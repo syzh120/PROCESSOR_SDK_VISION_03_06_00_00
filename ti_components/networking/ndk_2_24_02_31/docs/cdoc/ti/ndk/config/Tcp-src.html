@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>module ti.ndk.config.Tcp</title>
+<meta name="googlebot" content="noindex,nofollow">
+<link rel="stylesheet" type="text/css" href="../../../src.css"/>
+</head>
+<body>
+<pre class=src>
+     1    <span class="comment">/*
+</span>     2    <span class="comment"> * Copyright (c) 2012, Texas Instruments Incorporated
+</span>     3    <span class="comment"> * All rights reserved.
+</span>     4    <span class="comment"> *
+</span>     5    <span class="comment"> * Redistribution and use in source and binary forms, with or without
+</span>     6    <span class="comment"> * modification, are permitted provided that the following conditions
+</span>     7    <span class="comment"> * are met:
+</span>     8    <span class="comment"> *
+</span>     9    <span class="comment"> * *  Redistributions of source code must retain the above copyright
+</span>    10    <span class="comment"> *    notice, this list of conditions and the following disclaimer.
+</span>    11    <span class="comment"> *
+</span>    12    <span class="comment"> * *  Redistributions in binary form must reproduce the above copyright
+</span>    13    <span class="comment"> *    notice, this list of conditions and the following disclaimer in the
+</span>    14    <span class="comment"> *    documentation and/or other materials provided with the distribution.
+</span>    15    <span class="comment"> *
+</span>    16    <span class="comment"> * *  Neither the name of Texas Instruments Incorporated nor the names of
+</span>    17    <span class="comment"> *    its contributors may be used to endorse or promote products derived
+</span>    18    <span class="comment"> *    from this software without specific prior written permission.
+</span>    19    <span class="comment"> *
+</span>    20    <span class="comment"> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+</span>    21    <span class="comment"> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+</span>    22    <span class="comment"> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+</span>    23    <span class="comment"> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+</span>    24    <span class="comment"> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+</span>    25    <span class="comment"> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+</span>    26    <span class="comment"> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+</span>    27    <span class="comment"> * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+</span>    28    <span class="comment"> * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+</span>    29    <span class="comment"> * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+</span>    30    <span class="comment"> * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+</span>    31    <span class="comment"> * */</span>
+    32    <span class="comment">/*
+</span>    33    <span class="comment"> *  ======== Tcp.xdc ========
+</span>    34    <span class="comment"> *
+</span>    35    <span class="comment"> *  Tcp module definition file and initial values.
+</span>    36    <span class="comment"> */</span>
+    37    
+    38    <span class="xdoc">/*!
+</span>    39    <span class="xdoc"> *  ======== Tcp ========
+</span>    40    <span class="xdoc"> *  NDK Transmission Control Protocol (TCP) settings and configuration.
+</span>    41    <span class="xdoc"> *
+</span>    42    <span class="xdoc"> *  The Tcp module is used to configure settings for TCP, including:
+</span>    43    <span class="xdoc"> *
+</span>    44    <span class="xdoc"> *  <b>@p(blist)</b>
+</span>    45    <span class="xdoc"> *      - Buffer sizes
+</span>    46    <span class="xdoc"> *      - Maximum number of reassembly packets
+</span>    47    <span class="xdoc"> *      - Idle time
+</span>    48    <span class="xdoc"> *      - KEEP probe settings
+</span>    49    <span class="xdoc"> *  <b>@p</b>
+</span>    50    <span class="xdoc"> */</span>
+    51    
+    52    @Template(<span class="string">"./Tcp.xdt"</span>)
+    53    
+    54    <span class=key>metaonly</span> <span class=key>module</span> Tcp {
+    55    
+    56        <span class="comment">/*
+</span>    57    <span class="comment">     * Default values
+</span>    58    <span class="comment">     *  @_nodoc
+</span>    59    <span class="comment">     */</span>
+    60        <span class=key>const</span> Int defaultMaxReasmPkts  = 2;
+    61        <span class=key>const</span> Int defaultTxBufSize     = 8192;
+    62        <span class=key>const</span> Int defaultRxBufSize     = 8192;
+    63        <span class=key>const</span> Int defaultRxBufLimit    = 8192;
+    64        <span class=key>const</span> Int defaultKeepIdleTime  = 72000;
+    65        <span class=key>const</span> Int defaultKpProbIntv    = 750;
+    66        <span class=key>const</span> Int defaultKpProbTimeout = 6000;
+    67    
+    68        <span class="xdoc">/*!
+</span>    69    <span class="xdoc">     *  Specifies the maximum number of reassembly packets allowed per
+</span>    70    <span class="xdoc">     *  TCP socket.
+</span>    71    <span class="xdoc">     */</span>
+    72        <span class=key>config</span> Int maxNumReasmPkts = defaultMaxReasmPkts;
+    73    
+    74        <span class="xdoc">/*!
+</span>    75    <span class="xdoc">     *  Sets the size of the TCP send buffer.
+</span>    76    <span class="xdoc">     */</span>
+    77        <span class=key>config</span> Int transmitBufSize = defaultTxBufSize;
+    78    
+    79        <span class="xdoc">/*!
+</span>    80    <span class="xdoc">     *  Sets the size of the TCP receive buffer (copy mode).
+</span>    81    <span class="xdoc">     */</span>
+    82        <span class=key>config</span> Int receiveBufSize = defaultRxBufSize;
+    83    
+    84        <span class="xdoc">/*!
+</span>    85    <span class="xdoc">     *  Sets the max number of cumulative bytes in packet buffers that can be
+</span>    86    <span class="xdoc">     *  queued up at any given TCP based socket (non-copy mode).
+</span>    87    <span class="xdoc">     */</span>
+    88        <span class=key>config</span> Int receiveBufLimit = defaultRxBufLimit;
+    89    
+    90        <span class="xdoc">/*!
+</span>    91    <span class="xdoc">     *  Amount of time to allow socket to idle. Only affects sockets
+</span>    92    <span class="xdoc">     *  specified with SO_KEEPALIVE value.
+</span>    93    <span class="xdoc">     *
+</span>    94    <span class="xdoc">     *  Time units for this value are in 0.1 seconds.
+</span>    95    <span class="xdoc">     */</span>
+    96        <span class=key>config</span> Int keepIdleTime = defaultKeepIdleTime;
+    97    
+    98        <span class="xdoc">/*!
+</span>    99    <span class="xdoc">     *  Time interval specifying the amount of time in between TCP KEEP probes
+</span>   100    <span class="xdoc">     *  Only affects sockets specified with SO_KEEPALIVE value.
+</span>   101    <span class="xdoc">     *
+</span>   102    <span class="xdoc">     *  Used to determine if socket should be kept open. Time units for this
+</span>   103    <span class="xdoc">     *  value are in 0.1 seconds.
+</span>   104    <span class="xdoc">     */</span>
+   105        <span class=key>config</span> Int keepProbeInterval = defaultKpProbIntv;
+   106    
+   107        <span class="xdoc">/*!
+</span>   108    <span class="xdoc">     *  Time TCP will continue to send unanswered KEEP probes before timing out
+</span>   109    <span class="xdoc">     *  the connection.
+</span>   110    <span class="xdoc">     *
+</span>   111    <span class="xdoc">     *  Time units for this value are in 0.1 seconds.
+</span>   112    <span class="xdoc">     */</span>
+   113        <span class=key>config</span> Int keepProbeTimeout = defaultKpProbTimeout;
+   114    
+   115    }
+</pre>
+</body></html>

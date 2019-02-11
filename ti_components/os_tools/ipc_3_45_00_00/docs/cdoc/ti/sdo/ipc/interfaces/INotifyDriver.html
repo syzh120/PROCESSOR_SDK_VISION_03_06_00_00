@@ -1,0 +1,336 @@
+<html>
+<head>
+<title>interface ti.sdo.ipc.interfaces.INotifyDriver</title>
+<meta name="description" content="Notify driver interface">
+<link rel="stylesheet" type="text/css" href="../../../../xdoc.css" />
+</head>
+<body><div id="xdocWrapper"><div id="xdocContent">
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">interface</span> <span class="xdoc-id">ti.sdo.ipc.interfaces.</span><span class="xdoc-id">INotifyDriver</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/interfaces/INetworkTransport.html" title="interface INetworkTransport"><img class="xdocHdrArrow" src="../../../../Arrow_left.png"/></a></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/interfaces/package.html" title="package ti.sdo.ipc.interfaces"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/interfaces/INotifySetup.html" title="interface INotifySetup"><img class="xdocHdrArrow" src="../../../../Arrow_right.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/ipc/interfaces/INotifyDriver.html">index URL</a></div>
+<p class="xdocHdrSummary">Notify driver interface</p>
+<ul class="xdocToc">
+<li class="xdocToc"><a class="xdocToc" href="#spec-synop">Specification synopsis</a></li>
+<li class="xdocToc2"><a class="xdocToc" href="#xdocElems">Individual elements</a></li>
+</ul>
+<div class="xdocBrief">
+Interface implemented by all drivers for the notify module.  Modules that
+  implement this interface expect the eventId arguments to be valid.
+</div>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id">XDCspec</span></tt> summary</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/interfaces/INotifyDriver-src.html"><span class="xdocLabelFile">ti/sdo/ipc/interfaces/INotifyDriver.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynX">
+<div class="xdocSynCode">
+<tt></tt><span class="xdoc-kw1">interface</span> <span class="xdoc-id">INotifyDriver</span> {<b>&nbsp;&nbsp;...</b>
+</div>
+<div class='xdocSynSum'><tt></tt>//&nbsp;inherits <a class="xdoc-link" href="../../../../xdc/runtime/IModule.html" title="xdc.runtime.IModule">xdc.runtime.IModule</a></div>
+<div class="xdocSynCode">
+<tt></tt><span class="xdoc-kw1">instance</span>:<b>&nbsp;&nbsp;...</b>
+</div>
+</div>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/interfaces/INotifyDriver-src.html"><span class="xdocLabelFile">ti/sdo/ipc/interfaces/INotifyDriver.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynX">
+<div class="xdocSynCode">
+<tt></tt><span class="xdoc-kw1">package</span> <a class="xdoc-link" href="../../../../ti/sdo/ipc/interfaces/package.html" title="ti.sdo.ipc.interfaces">ti.sdo.ipc.interfaces</a>;
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt></tt><span class="xdoc-kw1">interface</span> <span class="xdoc-id">INotifyDriver</span> {
+</div>
+<div class='xdocSynHdr'>module-wide config parameters</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">config</span> <a class="xdoc-link" href="../../../../xdc/runtime/Types.html#.Common$" title="xdc.runtime.Types.Common$">Types.Common$</a>&nbsp;<a class="xdocSynGo" href="#common$"><span class="xdoc-id">common$</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Common module configuration parameters</span></span></a>;
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">instance</span>:
+</div>
+<div class='xdocSynHdr'>per-instance functions</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw2">Void</span>&nbsp;<a class="xdocSynGo" href="#disable"><span class="xdoc-id">disable</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Disable a NotifyDriver instance</span></span></a>();
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw2">Void</span>&nbsp;<a class="xdocSynGo" href="#disable.Event"><span class="xdoc-id">disableEvent</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Disable an event</span></span></a>(<span class="xdoc-kw2">UInt32</span>&nbsp;<span class="xdoc-id">eventId</span>);
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw2">Void</span>&nbsp;<a class="xdocSynGo" href="#enable"><span class="xdoc-id">enable</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Enable a NotifyDriver instance</span></span></a>();
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw2">Void</span>&nbsp;<a class="xdocSynGo" href="#enable.Event"><span class="xdoc-id">enableEvent</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Enable an event</span></span></a>(<span class="xdoc-kw2">UInt32</span>&nbsp;<span class="xdoc-id">eventId</span>);
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw2">Void</span>&nbsp;<a class="xdocSynGo" href="#register.Event"><span class="xdoc-id">registerEvent</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Register a callback to an event</span></span></a>(<span class="xdoc-kw2">UInt32</span>&nbsp;<span class="xdoc-id">eventId</span>);
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw2">Int</span>&nbsp;<a class="xdocSynGo" href="#send.Event"><span class="xdoc-id">sendEvent</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Send a signal to an event</span></span></a>(<span class="xdoc-kw2">UInt32</span>&nbsp;<span class="xdoc-id">eventId</span>, <span class="xdoc-kw2">UInt32</span>&nbsp;<span class="xdoc-id">payload</span>, <span class="xdoc-kw2">Bool</span>&nbsp;<span class="xdoc-id">waitClear</span>);
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw2">Void</span>&nbsp;<a class="xdocSynGo" href="#unregister.Event"><span class="xdoc-id">unregisterEvent</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Remove an event listener from an event</span></span></a>(<span class="xdoc-kw2">UInt32</span>&nbsp;<span class="xdoc-id">eventId</span>);
+</div>
+<div class="xdocSynCode">
+<tt></tt>}
+</div>
+</div>
+<div id="xdocSep">
+</div>
+<div id="xdocElems">
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="common$"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">config</span> <span class="xdoc-id">INotifyDriver.</span><span class="xdoc-id">common$</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/interfaces/INotifyDriver.html" title="interface INotifyDriver"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/ipc/interfaces/INotifyDriver.html#common$">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Common module configuration parameters</p>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/interfaces/INotifyDriver-src.html"><span class="xdocLabelFile">ti/sdo/ipc/interfaces/INotifyDriver.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">config</span> <a class="xdoc-link" href="../../../../xdc/runtime/Types.html#.Common$" title="xdc.runtime.Types.Common$">Types.Common$</a>&nbsp;<span class="xdoc-id">common$</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">All modules have this configuration parameter.  Its name
+  contains the '$' character to ensure it does not conflict with
+  configuration parameters declared by the module.  This allows
+  new configuration parameters to be added in the future without
+  any chance of breaking existing modules.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="disable"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-id">INotifyDriver.</span><span class="xdoc-id">disable</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;instance</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/interfaces/INotifyDriver.html" title="interface INotifyDriver"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/ipc/interfaces/INotifyDriver.html#disable">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Disable a NotifyDriver instance</p>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/interfaces/INotifyDriver-src.html"><span class="xdocLabelFile">ti/sdo/ipc/interfaces/INotifyDriver.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw2">Void</span>&nbsp;<span class="xdoc-id">disable</span>();
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">Disables the ability of a Notify driver to receive events for a given
+  processor. This interface function is called by the Notify_disable
+  function. Refer to its documentation for more details.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="disable.Event"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-id">INotifyDriver.</span><span class="xdoc-id">disableEvent</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;instance</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/interfaces/INotifyDriver.html" title="interface INotifyDriver"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/ipc/interfaces/INotifyDriver.html#disable.Event">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Disable an event</p>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/interfaces/INotifyDriver-src.html"><span class="xdocLabelFile">ti/sdo/ipc/interfaces/INotifyDriver.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw2">Void</span>&nbsp;<span class="xdoc-id">disableEvent</span>(<span class="xdoc-kw2">UInt32</span>&nbsp;<span class="xdoc-id">eventId</span>);
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">ARGUMENTS</div>
+<div class="xdocChild"><span class="xdocChildId">eventId</span>
+<span class="xdocChildSum">&#151;&nbsp;Number of event to disable</span>
+</div>
+<span id="xdoc-sect-2"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">This interface function is called by the Notify_disableEvent function.
+  Refer to its documentation for more details.</div>
+<div class="xdocText">The Notify module does validation of the eventId.  The Notify module
+  enters calls this function within the Notify module gate.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="enable"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-id">INotifyDriver.</span><span class="xdoc-id">enable</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;instance</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/interfaces/INotifyDriver.html" title="interface INotifyDriver"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/ipc/interfaces/INotifyDriver.html#enable">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Enable a NotifyDriver instance</p>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/interfaces/INotifyDriver-src.html"><span class="xdocLabelFile">ti/sdo/ipc/interfaces/INotifyDriver.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw2">Void</span>&nbsp;<span class="xdoc-id">enable</span>();
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">Enables the ability of a Notify driver to receive events for a given
+  processor. This interface function is called by the Notify_restore
+  function. Refer to its documentation for more details.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="enable.Event"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-id">INotifyDriver.</span><span class="xdoc-id">enableEvent</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;instance</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/interfaces/INotifyDriver.html" title="interface INotifyDriver"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/ipc/interfaces/INotifyDriver.html#enable.Event">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Enable an event</p>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/interfaces/INotifyDriver-src.html"><span class="xdocLabelFile">ti/sdo/ipc/interfaces/INotifyDriver.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw2">Void</span>&nbsp;<span class="xdoc-id">enableEvent</span>(<span class="xdoc-kw2">UInt32</span>&nbsp;<span class="xdoc-id">eventId</span>);
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">ARGUMENTS</div>
+<div class="xdocChild"><span class="xdocChildId">eventId</span>
+<span class="xdocChildSum">&#151;&nbsp;Number of event to enable</span>
+</div>
+<span id="xdoc-sect-2"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">This interface function is called by the Notify_disableEvent function.
+  Refer to its documentation for more details.</div>
+<div class="xdocText">The Notify module does validation of the eventId.  The Notify module
+  enters calls this function within the Notify module gate.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="register.Event"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-id">INotifyDriver.</span><span class="xdoc-id">registerEvent</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;instance</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/interfaces/INotifyDriver.html" title="interface INotifyDriver"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/ipc/interfaces/INotifyDriver.html#register.Event">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Register a callback to an event</p>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/interfaces/INotifyDriver-src.html"><span class="xdocLabelFile">ti/sdo/ipc/interfaces/INotifyDriver.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw2">Void</span>&nbsp;<span class="xdoc-id">registerEvent</span>(<span class="xdoc-kw2">UInt32</span>&nbsp;<span class="xdoc-id">eventId</span>);
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">ARGUMENTS</div>
+<div class="xdocChild"><span class="xdocChildId">eventId</span>
+<span class="xdocChildSum">&#151;&nbsp;Number of event that is being registered</span>
+</div>
+<span id="xdoc-sect-2"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">This driver function is called by the Notify_registerEvent function
+  within the Notify module gate. Refer to its documentation for more
+  details.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="send.Event"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-id">INotifyDriver.</span><span class="xdoc-id">sendEvent</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;instance</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/interfaces/INotifyDriver.html" title="interface INotifyDriver"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/ipc/interfaces/INotifyDriver.html#send.Event">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Send a signal to an event</p>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/interfaces/INotifyDriver-src.html"><span class="xdocLabelFile">ti/sdo/ipc/interfaces/INotifyDriver.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw2">Int</span>&nbsp;<span class="xdoc-id">sendEvent</span>(<span class="xdoc-kw2">UInt32</span>&nbsp;<span class="xdoc-id">eventId</span>, <span class="xdoc-kw2">UInt32</span>&nbsp;<span class="xdoc-id">payload</span>, <span class="xdoc-kw2">Bool</span>&nbsp;<span class="xdoc-id">waitClear</span>);
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">ARGUMENTS</div>
+<div class="xdocChild"><span class="xdocChildId">eventId</span>
+<span class="xdocChildSum">&#151;&nbsp;Number of event to signal</span>
+</div>
+<div class="xdocChild"><span class="xdocChildId">payload</span>
+<span class="xdocChildSum">&#151;&nbsp;Payload (optional) to pass to callback function</span>
+</div>
+<div class="xdocChild"><span class="xdocChildId">waitClear</span>
+<span class="xdocChildSum">&#151;&nbsp;If TRUE, have the NotifyDriver wait for
+                       acknowledgement back from the destination
+                       processor.</span>
+</div>
+<span id="xdoc-sect-2"></span>
+<div class="xdocSect">RETURNS</div>
+<div class="xdocText">Notify status</div>
+<span id="xdoc-sect-3"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">This interface function is called by the Notify_sendEvent function.
+  Notify_sendEvent does not provide any context protection for
+  INotifyDriver_sendEvent, so appropriate measures must be taken within
+  the driver itself.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="unregister.Event"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-id">INotifyDriver.</span><span class="xdoc-id">unregisterEvent</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;instance</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/interfaces/INotifyDriver.html" title="interface INotifyDriver"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/ipc/interfaces/INotifyDriver.html#unregister.Event">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Remove an event listener from an event</p>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/interfaces/INotifyDriver-src.html"><span class="xdocLabelFile">ti/sdo/ipc/interfaces/INotifyDriver.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw2">Void</span>&nbsp;<span class="xdoc-id">unregisterEvent</span>(<span class="xdoc-kw2">UInt32</span>&nbsp;<span class="xdoc-id">eventId</span>);
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">ARGUMENTS</div>
+<div class="xdocChild"><span class="xdocChildId">eventId</span>
+<span class="xdocChildSum">&#151;&nbsp;Number of event that is being unregistered</span>
+</div>
+<span id="xdoc-sect-2"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">This driver function is called by the Notify_unregisterEvent function
+  within the Notify module gate. Refer to it for more details.</div>
+</div>
+<div id="xdocDate">generated on Wed, 15 Feb 2017 14:20:03 GMT</div>
+</div></div></body>
+</html>

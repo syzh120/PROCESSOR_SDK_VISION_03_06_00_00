@@ -1,0 +1,36 @@
+digraph chains_srvCalibration_avb {
+
+       ColorScheme [shape=none, margin=0, label=<
+       <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+       <TR><TD bgcolor="lightblue">IPU1_0</TD></TR>
+       <TR><TD bgcolor="darkturquoise">IPU1_1</TD></TR>
+       </TABLE>>];
+
+       /************** LINKS ************************/
+       AvbRx [color=darkturquoise, style=filled]
+       IPCOut_IPU1_1_IPU1_0_0 [color=darkturquoise, style=filled]
+       IPCIn_IPU1_0_IPU1_1_0 [color=lightblue, style=filled]
+       Decode [color=lightblue, style=filled]
+       VPE_Upscale [color=lightblue, style=filled]
+       Dup [color=lightblue, style=filled]
+       Null_capture [color=lightblue, style=filled]
+       VPE [color=lightblue, style=filled]
+       Sync [color=lightblue, style=filled]
+       Alg_DmaSwMs [color=lightblue, style=filled]
+       Display [color=lightblue, style=filled]
+       GrpxSrc [color=lightblue, style=filled]
+       Display_Grpx [color=lightblue, style=filled]
+
+       /************** CONNECTIONS ************************/
+       Alg_DmaSwMs -> Display
+       Sync -> Alg_DmaSwMs
+       VPE -> Sync
+       Dup -> VPE[taillabel=Q0, minlen=2, labeldistance=3]
+       Dup -> Null_capture[taillabel=Q1, minlen=2, labeldistance=3]
+       VPE_Upscale -> Dup
+       Decode -> VPE_Upscale
+       AvbRx -> IPCOut_IPU1_1_IPU1_0_0
+       GrpxSrc -> Display_Grpx
+       IPCOut_IPU1_1_IPU1_0_0 -> IPCIn_IPU1_0_IPU1_1_0
+       IPCIn_IPU1_0_IPU1_1_0 -> Decode
+}

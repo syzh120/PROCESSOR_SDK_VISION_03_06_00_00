@@ -1,0 +1,253 @@
+<html>
+<head>
+<title>module ti.sdo.fc.ires.edma3chan.EDMA3CHANLITE</title>
+<meta name="description" content="EDMA3-specific IRES Resman and Protocol Implementation">
+<link rel="stylesheet" type="text/css" href="../../../../../xdoc.css" />
+</head>
+<body><div id="xdocWrapper"><div id="xdocContent">
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">module</span> <span class="xdoc-id">ti.sdo.fc.ires.edma3chan.</span><span class="xdoc-id">EDMA3CHANLITE</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/edma3chan/EDMA3CHAN.html" title="module EDMA3CHAN"><img class="xdocHdrArrow" src="../../../../../Arrow_left.png"/></a></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/edma3chan/package.html" title="package ti.sdo.fc.ires.edma3chan"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/edma3chan/INTERFACE.html" title="module INTERFACE"><img class="xdocHdrArrow" src="../../../../../Arrow_right.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/edma3chan/EDMA3CHANLITE.html">index URL</a></div>
+<p class="xdocHdrSummary">EDMA3-specific IRES Resman and Protocol Implementation</p>
+<ul class="xdocToc">
+<li class="xdocToc"><a class="xdocToc" href="#meta-synop">Configuration settings</a></li>
+<li class="xdocToc2"><a class="xdocToc" href="#xdocMetaElems">Individual elements</a></li>
+</ul>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../../ti/sdo/fc/ires/edma3chan/EDMA3CHANLITE-src.html"><span class="xdocLabelFile">ti/sdo/fc/ires/edma3chan/EDMA3CHANLITE.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynM">
+<div class="xdocSynCode">
+<tt></tt><span class="xdoc-kw1">var</span> EDMA3CHANLITE = <span class="xdoc-kw3">xdc.useModule</span>(<span class="xdoc-id">'ti.sdo.fc.ires.edma3chan.EDMA3CHANLITE'</span>);
+</div>
+<div class='xdocSynHdr'>module-wide constants & types</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">const</span> <a class="xdocSynGo" href="#.M.A.X_.P.A.R.A.M.S">EDMA3CHANLITE.<span class="xdoc-id">MAX_PARAMS</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> = 5;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">const</span> <a class="xdocSynGo" href="#.M.A.X_.R.E.S.O.U.R.C.E.S">EDMA3CHANLITE.<span class="xdoc-id">MAX_RESOURCES</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> = 5;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">const</span> <a class="xdocSynGo" href="#.M.A.X_.T.C.C.S">EDMA3CHANLITE.<span class="xdoc-id">MAX_TCCS</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> = 3;
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">var</span> <i>obj</i> = <span class="xdoc-kw1">new</span> <a class="xdocSynGo" href="#.Resource.Pool">EDMA3CHANLITE.<span class="xdoc-id">ResourcePool</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>obj</i>.<a class="xdocSynGo" href="#.Resource.Pool" title="ti.sdo.fc.ires.edma3chan.EDMA3CHANLITE.ResourcePool"><span class="xdoc-id">chan</span></a> = <i><span class="xdoc-kw2">UInt</span></i><b>&nbsp;&nbsp;...</b>
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>obj</i>.<a class="xdocSynGo" href="#.Resource.Pool" title="ti.sdo.fc.ires.edma3chan.EDMA3CHANLITE.ResourcePool"><span class="xdoc-id">numTccs</span></a> = <i><span class="xdoc-kw2">UInt</span></i><b>&nbsp;&nbsp;...</b>
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>obj</i>.<a class="xdocSynGo" href="#.Resource.Pool" title="ti.sdo.fc.ires.edma3chan.EDMA3CHANLITE.ResourcePool"><span class="xdoc-id">tccArray</span></a> = <i><span class="xdoc-kw2">UInt</span>[<a class="xdoc-link" href="../../../../../ti/sdo/fc/ires/edma3chan/EDMA3CHANLITE.html#.M.A.X_.T.C.C.S" title="ti.sdo.fc.ires.edma3chan.EDMA3CHANLITE.MAX_TCCS">EDMA3CHANLITE.MAX_TCCS</a>]</i><b>&nbsp;&nbsp;...</b>
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>obj</i>.<a class="xdocSynGo" href="#.Resource.Pool" title="ti.sdo.fc.ires.edma3chan.EDMA3CHANLITE.ResourcePool"><span class="xdoc-id">numParams</span></a> = <i><span class="xdoc-kw2">UInt</span></i><b>&nbsp;&nbsp;...</b>
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>obj</i>.<a class="xdocSynGo" href="#.Resource.Pool" title="ti.sdo.fc.ires.edma3chan.EDMA3CHANLITE.ResourcePool"><span class="xdoc-id">paramArray</span></a> = <i><span class="xdoc-kw2">UInt</span>[<a class="xdoc-link" href="../../../../../ti/sdo/fc/ires/edma3chan/EDMA3CHANLITE.html#.M.A.X_.P.A.R.A.M.S" title="ti.sdo.fc.ires.edma3chan.EDMA3CHANLITE.MAX_PARAMS">EDMA3CHANLITE.MAX_PARAMS</a>]</i><b>&nbsp;&nbsp;...</b>
+</div>
+<div class='xdocSynHdr'>module-wide config parameters</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#auto.Register">EDMA3CHANLITE.<span class="xdoc-id">autoRegister</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> = <i><span class="xdoc-kw2">Bool</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#base.Address">EDMA3CHANLITE.<span class="xdoc-id">baseAddress</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Base address of the EDMA3 Channel Controller</span></span></a> = <i><span class="xdoc-kw2">UInt</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#logical.Chans">EDMA3CHANLITE.<span class="xdoc-id">logicalChans</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> = <i><a class="xdoc-link" href="../../../../../ti/sdo/fc/ires/edma3chan/EDMA3CHANLITE.html#.Resource.Pool" title="ti.sdo.fc.ires.edma3chan.EDMA3CHANLITE.ResourcePool">EDMA3CHANLITE.ResourcePool</a>[<a class="xdoc-link" href="../../../../../ti/sdo/fc/ires/edma3chan/EDMA3CHANLITE.html#.M.A.X_.R.E.S.O.U.R.C.E.S" title="ti.sdo.fc.ires.edma3chan.EDMA3CHANLITE.MAX_RESOURCES">EDMA3CHANLITE.MAX_RESOURCES</a>]</i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#num.Logical.Chans">EDMA3CHANLITE.<span class="xdoc-id">numLogicalChans</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> = <i><span class="xdoc-kw2">Int</span></i> 0;
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+</div>
+<div id="xdocSep">
+</div>
+<div id="xdocMetaElems">
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".M.A.X_.P.A.R.A.M.S"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">const</span> <span class="xdoc-id">EDMA3CHANLITE.</span><span class="xdoc-id">MAX_PARAMS</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/edma3chan/EDMA3CHANLITE.html" title="module EDMA3CHANLITE"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/edma3chan/EDMA3CHANLITE.html#.M.A.X_.P.A.R.A.M.S">index URL</a></div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">const</span> EDMA3CHANLITE.<span class="xdoc-id">MAX_PARAMS</span> = 5;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".M.A.X_.R.E.S.O.U.R.C.E.S"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">const</span> <span class="xdoc-id">EDMA3CHANLITE.</span><span class="xdoc-id">MAX_RESOURCES</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/edma3chan/EDMA3CHANLITE.html" title="module EDMA3CHANLITE"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/edma3chan/EDMA3CHANLITE.html#.M.A.X_.R.E.S.O.U.R.C.E.S">index URL</a></div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">const</span> EDMA3CHANLITE.<span class="xdoc-id">MAX_RESOURCES</span> = 5;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".M.A.X_.T.C.C.S"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">const</span> <span class="xdoc-id">EDMA3CHANLITE.</span><span class="xdoc-id">MAX_TCCS</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/edma3chan/EDMA3CHANLITE.html" title="module EDMA3CHANLITE"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/edma3chan/EDMA3CHANLITE.html#.M.A.X_.T.C.C.S">index URL</a></div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">const</span> EDMA3CHANLITE.<span class="xdoc-id">MAX_TCCS</span> = 3;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".Resource.Pool"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">struct</span> <span class="xdoc-id">EDMA3CHANLITE.</span><span class="xdoc-id">ResourcePool</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/edma3chan/EDMA3CHANLITE.html" title="module EDMA3CHANLITE"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/edma3chan/EDMA3CHANLITE.html#.Resource.Pool">index URL</a></div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">var</span> <i>obj</i> = <span class="xdoc-kw1">new</span> EDMA3CHANLITE.<span class="xdoc-id">ResourcePool</span>;
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>obj</i>.<span class="xdoc-id">chan</span> = <i><span class="xdoc-kw2">UInt</span></i><b>&nbsp;&nbsp;...</b>
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>obj</i>.<span class="xdoc-id">numTccs</span> = <i><span class="xdoc-kw2">UInt</span></i><b>&nbsp;&nbsp;...</b>
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>obj</i>.<span class="xdoc-id">tccArray</span> = <i><span class="xdoc-kw2">UInt</span>[<a class="xdoc-link" href="../../../../../ti/sdo/fc/ires/edma3chan/EDMA3CHANLITE.html#.M.A.X_.T.C.C.S" title="ti.sdo.fc.ires.edma3chan.EDMA3CHANLITE.MAX_TCCS">EDMA3CHANLITE.MAX_TCCS</a>]</i><b>&nbsp;&nbsp;...</b>
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>obj</i>.<span class="xdoc-id">numParams</span> = <i><span class="xdoc-kw2">UInt</span></i><b>&nbsp;&nbsp;...</b>
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>obj</i>.<span class="xdoc-id">paramArray</span> = <i><span class="xdoc-kw2">UInt</span>[<a class="xdoc-link" href="../../../../../ti/sdo/fc/ires/edma3chan/EDMA3CHANLITE.html#.M.A.X_.P.A.R.A.M.S" title="ti.sdo.fc.ires.edma3chan.EDMA3CHANLITE.MAX_PARAMS">EDMA3CHANLITE.MAX_PARAMS</a>]</i><b>&nbsp;&nbsp;...</b>
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="auto.Register"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">EDMA3CHANLITE.</span><span class="xdoc-id">autoRegister</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/edma3chan/EDMA3CHANLITE.html" title="module EDMA3CHANLITE"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/edma3chan/EDMA3CHANLITE.html#auto.Register">index URL</a></div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>EDMA3CHANLITE.<span class="xdoc-id">autoRegister</span> = <i><span class="xdoc-kw2">Bool</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="base.Address"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">EDMA3CHANLITE.</span><span class="xdoc-id">baseAddress</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/edma3chan/EDMA3CHANLITE.html" title="module EDMA3CHANLITE"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/edma3chan/EDMA3CHANLITE.html#base.Address">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Base address of the EDMA3 Channel Controller</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>EDMA3CHANLITE.<span class="xdoc-id">baseAddress</span> = <i><span class="xdoc-kw2">UInt</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="logical.Chans"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">EDMA3CHANLITE.</span><span class="xdoc-id">logicalChans</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/edma3chan/EDMA3CHANLITE.html" title="module EDMA3CHANLITE"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/edma3chan/EDMA3CHANLITE.html#logical.Chans">index URL</a></div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>EDMA3CHANLITE.<span class="xdoc-id">logicalChans</span> = <i><a class="xdoc-link" href="../../../../../ti/sdo/fc/ires/edma3chan/EDMA3CHANLITE.html#.Resource.Pool" title="ti.sdo.fc.ires.edma3chan.EDMA3CHANLITE.ResourcePool">EDMA3CHANLITE.ResourcePool</a>[<a class="xdoc-link" href="../../../../../ti/sdo/fc/ires/edma3chan/EDMA3CHANLITE.html#.M.A.X_.R.E.S.O.U.R.C.E.S" title="ti.sdo.fc.ires.edma3chan.EDMA3CHANLITE.MAX_RESOURCES">EDMA3CHANLITE.MAX_RESOURCES</a>]</i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="num.Logical.Chans"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">EDMA3CHANLITE.</span><span class="xdoc-id">numLogicalChans</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/edma3chan/EDMA3CHANLITE.html" title="module EDMA3CHANLITE"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/edma3chan/EDMA3CHANLITE.html#num.Logical.Chans">index URL</a></div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>EDMA3CHANLITE.<span class="xdoc-id">numLogicalChans</span> = <i><span class="xdoc-kw2">Int</span></i> 0;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+</div>
+<div id="xdocDate">generated on Tue, 28 Jun 2016 21:14:30 GMT</div>
+</div></div></body>
+</html>

@@ -1,0 +1,89 @@
+menuitem "NOR";
+
+GPMCdelay()
+{
+    int delay = 0;
+    while (delay < 32000)
+    {
+        delay++;
+    }
+}
+
+/* This function does the GPMC timing and PAD configuration for accessing NOR.
+ *
+ * This is mainly useful for debuging SBL in NOR XIP boot.
+ * Flash the SBL binary in NOR, put SYS-BOOT settings to debug.
+ * Connect using CCS and run this gel configuration and NOR memory is accessible.
+ * Now change the PC to start of NOR and can be debugged from CCS.
+ */
+
+hotmenu
+config_gpmc_nor()
+{
+    (*((unsigned int*)(0x50000010))) = 0x00000000;
+    (*((unsigned int*)(0x5000001c))) = 0x00000000;
+    (*((unsigned int*)(0x50000040))) = 0xF01F0000;
+    (*((unsigned int*)(0x50000080))) = 0x000A0000;
+    (*((unsigned int*)(0x50000078))) = 0x00000000;
+    GPMCdelay();
+    (*((unsigned int*)(0x50000060))) = 0x41041010;
+    (*((unsigned int*)(0x50000064))) = 0x001E1C01;
+    (*((unsigned int*)(0x50000068))) = 0x00000000;
+    (*((unsigned int*)(0x5000006C))) = 0x0F071C03;
+    (*((unsigned int*)(0x50000070))) = 0x041B1F1F;
+    (*((unsigned int*)(0x50000074))) = 0x8F070000;
+    (*((unsigned int*)(0x50000078))) = 0x00000C08;
+    (*((unsigned int*)(0x50000078))) = 0x00000C48;
+    GPMCdelay();
+    (*((unsigned int*)(0x4A003400))) = 0x00050000;
+    (*((unsigned int*)(0x4A003404))) = 0x00050000;
+    (*((unsigned int*)(0x4A003408))) = 0x00050000;
+    (*((unsigned int*)(0x4A00340c))) = 0x00050000;
+    (*((unsigned int*)(0x4A003410))) = 0x00050000;
+    (*((unsigned int*)(0x4A003414))) = 0x00050000;
+    (*((unsigned int*)(0x4A003418))) = 0x00050000;
+    (*((unsigned int*)(0x4A00341c))) = 0x00050000;
+    (*((unsigned int*)(0x4A003420))) = 0x00050000;
+    (*((unsigned int*)(0x4A003424))) = 0x00050000;
+    (*((unsigned int*)(0x4A003428))) = 0x00050000;
+    (*((unsigned int*)(0x4A00342c))) = 0x00050000;
+    (*((unsigned int*)(0x4A003430))) = 0x00050000;
+    (*((unsigned int*)(0x4A003434))) = 0x00050000;
+    (*((unsigned int*)(0x4A003438))) = 0x00050000;
+    (*((unsigned int*)(0x4A00343c))) = 0x00050000;
+    (*((unsigned int*)(0x4A003440))) = 0x00040000;
+    (*((unsigned int*)(0x4A003444))) = 0x00040000;
+    (*((unsigned int*)(0x4A003448))) = 0x00040000;
+    (*((unsigned int*)(0x4A00344c))) = 0x00040000;
+    (*((unsigned int*)(0x4A003450))) = 0x00040000;
+    (*((unsigned int*)(0x4A003454))) = 0x00040000;
+    (*((unsigned int*)(0x4A003458))) = 0x00040000;
+    (*((unsigned int*)(0x4A00345c))) = 0x00040000;
+    (*((unsigned int*)(0x4A003460))) = 0x00040000;
+    (*((unsigned int*)(0x4A003464))) = 0x00040000;
+    (*((unsigned int*)(0x4A003468))) = 0x00040000;
+    (*((unsigned int*)(0x4A00346c))) = 0x00040000;
+    (*((unsigned int*)(0x4A003470))) = 0x00040000;
+    (*((unsigned int*)(0x4A003474))) = 0x00040000;
+    (*((unsigned int*)(0x4A003478))) = 0x00040000;
+    (*((unsigned int*)(0x4A00347c))) = 0x00040000;
+    (*((unsigned int*)(0x4A003480))) = 0x00040000;
+    (*((unsigned int*)(0x4A003484))) = 0x00040000;
+    (*((unsigned int*)(0x4A003488))) = 0x00040000;
+    (*((unsigned int*)(0x4A00348c))) = 0x00040000;
+    (*((unsigned int*)(0x4A003490))) = 0x00040000;
+    (*((unsigned int*)(0x4A003494))) = 0x00040000;
+    (*((unsigned int*)(0x4A003498))) = 0x00040000;
+    (*((unsigned int*)(0x4A00349c))) = 0x00040000;
+    (*((unsigned int*)(0x4A0034a0))) = 0x00040000;
+    (*((unsigned int*)(0x4A0034a4))) = 0x00040000;
+    (*((unsigned int*)(0x4A0034a8))) = 0x00040000;
+    (*((unsigned int*)(0x4A0034ac))) = 0x00040000;
+    (*((unsigned int*)(0x4A0034b4))) = 0x00060000;
+    (*((unsigned int*)(0x4A0034c4))) = 0x00060000;
+    (*((unsigned int*)(0x4A0034c8))) = 0x00070000;
+    (*((unsigned int*)(0x4A0034cc))) = 0x00070000;
+    (*((unsigned int*)(0x4A0034d0))) = 0x00070000;
+    (*((unsigned int*)(0x4A0034d8))) = 0x000F0000;
+    GEL_TextOut("GPMC NOR configuration done.\n");
+}

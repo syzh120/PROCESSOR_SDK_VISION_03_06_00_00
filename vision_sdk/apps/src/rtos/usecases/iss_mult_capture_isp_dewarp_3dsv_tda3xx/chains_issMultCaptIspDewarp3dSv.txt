@@ -1,0 +1,24 @@
+UseCase: chains_issMultCaptIspDeWarp3dSv
+
+IssCapture -> IssM2mIsp -> Sync_dewarp
+
+// Input Q0 of Synthesis
+Sync_dewarp -> Alg_DeWarp -> Alg_Synthesis (DSP1)
+
+Alg_Synthesis -> Display_Video
+
+// Input to PhotoAlign MUST be Q1 from Synthesis
+Alg_Synthesis -> Alg_PhotoAlign (DSP1)
+
+// There is no Geo Align Link so connecting Null Source to
+// input Q1 of Synthesis
+NullSource -> Alg_Synthesis  (DSP1)
+
+// Photo Align Should be on input Q2 of Synthesis
+Alg_PhotoAlign -> Alg_Synthesis  (DSP1)
+
+
+IssM2mIsp -> Alg_IssAewb
+
+
+

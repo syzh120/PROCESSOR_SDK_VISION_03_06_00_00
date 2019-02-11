@@ -1,0 +1,41 @@
+/*
+ *  ======== package.bld ========
+ */
+
+/*
+ * Create a new repository in this bundle named "packages".
+ * By convention most bundles contain a "packages" repository
+ * to hold the "high value" content. Other supporting content
+ * such as examples are often put into separate repositories.
+ */
+var rep = Pkg.addRepository('packages');
+
+/*
+ * Define the contents of the new repository. Initially the
+ * repository is empty -- here we name the packages that are
+ * to be released in this repository.
+ *
+ * The packages are named using a special syntax:
+ *   '<package name>:<release name>'
+ *
+ * Each named package is found along the package path. The
+ * release name is a tar file produced by "xdc release" on
+ * the named package, and is located in the package itself.
+ */
+rep.addPackages(
+    [
+        'ti.sdo.edma3.rm:ti_sdo_edma3_rm.tar',
+        'ti.sdo.edma3.rm.sample:ti_sdo_edma3_rm_sample.tar',
+        'ti.sdo.edma3.drv:ti_sdo_edma3_drv.tar',
+        'ti.sdo.edma3.drv.sample:ti_sdo_edma3_drv_sample.tar',
+    ]
+);
+
+Pkg.otherFiles = [
+    'docs',
+    'eclipse',
+    'examples',
+    'package.bld',
+    'release_notes_edma3_lld.html',
+    'software-manifest.doc',
+];

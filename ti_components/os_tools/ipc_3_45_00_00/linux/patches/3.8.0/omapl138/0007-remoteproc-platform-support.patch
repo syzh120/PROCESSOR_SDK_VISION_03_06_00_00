@@ -1,0 +1,62 @@
+From 527c0f1f2bcd142770804685987650624d9414d9 Mon Sep 17 00:00:00 2001
+From: Robert Tivy <rtivy@ti.com>
+Date: Fri, 8 Mar 2013 10:59:00 -0800
+Subject: [PATCH v8 7/7] ARM: davinci: da850 board: remoteproc platform support
+
+Add .reserve function for reserving CMA memory block to MACHINE_START.
+
+Add call to remoteproc platform device registration function during init.
+
+Signed-off-by: Robert Tivy <rtivy@ti.com>
+---
+ arch/arm/mach-davinci/board-da850-evm.c     |    6 ++++++
+ arch/arm/mach-davinci/board-omapl138-hawk.c |    6 ++++++
+ 2 files changed, 12 insertions(+)
+
+diff --git a/arch/arm/mach-davinci/board-da850-evm.c b/arch/arm/mach-davinci/board-da850-evm.c
+index bbb7979..3277bcf 100644
+--- a/arch/arm/mach-davinci/board-da850-evm.c
++++ b/arch/arm/mach-davinci/board-da850-evm.c
+@@ -1566,6 +1566,11 @@ static __init void da850_evm_init(void)
+ 		pr_warn("%s: SATA registration failed: %d\n", __func__, ret);
+ 
+ 	da850_evm_setup_mac_addr();
++
++	ret = da8xx_register_rproc();
++	if (ret)
++		pr_warn("%s: dsp/rproc registration failed: %d\n",
++			__func__, ret);
+ }
+ 
+ #ifdef CONFIG_SERIAL_8250_CONSOLE
+@@ -1593,4 +1598,5 @@ MACHINE_START(DAVINCI_DA850_EVM, "DaVinci DA850/OMAP-L138/AM18x EVM")
+ 	.init_late	= davinci_init_late,
+ 	.dma_zone_size	= SZ_128M,
+ 	.restart	= da8xx_restart,
++	.reserve	= da8xx_rproc_reserve_cma,
+ MACHINE_END
+diff --git a/arch/arm/mach-davinci/board-omapl138-hawk.c b/arch/arm/mach-davinci/board-omapl138-hawk.c
+index d5a6bcd..f60cfd1 100644
+--- a/arch/arm/mach-davinci/board-omapl138-hawk.c
++++ b/arch/arm/mach-davinci/board-omapl138-hawk.c
+@@ -311,6 +311,11 @@ static __init void omapl138_hawk_init(void)
+ 	if (ret)
+ 		pr_warn("%s: watchdog registration failed: %d\n",
+ 			__func__, ret);
++
++	ret = da8xx_register_rproc();
++	if (ret)
++		pr_warn("%s: dsp/rproc registration failed: %d\n",
++			__func__, ret);
+ }
+ 
+ #ifdef CONFIG_SERIAL_8250_CONSOLE
+@@ -338,4 +343,5 @@ MACHINE_START(OMAPL138_HAWKBOARD, "AM18x/OMAP-L138 Hawkboard")
+ 	.init_late	= davinci_init_late,
+ 	.dma_zone_size	= SZ_128M,
+ 	.restart	= da8xx_restart,
++	.reserve	= da8xx_rproc_reserve_cma,
+ MACHINE_END
+-- 
+1.7.9.4
+

@@ -1,0 +1,118 @@
+/*
+ * Copyright (C) 2013 Texas Instruments Incorporated - http://www.ti.com/
+ *
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *
+ *    Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ *    Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the
+ *    distribution.
+ *
+ *    Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ *  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ *  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ *  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ *  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ *  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+*/
+
+/*
+ *  ======== package.bld ========
+ *
+ */
+
+Pkg.uses = ["ti/avbtp/inc"];
+
+/* specify files to export */
+Pkg.otherFiles =
+    [
+    ];
+
+var objList = 
+    [
+        "avbtp.c",
+        "avb2nsp.c",
+        "avbtp_queue.c"
+    ];
+
+for (var i = 0; i < Build.targets.length; i++)
+{
+    var target   = Build.targets[i];
+    var profiles = ["debug","release"];
+    var profile_copts = ["-DDEBUG ", ""];
+
+    for (var j = 0; j < profiles.length; j++)
+    {
+        var lib_copts = " ";
+        var profile = profiles[j];
+
+        lib_copts += profile_copts[j];
+
+        /* Include optimization options */
+        if (profile == "release")
+        {
+            if ((target.suffix == "em3") || (target.suffix == "em4"))
+            {
+                /* TI M3/M4 compiler */
+                lib_copts += "--opt_level=3 --opt_for_speed=2 ";
+            }
+            else if ((target.suffix == "ea8f") || (target.suffix == "ea15fnv"))
+            {
+                /* TI A8/A15 compiler */
+                lib_copts += "--opt_level=3 --opt_for_speed=2 ";
+            }
+            else if ((target.suffix == "a8fg") || (target.suffix == "a15fg"))
+            {
+                /* GNU A8/A15 compiler */
+                lib_copts += "-O3 ";
+            }
+            else if ((target.suffix == "m3g") || (target.suffix == "m4g"))
+            {
+                /* GNU M3/M4 compiler */
+                lib_copts += "-O3 ";
+            }
+            else if ((target.suffix == "e674") || (target.suffix == "e66"))
+            {
+                /* TI C674x/C66 DSP compiler */
+                lib_copts += "--opt_level=2 ";
+            }
+            else
+            {
+                print("WARNING!!!! Unknown target suffix for release mode.");
+            }
+        }
+
+        var libName = Pkg.name;
+        var libOptions = {
+            copts: lib_copts + "",
+            profile: profile,
+        };
+        var lib = Pkg.addLibrary('lib/' + profile + '/' + libName, target, libOptions);
+        lib.addObjects(objList);
+
+        var libName = Pkg.name + "_instr";
+        var libOptions = {
+            copts: lib_copts + "-DAVBTP_INSTRUMENTATION_ENABLED",
+            profile: profile,
+        };
+        var lib = Pkg.addLibrary('lib/' + profile + '/' + libName, target, libOptions);
+        lib.addObjects(objList);
+    }
+}
+

@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>module ti.sdo.fc.global.Settings</title>
+<meta name="googlebot" content="noindex,nofollow">
+<link rel="stylesheet" type="text/css" href="../../../../src.css"/>
+</head>
+<body>
+<pre class=src>
+     1    <span class="comment">/*
+</span>     2    <span class="comment"> * Copyright (c) 2012, Texas Instruments Incorporated
+</span>     3    <span class="comment"> * All rights reserved.
+</span>     4    <span class="comment"> *
+</span>     5    <span class="comment"> * Redistribution and use in source and binary forms, with or without
+</span>     6    <span class="comment"> * modification, are permitted provided that the following conditions
+</span>     7    <span class="comment"> * are met:
+</span>     8    <span class="comment"> *
+</span>     9    <span class="comment"> * *  Redistributions of source code must retain the above copyright
+</span>    10    <span class="comment"> *    notice, this list of conditions and the following disclaimer.
+</span>    11    <span class="comment"> *
+</span>    12    <span class="comment"> * *  Redistributions in binary form must reproduce the above copyright
+</span>    13    <span class="comment"> *    notice, this list of conditions and the following disclaimer in the
+</span>    14    <span class="comment"> *    documentation and/or other materials provided with the distribution.
+</span>    15    <span class="comment"> *
+</span>    16    <span class="comment"> * *  Neither the name of Texas Instruments Incorporated nor the names of
+</span>    17    <span class="comment"> *    its contributors may be used to endorse or promote products derived
+</span>    18    <span class="comment"> *    from this software without specific prior written permission.
+</span>    19    <span class="comment"> *
+</span>    20    <span class="comment"> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+</span>    21    <span class="comment"> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+</span>    22    <span class="comment"> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+</span>    23    <span class="comment"> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+</span>    24    <span class="comment"> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+</span>    25    <span class="comment"> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+</span>    26    <span class="comment"> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+</span>    27    <span class="comment"> * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+</span>    28    <span class="comment"> * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+</span>    29    <span class="comment"> * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+</span>    30    <span class="comment"> * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+</span>    31    <span class="comment"> *
+</span>    32    <span class="comment"> */</span>
+    33    
+    34    <span class="xdoc">/*!
+</span>    35    <span class="xdoc"> *  ======== Settings ========
+</span>    36    <span class="xdoc"> *  Global configuration settings for all Framework Components packages
+</span>    37    <span class="xdoc"> *
+</span>    38    <span class="xdoc"> *  This module provides high-level configuration settings for all
+</span>    39    <span class="xdoc"> *  Framework Components packages.
+</span>    40    <span class="xdoc"> *
+</span>    41    <span class="xdoc"> *  <b>@a(Linking with Framework Components Libraries)</b>
+</span>    42    <span class="xdoc"> *
+</span>    43    <span class="xdoc"> *  When linking an executable, this module's profile config param is
+</span>    44    <span class="xdoc"> *  used to select which libraries are used. See the {<b>@link</b> #profile}
+</span>    45    <span class="xdoc"> *  config param below. There are three typical use-cases.
+</span>    46    <span class="xdoc"> *
+</span>    47    <span class="xdoc"> *  1. Link with Framework Components libraries of a specific profile. Add the
+</span>    48    <span class="xdoc"> *  following to your application cfg script.
+</span>    49    <span class="xdoc"> *
+</span>    50    <span class="xdoc"> *  <b>@p(code)</b>
+</span>    51    <span class="xdoc"> *  // set all framework component libraries to the given profile
+</span>    52    <span class="xdoc"> *  xdc.useModule('ti.sdo.fc.global.Settings').profile = "debug";
+</span>    53    <span class="xdoc"> *  <b>@p</b>
+</span>    54    <span class="xdoc"> *
+</span>    55    <span class="xdoc"> *  2. Link with Framework Component libraries using the program's profile. Add
+</span>    56    <span class="xdoc"> *  the following to your application cfg script.
+</span>    57    <span class="xdoc"> *
+</span>    58    <span class="xdoc"> *  <b>@p(code)</b>
+</span>    59    <span class="xdoc"> *  // use the program's profile
+</span>    60    <span class="xdoc"> *  var Program = xdc.useModule('xdc.cfg.Program');
+</span>    61    <span class="xdoc"> *  xdc.useModule('ti.sdo.fc.global.Settings').profile = Program.build.profile;
+</span>    62    <span class="xdoc"> *  <b>@p</b>
+</span>    63    <span class="xdoc"> *
+</span>    64    <span class="xdoc"> *  3. Specify a profile on a per-package basis.
+</span>    65    <span class="xdoc"> *
+</span>    66    <span class="xdoc"> *  <b>@p(code)</b>
+</span>    67    <span class="xdoc"> *  // specify the profile for some select packages
+</span>    68    <span class="xdoc"> *  xdc.loadPackage('ti.sdo.fc').profile = "debug";
+</span>    69    <span class="xdoc"> *  xdc.loadPackage('ti.sdo.fc.rman').profile = "debug";
+</span>    70    <span class="xdoc"> *  xdc.loadPackage('ti.sdo.fc.dman3').profile = "debug";
+</span>    71    <span class="xdoc"> *  xdc.loadPackage('ti.sdo.fc.edma3').profile = "debug";
+</span>    72    <span class="xdoc"> *  <b>@p</b>
+</span>    73    <span class="xdoc"> *
+</span>    74    <span class="xdoc"> *  Note that the third method above does not actually use the `profile`
+</span>    75    <span class="xdoc"> *  config param. It sets the package's profile config param directly.
+</span>    76    <span class="xdoc"> *
+</span>    77    <span class="xdoc"> *  The default value for the `profile` config param is `release`.
+</span>    78    <span class="xdoc"> *  Thus, even when building your executable using a debug profile, the
+</span>    79    <span class="xdoc"> *  Framework Component release libraries will be used. This helps to keep the
+</span>    80    <span class="xdoc"> *  executable size smaller when you want to debug the application code.
+</span>    81    <span class="xdoc"> */</span>
+    82    
+    83    @Template(<span class="string">"./Settings.xdt"</span>)
+    84    
+    85    <span class=key>metaonly</span> <span class=key>module</span> Settings
+    86    {
+    87        <span class="xdoc">/*!
+</span>    88    <span class="xdoc">     * ======== multiProcess ========
+</span>    89    <span class="xdoc">     * Add multi-process support for Framework Components libraries.
+</span>    90    <span class="xdoc">     *
+</span>    91    <span class="xdoc">     * This flag indicates whether an OSAL's multi-process support should
+</span>    92    <span class="xdoc">     * be linked in.
+</span>    93    <span class="xdoc">     */</span>
+    94        <span class=key>config</span> Bool multiProcess = <span class=key>true</span>;
+    95    
+    96        <span class="xdoc">/*!
+</span>    97    <span class="xdoc">     * ======== osalPackage ========
+</span>    98    <span class="xdoc">     * Name of the package supplying osal libraries.
+</span>    99    <span class="xdoc">     *
+</span>   100    <span class="xdoc">     * Some FC packages (such as ti.sdo.fc.rman and
+</span>   101    <span class="xdoc">     * ti.sdo.fc.ires.* on Linux) need implementation
+</span>   102    <span class="xdoc">     * of some OSAL APIs (LockMP_acquire/release/create/delete
+</span>   103    <span class="xdoc">     * and Sem_create/delete/pend/post).
+</span>   104    <span class="xdoc">     *
+</span>   105    <span class="xdoc">     * Assign this to a package name that implements these
+</span>   106    <span class="xdoc">     * signatures of the Lock functions are available at
+</span>   107    <span class="xdoc">     * ti/sdo/fc/utils/lock.h
+</span>   108    <span class="xdoc">     */</span>
+   109        <span class=key>config</span> String osalPackage;
+   110    
+   111        <span class="xdoc">/*!
+</span>   112    <span class="xdoc">     *  ======== profile ========
+</span>   113    <span class="xdoc">     *  Name the library profile to use at link time
+</span>   114    <span class="xdoc">     *
+</span>   115    <span class="xdoc">     *  If the Framework Component libraries have been built using the profile
+</span>   116    <span class="xdoc">     *  named by this config param, then these libraries will be used
+</span>   117    <span class="xdoc">     *  when linking the final executable. Otherwise, a substitute
+</span>   118    <span class="xdoc">     *  library will be used. For example, if this config param is set to
+</span>   119    <span class="xdoc">     *  debug but there are only release libraries available, then the
+</span>   120    <span class="xdoc">     *  release library is used.
+</span>   121    <span class="xdoc">     */</span>
+   122        <span class=key>config</span> String profile = <span class="string">"release"</span>;
+   123    
+   124        <span class="xdoc">/*!
+</span>   125    <span class="xdoc">     *  ======== enableLogFC ========
+</span>   126    <span class="xdoc">     *  Globally enable or disable logging in Framework components.
+</span>   127    <span class="xdoc">     *
+</span>   128    <span class="xdoc">     *  If enableLogFC is set to false, any Diags masks of a Framework
+</span>   129    <span class="xdoc">     *  Components module that have not been set in the application's
+</span>   130    <span class="xdoc">     *  configuration file, will be set to Diags.ALWAYS_OFF. However,
+</span>   131    <span class="xdoc">     *  the if the module's 'enableLog' configuration parameter has been
+</span>   132    <span class="xdoc">     *  set, it will override this.
+</span>   133    <span class="xdoc">     *
+</span>   134    <span class="xdoc">     *  If enableLogFC has been set to true, or has not been set at all,
+</span>   135    <span class="xdoc">     *  the default value for unset FC Diags masks will be RUNTIME_OFF.
+</span>   136    <span class="xdoc">     *
+</span>   137    <span class="xdoc">     *  <b>@sa</b> xdc.runtime.Diags
+</span>   138    <span class="xdoc">     *  <b>@sa</b> xdc.runtime.Log
+</span>   139    <span class="xdoc">     */</span>
+   140        <span class=key>config</span> Bool enableLogFC;
+   141    
+   142        <span class="xdoc">/*!
+</span>   143    <span class="xdoc">     *  ======== useDNUM ========
+</span>   144    <span class="xdoc">     *  Use DNUM to convert internal memory addresses to core-specific
+</span>   145    <span class="xdoc">     *  addresses, that peripherals such as the EDMA3 can understand.
+</span>   146    <span class="xdoc">     *  This is automatically done for devices such as 6472, 6474, 6486, 6488
+</span>   147    <span class="xdoc">     *  Should be explicitly set for others, others FC will return un-modified
+</span>   148    <span class="xdoc">     *  internal memory addresses.
+</span>   149    <span class="xdoc">     */</span>
+   150        <span class=key>config</span> Bool useDNUM;
+   151    
+   152        <span class=key>config</span> Bool useL3MemoryMap;
+   153    }
+</pre>
+</body></html>

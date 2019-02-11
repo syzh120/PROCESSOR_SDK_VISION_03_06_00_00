@@ -1,0 +1,214 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- --COPYRIGHT--,BSD
+ *  Copyright (c) 2016, Texas Instruments Incorporated
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *
+ *  *  Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *
+ *  *  Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ *
+ *  *  Neither the name of Texas Instruments Incorporated nor the names of
+ *     its contributors may be used to endorse or promote products derived
+ *     from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ *  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ *  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ *  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ *  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ *  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ *  OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ *  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ *  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ *  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * --/COPYRIGHT--
+-->
+<html>
+<head>
+  <title>Framework Components Example Build Instructions</title>
+<!-- For now, we use the doxygen style sheet -->
+  <link type="text/css" rel="stylesheet" href="../docs/html/doxygen.css">
+    <style type="text/css">
+    body {
+        margin: 20px;
+    }
+    </style>
+</head>
+<body>
+<table width="100%">
+  <tbody>
+    <tr>
+      <td bgcolor="black" width="1">
+        <a href="http://www.ti.com">
+          <img src="../docs/html/tilogo.gif" border="0" alt="Texas
+          Instruments">
+        </a>
+      </td>
+      <td bgcolor="red">
+        <img src="../docs/html/titagline.gif" alt="Technology for
+        Innovators">
+      </td>
+    </tr>
+  </tbody>
+</table>
+<h1>Build Instructions for Framework Components Examples</h1>
+<hr>
+<h2>General Information</h2>
+<p>This page explains how to build the examples provided in the
+Framework Components product.
+</p>
+
+<hr>
+<h2>Requirements</h2>
+<p>See the <a href="../framework_components_3_40_02_07_ReleaseNotes.html">Release Notes</a>
+for the specific software and hardware components this release of
+Framework Components has been validated against.
+</p>
+<hr>
+<h2>Directory Structure</h2>
+<p>Examples are provided in zip file format under the directory
+<ul><tt>&lt;FC_INSTALL_DIR&gt;/examples/archive</tt>, </ul> where
+<tt>&lt;FC_INSTALL_DIR&gt;</tt> is the root directory of your Codec Engine
+insatallation. Under the <tt>archive</tt> directory, you will find
+directories named for platforms containing zipped examples specific to
+the given platform.  Each example is self-contained, so that it can be
+unzipped and built in a directory of your choice.  It is also possible
+to build all the examples for your platform from the makefile located in
+<tt>&lt;FC_INSTALL_DIR&gt;/examples</tt>.
+</p>
+Directories containing examples:
+// ls -R examples | grep ':$' | grep -v '/lib' | grep -v '/package' | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'
+<pre>
+examples
+    +---archive
+        +---device-name
+            +----ex01_universal_dma_copy.zip  
+            +----ex02_dskt2_alg_mgmt.zip
+            +----ex03_ivahd_lateacquire_demo.zip
+            +----ex04_rman_generic_example.zip
+</pre>
+
+<hr>
+<h2>Building the examples: step-by-step instructions</h2>
+Here we will describe the steps to build all the examples for your
+platform, from the root of the <tt>examples</tt> directory.
+<h3>1. [Optional] Copy the entire "examples" tree out of the product</h3>
+<p>
+This step is optional, but recommended if you plan to modify the
+examples in any way. It will ensure you have a backup copy of the
+original examples, as provided by the Framework Components product.
+</p>
+<p><i>Important</i>: throughout the rest of this document, we will use the
+following notation:
+</p>
+<ul>
+  <li><tt>&lt;FC_EXAMPLES_INSTALL_DIR&gt;</tt> - absolute path of the
+  examples directory or the copy you made,
+  e.g. <tt>/usr/work/examples</tt></li>
+  <li><tt>&lt;FC_INSTALL_DIR&gt;</tt> - root directory of your Codec Engine
+  installation. The original examples are in
+  <tt>&lt;FC_INSTALL_DIR&gt;/examples</tt>.</li>
+  <li><tt>&lt;BIOS_INSTALL_DIR&gt;</tt> - root directory of your DSP/BIOS
+  installation.</li>
+  <li><tt>&lt;XDC_INSTALL_DIR&gt;</tt> - root directory of your xdctools
+  installation.</li>
+  <li><i>directory/file</i> - position of the file relative to the
+  examples directory; for examples, <tt>ti/sdo/fc/examples/codecs/makefile</tt> refers to
+  <tt>&lt;CE_EXAMPLES_INSTALL_DIR&gt;/ti/sdo/fc/examples/codecs/makefile</tt>.</li>
+</ul>
+
+<h3>2. Manage xdcpaths.mak and products.mak</h3>
+<p>
+At the root of the examples directory you will find the file,
+<b>xdcpaths.mak</b>, which must be edited for your particular usecase.
+Edit the following variables in <b>xdcpaths.mak</b>, as described below.
+</p>
+<h3>2.1 FC_INSTALL_DIR</h3>
+<p>
+The <tt>FC_INSTALL_DIR</tt> variable indicates where the Framework Components 
+product is installed.
+<p>
+
+<h3>2.2 DEVICE</h3>
+<p>
+The <tt>DEVICE</tt> variable indicates which hardware platforms should be
+built for.  Set this variable to one of the supported platforms listed in
+the <b>xdcpaths.mak</b> file.
+</p>
+
+<h3>3. Dependencies</h3>
+<p>Dependencies can be set in $(FC_INSTALL_DIR)/products.mak, which is then
+included by <b>examples/xdcpaths.mak</b>. Dependencies can also be set in individual example directories' products.mak, but they will be overriden with by the
+top-level products.mak.</p>
+<h3>INSTALL_DIR</h3>
+<ul>
+  <li> The many <b>INSTALL_DIR</b> variables let you set the path to other
+  dependent components. Depending on the programs you are building and the
+  devices you build for, you will need to set the path for one or more of
+  these components.  If your distribution includes cetools/, you can set
+  many of these variables to $(FC_INSTALL_DIR)/cetools.
+  </li>
+</ul>
+
+<h3>Codegen Tools</h3>
+<ul>
+  <li>Correct code generation tool paths will need to be specified for the
+  architectures you will be building for. For instance, to build for the C6472
+  device, you will need to set the appropriate cgtools variables to the TI C64x
+  toolchain location.<br />
+  Note that for TI toolchains, this is the directory that contains bin/,
+  include/, and lib/ subdirectories.<br />
+  </li>
+</ul>
+
+
+<p>
+The makefile in the top-level example directory unzips the examples for
+the device specified in the xdcpaths.mak file, into the examples directory,
+and then builds them.
+
+Each example contains a GNU <tt>makefile</tt> and a <tt>products.mak</tt>,
+which enable you to build it in the directory where it is unzipped. The
+<tt>products.mak</tt> for the individual example will look for a
+products.mak file one, two, or three directories above, to allow for a
+common products.mak file that can be used for the examples.
+
+<p>Please keep in mind that <b><span style="color: rgb(153, 0, 0);">MOST
+BUILD TROUBLES OCCUR WHEN ONE OF THE VARIOUS <tt>*_INSTALL_DIR</tt>
+VARIABLES ARE INCORRECT!</span></b>
+Make sure there are no extra spaces (check the end of lines!), that every
+individual path (segment separated by the semicolon) is correct, character
+for character, and the build process is very likely to go smoothly.
+</p>
+
+
+<h3>4. Build examples</h3>
+<p>After updating the variables described above, from your examples/ directory, type:</p>
+<p>&nbsp;&nbsp;&nbsp; <b>gmake clean<br>
+&nbsp;&nbsp;&nbsp; gmake</b></p>
+
+<p>All examples appropriate for your specified environment and device will be
+built.  This will include codecs and apps. Or in your specific example directory (for e.g., ex01_universal_dma_copy), 
+type</p> <p>&nbsp;&nbsp;&nbsp; <b>gmake clean<br> &nbsp;&nbsp;&nbsp; gmake</b></p>
+This will build all the libs/executables that are specified in the <b>makefile</b> 
+
+<hr>
+<h2>Running the example applications</h2>
+
+<p>All of these examples are single core examples that can be run by loading the executable on the corresponding core in CCS and letting it run till the end. In most cases logging/trace is enabled and that will generate useful output on the Console.
+<p>
+
+<hr>
+<p>
+Last updated: June 28, 2016
+</p>
+</body>
+</html>

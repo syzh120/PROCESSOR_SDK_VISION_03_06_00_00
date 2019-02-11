@@ -1,0 +1,60 @@
+UseCase: chains_issMultCaptIsp2d3dSv
+
+IssCapture -> IssM2mIsp -> Sync
+
+Sync -> Dup_sv
+
+
+// *****************************************
+//                 3D SRV
+// *****************************************
+
+// Input Q0 of Synthesis
+Dup_sv -> Alg_DeWarp -> Alg_Synthesis_3d (DSP1)
+
+// Synthesis Out Q0
+Alg_Synthesis_3d -> Display_3d
+
+// Synthesis Out Q1
+Alg_Synthesis_3d -> Alg_PhotoAlign_3d (DSP1)
+
+// There is no Geo Align Link so connecting Null Source to
+// input Q1 of Synthesis
+NullSource -> Alg_Synthesis_3d (DSP1)
+
+// Photo Align Should be on input Q2 of Synthesis
+Alg_PhotoAlign_3d -> Alg_Synthesis_3d (DSP1)
+
+// *****************************************
+
+// *****************************************
+//                 2D SRV
+// *****************************************
+Dup_sv -> Dup_2d
+
+// Dup Out Q0
+Dup_2d -> Alg_GeoAlign_2d (DSP2)
+
+// Dup Out Q1 to Synthesis In Q0
+Dup_2d -> Alg_Synthesis_2d (DSP2)
+
+// Synthesis Out Q0
+Alg_Synthesis_2d -> Display_2d
+
+// Synthesis Out Q1
+Alg_Synthesis_2d -> Alg_PhotoAlign_2d (DSP2)
+
+// Synthesis In Q1
+Alg_GeoAlign_2d -> Alg_Synthesis_2d (DSP2)
+
+// Synthesis In Q2
+Alg_PhotoAlign_2d -> Alg_Synthesis_2d (DSP2)
+
+// *****************************************
+
+// AEWB
+IssM2mIsp -> Alg_IssAewb
+
+// Graphics
+GrpxSrc -> Display_Grpx
+

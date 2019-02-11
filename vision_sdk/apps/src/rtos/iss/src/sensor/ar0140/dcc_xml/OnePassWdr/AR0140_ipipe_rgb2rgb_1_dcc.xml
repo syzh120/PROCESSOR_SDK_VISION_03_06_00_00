@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<IPIPE_RGB_RGB_1_xml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<!--this is comment-->
+	<dcc_name>ipipe_rgb2rgb</dcc_name>
+	<dcc_header>
+		<camera_module_id>     140 </camera_module_id>
+		<dcc_descriptor_id>   10 </dcc_descriptor_id>
+		<algorithm_vendor_id>  1 </algorithm_vendor_id>
+		<tunning_tool_version> 0 </tunning_tool_version>
+	</dcc_header>
+	<!--=======================================================================-->
+	<typedef>
+		<iss_ipipe_rgb2rgb type="struct">
+			<update type="uint8"> </update>
+			<!-- [RR] [GR] [BR]
+			     [RG] [GG] [BG]
+			     [RB] [GB] [BB] -->
+			<!-- Blending values (S12Q8 format) -->
+			<matrix type="int16[3][3]"> </matrix> <!-- ipipe rgb2rgb1 matrix: S12Q8 -->
+			<!-- Blending offset value for R,G,B - (S13) -->
+			<offset type="int16[3]"> </offset> <!-- ipipe rgb2rgb1 offset: S13 -->
+		</iss_ipipe_rgb2rgb>
+	</typedef>
+	<!--=======================================================================-->
+				
+	<use_case val="1023">
+		<n-space>
+		
+			<region0 class="0">
+				<colortemperature val="2" min="0" max="3000">  </colortemperature>
+				<exposure val="1" min="0" max="10000000">  </exposure>
+				<gain val="0" min="0" max="1024">  </gain>
+			</region0>
+			
+			<region1 class="1">
+				<colortemperature val="2" min="3001" max="4500">  </colortemperature>
+				<exposure val="1" min="0" max="10000000">  </exposure>
+				<gain val="0" min="0" max="1024">  </gain>
+			</region1>
+			
+			<region2 class="2">
+				<colortemperature val="2" min="4501" max="5500">  </colortemperature>
+				<exposure val="1" min="0" max="10000000">  </exposure>
+				<gain val="0" min="0" max="1024">  </gain>
+			</region2>
+			
+			<region3 class="3">
+				<colortemperature val="2" min="5501" max="20000">  </colortemperature>
+				<exposure val="1" min="0" max="10000000">  </exposure>
+				<gain val="0" min="0" max="1024">  </gain>
+			</region3>
+			
+		</n-space>
+	
+		<parameter_package>
+			<ipipe_rgb2rgb type="iss_ipipe_rgb2rgb">
+			{
+				0,	//update
+				{
+					{373, -137, 20},
+					{-138, 274, 120},
+					{-80, -414, 750}
+				},
+				{0, 0, 0}
+			}
+			</ipipe_rgb2rgb>
+		</parameter_package>
+		
+		<parameter_package>
+			<ipipe_rgb2rgb type="iss_ipipe_rgb2rgb">
+			{
+				0,	//update
+				{
+					{414, -182, 24},
+					{-124, 321, 59},
+					{1, -248, 503}
+				},
+				{0, 0, 0}
+			}
+			</ipipe_rgb2rgb>
+		</parameter_package>
+		
+		<parameter_package>
+			<ipipe_rgb2rgb type="iss_ipipe_rgb2rgb">
+			{
+				0,	//update
+				{
+					{409, -165, 12},
+					{-129, 338, 47},
+					{-11, -208, 475}
+				},
+				{0, 0, 0}
+			}
+			</ipipe_rgb2rgb>
+		</parameter_package>
+		
+		<parameter_package>
+			<ipipe_rgb2rgb type="iss_ipipe_rgb2rgb">
+			{
+				0,	//update
+				{
+					{413, -163, 6},
+					{-125, 358, 23},
+					{-6, -192, 454}
+				},
+				{0, 0, 0}
+			}
+			</ipipe_rgb2rgb>
+		</parameter_package>
+		
+	</use_case>
+	
+	<!--=====================================================================-->
+</IPIPE_RGB_RGB_1_xml>

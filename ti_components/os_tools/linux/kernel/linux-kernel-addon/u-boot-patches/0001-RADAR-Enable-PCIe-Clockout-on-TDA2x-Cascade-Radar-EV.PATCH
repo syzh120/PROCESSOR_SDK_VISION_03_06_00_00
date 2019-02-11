@@ -1,0 +1,29 @@
+From 62bf6e85d36dad1c02234fd1c692dcaa8400e7dd Mon Sep 17 00:00:00 2001
+From: Stanley Liu <stanley_liu@ti.com>
+Date: Fri, 28 Dec 2018 13:55:58 -0600
+Subject: [PATCH] [RADAR] Enable PCIe Clockout on TDA2x Cascade Radar EVM
+
+Signed-off-by: Stanley Liu <stanley_liu@ti.com>
+---
+ board/ti/dra7xx/evm.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/board/ti/dra7xx/evm.c b/board/ti/dra7xx/evm.c
+index 687457d..53502ee 100755
+--- a/board/ti/dra7xx/evm.c
++++ b/board/ti/dra7xx/evm.c
+@@ -693,6 +693,11 @@ int board_late_init(void)
+ 	omap_die_id_serial();
+ 	omap_set_fastboot_vars();
+ #endif
++        /* Enable PCIe Clockout */
++        volatile unsigned int *CTRL_CORE_SMA_SW_6 = (volatile unsigned int *)0x4A003C14;
++        *CTRL_CORE_SMA_SW_6 = ((*CTRL_CORE_SMA_SW_6) & ~0x30000) | 0x10000;
++
++
+ 	return 0;
+ }
+ 
+-- 
+1.9.1
+

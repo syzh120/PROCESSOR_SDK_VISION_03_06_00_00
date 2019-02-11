@@ -1,0 +1,86 @@
+/*
+ *  ======== config_arp32.bld ========
+ */
+
+var A15TargetOS = java.lang.System.getenv("A15_TARGET_OS");
+var platformMem = java.lang.System.getenv("DDR_MEM");
+var appPath = java.lang.System.getenv("APP_PATH");
+
+if (A15TargetOS == "Qnx")
+{
+    A15TargetOS = "Linux";
+}
+
+if(A15TargetOS == "Linux")
+{
+    var MemSegDefine = xdc.loadCapsule("" + appPath + "/build/tda2xx/mem_segment_definition_linux.xs");
+}
+if(A15TargetOS == "Bios")
+{
+    var MemSegDefine = xdc.loadCapsule("" + appPath + "/build/tda2xx/mem_segment_definition_bios.xs");
+}
+
+var CurrentPlatform = java.lang.System.getenv("PLATFORM");
+xdc.print("# !!!  Current build platform is [" + CurrentPlatform + "] !!!" );
+
+var Build = xdc.useModule('xdc.bld.BuildEnvironment');
+
+var buildReleaseConfig = true;
+
+var Build   = xdc.useModule('xdc.bld.BuildEnvironment');
+var ARP32   = xdc.useModule('ti.targets.arp32.elf.ARP32_far');
+
+ARP32.rootDir   = java.lang.System.getenv("CGTOOLS_EVE");
+
+ARP32.ccOpts.suffix += " --symdebug:none --gcc -O3 -DPLATFORM_EVM_SI ";
+ARP32.ccOpts.suffix += " -DCHIP_TDA2xx ";
+
+/* linker options - defined in rules_arp32.mk */
+
+ARP32.platforms = ["ti.platforms.evmDRA7XX:EVE_1",
+                   "ti.platforms.evmDRA7XX:EVE_2",
+                   "ti.platforms.evmDRA7XX:EVE_3",
+                   "ti.platforms.evmDRA7XX:EVE_4",
+                  ];
+
+ARP32.platform = ARP32.platforms[3];
+
+Build.targets     = [
+                    ARP32,
+                    ];
+
+var core = java.lang.System.getenv("CORE");
+
+Build.platformTable["ti.platforms.evmDRA7XX:EVE_1"] =
+{
+    externalMemoryMap: MemSegDefine.getMemSegmentDefinition_external(core),
+    codeMemory:"EVE1_CODE_MEM",
+    dataMemory:"EVE1_DATA_MEM",
+    stackMemory:"EVE1_DATA_MEM"
+};
+
+Build.platformTable["ti.platforms.evmDRA7XX:EVE_2"] =
+{
+    externalMemoryMap: MemSegDefine.getMemSegmentDefinition_external(core),
+    codeMemory:"EVE2_CODE_MEM",
+    dataMemory:"EVE2_DATA_MEM",
+    stackMemory:"EVE2_DATA_MEM"
+};
+
+Build.platformTable["ti.platforms.evmDRA7XX:EVE_3"] =
+{
+    externalMemoryMap: MemSegDefine.getMemSegmentDefinition_external(core),
+    codeMemory:"EVE3_CODE_MEM",
+    dataMemory:"EVE3_DATA_MEM",
+    stackMemory:"EVE3_DATA_MEM"
+};
+
+Build.platformTable["ti.platforms.evmDRA7XX:EVE_4"] =
+{
+    externalMemoryMap: MemSegDefine.getMemSegmentDefinition_external(core),
+    codeMemory:"EVE4_CODE_MEM",
+    dataMemory:"EVE4_DATA_MEM",
+    stackMemory:"EVE4_DATA_MEM"
+};
+
+

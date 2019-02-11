@@ -1,0 +1,80 @@
+/*
+ *  ======== config_c66.bld ========
+ *  Sample Build configuration script
+ */
+
+/* load the required modules for the configuration */
+
+var A15TargetOS = java.lang.System.getenv("A15_TARGET_OS");
+var platformMem = java.lang.System.getenv("DDR_MEM");
+var appPath = java.lang.System.getenv("APP_PATH");
+
+if (A15TargetOS == "Qnx")
+{
+    A15TargetOS = "Linux";
+}
+
+if(A15TargetOS == "Linux")
+{
+    var MemSegDefine = xdc.loadCapsule("" + appPath + "/build/tda2px/mem_segment_definition_linux.xs");
+}
+if(A15TargetOS == "Bios")
+{
+    var MemSegDefine = xdc.loadCapsule("" + appPath + "/build/tda2px/mem_segment_definition_bios.xs");
+}
+
+var CurrentPlatform = java.lang.System.getenv("PLATFORM");
+xdc.print("# !!!  Current build platform is [" + CurrentPlatform + "] !!!" );
+
+var Build = xdc.useModule('xdc.bld.BuildEnvironment');
+
+var buildReleaseConfig = true;
+
+var Build = xdc.useModule('xdc.bld.BuildEnvironment');
+var C66_ELF = xdc.useModule('ti.targets.elf.C66');
+
+C66_ELF.rootDir = java.lang.System.getenv("CGTOOLS_DSP");
+
+C66_ELF.ccOpts.suffix += " -DPLATFORM_EVM_SI ";
+
+C66_ELF.ccOpts.suffix += " -mi10 -mo --gcc --symdebug:none -O3";
+
+/* linker options */
+C66_ELF.lnkOpts.suffix += " --zero_init=off ";
+C66_ELF.lnkOpts.suffix += " --dynamic --retain=_Ipc_ResetVector --retain=.resource_table --cinit_compression=off";
+
+C66_ELF.platforms = ["ti.platforms.evmDRA7XX:DSP_1",
+                     "ti.platforms.evmDRA7XX:DSP_2",
+                    ];
+
+C66_ELF.platform = C66_ELF.platforms[1];
+
+/* list interested targets in Build.targets array  */
+Build.targets = [
+                C66_ELF,
+                ];
+
+var core = java.lang.System.getenv("CORE");
+
+Build.platformTable["ti.platforms.evmDRA7XX:DSP_1"] =
+{
+    externalMemoryMap: MemSegDefine.getMemSegmentDefinition_external(core),
+    codeMemory:"DSP1_CODE_MEM",
+    dataMemory:"DSP1_DATA_MEM",
+    stackMemory:"DSP1_DATA_MEM",
+    l1PMode: "32k",
+    l1DMode: "32k",
+    l2Mode:  "32k"
+};
+
+Build.platformTable["ti.platforms.evmDRA7XX:DSP_2"] =
+{
+    externalMemoryMap: MemSegDefine.getMemSegmentDefinition_external(core),
+    codeMemory:"DSP2_CODE_MEM",
+    dataMemory:"DSP2_DATA_MEM",
+    stackMemory:"DSP2_DATA_MEM",
+    l1PMode: "32k",
+    l1DMode: "32k",
+    l2Mode:  "32k"
+};
+

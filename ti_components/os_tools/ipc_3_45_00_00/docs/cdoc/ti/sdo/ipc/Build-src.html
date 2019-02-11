@@ -1,0 +1,243 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>module ti.sdo.ipc.Build</title>
+<meta name="googlebot" content="noindex,nofollow">
+<link rel="stylesheet" type="text/css" href="../../../src.css"/>
+</head>
+<body>
+<pre class=src>
+     1    <span class="comment">/*
+</span>     2    <span class="comment"> * Copyright (c) 2013-2015 Texas Instruments Incorporated - http://www.ti.com
+</span>     3    <span class="comment"> * All rights reserved.
+</span>     4    <span class="comment"> *
+</span>     5    <span class="comment"> * Redistribution and use in source and binary forms, with or without
+</span>     6    <span class="comment"> * modification, are permitted provided that the following conditions
+</span>     7    <span class="comment"> * are met:
+</span>     8    <span class="comment"> *
+</span>     9    <span class="comment"> * *  Redistributions of source code must retain the above copyright
+</span>    10    <span class="comment"> *    notice, this list of conditions and the following disclaimer.
+</span>    11    <span class="comment"> *
+</span>    12    <span class="comment"> * *  Redistributions in binary form must reproduce the above copyright
+</span>    13    <span class="comment"> *    notice, this list of conditions and the following disclaimer in the
+</span>    14    <span class="comment"> *    documentation and/or other materials provided with the distribution.
+</span>    15    <span class="comment"> *
+</span>    16    <span class="comment"> * *  Neither the name of Texas Instruments Incorporated nor the names of
+</span>    17    <span class="comment"> *    its contributors may be used to endorse or promote products derived
+</span>    18    <span class="comment"> *    from this software without specific prior written permission.
+</span>    19    <span class="comment"> *
+</span>    20    <span class="comment"> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+</span>    21    <span class="comment"> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+</span>    22    <span class="comment"> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+</span>    23    <span class="comment"> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+</span>    24    <span class="comment"> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+</span>    25    <span class="comment"> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+</span>    26    <span class="comment"> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+</span>    27    <span class="comment"> * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+</span>    28    <span class="comment"> * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+</span>    29    <span class="comment"> * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+</span>    30    <span class="comment"> * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+</span>    31    <span class="comment"> */</span>
+    32    
+    33    <span class="comment">/*
+</span>    34    <span class="comment"> *  ======== Build.xdc ========
+</span>    35    <span class="comment"> *  metaonly module to support building various package/product libraries
+</span>    36    <span class="comment"> *
+</span>    37    <span class="comment"> */</span>
+    38    
+    39    <span class="xdoc">/*!
+</span>    40    <span class="xdoc"> *  ======== Build ========
+</span>    41    <span class="xdoc"> */</span>
+    42    
+    43    @Template(<span class="string">"./Build.xdt"</span>)
+    44    <span class=key>metaonly</span> <span class=key>module</span> Build
+    45    {
+    46        <span class="xdoc">/*!
+</span>    47    <span class="xdoc">     *  ======== LibType ========
+</span>    48    <span class="xdoc">     *  IPC library selection options
+</span>    49    <span class="xdoc">     *
+</span>    50    <span class="xdoc">     *  This enumeration defines all the IPC library types provided
+</span>    51    <span class="xdoc">     *  by the product. You can select the library type by setting
+</span>    52    <span class="xdoc">     *  the {<b>@link</b> #libType Build.libType} configuration parameter.
+</span>    53    <span class="xdoc">     *
+</span>    54    <span class="xdoc">     *  <b>@field(LibType_Instrumented)</b> The library supplied is prebuilt
+</span>    55    <span class="xdoc">     *  with logging and assertions enabled.
+</span>    56    <span class="xdoc">     *
+</span>    57    <span class="xdoc">     *  <b>@field(LibType_NonInstrumented)</b> The library supplied is prebuilt
+</span>    58    <span class="xdoc">     *  with logging and assertions disabled.
+</span>    59    <span class="xdoc">     *
+</span>    60    <span class="xdoc">     *  <b>@field(LibType_Custom)</b> This option builds the IPC library from
+</span>    61    <span class="xdoc">     *  sources using the options specified by {<b>@link</b> #customCCOpts}.
+</span>    62    <span class="xdoc">     *  Only the modules and APIs that your application uses are
+</span>    63    <span class="xdoc">     *  contained in the resulting executable. Program optimization is
+</span>    64    <span class="xdoc">     *  performed to reduce the size of the executable and improve
+</span>    65    <span class="xdoc">     *  performance. Enough debug information is retained to allow you
+</span>    66    <span class="xdoc">     *  to step through the application code in CCS and locate global
+</span>    67    <span class="xdoc">     *  variables.
+</span>    68    <span class="xdoc">     *
+</span>    69    <span class="xdoc">     *  <b>@field(LibType_Debug)</b> This option is similar to the LibType_Custom
+</span>    70    <span class="xdoc">     *  option in that it builds the IPC library from sources and omits
+</span>    71    <span class="xdoc">     *  modules and APIs that your code does not use. However, no program
+</span>    72    <span class="xdoc">     *  optimization is performed. The resulting executable is fully
+</span>    73    <span class="xdoc">     *  debuggable, and you can step into IPC code. The tradeoff is that
+</span>    74    <span class="xdoc">     *  the executable is larger and runs slower than builds that use the
+</span>    75    <span class="xdoc">     *  LibType_Custom option.
+</span>    76    <span class="xdoc">     *
+</span>    77    <span class="xdoc">     *  <b>@field(LibType_PkgLib)</b> This option uses the individual libraries
+</span>    78    <span class="xdoc">     *  built by each package of the IPC product. These libraries are
+</span>    79    <span class="xdoc">     *  not shipped. You must build the product to generate the package
+</span>    80    <span class="xdoc">     *  libraries. See the IPC Install Guides (links in the Release
+</span>    81    <span class="xdoc">     *  Note) for details on building the IPC product.
+</span>    82    <span class="xdoc">     *
+</span>    83    <span class="xdoc">     *  <b>@see</b> #libType
+</span>    84    <span class="xdoc">     */</span>
+    85        <span class=key>enum</span> LibType {
+    86            LibType_Instrumented,           <span class="xdoc">/*! Instrumented */</span>
+    87            LibType_NonInstrumented,        <span class="xdoc">/*! Non-instrumented */</span>
+    88            LibType_Custom,                 <span class="xdoc">/*! Custom (Optimized) */</span>
+    89            LibType_Debug,                  <span class="xdoc">/*! Custom (Debug) */</span>
+    90            LibType_PkgLib                  <span class="xdoc">/*! Use package library */</span>
+    91        };
+    92    
+    93        <span class="xdoc">/*!
+</span>    94    <span class="xdoc">     *  ======== libType ========
+</span>    95    <span class="xdoc">     *  IPC library type
+</span>    96    <span class="xdoc">     *
+</span>    97    <span class="xdoc">     *  The IPC runtime is provided in the form of a library that is
+</span>    98    <span class="xdoc">     *  linked with your application. Several forms of this library are
+</span>    99    <span class="xdoc">     *  provided with the IPC product. In addition, there is an option
+</span>   100    <span class="xdoc">     *  to build the library from source. This configuration parameter
+</span>   101    <span class="xdoc">     *  allows you to select the form of the IPC library to use.
+</span>   102    <span class="xdoc">     *
+</span>   103    <span class="xdoc">     *  The default value of libType is taken from the BIOS.libType
+</span>   104    <span class="xdoc">     *  configuration parameter. For a complete list of options and
+</span>   105    <span class="xdoc">     *  what they offer see {<b>@link</b> #LibType}.
+</span>   106    <span class="xdoc">     */</span>
+   107        <span class=key>config</span> LibType libType;
+   108    
+   109        <span class="xdoc">/*!
+</span>   110    <span class="xdoc">     *  ======== customCCOpts ========
+</span>   111    <span class="xdoc">     *  Compiler options used when building a custom IPC library
+</span>   112    <span class="xdoc">     *
+</span>   113    <span class="xdoc">     *  When {<b>@link</b> #libType Build.libType} is set to
+</span>   114    <span class="xdoc">     *  {<b>@link</b> #LibType_Custom Build_LibType_Custom} or
+</span>   115    <span class="xdoc">     *  {<b>@link</b> #LibType_Debug Build_LibType_Debug}, this string contains
+</span>   116    <span class="xdoc">     *  the options passed to the compiler during any re-build of the
+</span>   117    <span class="xdoc">     *  IPC sources.
+</span>   118    <span class="xdoc">     *
+</span>   119    <span class="xdoc">     *  In addition to the options specified by `Build.customCCOpts`,
+</span>   120    <span class="xdoc">     *  several `-D` and `-I` options are also passed to the compiler.
+</span>   121    <span class="xdoc">     *  The options specified by `Build.customCCOpts` preceed the `-D`
+</span>   122    <span class="xdoc">     *  and `-I` options passed to the compiler on the command line.
+</span>   123    <span class="xdoc">     *
+</span>   124    <span class="xdoc">     *  To view the custom compiler options, add the following line
+</span>   125    <span class="xdoc">     *  to your config script:
+</span>   126    <span class="xdoc">     *
+</span>   127    <span class="xdoc">     *  <b>@p(code)</b>
+</span>   128    <span class="xdoc">     *  print("Build.customCCOpts="+Build.customCCOpts);
+</span>   129    <span class="xdoc">     *  <b>@p</b>
+</span>   130    <span class="xdoc">     *
+</span>   131    <span class="xdoc">     *  When {<b>@link</b> #libType Build.libType} is set to
+</span>   132    <span class="xdoc">     *  {<b>@link</b> #LibType_Custom Build_LibType_Custom}, `Build.customCCOpts`
+</span>   133    <span class="xdoc">     *  is initialized to create a highly optimized library.
+</span>   134    <span class="xdoc">     *
+</span>   135    <span class="xdoc">     *  When {<b>@link</b> #libType Build.libType} is set to
+</span>   136    <span class="xdoc">     *  {<b>@link</b> #LibType_Debug Build_LibType_Debug}, `Build.customCCOpts`
+</span>   137    <span class="xdoc">     *  is initialized to create a non-optimized library that can be
+</span>   138    <span class="xdoc">     *  used to single-step through the APIs with the CCS debugger.
+</span>   139    <span class="xdoc">     *
+</span>   140    <span class="xdoc">     *  <b>@a(Warning)</b>
+</span>   141    <span class="xdoc">     *  The default value of `Build.customCCOpts`, which is derived from
+</span>   142    <span class="xdoc">     *  the target specified by your configuration, includes runtime
+</span>   143    <span class="xdoc">     *  model options (such as endianess) that must be the same for all
+</span>   144    <span class="xdoc">     *  sources built and linked into your application. You must not
+</span>   145    <span class="xdoc">     *  change or add any options that can alter the runtime model
+</span>   146    <span class="xdoc">     *  specified by the default value of `Build.customCCOpts`.
+</span>   147    <span class="xdoc">     */</span>
+   148        <span class=key>config</span> String customCCOpts;
+   149    
+   150        <span class="xdoc">/*!
+</span>   151    <span class="xdoc">     *  ======== assertsEnabled ========
+</span>   152    <span class="xdoc">     *  IPC assert checking in custom library enable flag
+</span>   153    <span class="xdoc">     *
+</span>   154    <span class="xdoc">     *  When set to true, assert checking code is compiled into
+</span>   155    <span class="xdoc">     *  the custom library created when {<b>@link</b> #libType Build.libType}
+</span>   156    <span class="xdoc">     *  is set to {<b>@link</b> #LibType_Custom Build_LibType_Custom} or
+</span>   157    <span class="xdoc">     *  {<b>@link</b> #LibType_Debug Build_LibType_Debug}.
+</span>   158    <span class="xdoc">     *
+</span>   159    <span class="xdoc">     *  When set to false, assert checking code is removed from the
+</span>   160    <span class="xdoc">     *  custom library created when Build.libType is set to
+</span>   161    <span class="xdoc">     *  Build.LibType_Custom or Build.LibType_Debug. This option can
+</span>   162    <span class="xdoc">     *  considerably improve runtime performance as well significantly
+</span>   163    <span class="xdoc">     *  reduce the application's code size.
+</span>   164    <span class="xdoc">     *
+</span>   165    <span class="xdoc">     *  <b>@see</b> #libType
+</span>   166    <span class="xdoc">     */</span>
+   167        <span class=key>config</span> Bool assertsEnabled = <span class=key>true</span>;
+   168    
+   169        <span class="xdoc">/*!
+</span>   170    <span class="xdoc">     *  ======== logsEnabled ========
+</span>   171    <span class="xdoc">     *  IPC log support in custom library enable flag
+</span>   172    <span class="xdoc">     *
+</span>   173    <span class="xdoc">     *  When set to true, IPC execution log code is compiled into
+</span>   174    <span class="xdoc">     *  the custom library created when {<b>@link</b> #libType Build.libType}
+</span>   175    <span class="xdoc">     *  is set to {<b>@link</b> #LibType_Custom Build_LibType_Custom} or
+</span>   176    <span class="xdoc">     *  {<b>@link</b> #LibType_Debug Build_LibType_Debug}.
+</span>   177    <span class="xdoc">     *
+</span>   178    <span class="xdoc">     *  When set to false, all log code is removed from the custom
+</span>   179    <span class="xdoc">     *  library created when Build.libType = Build.LibType_Custom or
+</span>   180    <span class="xdoc">     *  Build.LibType_Debug. This option can considerably improve runtime
+</span>   181    <span class="xdoc">     *  performance as well signficantly reduce the application's code
+</span>   182    <span class="xdoc">     *  size.
+</span>   183    <span class="xdoc">     *
+</span>   184    <span class="xdoc">     *  <b>@see</b> #libType
+</span>   185    <span class="xdoc">     */</span>
+   186        <span class=key>config</span> Bool logsEnabled = <span class=key>true</span>;
+   187    
+   188        <span class="xdoc">/*!
+</span>   189    <span class="xdoc">     *  ======== libDir ========
+</span>   190    <span class="xdoc">     */</span>
+   191        <span class=key>config</span> String libDir = <span class=key>null</span>;
+   192    
+   193        <span class="comment">/*
+</span>   194    <span class="comment">     *  ======== getCCOpts ========
+</span>   195    <span class="comment">     *  Get the compiler options necessary to build
+</span>   196    <span class="comment">     */</span>
+   197        <span class=key>metaonly</span> String getCCOpts(xdc.bld.ITarget.Module target);
+   198    
+   199        <span class="xdoc">/*!
+</span>   200    <span class="xdoc">     *  ======== getDefaultCustomCCOpts ========
+</span>   201    <span class="xdoc">     */</span>
+   202        String getDefaultCustomCCOpts();
+   203    
+   204        <span class="xdoc">/*!
+</span>   205    <span class="xdoc">     *  ======== getDefs ========
+</span>   206    <span class="xdoc">     *  Get the compiler -D options necessary to build
+</span>   207    <span class="xdoc">     */</span>
+   208        String getDefs();
+   209    
+   210        <span class="xdoc">/*!
+</span>   211    <span class="xdoc">     *  ======== getCFiles ========
+</span>   212    <span class="xdoc">     *  Get the library C source files.
+</span>   213    <span class="xdoc">     */</span>
+   214        String getCFiles(String target);
+   215    
+   216        <span class="xdoc">/*!
+</span>   217    <span class="xdoc">     *  ======== getAsmFiles ========
+</span>   218    <span class="xdoc">     *  Get the library Asm source files.
+</span>   219    <span class="xdoc">     */</span>
+   220        Any getAsmFiles(String target);
+   221    
+   222        <span class="comment">/*
+</span>   223    <span class="comment">     *  ======== buildLibs ========
+</span>   224    <span class="comment">     *  This function generates the makefile goals for the libraries
+</span>   225    <span class="comment">     *  produced by a ti.sysbios package.
+</span>   226    <span class="comment">     */</span>
+   227        <span class=key>function</span> buildLibs(objList, relList, filter, xdcArgs);
+   228    
+   229        <span class="xdoc">/*!
+</span>   230    <span class="xdoc">     *  ======== getLibs ========
+</span>   231    <span class="xdoc">     *  Common getLibs() for all ipc packages.
+</span>   232    <span class="xdoc">     */</span>
+   233        <span class=key>function</span> getLibs(pkg);
+   234    }
+</pre>
+</body></html>

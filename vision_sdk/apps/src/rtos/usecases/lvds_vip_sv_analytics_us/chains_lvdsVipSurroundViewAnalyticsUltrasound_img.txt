@@ -1,0 +1,117 @@
+digraph chains_lvdsVipSurroundViewAnalyticsUltrasound {
+
+       ColorScheme [shape=none, margin=0, label=<
+       <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+       <TR><TD bgcolor="lightblue">IPU1_0</TD></TR>
+       <TR><TD bgcolor="palegreen">DSP1</TD></TR>
+       <TR><TD bgcolor="darkolivegreen1">DSP2</TD></TR>
+       <TR><TD bgcolor="yellow">EVE1</TD></TR>
+       </TABLE>>];
+
+       /************** LINKS ************************/
+       Capture [color=lightblue, style=filled]
+       Select [color=lightblue, style=filled]
+       VPE_algPd [color=lightblue, style=filled]
+       Dup_algPd [color=lightblue, style=filled]
+       IPCOut_IPU1_0_EVE1_3 [color=lightblue, style=filled]
+       IPCIn_EVE1_IPU1_0_0 [color=yellow, style=filled]
+       Alg_FeaturePlaneComputation [color=yellow, style=filled]
+       IPCOut_EVE1_DSP2_0 [color=yellow, style=filled]
+       IPCIn_DSP2_EVE1_2 [color=darkolivegreen1, style=filled]
+       Alg_ObjectDetection [color=darkolivegreen1, style=filled]
+       IPCOut_DSP2_IPU1_0_0 [color=darkolivegreen1, style=filled]
+       IPCIn_IPU1_0_DSP2_1 [color=lightblue, style=filled]
+       Merge_algPd [color=lightblue, style=filled]
+       Sync_algPd [color=lightblue, style=filled]
+       Dup_objDraw [color=lightblue, style=filled]
+       Alg_ObjectDraw_Tsr [color=lightblue, style=filled]
+       Alg_ObjectDraw_Pd [color=lightblue, style=filled]
+       Merge_alg_display [color=lightblue, style=filled]
+       Sync_algDisplay [color=lightblue, style=filled]
+       Alg_DmaSwMs_alg [color=lightblue, style=filled]
+       Display_alg [color=lightblue, style=filled]
+       Dup_sv_org [color=lightblue, style=filled]
+       Sync_sv [color=lightblue, style=filled]
+       Dup_sv [color=lightblue, style=filled]
+       IPCOut_IPU1_0_DSP1_1 [color=lightblue, style=filled]
+       IPCIn_DSP1_IPU1_0_1 [color=palegreen, style=filled]
+       IPCOut_IPU1_0_DSP1_0 [color=lightblue, style=filled]
+       IPCIn_DSP1_IPU1_0_0 [color=palegreen, style=filled]
+       Alg_GeoAlign [color=palegreen, style=filled]
+       IPCOut_DSP1_DSP2_1 [color=palegreen, style=filled]
+       IPCIn_DSP2_DSP1_1 [color=darkolivegreen1, style=filled]
+       UltrasonicCapture [color=lightblue, style=filled]
+       Dup_us [color=lightblue, style=filled]
+       IPCOut_IPU1_0_DSP2_2 [color=lightblue, style=filled]
+       IPCIn_DSP2_IPU1_0_0 [color=darkolivegreen1, style=filled]
+       Alg_UltrasonicFusion [color=darkolivegreen1, style=filled]
+       IPCOut_DSP2_IPU1_0_1 [color=darkolivegreen1, style=filled]
+       IPCIn_IPU1_0_DSP2_2 [color=lightblue, style=filled]
+       GrpxSrc [color=lightblue, style=filled]
+       Display_Grpx [color=lightblue, style=filled]
+       Null [color=palegreen, style=filled]
+       Alg_Synthesis [color=palegreen, style=filled]
+       IPCOut_DSP1_IPU1_0_0 [color=palegreen, style=filled]
+       IPCIn_IPU1_0_DSP1_0 [color=lightblue, style=filled]
+       Display_sv [color=lightblue, style=filled]
+       Alg_PhotoAlign [color=palegreen, style=filled]
+       VPE_sv_org [color=lightblue, style=filled]
+       Sync_sv_org [color=lightblue, style=filled]
+       Alg_DmaSwMs_sv_org [color=lightblue, style=filled]
+       Display_sv_org [color=lightblue, style=filled]
+
+       /************** CONNECTIONS ************************/
+       Select -> Dup_sv_org[taillabel=Q0, minlen=2, labeldistance=3]
+       Select -> VPE_algPd[taillabel=Q1, minlen=2, labeldistance=3]
+       Capture -> Select
+       Alg_DmaSwMs_sv_org -> Display_sv_org
+       Sync_sv_org -> Alg_DmaSwMs_sv_org
+       VPE_sv_org -> Sync_sv_org
+       Dup_sv_org -> VPE_sv_org[taillabel=Q0, minlen=2, labeldistance=3]
+       Dup_sv_org -> Sync_sv[taillabel=Q1, minlen=2, labeldistance=3]
+       Dup_sv -> IPCOut_IPU1_0_DSP1_0[taillabel=Q0, minlen=2, labeldistance=3]
+       Dup_sv -> IPCOut_IPU1_0_DSP1_1[taillabel=Q1, minlen=2, labeldistance=3]
+       Sync_sv -> Dup_sv
+       Alg_GeoAlign -> Alg_Synthesis[headlabel=Q1, taillabel=Q0, minlen=2, labeldistance=3]
+       Alg_GeoAlign -> Null[taillabel=Q1, minlen=2, labeldistance=3]
+       Alg_GeoAlign -> IPCOut_DSP1_DSP2_1[taillabel=Q2, minlen=2, labeldistance=3]
+       Alg_Synthesis -> Alg_PhotoAlign[taillabel=Q1, minlen=2, labeldistance=3]
+       Alg_Synthesis -> IPCOut_DSP1_IPU1_0_0[taillabel=Q0, minlen=2, labeldistance=3]
+       Alg_PhotoAlign -> Alg_Synthesis[headlabel=Q2 minlen=2, labeldistance=3]
+       Dup_us -> IPCOut_IPU1_0_DSP2_2
+       UltrasonicCapture -> Dup_us
+       Alg_UltrasonicFusion -> IPCOut_DSP2_IPU1_0_1
+       Merge_algPd -> Sync_algPd
+       Dup_algPd -> Merge_algPd[headlabel=Q0, taillabel=Q0, minlen=2, labeldistance=3]
+       Dup_algPd -> IPCOut_IPU1_0_EVE1_3[taillabel=Q1, minlen=2, labeldistance=3]
+       VPE_algPd -> Dup_algPd
+       Dup_objDraw -> Alg_ObjectDraw_Pd[taillabel=Q0, minlen=2, labeldistance=3]
+       Dup_objDraw -> Alg_ObjectDraw_Tsr[taillabel=Q1, minlen=2, labeldistance=3]
+       Sync_algPd -> Dup_objDraw
+       Alg_ObjectDetection -> IPCOut_DSP2_IPU1_0_0
+       Alg_FeaturePlaneComputation -> IPCOut_EVE1_DSP2_0
+       Merge_alg_display -> Sync_algDisplay
+       Alg_ObjectDraw_Pd -> Merge_alg_display[headlabel=Q0 minlen=2, labeldistance=3]
+       Alg_ObjectDraw_Tsr -> Merge_alg_display[headlabel=Q1 minlen=2, labeldistance=3]
+       Alg_DmaSwMs_alg -> Display_alg
+       Sync_algDisplay -> Alg_DmaSwMs_alg
+       GrpxSrc -> Display_Grpx
+       IPCOut_IPU1_0_DSP1_0 -> IPCIn_DSP1_IPU1_0_0
+       IPCIn_DSP1_IPU1_0_0 -> Alg_GeoAlign
+       IPCOut_IPU1_0_DSP1_1 -> IPCIn_DSP1_IPU1_0_1
+       IPCIn_DSP1_IPU1_0_1 -> Alg_Synthesis[headlabel=Q0 minlen=2, labeldistance=3]
+       IPCOut_DSP1_IPU1_0_0 -> IPCIn_IPU1_0_DSP1_0
+       IPCIn_IPU1_0_DSP1_0 -> Display_sv
+       IPCOut_IPU1_0_DSP2_2 -> IPCIn_DSP2_IPU1_0_0
+       IPCIn_DSP2_IPU1_0_0 -> Alg_UltrasonicFusion[headlabel=Q0 minlen=2, labeldistance=3]
+       IPCOut_DSP1_DSP2_1 -> IPCIn_DSP2_DSP1_1
+       IPCIn_DSP2_DSP1_1 -> Alg_UltrasonicFusion[headlabel=Q1 minlen=2, labeldistance=3]
+       IPCOut_IPU1_0_EVE1_3 -> IPCIn_EVE1_IPU1_0_0
+       IPCIn_EVE1_IPU1_0_0 -> Alg_FeaturePlaneComputation
+       IPCOut_EVE1_DSP2_0 -> IPCIn_DSP2_EVE1_2
+       IPCIn_DSP2_EVE1_2 -> Alg_ObjectDetection
+       IPCOut_DSP2_IPU1_0_0 -> IPCIn_IPU1_0_DSP2_1
+       IPCIn_IPU1_0_DSP2_1 -> Merge_algPd[headlabel=Q1 minlen=2, labeldistance=3]
+       IPCOut_DSP2_IPU1_0_1 -> IPCIn_IPU1_0_DSP2_2
+       IPCIn_IPU1_0_DSP2_2 -> GrpxSrc
+}

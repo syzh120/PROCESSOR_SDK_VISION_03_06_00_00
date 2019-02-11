@@ -1,0 +1,167 @@
+/*
+ *  ======== config.bld ========
+ *  Sample Build configuration script
+ */
+
+/* load the required modules for the configuration */
+var C64P = xdc.useModule('ti.targets.C64P');
+var C64Pe = xdc.useModule('ti.targets.C64P_big_endian');
+var C674 = xdc.useModule('ti.targets.C674');
+var C64P_ELF = xdc.useModule('ti.targets.elf.C64P');
+var C64Pe_ELF = xdc.useModule('ti.targets.elf.C64P_big_endian');
+var C674_ELF = xdc.useModule('ti.targets.elf.C674');
+var C66 = xdc.useModule('ti.targets.elf.C66');
+var C66e = xdc.useModule('ti.targets.elf.C66_big_endian');
+var Arm = xdc.useModule('ti.targets.arm.elf.Arm9');
+var cortexA8 = xdc.useModule('ti.targets.arm.elf.A8F');
+//var C64T_ELF = xdc.useModule('ti.targets.elf.C64T');
+var M3 = xdc.useModule('ti.targets.arm.elf.M3');
+
+/* compiler paths for the CCS4.0                   */
+var cgtools = java.lang.System.getenv("CGTOOLS");
+var cgtools_elf = java.lang.System.getenv("CGTOOLS_ELF");
+var armcgtools = java.lang.System.getenv("TMS470_CGTOOLS");
+
+C64P.rootDir = cgtools;
+C64Pe.rootDir = cgtools;
+C674.rootDir = cgtools;
+C64P_ELF.rootDir = cgtools_elf;
+//C64T_ELF.rootDir = cgtools_elf;
+C64Pe_ELF.rootDir = cgtools_elf;
+C674_ELF.rootDir = cgtools_elf;
+C66.rootDir = cgtools_elf;
+C66e.rootDir = cgtools_elf;
+Arm.rootDir = armcgtools;
+cortexA8.rootDir = armcgtools;
+M3.rootDir = armcgtools;
+
+/**********************************c674******************************/
+
+/* compiler options                                */
+C64P.ccOpts.suffix += " -mi10 -mo ";
+C64Pe.ccOpts.suffix += " -mi10 -mo -me ";
+C674.ccOpts.suffix += " -mi10 -mo ";
+C64P_ELF.ccOpts.suffix += " -mi10 -mo ";
+//C64T_ELF.ccOpts.suffix += " -mi10 -mo ";
+C64Pe_ELF.ccOpts.suffix += " -mi10 -mo -me ";
+C674_ELF.ccOpts.suffix += " -mi10 -mo ";
+C66.ccOpts.suffix += " -mi10 -mo --mem_model:data=far ";
+C66e.ccOpts.suffix += " -mi10 -mo -me --mem_model:data=far ";
+Arm.ccOpts.suffix += " ";
+cortexA8.ccOpts.suffix += "";
+M3.ccOpts.suffix += "";
+
+/* set default platform and list of all interested platforms */
+C64P.platforms = [
+                     "ti.platforms.evm6472",
+                     "ti.platforms.evmTCI6486",
+                 ];
+C64Pe.platforms = [
+                     "ti.platforms.evm6472",
+                     "ti.platforms.evmTCI6486",
+                 ];
+C674.platforms = [
+                     "ti.platforms.evmDA830",
+                     "ti.platforms.evm6748",
+                     "ti.platforms.evmOMAPL137",
+                     "ti.platforms.evmOMAPL138",
+                     "ti.platforms.simDM8168",
+                     "ti.platforms.evmDM8168",
+                     "ti.platforms.evmDM8148",
+                 ];
+C64P_ELF.platforms = [
+                     "ti.platforms.evm6472",
+                     "ti.platforms.evmTCI6486",
+                 ];
+//C64T_ELF.platforms = [
+//                     "ti.platforms.sdp4430",
+//                 ];
+C64Pe_ELF.platforms = [
+                     "ti.platforms.evm6472",
+                     "ti.platforms.evmTCI6486",
+                 ];
+C674_ELF.platforms = [
+                     "ti.platforms.evmDA830",
+                     "ti.platforms.evm6748",
+                     "ti.platforms.evmOMAPL137",
+                     "ti.platforms.evmOMAPL138",
+                     "ti.platforms.simDM8168",
+                     "ti.platforms.evmDM8168",
+                     "ti.platforms.evmDM8148",
+                 ];
+C66.platforms = [
+                     "ti.platforms.simTCI6608",
+                     "ti.platforms.simTCI6616",
+                     "ti.platforms.simTCI6614",
+                     "ti.platforms.simC6657",
+                     "ti.platforms.simKepler",
+                     "ti.platforms.evm6670",
+                     "ti.platforms.evm6678",
+                     "ti.platforms.evmTCI6614",
+                     "ti.platforms.evm6657",
+                     "ti.platforms.evmTCI6638K2K",
+                     "ti.platforms.evmTCI6636K2H",
+                     "ti.platforms.evmTCI6630K2L",
+                     "ti.platforms.evmC66AK2E",
+                     "ti.platforms.evmTCI66AK2G02",
+                 ];
+C66e.platforms = [
+                     "ti.platforms.simTCI6608",
+                     "ti.platforms.simTCI6616",
+                     "ti.platforms.simTCI6614",
+                     "ti.platforms.simC6657",
+                     "ti.platforms.simKepler",
+                     "ti.platforms.evm6670",
+                     "ti.platforms.evm6678",
+                     "ti.platforms.evmTCI6614",
+                     "ti.platforms.evm6657",
+                     "ti.platforms.evmTCI6638K2K",
+                     "ti.platforms.evmTCI6636K2H",
+                     "ti.platforms.evmTCI66AK2G02",
+                 ];
+Arm.platforms = [
+                     "ti.platforms.evmOMAPL137",
+                     "ti.platforms.evmOMAPL138",
+                     "ti.platforms.evmAM437X",
+                 ];
+
+cortexA8.platforms = [
+                         "ti.platforms.evmDM8148",
+                         "ti.platforms.evmAM3359",
+                     ];
+M3.platforms = [
+                     "ti.platforms.evmTI816X",
+                 ];
+
+/* select the default platform */
+C64P.platform = C64P.platforms[0];
+C64Pe.platform = C64Pe.platforms[0];
+C674.platform = C674.platforms[0];
+C64P_ELF.platform = C64P_ELF.platforms[0];
+//C64T_ELF.platform = C64T_ELF.platforms[0];
+C64Pe_ELF.platform = C64Pe_ELF.platforms[0];
+C674_ELF.platform = C674_ELF.platforms[0];
+C66.platform = C66.platforms[0];
+C66e.platform = C66e.platforms[0];
+Arm.platform = Arm.platforms[0];
+cortexA8.platform = cortexA8.platforms[0];
+M3.platform = M3.platforms[0];
+
+/* list interested targets in Build.targets array  */
+Build.targets = [
+		   //C64T_ELF,
+                    //C64,
+                    C64P,
+                    C64Pe,
+                    //C67P,
+                    C674,
+                    C64P_ELF,
+                    C64Pe_ELF,
+                    C674_ELF,
+                    C66,
+                    C66e,
+                    Arm,
+                    cortexA8,
+                    M3,
+                  //Win32,
+                ];

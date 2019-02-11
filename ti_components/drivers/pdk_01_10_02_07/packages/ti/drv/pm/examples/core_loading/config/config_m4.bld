@@ -1,0 +1,126 @@
+/* =============================================================================
+ *   Copyright (c) Texas Instruments Incorporated 2018
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *
+ *    Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ *    Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the
+ *    distribution.
+ *
+ *    Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ *  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ *  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ *  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ *  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ *  DATA, OR PROFITS; OR BUSINESS int32_tERRUPTION) HOWEVER CAUSED AND ON ANY
+ *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ *  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ */
+/*
+ *  ======== config_m4.bld ========
+ */
+
+var pdkPath = java.lang.System.getenv("PDK_PM_COMP_PATH");
+var soc = java.lang.System.getenv("SOC");
+
+var Build = xdc.useModule('xdc.bld.BuildEnvironment');
+
+var buildReleaseConfig = true;
+
+var Build         = xdc.useModule('xdc.bld.BuildEnvironment');
+var M4            = xdc.useModule('ti.targets.arm.elf.M4');
+
+M4.rootDir        = java.lang.System.getenv("CGTOOLS");
+
+M4.ccOpts.suffix  += " --symdebug:none -ms --gcc -O3 -D___DSPBIOS___ -D___DUCATI_FW___ -DPLATFORM_EVM_SI";
+
+M4.ccOpts.suffix  += " -DUTILS_ASSERT_ENABLE";
+
+M4.lnkOpts.suffix += " --zero_init=on -x --dynamic --retain=_Ipc_ResetVector --retain=.resource_table --cinit_compression=off";
+
+Build.targets     = [
+                    M4,
+                    ];
+
+var core = java.lang.System.getenv("CORE");
+
+var MemSegDefine = xdc.loadCapsule("" + pdkPath +
+    "/examples/core_loading/config/mem_segment_definition.xs");
+if ( soc == "tda3xx" )
+{
+    //set default platform and list of all interested platforms for M4
+    M4.platforms = ["ti.platforms.evmTDA3XX:IPU_1_0",
+                    "ti.platforms.evmTDA3XX:IPU_1_1",
+                ];
+    M4.platform = M4.platforms[1];
+    Build.platformTable["ti.platforms.evmTDA3XX:IPU_1_0"] =
+    {
+        externalMemoryMap: MemSegDefine.getMemSegmentDefinition_external(core),
+        codeMemory:"IPU1_0_CODE_MEM",
+        dataMemory:"IPU1_0_DATA_MEM",
+        stackMemory:"IPU1_0_DATA_MEM"
+    };
+    
+    Build.platformTable["ti.platforms.evmTDA3XX:IPU_1_1"] =
+    {
+        externalMemoryMap: MemSegDefine.getMemSegmentDefinition_external(core),
+        codeMemory:"IPU1_1_CODE_MEM",
+        dataMemory:"IPU1_1_DATA_MEM",
+        stackMemory:"IPU1_1_DATA_MEM"
+    };
+}
+else
+{
+    //set default platform and list of all interested platforms for M4
+    M4.platforms = ["ti.platforms.evmDRA7XX:IPU_1_0",
+                    "ti.platforms.evmDRA7XX:IPU_1_1",
+                    "ti.platforms.evmDRA7XX:IPU_2_0",
+                    "ti.platforms.evmDRA7XX:IPU_2_1",
+                ];
+    M4.platform = M4.platforms[3];
+    Build.platformTable["ti.platforms.evmDRA7XX:IPU_1_0"] =
+    {
+        externalMemoryMap: MemSegDefine.getMemSegmentDefinition_external(core),
+        codeMemory:"IPU1_0_CODE_MEM",
+        dataMemory:"IPU1_0_DATA_MEM",
+        stackMemory:"IPU1_0_DATA_MEM"
+    };
+    
+    Build.platformTable["ti.platforms.evmDRA7XX:IPU_1_1"] =
+    {
+        externalMemoryMap: MemSegDefine.getMemSegmentDefinition_external(core),
+        codeMemory:"IPU1_1_CODE_MEM",
+        dataMemory:"IPU1_1_DATA_MEM",
+        stackMemory:"IPU1_1_DATA_MEM"
+    };
+    
+    Build.platformTable["ti.platforms.evmDRA7XX:IPU_2_0"] =
+    {
+        externalMemoryMap: MemSegDefine.getMemSegmentDefinition_external(core),
+        codeMemory:"IPU2_0_CODE_MEM",
+        dataMemory:"IPU2_0_DATA_MEM",
+        stackMemory:"IPU2_0_DATA_MEM"
+    };
+    
+    Build.platformTable["ti.platforms.evmDRA7XX:IPU_2_1"] =
+    {
+        externalMemoryMap: MemSegDefine.getMemSegmentDefinition_external(core),
+        codeMemory:"IPU2_1_CODE_MEM",
+        dataMemory:"IPU2_1_DATA_MEM",
+        stackMemory:"IPU2_1_DATA_MEM"
+    };
+}

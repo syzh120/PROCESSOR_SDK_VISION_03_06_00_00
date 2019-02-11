@@ -1,0 +1,26 @@
+# Default - 0
+randParams         = 0 
+
+# 0: Caffe, 1: TensorFlow, Default - 0
+modelType          = 0 
+
+# 0: Fixed quantization By tarininng Framework, 1: Dyanamic quantization by TIDL, Default - 1
+quantizationStyle  = 1 
+
+# quantRoundAdd/100 will be added while rounding to integer, Default - 50
+quantRoundAdd      = 25
+
+numParamBits       = 8
+# 0 : 8bit Unsigned, 1 : 8bit Signed Default - 1
+inElementType      = 0
+
+foldBnInConv2D = 1
+
+inputNetFile       = "..\..\test\testvecs\config\caffe_models\small_roi_2\deploy.prototxt"
+inputParamsFile    = "..\..\test\testvecs\config\caffe_models\small_roi_2\pd_j11v2_iter_50000.caffemodel"
+outputNetFile      = "..\..\test\testvecs\config\tidl_models\tidl_net_small_roi_2.bin"
+outputParamsFile   = "..\..\test\testvecs\config\tidl_models\tidl_param_small_roi_2.bin"
+
+rawSampleInData  = 1
+sampleInData = "..\..\test\testvecs\config\caffe_models\small_roi_2\trace_dump_0_16x30.y"
+tidlStatsTool = "..\quantStatsTool\eve_test_dl_algo.out.exe"

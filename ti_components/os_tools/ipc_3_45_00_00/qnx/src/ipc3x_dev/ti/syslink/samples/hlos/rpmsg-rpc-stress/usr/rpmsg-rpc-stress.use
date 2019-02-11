@@ -1,0 +1,49 @@
+rpmsg-rpc Stress Test
+
+Syntax:
+  rpmsg-rpc-stress -t <test_no> -c <id> [-f <func_id>] [-x <num>] [-l <num>] [-s <sub_test>]
+
+  Where:
+    -t <test_no>    Test number to be run. Valid values are 1-4.
+                    1: Run multi-srvmgr test
+                    2: Run multi-thread test
+                    3: Run select test
+                    4: Run error test
+    -c <id>         Core ID with which to communicate. Must match MultiProc ID of core.
+                    For example, for OMAP5, valid values are:
+                        1: IPU CORE1 or IPU SMP
+                        2: DSP
+    -f <func_id>    1: FxnTriple (default)
+                    2: FxnAdd
+                    3: FxnAdd3
+                    4: FxnAddX
+    -x <num>        For tests 1 and 3, the number of RPMSGRPC ServiceMgr instances.
+                    Default is 1.
+    -l <num>        For test 2, the number of threads communicating with the
+                    remote OMX ServiceMgr. Default is 1.
+    -s <sub_test>   For test 4, sub_test Ids can be:
+                    1: MMU Fault (data read access) (default)
+                    2: MMU Fault (data write access)
+                    3: MMU Fault (program access)
+                    4: Exception
+                    5: Watchdog timeout
+
+Examples:
+  rpmsg-rpc-stress -t 1                 Runs the Multi-SrvMgr test with 1
+                                        ServiceMgr instance on CORE0 using
+                                        synchronous calls.
+  rpmsg-rpc-stress -t 1 -c 1 -x 5       Runs the Multi-SrvMgr test with 5
+                                        ServiceMgr instances on CORE1 using
+                                        synchronous calls.
+  rpmsg-rpc-stress -t 2                 Runs the Multi-thread test with 1
+                                        thread communicating with CORE0 using
+                                        synchronous calls.
+  rpmsg-rpc-stress -t 2 -c 1 -l 5       Runs the Multi-thread test with 5
+                                        threads communicating with CORE1 using
+                                        synchronous calls.
+  rpmsg-rpc-stress -t 3                 Runs the Multi-SrvMgr select test with
+                                        1 ServiceMgr instance on CORE0 using
+                                        synchronous calls.
+  rpmsg-rpc-stress -t 3 -c 1 -x 5       Runs the Multi-SrvMgr select test with
+                                        5 ServiceMgr instances on CORE1 using
+                                        synchronous calls.

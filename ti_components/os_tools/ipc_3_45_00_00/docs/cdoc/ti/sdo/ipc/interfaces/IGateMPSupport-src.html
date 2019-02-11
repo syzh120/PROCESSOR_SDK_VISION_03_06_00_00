@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>interface ti.sdo.ipc.interfaces.IGateMPSupport</title>
+<meta name="googlebot" content="noindex,nofollow">
+<link rel="stylesheet" type="text/css" href="../../../../src.css"/>
+</head>
+<body>
+<pre class=src>
+     1    <span class="comment">/*
+</span>     2    <span class="comment"> * Copyright (c) 2012-2013, Texas Instruments Incorporated
+</span>     3    <span class="comment"> * All rights reserved.
+</span>     4    <span class="comment"> *
+</span>     5    <span class="comment"> * Redistribution and use in source and binary forms, with or without
+</span>     6    <span class="comment"> * modification, are permitted provided that the following conditions
+</span>     7    <span class="comment"> * are met:
+</span>     8    <span class="comment"> *
+</span>     9    <span class="comment"> * *  Redistributions of source code must retain the above copyright
+</span>    10    <span class="comment"> *    notice, this list of conditions and the following disclaimer.
+</span>    11    <span class="comment"> *
+</span>    12    <span class="comment"> * *  Redistributions in binary form must reproduce the above copyright
+</span>    13    <span class="comment"> *    notice, this list of conditions and the following disclaimer in the
+</span>    14    <span class="comment"> *    documentation and/or other materials provided with the distribution.
+</span>    15    <span class="comment"> *
+</span>    16    <span class="comment"> * *  Neither the name of Texas Instruments Incorporated nor the names of
+</span>    17    <span class="comment"> *    its contributors may be used to endorse or promote products derived
+</span>    18    <span class="comment"> *    from this software without specific prior written permission.
+</span>    19    <span class="comment"> *
+</span>    20    <span class="comment"> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+</span>    21    <span class="comment"> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+</span>    22    <span class="comment"> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+</span>    23    <span class="comment"> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+</span>    24    <span class="comment"> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+</span>    25    <span class="comment"> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+</span>    26    <span class="comment"> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+</span>    27    <span class="comment"> * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+</span>    28    <span class="comment"> * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+</span>    29    <span class="comment"> * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+</span>    30    <span class="comment"> * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+</span>    31    <span class="comment"> */</span>
+    32    <span class="comment">/*
+</span>    33    <span class="comment"> *  ======== IGateMPSupport.xdc ========
+</span>    34    <span class="comment"> *
+</span>    35    <span class="comment"> */</span>
+    36    
+    37    import xdc.runtime.IGateProvider;
+    38    
+    39    <span class="xdoc">/*!
+</span>    40    <span class="xdoc"> *  ======== IGateMPSupport ========
+</span>    41    <span class="xdoc"> */</span>
+    42    <span class=key>interface</span> IGateMPSupport <span class=key>inherits</span> IGateProvider
+    43    {
+    44        <span class="xdoc">/*!
+</span>    45    <span class="xdoc">     *  ======== getNumResources ========
+</span>    46    <span class="xdoc">     *  Returns the number of resources offered by the GateMP delegate
+</span>    47    <span class="xdoc">     */</span>
+    48        <span class=key>metaonly</span> UInt getNumResources();
+    49    
+    50        <span class="xdoc">/*!
+</span>    51    <span class="xdoc">     *  ======== getReservedMask ========
+</span>    52    <span class="xdoc">     *  <b>@_nodoc</b>
+</span>    53    <span class="xdoc">     *  Used by GateMP to query which HW resources are reserved
+</span>    54    <span class="xdoc">     */</span>
+    55        @DirectCall
+    56        Bits32 *getReservedMask();
+    57    
+    58        <span class="xdoc">/*!
+</span>    59    <span class="xdoc">     *  ======== sharedMemReq ========
+</span>    60    <span class="xdoc">     *  Amount of shared memory required for creation of each instance
+</span>    61    <span class="xdoc">     *
+</span>    62    <span class="xdoc">     *  The value returned by this function may depend on the cache alignment
+</span>    63    <span class="xdoc">     *  requirements for the shared region from which memory will be used.
+</span>    64    <span class="xdoc">     *
+</span>    65    <span class="xdoc">     *  <b>@param(params)</b>      Pointer to the parameters that will be used in
+</span>    66    <span class="xdoc">     *                      the create.
+</span>    67    <span class="xdoc">     *
+</span>    68    <span class="xdoc">     *  <b>@a(returns)</b>         Number of MAUs needed to create the instance.
+</span>    69    <span class="xdoc">     */</span>
+    70        @DirectCall
+    71        SizeT sharedMemReq(<span class=key>const</span> Params *params);
+    72    
+    73        <span class="xdoc">/*!
+</span>    74    <span class="xdoc">     *  ======== getRemoteStatus$view ========
+</span>    75    <span class="xdoc">     *  <b>@_nodoc</b>
+</span>    76    <span class="xdoc">     *  ROV helper function that returns the status of the remote gate
+</span>    77    <span class="xdoc">     *
+</span>    78    <span class="xdoc">     *  <b>@b(returns)</b>     Gate status
+</span>    79    <span class="xdoc">     */</span>
+    80        <span class=key>metaonly</span> String getRemoteStatus$view(IGateProvider.Handle handle);
+    81    
+    82    <span class=key>instance</span>:
+    83    
+    84        <span class="xdoc">/*!
+</span>    85    <span class="xdoc">     *  Logical resource id
+</span>    86    <span class="xdoc">     */</span>
+    87        <span class=key>config</span> UInt resourceId = 0;
+    88    
+    89        <span class="xdoc">/*! <b>@_nodoc</b>
+</span>    90    <span class="xdoc">     *  ======== openFlag ========
+</span>    91    <span class="xdoc">     */</span>
+    92        <span class=key>config</span> Bool openFlag = <span class=key>false</span>;
+    93    
+    94        <span class="xdoc">/*!
+</span>    95    <span class="xdoc">     *  ======== regionId ========
+</span>    96    <span class="xdoc">     *  <b>@_nodoc</b>
+</span>    97    <span class="xdoc">     *  Shared Region Id
+</span>    98    <span class="xdoc">     *
+</span>    99    <span class="xdoc">     *  The ID corresponding to the shared region in which this shared instance
+</span>   100    <span class="xdoc">     *  is to be placed.
+</span>   101    <span class="xdoc">     */</span>
+   102        <span class=key>config</span> UInt16 regionId = 0;
+   103    
+   104        <span class="xdoc">/*!
+</span>   105    <span class="xdoc">     *  ======== sharedAddr ========
+</span>   106    <span class="xdoc">     *  Physical address of the shared memory
+</span>   107    <span class="xdoc">     *
+</span>   108    <span class="xdoc">     *  This parameter is only used by GateMP delegates that use shared memory
+</span>   109    <span class="xdoc">     */</span>
+   110        <span class=key>config</span> Ptr sharedAddr = <span class=key>null</span>;
+   111    
+   112        <span class="xdoc">/*!
+</span>   113    <span class="xdoc">     *  ======== create ========
+</span>   114    <span class="xdoc">     *  Create a remote gate instance.
+</span>   115    <span class="xdoc">     *
+</span>   116    <span class="xdoc">     *  A Non-NULL gate for local protection must be passed to the create
+</span>   117    <span class="xdoc">     *  call.  If no local protection is desired, a
+</span>   118    <span class="xdoc">     *  {<b>@link</b> xdc.runtime.GateNull} handle must be passed in.
+</span>   119    <span class="xdoc">     *
+</span>   120    <span class="xdoc">     *  <b>@param(localGate)</b>       Gate to use for local protection.
+</span>   121    <span class="xdoc">     */</span>
+   122        create(IGateProvider.Handle localGate);
+   123    }
+</pre>
+</body></html>

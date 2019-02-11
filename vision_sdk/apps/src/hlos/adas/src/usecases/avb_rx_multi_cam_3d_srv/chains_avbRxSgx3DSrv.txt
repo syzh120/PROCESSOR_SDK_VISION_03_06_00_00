@@ -1,0 +1,41 @@
+UseCase: chains_avbRxSgx3DSrv
+
+AvbRx (IPU1_0) -> Decode
+
+//
+// surround view algorithm and display
+//
+Decode -> Sync -> Dup_sv
+// Input sync'ed frames to Alg_GeoAlign MUST be Q0
+Dup_sv -> Alg_GeoAlign3D (DSP1)
+
+// Input sync'ed frames to Alg_Synthesis MUST be Q1
+Dup_sv -> Alg_Synthesis (DSP1)
+
+// Input sync'ed frames to Sgx3Dsrv MUST be Q2
+Dup_sv -> Sgx3Dsrv (A15)
+
+// Alg_Synthesis Output Q0 to NULL
+Alg_Synthesis -> Null (DSP1)
+
+// Alg_Synthesis Output Q1 to Alg_PhotoAlign
+Alg_Synthesis -> Alg_PhotoAlign (DSP1)
+
+// Alg_GeoAlign3D output Q0 MUST be connect to Alg_Synthesis
+Alg_GeoAlign3D -> Alg_Synthesis
+
+// PhotoAlign output Q0 must be connect to Sgx3Dsrv
+Alg_PhotoAlign -> Sgx3Dsrv
+
+// Alg_GeoAlign3D output Q0 MUST be connect to Sgx3Dsrv
+Alg_GeoAlign3D -> Sgx3Dsrv
+
+// Alg_Synthesis Output Q2 to Sgx3Dsrv
+Alg_Synthesis -> Sgx3Dsrv
+
+Sgx3Dsrv -> Display_M4 (IPU1_0)
+
+//
+// Graphics overlay display
+//
+GrpxSrc -> Display_Grpx

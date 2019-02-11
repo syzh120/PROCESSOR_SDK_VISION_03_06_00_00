@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>module ti.sdo.fc.ecpy.ECPY</title>
+<meta name="googlebot" content="noindex,nofollow">
+<link rel="stylesheet" type="text/css" href="../../../../src.css"/>
+</head>
+<body>
+<pre class=src>
+     1    <span class="comment">/*
+</span>     2    <span class="comment"> * Copyright (c) 2010-2012, Texas Instruments Incorporated
+</span>     3    <span class="comment"> * All rights reserved.
+</span>     4    <span class="comment"> *
+</span>     5    <span class="comment"> * Redistribution and use in source and binary forms, with or without
+</span>     6    <span class="comment"> * modification, are permitted provided that the following conditions
+</span>     7    <span class="comment"> * are met:
+</span>     8    <span class="comment"> *
+</span>     9    <span class="comment"> * *  Redistributions of source code must retain the above copyright
+</span>    10    <span class="comment"> *    notice, this list of conditions and the following disclaimer.
+</span>    11    <span class="comment"> *
+</span>    12    <span class="comment"> * *  Redistributions in binary form must reproduce the above copyright
+</span>    13    <span class="comment"> *    notice, this list of conditions and the following disclaimer in the
+</span>    14    <span class="comment"> *    documentation and/or other materials provided with the distribution.
+</span>    15    <span class="comment"> *
+</span>    16    <span class="comment"> * *  Neither the name of Texas Instruments Incorporated nor the names of
+</span>    17    <span class="comment"> *    its contributors may be used to endorse or promote products derived
+</span>    18    <span class="comment"> *    from this software without specific prior written permission.
+</span>    19    <span class="comment"> *
+</span>    20    <span class="comment"> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+</span>    21    <span class="comment"> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+</span>    22    <span class="comment"> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+</span>    23    <span class="comment"> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+</span>    24    <span class="comment"> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+</span>    25    <span class="comment"> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+</span>    26    <span class="comment"> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+</span>    27    <span class="comment"> * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+</span>    28    <span class="comment"> * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+</span>    29    <span class="comment"> * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+</span>    30    <span class="comment"> * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+</span>    31    <span class="comment"> *
+</span>    32    <span class="comment"> */</span>
+    33    
+    34    import xdc.runtime.IHeap;
+    35    
+    36    <span class="xdoc">/*!
+</span>    37    <span class="xdoc"> *  ======== ECPY ========
+</span>    38    <span class="xdoc"> *  EDMA functional layer library.
+</span>    39    <span class="xdoc"> */</span>
+    40    
+    41    @Template(<span class="string">"./ECPY.xdt"</span>)
+    42    <span class=key>metaonly</span> <span class=key>module</span> ECPY {
+    43    
+    44        <span class=key>config</span> Bool cachedIresMode = <span class=key>true</span>;
+    45    
+    46        <span class="xdoc">/*!
+</span>    47    <span class="xdoc">     *  ======== persistentAllocFxn ========
+</span>    48    <span class="xdoc">     *  Function for allocating persistent memory for ECPY's
+</span>    49    <span class="xdoc">     *  implementation's internal objects and for allocating memory for
+</span>    50    <span class="xdoc">     *  ECPY handle objects.
+</span>    51    <span class="xdoc">     *
+</span>    52    <span class="xdoc">     *  The signature of the persistent alloc function is:
+</span>    53    <span class="xdoc">     *      extern Bool persistentAllocFxn(IALG_MemRec * memTab, Int numRecs);
+</span>    54    <span class="xdoc">     */</span>
+    55        <span class=key>config</span> String persistentAllocFxn = <span class=key>null</span>;
+    56    
+    57        <span class="xdoc">/*!
+</span>    58    <span class="xdoc">     *  ======== persistentFreeFxn ========
+</span>    59    <span class="xdoc">     *  Function for freeing persistent memory allocated by ECPY.
+</span>    60    <span class="xdoc">     *
+</span>    61    <span class="xdoc">     *  The signature of hte persistentFreeFxn is:
+</span>    62    <span class="xdoc">     *
+</span>    63    <span class="xdoc">     *      extern Void persistentFreeFxn(IALG_MemRec *memTab, Int numRecs);
+</span>    64    <span class="xdoc">     */</span>
+    65        <span class=key>config</span> String persistentFreeFxn = <span class=key>null</span>;
+    66    
+    67        <span class="xdoc">/*!
+</span>    68    <span class="xdoc">     *  ======== scratchAllocFxn ========
+</span>    69    <span class="xdoc">     *  Function for allocating scratch memory for ECPY Handle.
+</span>    70    <span class="xdoc">     *  The scratch memory can be overlayed with other algorithm instance's
+</span>    71    <span class="xdoc">     *  handle's that are created in the same scratch group to reduce footprint
+</span>    72    <span class="xdoc">     *  in high-density multi-channel environments.
+</span>    73    <span class="xdoc">     *
+</span>    74    <span class="xdoc">     *  The signature of the shared allocation function is:
+</span>    75    <span class="xdoc">     *
+</span>    76    <span class="xdoc">     *      extern Bool scratchAllocFxn(IALG_Handle alg, Int scratchId,
+</span>    77    <span class="xdoc">     *                                  IALG_MemRec * memTab, Int numRecs);
+</span>    78    <span class="xdoc">     */</span>
+    79        <span class=key>config</span> String scratchAllocFxn = <span class=key>null</span>;
+    80    
+    81        <span class="xdoc">/*!
+</span>    82    <span class="xdoc">     *  ======== scratchFreeFxn ========
+</span>    83    <span class="xdoc">     *  Function for freeing scratch memory allocated by ECPY.
+</span>    84    <span class="xdoc">     *
+</span>    85    <span class="xdoc">     *  The signature of the scratchFreeFxn is:
+</span>    86    <span class="xdoc">     *
+</span>    87    <span class="xdoc">     *      extern Void scratchFreeFxn(Int mutexId, Void *addr, UInt size);
+</span>    88    <span class="xdoc">     */</span>
+    89        <span class=key>config</span> String scratchFreeFxn = <span class=key>null</span>;
+    90    
+    91        <span class="xdoc">/*!
+</span>    92    <span class="xdoc">     *  ======== getScratchIdFxn ========
+</span>    93    <span class="xdoc">     *  Function for obtaining scratchId associated with IALG_Handle
+</span>    94    <span class="xdoc">     *  used for creating the algorithm instance.
+</span>    95    <span class="xdoc">     *  When set to null, ECPY assumes scratchId =&gt; -1
+</span>    96    <span class="xdoc">     *
+</span>    97    <span class="xdoc">     *  The signature of the getScratchIdFxn is:
+</span>    98    <span class="xdoc">     *
+</span>    99    <span class="xdoc">     *      extern Int DSKT2_getScratchId(IALG_Handle alg);
+</span>   100    <span class="xdoc">     */</span>
+   101        <span class=key>config</span> String getScratchIdFxn = <span class=key>null</span>;
+   102    }
+   103    <span class="comment">/*
+</span>   104    <span class="comment"> *  @(#) ti.sdo.fc.ecpy; 1, 0, 0,10; 8-26-2010 17:48:49; /db/atree/mk/fc-n13x/src/
+</span>   105    <span class="comment"> */</span>
+</pre>
+</body></html>

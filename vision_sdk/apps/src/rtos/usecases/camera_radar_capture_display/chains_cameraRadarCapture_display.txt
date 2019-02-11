@@ -1,0 +1,8 @@
+UseCase: chains_cameraRadarCapture_display
+
+IssCapture -> Select -> IssM2mIsp -> IssM2mResizer -> Display_Video
+IssM2mIsp -> Alg_IssAewb
+
+Select -> Alg_RadarProcess_fft (DSP1) -> Alg_RadarProcess_pkDetect (DSP1) -> Alg_RadarProcess_beamForm (DSP1) -> Alg_RadarProcess_drawObjs (DSP1) -> Display_Radar
+
+GrpxSrc -> Display_Grpx

@@ -1,0 +1,545 @@
+<html>
+<head>
+<title>interface ti.xdais.qualiti.ITest</title>
+<link rel="stylesheet" type="text/css" href="../../../xdoc.css" />
+</head>
+<body><div id="xdocWrapper"><div id="xdocContent">
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">interface</span> <span class="xdoc-id">ti.xdais.qualiti.</span><span class="xdoc-id">ITest</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/xdais/qualiti/package.html" title="package ti.xdais.qualiti"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/xdais/qualiti/Compiler.html" title="module Compiler"><img class="xdocHdrArrow" src="../../../Arrow_right.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/xdais/qualiti/ITest.html">index URL</a></div>
+<ul class="xdocToc">
+</ul>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id">XDCspec</span></tt> summary</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../ti/xdais/qualiti/ITest-src.html"><span class="xdocLabelFile">ti/xdais/qualiti/ITest.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynX">
+<div class="xdocSynCode">
+<tt></tt><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">interface</span> <go><span class="xdoc-id">ITest</span></go> {<b>&nbsp;&nbsp;...</b>
+</div>
+</div>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../ti/xdais/qualiti/ITest-src.html"><span class="xdocLabelFile">ti/xdais/qualiti/ITest.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynX">
+<div class="xdocSynCode">
+<tt></tt><span class="xdoc-kw1">package</span> <a class="xdoc-link" href="../../../ti/xdais/qualiti/package.html" title="ti.xdais.qualiti">ti.xdais.qualiti</a>;
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt></tt><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">interface</span> <go><span class="xdoc-id">ITest</span></go> {
+</div>
+<div class='xdocSynHdr'>module-wide constants & types</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">enum</span> <a class="xdocSynGo" href="#.Test.Detail.Level"><span class="xdoc-id">TestDetailLevel</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> {
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><a class="xdocSynGo" href="#.Test.Detail.Level" title="ti.xdais.qualiti.ITest.TestDetailLevel"><span class="xdoc-id">DETAILLEVEL_FAILDETAILS</span></a>, 
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><a class="xdocSynGo" href="#.Test.Detail.Level" title="ti.xdais.qualiti.ITest.TestDetailLevel"><span class="xdoc-id">DETAILLEVEL_TESTLOG</span></a>, 
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><a class="xdocSynGo" href="#.Test.Detail.Level" title="ti.xdais.qualiti.ITest.TestDetailLevel"><span class="xdoc-id">DETAILLEVEL_TESTOUTPUT</span></a>
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt>};
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">enum</span> <a class="xdocSynGo" href="#.Test.Status"><span class="xdoc-id">TestStatus</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> {
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><a class="xdocSynGo" href="#.Test.Status" title="ti.xdais.qualiti.ITest.TestStatus"><span class="xdoc-id">TEST_NOTRUN</span></a>, 
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><a class="xdocSynGo" href="#.Test.Status" title="ti.xdais.qualiti.ITest.TestStatus"><span class="xdoc-id">TEST_PASS</span></a>, 
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><a class="xdocSynGo" href="#.Test.Status" title="ti.xdais.qualiti.ITest.TestStatus"><span class="xdoc-id">TEST_FAIL</span></a>, 
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><a class="xdocSynGo" href="#.Test.Status" title="ti.xdais.qualiti.ITest.TestStatus"><span class="xdoc-id">TEST_NOTAPPLY</span></a>, 
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><a class="xdocSynGo" href="#.Test.Status" title="ti.xdais.qualiti.ITest.TestStatus"><span class="xdoc-id">TEST_RUNNING</span></a>, 
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><a class="xdocSynGo" href="#.Test.Status" title="ti.xdais.qualiti.ITest.TestStatus"><span class="xdoc-id">TEST_RUNERROR</span></a>
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt>};
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">struct</span> <a class="xdocSynGo" href="#.Algo.Params"><span class="xdoc-id">AlgoParams</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> {
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<a class="xdocSynGo" href="#.Algo.Params" title="ti.xdais.qualiti.ITest.AlgoParams"><span class="xdoc-id">moduleName</span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<a class="xdocSynGo" href="#.Algo.Params" title="ti.xdais.qualiti.ITest.AlgoParams"><span class="xdoc-id">vendor</span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<a class="xdocSynGo" href="#.Algo.Params" title="ti.xdais.qualiti.ITest.AlgoParams"><span class="xdoc-id">interfaceName</span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<a class="xdocSynGo" href="#.Algo.Params" title="ti.xdais.qualiti.ITest.AlgoParams"><span class="xdoc-id">architecture</span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<a class="xdocSynGo" href="#.Algo.Params" title="ti.xdais.qualiti.ITest.AlgoParams"><span class="xdoc-id">baseDir</span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<a class="xdocSynGo" href="#.Algo.Params" title="ti.xdais.qualiti.ITest.AlgoParams"><span class="xdoc-id">library</span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<a class="xdocSynGo" href="#.Algo.Params" title="ti.xdais.qualiti.ITest.AlgoParams"><span class="xdoc-id">headers</span></a>[<span class="xdoc-kw2"></span>];
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><a class="xdoc-link" href="../../../ti/xdais/qualiti/ITest.html#.Compiler.Params" title="ti.xdais.qualiti.ITest.CompilerParams">ITest.CompilerParams</a>&nbsp;<a class="xdocSynGo" href="#.Algo.Params" title="ti.xdais.qualiti.ITest.AlgoParams"><span class="xdoc-id">compilerParams</span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt>};
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">struct</span> <a class="xdocSynGo" href="#.Compiler.Params"><span class="xdoc-id">CompilerParams</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> {
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">Bool</span>&nbsp;<a class="xdocSynGo" href="#.Compiler.Params" title="ti.xdais.qualiti.ITest.CompilerParams"><span class="xdoc-id">isTICompiler</span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">Bool</span>&nbsp;<a class="xdocSynGo" href="#.Compiler.Params" title="ti.xdais.qualiti.ITest.CompilerParams"><span class="xdoc-id">isC6x</span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<a class="xdocSynGo" href="#.Compiler.Params" title="ti.xdais.qualiti.ITest.CompilerParams"><span class="xdoc-id">libFormat</span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<a class="xdocSynGo" href="#.Compiler.Params" title="ti.xdais.qualiti.ITest.CompilerParams"><span class="xdoc-id">version</span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<a class="xdocSynGo" href="#.Compiler.Params" title="ti.xdais.qualiti.ITest.CompilerParams"><span class="xdoc-id">log</span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt>};
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">struct</span> <a class="xdocSynGo" href="#.Test"><span class="xdoc-id">Test</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> {
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<a class="xdocSynGo" href="#.Test" title="ti.xdais.qualiti.ITest.Test"><span class="xdoc-id">id</span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<a class="xdocSynGo" href="#.Test" title="ti.xdais.qualiti.ITest.Test"><span class="xdoc-id">title</span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt>};
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">struct</span> <a class="xdocSynGo" href="#.Test.Attrs"><span class="xdoc-id">TestAttrs</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> {
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<a class="xdocSynGo" href="#.Test.Attrs" title="ti.xdais.qualiti.ITest.TestAttrs"><span class="xdoc-id">description</span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">Bool</span>&nbsp;<a class="xdocSynGo" href="#.Test.Attrs" title="ti.xdais.qualiti.ITest.TestAttrs"><span class="xdoc-id">isPerformanceTest</span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt>};
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">struct</span> <a class="xdocSynGo" href="#.Test.Result"><span class="xdoc-id">TestResult</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> {
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><a class="xdoc-link" href="../../../ti/xdais/qualiti/ITest.html#.Test.Status" title="ti.xdais.qualiti.ITest.TestStatus">ITest.TestStatus</a>&nbsp;<a class="xdocSynGo" href="#.Test.Result" title="ti.xdais.qualiti.ITest.TestResult"><span class="xdoc-id">status</span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<a class="xdocSynGo" href="#.Test.Result" title="ti.xdais.qualiti.ITest.TestResult"><span class="xdoc-id">statusDetails</span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><a class="xdoc-link" href="../../../ti/xdais/qualiti/System.html#.Run.Result" title="ti.xdais.qualiti.System.RunResult">System.RunResult</a>&nbsp;<a class="xdocSynGo" href="#.Test.Result" title="ti.xdais.qualiti.ITest.TestResult"><span class="xdoc-id">runResult</span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt>};
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">struct</span> <a class="xdocSynGo" href="#.Test.Settings"><span class="xdoc-id">TestSettings</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> {
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<a class="xdocSynGo" href="#.Test.Settings" title="ti.xdais.qualiti.ITest.TestSettings"><span class="xdoc-id">cgtoolsDir</span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<a class="xdocSynGo" href="#.Test.Settings" title="ti.xdais.qualiti.ITest.TestSettings"><span class="xdoc-id">cgxmlDir</span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt>};
+</div>
+<div class='xdocSynHdr'>module-wide functions</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdoc-link" href="../../../ti/xdais/qualiti/ITest.html#.Test.Attrs" title="ti.xdais.qualiti.ITest.TestAttrs">ITest.TestAttrs</a>&nbsp;<a class="xdocSynGo" href="#get.Attrs"><span class="xdoc-id">getAttrs</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a>(<span class="xdoc-kw2">String</span>&nbsp;<go><span class="xdoc-id">testId</span></go>);
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw2">Void</span>&nbsp;<a class="xdocSynGo" href="#reset"><span class="xdoc-id">reset</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a>(<span class="xdoc-kw2">String</span>&nbsp;<go><span class="xdoc-id">testId</span></go>);
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdoc-link" href="../../../ti/xdais/qualiti/ITest.html#.Test.Result" title="ti.xdais.qualiti.ITest.TestResult">ITest.TestResult</a>&nbsp;<a class="xdocSynGo" href="#run"><span class="xdoc-id">run</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a>(<span class="xdoc-kw2">String</span>&nbsp;<go><span class="xdoc-id">testId</span></go>, <a class="xdoc-link" href="../../../ti/xdais/qualiti/ITest.html#.Algo.Params" title="ti.xdais.qualiti.ITest.AlgoParams">ITest.AlgoParams</a>&nbsp;<go><span class="xdoc-id">algoParams</span></go>, <a class="xdoc-link" href="../../../ti/xdais/qualiti/ITest.html#.Test.Settings" title="ti.xdais.qualiti.ITest.TestSettings">ITest.TestSettings</a>&nbsp;<go><span class="xdoc-id">testSettings</span></go>, <span class="xdoc-kw2">Int</span>&nbsp;<go><span class="xdoc-id">testDetailLevel</span></go>, <span class="xdoc-kw2">Any</span>&nbsp;<go><span class="xdoc-id">cbPrintLog</span></go>);
+</div>
+<div class="xdocSynCode">
+<tt></tt>}
+</div>
+</div>
+<div id="xdocSep">
+</div>
+<div id="xdocElems">
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".Test.Detail.Level"></a>
+<a class="xdocAnchor" id=".D.E.T.A.I.L.L.E.V.E.L_.F.A.I.L.D.E.T.A.I.L.S"></a>
+<a class="xdocAnchor" id=".D.E.T.A.I.L.L.E.V.E.L_.T.E.S.T.L.O.G"></a>
+<a class="xdocAnchor" id=".D.E.T.A.I.L.L.E.V.E.L_.T.E.S.T.O.U.T.P.U.T"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">enum</span> <span class="xdoc-id">ITest.</span><span class="xdoc-id">TestDetailLevel</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/xdais/qualiti/ITest.html" title="interface ITest"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/xdais/qualiti/ITest.html#.Test.Detail.Level">index URL</a></div>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../ti/xdais/qualiti/ITest-src.html"><span class="xdocLabelFile">ti/xdais/qualiti/ITest.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">enum</span> <span class="xdoc-id">TestDetailLevel</span> {
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-id">DETAILLEVEL_FAILDETAILS</span>, 
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-id">DETAILLEVEL_TESTLOG</span>, 
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-id">DETAILLEVEL_TESTOUTPUT</span>
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt>};
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".Test.Status"></a>
+<a class="xdocAnchor" id=".T.E.S.T_.N.O.T.R.U.N"></a>
+<a class="xdocAnchor" id=".T.E.S.T_.P.A.S.S"></a>
+<a class="xdocAnchor" id=".T.E.S.T_.F.A.I.L"></a>
+<a class="xdocAnchor" id=".T.E.S.T_.N.O.T.A.P.P.L.Y"></a>
+<a class="xdocAnchor" id=".T.E.S.T_.R.U.N.N.I.N.G"></a>
+<a class="xdocAnchor" id=".T.E.S.T_.R.U.N.E.R.R.O.R"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">enum</span> <span class="xdoc-id">ITest.</span><span class="xdoc-id">TestStatus</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/xdais/qualiti/ITest.html" title="interface ITest"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/xdais/qualiti/ITest.html#.Test.Status">index URL</a></div>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../ti/xdais/qualiti/ITest-src.html"><span class="xdocLabelFile">ti/xdais/qualiti/ITest.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">enum</span> <span class="xdoc-id">TestStatus</span> {
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-id">TEST_NOTRUN</span>, 
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-id">TEST_PASS</span>, 
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-id">TEST_FAIL</span>, 
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-id">TEST_NOTAPPLY</span>, 
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-id">TEST_RUNNING</span>, 
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-id">TEST_RUNERROR</span>
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt>};
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".Algo.Params"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">struct</span> <span class="xdoc-id">ITest.</span><span class="xdoc-id">AlgoParams</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/xdais/qualiti/ITest.html" title="interface ITest"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/xdais/qualiti/ITest.html#.Algo.Params">index URL</a></div>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../ti/xdais/qualiti/ITest-src.html"><span class="xdocLabelFile">ti/xdais/qualiti/ITest.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">struct</span> <span class="xdoc-id">AlgoParams</span> {
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<span class="xdoc-id">moduleName</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<span class="xdoc-id">vendor</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<span class="xdoc-id">interfaceName</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<span class="xdoc-id">architecture</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<span class="xdoc-id">baseDir</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<span class="xdoc-id">library</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<span class="xdoc-id">headers</span>[<span class="xdoc-kw2"></span>];
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><a class="xdoc-link" href="../../../ti/xdais/qualiti/ITest.html#.Compiler.Params" title="ti.xdais.qualiti.ITest.CompilerParams">ITest.CompilerParams</a>&nbsp;<span class="xdoc-id">compilerParams</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt>};
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".Compiler.Params"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">struct</span> <span class="xdoc-id">ITest.</span><span class="xdoc-id">CompilerParams</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/xdais/qualiti/ITest.html" title="interface ITest"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/xdais/qualiti/ITest.html#.Compiler.Params">index URL</a></div>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../ti/xdais/qualiti/ITest-src.html"><span class="xdocLabelFile">ti/xdais/qualiti/ITest.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">struct</span> <span class="xdoc-id">CompilerParams</span> {
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">Bool</span>&nbsp;<span class="xdoc-id">isTICompiler</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">Bool</span>&nbsp;<span class="xdoc-id">isC6x</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<span class="xdoc-id">libFormat</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<span class="xdoc-id">version</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<span class="xdoc-id">log</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt>};
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".Test"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">struct</span> <span class="xdoc-id">ITest.</span><span class="xdoc-id">Test</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/xdais/qualiti/ITest.html" title="interface ITest"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/xdais/qualiti/ITest.html#.Test">index URL</a></div>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../ti/xdais/qualiti/ITest-src.html"><span class="xdocLabelFile">ti/xdais/qualiti/ITest.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">struct</span> <span class="xdoc-id">Test</span> {
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<span class="xdoc-id">id</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<span class="xdoc-id">title</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt>};
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".Test.Attrs"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">struct</span> <span class="xdoc-id">ITest.</span><span class="xdoc-id">TestAttrs</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/xdais/qualiti/ITest.html" title="interface ITest"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/xdais/qualiti/ITest.html#.Test.Attrs">index URL</a></div>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../ti/xdais/qualiti/ITest-src.html"><span class="xdocLabelFile">ti/xdais/qualiti/ITest.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">struct</span> <span class="xdoc-id">TestAttrs</span> {
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<span class="xdoc-id">description</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">Bool</span>&nbsp;<span class="xdoc-id">isPerformanceTest</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt>};
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".Test.Result"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">struct</span> <span class="xdoc-id">ITest.</span><span class="xdoc-id">TestResult</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/xdais/qualiti/ITest.html" title="interface ITest"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/xdais/qualiti/ITest.html#.Test.Result">index URL</a></div>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../ti/xdais/qualiti/ITest-src.html"><span class="xdocLabelFile">ti/xdais/qualiti/ITest.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">struct</span> <span class="xdoc-id">TestResult</span> {
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><a class="xdoc-link" href="../../../ti/xdais/qualiti/ITest.html#.Test.Status" title="ti.xdais.qualiti.ITest.TestStatus">ITest.TestStatus</a>&nbsp;<span class="xdoc-id">status</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<span class="xdoc-id">statusDetails</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><a class="xdoc-link" href="../../../ti/xdais/qualiti/System.html#.Run.Result" title="ti.xdais.qualiti.System.RunResult">System.RunResult</a>&nbsp;<span class="xdoc-id">runResult</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt>};
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".Test.Settings"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">struct</span> <span class="xdoc-id">ITest.</span><span class="xdoc-id">TestSettings</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/xdais/qualiti/ITest.html" title="interface ITest"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/xdais/qualiti/ITest.html#.Test.Settings">index URL</a></div>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../ti/xdais/qualiti/ITest-src.html"><span class="xdocLabelFile">ti/xdais/qualiti/ITest.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">struct</span> <span class="xdoc-id">TestSettings</span> {
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<span class="xdoc-id">cgtoolsDir</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<span class="xdoc-id">cgxmlDir</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt>};
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="get.Attrs"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-id">ITest.</span><span class="xdoc-id">getAttrs</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/xdais/qualiti/ITest.html" title="interface ITest"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/xdais/qualiti/ITest.html#get.Attrs">index URL</a></div>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../ti/xdais/qualiti/ITest-src.html"><span class="xdocLabelFile">ti/xdais/qualiti/ITest.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><a class="xdoc-link" href="../../../ti/xdais/qualiti/ITest.html#.Test.Attrs" title="ti.xdais.qualiti.ITest.TestAttrs">ITest.TestAttrs</a>&nbsp;<span class="xdoc-id">getAttrs</span>(<span class="xdoc-kw2">String</span>&nbsp;<span class="xdoc-id">testId</span>);
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="reset"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-id">ITest.</span><span class="xdoc-id">reset</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/xdais/qualiti/ITest.html" title="interface ITest"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/xdais/qualiti/ITest.html#reset">index URL</a></div>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../ti/xdais/qualiti/ITest-src.html"><span class="xdocLabelFile">ti/xdais/qualiti/ITest.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw2">Void</span>&nbsp;<span class="xdoc-id">reset</span>(<span class="xdoc-kw2">String</span>&nbsp;<span class="xdoc-id">testId</span>);
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="run"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-id">ITest.</span><span class="xdoc-id">run</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/xdais/qualiti/ITest.html" title="interface ITest"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/xdais/qualiti/ITest.html#run">index URL</a></div>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../ti/xdais/qualiti/ITest-src.html"><span class="xdocLabelFile">ti/xdais/qualiti/ITest.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><a class="xdoc-link" href="../../../ti/xdais/qualiti/ITest.html#.Test.Result" title="ti.xdais.qualiti.ITest.TestResult">ITest.TestResult</a>&nbsp;<span class="xdoc-id">run</span>(<span class="xdoc-kw2">String</span>&nbsp;<span class="xdoc-id">testId</span>, <a class="xdoc-link" href="../../../ti/xdais/qualiti/ITest.html#.Algo.Params" title="ti.xdais.qualiti.ITest.AlgoParams">ITest.AlgoParams</a>&nbsp;<span class="xdoc-id">algoParams</span>, <a class="xdoc-link" href="../../../ti/xdais/qualiti/ITest.html#.Test.Settings" title="ti.xdais.qualiti.ITest.TestSettings">ITest.TestSettings</a>&nbsp;<span class="xdoc-id">testSettings</span>, <span class="xdoc-kw2">Int</span>&nbsp;<span class="xdoc-id">testDetailLevel</span>, <span class="xdoc-kw2">Any</span>&nbsp;<span class="xdoc-id">cbPrintLog</span>);
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+</div>
+<div id="xdocDate">generated on Mon, 20 May 2013 19:15:16 GMT</div>
+</div></div></body>
+</html>

@@ -1,0 +1,9 @@
+UseCase: chains_vipSingleCameraObjectDetect2Tda3xx
+
+Capture -> Alg_ImagePreProcess (EVE1) -> Dup_capture -> Merge_alg
+
+Dup_capture -> Alg_ImgPyramid -> Dup_imgPyramid -> Alg_FPCompute (EVE1) -> Alg_ObjectDetection (DSP1) -> Merge_objectDetect (DSP1)
+
+Dup_imgPyramid -> Merge_objectDetect (DSP1) -> Sync_objectDetect (DSP1) -> Alg_ObjectClassification (DSP1) -> Merge_alg -> Sync_alg -> Alg_ObjectDraw -> Display_alg
+
+GrpxSrc -> Display_Grpx

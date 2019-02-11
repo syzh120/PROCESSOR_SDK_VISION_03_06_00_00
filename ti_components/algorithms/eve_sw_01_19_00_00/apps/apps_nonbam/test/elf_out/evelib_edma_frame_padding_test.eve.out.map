@@ -1,0 +1,554 @@
+******************************************************************************
+                   ARP32 Linker PC v1.0.7                      
+******************************************************************************
+>> Linked Mon Jun 25 21:49:28 2018
+
+OUTPUT FILE NAME:   <.\elf_out/evelib_edma_frame_padding_test.eve.out>
+ENTRY POINT SYMBOL: "_reset_handler"  address: 80000100
+
+
+MEMORY CONFIGURATION
+
+         name            origin    length      used     unused   attr    fill
+----------------------  --------  ---------  --------  --------  ----  --------
+PAGE 0:
+  VECMEM                80000000   00000100  00000028  000000d8  RWIX
+  CMDMEM                80000100   00001000  00000028  00000fd8  RWIX
+  EXTMEM                80001100   00020000  00004e34  0001b1cc  RWIX
+
+PAGE 1:
+  DATMEM                40020000   00008000  00002321  00005cdf  RWIX
+  WMEM                  40040000   00007fe0  00005b00  000024e0  RWIX
+  IMEMLA                40050000   00004000  00004000  00000000  RWIX
+  IMEMHA                40054000   00004000  00004000  00000000  RWIX
+  IMEMLB                40070000   00004000  00004000  00000000  RWIX
+  IMEMHB                40074000   00004000  00004000  00000000  RWIX
+  L3MEM                 40300000   00100000  00000000  00100000  RWIX
+  GEM0_L2_MEM           40800000   00008000  00000000  00008000  RWIX
+  EXTDMEM               80030000   02000000  00174508  01e8baf8  RWIX
+
+
+SECTION ALLOCATION MAP
+
+ output                                  attributes/
+section   page    origin      length       input sections
+--------  ----  ----------  ----------   ----------------
+.cinit     1    40020000    00000000     UNINITIALIZED
+
+.init_array 
+*          1    40020000    00000000     UNINITIALIZED
+
+.intvecs   0    80000000    00000028     
+                  80000000    00000028     boot_arp32.obj (.intvecs)
+
+.inthandler 
+*          0    80000100    00000028     
+                  80000100    00000028     boot_arp32.obj (.inthandler)
+
+.bam_text 
+*          0    80001100    00000000     UNINITIALIZED
+
+.starterware_text 
+*          0    80001100    00000000     UNINITIALIZED
+
+.rts_text 
+*          0    80001100    00004084     
+                  80001100    000002a0     rtsarp32_v200.lib : _printfi.obj (.text:_setfield)
+                  800013a0    0000025c                       : _printfi.obj (.text:_pproc_fge)
+                  800015fc    0000025c                       : _printfi.obj (.text:ecvt)
+                  80001858    00000258                       : _printfi.obj (.text:fcvt)
+                  80001ab0    0000022c                       : _printfi.obj (.text:_printfi)
+                  80001cdc    00000220                       : _printfi.obj (.text:_pconv_e)
+                  80001efc    00000208                       : _printfi.obj (.text:_getarg_diouxp)
+                  80002104    00000200                       : frcdivd.obj (.text:_frcdivd)
+                  80002304    000001e4                       : divd.obj (.text:__arp32abi_divd)
+                  800024e8    000001cc                       : imath64.obj (.text:__arp32abi_divull)
+                  800026b4    000001c8                       : mpyd.obj (.text:__arp32abi_mpyd)
+                  8000287c    000001b8                       : addd.obj (.text:__arp32abi_addd)
+                  80002a34    0000018c                       : _printfi.obj (.text:_pproc_diouxp)
+                  80002bc0    00000170                       : fputs.obj (.text:fputs)
+                  80002d30    00000168                       : vcop_memory.obj (.text:vcop_memalign)
+                  80002e98    00000160                       : frcaddd.obj (.text:_frcaddd)
+                  80002ff8    00000158                       : llmpy.obj (.text:__arp32abi_mpyll)
+                  80003150    00000140                       : frcmpyd.obj (.text:_frcmpyd)
+                  80003290    0000013c                       : _printfi.obj (.text:_pproc_fwp)
+                  800033cc    00000118                       : setvbuf.obj (.text:setvbuf)
+                  800034e4    00000114                       : _printfi.obj (.text:_pconv_g)
+                  800035f8    000000f4                       : _printfi.obj (.text:_pproc_str)
+                  800036ec    000000e8                       : fputc.obj (.text:fputc)
+                  800037d4    000000dc                       : memcpy.obj (.text:memcpy)
+                  800038b0    000000cc                       : cmpd.obj (.text:__arp32abi_cmpd)
+                  8000397c    000000c4                       : memory.obj (.text:mem_alloc)
+                  80003a40    000000bc                       : _printfi.obj (.text:_ltostr)
+                  80003afc    000000b4                       : trgdrv.obj (.text:HOSTlseek)
+                  80003bb0    000000ac                       : trgdrv.obj (.text:HOSTrename)
+                  80003c5c    000000a8                       : memset.obj (.text:memset)
+                  80003d04    000000a0                       : lowlev.obj (.text:getdevice)
+                  80003da4    0000009c                       : _printfi.obj (.text:_mcpy)
+                  80003e40    00000098                       : trgdrv.obj (.text:HOSTopen)
+                  80003ed8    00000094                       : memory.obj (.text:mem_free)
+                  80003f6c    00000090                       : trgdrv.obj (.text:HOSTread)
+                  80003ffc    00000090                       : _printfi.obj (.text:_pproc_fflags)
+                  8000408c    00000090                       : _io_perm.obj (.text:_wrt_ok)
+                  8000411c    00000090                       : fseek.obj (.text:fseek)
+                  800041ac    0000008c                       : trgdrv.obj (.text:HOSTwrite)
+                  80004238    00000088                       : lowlev.obj (.text:close)
+                  800042c0    00000084                       : _printfi.obj (.text:_ecpy)
+                  80004344    0000007c                       : fixdi.obj (.text:__arp32abi_fixdi)
+                  800043c0    0000007c                       : fclose.obj (.text:_closefile)
+                  8000443c    0000007c                       : atoi.obj (.text:atoi)
+                  800044b8    0000007c                       : fflush.obj (.text:fflush)
+                  80004534    00000078                       : trgdrv.obj (.text:HOSTunlink)
+                  800045ac    00000078                       : _printfi.obj (.text:_div)
+                  80004624    00000078                       : _printfi.obj (.text:_pconv_f)
+                  8000469c    00000078                       : memory.obj (.text:minit)
+                  80004714    00000074                       : trgdrv.obj (.text:HOSTclose)
+                  80004788    00000070                       : autoinit.obj (.text:_auto_init)
+                  800047f8    00000070                       : vfprintf.obj (.text:vfprintf)
+                  80004868    00000068                       : fltid.obj (.text:__arp32abi_fltid)
+                  800048d0    00000068                       : boot.obj (.text:_c_int00)
+                  80004938    00000068                       : lowlev.obj (.text:lseek)
+                  800049a0    00000068                       : lowlev.obj (.text:write)
+                  80004a08    00000064                       : imath64.obj (.text:_subcull)
+                  80004a6c    00000064                       : ltoa.obj (.text:ltoa)
+                  80004ad0    00000060                       : llshift.obj (.text:__arp32abi_llshl)
+                  80004b30    00000060                       : fflush.obj (.text:_doflush)
+                  80004b90    0000005c                       : isinf.obj (.text:__arp32abi_isinf)
+                  80004bec    0000005c                       : vcop_memory.obj (.text:vcop_minit)
+                  80004c48    00000054                       : _printfi.obj (.text:_fcpy)
+                  80004c9c    00000054                       : renormd.obj (.text:_renormd)
+                  80004cf0    00000054                       : exit.obj (.text:exit)
+                  80004d44    00000050                       : fopen.obj (.text:_cleanup)
+                  80004d94    00000050                       : lowlev.obj (.text:finddevice)
+                  80004de4    00000050                       : rand.obj (.text:rand)
+                  80004e34    0000004c                       : memory.obj (.text:malloc)
+                  80004e80    00000048                       : trgmsg.obj (.text:readmsg)
+                  80004ec8    00000048                       : lowlev.obj (.text:unlink)
+                  80004f10    00000048                       : trgmsg.obj (.text:writemsg)
+                  80004f58    00000040                       : args_main.obj (.text:_args_main)
+                  80004f98    0000003c                       : _printfi.obj (.text:__arp32abi_isnan)
+                  80004fd4    00000034                       : llshift.obj (.text:__arp32abi_llshru)
+                  80005008    0000002c                       : subd.obj (.text:__arp32abi_subd)
+                  80005034    00000028                       : negd.obj (.text:__arp32abi_negd)
+                  8000505c    00000028                       : mult.obj (.text:_mpyl)
+                  80005084    00000024                       : llcmp.obj (.text:__arp32abi_cmplls)
+                  800050a8    00000024                       : llcmp.obj (.text:__arp32abi_cmpllu)
+                  800050cc    00000020                       : memccpy.obj (.text:memccpy)
+                  800050ec    0000001c                       : lladdsub.obj (.text:__arp32abi_addll)
+                  80005108    00000014                       : lladdsub.obj (.text:__arp32abi_subll)
+                  8000511c    00000014                       : memory.obj (.text:free)
+                  80005130    00000010                       : lladdsub.obj (.text:__arp32abi_negll)
+                  80005140    00000010                       : vcop_memory.obj (.text:vcop_malloc)
+                  80005150    0000000c                       : vfprintf.obj (.text:_outc)
+                  8000515c    0000000c                       : vfprintf.obj (.text:_outs)
+                  80005168    0000000c                       : remove.obj (.text:remove)
+                  80005174    00000008                       : exit.obj (.text:abort)
+                  8000517c    00000004                       : _lock.obj (.text:_nop)
+                  80005180    00000004                       : pre_init.obj (.text:_system_pre_init)
+
+.text      0    80005184    00000bec     
+                  80005184    00000724     evelib_edma_frame_padding_test.obj (.text:main)
+                  800058a8    000001c4     dmautils.lib : dma_funcs.obj (.text:DMA_funcs_hardwareRegSetup)
+                  80005a6c    00000178                  : dma_resource_allocator.obj (.text:DMA_resourceAllocator_allocateResources)
+                  80005be4    000000c0                  : dma_resource_allocator.obj (.text:DMA_resourceAllocator_deallocateResources)
+                  80005ca4    00000074                  : dma_funcs.obj (.text:DMA_funcs_writeTransferParams)
+                  80005d18    0000002c                  : dma_resource_allocator.obj (.text:DMA_resourceAllocator_initResources)
+                  80005d44    00000024     eve_profile.obj (.text:TEST_PRINTF)
+                  80005d68    00000004     dmautils.lib : edma3lld_support.obj (.text:EDMA3LLD_SUPPORT_releaseResources)
+                  80005d6c    00000004                  : edma3lld_support.obj (.text:EDMA3LLD_SUPPORT_requestResources)
+
+.algo_text 
+*          0    80005d70    000001c4     
+                  80005d70    0000009c     libeveapps.eve.lib : evelib_edma_frame_padding.obj (.text:EVELIB_padVertEDMA)
+                  80005e0c    000000e0                        : evelib_edma_frame_padding.obj (.text:EVELIB_padHorzEDMA)
+                  80005eec    00000048                        : evelib_edma_frame_padding.obj (.text:evelib_EDMAInitInt)
+
+.bam_neardata 
+*          1    40020000    00000000     UNINITIALIZED
+
+.starterware_neardata 
+*          1    40020000    00000000     UNINITIALIZED
+
+.stack     1    40020000    00002000     UNINITIALIZED
+                  40020000    00000004     rtsarp32_v200.lib : boot.obj (.stack)
+                  40020004    00001ffc     --HOLE--
+
+.rts_neardata 
+*          1    40022000    00000125     
+                  40022000    00000023     rtsarp32_v200.lib : _printfi.obj (.const:.string)
+                  40022023    00000001     --HOLE-- [fill = 0]
+                  40022024    00000101                       : ctype.obj (.const:.string:_ctypes_)
+
+.cio       1    40022128    00000120     UNINITIALIZED
+                  40022128    00000120     rtsarp32_v200.lib : trgmsg.obj (.cio)
+
+.bss       1    40022248    000000a8     UNINITIALIZED
+                  40022248    000000a8     dmautils.lib : dma_resource_allocator.obj (.bss)
+
+.data      1    400222f0    00000024     
+                  400222f0    00000020     boot_arp32.obj (.data)
+                  40022310    00000004     dmautils.lib : dma_resource_allocator.obj (.data)
+
+.rodata    1    40022314    00000008     
+                  40022314    00000008     evelib_edma_frame_padding_test.obj (.rodata)
+
+.algo_neardata 
+*          1    4002231c    00000008     
+                  4002231c    00000008     libeveapps.eve.lib : evelib_edma_frame_padding.obj (.rodata)
+
+.wmem      1    40040000    00005b00     UNINITIALIZED
+                  40040000    00000008     rtsarp32_v200.lib : vcop_memory.obj (.wmem)
+                  40040008    00005af8     --HOLE--
+
+.imemla    1    40050000    00004000     UNINITIALIZED
+                  40050000    00000008     rtsarp32_v200.lib : vcop_memory.obj (.imemla)
+                  40050008    00003ff8     --HOLE--
+
+.imemha    1    40054000    00004000     UNINITIALIZED
+                  40054000    00000008     rtsarp32_v200.lib : vcop_memory.obj (.imemha)
+                  40054008    00003ff8     --HOLE--
+
+.imemlb    1    40070000    00004000     UNINITIALIZED
+                  40070000    00000008     rtsarp32_v200.lib : vcop_memory.obj (.imemlb)
+                  40070008    00003ff8     --HOLE--
+
+.imemhb    1    40074000    00004000     UNINITIALIZED
+                  40074000    00000008     rtsarp32_v200.lib : vcop_memory.obj (.imemhb)
+                  40074008    00003ff8     --HOLE--
+
+.algo_fardata 
+*          1    80030000    00000000     UNINITIALIZED
+
+.starterware_fardata 
+*          1    80030000    00000000     UNINITIALIZED
+
+.bam_fardata 
+*          1    80030000    00000000     UNINITIALIZED
+
+.fardata   1    80030000    000f4040     
+                  80030000    000f4040     evelib_edma_frame_padding_test.obj (.fardata:gTestInput)
+
+.sysmem    1    80124040    00080000     UNINITIALIZED
+                  80124040    00000008     rtsarp32_v200.lib : memory.obj (.sysmem)
+                  80124048    0007fff8     --HOLE--
+
+.rts_fardata 
+*          1    801a4040    000002f4     
+                  801a4040    000000a0     rtsarp32_v200.lib : defs.obj (.far) [fill = 0]
+                  801a40e0    0000000c                       : memory.obj (.far) [fill = 0]
+                  801a40ec    00000008                       : boot.obj (.far) [fill = 0]
+                  801a40f4    00000008                       : trgdrv.obj (.far) [fill = 0]
+                  801a40fc    000000f0                       : defs.obj (.fardata:_ftable)
+                  801a41ec    00000078                       : lowlev.obj (.fardata:_device)
+                  801a4264    00000064                       : vcop_memory.obj (.fardata:vcop_mem)
+                  801a42c8    00000050                       : lowlev.obj (.fardata:_stream)
+                  801a4318    00000008                       : _lock.obj (.fardata)
+                  801a4320    00000005                       : vcop_memory.obj (.fardata)
+                  801a4325    00000003     --HOLE-- [fill = 0]
+                  801a4328    00000004                       : defs.obj (.fardata)
+                  801a432c    00000004                       : memory.obj (.fardata)
+                  801a4330    00000004                       : rand.obj (.fardata)
+
+.const     1    801a4334    000001d4     
+                  801a4334    000001d4     evelib_edma_frame_padding_test.obj (.const:.string)
+
+
+SEGMENT ATTRIBUTES
+
+    id tag      seg value
+    -- ---      --- -----
+     0 PHA_PAGE 3   1    
+     1 PHA_PAGE 4   1    
+     2 PHA_PAGE 5   1    
+     3 PHA_PAGE 6   1    
+     4 PHA_PAGE 7   1    
+     5 PHA_PAGE 8   1    
+     6 PHA_PAGE 9   1    
+     7 PHA_PAGE 10  1    
+     8 PHA_PAGE 11  1    
+     9 PHA_PAGE 12  1    
+    10 PHA_PAGE 13  1    
+
+
+GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name 
+
+address    name
+--------   ----
+80005174   C$$EXIT
+80004f50   C$$IO$$
+800058a8   DMA_funcs_hardwareRegSetup
+80005ca4   DMA_funcs_writeTransferParams
+80005a6c   DMA_resourceAllocator_allocateResources
+80005be4   DMA_resourceAllocator_deallocateResources
+80005d18   DMA_resourceAllocator_initResources
+80005d68   EDMA3LLD_SUPPORT_releaseResources
+80005d6c   EDMA3LLD_SUPPORT_requestResources
+80005e0c   EVELIB_padHorzEDMA
+80005d70   EVELIB_padVertEDMA
+80004714   HOSTclose
+80003afc   HOSTlseek
+80003e40   HOSTopen
+80003f6c   HOSTread
+80003bb0   HOSTrename
+80004534   HOSTunlink
+800041ac   HOSTwrite
+00004000   IMEMH_SIZE
+00004000   IMEML_SIZE
+80005d44   TEST_PRINTF
+00005b00   WMEM_SIZE
+40022128   __CIOBUF_
+UNDEFED    __TI_CINIT_Base
+UNDEFED    __TI_CINIT_Limit
+UNDEFED    __TI_Handler_Table_Base
+UNDEFED    __TI_Handler_Table_Limit
+UNDEFED    __TI_INITARRAY_Base
+UNDEFED    __TI_INITARRAY_Limit
+40022000   __TI_STACK_END
+00002000   __TI_STACK_SIZE
+400222f0   __TI_STATIC_BASE
+00080000   __TI_SYSMEM_SIZE
+00000001   __TI_args_main
+00000001   __TI_exit
+8000287c   __arp32abi_addd
+800050ec   __arp32abi_addll
+800038b0   __arp32abi_cmpd
+80005084   __arp32abi_cmplls
+800050a8   __arp32abi_cmpllu
+80002304   __arp32abi_divd
+800024e8   __arp32abi_divull
+80004344   __arp32abi_fixdi
+80004868   __arp32abi_fltid
+80004b90   __arp32abi_isinf
+80004ad0   __arp32abi_llshl
+80004fd4   __arp32abi_llshru
+800026b4   __arp32abi_mpyd
+80002ff8   __arp32abi_mpyll
+80005034   __arp32abi_negd
+80005130   __arp32abi_negll
+80005008   __arp32abi_subd
+80005108   __arp32abi_subll
+ffffffff   __binit__
+ffffffff   __c_args__
+00000000   _algo_fardata_size
+00000008   _algo_neardata_size
+000001c4   _algo_text_size
+80004f58   _args_main
+80004788   _auto_init
+00000000   _bam_fardata_size
+00000000   _bam_neardata_size
+00000000   _bam_text_size
+800048d0   _c_int00
+80004d44   _cleanup
+801a40ec   _cleanup_ptr
+800043c0   _closefile
+40022024   _ctypes_
+80004b30   _doflush
+801a40f0   _dtors_ptr
+80000120   _dummy_handler
+80002e98   _frcaddd
+80002104   _frcdivd
+80003150   _frcmpyd
+801a4328   _ft_end
+801a40fc   _ftable
+40054000   _imemha_memory
+40074000   _imemhb_memory
+40050000   _imemla_memory
+40070000   _imemlb_memory
+801a4318   _lock
+8000505c   _mpyl
+400222f0   _my_stack
+8000517c   _nop
+80001ab0   _printfi
+80004c9c   _renormd
+80000100   _reset_handler
+000002f4   _rts_fardata_size
+00000125   _rts_neardata_size
+00004084   _rts_text_size
+40020000   _stack
+00000000   _starterware_fardata_size
+00000000   _starterware_neardata_size
+00000000   _starterware_text_size
+80124040   _sys_memory
+80005180   _system_pre_init
+00000bec   _text_size
+801a4040   _tmpnams
+801a431c   _unlock
+80000000   _vec_table
+40040000   _wmem_memory
+8000408c   _wrt_ok
+80005174   abort
+8000443c   atoi
+ffffffff   binit
+80004238   close
+80005eec   evelib_EDMAInitInt
+80004cf0   exit
+800044b8   fflush
+800036ec   fputc
+80002bc0   fputs
+8000511c   free
+8000411c   fseek
+80030000   gTestInput
+80004938   lseek
+80004a6c   ltoa
+80005184   main
+80004e34   malloc
+8000397c   mem_alloc
+80003ed8   mem_free
+800050cc   memccpy
+800037d4   memcpy
+80003c5c   memset
+8000469c   minit
+80004de4   rand
+80004e80   readmsg
+80005168   remove
+800033cc   setvbuf
+80004ec8   unlink
+80005140   vcop_malloc
+80002d30   vcop_memalign
+80004bec   vcop_minit
+800047f8   vfprintf
+800049a0   write
+80004f10   writemsg
+
+
+GLOBAL SYMBOLS: SORTED BY Symbol Address 
+
+address    name
+--------   ----
+00000000   _algo_fardata_size
+00000000   _bam_fardata_size
+00000000   _bam_neardata_size
+00000000   _bam_text_size
+00000000   _starterware_fardata_size
+00000000   _starterware_neardata_size
+00000000   _starterware_text_size
+00000001   __TI_args_main
+00000001   __TI_exit
+00000008   _algo_neardata_size
+00000125   _rts_neardata_size
+000001c4   _algo_text_size
+000002f4   _rts_fardata_size
+00000bec   _text_size
+00002000   __TI_STACK_SIZE
+00004000   IMEMH_SIZE
+00004000   IMEML_SIZE
+00004084   _rts_text_size
+00005b00   WMEM_SIZE
+00080000   __TI_SYSMEM_SIZE
+40020000   _stack
+40022000   __TI_STACK_END
+40022024   _ctypes_
+40022128   __CIOBUF_
+400222f0   __TI_STATIC_BASE
+400222f0   _my_stack
+40040000   _wmem_memory
+40050000   _imemla_memory
+40054000   _imemha_memory
+40070000   _imemlb_memory
+40074000   _imemhb_memory
+80000000   _vec_table
+80000100   _reset_handler
+80000120   _dummy_handler
+80001ab0   _printfi
+80002104   _frcdivd
+80002304   __arp32abi_divd
+800024e8   __arp32abi_divull
+800026b4   __arp32abi_mpyd
+8000287c   __arp32abi_addd
+80002bc0   fputs
+80002d30   vcop_memalign
+80002e98   _frcaddd
+80002ff8   __arp32abi_mpyll
+80003150   _frcmpyd
+800033cc   setvbuf
+800036ec   fputc
+800037d4   memcpy
+800038b0   __arp32abi_cmpd
+8000397c   mem_alloc
+80003afc   HOSTlseek
+80003bb0   HOSTrename
+80003c5c   memset
+80003e40   HOSTopen
+80003ed8   mem_free
+80003f6c   HOSTread
+8000408c   _wrt_ok
+8000411c   fseek
+800041ac   HOSTwrite
+80004238   close
+80004344   __arp32abi_fixdi
+800043c0   _closefile
+8000443c   atoi
+800044b8   fflush
+80004534   HOSTunlink
+8000469c   minit
+80004714   HOSTclose
+80004788   _auto_init
+800047f8   vfprintf
+80004868   __arp32abi_fltid
+800048d0   _c_int00
+80004938   lseek
+800049a0   write
+80004a6c   ltoa
+80004ad0   __arp32abi_llshl
+80004b30   _doflush
+80004b90   __arp32abi_isinf
+80004bec   vcop_minit
+80004c9c   _renormd
+80004cf0   exit
+80004d44   _cleanup
+80004de4   rand
+80004e34   malloc
+80004e80   readmsg
+80004ec8   unlink
+80004f10   writemsg
+80004f50   C$$IO$$
+80004f58   _args_main
+80004fd4   __arp32abi_llshru
+80005008   __arp32abi_subd
+80005034   __arp32abi_negd
+8000505c   _mpyl
+80005084   __arp32abi_cmplls
+800050a8   __arp32abi_cmpllu
+800050cc   memccpy
+800050ec   __arp32abi_addll
+80005108   __arp32abi_subll
+8000511c   free
+80005130   __arp32abi_negll
+80005140   vcop_malloc
+80005168   remove
+80005174   C$$EXIT
+80005174   abort
+8000517c   _nop
+80005180   _system_pre_init
+80005184   main
+800058a8   DMA_funcs_hardwareRegSetup
+80005a6c   DMA_resourceAllocator_allocateResources
+80005be4   DMA_resourceAllocator_deallocateResources
+80005ca4   DMA_funcs_writeTransferParams
+80005d18   DMA_resourceAllocator_initResources
+80005d44   TEST_PRINTF
+80005d68   EDMA3LLD_SUPPORT_releaseResources
+80005d6c   EDMA3LLD_SUPPORT_requestResources
+80005d70   EVELIB_padVertEDMA
+80005e0c   EVELIB_padHorzEDMA
+80005eec   evelib_EDMAInitInt
+80030000   gTestInput
+80124040   _sys_memory
+801a4040   _tmpnams
+801a40ec   _cleanup_ptr
+801a40f0   _dtors_ptr
+801a40fc   _ftable
+801a4318   _lock
+801a431c   _unlock
+801a4328   _ft_end
+ffffffff   __binit__
+ffffffff   __c_args__
+ffffffff   binit
+UNDEFED    __TI_CINIT_Base
+UNDEFED    __TI_CINIT_Limit
+UNDEFED    __TI_Handler_Table_Base
+UNDEFED    __TI_Handler_Table_Limit
+UNDEFED    __TI_INITARRAY_Base
+UNDEFED    __TI_INITARRAY_Limit
+
+[135 symbols]

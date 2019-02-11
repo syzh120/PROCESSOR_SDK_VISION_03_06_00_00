@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GLBCE_xml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!--this is comment-->
+  <dcc_name>glbce</dcc_name>
+  <dcc_header>
+    <camera_module_id>     0143 </camera_module_id>
+      <dcc_descriptor_id>   51 </dcc_descriptor_id>
+      <algorithm_vendor_id>  1 </algorithm_vendor_id>
+      <tunning_tool_version> 0 </tunning_tool_version>
+  </dcc_header>
+  <!--=======================================================================-->
+
+    <typedef>
+        <iss_glbce type="struct">
+              <update type="uint8"> </update>
+                  <enable type="uint8"> </enable> <!-- enable/disable glbce: 0,1 -->
+                  <strength_ir type="uint8"> </strength_ir > <!-- glbce strength parameter: u8 -->
+                  <spatial_var type="uint8"> </spatial_var > <!-- glbce spatial variance parameter: u4 -->
+                  <intensity_var type="uint8"> </intensity_var > <!-- glbce intensity variance parameter: u4 -->
+                  <asymmetry type="uint8"> </asymmetry > <!-- glbce asymmetry parameter: u8 -->
+                  <slope_min_limit type="uint8"> </slope_min_limit > <!-- glbce slope_min_limit parameter: u8 -->
+                  <slope_max_limit type="uint8"> </slope_max_limit > <!-- glbce slope_max_limit parameter: u8 -->
+                  <dark_amplification_limit type="uint8"> </dark_amplification_limit > <!-- glbce dark_amplification_limit parameter: u4 -->
+                  <bright_amplification_limit type="uint8"> </bright_amplification_limit > <!-- glbce bright_amplification_limit parameter: u4 -->
+        </iss_glbce>
+    </typedef>
+  <!--=======================================================================-->
+        <use_case val="65535"> <!-- DCC_USE_CASE_PREVIEW_ALL -->
+        <n-space>
+            <region0 class="0">
+                <gain val="0" min="0" max="100">  </gain>
+            </region0>
+        </n-space>
+
+        <parameter_package>
+        <!-- parameters for photospace class 0-->
+        <glbce_params type="iss_glbce" >
+        {
+           1, // update
+           1, // GLBCE enable
+           255, // strength_ir: u8
+           7, // spatial_var: u4
+           12, // intensity_var: u4
+           10, // Asymmetry: u8
+           64, // slope_min_limit: u8
+           72, // slope_max_limit: u8
+           6, // dark_amplification_limit: u4
+           6, // bright_amplification_limit: u4
+        }
+        </glbce_params>
+        <!-- parameters for photospace class 1-->
+  </parameter_package>
+
+    </use_case>
+   <!--=====================================================================-->
+</GLBCE_xml>

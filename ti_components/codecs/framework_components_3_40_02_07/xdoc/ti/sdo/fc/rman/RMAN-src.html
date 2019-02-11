@@ -1,0 +1,229 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>module ti.sdo.fc.rman.RMAN</title>
+<meta name="googlebot" content="noindex,nofollow">
+<link rel="stylesheet" type="text/css" href="../../../../src.css"/>
+</head>
+<body>
+<pre class=src>
+     1    <span class="comment">/*
+</span>     2    <span class="comment"> * Copyright (c) 2012, Texas Instruments Incorporated
+</span>     3    <span class="comment"> * All rights reserved.
+</span>     4    <span class="comment"> *
+</span>     5    <span class="comment"> * Redistribution and use in source and binary forms, with or without
+</span>     6    <span class="comment"> * modification, are permitted provided that the following conditions
+</span>     7    <span class="comment"> * are met:
+</span>     8    <span class="comment"> *
+</span>     9    <span class="comment"> * *  Redistributions of source code must retain the above copyright
+</span>    10    <span class="comment"> *    notice, this list of conditions and the following disclaimer.
+</span>    11    <span class="comment"> *
+</span>    12    <span class="comment"> * *  Redistributions in binary form must reproduce the above copyright
+</span>    13    <span class="comment"> *    notice, this list of conditions and the following disclaimer in the
+</span>    14    <span class="comment"> *    documentation and/or other materials provided with the distribution.
+</span>    15    <span class="comment"> *
+</span>    16    <span class="comment"> * *  Neither the name of Texas Instruments Incorporated nor the names of
+</span>    17    <span class="comment"> *    its contributors may be used to endorse or promote products derived
+</span>    18    <span class="comment"> *    from this software without specific prior written permission.
+</span>    19    <span class="comment"> *
+</span>    20    <span class="comment"> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+</span>    21    <span class="comment"> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+</span>    22    <span class="comment"> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+</span>    23    <span class="comment"> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+</span>    24    <span class="comment"> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+</span>    25    <span class="comment"> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+</span>    26    <span class="comment"> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+</span>    27    <span class="comment"> * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+</span>    28    <span class="comment"> * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+</span>    29    <span class="comment"> * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+</span>    30    <span class="comment"> * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+</span>    31    <span class="comment"> *
+</span>    32    <span class="comment"> */</span>
+    33    
+    34    
+    35    <span class="xdoc">/*!
+</span>    36    <span class="xdoc"> *  ======== RMAN ========
+</span>    37    <span class="xdoc"> *  Resource Manager for shared C64x+ resources.
+</span>    38    <span class="xdoc"> */</span>
+    39    @Template(<span class="string">"./RMAN.xdt"</span>)
+    40    
+    41    <span class=key>metaonly</span> <span class=key>module</span> RMAN {
+    42    
+    43        <span class="xdoc">/*!
+</span>    44    <span class="xdoc">     *  ======== tableSize  ========
+</span>    45    <span class="xdoc">     * Total number of individual resource manager (IRESMAN implementation)
+</span>    46    <span class="xdoc">     * entries that will be registered with RMAN (including both static and
+</span>    47    <span class="xdoc">     * dynamic)
+</span>    48    <span class="xdoc">     */</span>
+    49        <span class=key>config</span> UInt tableSize = 10;
+    50    
+    51        <span class="xdoc">/*!
+</span>    52    <span class="xdoc">     *  ======== maxAlgs  ========
+</span>    53    <span class="xdoc">     * Maximum number of algorithm instances that will be using the RMAN
+</span>    54    <span class="xdoc">     * module.
+</span>    55    <span class="xdoc">     */</span>
+    56        <span class=key>config</span> UInt maxAlgs = 32;
+    57    
+    58        <span class="xdoc">/*!
+</span>    59    <span class="xdoc">     *  ======== useDSKT2 ========
+</span>    60    <span class="xdoc">     *  Flag indicating if DSKT2 should be used for memory allocation and
+</span>    61    <span class="xdoc">     *  for supporting algorithm yields.
+</span>    62    <span class="xdoc">     *
+</span>    63    <span class="xdoc">     *  Setting this flag to `false` will disable cooperative preemption support
+</span>    64    <span class="xdoc">     *  for algorithms in RMAN.
+</span>    65    <span class="xdoc">     */</span>
+    66        <span class=key>config</span> Bool useDSKT2 = <span class=key>true</span>;
+    67    
+    68        <span class="xdoc">/*!
+</span>    69    <span class="xdoc">     *  ======== persistentAllocFxn ========
+</span>    70    <span class="xdoc">     *  Function for allocating persistent memory for RMAN's and other IRESMAN
+</span>    71    <span class="xdoc">     *  implementation's internal objects.
+</span>    72    <span class="xdoc">     *
+</span>    73    <span class="xdoc">     *  The signature of the persistent alloc function is:
+</span>    74    <span class="xdoc">     *      extern Bool persistentAllocFxn(IALG_MemRec * memTab, Int numRecs);
+</span>    75    <span class="xdoc">     *
+</span>    76    <span class="xdoc">     *  This is required to be supplied ONLY if {<b>@link</b> #useDSKT2} is set to
+</span>    77    <span class="xdoc">     *  `false`.
+</span>    78    <span class="xdoc">     */</span>
+    79        <span class=key>config</span> String persistentAllocFxn = <span class=key>null</span>;
+    80    
+    81        <span class="xdoc">/*!
+</span>    82    <span class="xdoc">     *  ======== persistentFreeFxn ========
+</span>    83    <span class="xdoc">     *  Function for freeing persistent memory used by RMAN and other IRESMAN
+</span>    84    <span class="xdoc">     *  implementation's internal objects.
+</span>    85    <span class="xdoc">     *
+</span>    86    <span class="xdoc">     *  The signature of hte persistentFreeFxn is:
+</span>    87    <span class="xdoc">     *
+</span>    88    <span class="xdoc">     *      extern Void persistentFreeFxn(IALG_MemRec *memTab, Int numRecs);
+</span>    89    <span class="xdoc">     *
+</span>    90    <span class="xdoc">     *  This is required to be supplied ONLY if {<b>@link</b> #useDSKT2} is set to
+</span>    91    <span class="xdoc">     *  `false`.
+</span>    92    <span class="xdoc">     */</span>
+    93        <span class=key>config</span> String persistentFreeFxn = <span class=key>null</span>;
+    94    
+    95        <span class="xdoc">/*!
+</span>    96    <span class="xdoc">     *  ======== ipcKeyBase ========
+</span>    97    <span class="xdoc">     *  For multi-process support only. This is the base value of MP objects
+</span>    98    <span class="xdoc">     *  used by RMAN.
+</span>    99    <span class="xdoc">     *  The MP objects created by RMAN will use keys starting at this
+</span>   100    <span class="xdoc">     *  value, and incrementing with each new object. There is currently
+</span>   101    <span class="xdoc">     *  only one RMAN lock. The default value of ipcKeyBase is the ascii
+</span>   102    <span class="xdoc">     *  code for "RMAN".
+</span>   103    <span class="xdoc">     *
+</span>   104    <span class="xdoc">     *  WARNING: This value should only be changed if it conflicts with
+</span>   105    <span class="xdoc">     *  another key in the system that cannot be changed. If this value
+</span>   106    <span class="xdoc">     *  is changed, all programs using RMAN that will be run simultaneously
+</span>   107    <span class="xdoc">     *  must have the ipcKeyBase configured to the new value.
+</span>   108    <span class="xdoc">     *  <b>@_nodoc</b>
+</span>   109    <span class="xdoc">     */</span>
+   110        <span class=key>config</span> UInt ipcKeyBase = 0x524D414E;
+   111    
+   112        <span class="xdoc">/*!
+</span>   113    <span class="xdoc">     *  ======== yieldSamePriority ========
+</span>   114    <span class="xdoc">     * Flag indicating if yields to same priority should happen or not
+</span>   115    <span class="xdoc">     *
+</span>   116    <span class="xdoc">     * This is required only if {<b>@link</b> #useDSKT2} is set to `true`.
+</span>   117    <span class="xdoc">     */</span>
+   118        <span class=key>config</span> <span class=key>bool</span> yieldSamePriority = <span class=key>false</span>;
+   119    
+   120        <span class="xdoc">/*!
+</span>   121    <span class="xdoc">     *  ======== semCreateFxn ========
+</span>   122    <span class="xdoc">     * Deprecated
+</span>   123    <span class="xdoc">     * Function to create semaphores used by various individual resource
+</span>   124    <span class="xdoc">     * manager(s) registered with RMAN.
+</span>   125    <span class="xdoc">     *
+</span>   126    <span class="xdoc">     *  Function signature is:
+</span>   127    <span class="xdoc">     *  <b>@p(code)</b>
+</span>   128    <span class="xdoc">     * Void * _semCreate(Int key, Int count);
+</span>   129    <span class="xdoc">     * <b>@_nodoc</b>
+</span>   130    <span class="xdoc">     */</span>
+   131        <span class=key>config</span> String semCreateFxn = <span class=key>null</span>;
+   132    
+   133        <span class="xdoc">/*!
+</span>   134    <span class="xdoc">     *  ======== semDeleteFxn ========
+</span>   135    <span class="xdoc">     * Deprecated
+</span>   136    <span class="xdoc">     * Function to delete semaphores used by various individual resource
+</span>   137    <span class="xdoc">     * manager(s) registered with RMAN.
+</span>   138    <span class="xdoc">     *
+</span>   139    <span class="xdoc">     *  Function signature is:
+</span>   140    <span class="xdoc">     *  <b>@p(code)</b>
+</span>   141    <span class="xdoc">     *  Void _semDelete(Void * sem);
+</span>   142    <span class="xdoc">     * <b>@_nodoc</b>
+</span>   143    <span class="xdoc">     */</span>
+   144        <span class=key>config</span> String semDeleteFxn = <span class=key>null</span>;
+   145    
+   146        <span class="xdoc">/*!
+</span>   147    <span class="xdoc">     *  ======== semPendFxn ========
+</span>   148    <span class="xdoc">     * Deprecated
+</span>   149    <span class="xdoc">     * Function to pend on semaphores used by various resource manager(s)
+</span>   150    <span class="xdoc">     * registered with RMAN.
+</span>   151    <span class="xdoc">     *
+</span>   152    <span class="xdoc">     *  Function signature is:
+</span>   153    <span class="xdoc">     *  <b>@p(code)</b>
+</span>   154    <span class="xdoc">     *  Int _semPend(Void * sem, unsigned int timeout);
+</span>   155    <span class="xdoc">     * <b>@_nodoc</b>
+</span>   156    <span class="xdoc">     */</span>
+   157        <span class=key>config</span> String semPendFxn = <span class=key>null</span>;
+   158    
+   159        <span class="xdoc">/*!
+</span>   160    <span class="xdoc">     *  ======== semPostFxn ========
+</span>   161    <span class="xdoc">     * <b>@Deprecated</b>
+</span>   162    <span class="xdoc">     * Function to post on Semaphores used by various resource manager(s)
+</span>   163    <span class="xdoc">     * registered with RMAN.
+</span>   164    <span class="xdoc">     *
+</span>   165    <span class="xdoc">     *  Function signature is:
+</span>   166    <span class="xdoc">     *  <b>@p(code)</b>
+</span>   167    <span class="xdoc">     * Void _semPost(Void * sem);
+</span>   168    <span class="xdoc">     * <b>@_nodoc</b>
+</span>   169    <span class="xdoc">     */</span>
+   170        <span class=key>config</span> String semPostFxn = <span class=key>null</span>;
+   171    
+   172        <span class="xdoc">/*!
+</span>   173    <span class="xdoc">     *  ======== lockFxn ========
+</span>   174    <span class="xdoc">     *  Deprecated
+</span>   175    <span class="xdoc">     *  Function for handling the release and lock of scratch groups required
+</span>   176    <span class="xdoc">     *  during yield to higher or same priority algorithm
+</span>   177    <span class="xdoc">     *  Void _acquireLock(Int scratchId);
+</span>   178    <span class="xdoc">     * <b>@_nodoc</b>
+</span>   179    <span class="xdoc">     */</span>
+   180        <span class=key>config</span> String lockFxn = <span class=key>null</span>;
+   181    
+   182        <span class="xdoc">/*!
+</span>   183    <span class="xdoc">     *  ======== unlockFxn ========
+</span>   184    <span class="xdoc">     *  Deprecated
+</span>   185    <span class="xdoc">     *  Function for handling the release and lock of scratch groups required
+</span>   186    <span class="xdoc">     *  during yield to higher or same priority algorithm
+</span>   187    <span class="xdoc">     *  Void _releaseLock(Int scratchId);
+</span>   188    <span class="xdoc">     * <b>@_nodoc</b>
+</span>   189    <span class="xdoc">     */</span>
+   190        <span class=key>config</span> String unlockFxn = <span class=key>null</span>;
+   191    
+   192        <span class="xdoc">/*!
+</span>   193    <span class="xdoc">     *  ======== setContext ========
+</span>   194    <span class="xdoc">     *  Deprecated
+</span>   195    <span class="xdoc">     *  Function for handling setting and obtaining the Yield context of a
+</span>   196    <span class="xdoc">     *  scratch group during yield to higher or same priority algorithm
+</span>   197    <span class="xdoc">     *  Void _setContext(Int scratchId, IRES_YieldContextHandle context);
+</span>   198    <span class="xdoc">     * <b>@_nodoc</b>
+</span>   199    <span class="xdoc">     */</span>
+   200        <span class=key>config</span> String setContextFxn = <span class=key>null</span>;
+   201    
+   202        <span class="xdoc">/*!
+</span>   203    <span class="xdoc">     *  ======== getContext ========
+</span>   204    <span class="xdoc">     *  Deprecated
+</span>   205    <span class="xdoc">     *  Function for handling setting and obtaining the Yield context of a
+</span>   206    <span class="xdoc">     *  scratch group during yield to higher or same priority algorithm
+</span>   207    <span class="xdoc">     *  IRES_YieldContextHandle _getContext(Int scratchId);
+</span>   208    <span class="xdoc">     * <b>@_nodoc</b>
+</span>   209    <span class="xdoc">     */</span>
+   210        <span class=key>config</span> String getContextFxn = <span class=key>null</span>;
+   211    
+   212        <span class="xdoc">/*!
+</span>   213    <span class="xdoc">     *  ======== yieldFxn ========
+</span>   214    <span class="xdoc">     *  Deprecated
+</span>   215    <span class="xdoc">     *  Function to call to yield to another task of the same priority.
+</span>   216    <span class="xdoc">     *  Required only if the yieldSamePriority flag is set to "true".
+</span>   217    <span class="xdoc">     * <b>@_nodoc</b>
+</span>   218    <span class="xdoc">     */</span>
+   219        <span class=key>config</span> String yieldFxn = <span class=key>null</span>;
+   220    }
+</pre>
+</body></html>

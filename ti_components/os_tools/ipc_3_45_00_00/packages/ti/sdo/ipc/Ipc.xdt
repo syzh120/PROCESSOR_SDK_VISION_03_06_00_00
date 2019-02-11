@@ -1,0 +1,187 @@
+%%{
+/*
+ * Copyright (c) 2012-2013, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+%%}
+%%{
+/*
+ *  @file       Ipc.xdt
+ *
+ *  @brief      Template to generate the embedded config section.
+ *
+ *  @ver        0001
+ *
+ *  @date       18 Jan, 2010
+ *
+ *  @internal   18 Jan, 2010, Samir Das, Revision 0001:
+ *              [1] Original version.
+ *
+ */
+
+var SharedRegion = xdc.module("ti.sdo.ipc.SharedRegion");
+var Ipc          = xdc.module("ti.sdo.ipc.Ipc");
+var regions      = SharedRegion.$object.regions;
+
+/* Calculate the offset of branch insn */
+var align = 0;
+
+if ((Program.build.target.$name.match(/C64P/)) ||
+    (Program.build.target.$name.match(/C674/)) ||
+    (Program.build.target.$name.match(/C64T/)) ||
+    (Program.build.target.$name.match(/C67P/))) {
+    align = SharedRegion.cacheLineSize > 0x400 ?
+            SharedRegion.cacheLineSize : 0x400;
+}
+else {
+    align = SharedRegion.cacheLineSize;
+}
+
+var b_gap  = 0;
+
+var offset = (3 * 4); /* cacheLineSize, offset, sr0Setup member */
+offset    += (3 * 4); /* setupMessageQ, setupNotify, procSync members */
+offset    += (1 * 4); /* numSRs */
+for (var i = 0; i < regions.length; i++) {
+    if (regions[i].entry.isValid == true) {
+        offset += (4 * 6); /* Shared region details */
+    }
+}
+
+/* align the offset to cpu required entry point restriction */
+if ((Program.build.target.$name.match(/C64P/)) ||
+    (Program.build.target.$name.match(/C674/)) ||
+    (Program.build.target.$name.match(/C64T/)) ||
+    (Program.build.target.$name.match(/C67P/))) {
+    b_gap   = (align - (offset % align));
+    offset += (align - (offset % align));
+}
+%%}
+
+%     if (!(Ipc.generateSlaveDataForHost)) {
+Bits32 Ipc_sr0MemorySetup;
+%     }
+%     else {
+asm ("\t.sect ti_sdo_ipc_init");
+asm ("\t.align `align`");
+
+%         if (Program.build.target.$name.match(/elf/)) {
+asm ("Ipc_ResetVector:");
+asm ("_Ipc_ResetVector:");
+%         }
+%         else {
+asm ("\t.global _Ipc_ResetVector");
+asm ("_Ipc_ResetVector:");
+%         }
+
+/* First word is cacheLine Size */
+asm ("\t.word `utils.toHex(Number(SharedRegion.cacheLineSize))`");
+
+/* Second word is the offset of branch to _c_int00 insn */
+asm ("\t.word `utils.toHex(offset)`");
+
+/* sr0 memory setup */
+%         if (Program.build.target.$name.match(/elf/)) {
+asm ("Ipc_sr0MemorySetup:");
+asm ("_Ipc_sr0MemorySetup:");
+%         }
+%         else {
+asm ("\t.global _Ipc_sr0MemorySetup");
+asm ("_Ipc_sr0MemorySetup:");
+%         }
+%         if (this.sr0MemorySetup) {
+asm ("\t.word 0x1");
+%         }
+%         else {
+asm ("\t.word 0x0");
+%         }
+
+/* Ipc Module configuration shared with HOST */
+%         for (var i = 0; i < Ipc.entry.length; i++) {
+%             if (Ipc.entry[i].remoteProcId == Ipc.hostProcId) {
+asm ("\t.word `utils.toHex(Number(Ipc.entry[i].setupMessageQ))`");
+asm ("\t.word `utils.toHex(Number(Ipc.entry[i].setupNotify))`");
+asm ("\t.word `utils.toHex(Number(Ipc.procSync))`");
+%             }
+%         }
+
+/* find the number of valid SharedRegions */
+%         var numSRs = 0;
+%         for (var i = 0; i < regions.length; i++) {
+%             if (regions[i].entry.isValid == true) {
+%                 numSRs++;
+%             }
+%         }
+%
+%         /*
+%          *  This section must be padded to a cache line size.
+%          *  Assume the worst case cache line (128 bytes or 32 words).
+%          *  First 4 words (cacheLine size, offset, sr0MemorySetup, number SRs)
+%          *  Each SharedRegion contributes 6 words.  If the number of
+%          *  SharedRegion is more than 4, we do not need any padding.
+%          */
+%         if (numSRs > 4) {
+%             var numWordToPad = 0;
+%         }
+%         else {
+%             var numWordToPad = 32 - (4 + (numSRs * 6))
+%         }
+
+/* Generate the static shared regions details */
+asm ("\t.word `utils.toHex(numSRs)`");
+
+%         for (var i = 0; i < regions.length; i++) {
+%             if (regions[i].entry.isValid == true) {
+/* Shared region `i` memory address */
+asm ("\t.word `utils.toHex(Number(regions[i].entry.base))`");
+/* Shared region `i` memory size */
+asm ("\t.word `utils.toHex(Number(regions[i].entry.len))`");
+/* Shared region `i` owner procId */
+asm ("\t.word `regions[i].entry.ownerProcId`");
+/* Shared region `i` entryId  */
+asm ("\t.word `utils.toHex(Number(i))`");
+/* Shared region `i` createHeap  */
+asm ("\t.word `utils.toHex(Number(regions[i].entry.createHeap))`");
+/* Shared region `i` cacheLineSize  */
+asm ("\t.word `utils.toHex(regions[i].entry.cacheLineSize)`");
+%             }
+%         }
+
+%         /* Generate the cache line pad */
+%         for (var i = 0; i < numWordToPad; i++) {
+asm ("\t.word 0x0");
+%         }
+
+/* .export keyword needed here to ensure symbols go into ELF .dynsym table. */
+%         if (Program.build.target.$name.match(/elf/)) {
+asm ("      .export _Ipc_ResetVector");
+asm ("      .export Ipc_sr0MemorySetup");
+%         }
+%     }

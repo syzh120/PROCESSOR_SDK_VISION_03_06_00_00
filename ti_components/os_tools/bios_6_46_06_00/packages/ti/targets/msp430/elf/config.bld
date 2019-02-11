@@ -1,0 +1,27 @@
+/*
+ *  Copyright 2016 by Texas Instruments Incorporated.
+ *
+ */
+
+/*  This file is necessary because we need to avoid including
+ *  ti.targets.msp430.elf because this is the ti.targets.msp430.elf
+ *  package and after an 'xdc clean' this package does not exist!
+ */
+
+Pkg.attrs.archiver = "zip";
+Pkg.attrs.exportAll = true;
+Pkg.producerId = xdc.csd();
+Pkg.releasePrefix = "^/../exports/";
+Build.useTargets = null;    /* force the set of build targets to be empty */
+Pkg.attrs.relScript = "tisb/release/filters/copyright.rel";
+
+var top = ("." + Pkg.name).replace(/\w+/g, "./");
+Pkg.addRelease(Pkg.name.replace(/\./g, '_') + "_purec", {
+                   relScript: top + "purec.rel",
+                   label: "purec"
+               });
+/*
+ *  @(#) ti.targets.msp430.elf; 1, 0, 0,0; 10-21-2016 18:16:59; /db/ztree/library/trees/xdctargets/xdctargets-l07/src/ xlibrary
+
+ */
+

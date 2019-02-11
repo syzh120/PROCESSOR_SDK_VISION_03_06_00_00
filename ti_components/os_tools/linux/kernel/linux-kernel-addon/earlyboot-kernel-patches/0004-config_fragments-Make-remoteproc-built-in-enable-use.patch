@@ -1,0 +1,43 @@
+From df57ced5f6179153a82c7efb7a081b049e10cd59 Mon Sep 17 00:00:00 2001
+From: Shravan Karthik <shravan.karthik@ti.com>
+Date: Fri, 6 Oct 2017 10:53:00 +0530
+Subject: [PATCH 4/4] config_fragments: Make remoteproc built in, enable
+ userspace firmware loading
+
+Keeping remoteproc module builtin allows us to have better control
+over firmware loading through sysfs.
+This actually optimizes overall time to insert modules and load firmwares
+
+Signed-off-by: Shravan Karthik <shravan.karthik@ti.com>
+---
+ ti_config_fragments/boot_opt.cfg | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/ti_config_fragments/boot_opt.cfg b/ti_config_fragments/boot_opt.cfg
+index 6f11376..02b3c6b 100644
+--- a/ti_config_fragments/boot_opt.cfg
++++ b/ti_config_fragments/boot_opt.cfg
+@@ -168,8 +168,6 @@ CONFIG_VIDEO_OV1063X=m
+ # Set oprofile as module
+ CONFIG_OPROFILE=m
+ 
+-# Set remoteproc into module
+-CONFIG_OMAP_REMOTEPROC=m
+ 
+ CONFIG_TWL4030_CORE=n
+ CONFIG_TWL4030_POWER=n
+@@ -208,3 +206,11 @@ CONFIG_KALLSYMS=n
+ CONFIG_KALLSYMS_ALL=n
+ 
+ CONFIG_MMC_BLOCK_MINORS=16
++
++# Userspace firmware loading
++CONFIG_FW_LOADER_USER_HELPER=y
++CONFIG_FW_LOADER_USER_HELPER_FALLBACK=y
++
++# Set remoteproc as inbuilt
++CONFIG_OMAP_REMOTEPROC=y
++CONFIG_RPMSG_RPC=y
+-- 
+2.7.4
+

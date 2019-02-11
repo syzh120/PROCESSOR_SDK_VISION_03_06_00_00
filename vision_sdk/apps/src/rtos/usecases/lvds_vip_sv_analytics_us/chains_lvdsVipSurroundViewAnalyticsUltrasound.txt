@@ -1,0 +1,61 @@
+UseCase: chains_lvdsVipSurroundViewAnalyticsUltrasound
+
+Capture -> Select
+
+//
+// surround view original video display
+//
+Select -> Dup_sv_org -> VPE_sv_org -> Sync_sv_org -> Alg_DmaSwMs_sv_org -> Display_sv_org
+
+//
+// surround view algorithm and display
+//
+Dup_sv_org -> Sync_sv -> Dup_sv
+
+Dup_sv -> Alg_GeoAlign (DSP1)
+
+// Original sync'ed frames MUST be Q0 input to Synthesis
+Dup_sv -> Alg_Synthesis (DSP1)
+
+// Input for Display MUST be Q0 from Synthesis
+Alg_Synthesis -> Display_sv
+
+// Input to PhotoAlign MUST be Q1 from Synthesis
+Alg_Synthesis -> Alg_PhotoAlign (DSP1)
+
+// GeoAlign MUST be Q1 input to Synthesis
+Alg_GeoAlign -> Alg_Synthesis
+
+// PhotoAlign MUST be Q2 input to Synthesis
+Alg_PhotoAlign -> Alg_Synthesis
+
+//Not using 3D output
+Alg_GeoAlign -> Null (DSP1)
+
+
+// Ultrasonic Fusion 
+UltrasonicCapture -> Dup_us
+Dup_us -> Alg_UltrasonicFusion (DSP2)
+Alg_GeoAlign -> Alg_UltrasonicFusion
+
+//
+// front cam algorithm and display
+//
+Select -> VPE_algPd -> Dup_algPd -> Merge_algPd
+
+// PD Alg & draw links
+Dup_algPd -> Alg_FeaturePlaneComputation (EVE1) -> Alg_ObjectDetection (DSP2) -> Merge_algPd -> Sync_algPd -> Dup_objDraw 
+
+Dup_objDraw -> Alg_ObjectDraw_Pd -> Merge_alg_display
+Dup_objDraw -> Alg_ObjectDraw_Tsr -> Merge_alg_display
+
+
+// Sync ED & PD output and display
+Merge_alg_display -> Sync_algDisplay -> Alg_DmaSwMs_alg -> Display_alg
+
+//
+// Graphics overlay display
+//
+Alg_UltrasonicFusion -> GrpxSrc
+
+GrpxSrc -> Display_Grpx

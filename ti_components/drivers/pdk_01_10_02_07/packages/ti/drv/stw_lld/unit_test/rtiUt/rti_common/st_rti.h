@@ -1,0 +1,150 @@
+/*
+ *  Copyright (C) 2014 Texas Instruments Incorporated
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *
+ *    Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ *    Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the
+ *    distribution.
+ *
+ *    Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ *  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ *  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ *  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ *  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ *  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ */
+
+/**
+ *  \file st_rti.h
+ *
+ *  \brief This file contains all the structures, macros, enums
+ *  used by the rti UT applications.
+ */
+
+#ifndef STW_rti_H_
+#define STW_rti_H_
+
+/* ========================================================================== */
+/*                             Include Files                                  */
+/* ========================================================================== */
+#include <stdint.h>
+#include <stdio.h>
+#include <string.h>
+#include <ti/csl/soc.h>
+#include <ti/csl/csl_types.h>
+#include <ti/csl/tistdtypes.h>
+#include <ti/csl/hw_types.h>
+#include <ti/csl/cslr_rti.h>
+#include <ti/csl/csl_rti.h>
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/* ========================================================================== */
+/*                                 Macros                                     */
+/* ========================================================================== */
+#define CONTROL_CORE_SEC_OCPINTF_PRCM_CLKSEL_CONTROL_RTI_1_CLKSEL_SHIFT (16U)
+#define CONTROL_CORE_SEC_OCPINTF_PRCM_CLKSEL_CONTROL_RTI_2_CLKSEL_SHIFT (12U)
+#define CONTROL_CORE_SEC_OCPINTF_PRCM_CLKSEL_CONTROL_RTI_3_CLKSEL_SHIFT (8U)
+#define CONTROL_CORE_SEC_OCPINTF_PRCM_CLKSEL_CONTROL_RTI_4_CLKSEL_SHIFT (4U)
+#define CONTROL_CORE_SEC_OCPINTF_PRCM_CLKSEL_CONTROL_RTI_5_CLKSEL_SHIFT (0U)
+
+#define CONTROL_CORE_SEC_OCPINTF_PRCM_CLKSEL_CONTROL_RTI_1_CLKSEL_MASK \
+                                                                (0x00030000U)
+#define CONTROL_CORE_SEC_OCPINTF_PRCM_CLKSEL_CONTROL_RTI_2_CLKSEL_MASK \
+                                                                (0x00003000U)
+#define CONTROL_CORE_SEC_OCPINTF_PRCM_CLKSEL_CONTROL_RTI_3_CLKSEL_MASK \
+                                                                (0x00000300U)
+#define CONTROL_CORE_SEC_OCPINTF_PRCM_CLKSEL_CONTROL_RTI_4_CLKSEL_MASK \
+                                                                (0x00000030U)
+#define CONTROL_CORE_SEC_OCPINTF_PRCM_CLKSEL_CONTROL_RTI_5_CLKSEL_MASK \
+                                                                (0x00000003U)
+
+#define CONTROL_CORE_SEC_OCPINTF    (0x4A003A00U)
+#define CONTROL_CORE_SEC_OCPINTF_PRCM_CLKSEL_CONTROL    (0x0000025CU)
+
+#define SOC_CTRL_MODULE_CORE_CORE_REGISTERS_BASE_MMR_LOCK_1 (0x00000440U)
+#define SOC_CTRL_MODULE_CORE_CORE_REGISTERS_BASE_MMR_LOCK_1_LOCK (0x1A1C8144U)
+#define SOC_CTRL_MODULE_CORE_CORE_REGISTERS_BASE_MMR_LOCK_1_UNLOCK (0x2FF1AC2BU)
+
+#define SOC_DEVICE_PRM_BASE_PRM_RSTST   (0x00000004U)
+#define SOC_DEVICE_PRM_BASE_PRM_RSTST_SECURE_WDT_RST_MASK   (0x00000010U)
+#define SOC_DEVICE_PRM_BASE_PRM_RSTST_SECURE_WDT_RST_SHIFT   (4U)
+
+#define SOC_I_DRM_BASE_SUSPEND_CTRL20   (0x250U)
+#define SOC_I_DRM_BASE_SUSPEND_CTRL21   (0x254U)
+#define SOC_I_DRM_BASE_SUSPEND_CTRL22   (0x258U)
+#define SOC_I_DRM_BASE_SUSPEND_CTRL23   (0x25CU)
+#define SOC_I_DRM_BASE_SUSPEND_CTRL24   (0x260U)
+
+/* ========================================================================== */
+/*                         Structures and Enums                               */
+/* ========================================================================== */
+/**
+ * \brief  Enum to report the last system reset status.
+ */
+typedef enum deviceLastResetStatus
+{
+    DEVICE_LAST_RESET_STATUS_WDT_GENERATED,
+    /**< Last device reset is generated by WDT */
+    DEVICE_LAST_RESET_STATUS_NOT_WDT_GENERATED
+    /**< Last device reset is not generated by WDT */
+}deviceLastResetStaus_t;
+
+/**
+ * \brief  Enum to select the clock source for RTI module.
+ */
+
+typedef enum rtiClockSource
+{
+    RTI_CLOCK_SOURCE_SYSCLK1 = 0x00000000U,
+    /**< to select clock frequency of (sysclk1/4) */
+    RTI_CLOCK_SOURCE_SYSCLK2 = 0x00000001U,
+    /**< to select clock frequency of (sysclk1/4) */
+    RTI_CLOCK_SOURCE_32KHZ = 0x00000002U
+    /**< to select clock frequency of 32KHz */
+}rtiClockSource_t;
+
+/**
+ * \brief  Enum to select the Suspend lines for RTI module.
+ */
+
+typedef enum rtiSuspendLineCore
+{
+    RTI_SUSPEND_LINE_CORE_IPU_C0 = 0x00000031U,
+    /**< to select suspend line for IPU core 0 */
+    RTI_SUSPEND_LINE_CORE_IPU_C1 = 0x00000041U,
+    /**< to select suspend line for IPU core  */
+    RTI_SUSPEND_LINE_CORE_DSP_C0 = 0x00000001U,
+    /**< to select suspend line for DSP core 0 */
+    RTI_SUSPEND_LINE_CORE_DSP_C1 = 0x00000071U,
+    /**< to select suspend line for DSP core 1 */
+    RTI_SUSPEND_LINE_CORE_EVE = 0x000000A1U
+    /**< to select suspend line for EVE */
+}rtiSuspendLineCore_t;
+
+#ifdef __cplusplus
+}
+
+#endif /*extern "C" */
+
+#endif

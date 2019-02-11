@@ -1,0 +1,410 @@
+<!--
+ *  Copyright (c) 2012-2013, Texas Instruments Incorporated
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *
+ *  *  Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *
+ *  *  Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ *
+ *  *  Neither the name of Texas Instruments Incorporated nor the names of
+ *     its contributors may be used to endorse or promote products derived
+ *     from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ *  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ *  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ *  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ *  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ *  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ *  OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ *  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ *  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ *  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+  <title>NDK Support Package (NSP) 4_12_00_01 for DRA7xx Release Notes</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  </head>
+  <body>
+    <table width="100%">
+      <tbody>
+        <tr>
+          <td bgcolor="black" width="1">
+            <a href="http://www.ti.com/"><img style=
+            "border: 0px solid ; width: 222px; height: 54px;" alt=
+            "Texas Instruments" src="docs/tilogo.gif"></a>
+          </td>
+          <td bgcolor="red">
+            <img style="width: 314px; height: 26px;" alt=
+            "Technology for Innovators(tm)" src="docs/titagline.gif">
+          </td>
+        </tr>
+  </tbody>
+  </table>
+    <h1 style="text-align: left;">NSP 4_12_00_01 for DRA7xx Release Notes</h1>
+        This release note is divided into the following sections:<br>
+    <br>
+        <a href="#General_Info">Introduction</a>,
+        <a href="#Documentation">Documentation</a>,
+        <a href="#Whats_New">What's New</a>,
+        <a href="#Compatibility">Upgrade and Compatibility Information</a>,
+        <a href="#Dependencies">Dependencies</a>,
+        <a href="#Device_Support">Device Support</a>,
+        <a href="#Validation">Validation Info</a>,
+        <a href="#Known_Issues">Known Issues</a>,
+        <a href="#Examples">Examples</a>,
+        <a href="#Testing">Testing</a>,
+        <a href="#Version">Version Information</a>,
+        <a href="#Support">Technical Support</a>.
+
+    <hr>
+    <h2>
+      <a name="General_Info" id="General_Info">Introduction</a>
+    </h2>
+    <p>
+      This is an NSP release for the 3-port Gigabit Ethernet Switch (GMACSW) on the
+      DRA7xx/TDA2xx (Vayu) device, the DRA62x (J5Eco) device, and the DRA65x/VisionMid (Centaurus)
+      device. On J5Eco and Centaurus devices, this release supports Ethernet control on the
+      ARM Cortex-M3 (Media Controller) and ARM Cortex-A8 (GPP or MPU). On the Vayu device,
+      this release supports use on the ARM Cortex-M4 (IPU) and ARM Cortex-A15 (MPU).
+      Network examples for SYS/BIOS 6.x are provided for the supported cores.
+    </p>
+    <p>
+      The Network Development Kit Support Package (NSP) contains
+      Ethernet driver code, libraries and network examples for the supported EVM platforms.
+      It is meant to be used in conjunction with the TI Network Development Kit
+      (NDK), which consists of the platform independent networking code and stacks.
+    </p>
+    <p>
+      The NSP product is comprised of the following main packages
+    </p>
+    <ul>
+      <li>
+        <span style="font-weight: bold;">ti.nsp.drv</span>: Contains the NSP driver
+      </li>
+      <li>
+        <span style="font-weight: bold;">ti.ndk.vayu</span>: Contains the NDK example application for the DRA7xx/TDA2xx (Vayu) device
+      </li>
+      <li>
+        <span style="font-weight: bold;">ti.ndk.j5eco</span>: Contains the NDK example application for the DRA62x (J5Eco) device
+      </li>
+      <li>
+        <span style="font-weight: bold;">ti.ndk.centaurus</span>: Contains the NDK example application for the DRA65x/VisionMid (Centaurus) device
+      </li>
+    </ul>These driver packages are provided as source code and prebuilt libraries.<br>
+
+
+    <hr>
+    <h2>
+      <a name="Documentation" id="Documentation">Documentation</a>
+    </h2>
+    <p>
+      The following documentation is available:
+    </p>
+    <table border=1px>
+      <tr>
+        <td><a href="docs/nsp_gmacsw_4_12_00_01_user_guide.html">NSP User's Guide</a></td>
+        <td>Documents the NSP basics and provides relevant links to NDK related documents.</td>
+      </tr>
+      <tr>
+        <td><a href="docs/NSP_GMACSW_Design.pdf">NSP Driver Design Guide</a></td>
+        <td>Documents the design of the driver and the architecture of the NSP_GMACSW package.</td>
+      </tr>
+      <tr>
+        <td><a href="docs/gmacsw/html/index.html">Doxygen API guide</a></td>
+        <td>Documents runtime-APIs, type definitions, error codes and constants.</td>
+      </tr>
+    </table>
+    <p>Manifest and License:</p>
+    <p><a href="nsp_gmacsw_4_12_00_01_manifest.html">NSP Software Manifest and License</a></p>
+    <p>Code Analysis Reports:</p>
+    <p><a href="packages/ti/nsp/drv/reports/code_report.html">NSP Driver Code Analysis Report</a></p>
+    <p>Test/Validation Results:</p>
+    <p><a href="packages/ti/nsp/drv/reports/test_report.html">NSP Test results for the various targets</a></p>
+    <p>
+      Release notes from previous releases are also available in the <a href=
+      "docs/relnotes_archive">relnotes_archive</a> directory.
+    </p>
+
+
+    <hr>
+    <h2>
+      <a name="Whats_New" id="Whats_New">What's New</a>
+    </h2>
+    <ul>
+      <li>
+      Additional documentation for the driver is now included, including Doxygen-generated HTML pages and an extensive design guide that touches on many aspects of the hardware.
+      </li>
+      <li>
+      A few IOCTL names and IOCTL param structure names have changed in order to make them all consistent. The Doxygen pages should be reviewed.
+      </li>
+      <li>
+      With the updated Doxygen-generated documentation, there was some further code cleanup.
+      </li>
+    </ul>
+    <h3>Issues addressed in this release</h3>
+      <p>None.</p>
+    <!--
+      <table width="100%">
+      <tbody>
+        <tr>
+          <th align="left">Defect/Enhancement ID</th>
+          <th align="left">Headline</th>
+        </tr>
+        <tr>
+          <td width="200">N/A</td>
+          <td>N/A</td>
+        </tr>
+      </tbody>
+      </table>-->
+
+
+    <hr>
+    <h2>
+      <a name="Compatibility" id="Compatibility">Upgrade and Compatibility
+      Information</a>
+    </h2>
+    <p>
+      A few IOCTL names and IOCTL parameter structures have changed in order to be consistent across all modules. Refer to the source or 
+      Doxygen-generated documentation to make sure your application/stack code is aligned.
+    </p>
+    <p>
+      The required version of the NDK dependency has been updated for this release. See below.
+    </p>
+
+
+    <hr>
+    <h2>
+      <a name="Dependencies" id="Dependencies">Dependencies</a>
+    </h2>
+    <p>
+      This release requires the following other software components and tools
+      versions to successfully function:
+    </p>
+    <ul>
+      <li>CCS 5.4.0 (or later)
+      </li>
+      <li>SYS/BIOS 6.37.01.24 (or later)
+      </li>
+      <li>NDK 2.24.00.11 (or later)
+      </li>
+      <li>XDCTools 3.25.05.94 (or later)
+      </li>
+<!--
+      <li>TMS320 C6000 Code Generation Tools <b>4.7.x</b> (for C66x DSP)
+      </li>
+-->
+      <li>Linaro GCC (arm-none-eabi) 4.7.3 (for Cortex A15)
+      </li>
+      <li>TI ARM Code Generation Tools 5.1.1 (or later)
+      </li>
+    </ul>
+
+
+    <hr>
+    <h2>
+      <a name="Device_Support"  id="Device_Support">Device & Architecture Support</a>
+    </h2>
+    <p>
+      This release supports the following devices and platforms:
+    </p>
+
+    <ul>
+      <li>DRA7xx/TDA2xx (Vayu) EVM:</li>
+      <ul>
+        <li>ARM Cortex-A15: Little endian, ELF only</li>
+        <li>ARM Cortex-M4: Little endian, ELF only</li>
+      </ul>
+      <li>DRA62x (J5Eco) EVM:</li>
+      <ul>
+        <li>ARM Cortex-A8: Little endian, ELF only</li>
+        <li>ARM Cortex-M3: Little endian, ELF only</li>
+      </ul>
+      <li>DRA65x/VisionMid (Centaurus) EVM:</li>
+      <ul>
+        <li>ARM Cortex-A8: Little endian, ELF only</li>
+        <li>ARM Cortex-M3: Little endian, ELF only</li>
+      </ul>
+    </ul>
+
+
+    <hr>
+    <h2>
+      <a name="Validation" id="Validation">Validation Information</a>
+    </h2>
+    <p>
+      This release was validated using the following hardware platforms:
+      <ul>
+        <li>Spectrum Digital TDA2xx/DRA7xx EVM (RGMII)</li>
+      </ul>
+      <ul>
+        <li>Spectrum Digital DRA62x EVM</li>
+      </ul>
+      <ul>
+        <li>Spectrum Digital J5 EVM</li>
+      </ul>
+    </p>
+    <p>
+      This release was validated using the following software components:
+      <ul>
+        <li>CCS 5.4.0.91
+        </li>
+        <li>SYS/BIOS 6.37.03.30
+        </li>
+        <li>NDK 2.24.00.11
+        </li>
+        <li>XDCTools 3.25.05.94
+        </li>
+        <li>TI ARM Code Generation Tools 5.1.6
+        </li>
+        <li>Linaro GCC (arm-none-eabi) 4.7.3
+        </li>
+      </ul>
+    </p>
+    <p>
+      Validation consisted of running the NSP test server/client combination described <a href="#Testing">below</a>.
+    </p>
+
+
+    <hr>
+    <h2>
+      <a name="Known_Issues" id="Known_Issues">Known Issues</a>
+    </h2>
+    <p>None.</p>
+    <!--
+    <table width="100%">
+    <tbody>
+      <tr>
+        <th align="left">Defect ID</th>
+        <th align="left">Headline</th>
+      </tr>
+      <tr>
+        <td width="200">OMAPS00299944</td>
+        <td>A15 external loopback example fails on Vayu platform. Note: Though A15 examples build and run, they all appear to suffer
+        from some fundamental misconfiguration. Any results derived from these examples should not be considered valid.</td>
+      </tr>
+    </tbody>
+    </table>-->
+
+
+    <hr>
+    <h2>
+      <a name="Examples" id="Examples">Examples</a>
+    </h2>
+    <p>
+      The NSP includes demonstration software which showcases the various devices
+      and cores and their capabilities across a range of network enabled applications, using
+      the SYS/BIOS 6.x RTOS.
+    </p>
+    <p>
+      The NDK examples found in this NSP can serve as a rapid prototype platform
+      for the development of network and packet processing applications, or to add
+      network connectivity to existing applications for communications,
+      configuration, and control. Using the components provided in the NDK and NSP,
+      developers can quickly move from development concepts to working
+      implementations attached to the network.
+    </p>
+
+
+    <hr>
+    <h2>
+      <a name="Testing" id="Testing">Testing</a>
+    </h2>
+    <p>
+      The NSP includes a unit test client and server programs in the utils directory.
+      This test program was used to validate the NSP. The test results that were generated
+      by the test client/server are available <a href="packages/ti/nsp/drv/reports/test_report.html">here</a>.
+      Note that any results which show FAIL purely due to CRC errors, are not true failures of the NSP, but 
+      rather are indicative of some physical transport issue between the two MACs.
+    </p>
+    <p>
+      To rerun the NSP tests you need to build the test client on a Linux workstation
+      (tested on Ubuntu 12.04) with a gigabit Ethernet NIC. The Linux OS must support
+      the use of the hierarchial token bucket (HTB) queueing discipline (qdisc). The
+      test program makes use of the 'tc' utility to manipulate traffic shaping on the
+      Linux PC (to do rate limiting of streams). There are CCS projects for NSP test
+      server for each supported platform and core.
+    </p>
+    <p>
+      The test setup used a dedicated connection between the Linux workstation and the
+      device under test, with both end configured to use static IP addresses on the 192.168.1.x
+      subnet. No switch was used between the two endpoints. If you wish to use DHCP for dynamic
+      addressing on your network, you will need to update the server project's config file (nsp_test_server.cfg)
+      and change the 'enableStaticIP' variable at the top of the file to 0.
+    </p>
+    <p>
+      The testing procedure is as follows:
+      <ol>
+        <li>Import and build the server CCS project appropriate for the device and core you wish to test. Note: all tests done using release builds.</li>
+        <li>Use the make utility to build the client program on the Linux workstation
+        <ol>
+          <li>Copy the utils/nsp_test directory to the Linux machine.</li>
+          <li>Enter the utils/nsp_test/client path.</li>
+          <li>Run 'make all' to build the NSP test client.</li>
+        </ol></li>
+        <li>Load and run the server executable on the target device/core. For the J5Eco and Centaurus platforms, Gel files for the A8 cores are included in the
+        NSP package under the packages/ti/ndk/j5eco and packages/ti/ndk/centaurus directories. For the Vayu device, you should use the standard Gel files provided.
+        For executing on the M3 (J5Eco or Centaurus Media Controller) or M4 (Vayu IPU1), you need to connect to the Cortex A8/A15 core first and then connect to the
+        M3/M4 core.</li>
+        <li>With the server running, execute the client application on the Linux machine. For the test setup used to generate the results included, the following
+        command was used:<p><code>sudo ./nsp_test_client --ip 192.168.1.200 --dev eth1 --num-load-measures 0 --num-shutdowns 5 --run-perf-tests true --test-duration 30</code></p>
+        Note that using root or elevated privileges is required because the program uses raw sockets. If you do not use the static IP address option, you will need to use
+        the IP address printed when you first start executing the server application under CCS. The Ethernet device used may also be different (eth0 is probably most common).
+        </li>
+      </ol>
+    </p>
+
+
+    <hr>
+    <h2>
+      <a name="Version" id="Version">Version Information</a>
+    </h2>
+    <p>
+      This product's version follows a version format, <b>M.mm.pp.bb</b>,
+      where <b>M</b> is a single digit Major number, <b>mm</b> is 2 digit
+      minor number, <b>pp</b> is a 2 digit patch number, and <b>b</b> is an
+      unrestricted set of digits used as an incrementing build counter.
+    </p>
+    <p>
+      To support multiple side-by-side installations of the product, the
+      product version is encoded in the top level directory, ex.
+      <b>nsp_gmacsw_4_06_01_01</b>.
+    </p>
+    <p>
+      Subsequent releases of patch upgrades will be identified by the patch
+      number, ex. NSP 4.06.01.bb with directory <b>nsp_gmacsw_4_06_01_bb</b>.
+      Typically, these patches only include critical bug fixes.
+    </p>
+    <p>
+      Please note that version numbers and compatibility keys are NOT the same.
+      For an explanation of compatibility keys, please refer to the <a href="#Compatibility">'Upgrade
+      and Compatibility Information'</a> section.
+    </p>
+
+    <hr>
+    <h2>
+      <a name="Support" id="Support">Technical Support</a>
+    </h2>
+    <p>
+      For technical support, use the community forum
+      <a href="http://e2e.ti.com/">TI E2E Community</a>, or email
+      softwaresupport@ti.com.
+    </p>
+
+    <hr>
+    <p>
+      Last updated: 07-25-2014
+    </p>
+  </body>
+</html>

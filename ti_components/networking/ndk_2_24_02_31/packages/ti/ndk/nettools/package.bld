@@ -1,0 +1,118 @@
+/*
+ * Copyright (c) 2013, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * */
+/*
+ * ======== package.bld ========
+ */
+
+Pkg.otherFiles = [
+    "package.bld",
+    "config/config.h",
+    "dhcp/dhcp.h",
+    "dhcps/dhcps.h",
+    "dns/dns.h",
+    "http/http.h",
+    "mytime/mytime.h",
+    "sntp/sntp.h",
+    "telnet/telnet.h",
+    "tftp/tftp.h",
+    "tftp/tftpinc.h",
+];
+
+/* List of all the NETTOOLS Files */
+var buildFiles = [
+    "config/config.c", 
+    "daemon/daemon.c", 
+    "dhcp/dhcpbild.c",
+    "dhcp/dhcpmain.c", 
+    "dhcp/dhcppkt.c",
+    "dhcp/dhcpsm.c",
+    "dhcp/dhcpsock.c",
+    "dhcp/dhcptags.c",
+    "dhcps/dhcps.c",
+    "dns/dnsclnt.c",
+    "dns/dnscomn.c", 
+    "dns/dnspkt.c",
+    "dns/dnssrvr.c", 
+    "http/http.c",
+    "http/httpclie.c",
+    "http/httppars.c", 
+    "http/httpsend.c",
+    "http/httpstr.c",
+    "inet/inetaddr.c", 
+    "ipaddr/ipaddr.c",
+    "mytime/mytime.c",
+    "nat/natsrv.c",
+    "sntp/sntp.c",
+    "telnet/telnetd.c", 
+    "tftp/tftp.c",
+    "tftp/tftp6.c",
+];
+
+/* Build the libraries for all the targets specified. */
+for (var i = 0; i < Build.targets.length; i++) {
+    var target = Build.targets[i];
+
+
+    /* We build 2 version of the library, i.e. NIMU + IPv6  but with and 
+     * without Jumbo Packet Buffer Manager Support.
+     */
+    /*********************************************************************
+     ******************* No Jumbo Frame Support Version ******************
+     *********************************************************************/
+    /* build nettools for IPv6 */
+    var libOptions = {
+        copts: "-D_NDK_EXTERN_CONFIG -D_INCLUDE_NAT_CODE -D_INCLUDE_PPP_CODE " +
+               "-D_INCLUDE_PPPOE_CODE -D_INCLUDE_NIMU_CODE -D_INCLUDE_IPv6_CODE",
+        incs: ndkPathInclude, 
+    };
+
+    /* first library to build */
+    var libName = "nettool";
+
+    var lib = Pkg.addLibrary("lib/" + libName, target, libOptions);
+    lib.addObjects(buildFiles);
+
+    /* build nettools for IPv4 */
+    var libName = "nettool_ipv4";
+    var libOptions = {
+        copts: "-D_NDK_EXTERN_CONFIG -D_INCLUDE_NAT_CODE -D_INCLUDE_PPP_CODE " +
+               "-D_INCLUDE_PPPOE_CODE -D_INCLUDE_NIMU_CODE ",
+        incs: ndkPathInclude, 
+    };
+
+    var lib = Pkg.addLibrary("lib/" + libName, target, libOptions);
+    lib.addObjects(buildFiles);
+}
+
+/* include source files in the release package */
+Pkg.attrs.exportSrc = true;
+Pkg.attrs.exportCfg = true;

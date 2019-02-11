@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<gep name="ndk/Global" title="NDK" version="1">
+
+<page name="Welcome" title="Welcome" DPI="2540">
+  <instance href="ti/ndk/config/Welcome.html"/>
+</page>
+
+<page name="System Overview" title="System Overview" DPI="2540">
+  <instance href="ti/ndk/config/Overview.xml"/>
+</page>
+
+<page name="Scheduling" title="Scheduling Options">
+<html><body><table>
+  <tr>
+    <td>
+      <form>
+        <p>This page allows you to configure settings for the Network Scheduler Task, as well as the default stack sizes and priority values for tasks that are dynamically created internally by the stack, such as when creating a daemon.
+        </p>
+        <p></p>
+      </form>
+    </td>
+  </tr>
+
+
+  <tr>
+    <td>
+    <h1>Network Scheduler Task Options</h1>
+    <form>
+      <p>The NDK's Network Scheduler task is essentially an infinite loop which actively checks for network activity from the low level device drivers, and takes action when such activity is detected.
+      </p>
+      <p>The below options allow you to set the scheduler's relative stack priority level and run mode.
+      </p>
+    </form>
+    <table>
+      <tr>
+        <td><control type="radiogroup" value="value:ti.ndk.config.Global.netSchedulerPri" label="Network Scheduler Task Priority" tooltip="value:ti.ndk.config.Global.netSchedulerPri.$summary" align="left" /></td>
+
+      </tr>
+      <tr>
+      </tr>
+    </table>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <h1>Network Task Priority Levels</h1>
+    <form>
+      <p>The NDK uses four priority levels - <b>low</b>, <b>normal</b>, <b>high</b> and <b>kernel</b> - in order to sychronize between the Network Scheduler and other NDK-created tasks that run within the context of the stack.</p>
+      <p>Use the following settings to configure the value for these priorities.  Priority levels start with level 1 (lowest), and go up to the value defined by SYS/BIOS Task priority level (highest).</p>
+    </form>
+    <table>
+      <tr>
+        <td><control type="label" label="Priority level for low priority NDK tasks" align="right"/></td>
+        <td><control type="editbox" 
+             value="value:ti.ndk.config.Global.lowTaskPriLevel"
+             tooltip="value:ti.ndk.config.Global.lowTaskPriLevel.$summary"/></td>
+      </tr>
+      <tr>
+        <td><control type="label" label="Priority level for normal priority NDK tasks" align="right"/></td>
+        <td><control type="editbox" 
+             value="value:ti.ndk.config.Global.normTaskPriLevel"
+             tooltip="value:ti.ndk.config.Global.normTaskPriLevel.$summary"/></td>
+      </tr>
+      <tr>
+        <td><control type="label" label="Priority level for high priority NDK tasks" align="right"/></td>
+        <td><control type="editbox" 
+             value="value:ti.ndk.config.Global.highTaskPriLevel"
+             tooltip="value:ti.ndk.config.Global.highTaskPriLevel.$summary"/></td>
+      </tr>
+      <tr>
+        <td><control type="label" label="Priority level for kernel priority NDK tasks" align="right"/></td>
+        <td><control type="editbox" 
+             value="value:ti.ndk.config.Global.kernTaskPriLevel"
+             tooltip="value:ti.ndk.config.Global.kernTaskPriLevel.$summary"/></td>
+      </tr>
+    </table>
+    </td>
+
+    <td>
+    <h1>Network Task Stack Sizes</h1>
+    <table>
+      <tr>
+        <td><control type="label" label="Default stack size for the main network task (bytes)" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:ti.ndk.config.Global.ndkThreadStackSize"
+             tooltip="value:ti.ndk.config.Global.ndkThreadStackSize.$summary"/></td>
+      </tr>
+    </table>
+    <form>
+      <p></p>
+    </form>
+    <form>
+      <p>The following stack sizes are used by the stack when creating a task of <b>low</b>, <b>normal</b> or <b>high</b> priorities.</p>
+    </form>
+    <table>
+      <tr>
+        <td><control type="label" label="Default stack size for low priority NDK tasks (bytes)" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:ti.ndk.config.Global.lowTaskStackSize"
+             tooltip="value:ti.ndk.config.Global.lowTaskStackSize.$summary"/></td>
+      </tr>
+      <tr>
+        <td><control type="label" label="Default stack size for normal priority NDK tasks (bytes)" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:ti.ndk.config.Global.normTaskStackSize"
+             tooltip="value:ti.ndk.config.Global.normTaskStackSize.$summary"/></td>
+      </tr>
+      <tr>
+        <td><control type="label" label="Default stack size for high priority NDK tasks (bytes)" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:ti.ndk.config.Global.highTaskStackSize"
+             tooltip="value:ti.ndk.config.Global.highTaskStackSize.$summary"/></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+
+</table></body></html>
+</page>
+
+<page name="Buffers" title="Stack Buffer Sizes And Placement">
+<html><body><table>
+  <tr>
+    <td>
+      <form>
+        <p>The NDK Packet Buffer Manager (PBM) and memory manager both contain buffers whose sizes can be configured.  These options can be tuned to reduce memory footprint and to change where the buffers are placed.</p>
+          <p></p>
+      </form>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <h1>PBM Buffers</h1>
+
+    <table>
+      <tr>
+        <td><control type="label" label="Number of frames" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:ti.ndk.config.Global.pktNumFrameBufs"
+             tooltip="value:ti.ndk.config.Global.pktNumFrameBufs.$summary"/></td>
+      </tr>
+      <tr>
+        <td><control type="label" label="Frame buffer size (bytes)" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:ti.ndk.config.Global.pktSizeFrameBuf"
+             tooltip="value:ti.ndk.config.Global.pktSizeFrameBuf.$summary"/></td>
+      </tr>
+      <tr>
+        <td><control type="label" label="Buffer data section" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:ti.ndk.config.Global.pbmDataSection"
+             tooltip="value:ti.ndk.config.Global.pbmDataSection.$summary"/></td>
+      </tr>
+    </table>
+    </td>
+
+    <td>
+    <h1>Memory Manager Buffers</h1>
+    <table>
+      <tr>
+        <td><control type="label" label="Page size (bytes)" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:ti.ndk.config.Global.memRawPageSize"
+             tooltip="value:ti.ndk.config.Global.memRawPageSize.$summary"/></td>
+      </tr>
+      <tr>
+        <td><control type="label" label="Number of pages" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:ti.ndk.config.Global.memRawPageCount"
+             tooltip="value:ti.ndk.config.Global.memRawPageCount.$summary"/></td>
+      </tr>
+      <tr>
+        <td><control type="label" label="Buffer data section" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:ti.ndk.config.Global.memDataSection"
+             tooltip="value:ti.ndk.config.Global.memDataSection.$summary"/></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+
+</table></body></html>
+</page>
+
+<page name="Hooks" title="Stack Hook Functions">
+<html><body><table>
+  <tr>
+    <td>
+      <form>
+        <p>The NDK allows the user to specify a variety of hook functions, which will be called at various times in the application.</p>
+          <p>Stack thread hooks allow the user to run certain code from within the generated NDK stack thread function 'ti_ndk_config_Global_stackThread' function.</p>
+          <p>Network callback hooks allow the user to define the code that should run for the NDK callbacks 'ti_ndk_config_Global_serviceReport', 'ti_ndk_config_Global_NetworkOpen', 'ti_ndk_config_Global_NetworkClose' and the 'ti_ndk_config_Global_NetworkIPAddr'.</p>
+          <p></p>
+      </form>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <h1>Stack Thread Hooks</h1>
+
+    <table>
+      <tr>
+        <td><control type="label" label="Stack thread begin hook" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:ti.ndk.config.Global.stackBeginHook"
+             tooltip="value:ti.ndk.config.Global.stackBeginHook.$summary"/></td>
+      </tr>
+      <tr>
+        <td><control type="label" label="Stack thread initialization hook" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:ti.ndk.config.Global.stackInitHook"
+             tooltip="value:ti.ndk.config.Global.stackInitHook.$summary"/></td>
+      </tr>
+      <tr>
+        <td><control type="label" label="Stack thread delete hook" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:ti.ndk.config.Global.stackDeleteHook"
+             tooltip="value:ti.ndk.config.Global.stackDeleteHook.$summary"/></td>
+      </tr>
+    </table>
+    </td>
+
+    <td>
+    <h1>Network Callback Hooks</h1>
+    <table>
+      <tr>
+        <td><control type="label" label="Status report hook" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:ti.ndk.config.Global.serviceReportHook"
+             tooltip="value:ti.ndk.config.Global.serviceReportHook.$summary"/></td>
+      </tr>
+      <tr>
+        <td><control type="label" label="Network open hook" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:ti.ndk.config.Global.networkOpenHook"
+             tooltip="value:ti.ndk.config.Global.networkOpenHook.$summary"/></td>
+      </tr>
+      <tr>
+        <td><control type="label" label="Network close hook" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:ti.ndk.config.Global.networkCloseHook"
+             tooltip="value:ti.ndk.config.Global.networkCloseHook.$summary"/></td>
+      </tr>
+      <tr>
+        <td><control type="label" label="Network IP address hook" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:ti.ndk.config.Global.networkIPAddrHook"
+             tooltip="value:ti.ndk.config.Global.networkIPAddrHook.$summary"/></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+
+</table></body></html>
+</page>
+
+<page name="Debug" title="Debug Settings">
+<html><body><table>
+  <tr>
+    <td>
+      <form><p>The stack contains trace messages of different severity levels which the user can choose to either enable or disable.  Furthermore, the option exists to cause a stack shut down if such a debug message is hit.  Use these options to configure the types of debug trace that will be displayed, and if a message of a given type should result in a stack shutdown.</p>
+      </form>
+    </td>
+  </tr>
+
+
+  <tr>
+    <td>
+    <h1>Stack Debug Trace Level</h1>
+    <form>
+      <p>Use the following option to turn on NDK stack trace, or to disable these messages:</p>
+    </form>
+    <table>
+      <tr>
+        <td><control type="radiogroup" value="value:ti.ndk.config.Global.debugPrintLevel" label="Debug Print Message Level" tooltip="value:ti.ndk.config.Global.debugPrintLevel.$summary" align="left" /></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+    <h1>Stack Shutdown Control</h1>
+    <form>
+      <p>Use the following option determine the debug message level that should result in a stack shutdown, or to disable this behavior:</p>
+    </form>
+    <table>
+      <tr>
+        <td><control type="radiogroup" value="value:ti.ndk.config.Global.debugAbortLevel" label="Debug Abort Message Level" tooltip="value:ti.ndk.config.Global.debugAbortLevel.$summary" align="left" /></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+</table></body></html>
+</page>
+
+<properties name="Advanced" title="All Options" enabled="true" visible="true" link="ti.ndk.config.Global"/>
+</gep>

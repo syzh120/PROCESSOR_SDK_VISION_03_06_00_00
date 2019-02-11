@@ -1,0 +1,153 @@
+From e178f2c378e86f31ab676ae1376303e60bcd76d2 Mon Sep 17 00:00:00 2001
+From: Karthik Ramanan <a0393906@ti.com>
+Date: Thu, 4 Oct 2018 17:25:48 +0530
+Subject: [PATCH] Reduce the filesystem aggressively (tailored for VISION SDK)
+
+Version: 3
+
+Signed-off-by: Karthik Ramanan <a0393906@ti.com>
+---
+ meta-arago-distro/recipes-core/images/tisdk-rootfs-image.bb  | 12 ------------
+ .../recipes-core/packagegroups/packagegroup-arago-base.bb    |  4 ----
+ .../recipes-core/packagegroups/packagegroup-arago-console.bb |  5 -----
+ .../recipes-core/packagegroups/packagegroup-arago-gst.bb     |  5 -----
+ .../packagegroups/packagegroup-arago-tisdk-graphics.bb       | 11 ++++++++++-
+ .../packagegroups/packagegroup-arago-tisdk-multimedia.bb     |  4 ----
+ 6 files changed, 10 insertions(+), 31 deletions(-)
+
+diff --git a/meta-arago-distro/recipes-core/images/tisdk-rootfs-image.bb b/meta-arago-distro/recipes-core/images/tisdk-rootfs-image.bb
+index a169107..849cdb2 100644
+--- a/meta-arago-distro/recipes-core/images/tisdk-rootfs-image.bb
++++ b/meta-arago-distro/recipes-core/images/tisdk-rootfs-image.bb
+@@ -5,20 +5,8 @@ require arago-image.inc
+ IMAGE_INSTALL += "\
+     packagegroup-arago-base \
+     packagegroup-arago-console \
+-    packagegroup-arago-base-tisdk \
+-    packagegroup-arago-test \
+-    packagegroup-arago-test-addons \
+     ${@bb.utils.contains('MACHINE_FEATURES','sgx','packagegroup-arago-tisdk-graphics','',d)} \
+-    packagegroup-arago-tisdk-qte \
+-    ${@bb.utils.contains('MACHINE_FEATURES','opencl','packagegroup-arago-tisdk-opencl','',d)} \
+-    ${@bb.utils.contains('MACHINE_FEATURES','opencl','packagegroup-arago-tisdk-opencl-extra','',d)} \
+-    packagegroup-arago-tisdk-connectivity \
+-    packagegroup-arago-tisdk-crypto \
+-    packagegroup-arago-tisdk-matrix \
+     packagegroup-arago-tisdk-multimedia \
+-    packagegroup-arago-tisdk-amsdk \
+-    packagegroup-arago-tisdk-addons \
+-    packagegroup-arago-tisdk-addons-extra \
+     "
+ 
+ export IMAGE_BASENAME = "tisdk-rootfs-image"
+diff --git a/meta-arago-distro/recipes-core/packagegroups/packagegroup-arago-base.bb b/meta-arago-distro/recipes-core/packagegroups/packagegroup-arago-base.bb
+index 7832a89..c9edc26 100644
+--- a/meta-arago-distro/recipes-core/packagegroups/packagegroup-arago-base.bb
++++ b/meta-arago-distro/recipes-core/packagegroups/packagegroup-arago-base.bb
+@@ -15,10 +15,7 @@ ARAGO_BASE = "\
+     module-init-tools \
+     mtd-utils \
+     mtd-utils-ubifs \
+-    curl \
+     initscript-telnetd \
+-    ethtool \
+-    thermal-init \
+     bash \
+     udev-extraconf \
+     "
+@@ -26,7 +23,6 @@ ARAGO_BASE = "\
+ # these require meta-openembedded/meta-oe layer
+ ARAGO_EXTRA = "\
+     devmem2 \
+-    tcpdump \
+     "
+ 
+ # minimal set of packages - needed to boot
+diff --git a/meta-arago-distro/recipes-core/packagegroups/packagegroup-arago-console.bb b/meta-arago-distro/recipes-core/packagegroups/packagegroup-arago-console.bb
+index 099ab88..fa56ffd 100644
+--- a/meta-arago-distro/recipes-core/packagegroups/packagegroup-arago-console.bb
++++ b/meta-arago-distro/recipes-core/packagegroups/packagegroup-arago-console.bb
+@@ -70,11 +70,6 @@ ARAGO_SDK_PREREQ = "\
+ 
+ ARAGO_CONSOLE = "\
+     ${@bb.utils.contains('MACHINE_FEATURES', 'alsa', '${ARAGO_ALSA_EXTRA}', '',d)} \
+-    ${@bb.utils.contains('DISTRO_FEATURES', 'wayland', '', '${ARAGO_TSLIB}', d)} \
+-    ${ARAGO_NCURSES} \
+-    ${ARAGO_FSTOOLS} \
+-    ${ARAGO_UTILS} \
+-    ${ARAGO_SDK_PREREQ} \
+     "
+ 
+ RDEPENDS_${PN} = "\
+diff --git a/meta-arago-distro/recipes-core/packagegroups/packagegroup-arago-gst.bb b/meta-arago-distro/recipes-core/packagegroups/packagegroup-arago-gst.bb
+index 4fc0255..970577f 100644
+--- a/meta-arago-distro/recipes-core/packagegroups/packagegroup-arago-gst.bb
++++ b/meta-arago-distro/recipes-core/packagegroups/packagegroup-arago-gst.bb
+@@ -17,11 +17,6 @@ GSTREAMER_DEPS = " \
+     gstreamer1.0-libav \
+ "
+ 
+-GSTREAMER_DEPS_append_dra7xx = " \
+-    gstreamer1.0-plugins-hevc \
+-    gstreamer1.0-plugins-dsp66 \
+-"
+-
+ GSTREAMER_DEPS_append_keystone = " \
+     gstreamer1.0-plugins-hevc \
+     gstreamer1.0-plugins-dsp66 \
+diff --git a/meta-arago-distro/recipes-core/packagegroups/packagegroup-arago-tisdk-graphics.bb b/meta-arago-distro/recipes-core/packagegroups/packagegroup-arago-tisdk-graphics.bb
+index 12331e0..fd1bcb6 100644
+--- a/meta-arago-distro/recipes-core/packagegroups/packagegroup-arago-tisdk-graphics.bb
++++ b/meta-arago-distro/recipes-core/packagegroups/packagegroup-arago-tisdk-graphics.bb
+@@ -14,9 +14,18 @@ GRAPHICS_RDEPENDS = "\
+     libgbm \
+     ti-sgx-ddk-km \
+     ti-sgx-ddk-um \
++    ti-sgx-ddk-um-dev \
++    cmem-mod \
++    cmem \
++    cmem-dev \
++    strace \
++    gdb \
++    omapconf \
++    elfutils-dev \
++    e2fsprogs-mke2fs \
++    dropbear \
+ "
+ 
+-
+ GRAPHICS_RDEPENDS_append_omap-a15 = "\
+     ti-gc320-tests \
+     ti-gc320-driver \
+diff --git a/meta-arago-distro/recipes-core/packagegroups/packagegroup-arago-tisdk-multimedia.bb b/meta-arago-distro/recipes-core/packagegroups/packagegroup-arago-tisdk-multimedia.bb
+index a468086..9e18bd4 100644
+--- a/meta-arago-distro/recipes-core/packagegroups/packagegroup-arago-tisdk-multimedia.bb
++++ b/meta-arago-distro/recipes-core/packagegroups/packagegroup-arago-tisdk-multimedia.bb
+@@ -7,7 +7,6 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
+ inherit packagegroup
+ 
+ MULTIMEDIA = " \
+-    amsdk-av-files \
+ "
+ 
+ MULTIMEDIA_append_keystone = " \
+@@ -25,8 +24,6 @@ MULTIMEDIA_append_omap-a15 = " \
+ "
+ 
+ MULTIMEDIA_append_dra7xx = " \
+-    hevc-arm-decoder \
+-    ${@bb.utils.contains('MACHINE_FEATURES', 'opencl', 'qt-opencv-opencl-opengl-multithreaded-dev', '', d)} \
+ "
+ 
+ MULTIMEDIA_append_omap5-evm = " \
+@@ -45,7 +42,6 @@ ACCEL_FW_append_omap5-evm = " \
+ 
+ ACCEL_FW_append_dra7xx-evm = " \
+     ${@bb.utils.contains('MACHINE_FEATURES', 'mmip', 'ipumm-fw', '', d)} \
+-    vis \
+ "
+ 
+ RDEPENDS_${PN} = "\
+-- 
+1.9.1
+

@@ -1,0 +1,12 @@
+UseCase: chains_fastBoot_issIspSimcop_pd_Display
+
+IssCapture -> IssM2mIsp -> IssM2mSimcop -> VPE -> Dup_capture -> Merge_display
+
+IssM2mIsp -> Alg_IssAewb
+
+Dup_capture -> Gate_algCapture -> Merge_alg
+
+Dup_capture -> Gate_algFeatureCompute -> Alg_FeaturePlaneComputation (EVE1) -> Alg_ObjectDetection (DSP1) -> Merge_alg -> Sync_alg -> Alg_ObjectDraw -> Gate_algDraw -> Merge_display -> Display_Video
+
+GrpxSrc -> Display_Grpx
+

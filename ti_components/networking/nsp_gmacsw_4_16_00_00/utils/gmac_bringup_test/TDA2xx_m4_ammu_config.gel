@@ -1,0 +1,183 @@
+/* ======================================================================
+ *   Copyright (C) 2014 Texas Instruments Incorporated
+ *
+ *   All rights reserved. Property of Texas Instruments Incorporated.
+ *   Restricted rights to use, duplicate or disclose this code are
+ *   granted through contract.
+ *
+ *   The program may not be used without the written permission
+ *   of Texas Instruments Incorporated or against the terms and conditions
+ *   stipulated in the agreement under which this program has been
+ *   supplied.
+ * ==================================================================== */
+
+ /*******************************************************************/
+/* This GEL file is loaded on the command line of Code Composer    */
+/* The StartUp() function is called every time you start           */
+/* Code Composer.  You can customize this function to              */
+/* initialize wait states or to perform other initialization.      */
+/*                                                                 */
+/* TDA3xx multicore reset config                                   */
+/*                                                                 */
+/*                                                                 */
+/*******************************************************************/
+
+#define WR_MEM_32(addr, data)   *(unsigned int*)(addr) =(unsigned int)(data)
+#define RD_MEM_32(addr)         *(unsigned int*)(addr)
+#define uint32_t                unsigned int
+
+#define DEBUG_PRINT     1
+
+
+#define IPU_MMU_CFG                   0x55080000
+
+/******************************************************************
+*   A-MMU configuration starts here...
+******************************************************************/
+
+menuitem "IPU Unicache and A-MMU configurations "
+
+/******************************************************************
+*   A-MMU initialization.
+******************************************************************/
+hotmenu Config_AMMU(){
+   AMMU_config();
+   Enable_UniCache();
+}
+
+hotmenu DummyLoopM4()
+{
+    WR_MEM_32(IPU_BASE_ADDR, 0x10000);
+    WR_MEM_32(IPU_BASE_ADDR + 0x4, 0x9);
+    WR_MEM_32(IPU_BASE_ADDR + 0x8, 0xE7FEE7FE);
+    while (RD_MEM_32(IPU_BASE_ADDR) != 0x10000);
+    while (RD_MEM_32(IPU_BASE_ADDR + 0x4) != 0x9);
+    while (RD_MEM_32(IPU_BASE_ADDR + 0x8) != 0xE7FEE7FE);
+}
+AMMU_config()
+{
+    uint32_t regVal, regAddr;
+
+    GEL_TextOut("--->>>Starting A-MMU config... <<<---\n");
+
+    /*---------------- Setup the UNICACHE MMU -----------------*/
+    /*Large Page Translations */
+    /* Logical Address */
+    regAddr = IPU_MMU_CFG;
+    regAddr += 0x800;
+    WR_MEM_32(regAddr,         0x40000000); regAddr += 0x4;
+    WR_MEM_32(regAddr,         0x80000000); regAddr += 0x4;
+    WR_MEM_32(regAddr,         0xA0000000); regAddr += 0x4;
+    WR_MEM_32(regAddr,         0x60000000); regAddr += 0x4;
+
+    /* Physical Address */
+    regAddr = IPU_MMU_CFG;
+    regAddr += 0x820;
+    WR_MEM_32(regAddr,         0x40000000); regAddr += 0x4;
+    WR_MEM_32(regAddr,         0x80000000); regAddr += 0x4;
+    WR_MEM_32(regAddr,         0x80000000); regAddr += 0x4;
+    WR_MEM_32(regAddr,         0x40000000); regAddr += 0x4;
+
+
+    /* Policy Register */
+    regAddr = IPU_MMU_CFG;
+    regAddr += 0x840;
+    WR_MEM_32(regAddr,         0x00000007); regAddr += 0x4;
+    WR_MEM_32(regAddr,         0x000B0007); regAddr += 0x4;
+    WR_MEM_32(regAddr,         0x00000007); regAddr += 0x4;
+    WR_MEM_32(regAddr,         0x00000007); regAddr += 0x4;
+
+    /*Medium Page*/
+    regAddr = IPU_MMU_CFG;
+    regAddr += 0x860;
+    WR_MEM_32(regAddr,         0x00300000); regAddr += 0x4;
+    WR_MEM_32(regAddr,         0x00340000); regAddr += 0x4;
+
+    regAddr = IPU_MMU_CFG;
+    regAddr += 0x8A0;
+    WR_MEM_32(regAddr,         0x40300000); regAddr += 0x4;
+    WR_MEM_32(regAddr,         0x40340000); regAddr += 0x4;
+
+    regAddr = IPU_MMU_CFG;
+    regAddr += 0x8E0;
+    WR_MEM_32(regAddr,         0x00030003); regAddr += 0x4;
+    WR_MEM_32(regAddr,         0x00030003); regAddr += 0x4;
+
+ //==>    /*Small Page*/
+ //==>   //Small page Physical Address
+ //==>   regAddr = IPU_MMU_CFG;
+ //==>   regAddr += 0x920;
+ //==>   WR_MEM_32(regAddr,         0x00000000); regAddr += 0x4;
+ //==>   WR_MEM_32(regAddr,         0x40000000); regAddr += 0x4;
+ //==>   WR_MEM_32(regAddr,         0x00004000); regAddr += 0x4;
+ //==>   WR_MEM_32(regAddr,         0x00008000); regAddr += 0x4;
+ //==>   WR_MEM_32(regAddr,         0x0000C000); regAddr += 0x4;
+ //==>   WR_MEM_32(regAddr,         0x00000000); regAddr += 0x4;
+ //==>   WR_MEM_32(regAddr,         0x00000000); regAddr += 0x4;
+ //==>   WR_MEM_32(regAddr,         0x00000000); regAddr += 0x4;
+ //==>   WR_MEM_32(regAddr,         0x00000000); regAddr += 0x4;
+ //==>   WR_MEM_32(regAddr,         0x00000000); regAddr += 0x4;
+ //==>
+ //==>   //Small page Virtual Address
+ //==>   regAddr = IPU_MMU_CFG;
+ //==>   regAddr += 0x9A0;
+ //==>   WR_MEM_32(regAddr,         0x55020000); regAddr += 0x4;
+ //==>   WR_MEM_32(regAddr,         0x55080000); regAddr += 0x4;
+ //==>   WR_MEM_32(regAddr,         0x55024000); regAddr += 0x4;
+ //==>   WR_MEM_32(regAddr,         0x55028000); regAddr += 0x4;
+ //==>   WR_MEM_32(regAddr,         0x5502C000); regAddr += 0x4;
+ //==>   WR_MEM_32(regAddr,         0x00000000); regAddr += 0x4;
+ //==>   WR_MEM_32(regAddr,         0x00000000); regAddr += 0x4;
+ //==>   WR_MEM_32(regAddr,         0x00000000); regAddr += 0x4;
+ //==>   WR_MEM_32(regAddr,         0x00000000); regAddr += 0x4;
+ //==>   WR_MEM_32(regAddr,         0x00000000); regAddr += 0x4;
+ //==>
+ //==>   regAddr = IPU_MMU_CFG;
+ //==>   regAddr += 0xA20;
+ //==>   WR_MEM_32(regAddr,         0x0001000B); regAddr += 0x4;
+ //==>   WR_MEM_32(regAddr,         0x0000000B); regAddr += 0x4;
+ //==>   WR_MEM_32(regAddr,         0x0001000B); regAddr += 0x4;
+ //==>   WR_MEM_32(regAddr,         0x00000007); regAddr += 0x4;
+ //==>   WR_MEM_32(regAddr,         0x00000007); regAddr += 0x4;
+ //==>   WR_MEM_32(regAddr,         0x00000000); regAddr += 0x4;
+ //==>   WR_MEM_32(regAddr,         0x00000000); regAddr += 0x4;
+ //==>   WR_MEM_32(regAddr,         0x00000000); regAddr += 0x4;
+ //==>   WR_MEM_32(regAddr,         0x00000000); regAddr += 0x4;
+ //==>   WR_MEM_32(regAddr,         0x00000000); regAddr += 0x4;
+
+    GEL_TextOut("--->>> A-MMU config completed. <<<---\n");
+
+}
+
+/******************************************************************
+*   A-MMU configuration ends here...
+******************************************************************/
+
+hotmenu Enable_UniCache()
+{
+
+    GEL_TextOut("--->>> enter Enable_UniCache <<<---\n");
+
+    /* Enalble Unicache */
+    WR_MEM_32(0x40000004, 0x0000001F);
+
+
+    GEL_TextOut("--->>> exit Enable_UniCache <<<---\n");
+}
+
+hotmenu Disable_UniCache()
+{
+
+    GEL_TextOut("--->>> enter Disable_UniCache <<<---\n");
+
+    /* Disable Unicache */
+    WR_MEM_32(0x40000004, 0x0000001C);
+
+
+    GEL_TextOut("--->>> exit Disable_UniCache <<<---\n");
+}
+
+/******************************************************************
+*   Unicache enable completed.
+******************************************************************/
+

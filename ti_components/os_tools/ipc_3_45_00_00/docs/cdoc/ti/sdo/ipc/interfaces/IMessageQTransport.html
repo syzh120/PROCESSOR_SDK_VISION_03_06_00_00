@@ -1,0 +1,497 @@
+<html>
+<head>
+<title>interface ti.sdo.ipc.interfaces.IMessageQTransport</title>
+<meta name="description" content="Interface for the transports used by MessageQ">
+<link rel="stylesheet" type="text/css" href="../../../../xdoc.css" />
+</head>
+<body><div id="xdocWrapper"><div id="xdocContent">
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">interface</span> <span class="xdoc-id">ti.sdo.ipc.interfaces.</span><span class="xdoc-id">IMessageQTransport</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/interfaces/IGateMPSupport.html" title="interface IGateMPSupport"><img class="xdocHdrArrow" src="../../../../Arrow_left.png"/></a></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/interfaces/package.html" title="package ti.sdo.ipc.interfaces"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/interfaces/INetworkTransport.html" title="interface INetworkTransport"><img class="xdocHdrArrow" src="../../../../Arrow_right.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/ipc/interfaces/IMessageQTransport.html">index URL</a></div>
+<p class="xdocHdrSummary">Interface for the transports used by MessageQ</p>
+<ul class="xdocToc">
+<li class="xdocToc"><a class="xdocToc" href="#spec-synop">Specification synopsis</a></li>
+<li class="xdocToc2"><a class="xdocToc" href="#xdocElems">Individual elements</a></li>
+</ul>
+<div class="xdocBrief">
+The transport implementations have to register with
+  <a class="xdoc-link" href="../../../../ti/sdo/ipc/MessageQ.html" title="ti.sdo.ipc.MessageQ">ti.sdo.ipc.MessageQ</a>. This is done via the
+  <a class="xdoc-link" href="../../../../ti/sdo/ipc/MessageQ.html#register.Transport" title="ti.sdo.ipc.MessageQ.registerTransport">ti.sdo.ipc.MessageQ.registerTransport</a> function.
+[&nbsp;<a class="xdocBrief" href="#xdoc-desc">more</a>&nbsp;...&nbsp;]
+</div>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id">XDCspec</span></tt> summary</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/interfaces/IMessageQTransport-src.html"><span class="xdocLabelFile">ti/sdo/ipc/interfaces/IMessageQTransport.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynX">
+<div class="xdocSynCode">
+<tt></tt><span class="xdoc-kw1">interface</span> <span class="xdoc-id">IMessageQTransport</span> {<b>&nbsp;&nbsp;...</b>
+</div>
+<div class='xdocSynSum'><tt></tt>//&nbsp;inherits <a class="xdoc-link" href="../../../../ti/sdo/ipc/interfaces/ITransport.html" title="ti.sdo.ipc.interfaces.ITransport">ti.sdo.ipc.interfaces.ITransport</a></div>
+<div class='xdocSynSum'><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>//&nbsp;inherits <a class="xdoc-link" href="../../../../xdc/runtime/IModule.html" title="xdc.runtime.IModule">xdc.runtime.IModule</a></div>
+<div class="xdocSynCode">
+<tt></tt><span class="xdoc-kw1">instance</span>:<b>&nbsp;&nbsp;...</b>
+</div>
+</div>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/interfaces/IMessageQTransport-src.html"><span class="xdocLabelFile">ti/sdo/ipc/interfaces/IMessageQTransport.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynX">
+<div class="xdocSynCode">
+<tt></tt><span class="xdoc-kw1">package</span> <a class="xdoc-link" href="../../../../ti/sdo/ipc/interfaces/package.html" title="ti.sdo.ipc.interfaces">ti.sdo.ipc.interfaces</a>;
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt></tt><span class="xdoc-kw1">interface</span> <span class="xdoc-id">IMessageQTransport</span><span class="xdoc-kw1"> inherits </span><a class="xdoc-link" href="../../../../ti/sdo/ipc/interfaces/ITransport.html" title="ti.sdo.ipc.interfaces.ITransport">ITransport</a> {
+</div>
+<div class='xdocSynHdr'>module-wide constants & types</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">enum</span> <a class="xdocSynGo" href="#.Reason"><span class="xdoc-id">Reason</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Reason for error function being called</span></span></a> {
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><a class="xdocSynGo" href="#.Reason" title="ti.sdo.ipc.interfaces.IMessageQTransport.Reason"><span class="xdoc-id">Reason_FAILEDPUT</span></a>, 
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><a class="xdocSynGo" href="#.Reason" title="ti.sdo.ipc.interfaces.IMessageQTransport.Reason"><span class="xdoc-id">Reason_INTERNALERR</span></a>, 
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><a class="xdocSynGo" href="#.Reason" title="ti.sdo.ipc.interfaces.IMessageQTransport.Reason"><span class="xdoc-id">Reason_PHYSICALERR</span></a>, 
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><a class="xdocSynGo" href="#.Reason" title="ti.sdo.ipc.interfaces.IMessageQTransport.Reason"><span class="xdoc-id">Reason_FAILEDALLOC</span></a>
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt>};
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">enum</span> <a class="xdocSynGo" href="#.Status"><span class="xdoc-id">Status</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Transport return values</span></span></a> {
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><a class="xdocSynGo" href="#.Status" title="ti.sdo.ipc.interfaces.IMessageQTransport.Status"><span class="xdoc-id">S_SUCCESS</span></a>, 
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><a class="xdocSynGo" href="#.Status" title="ti.sdo.ipc.interfaces.IMessageQTransport.Status"><span class="xdoc-id">E_FAIL</span></a>, 
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><a class="xdocSynGo" href="#.Status" title="ti.sdo.ipc.interfaces.IMessageQTransport.Status"><span class="xdoc-id">E_ERROR</span></a>
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt>};
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">typedef</span> <span class="xdoc-kw2">Void</span>&nbsp;(*<a class="xdocSynGo" href="#.Err.Fxn"><span class="xdoc-id">ErrFxn</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Typedef for transport error callback function</span></span></a>)(<a class="xdoc-link" href="../../../../ti/sdo/ipc/interfaces/IMessageQTransport.html#.Reason" title="ti.sdo.ipc.interfaces.IMessageQTransport.Reason">IMessageQTransport.Reason</a>,<a class="xdoc-link" href="../../../../ti/sdo/ipc/interfaces/IMessageQTransport.html#per-instance_object_types" title="ti.sdo.ipc.interfaces.IMessageQTransport.Handle">IMessageQTransport.Handle</a>,<span class="xdoc-kw2">Ptr</span>,<span class="xdoc-kw2">UArg</span>);
+</div>
+<div class='xdocSynHdr'>module-wide config parameters</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">config</span> <a class="xdoc-link" href="../../../../ti/sdo/ipc/interfaces/IMessageQTransport.html#.Err.Fxn" title="ti.sdo.ipc.interfaces.IMessageQTransport.ErrFxn">IMessageQTransport.ErrFxn</a>&nbsp;<a class="xdocSynGo" href="#err.Fxn"><span class="xdoc-id">errFxn</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Asynchronous error function for the transport module</span></span></a> = <span class="xdoc-kw2">null</span>;
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">config</span> <a class="xdoc-link" href="../../../../xdc/runtime/Types.html#.Common$" title="xdc.runtime.Types.Common$">Types.Common$</a>&nbsp;<a class="xdocSynGo" href="#common$"><span class="xdoc-id">common$</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Common module configuration parameters</span></span></a>;
+</div>
+<div class='xdocSynHdr'>module-wide functions</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw2">Void</span>&nbsp;<a class="xdocSynGo" href="#set.Err.Fxn"><span class="xdoc-id">setErrFxn</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Sets the asynchronous error function for the transport module</span></span></a>(<a class="xdoc-link" href="../../../../ti/sdo/ipc/interfaces/IMessageQTransport.html#.Err.Fxn" title="ti.sdo.ipc.interfaces.IMessageQTransport.ErrFxn">IMessageQTransport.ErrFxn</a>&nbsp;<span class="xdoc-id">errFxn</span>);
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">instance</span>:
+</div>
+<div class='xdocSynHdr'>per-instance config parameters</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">config</span> <span class="xdoc-kw2">UInt</span>&nbsp;<a class="xdocSynGo" href="#priority"><span class="xdoc-id">priority</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Which priority messages should this transport manage</span></span></a> = 0;
+</div>
+<div class='xdocSynHdr'>per-instance creation</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#per-instance_creation"><span class="xdoc-id">create</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Create an instance-object</span></span></a>(<span class="xdoc-kw2">UInt16</span>&nbsp;<span class="xdoc-id">procId</span>);
+</div>
+<div class='xdocSynHdr'>per-instance functions</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw2">Bool</span>&nbsp;<a class="xdocSynGo" href="#control"><span class="xdoc-id">control</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Send a control command to the transport instance</span></span></a>(<span class="xdoc-kw2">UInt</span>&nbsp;<span class="xdoc-id">cmd</span>, <span class="xdoc-kw2">UArg</span>&nbsp;<span class="xdoc-id">cmdArg</span>);
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw2">Int</span>&nbsp;<a class="xdocSynGo" href="#get.Status"><span class="xdoc-id">getStatus</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Status of a Transport instance</span></span></a>();
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw2">Bool</span>&nbsp;<a class="xdocSynGo" href="#put"><span class="xdoc-id">put</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Put the message to the remote processor</span></span></a>(<span class="xdoc-kw2">Ptr</span>&nbsp;<span class="xdoc-id">msg</span>);
+</div>
+<div class="xdocSynCode">
+<tt></tt>}
+</div>
+</div>
+<span id="xdoc-desc"></span>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">The transport implementations have to register with
+  <a class="xdoc-link" href="../../../../ti/sdo/ipc/MessageQ.html" title="ti.sdo.ipc.MessageQ">ti.sdo.ipc.MessageQ</a>. This is done via the
+  <a class="xdoc-link" href="../../../../ti/sdo/ipc/MessageQ.html#register.Transport" title="ti.sdo.ipc.MessageQ.registerTransport">ti.sdo.ipc.MessageQ.registerTransport</a> function.</div>
+<div class="xdocText">If transports need additional processing during startup,
+  there are multiple hook points to run start-up code that
+  the transport implementation can use.</div>
+<div id="xdocSep">
+</div>
+<div id="xdocElems">
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".Reason"></a>
+<a class="xdocAnchor" id=".Reason_.F.A.I.L.E.D.P.U.T"></a>
+<a class="xdocAnchor" id=".Reason_.I.N.T.E.R.N.A.L.E.R.R"></a>
+<a class="xdocAnchor" id=".Reason_.P.H.Y.S.I.C.A.L.E.R.R"></a>
+<a class="xdocAnchor" id=".Reason_.F.A.I.L.E.D.A.L.L.O.C"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">enum</span> <span class="xdoc-id">IMessageQTransport.</span><span class="xdoc-id">Reason</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/interfaces/IMessageQTransport.html" title="interface IMessageQTransport"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/ipc/interfaces/IMessageQTransport.html#.Reason">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Reason for error function being called</p>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/interfaces/IMessageQTransport-src.html"><span class="xdocLabelFile">ti/sdo/ipc/interfaces/IMessageQTransport.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">enum</span> <span class="xdoc-id">Reason</span> {
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-id">Reason_FAILEDPUT</span>, 
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-id">Reason_INTERNALERR</span>, 
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-id">Reason_PHYSICALERR</span>, 
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-id">Reason_FAILEDALLOC</span>
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt>};
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">First field in the <a class="xdoc-link" href="IMessageQTransport.html#err.Fxn" title="errFxn">errFxn</a></div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".Status"></a>
+<a class="xdocAnchor" id=".S_.S.U.C.C.E.S.S"></a>
+<a class="xdocAnchor" id=".E_.F.A.I.L"></a>
+<a class="xdocAnchor" id=".E_.E.R.R.O.R"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">enum</span> <span class="xdoc-id">IMessageQTransport.</span><span class="xdoc-id">Status</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/interfaces/IMessageQTransport.html" title="interface IMessageQTransport"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/ipc/interfaces/IMessageQTransport.html#.Status">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Transport return values</p>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/interfaces/IMessageQTransport-src.html"><span class="xdocLabelFile">ti/sdo/ipc/interfaces/IMessageQTransport.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">enum</span> <span class="xdoc-id">Status</span> {
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-id">S_SUCCESS</span>, 
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-id">E_FAIL</span>, 
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-id">E_ERROR</span>
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt>};
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText"><UL><LI><a class="xdoc-link" href="IMessageQTransport.html#.S_.S.U.C.C.E.S.S" title="S_SUCCESS">S_SUCCESS</a>: Operation was successful
+</LI><LI><a class="xdoc-link" href="IMessageQTransport.html#.E_.F.A.I.L" title="E_FAIL">E_FAIL</a>: Operation resulted in a failure
+</LI><LI><a class="xdoc-link" href="IMessageQTransport.html#.E_.E.R.R.O.R" title="E_ERROR">E_ERROR</a>: Operation resulted in an error.
+</LI></UL></div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".Err.Fxn"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">typedef</span> <span class="xdoc-id">IMessageQTransport.</span><span class="xdoc-id">ErrFxn</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/interfaces/IMessageQTransport.html" title="interface IMessageQTransport"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/ipc/interfaces/IMessageQTransport.html#.Err.Fxn">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Typedef for transport error callback function</p>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/interfaces/IMessageQTransport-src.html"><span class="xdocLabelFile">ti/sdo/ipc/interfaces/IMessageQTransport.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">typedef</span> <span class="xdoc-kw2">Void</span>&nbsp;(*<span class="xdoc-id">ErrFxn</span>)(<a class="xdoc-link" href="../../../../ti/sdo/ipc/interfaces/IMessageQTransport.html#.Reason" title="ti.sdo.ipc.interfaces.IMessageQTransport.Reason">IMessageQTransport.Reason</a>,<a class="xdoc-link" href="../../../../ti/sdo/ipc/interfaces/IMessageQTransport.html#per-instance_object_types" title="ti.sdo.ipc.interfaces.IMessageQTransport.Handle">IMessageQTransport.Handle</a>,<span class="xdoc-kw2">Ptr</span>,<span class="xdoc-kw2">UArg</span>);
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">First parameter: Why the error function is being called.</div>
+<div class="xdocText">Second parameter: Handle of transport that had the error. NULL denotes
+  that it is a system error, not a specific transport.</div>
+<div class="xdocText">Third parameter: Pointer to the message. This is only valid for
+  <a class="xdoc-link" href="IMessageQTransport.html#.Reason_.F.A.I.L.E.D.P.U.T" title="Reason_FAILEDPUT">Reason_FAILEDPUT</a>.</div>
+<div class="xdocText">Fourth parameter: Transport specific information. Refer to individual
+  transports for more details.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="err.Fxn"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">IMessageQTransport.</span><span class="xdoc-id">errFxn</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/interfaces/IMessageQTransport.html" title="interface IMessageQTransport"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/ipc/interfaces/IMessageQTransport.html#err.Fxn">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Asynchronous error function for the transport module</p>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/interfaces/IMessageQTransport-src.html"><span class="xdocLabelFile">ti/sdo/ipc/interfaces/IMessageQTransport.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">config</span> <a class="xdoc-link" href="../../../../ti/sdo/ipc/interfaces/IMessageQTransport.html#.Err.Fxn" title="ti.sdo.ipc.interfaces.IMessageQTransport.ErrFxn">IMessageQTransport.ErrFxn</a>&nbsp;<span class="xdoc-id">errFxn</span> = <span class="xdoc-kw2">null</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="common$"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">config</span> <span class="xdoc-id">IMessageQTransport.</span><span class="xdoc-id">common$</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/interfaces/IMessageQTransport.html" title="interface IMessageQTransport"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/ipc/interfaces/IMessageQTransport.html#common$">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Common module configuration parameters</p>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/interfaces/IMessageQTransport-src.html"><span class="xdocLabelFile">ti/sdo/ipc/interfaces/IMessageQTransport.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">config</span> <a class="xdoc-link" href="../../../../xdc/runtime/Types.html#.Common$" title="xdc.runtime.Types.Common$">Types.Common$</a>&nbsp;<span class="xdoc-id">common$</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">All modules have this configuration parameter.  Its name
+  contains the '$' character to ensure it does not conflict with
+  configuration parameters declared by the module.  This allows
+  new configuration parameters to be added in the future without
+  any chance of breaking existing modules.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="set.Err.Fxn"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-id">IMessageQTransport.</span><span class="xdoc-id">setErrFxn</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/interfaces/IMessageQTransport.html" title="interface IMessageQTransport"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/ipc/interfaces/IMessageQTransport.html#set.Err.Fxn">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Sets the asynchronous error function for the transport module</p>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/interfaces/IMessageQTransport-src.html"><span class="xdocLabelFile">ti/sdo/ipc/interfaces/IMessageQTransport.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw2">Void</span>&nbsp;<span class="xdoc-id">setErrFxn</span>(<a class="xdoc-link" href="../../../../ti/sdo/ipc/interfaces/IMessageQTransport.html#.Err.Fxn" title="ti.sdo.ipc.interfaces.IMessageQTransport.ErrFxn">IMessageQTransport.ErrFxn</a>&nbsp;<span class="xdoc-id">errFxn</span>);
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">ARGUMENTS</div>
+<div class="xdocChild"><span class="xdocChildId">errFxn</span>
+<span class="xdocChildSum">&#151;&nbsp;Function that is called when an asynchronous
+                        error occurs.</span>
+</div>
+<span id="xdoc-sect-2"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">This API allows the user to set the function that will be called in
+  case of an asynchronous error by the transport.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="priority"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">IMessageQTransport.Params.</span><span class="xdoc-id">priority</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;instance</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/interfaces/IMessageQTransport.html" title="interface IMessageQTransport"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/ipc/interfaces/IMessageQTransport.html#priority">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Which priority messages should this transport manage</p>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/interfaces/IMessageQTransport-src.html"><span class="xdocLabelFile">ti/sdo/ipc/interfaces/IMessageQTransport.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">config</span> <span class="xdoc-kw2">UInt</span>&nbsp;<span class="xdoc-id">priority</span> = 0;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="per-instance_creation"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdocSynSum">Static Instance Creation</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/interfaces/IMessageQTransport.html" title="interface IMessageQTransport"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/ipc/interfaces/IMessageQTransport.html#per-instance_creation">index URL</a></div>
+<p class="xdocHdrSummary"></p>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/interfaces/IMessageQTransport-src.html"><span class="xdocLabelFile">ti/sdo/ipc/interfaces/IMessageQTransport.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-id">create</span>(<span class="xdoc-kw2">UInt16</span>&nbsp;<span class="xdoc-id">procId</span>);
+</div>
+<div class='xdocSynSum'><tt></tt><tt></tt>//&nbsp;Create an instance-object</div>
+</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">ARGUMENTS</div>
+<div class="xdocChild"><span class="xdocChildId">procId</span>
+<span class="xdocChildSum">&#151;&nbsp;Remote processor id that this instance
+                        will communicate with.</span>
+</div>
+<span id="xdoc-sect-2"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">This function creates a transport instance. The transport is
+  responsible for registering with MessageQ via the
+  <a class="xdoc-link" href="../../../../ti/sdo/ipc/MessageQ.html#register.Transport" title="ti.sdo.ipc.MessageQ.registerTransport">ti.sdo.ipc.MessageQ.registerTransport</a> API.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="control"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-id">IMessageQTransport.</span><span class="xdoc-id">control</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;instance</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/interfaces/IMessageQTransport.html" title="interface IMessageQTransport"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/ipc/interfaces/IMessageQTransport.html#control">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Send a control command to the transport instance</p>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/interfaces/IMessageQTransport-src.html"><span class="xdocLabelFile">ti/sdo/ipc/interfaces/IMessageQTransport.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw2">Bool</span>&nbsp;<span class="xdoc-id">control</span>(<span class="xdoc-kw2">UInt</span>&nbsp;<span class="xdoc-id">cmd</span>, <span class="xdoc-kw2">UArg</span>&nbsp;<span class="xdoc-id">cmdArg</span>);
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">ARGUMENTS</div>
+<div class="xdocChild"><span class="xdocChildId">cmd</span>
+<span class="xdocChildSum">&#151;&nbsp;Requested command</span>
+</div>
+<div class="xdocChild"><span class="xdocChildId">cmdArgs</span>
+<span class="xdocChildSum">&#151;&nbsp;Accompanying field for the command. This is
+                          command specific.</span>
+</div>
+<span id="xdoc-sect-2"></span>
+<div class="xdocSect">RETURNS</div>
+<div class="xdocText">TRUE denotes acceptance of the command. FALSE
+                          denotes failure of the command.</div>
+<span id="xdoc-sect-3"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">This is function allows transport to specify control commands. Refer
+  to individual transport implementions for more details.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="get.Status"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-id">IMessageQTransport.</span><span class="xdoc-id">getStatus</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;instance</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/interfaces/IMessageQTransport.html" title="interface IMessageQTransport"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/ipc/interfaces/IMessageQTransport.html#get.Status">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Status of a Transport instance</p>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/interfaces/IMessageQTransport-src.html"><span class="xdocLabelFile">ti/sdo/ipc/interfaces/IMessageQTransport.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw2">Int</span>&nbsp;<span class="xdoc-id">getStatus</span>();
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">RETURNS</div>
+<div class="xdocText">Returns status of Transport instance</div>
+<span id="xdoc-sect-2"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">This function returns the status of the transport instance.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="put"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-id">IMessageQTransport.</span><span class="xdoc-id">put</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;instance</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/interfaces/IMessageQTransport.html" title="interface IMessageQTransport"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/ipc/interfaces/IMessageQTransport.html#put">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Put the message to the remote processor</p>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/interfaces/IMessageQTransport-src.html"><span class="xdocLabelFile">ti/sdo/ipc/interfaces/IMessageQTransport.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw2">Bool</span>&nbsp;<span class="xdoc-id">put</span>(<span class="xdoc-kw2">Ptr</span>&nbsp;<span class="xdoc-id">msg</span>);
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">ARGUMENTS</div>
+<div class="xdocChild"><span class="xdocChildId">msg</span>
+<span class="xdocChildSum">&#151;&nbsp;Pointer the message to be sent</span>
+</div>
+<span id="xdoc-sect-2"></span>
+<div class="xdocSect">RETURNS</div>
+<div class="xdocText">TRUE denotes acceptance of the message to
+                          be sent. FALSE denotes the message could not be
+                          sent.</div>
+<span id="xdoc-sect-3"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">If the transport can accept the message, it returns TRUE. Accepting
+  a message does not mean that it is transmitted. It simply means that
+  the transport should be able to send the message. If the actual transfer
+  fails, the transport calls the {@#ErrFxn} (assuming it is set up via the
+  {@#setErrFxn} API. If the {@#ErrFxn} is not set, the message is dropped.
+  (also...should an error be raised or just System_printf?).</div>
+<div class="xdocText">If the transport cannot send the message, it returns FALSE and a
+  filled in Error_Block. The caller still owns the message.</div>
+</div>
+<div id="xdocDate">generated on Wed, 15 Feb 2017 14:20:03 GMT</div>
+</div></div></body>
+</html>

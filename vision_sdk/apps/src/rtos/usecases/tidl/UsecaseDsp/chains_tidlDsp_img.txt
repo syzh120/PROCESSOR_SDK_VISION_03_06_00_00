@@ -1,0 +1,34 @@
+digraph chains_tidlDsp {
+
+       ColorScheme [shape=none, margin=0, label=<
+       <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+       <TR><TD bgcolor="lightblue">IPU1_0</TD></TR>
+       <TR><TD bgcolor="palegreen">DSP1</TD></TR>
+       <TR><TD bgcolor="lightsalmon">A15</TD></TR>
+       </TABLE>>];
+
+       /************** LINKS ************************/
+       NullSource [color=lightblue, style=filled]
+       IPCOut_IPU1_0_A15_0_0 [color=lightblue, style=filled]
+       IPCIn_A15_0_IPU1_0_0 [color=lightsalmon, style=filled]
+       Alg_tidlpreproc [color=lightsalmon, style=filled]
+       IPCOut_A15_0_DSP1_0 [color=lightsalmon, style=filled]
+       IPCIn_DSP1_A15_0_0 [color=palegreen, style=filled]
+       Alg_tidl_1 [color=palegreen, style=filled]
+       IPCOut_DSP1_IPU1_0_0 [color=palegreen, style=filled]
+       IPCIn_IPU1_0_DSP1_0 [color=lightblue, style=filled]
+       Merge [color=lightblue, style=filled]
+       Null [color=lightblue, style=filled]
+
+       /************** CONNECTIONS ************************/
+       Alg_tidlpreproc -> IPCOut_A15_0_DSP1_0
+       NullSource -> IPCOut_IPU1_0_A15_0_0
+       Alg_tidl_1 -> IPCOut_DSP1_IPU1_0_0
+       Merge -> Null
+       IPCOut_IPU1_0_A15_0_0 -> IPCIn_A15_0_IPU1_0_0
+       IPCIn_A15_0_IPU1_0_0 -> Alg_tidlpreproc
+       IPCOut_A15_0_DSP1_0 -> IPCIn_DSP1_A15_0_0
+       IPCIn_DSP1_A15_0_0 -> Alg_tidl_1
+       IPCOut_DSP1_IPU1_0_0 -> IPCIn_IPU1_0_DSP1_0
+       IPCIn_IPU1_0_DSP1_0 -> Merge
+}

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<gep name="Telnet" title="Telnet Server Settings" version="1">
+
+<page name="Module" title="Module Settings">
+<html><body><table>
+  <tr>
+    <td>
+      <form>
+        <p>The Telnet module allows you to configure and create a telnet server in your application.  To create a telnet server, add a new Telnet instance to your configuration.</p>
+        <p></p> <!-- create some white space -->
+      </form>
+    </td>
+  </tr>
+  <tr>
+    <td><control type="checkbox" label="Add the Telnet server module to my configuration" value="value:this.$used" bold="true"/></td>
+  </tr>
+</table></body></html>
+</page>
+
+<page name="Instance" title="Instance Settings" DPI="10">
+<html><body><table>
+  <!-- instance box section -->
+  <tr>
+    <td>
+      <h1>Telnet Servers</h1>
+
+      <table><tr>
+        <td><control type="listbox" id="master" width="10" height="15" align="fill" labels="value:this"/></td>
+        <td>
+          <control type="pushbutton" label="Add ..." align="fill" link="action:New"/>
+		  <control type="pushbutton" label="Remove" align="fill" link="action:Delete" context="value:widget.master.selection"/>
+        </td>
+      </tr></table>
+
+    </td>
+
+      <td context="value:widget.master.selection">
+        <h1>Parameters</h1>
+        <table>
+              <!-- Row 1 (contains 1 columns) -->
+                    <tr>
+                      <td><control type="label" label="Telnet Server Mode Flags" align="left" bold="true"/></td>
+                    </tr>
+
+                    <tr><td colspan="2">
+                      <control type="checkbox" label="Use physical device index (CIS_FLG_IFIDXVALID)" value="value:this.IfIdXValid" tooltip="value:this.CIS_FLG_IFIDXVALID.$summary" bold="false"/></td>
+                    </tr>
+
+                    <tr><td colspan="2">
+                      <control type="checkbox" label="Resolve IP address before server start (CIS_FLG_RESOLVEIP)" value="value:this.ResolveIP" tooltip="value:this.CIS_FLG_RESOLVEIP.$summary" bold="false"/></td>
+                    </tr>
+
+                    <tr><td colspan="2">
+                      <control type="checkbox" label="Invoke Telnet server by IP address (CIS_FLG_CALLBYIP)" value="value:this.CallByIP" tooltip="value:this.CIS_FLG_CALLBYIP.$summary" bold="false"/></td>
+                    </tr>
+
+                    <tr><td colspan="2">
+                      <control type="checkbox" label="Restart server when new IP address is available (CIS_FLG_RESTARTIPTERM)" value="value:this.RestartIPTerm" tooltip="value:this.CIS_FLG_RESTARTIPTERM.$summary" bold="false"/></td>
+                    </tr>
+
+                    <tr>
+                      <td>
+                        <control type="label"
+                                label="Server interface ID"
+                                align="left"/>
+                      </td>
+                      <td>
+                        <control type="editbox" 
+                                value="value:this.ifIdx"
+                                tooltip="value:this.ifIdx.$summary"/>
+                      </td>
+                    </tr>
+              <!-- End Row 1 -->
+
+              <!-- Row 2 (contains 2 columns) -->
+<!--              <tr>
+                <td>
+                  <h1>Connection Settings</h1>
+
+                  <table>
+-->
+                    <tr>
+                      <td>
+                        <form>
+                          <p></p> <!-- create some white space -->
+                        </form>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><control type="label" label="Connection Settings" align="left" bold="true"/></td>
+                    </tr>
+
+                    <tr>
+                      <td>
+                        <control type="label"
+                                label="IP address"
+                                align="left"/>
+                      </td>
+                      <td>
+                        <control type="editbox" 
+                                value="value:this.ipAddr"
+                                tooltip="value:this.ipAddr.$summary"/>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>
+                        <control type="label"
+                                label="Maximum connections"
+                                align="left"/>
+                      </td>
+                      <td>
+                        <control type="editbox" 
+                                value="value:this.maxCon"
+                                tooltip="value:this.maxCon.$summary"/>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>
+                        <control type="label"
+                                label="Port"
+                                align="left"/>
+                      </td>
+                      <td>
+                        <control type="editbox" 
+                                value="value:this.port"
+                                tooltip="value:this.port.$summary"/>
+                      </td>
+                    </tr>
+
+                    <tr></tr> <!-- create some white space -->
+
+                    <tr>
+                      <td><control type="label" label="Callback and Service Reporting Functions" align="left" bold="true"/></td>
+                    </tr>
+
+                    <tr>
+                      <td>
+                        <control type="label"
+                                label="Service report function"
+                                align="left"/>
+                      </td>
+                      <td>
+                        <control type="editbox" 
+                                value="value:this.pCbSrv"
+                                tooltip="value:this.pCbSrv.$summary"/>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>
+                        <control type="label"
+                                label="Callback function"
+                                align="left"/>
+                      </td>
+                      <td>
+                        <control type="editbox" 
+                                value="value:this.callBackFxn"
+                                tooltip="value:this.callBackFxn.$summary"/>
+                      </td>
+                    </tr>
+              <!-- End Row 2 -->
+
+            </table>
+          </td>
+  </tr>
+</table></body></html>
+</page>
+<properties name="Advanced" title="All Options" enabled="true" visible="true" link="this"/>
+</gep>
+

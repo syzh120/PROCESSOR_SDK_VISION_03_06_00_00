@@ -1,0 +1,41 @@
+/*******************************************************************************
+ *                                                                             *
+ * Copyright (c) 2013 Texas Instruments Incorporated - http://www.ti.com/      *
+ *                        ALL RIGHTS RESERVED                                  *
+ *                                                                             *
+ ******************************************************************************/
+
+/*
+ *  ======== config_a15.bld ========
+ */
+
+var MemSegDefine = xdc.loadCapsule("mem_segment_definition_512mb.xs");
+
+var Build = xdc.useModule('xdc.bld.BuildEnvironment');
+
+var buildReleaseConfig = true;
+
+var Build         = xdc.useModule('xdc.bld.BuildEnvironment');
+var A15            = xdc.useModule('gnu.targets.arm.A15F');
+
+A15.rootDir        = java.lang.System.getenv("COMPILER_TOOLS");
+
+//set default platform and list of all interested platforms for A15
+A15.platforms = ["ti.platforms.evmDRA7XX:CUSTOM_HOST"
+               ];
+
+A15.platform = A15.platforms[0];
+
+Build.targets     = [
+                    A15
+                    ];
+
+
+Build.platformTable["ti.platforms.evmDRA7XX:CUSTOM_HOST"] =
+{
+    externalMemoryMap: MemSegDefine.getMemSegmentDefinition_external(),
+    codeMemory:"CUSTOM_HOST_CODE_MEM",
+    dataMemory:"CUSTOM_HOST_BSS_MEM",
+    stackMemory:"CUSTOM_HOST_BSS_MEM"
+    };
+

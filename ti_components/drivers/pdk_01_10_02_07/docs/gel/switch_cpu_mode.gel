@@ -1,0 +1,26 @@
+menuitem "Switch CPU mode"
+hotmenu SetCPSRsuper() 
+{
+
+    int value;
+
+    CPSR.M = 0x13;
+
+    value = CPSR;
+
+    GEL_TextOut("CPSR %x\n",,,,,value);
+
+}
+
+hotmenu SetCPSRuser() 
+{
+
+    int value;
+
+    CPSR.M = 0x10;
+
+    value = CPSR;
+
+    GEL_TextOut("CPSR %x\n",,,,,value);
+
+}

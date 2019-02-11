@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<IPIPE_DPC_OTF_xml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!--this is comment-->
+  <dcc_name>ipipe_dpc_otf_dcc</dcc_name>
+  <dcc_header>
+    <camera_module_id>     0140 </camera_module_id>
+      <dcc_descriptor_id>   4 </dcc_descriptor_id>
+      <algorithm_vendor_id>  1 </algorithm_vendor_id>
+      <tunning_tool_version> 0 </tunning_tool_version>
+  </dcc_header>
+  <!--=======================================================================-->
+    <typedef>
+        <ipipe_dpc_otf_dpc2 type="struct">
+          <thr_cor_r    type="uint16">  </thr_cor_r>
+          <thr_cor_gr   type="uint16">  </thr_cor_gr>
+          <thr_cor_gb   type="uint16">  </thr_cor_gb>
+          <thr_cor_b    type="uint16">  </thr_cor_b>
+          <thr_det_r    type="uint16">  </thr_det_r>
+          <thr_det_gr   type="uint16">  </thr_det_gr>
+          <thr_det_gb   type="uint16">  </thr_det_gb>
+          <thr_det_b    type="uint16">  </thr_det_b>
+        </ipipe_dpc_otf_dpc2>
+        <ipipe_dpc_otf_dpc3 type="struct">
+            <shift type="uint8"> </shift> <!-- dpc3 activity shift: 0,1,2,3 -->
+            <d_thr type="uint16"> </d_thr> <!-- dpc3 detection threshold: U12 -->
+            <d_slp type="uint8"> </d_slp> <!-- dpc3 detection slope: U6 -->
+            <d_min type="uint16"> </d_min> <!-- dpc3 detection min: U12 -->
+            <d_max type="uint16"> </d_max> <!-- dpc3 detection max: U12 -->
+            <c_thr type="uint16"> </c_thr> <!-- dpc3 correction threshold: U12 -->
+            <c_slp type="uint8"> </c_slp> <!-- dpc3 correction slope: U6 -->
+            <c_min type="uint16"> </c_min> <!-- dpc3 correction min: U12 -->
+            <c_max type="uint16"> </c_max> <!-- dpc3 correction max: U12 -->
+        </ipipe_dpc_otf_dpc3>
+        <iss_ipipe_dpc_otf type="struct">
+            <update type="uint8">   </update>
+            <enable type="uint8"> </enable> <!-- enable/disable otf based dpc: 0,1 -->
+            <dpc_detection_alg_type type="uint8"> </dpc_detection_alg_type> <!-- defect detection method: 0,1 -->
+            <dpc_min_max_type type="uint8"> </dpc_min_max_type> <!-- defect detection data: 0,1 -->
+            <dpc2_params type="ipipe_dpc_otf_dpc2"> </dpc2_params> <!-- dpc2 parameters -->
+            <dpc3_params type="ipipe_dpc_otf_dpc3"> </dpc3_params> <!-- dpc3 parameters -->
+        </iss_ipipe_dpc_otf>
+    </typedef>
+  <!--=======================================================================-->
+    <use_case val="1023"> <!-- DCC_USE_CASE_PREVIEW_ALL -->
+        <n-space>
+           <region0 class="0">
+            <exposure val="1" min="0" max="2000000">  </exposure>
+            <gain val="0" min="0" max="13">  </gain>
+        </region0>
+
+     </n-space>
+          <parameter_package>
+            <!--OTF DPC parameters for photospace class 0-->
+            <ipipe_dpc_otf_dcc type="iss_ipipe_dpc_otf">
+              {
+                0, //update
+                1, // enable
+                1, // dpc_detection_alg_type
+                0, // dpc_min_max_type
+                {  // dpc2_params
+                  0, // thr_cor_r
+                  0,  // thr_cor_gr
+                  0, // thr_cor_gb
+                  0,  // thr_cor_b
+                  0, // thr_det_r
+                  0,  // thr_det_gr
+                  0, // thr_det_gb
+                  0,  // thr_det_b
+                                },
+                                { // dpc3_params: ipipe_dpc_otf_dpc3
+                                     2,  // shift
+                                   0, // d_thr
+                                     1, // d_slp
+                                     0, // d_min
+                                   800, // d_max
+                                    0, // c_thr
+                                     1, // c_slp
+                                     0, // c_min
+                                   1023 // c_max
+                                }
+                            }
+            </ipipe_dpc_otf_dcc>
+        </parameter_package>
+
+    </use_case>
+  <!--=====================================================================-->
+</IPIPE_DPC_OTF_xml>

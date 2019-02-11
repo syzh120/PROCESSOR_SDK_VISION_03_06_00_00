@@ -1,0 +1,28 @@
+INCLUDES=-I/etc/X11 -I./Include/ -I. -I./glm -I./Tools -I./Tools/OGLES2
+CPP=g++
+CC=gcc
+#CFLAGS=${INCLUDES} -DSTANDALONE -DSRV_USE_JOYSTICK -g
+CFLAGS=${INCLUDES} -DSTANDALONE -g -DPLATFORM_GLX -DDYNAMIC_LUT
+GLTOOLS_SRC_PATH=../GLTools/src
+LIBDIRS = -L./Library/Linux_x86_64 -L./Tools/OGLES2/Build/Linux_x86_64/ReleaseX11
+#/usr/X11R6/lib -L/usr/X11R6/lib64 -L/usr/local/lib
+#LDFLAGS= ${LIBDIRS} -lglfw -lGL -lX11  -logles2tools -lGLEW -lpthread
+LDFLAGS= ${LIBDIRS} -lGL -lX11  -logles2tools -lpthread
+
+.PHONY: all srv 
+
+all: srv
+ 
+srv:
+	g++ ${CFLAGS} standalone.cxx \
+		srv_lut.cpp \
+		srv.cpp \
+		render.cpp \
+		textures.cpp \
+		car.cpp \
+		single_view.cpp \
+		box.cpp \
+		srv_views.cpp \
+		renderutils.cpp \
+		${LDFLAGS} \
+		-o srv

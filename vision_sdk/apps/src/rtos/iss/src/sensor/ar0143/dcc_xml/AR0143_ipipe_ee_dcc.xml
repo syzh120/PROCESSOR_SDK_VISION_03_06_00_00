@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<IPIPE_EE_xml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!--this is comment-->
+  <dcc_name>ipipe_ee</dcc_name>
+  <dcc_header>
+    <camera_module_id>     0143 </camera_module_id>
+      <dcc_descriptor_id>   16 </dcc_descriptor_id>
+      <algorithm_vendor_id>  1 </algorithm_vendor_id>
+      <tunning_tool_version> 0 </tunning_tool_version>
+  </dcc_header>
+  <!--=======================================================================-->
+    <typedef>
+                <iss_ipipe_ee type="struct">
+          <update type="uint8"> </update>
+                  <enable type="uint8"> </enable> <!-- enable/disable ipipe edge enhancer: 0,1 -->
+                  <halo_reduction_enable type="uint8"> </halo_reduction_enable> <!-- enable/disable ipipe ee halo reduction: 0,1 -->
+                  <ee_2d_filter_coeff type="int16[9]"> </ee_2d_filter_coeff> <!-- 2d filter coefficieints: S10 -->
+                  <merge_select type="uint8"> </merge_select> <!-- select merge type: 0,1 -->
+                  <shift_amount type="uint8"> </shift_amount> <!-- shift right amount: U4 -->
+                  <threshold_before_lut type="uint8"> </threshold_before_lut> <!-- threshold (shrink) before lut: U6 -->
+                  <edge_sharpener_gain type="uint8"> </edge_sharpener_gain> <!-- edge sharpener gain: U8 -->
+                  <edge_sharpener_hpf_low_thresh type="uint16"> </edge_sharpener_hpf_low_thresh> <!-- edge sharpener threshold low (shrink): U12 -->
+                  <edge_sharpener_hpf_high_thresh type="uint8"> </edge_sharpener_hpf_high_thresh> <!-- edge sharpener threshold high: U6 -->
+                  <edge_sharpener_gradient_gain type="uint8"> </edge_sharpener_gradient_gain> <!-- edge sharpener gradient gain: U8 -->
+                  <edge_sharpener_gradient_offset type="uint8"> </edge_sharpener_gradient_offset> <!-- edge sharpener gradient offset: U6 -->
+                  <edge_intensity_lut type="int16[1024]"> </edge_intensity_lut> <!-- edge intensity lut: S9 -->
+        </iss_ipipe_ee>
+    </typedef>
+  <!--=======================================================================-->
+
+    <use_case val="1023"> <!-- DCC_USE_CASE_ALL -->
+    <n-space>
+        <region0 class="0">
+            <exposure val="1" min="0" max="2000000">  </exposure>
+            <gain val="0" min="0" max="6">  </gain>
+        </region0>
+
+        <region0 class="1">
+            <exposure val="1" min="0" max="2000000">  </exposure>
+            <gain val="0" min="7" max="13">  </gain>
+        </region0>
+
+    </n-space>
+    <parameter_package>
+        <!--EE parameters for photospace class 0-->
+        <ipipe_ee_dcc type="iss_ipipe_ee">
+        {
+            0, //update
+            0, // enable
+            1, // halo_reduction_enable
+            {
+                48, 2, -5,
+                2,  -2,  -3,
+                -5, -3,  -1
+            }, // ee_2d_filter_coeff
+            0, // merge_select
+            4, // shift_amount
+            0, // threshold_before_lut
+            0, // edge_sharpener_gain
+            0, // edge_sharpener_hpf_low_thresh
+            0, // edge_sharpener_hpf_high_thresh
+            0, // edge_sharpener_gradient_gain
+            0, // edge_sharpener_gradient_offset
+            { // edge_intensity_lut
+                #include "iss6_cs0.txt"
+            },
+        }
+        </ipipe_ee_dcc>
+    </parameter_package>
+
+
+    <parameter_package>
+        <!--EE parameters for photospace class 1-->
+        <ipipe_ee_dcc type="iss_ipipe_ee">
+        {
+            0, //update
+            1, // enable
+            1, // halo_reduction_enable
+            {
+                48, 2, -5,
+                2,  -2,  -3,
+                -5, -3,  -1
+            }, // ee_2d_filter_coeff
+            0, // merge_select
+            3, // shift_amount
+            0, // threshold_before_lut
+            0, // edge_sharpener_gain
+            0, // edge_sharpener_hpf_low_thresh
+            0, // edge_sharpener_hpf_high_thresh
+            0, // edge_sharpener_gradient_gain
+            0, // edge_sharpener_gradient_offset
+            { // edge_intensity_lut
+                #include "iss6_cs0.txt"
+            },
+        }
+        </ipipe_ee_dcc>
+    </parameter_package>
+
+    </use_case>
+
+  <!--=====================================================================-->
+</IPIPE_EE_xml>

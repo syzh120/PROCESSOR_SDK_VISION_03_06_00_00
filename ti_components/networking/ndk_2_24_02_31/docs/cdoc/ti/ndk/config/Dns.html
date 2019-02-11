@@ -1,0 +1,393 @@
+<html>
+<head>
+<title>module ti.ndk.config.Dns</title>
+<meta name="description" content="NDK module used for creating and configuring a DNS server">
+<link rel="stylesheet" type="text/css" href="../../../xdoc.css" />
+</head>
+<body><div id="xdocWrapper"><div id="xdocContent">
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">module</span> <span class="xdoc-id">ti.ndk.config.</span><span class="xdoc-id">Dns</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/ndk/config/DhcpServer.html" title="module DhcpServer"><img class="xdocHdrArrow" src="../../../Arrow_left.png"/></a></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/ndk/config/package.html" title="package ti.ndk.config"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/ndk/config/Emac.html" title="module Emac"><img class="xdocHdrArrow" src="../../../Arrow_right.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/ndk/config/Dns.html">index URL</a></div>
+<p class="xdocHdrSummary">NDK module used for creating and configuring a DNS server</p>
+<ul class="xdocToc">
+<li class="xdocToc"><a class="xdocToc" href="#meta-synop">XDCscript usage</a></li>
+<li class="xdocToc2"><a class="xdocToc" href="#xdocMetaElems">Individual elements</a></li>
+</ul>
+<div class="xdocBrief">
+The Dns module can be used to configure and create a DNS server in
+  an NDK program.
+[&nbsp;<a class="xdocBrief" href="#xdoc-desc">more</a>&nbsp;...&nbsp;]
+</div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2">XDCscript</span></tt> usage</td>
+<td class="xdocLabelCenter">meta-domain</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../ti/ndk/config/Dns-src.html"><span class="xdocLabelFile">ti/ndk/config/Dns.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynM">
+<div class="xdocSynCode">
+<tt></tt><span class="xdoc-kw1">var</span> Dns = <span class="xdoc-kw3">xdc.useModule</span>(<span class="xdoc-id">'ti.ndk.config.Dns'</span>);
+</div>
+<div class='xdocSynHdr'>module-wide constants & types</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">const</span> <a class="xdocSynGo" href="#.C.I.S_.F.L.G_.C.A.L.L.B.Y.I.P">Dns.<span class="xdoc-id">CIS_FLG_CALLBYIP</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Specifies that the service should be invoked by IP address</span></span></a> = 0x0004;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">const</span> <a class="xdocSynGo" href="#.C.I.S_.F.L.G_.I.F.I.D.X.V.A.L.I.D">Dns.<span class="xdoc-id">CIS_FLG_IFIDXVALID</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Specifies if the IfIdx field is valid</span></span></a> = 0x0001;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">const</span> <a class="xdocSynGo" href="#.C.I.S_.F.L.G_.R.E.S.O.L.V.E.I.P">Dns.<span class="xdoc-id">CIS_FLG_RESOLVEIP</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Requests that IfIdx be resolved to an IP address before service
+  execution is initiated</span></span></a> = 0x0002;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">const</span> <a class="xdocSynGo" href="#.C.I.S_.F.L.G_.R.E.S.T.A.R.T.I.P.T.E.R.M">Dns.<span class="xdoc-id">CIS_FLG_RESTARTIPTERM</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;A service that is dependent on a valid IP address (as determined by the
+  RESOLVEIP flag) is shut down if the IP address becomes invalid</span></span></a> = 0x0008;
+</div>
+<div class='xdocSynHdr'>module-wide config parameters</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#extern.Dns.Serv.Ip">Dns.<span class="xdoc-id">externDnsServIp</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Used to specify an external DNS Server</span></span></a> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+<div class='xdocSynHdr'>per-instance config parameters</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">var</span> params = <span class="xdoc-kw1">new</span> Dns.<a class="xdocSynGo" href="#per-instance_config_parameters"><span class="xdoc-id">Params</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Instance config-params object</span></span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>params.<a class="xdocSynGo" href="#if.Idx"><span class="xdoc-id">ifIdx</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;The physical device index on which the DNS server shall be
+  executed.  Must be greater than zero</span></span></a> = <i><span class="xdoc-kw2">Int</span></i> 1;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>params.<a class="xdocSynGo" href="#ip.Addr"><span class="xdoc-id">ipAddr</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;The IP address on which to initiate this service</span></span></a> = <i><span class="xdoc-kw2">String</span></i> "INADDR_ANY";
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>params.<a class="xdocSynGo" href="#mode"><span class="xdoc-id">mode</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Set of flags which represent the desired behavior of the DNS Server</span></span></a> = <i><span class="xdoc-kw2">Bits16</span></i> 0;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>params.<a class="xdocSynGo" href="#p.Cb.Srv"><span class="xdoc-id">pCbSrv</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Dns service reporting function</span></span></a> = <i><span class="xdoc-kw2">Void</span>(*)(<span class="xdoc-kw2">Int</span>,<span class="xdoc-kw2">Int</span>,<span class="xdoc-kw2">Int</span>,<span class="xdoc-kw2">Void</span>*)</i> '&ti_ndk_config_Global_serviceReport';
+</div>
+<div class='xdocSynHdr'>per-instance creation</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">var</span> inst = Dns.<a class="xdocSynGo" href="#per-instance_creation"><span class="xdoc-id">create</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Create an instance-object</span></span></a>(params);
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+</div>
+<span id="xdoc-desc"></span>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">The Dns module can be used to configure and create a DNS server in
+  an NDK program.</div>
+<div class="xdocText">In order to configure a DNS server, users must create a Dns module
+  parameters structure, which contains all of the instance properties of a
+  Dns instance.  Once the parameter structure is created, it may be used
+  to change the properties of the DNS server that's being created.</div>
+<div class="xdocText">Users are able to create multiple DNS servers by creating multiple Dns
+  module instances, and configuring each one.  However, if multiple Dns
+  instances are created, one must be careful to ensure that they all
+  have been configured to have unique and free port numbers.</div>
+<div id="xdocSep">
+</div>
+<div id="xdocMetaElems">
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".C.I.S_.F.L.G_.C.A.L.L.B.Y.I.P"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">const</span> <span class="xdoc-id">Dns.</span><span class="xdoc-id">CIS_FLG_CALLBYIP</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/ndk/config/Dns.html" title="module Dns"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/ndk/config/Dns.html#.C.I.S_.F.L.G_.C.A.L.L.B.Y.I.P">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Specifies that the service should be invoked by IP address</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl">XDCscript</span></tt> usage</td>
+<td class="xdocLabelRight">meta-domain</td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">const</span> Dns.<span class="xdoc-id">CIS_FLG_CALLBYIP</span> = 0x0004;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".C.I.S_.F.L.G_.I.F.I.D.X.V.A.L.I.D"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">const</span> <span class="xdoc-id">Dns.</span><span class="xdoc-id">CIS_FLG_IFIDXVALID</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/ndk/config/Dns.html" title="module Dns"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/ndk/config/Dns.html#.C.I.S_.F.L.G_.I.F.I.D.X.V.A.L.I.D">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Specifies if the IfIdx field is valid</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl">XDCscript</span></tt> usage</td>
+<td class="xdocLabelRight">meta-domain</td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">const</span> Dns.<span class="xdoc-id">CIS_FLG_IFIDXVALID</span> = 0x0001;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".C.I.S_.F.L.G_.R.E.S.O.L.V.E.I.P"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">const</span> <span class="xdoc-id">Dns.</span><span class="xdoc-id">CIS_FLG_RESOLVEIP</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/ndk/config/Dns.html" title="module Dns"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/ndk/config/Dns.html#.C.I.S_.F.L.G_.R.E.S.O.L.V.E.I.P">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Requests that IfIdx be resolved to an IP address before service
+  execution is initiated</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl">XDCscript</span></tt> usage</td>
+<td class="xdocLabelRight">meta-domain</td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">const</span> Dns.<span class="xdoc-id">CIS_FLG_RESOLVEIP</span> = 0x0002;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".C.I.S_.F.L.G_.R.E.S.T.A.R.T.I.P.T.E.R.M"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">const</span> <span class="xdoc-id">Dns.</span><span class="xdoc-id">CIS_FLG_RESTARTIPTERM</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/ndk/config/Dns.html" title="module Dns"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/ndk/config/Dns.html#.C.I.S_.F.L.G_.R.E.S.T.A.R.T.I.P.T.E.R.M">index URL</a></div>
+<p class="xdocHdrSummaryDcl">A service that is dependent on a valid IP address (as determined by the
+  RESOLVEIP flag) is shut down if the IP address becomes invalid</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl">XDCscript</span></tt> usage</td>
+<td class="xdocLabelRight">meta-domain</td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">const</span> Dns.<span class="xdoc-id">CIS_FLG_RESTARTIPTERM</span> = 0x0008;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">When this flag is set, the service will be restarted when a new address
+  becomes available. Otherwise; the service will not be restarted.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="extern.Dns.Serv.Ip"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Dns.</span><span class="xdoc-id">externDnsServIp</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/ndk/config/Dns.html" title="module Dns"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/ndk/config/Dns.html#extern.Dns.Serv.Ip">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Used to specify an external DNS Server</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl">XDCscript</span></tt> usage</td>
+<td class="xdocLabelRight">meta-domain</td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Dns.<span class="xdoc-id">externDnsServIp</span> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="per-instance_config_parameters"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdocSynSum">Instance Config Parameters</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/ndk/config/Dns.html" title="module Dns"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/ndk/config/Dns.html#per-instance_config_parameters">index URL</a></div>
+<p class="xdocHdrSummary"></p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl">XDCscript</span></tt> usage</td>
+<td class="xdocLabelRight">meta-domain</td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">var</span> params = <span class="xdoc-kw1">new</span> Dns.<span class="xdoc-id">Params</span>;
+</div>
+<div class='xdocSynSum'><tt></tt><tt></tt>//&nbsp;Instance config-params object</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>params.<span class="xdoc-id">ifIdx</span> = <i><span class="xdoc-kw2">Int</span></i> 1;
+</div>
+<div class='xdocSynSum'><tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>//&nbsp;The physical device index on which the DNS server shall be
+  executed.  Must be greater than zero</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>params.<span class="xdoc-id">ipAddr</span> = <i><span class="xdoc-kw2">String</span></i> "INADDR_ANY";
+</div>
+<div class='xdocSynSum'><tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>//&nbsp;The IP address on which to initiate this service</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>params.<span class="xdoc-id">mode</span> = <i><span class="xdoc-kw2">Bits16</span></i> 0;
+</div>
+<div class='xdocSynSum'><tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>//&nbsp;Set of flags which represent the desired behavior of the DNS Server</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>params.<span class="xdoc-id">pCbSrv</span> = <i><span class="xdoc-kw2">Void</span>(*)(<span class="xdoc-kw2">Int</span>,<span class="xdoc-kw2">Int</span>,<span class="xdoc-kw2">Int</span>,<span class="xdoc-kw2">Void</span>*)</i> '&ti_ndk_config_Global_serviceReport';
+</div>
+<div class='xdocSynSum'><tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>//&nbsp;Dns service reporting function</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="if.Idx"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Dns.</span><span class="xdoc-id">ifIdx</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;instance</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/ndk/config/Dns.html" title="module Dns"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/ndk/config/Dns.html#if.Idx">index URL</a></div>
+<p class="xdocHdrSummaryDcl">The physical device index on which the DNS server shall be
+  executed.  Must be greater than zero</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl">XDCscript</span></tt> usage</td>
+<td class="xdocLabelRight">meta-domain</td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">var</span> params = <span class="xdoc-kw1">new</span> Dns.<span class="xdoc-id">Params</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt><b>&nbsp;&nbsp;...</b>
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt>params.<span class="xdoc-id">ifIdx</span> = <i><span class="xdoc-kw2">Int</span></i> 1;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="ip.Addr"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Dns.</span><span class="xdoc-id">ipAddr</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;instance</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/ndk/config/Dns.html" title="module Dns"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/ndk/config/Dns.html#ip.Addr">index URL</a></div>
+<p class="xdocHdrSummaryDcl">The IP address on which to initiate this service</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl">XDCscript</span></tt> usage</td>
+<td class="xdocLabelRight">meta-domain</td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">var</span> params = <span class="xdoc-kw1">new</span> Dns.<span class="xdoc-id">Params</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt><b>&nbsp;&nbsp;...</b>
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt>params.<span class="xdoc-id">ipAddr</span> = <i><span class="xdoc-kw2">String</span></i> "INADDR_ANY";
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">To accept a connection from any IP, specify INADDR_ANY.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="mode"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Dns.</span><span class="xdoc-id">mode</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;instance</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/ndk/config/Dns.html" title="module Dns"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/ndk/config/Dns.html#mode">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Set of flags which represent the desired behavior of the DNS Server</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl">XDCscript</span></tt> usage</td>
+<td class="xdocLabelRight">meta-domain</td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">var</span> params = <span class="xdoc-kw1">new</span> Dns.<span class="xdoc-id">Params</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt><b>&nbsp;&nbsp;...</b>
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt>params.<span class="xdoc-id">mode</span> = <i><span class="xdoc-kw2">Bits16</span></i> 0;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">The following flag values may be set either individually, or by or-ing
+  flags together:</div>
+<div class="xdocText"><UL><LI> CIS_FLG_IFIDXVALID - specifies if the IfIdx field is valid.
+</LI><LI> CIS_FLG_RESOLVEIP - Requests that IfIdx be resolved to an IP
+      address before service execution is initiated.
+</LI><LI> CIS_FLG_CALLBYIP - Specifies that the service should be invoked by
+      IP address
+</LI><LI> CIS_FLG_RESTARTIPTERM - A service that is dependent on a valid IP
+      address.
+</LI></UL></div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="p.Cb.Srv"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Dns.</span><span class="xdoc-id">pCbSrv</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;instance</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/ndk/config/Dns.html" title="module Dns"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/ndk/config/Dns.html#p.Cb.Srv">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Dns service reporting function</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl">XDCscript</span></tt> usage</td>
+<td class="xdocLabelRight">meta-domain</td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">var</span> params = <span class="xdoc-kw1">new</span> Dns.<span class="xdoc-id">Params</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt><b>&nbsp;&nbsp;...</b>
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt>params.<span class="xdoc-id">pCbSrv</span> = <i><span class="xdoc-kw2">Void</span>(*)(<span class="xdoc-kw2">Int</span>,<span class="xdoc-kw2">Int</span>,<span class="xdoc-kw2">Int</span>,<span class="xdoc-kw2">Void</span>*)</i> '&ti_ndk_config_Global_serviceReport';
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="per-instance_creation"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdocSynSum">Instance Creation</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/ndk/config/Dns.html" title="module Dns"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/ndk/config/Dns.html#per-instance_creation">index URL</a></div>
+<p class="xdocHdrSummary"></p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl">XDCscript</span></tt> usage</td>
+<td class="xdocLabelRight">meta-domain</td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">var</span> params = <span class="xdoc-kw1">new</span> Dns.<a class="xdoc-link" href="../../../ti/ndk/config/Dns.html#per-instance_config_parameters" title="ti.ndk.config.Dns.Params">Params</a>;
+</div>
+<div class='xdocSynSum'><tt></tt><tt></tt>//&nbsp;Allocate instance config-params</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt>params.<i>config</i> = <b>&nbsp;&nbsp;...</b>
+</div>
+<div class='xdocSynSum'><tt></tt><tt></tt>//&nbsp;Assign individual configs</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">var</span> inst = Dns.<span class="xdoc-id">create</span>(params);
+</div>
+<div class='xdocSynSum'><tt></tt><tt></tt>//&nbsp;Create an instance-object</div>
+</div>
+</div>
+<div id="xdocDate">generated on Tue, 14 Apr 2015 22:13:48 GMT</div>
+</div></div></body>
+</html>

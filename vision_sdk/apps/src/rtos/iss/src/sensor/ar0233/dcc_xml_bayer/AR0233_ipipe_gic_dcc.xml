@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<IPIPE_GIC_xml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!--this is comment-->
+  <dcc_name>ipipe_gic</dcc_name>
+  <dcc_header>
+    <camera_module_id>     0233 </camera_module_id>
+      <dcc_descriptor_id>   8 </dcc_descriptor_id>
+      <algorithm_vendor_id>  1 </algorithm_vendor_id>
+      <tunning_tool_version> 0 </tunning_tool_version>
+  </dcc_header>
+  <!--=======================================================================-->
+    <typedef>
+                <iss_ipipe_gic type="struct">
+            <update type="uint8"> </update>
+                    <enable type="uint8"> </enable> <!-- enable/disable ipipe green imbalance correction: 0,1 -->
+                    <radial_lsc_enable type="uint8"> </radial_lsc_enable> <!-- enable/disable radial lsc gain: 0,1 -->
+                    <difference_index_select type="uint8"> </difference_index_select> <!-- select the difference index: 0,1 -->
+                    <thr_select type="uint8"> </thr_select> <!-- select source of threshold: 0,1 -->
+                    <gic_gain type="uint8"> </gic_gain> <!-- output mixing gain: U8 -->
+                    <gic_nfgain type="uint8"> </gic_nfgain> <!-- gain for NF2 thr value: U8Q5 -->
+                    <gic_thr type="uint16"> </gic_thr> <!-- gic register thr value: U12 -->
+                    <gic_slp type="uint16"> </gic_slp> <!-- gic slope/spread: U12 -->
+        </iss_ipipe_gic>
+    </typedef>
+  <!--=======================================================================-->
+    <use_case val="1023"> <!-- DCC_USE_CASE_ALL -->
+    <n-space>
+
+           <region0 class="0">
+            <exposure val="1" min="0" max="6250">  </exposure>
+            <gain val="0" min="0" max="6">  </gain>
+        </region0>
+
+        <region0 class="1">
+            <exposure val="1" min="6250" max="2000000">  </exposure>
+            <gain val="0" min="0" max="6">  </gain>
+        </region0>
+
+        <region0 class="2">
+            <exposure val="1" min="0" max="6250">  </exposure>
+            <gain val="0" min="7" max="13">  </gain>
+        </region0>
+
+        <region0 class="3">
+            <exposure val="1" min="6250" max="2000000">  </exposure>
+            <gain val="0" min="7" max="13">  </gain>
+        </region0>
+
+        <region0 class="4">
+            <exposure val="1" min="0" max="166667">  </exposure>
+            <gain val="0" min="14" max="23">  </gain>
+        </region0>
+
+        <region0 class="5">
+            <exposure val="1" min="166667" max="2000000">  </exposure>
+            <gain val="0" min="14" max="23">  </gain>
+        </region0>
+
+        <region0 class="6">
+            <exposure val="1" min="0" max="2000000">  </exposure>
+            <gain val="0" min="24" max="100">  </gain>
+        </region0>
+
+
+
+    </n-space>
+         <parameter_package>
+            <!--GIC parameters for photospace class 0-->
+            <ipipe_gic_dcc type="iss_ipipe_gic">
+              {
+                  0, //update
+                  0, // enable
+                  0, // radial_lsc_enable
+                  1, // difference_index_select
+                  0, // thr_select
+                64, // gic_gain
+                0, // gic_nfgain
+                 32, // gic_thr
+                 64  // gic_slp
+                }
+            </ipipe_gic_dcc>
+        </parameter_package>
+
+
+
+         <parameter_package>
+            <!--GIC parameters for photospace class 1-->
+            <ipipe_gic_dcc type="iss_ipipe_gic">
+              {
+                  0, //update
+                  0, // enable
+                  0, // radial_lsc_enable
+                  1, // difference_index_select
+                  0, // thr_select
+                64, // gic_gain
+                0, // gic_nfgain
+                 32, // gic_thr
+                 64  // gic_slp
+                            }
+            </ipipe_gic_dcc>
+        </parameter_package>
+
+
+        <parameter_package>
+            <!--GIC parameters for photospace class 2-->
+            <ipipe_gic_dcc type="iss_ipipe_gic">
+              {
+                      0, //update
+                  0, // enable
+                  0, // radial_lsc_enable
+                  0, // difference_index_select
+                  0, // thr_select
+                 40, // gic_gain
+                 64, // gic_nfgain
+                 32, // gic_thr
+                 64  // gic_slp
+                            }
+            </ipipe_gic_dcc>
+        </parameter_package><parameter_package>
+
+            <!--GIC parameters for photospace class 3-->
+            <ipipe_gic_dcc type="iss_ipipe_gic">
+              {
+                      0, //update
+                  0, // enable
+                  0, // radial_lsc_enable
+                  0, // difference_index_select
+                  0, // thr_select
+                 40, // gic_gain
+                 64, // gic_nfgain
+                 32, // gic_thr
+                 64  // gic_slp
+                            }
+            </ipipe_gic_dcc>
+        </parameter_package>
+        <parameter_package>
+            <!--GIC parameters for photospace class 4-->  // 210lx
+            <ipipe_gic_dcc type="iss_ipipe_gic">
+              {
+                  0, //update
+                  0, // enable
+                  0, // radial_lsc_enable
+                  0, // difference_index_select
+                  0, // thr_select
+                 50, // gic_gain
+                 64, // gic_nfgain
+                 56, // gic_thr
+                 64  // gic_slp
+              }
+            </ipipe_gic_dcc>
+        </parameter_package>
+         <parameter_package>
+            <!--GIC parameters for photospace class 5-->
+            <ipipe_gic_dcc type="iss_ipipe_gic">
+              {
+             0, //update
+                  0, // enable
+                  0, // radial_lsc_enable
+                  0, // difference_index_select
+                  0, // thr_select
+                 64, // gic_gain
+                 64, // gic_nfgain
+                 60, // gic_thr
+                 70  // gic_slp
+                            }
+            </ipipe_gic_dcc>
+        </parameter_package>
+
+        <parameter_package>
+            <!--GIC parameters for photospace class 6-->
+            <ipipe_gic_dcc type="iss_ipipe_gic">
+              {
+                0, //update
+                  0, // enable
+                  0, // radial_lsc_enable
+                  0, // difference_index_select
+                  0, // thr_select
+                128, // gic_gain
+                  0, // gic_nfgain
+                 64, // gic_thr
+                 128  // gic_slp
+                            }
+            </ipipe_gic_dcc>
+        </parameter_package>
+
+
+
+
+
+    </use_case>
+
+  <!--=====================================================================-->
+</IPIPE_GIC_xml>

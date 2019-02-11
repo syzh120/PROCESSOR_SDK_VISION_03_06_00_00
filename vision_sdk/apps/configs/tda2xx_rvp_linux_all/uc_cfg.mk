@@ -1,0 +1,18 @@
+
+ifeq ($(AVB_INCLUDE),yes)
+UC_avb_rx_multi_cam_decode_sgx_display=yes
+UC_avb_rx_multi_cam_3d_srv=yes
+UC_avbrx_sv_display_avbtx=yes
+endif
+UC_lvds_vip_multi_cam_3d_perception=yes
+UC_lvds_vip_multi_cam_3d_srv=yes
+UC_lvds_vip_multi_cam_2mp_3d_srv=yes
+UC_lvds_vip_multi_cam_3d_adaptive_srv=yes
+UC_lvds_vip_multi_cam_view_sgx_display=yes
+UC_lvds_vip_multi_cam_vpe_enc_null=yes
+UC_srv_calibration=yes
+UC_null_src_decode_display=yes
+UC_ov490_vip_multi_cam_3d_srv=yes
+UC_lvds_vip_multi_cam_8ch_sgx_display=yes
+UC_lvds_vip_single_cam_view_sgx_display=yes
+

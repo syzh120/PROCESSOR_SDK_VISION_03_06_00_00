@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>module ti.ndk.config.DhcpServer</title>
+<meta name="googlebot" content="noindex,nofollow">
+<link rel="stylesheet" type="text/css" href="../../../src.css"/>
+</head>
+<body>
+<pre class=src>
+     1    <span class="comment">/*
+</span>     2    <span class="comment"> * Copyright (c) 2012, Texas Instruments Incorporated
+</span>     3    <span class="comment"> * All rights reserved.
+</span>     4    <span class="comment"> *
+</span>     5    <span class="comment"> * Redistribution and use in source and binary forms, with or without
+</span>     6    <span class="comment"> * modification, are permitted provided that the following conditions
+</span>     7    <span class="comment"> * are met:
+</span>     8    <span class="comment"> *
+</span>     9    <span class="comment"> * *  Redistributions of source code must retain the above copyright
+</span>    10    <span class="comment"> *    notice, this list of conditions and the following disclaimer.
+</span>    11    <span class="comment"> *
+</span>    12    <span class="comment"> * *  Redistributions in binary form must reproduce the above copyright
+</span>    13    <span class="comment"> *    notice, this list of conditions and the following disclaimer in the
+</span>    14    <span class="comment"> *    documentation and/or other materials provided with the distribution.
+</span>    15    <span class="comment"> *
+</span>    16    <span class="comment"> * *  Neither the name of Texas Instruments Incorporated nor the names of
+</span>    17    <span class="comment"> *    its contributors may be used to endorse or promote products derived
+</span>    18    <span class="comment"> *    from this software without specific prior written permission.
+</span>    19    <span class="comment"> *
+</span>    20    <span class="comment"> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+</span>    21    <span class="comment"> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+</span>    22    <span class="comment"> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+</span>    23    <span class="comment"> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+</span>    24    <span class="comment"> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+</span>    25    <span class="comment"> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+</span>    26    <span class="comment"> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+</span>    27    <span class="comment"> * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+</span>    28    <span class="comment"> * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+</span>    29    <span class="comment"> * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+</span>    30    <span class="comment"> * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+</span>    31    <span class="comment"> * */</span>
+    32    <span class="comment">/*
+</span>    33    <span class="comment"> *  ======== DhcpServer.xdc ========
+</span>    34    <span class="comment"> *
+</span>    35    <span class="comment"> *  DhcpServer module definition and initial values
+</span>    36    <span class="comment"> */</span>
+    37    
+    38    <span class="xdoc">/*!
+</span>    39    <span class="xdoc"> *  ======== DhcpServer ========
+</span>    40    <span class="xdoc"> *  NDK module for creating and configuring a DHCP server. 
+</span>    41    <span class="xdoc"> *  
+</span>    42    <span class="xdoc"> *  The DhcpServer module can be used to configure and create a DHCP server in
+</span>    43    <span class="xdoc"> *  an NDK application.
+</span>    44    <span class="xdoc"> *  
+</span>    45    <span class="xdoc"> *  In order to configure a DHCP server, users must create a DhcpServer module
+</span>    46    <span class="xdoc"> *  parameters structure, which contains all of the instance properties of a
+</span>    47    <span class="xdoc"> *  DhcpServer instance.  Once the parameter structure is created, it may
+</span>    48    <span class="xdoc"> *  be used to change the properties of the DHCP server that's being created.
+</span>    49    <span class="xdoc"> *  
+</span>    50    <span class="xdoc"> *  Users are able to create multiple DHCP servers by creating multiple
+</span>    51    <span class="xdoc"> *  DhcpServer instances, and configuring each one.  However, if multiple
+</span>    52    <span class="xdoc"> *  DhcpServer instances are created, one must be careful to ensure that
+</span>    53    <span class="xdoc"> *  they all have been configured to have unique and free port numbers.
+</span>    54    <span class="xdoc"> */</span>  
+    55    
+    56    @Template(<span class="string">"./DhcpServer.xdt"</span>)
+    57    
+    58    <span class=key>metaonly</span> <span class=key>module</span> DhcpServer {
+    59    
+    60        <span class="xdoc">/*! Function signature for CISARGS struct service reporting function */</span>
+    61        <span class=key>typedef</span> Void (*dhcpServerServiceFxn)(Int, Int, Int, Void *);
+    62    
+    63        <span class="xdoc">/*! Type used to specify bits in flags config parameter */</span>
+    64        <span class=key>typedef</span> Bits16 DhcpServerFlag;
+    65    
+    66        <span class="xdoc">/*!
+</span>    67    <span class="xdoc">     *  Causes DHCP Server to report its own IP address as the local DNS server
+</span>    68    <span class="xdoc">     *  to clients
+</span>    69    <span class="xdoc">     *
+</span>    70    <span class="xdoc">     *  If this flag is not set, the DHCP server reports the DNS servers as
+</span>    71    <span class="xdoc">     *  contained in the SYSINFO portion of the configuration.
+</span>    72    <span class="xdoc">     */</span>
+    73        <span class=key>const</span> DhcpServerFlag DHCPS_FLG_LOCALDNS    = 0x0001;
+    74    
+    75        <span class="xdoc">/*!
+</span>    76    <span class="xdoc">     *  Causes DHCP Server to report the local domain name assigned to the
+</span>    77    <span class="xdoc">     *  virtual network to clients.
+</span>    78    <span class="xdoc">     *
+</span>    79    <span class="xdoc">     *  If this flag is not set, the DHCP Server reports the public domain
+</span>    80    <span class="xdoc">     *  name to its clients.
+</span>    81    <span class="xdoc">     */</span>
+    82        <span class=key>const</span> DhcpServerFlag DHCPS_FLG_LOCALDOMAIN = 0x0002;
+    83    
+    84        <span class="comment">/*
+</span>    85    <span class="comment">     *  NOTE: DHCPS can only be run on an interface so no CIS mode options
+</span>    86    <span class="comment">     */</span>
+    87    
+    88        <span class="xdoc">/*!
+</span>    89    <span class="xdoc">     *  ======== create ========
+</span>    90    <span class="xdoc">     *  Creates an DhcpServer instance.
+</span>    91    <span class="xdoc">     */</span>
+    92        create();
+    93    
+    94    <span class=key>instance</span>:
+    95        <span class="xdoc">/*! The first IP address of the DHCP server address pool */</span>
+    96        <span class=key>config</span> String ipAddrPoolBase = <span class="string">"192.168.1.2"</span>;
+    97    
+    98        <span class="xdoc">/*! The number of IP addresses in the DHCP server address pool */</span>
+    99        <span class=key>config</span> Int ipAddrPoolCount = 253;
+   100    
+   101        <span class="xdoc">/*!
+</span>   102    <span class="xdoc">     *  The physical device index on which the DHCP server shall be
+</span>   103    <span class="xdoc">     *  executed.  Must be greater than zero.
+</span>   104    <span class="xdoc">     */</span>
+   105        <span class=key>config</span> Int ifIdx = 1;
+   106    
+   107        <span class="xdoc">/*! DhcpServer service reporting function. */</span>
+   108        <span class=key>config</span> dhcpServerServiceFxn pCbSrv = <span class="string">'&amp;ti_ndk_config_Global_serviceReport'</span>;
+   109    
+   110        <span class="xdoc">/*!
+</span>   111    <span class="xdoc">     *  Causes DHCP Server to report its own IP address as the local DNS server
+</span>   112    <span class="xdoc">     *  to clients
+</span>   113    <span class="xdoc">     */</span>
+   114        <span class=key>config</span> Bool localDNS = <span class=key>false</span>;
+   115    
+   116        <span class="xdoc">/*!
+</span>   117    <span class="xdoc">     *  Causes DHCP Server to report the local domain name assigned to the
+</span>   118    <span class="xdoc">     *  virtual network to clients.
+</span>   119    <span class="xdoc">     */</span>
+   120        <span class=key>config</span> Bool localDomain = <span class=key>false</span>;
+   121    }
+</pre>
+</body></html>

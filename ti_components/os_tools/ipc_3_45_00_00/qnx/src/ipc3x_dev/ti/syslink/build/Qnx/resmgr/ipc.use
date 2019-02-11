@@ -1,0 +1,26 @@
+ipc - IPC Resource Manager
+
+ipc: [-HTgdca] <core_id1> <executable1> [<core_id2> <executable2> ...]
+
+  <core_id#> should be set to a core name
+      followed by the path to the executable to load on that core.
+      Supported core ids are
+          OMAP54xx: IPU, DSP
+          DRA7xx: IPU1, IPU2, DSP1, DSP2
+
+Options:
+ -H <option>    Enable/Disable Ducati hibernation.  Default: 1
+                where <option> is:
+                    0: OFF
+                    1: ON
+                Supported on: OMAP54xx
+ -T <timeout>   Set the timeout value of the Ducati hibernation in ms.
+                Default: 5000 ms
+                Supported on: OMAP54xx
+ -g             Enable GateMP support on host
+                Supported on: DRA7xx
+ -d             Disable automatic crash recovery
+ -c <dump_file> Generate dump of slave trace during crashes. Use
+                absolute path for filename.
+ -a<n>          Specify that the first 'n' cores have been pre-loaded and
+                started. Perform late-attach to these cores.

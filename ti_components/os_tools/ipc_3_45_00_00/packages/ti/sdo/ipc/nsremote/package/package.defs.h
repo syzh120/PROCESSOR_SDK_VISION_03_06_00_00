@@ -1,0 +1,41 @@
+/*
+ *  Do not modify this file; it is automatically 
+ *  generated and any modifications will be overwritten.
+ *
+ * @(#) xdc-B21
+ */
+
+#ifndef ti_sdo_ipc_nsremote__
+#define ti_sdo_ipc_nsremote__
+
+
+/*
+ * ======== module ti.sdo.ipc.nsremote.NameServerRemoteNotify ========
+ */
+
+typedef struct ti_sdo_ipc_nsremote_NameServerRemoteNotify_Message ti_sdo_ipc_nsremote_NameServerRemoteNotify_Message;
+typedef struct ti_sdo_ipc_nsremote_NameServerRemoteNotify_Fxns__ ti_sdo_ipc_nsremote_NameServerRemoteNotify_Fxns__;
+typedef const struct ti_sdo_ipc_nsremote_NameServerRemoteNotify_Fxns__* ti_sdo_ipc_nsremote_NameServerRemoteNotify_Module;
+typedef struct ti_sdo_ipc_nsremote_NameServerRemoteNotify_Params ti_sdo_ipc_nsremote_NameServerRemoteNotify_Params;
+typedef struct ti_sdo_ipc_nsremote_NameServerRemoteNotify_Object ti_sdo_ipc_nsremote_NameServerRemoteNotify_Object;
+typedef struct ti_sdo_ipc_nsremote_NameServerRemoteNotify_Struct ti_sdo_ipc_nsremote_NameServerRemoteNotify_Struct;
+typedef ti_sdo_ipc_nsremote_NameServerRemoteNotify_Object* ti_sdo_ipc_nsremote_NameServerRemoteNotify_Handle;
+typedef struct ti_sdo_ipc_nsremote_NameServerRemoteNotify_Object__ ti_sdo_ipc_nsremote_NameServerRemoteNotify_Instance_State;
+typedef ti_sdo_ipc_nsremote_NameServerRemoteNotify_Object* ti_sdo_ipc_nsremote_NameServerRemoteNotify_Instance;
+
+/*
+ * ======== module ti.sdo.ipc.nsremote.NameServerMessageQ ========
+ */
+
+typedef struct ti_sdo_ipc_nsremote_NameServerMessageQ_Module_State ti_sdo_ipc_nsremote_NameServerMessageQ_Module_State;
+typedef struct ti_sdo_ipc_nsremote_NameServerMessageQ_Fxns__ ti_sdo_ipc_nsremote_NameServerMessageQ_Fxns__;
+typedef const struct ti_sdo_ipc_nsremote_NameServerMessageQ_Fxns__* ti_sdo_ipc_nsremote_NameServerMessageQ_Module;
+typedef struct ti_sdo_ipc_nsremote_NameServerMessageQ_Params ti_sdo_ipc_nsremote_NameServerMessageQ_Params;
+typedef struct ti_sdo_ipc_nsremote_NameServerMessageQ_Object ti_sdo_ipc_nsremote_NameServerMessageQ_Object;
+typedef struct ti_sdo_ipc_nsremote_NameServerMessageQ_Struct ti_sdo_ipc_nsremote_NameServerMessageQ_Struct;
+typedef ti_sdo_ipc_nsremote_NameServerMessageQ_Object* ti_sdo_ipc_nsremote_NameServerMessageQ_Handle;
+typedef struct ti_sdo_ipc_nsremote_NameServerMessageQ_Object__ ti_sdo_ipc_nsremote_NameServerMessageQ_Instance_State;
+typedef ti_sdo_ipc_nsremote_NameServerMessageQ_Object* ti_sdo_ipc_nsremote_NameServerMessageQ_Instance;
+
+
+#endif /* ti_sdo_ipc_nsremote__ */ 

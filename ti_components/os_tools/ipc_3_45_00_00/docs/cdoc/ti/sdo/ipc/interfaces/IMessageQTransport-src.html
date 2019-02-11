@@ -1,0 +1,191 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>interface ti.sdo.ipc.interfaces.IMessageQTransport</title>
+<meta name="googlebot" content="noindex,nofollow">
+<link rel="stylesheet" type="text/css" href="../../../../src.css"/>
+</head>
+<body>
+<pre class=src>
+     1    <span class="comment">/*
+</span>     2    <span class="comment"> * Copyright (c) 2012-2014 Texas Instruments Incorporated - http://www.ti.com
+</span>     3    <span class="comment"> * All rights reserved.
+</span>     4    <span class="comment"> *
+</span>     5    <span class="comment"> * Redistribution and use in source and binary forms, with or without
+</span>     6    <span class="comment"> * modification, are permitted provided that the following conditions
+</span>     7    <span class="comment"> * are met:
+</span>     8    <span class="comment"> *
+</span>     9    <span class="comment"> * *  Redistributions of source code must retain the above copyright
+</span>    10    <span class="comment"> *    notice, this list of conditions and the following disclaimer.
+</span>    11    <span class="comment"> *
+</span>    12    <span class="comment"> * *  Redistributions in binary form must reproduce the above copyright
+</span>    13    <span class="comment"> *    notice, this list of conditions and the following disclaimer in the
+</span>    14    <span class="comment"> *    documentation and/or other materials provided with the distribution.
+</span>    15    <span class="comment"> *
+</span>    16    <span class="comment"> * *  Neither the name of Texas Instruments Incorporated nor the names of
+</span>    17    <span class="comment"> *    its contributors may be used to endorse or promote products derived
+</span>    18    <span class="comment"> *    from this software without specific prior written permission.
+</span>    19    <span class="comment"> *
+</span>    20    <span class="comment"> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+</span>    21    <span class="comment"> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+</span>    22    <span class="comment"> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+</span>    23    <span class="comment"> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+</span>    24    <span class="comment"> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+</span>    25    <span class="comment"> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+</span>    26    <span class="comment"> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+</span>    27    <span class="comment"> * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+</span>    28    <span class="comment"> * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+</span>    29    <span class="comment"> * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+</span>    30    <span class="comment"> * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+</span>    31    <span class="comment"> */</span>
+    32    
+    33    <span class="comment">/*
+</span>    34    <span class="comment"> *  ======== IMessageQTransport.xdc ========
+</span>    35    <span class="comment"> */</span>
+    36    <span class=key>package</span> ti.sdo.ipc.interfaces;
+    37    
+    38    <span class="xdoc">/*!
+</span>    39    <span class="xdoc"> *  ======== IMessageQTransport ========
+</span>    40    <span class="xdoc"> *  Interface for the transports used by MessageQ
+</span>    41    <span class="xdoc"> *
+</span>    42    <span class="xdoc"> *  The transport implementations have to register with
+</span>    43    <span class="xdoc"> *  {<b>@link</b> ti.sdo.ipc.MessageQ}. This is done via the
+</span>    44    <span class="xdoc"> *  {<b>@link</b> ti.sdo.ipc.MessageQ#registerTransport} function.
+</span>    45    <span class="xdoc"> *
+</span>    46    <span class="xdoc"> *  If transports need additional processing during startup,
+</span>    47    <span class="xdoc"> *  there are multiple hook points to run start-up code that
+</span>    48    <span class="xdoc"> *  the transport implementation can use.
+</span>    49    <span class="xdoc"> */</span>
+    50    
+    51    <span class=key>interface</span> IMessageQTransport <span class=key>inherits</span> ITransport {
+    52        <span class="xdoc">/*!
+</span>    53    <span class="xdoc">     *  Transport return values
+</span>    54    <span class="xdoc">     *
+</span>    55    <span class="xdoc">     *  <b>@p(blist)</b>
+</span>    56    <span class="xdoc">     *  -{<b>@link</b> #S_SUCCESS}: Operation was successful
+</span>    57    <span class="xdoc">     *  -{<b>@link</b> #E_FAIL}: Operation resulted in a failure
+</span>    58    <span class="xdoc">     *  -{<b>@link</b> #E_ERROR}: Operation resulted in an error.
+</span>    59    <span class="xdoc">     *  <b>@p</b>
+</span>    60    <span class="xdoc">     */</span>
+    61        <span class=key>enum</span> Status {
+    62            S_SUCCESS = 0,
+    63            E_FAIL = -1,
+    64            E_ERROR = -2
+    65        };
+    66    
+    67        <span class="xdoc">/*!
+</span>    68    <span class="xdoc">     *  Reason for error function being called
+</span>    69    <span class="xdoc">     *
+</span>    70    <span class="xdoc">     *  First field in the {<b>@link</b> #errFxn}
+</span>    71    <span class="xdoc">     */</span>
+    72        <span class=key>enum</span> Reason {
+    73            Reason_FAILEDPUT,
+    74            Reason_INTERNALERR,
+    75            Reason_PHYSICALERR,
+    76            Reason_FAILEDALLOC
+    77        };
+    78    
+    79        <span class="xdoc">/*!
+</span>    80    <span class="xdoc">     *  Asynchronous error function for the transport module
+</span>    81    <span class="xdoc">     */</span>
+    82        <span class=key>config</span> ErrFxn errFxn = <span class=key>null</span>;
+    83    
+    84        <span class="xdoc">/*!
+</span>    85    <span class="xdoc">     *  Typedef for transport error callback function.
+</span>    86    <span class="xdoc">     *
+</span>    87    <span class="xdoc">     *  First parameter: Why the error function is being called.
+</span>    88    <span class="xdoc">     *
+</span>    89    <span class="xdoc">     *  Second parameter: Handle of transport that had the error. NULL denotes
+</span>    90    <span class="xdoc">     *  that it is a system error, not a specific transport.
+</span>    91    <span class="xdoc">     *
+</span>    92    <span class="xdoc">     *  Third parameter: Pointer to the message. This is only valid for
+</span>    93    <span class="xdoc">     *  {<b>@link</b> #Reason_FAILEDPUT}.
+</span>    94    <span class="xdoc">     *
+</span>    95    <span class="xdoc">     *  Fourth parameter: Transport specific information. Refer to individual
+</span>    96    <span class="xdoc">     *  transports for more details.
+</span>    97    <span class="xdoc">     */</span>
+    98        <span class=key>typedef</span> Void (*ErrFxn)(Reason, Handle, Ptr, UArg);
+    99    
+   100        <span class="xdoc">/*!
+</span>   101    <span class="xdoc">     *  ======== setErrFxn ========
+</span>   102    <span class="xdoc">     *  Sets the asynchronous error function for the transport module
+</span>   103    <span class="xdoc">     *
+</span>   104    <span class="xdoc">     *  This API allows the user to set the function that will be called in
+</span>   105    <span class="xdoc">     *  case of an asynchronous error by the transport.
+</span>   106    <span class="xdoc">     *
+</span>   107    <span class="xdoc">     *  <b>@param(errFxn)</b>        Function that is called when an asynchronous
+</span>   108    <span class="xdoc">     *                        error occurs.
+</span>   109    <span class="xdoc">     */</span>
+   110        Void setErrFxn(ErrFxn errFxn);
+   111    
+   112    <span class=key>instance</span>:
+   113    
+   114        <span class="xdoc">/*!
+</span>   115    <span class="xdoc">     *  Which priority messages should this transport manage.
+</span>   116    <span class="xdoc">     */</span>
+   117        <span class=key>config</span> UInt priority = 0;
+   118    
+   119        <span class="xdoc">/*!
+</span>   120    <span class="xdoc">     *  ======== create ========
+</span>   121    <span class="xdoc">     *  Create a Transport instance
+</span>   122    <span class="xdoc">     *
+</span>   123    <span class="xdoc">     *  This function creates a transport instance. The transport is
+</span>   124    <span class="xdoc">     *  responsible for registering with MessageQ via the
+</span>   125    <span class="xdoc">     *  {<b>@link</b> ti.sdo.ipc.MessageQ#registerTransport} API.
+</span>   126    <span class="xdoc">     *
+</span>   127    <span class="xdoc">     *  <b>@param(procId)</b>        Remote processor id that this instance
+</span>   128    <span class="xdoc">     *                        will communicate with.
+</span>   129    <span class="xdoc">     */</span>
+   130        create(UInt16 procId);
+   131    
+   132        <span class="xdoc">/*!
+</span>   133    <span class="xdoc">     *  ======== getStatus ========
+</span>   134    <span class="xdoc">     *  Status of a Transport instance
+</span>   135    <span class="xdoc">     *
+</span>   136    <span class="xdoc">     *  This function returns the status of the transport instance.
+</span>   137    <span class="xdoc">     *
+</span>   138    <span class="xdoc">     *  <b>@b(returns)</b>             Returns status of Transport instance
+</span>   139    <span class="xdoc">     */</span>
+   140        @DirectCall
+   141        Int getStatus();
+   142    
+   143        <span class="xdoc">/*!
+</span>   144    <span class="xdoc">     *  ======== put ========
+</span>   145    <span class="xdoc">     *  Put the message to the remote processor
+</span>   146    <span class="xdoc">     *
+</span>   147    <span class="xdoc">     *  If the transport can accept the message, it returns TRUE. Accepting
+</span>   148    <span class="xdoc">     *  a message does not mean that it is transmitted. It simply means that
+</span>   149    <span class="xdoc">     *  the transport should be able to send the message. If the actual transfer
+</span>   150    <span class="xdoc">     *  fails, the transport calls the {@#ErrFxn} (assuming it is set up via the
+</span>   151    <span class="xdoc">     *  {@#setErrFxn} API. If the {@#ErrFxn} is not set, the message is dropped.
+</span>   152    <span class="xdoc">     *  (also...should an error be raised or just System_printf?).
+</span>   153    <span class="xdoc">     *
+</span>   154    <span class="xdoc">     *  If the transport cannot send the message, it returns FALSE and a
+</span>   155    <span class="xdoc">     *  filled in Error_Block. The caller still owns the message.
+</span>   156    <span class="xdoc">     *
+</span>   157    <span class="xdoc">     *  <b>@param(msg)</b>             Pointer the message to be sent
+</span>   158    <span class="xdoc">     *
+</span>   159    <span class="xdoc">     *  <b>@b(returns)</b>             TRUE denotes acceptance of the message to
+</span>   160    <span class="xdoc">     *                          be sent. FALSE denotes the message could not be
+</span>   161    <span class="xdoc">     *                          sent.
+</span>   162    <span class="xdoc">     */</span>
+   163        @DirectCall
+   164        Bool put(Ptr msg);
+   165    
+   166        <span class="xdoc">/*!
+</span>   167    <span class="xdoc">     *  ======== Control ========
+</span>   168    <span class="xdoc">     *  Send a control command to the transport instance
+</span>   169    <span class="xdoc">     *
+</span>   170    <span class="xdoc">     *  This is function allows transport to specify control commands. Refer
+</span>   171    <span class="xdoc">     *  to individual transport implementions for more details.
+</span>   172    <span class="xdoc">     *
+</span>   173    <span class="xdoc">     *  <b>@param(cmd)</b>             Requested command
+</span>   174    <span class="xdoc">     *  <b>@param(cmdArgs)</b>         Accompanying field for the command. This is
+</span>   175    <span class="xdoc">     *                          command specific.
+</span>   176    <span class="xdoc">     *
+</span>   177    <span class="xdoc">     *  <b>@b(returns)</b>             TRUE denotes acceptance of the command. FALSE
+</span>   178    <span class="xdoc">     *                          denotes failure of the command.
+</span>   179    <span class="xdoc">     */</span>
+   180        @DirectCall
+   181        Bool control(UInt cmd, UArg cmdArg);
+   182    }
+</pre>
+</body></html>

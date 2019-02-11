@@ -1,0 +1,87 @@
+digraph chains_ov490VipMultiCam_Sgx3Dsrv {
+
+       ColorScheme [shape=none, margin=0, label=<
+       <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+       <TR><TD bgcolor="lightblue">IPU1_0</TD></TR>
+       <TR><TD bgcolor="palegreen">DSP1</TD></TR>
+       <TR><TD bgcolor="lightsalmon">A15</TD></TR>
+       </TABLE>>];
+
+       /************** LINKS ************************/
+       Capture [color=lightblue, style=filled]
+       Split [color=lightblue, style=filled]
+       Dup_sv_org [color=lightblue, style=filled]
+       Sync [color=lightblue, style=filled]
+       Dup_sv [color=lightblue, style=filled]
+       IPCOut_IPU1_0_A15_0_2 [color=lightblue, style=filled]
+       IPCIn_A15_0_IPU1_0_0 [color=lightsalmon, style=filled]
+       IPCOut_IPU1_0_DSP1_1 [color=lightblue, style=filled]
+       IPCIn_DSP1_IPU1_0_1 [color=palegreen, style=filled]
+       IPCOut_IPU1_0_DSP1_0 [color=lightblue, style=filled]
+       IPCIn_DSP1_IPU1_0_0 [color=palegreen, style=filled]
+       Alg_GeoAlign3D [color=palegreen, style=filled]
+       IPCOut_DSP1_A15_0_1 [color=palegreen, style=filled]
+       IPCIn_A15_0_DSP1_2 [color=lightsalmon, style=filled]
+       Alg_Synthesis [color=palegreen, style=filled]
+       IPCOut_DSP1_A15_0_2 [color=palegreen, style=filled]
+       IPCIn_A15_0_DSP1_3 [color=lightsalmon, style=filled]
+       Alg_PhotoAlign [color=palegreen, style=filled]
+       IPCOut_DSP1_A15_0_0 [color=palegreen, style=filled]
+       IPCIn_A15_0_DSP1_1 [color=lightsalmon, style=filled]
+       Sgx3Dsrv [color=lightsalmon, style=filled]
+       IPCOut_A15_0_IPU1_0_0 [color=lightsalmon, style=filled]
+       IPCIn_IPU1_0_A15_0_0 [color=lightblue, style=filled]
+       Display_M4 [color=lightblue, style=filled]
+       Select [color=lightblue, style=filled]
+       VPE_sv_org2 [color=lightblue, style=filled]
+       Sync_sv_org2 [color=lightblue, style=filled]
+       Alg_DmaSwMs_sv_org2 [color=lightblue, style=filled]
+       Display_sv_org2 [color=lightblue, style=filled]
+       VPE_sv_org1 [color=lightblue, style=filled]
+       Sync_sv_org1 [color=lightblue, style=filled]
+       Alg_DmaSwMs_sv_org1 [color=lightblue, style=filled]
+       Display_sv_org1 [color=lightblue, style=filled]
+       Null [color=palegreen, style=filled]
+       GrpxSrc [color=lightblue, style=filled]
+       Display_Grpx [color=lightblue, style=filled]
+
+       /************** CONNECTIONS ************************/
+       Select -> VPE_sv_org1[taillabel=Q0, minlen=2, labeldistance=3]
+       Select -> VPE_sv_org2[taillabel=Q1, minlen=2, labeldistance=3]
+       Dup_sv_org -> Select[taillabel=Q0, minlen=2, labeldistance=3]
+       Dup_sv_org -> Sync[taillabel=Q1, minlen=2, labeldistance=3]
+       Split -> Dup_sv_org
+       Capture -> Split
+       Alg_DmaSwMs_sv_org1 -> Display_sv_org1
+       Sync_sv_org1 -> Alg_DmaSwMs_sv_org1
+       VPE_sv_org1 -> Sync_sv_org1
+       Alg_DmaSwMs_sv_org2 -> Display_sv_org2
+       Sync_sv_org2 -> Alg_DmaSwMs_sv_org2
+       VPE_sv_org2 -> Sync_sv_org2
+       Dup_sv -> IPCOut_IPU1_0_DSP1_0[taillabel=Q0, minlen=2, labeldistance=3]
+       Dup_sv -> IPCOut_IPU1_0_DSP1_1[taillabel=Q1, minlen=2, labeldistance=3]
+       Dup_sv -> IPCOut_IPU1_0_A15_0_2[taillabel=Q2, minlen=2, labeldistance=3]
+       Sync -> Dup_sv
+       Alg_GeoAlign3D -> Alg_Synthesis[headlabel=Q1, taillabel=Q0, minlen=2, labeldistance=3]
+       Alg_GeoAlign3D -> IPCOut_DSP1_A15_0_1[taillabel=Q1, minlen=2, labeldistance=3]
+       Alg_Synthesis -> Null[taillabel=Q0, minlen=2, labeldistance=3]
+       Alg_Synthesis -> Alg_PhotoAlign[taillabel=Q1, minlen=2, labeldistance=3]
+       Alg_Synthesis -> IPCOut_DSP1_A15_0_2[taillabel=Q2, minlen=2, labeldistance=3]
+       Sgx3Dsrv -> IPCOut_A15_0_IPU1_0_0
+       Alg_PhotoAlign -> IPCOut_DSP1_A15_0_0
+       GrpxSrc -> Display_Grpx
+       IPCOut_IPU1_0_DSP1_0 -> IPCIn_DSP1_IPU1_0_0
+       IPCIn_DSP1_IPU1_0_0 -> Alg_GeoAlign3D
+       IPCOut_IPU1_0_DSP1_1 -> IPCIn_DSP1_IPU1_0_1
+       IPCIn_DSP1_IPU1_0_1 -> Alg_Synthesis[headlabel=Q0 minlen=2, labeldistance=3]
+       IPCOut_IPU1_0_A15_0_2 -> IPCIn_A15_0_IPU1_0_0
+       IPCIn_A15_0_IPU1_0_0 -> Sgx3Dsrv[headlabel=Q0 minlen=2, labeldistance=3]
+       IPCOut_DSP1_A15_0_0 -> IPCIn_A15_0_DSP1_1
+       IPCIn_A15_0_DSP1_1 -> Sgx3Dsrv[headlabel=Q1 minlen=2, labeldistance=3]
+       IPCOut_DSP1_A15_0_1 -> IPCIn_A15_0_DSP1_2
+       IPCIn_A15_0_DSP1_2 -> Sgx3Dsrv[headlabel=Q2 minlen=2, labeldistance=3]
+       IPCOut_DSP1_A15_0_2 -> IPCIn_A15_0_DSP1_3
+       IPCIn_A15_0_DSP1_3 -> Sgx3Dsrv[headlabel=Q3 minlen=2, labeldistance=3]
+       IPCOut_A15_0_IPU1_0_0 -> IPCIn_IPU1_0_A15_0_0
+       IPCIn_IPU1_0_A15_0_0 -> Display_M4
+}

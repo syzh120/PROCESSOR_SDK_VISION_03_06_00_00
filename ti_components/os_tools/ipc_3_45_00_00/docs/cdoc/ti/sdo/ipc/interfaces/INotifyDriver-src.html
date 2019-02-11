@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>interface ti.sdo.ipc.interfaces.INotifyDriver</title>
+<meta name="googlebot" content="noindex,nofollow">
+<link rel="stylesheet" type="text/css" href="../../../../src.css"/>
+</head>
+<body>
+<pre class=src>
+     1    <span class="comment">/*
+</span>     2    <span class="comment"> * Copyright (c) 2012-2013, Texas Instruments Incorporated
+</span>     3    <span class="comment"> * All rights reserved.
+</span>     4    <span class="comment"> *
+</span>     5    <span class="comment"> * Redistribution and use in source and binary forms, with or without
+</span>     6    <span class="comment"> * modification, are permitted provided that the following conditions
+</span>     7    <span class="comment"> * are met:
+</span>     8    <span class="comment"> *
+</span>     9    <span class="comment"> * *  Redistributions of source code must retain the above copyright
+</span>    10    <span class="comment"> *    notice, this list of conditions and the following disclaimer.
+</span>    11    <span class="comment"> *
+</span>    12    <span class="comment"> * *  Redistributions in binary form must reproduce the above copyright
+</span>    13    <span class="comment"> *    notice, this list of conditions and the following disclaimer in the
+</span>    14    <span class="comment"> *    documentation and/or other materials provided with the distribution.
+</span>    15    <span class="comment"> *
+</span>    16    <span class="comment"> * *  Neither the name of Texas Instruments Incorporated nor the names of
+</span>    17    <span class="comment"> *    its contributors may be used to endorse or promote products derived
+</span>    18    <span class="comment"> *    from this software without specific prior written permission.
+</span>    19    <span class="comment"> *
+</span>    20    <span class="comment"> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+</span>    21    <span class="comment"> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+</span>    22    <span class="comment"> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+</span>    23    <span class="comment"> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+</span>    24    <span class="comment"> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+</span>    25    <span class="comment"> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+</span>    26    <span class="comment"> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+</span>    27    <span class="comment"> * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+</span>    28    <span class="comment"> * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+</span>    29    <span class="comment"> * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+</span>    30    <span class="comment"> * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+</span>    31    <span class="comment"> */</span>
+    32    <span class="comment">/*
+</span>    33    <span class="comment"> *  ======== INotifyDriver.xdc ========
+</span>    34    <span class="comment"> *
+</span>    35    <span class="comment"> */</span>
+    36    
+    37    <span class="xdoc">/*!
+</span>    38    <span class="xdoc"> *  ======== INotifyDriver ========
+</span>    39    <span class="xdoc"> *  Notify driver interface
+</span>    40    <span class="xdoc"> *
+</span>    41    <span class="xdoc"> *  Interface implemented by all drivers for the notify module.  Modules that
+</span>    42    <span class="xdoc"> *  implement this interface expect the eventId arguments to be valid.
+</span>    43    <span class="xdoc"> */</span>
+    44    
+    45    <span class=key>interface</span> INotifyDriver {
+    46    
+    47    <span class=key>instance</span>:
+    48    
+    49        <span class="xdoc">/*!
+</span>    50    <span class="xdoc">     *  ======== registerEvent ========
+</span>    51    <span class="xdoc">     *  Register a callback to an event
+</span>    52    <span class="xdoc">     *
+</span>    53    <span class="xdoc">     *  This driver function is called by the Notify_registerEvent function
+</span>    54    <span class="xdoc">     *  within the Notify module gate. Refer to its documentation for more
+</span>    55    <span class="xdoc">     *  details.
+</span>    56    <span class="xdoc">     *
+</span>    57    <span class="xdoc">     *  <b>@param(eventId)</b>      Number of event that is being registered
+</span>    58    <span class="xdoc">     */</span>
+    59        @DirectCall
+    60        Void registerEvent(UInt32 eventId);
+    61    
+    62        <span class="xdoc">/*!
+</span>    63    <span class="xdoc">     *  ======== unregisterEvent ========
+</span>    64    <span class="xdoc">     *  Remove an event listener from an event
+</span>    65    <span class="xdoc">     *
+</span>    66    <span class="xdoc">     *  This driver function is called by the Notify_unregisterEvent function
+</span>    67    <span class="xdoc">     *  within the Notify module gate. Refer to it for more details.
+</span>    68    <span class="xdoc">     *
+</span>    69    <span class="xdoc">     *  <b>@param(eventId)</b>      Number of event that is being unregistered
+</span>    70    <span class="xdoc">     */</span>
+    71        @DirectCall
+    72        Void unregisterEvent(UInt32 eventId);
+    73    
+    74        <span class="xdoc">/*!
+</span>    75    <span class="xdoc">     *  ======== sendEvent ========
+</span>    76    <span class="xdoc">     *  Send a signal to an event
+</span>    77    <span class="xdoc">     *
+</span>    78    <span class="xdoc">     *  This interface function is called by the Notify_sendEvent function.
+</span>    79    <span class="xdoc">     *  Notify_sendEvent does not provide any context protection for
+</span>    80    <span class="xdoc">     *  INotifyDriver_sendEvent, so appropriate measures must be taken within
+</span>    81    <span class="xdoc">     *  the driver itself.
+</span>    82    <span class="xdoc">     *
+</span>    83    <span class="xdoc">     *  <b>@param(eventId)</b>      Number of event to signal
+</span>    84    <span class="xdoc">     *  <b>@param(payload)</b>      Payload (optional) to pass to callback function
+</span>    85    <span class="xdoc">     *  <b>@param(waitClear)</b>    If TRUE, have the NotifyDriver wait for
+</span>    86    <span class="xdoc">     *                       acknowledgement back from the destination
+</span>    87    <span class="xdoc">     *                       processor.
+</span>    88    <span class="xdoc">     *
+</span>    89    <span class="xdoc">     *  <b>@b(returns)</b>          Notify status
+</span>    90    <span class="xdoc">     */</span>
+    91        @DirectCall
+    92        Int sendEvent(UInt32 eventId, UInt32 payload, Bool waitClear);
+    93    
+    94        <span class="xdoc">/*!
+</span>    95    <span class="xdoc">     *  ======== disable ========
+</span>    96    <span class="xdoc">     *  Disable a NotifyDriver instance
+</span>    97    <span class="xdoc">     *
+</span>    98    <span class="xdoc">     *  Disables the ability of a Notify driver to receive events for a given
+</span>    99    <span class="xdoc">     *  processor. This interface function is called by the Notify_disable
+</span>   100    <span class="xdoc">     *  function. Refer to its documentation for more details.
+</span>   101    <span class="xdoc">     */</span>
+   102        @DirectCall
+   103        Void disable();
+   104    
+   105        <span class="xdoc">/*!
+</span>   106    <span class="xdoc">     *  ======== enable ========
+</span>   107    <span class="xdoc">     *  Enable a NotifyDriver instance
+</span>   108    <span class="xdoc">     *
+</span>   109    <span class="xdoc">     *  Enables the ability of a Notify driver to receive events for a given
+</span>   110    <span class="xdoc">     *  processor. This interface function is called by the Notify_restore
+</span>   111    <span class="xdoc">     *  function. Refer to its documentation for more details.
+</span>   112    <span class="xdoc">     */</span>
+   113        @DirectCall
+   114        Void enable();
+   115    
+   116        <span class="xdoc">/*!
+</span>   117    <span class="xdoc">     *  ======== disableEvent ========
+</span>   118    <span class="xdoc">     *  Disable an event
+</span>   119    <span class="xdoc">     *
+</span>   120    <span class="xdoc">     *  This interface function is called by the Notify_disableEvent function.
+</span>   121    <span class="xdoc">     *  Refer to its documentation for more details.
+</span>   122    <span class="xdoc">     *
+</span>   123    <span class="xdoc">     *  The Notify module does validation of the eventId.  The Notify module
+</span>   124    <span class="xdoc">     *  enters calls this function within the Notify module gate.
+</span>   125    <span class="xdoc">     *
+</span>   126    <span class="xdoc">     *  <b>@param(eventId)</b>      Number of event to disable
+</span>   127    <span class="xdoc">     */</span>
+   128        @DirectCall
+   129        Void disableEvent(UInt32 eventId);
+   130    
+   131        <span class="xdoc">/*!
+</span>   132    <span class="xdoc">     *  ======== enableEvent ========
+</span>   133    <span class="xdoc">     *  Enable an event
+</span>   134    <span class="xdoc">     *
+</span>   135    <span class="xdoc">     *  This interface function is called by the Notify_disableEvent function.
+</span>   136    <span class="xdoc">     *  Refer to its documentation for more details.
+</span>   137    <span class="xdoc">     *
+</span>   138    <span class="xdoc">     *  The Notify module does validation of the eventId.  The Notify module
+</span>   139    <span class="xdoc">     *  enters calls this function within the Notify module gate.
+</span>   140    <span class="xdoc">     *
+</span>   141    <span class="xdoc">     *  <b>@param(eventId)</b>      Number of event to enable
+</span>   142    <span class="xdoc">     */</span>
+   143        @DirectCall
+   144        Void enableEvent(UInt32 eventId);
+   145    
+   146        <span class="xdoc">/*! <b>@_nodoc</b>
+</span>   147    <span class="xdoc">     *  ======== setNotifyHandle ========
+</span>   148    <span class="xdoc">     *  Called during Notify instance creation to 'send' its handle to its
+</span>   149    <span class="xdoc">     *  corresponding notify driver instance
+</span>   150    <span class="xdoc">     */</span>
+   151        @DirectCall
+   152        Void setNotifyHandle(Ptr driverHandle);
+   153    
+   154    }
+</pre>
+</body></html>

@@ -1,0 +1,175 @@
+/*
+ * package.bld
+ *
+ * xdc build specification file for the EDMA DRV module.
+ *
+ * Copyright (C) 2009 Texas Instruments Incorporated - http://www.ti.com/
+ *
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *
+ *    Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ *    Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the
+ *    distribution.
+ *
+ *    Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ *  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ *  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ *  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ *  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ *  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+*/
+
+var Build = xdc.useModule('xdc.bld.BuildEnvironment');
+var Pkg = xdc.useModule('xdc.bld.PackageContents');
+
+var objList = [
+    "src/edma3_drv_init.c",
+    "src/edma3_drv_basic.c",
+    "src/edma3_drv_adv.c",
+];
+
+/* Targets supported */
+var targ_supported = [
+                    'C64P',
+                    'C64P_big_endian',
+                    'C674',
+                    'Arm9',
+                    'A8F',
+                    'C66',
+                    'C66_big_endian',
+                    'M3',
+               ];
+
+/* Directories for each target */
+var dir = [
+            '64p/',
+            '64p/',
+            '674/',
+            'arm9/',
+            'a8/',
+            '66/',
+            '66/',
+            'm3/',
+          ];
+
+for each (var targ in Build.targets)
+{
+    /* compile the library only for the default platform otherwise error will 
+     * will be thrown by xdc that library already exists                      */
+    var plat = targ.platform;
+
+    var lib = "lib/";
+    var bool = 0;
+    
+    if (targ.platforms.length == 0)
+    	continue;
+
+    for (var i = 0; i < targ_supported.length; i++)
+    {
+        if (java.lang.String(targ.name).equals(targ_supported[i]))
+        {
+            /* Choose the selected target */
+            lib = lib + dir[i];
+            bool = 1;
+            break;
+        }
+    }
+
+    if (bool == 0)
+        throw new Error('Unexpected value in "target" parameter')
+                
+    if (java.lang.String(targ.model.endian).equals("big"))  {
+        Pkg.addLibrary(lib + "debug/" + Pkg.name, targ,
+            { defs:"-DBIG_ENDIAN_MODE", profile: "debug"}
+            ).addObjects(objList);
+        Pkg.addLibrary(lib + "release/" + Pkg.name, targ,
+            { defs:"-DBIG_ENDIAN_MODE", profile: "release"}
+            ).addObjects(objList);
+        benchmark("lib/release/" + Pkg.name, targ);            
+    } else {
+        Pkg.addLibrary(lib + "debug/" + Pkg.name, targ,
+            { defs:"", profile: "debug"}
+            ).addObjects(objList);
+        Pkg.addLibrary(lib + "release/" + Pkg.name, targ,
+            { defs:"", profile: "release"}
+            ).addObjects(objList);
+        benchmark("lib/release/" + Pkg.name, targ);            
+    }
+}
+
+function benchmark(lldFullLibraryPath, target)
+{
+    /* Create the Epilogue; which executes after all the builds are completed. 
+     * This is used to generate the benchmark information for the built library. 
+     * Also add the benchmarking information file to the package. */
+    Pkg.makeEpilogue += ".libraries: benchmarking_" + target.suffix + "\n";
+    Pkg.makeEpilogue += "benchmarking_" + target.suffix + ":";
+    Pkg.makeEpilogue += "\n\t ofd6x.exe -x " + lldFullLibraryPath + ".a" + target.suffix + " > tmp.xml";
+    Pkg.makeEpilogue += "\n\t sectti.exe tmp.xml > " + lldFullLibraryPath + ".a" + target.suffix +  "_size.txt";
+    Pkg.makeEpilogue += "\n\t $(RM) tmp.xml\n\n";
+    Pkg.otherFiles[Pkg.otherFiles.length++] = lldFullLibraryPath + ".a" + target.suffix + "_size.txt";
+
+    /* We need to clean after ourselves; extend the 'clean' target to take care of this. */
+    Pkg.makeEpilogue += "clean::\n\t";
+    Pkg.makeEpilogue += "$(RM) " + lldFullLibraryPath + ".a" + target.suffix + "_size.txt\n\n";    
+}
+Pkg.otherFiles=[
+        '.settings/org.eclipse.cdt.core.prefs',
+        'docs',
+        'lib/debug/ti.sdo.edma3.drv.a64P',
+        'lib/debug/ti.sdo.edma3.drv.a64Pe',
+        'lib/debug/ti.sdo.edma3.drv.a674',
+        'lib/release/ti.sdo.edma3.drv.a64P',
+        'lib/release/ti.sdo.edma3.drv.a64Pe',
+        'lib/release/ti.sdo.edma3.drv.a674',
+        'lib/debug/ti.sdo.edma3.drv.ae64P',
+        'lib/debug/ti.sdo.edma3.drv.ae64Pe',
+        'lib/debug/ti.sdo.edma3.drv.ae674',
+        'lib/release/ti.sdo.edma3.drv.ae64P',
+        'lib/release/ti.sdo.edma3.drv.ae64Pe',
+        'lib/release/ti.sdo.edma3.drv.ae674',
+        'lib/debug/ti.sdo.edma3.drv.ae66',
+        'lib/debug/ti.sdo.edma3.drv.ae66e',
+        'lib/release/ti.sdo.edma3.drv.ae66',
+        'lib/release/ti.sdo.edma3.drv.ae66e',
+        'lib/release/ti.sdo.edma3.drv.a64P_size.txt',
+        'lib/release/ti.sdo.edma3.drv.a64Pe_size.txt',
+        'lib/release/ti.sdo.edma3.drv.ae64P_size.txt',
+        'lib/release/ti.sdo.edma3.drv.ae64Pe_size.txt',
+        'lib/release/ti.sdo.edma3.drv.ae66_size.txt',
+        'lib/release/ti.sdo.edma3.drv.ae66e_size.txt',
+        'src',
+        '.cdtproject',
+        '.project',
+        'DRV.xdc',
+        'edma3_drv.h',
+        'package.bld',
+        'package.xs',
+];
+
+
+
+
+
+
+
+
+
+

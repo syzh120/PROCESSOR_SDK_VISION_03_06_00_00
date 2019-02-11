@@ -1,0 +1,28 @@
+var searchData=
+[
+  ['messageq_5fhighpri',['MessageQ_HIGHPRI',['../_message_q_8h.html#a01e825f1f15fa12643eabea99ca76248ae06ba6f7cd0cafb89a56b1224693755d',1,'MessageQ.h']]],
+  ['messageq_5fnormalpri',['MessageQ_NORMALPRI',['../_message_q_8h.html#a01e825f1f15fa12643eabea99ca76248a12365e9d70b3fc967dc147e2f8a0d4fb',1,'MessageQ.h']]],
+  ['messageq_5freservedpri',['MessageQ_RESERVEDPRI',['../_message_q_8h.html#a01e825f1f15fa12643eabea99ca76248a3baaafcfd52556f649576a8c08748d03',1,'MessageQ.h']]],
+  ['messageq_5furgentpri',['MessageQ_URGENTPRI',['../_message_q_8h.html#a01e825f1f15fa12643eabea99ca76248a18496bc5d4650cd4eb8db0c399d95399',1,'MessageQ.h']]],
+  ['mmrpc_5fbuftype_5fhandle',['MmRpc_BufType_Handle',['../_mm_rpc_8h.html#ae9768b7d001102ef8eac026f3be6a788a2527bb614bb9780e6ee60ce103815180',1,'MmRpc.h']]],
+  ['mmrpc_5fbuftype_5fptr',['MmRpc_BufType_Ptr',['../_mm_rpc_8h.html#ae9768b7d001102ef8eac026f3be6a788a32015f574b31c9cc5ffab12b2a2dcb34',1,'MmRpc.h']]],
+  ['mmrpc_5fparamtype_5felem',['MmRpc_ParamType_Elem',['../_mm_rpc_8h.html#aa14265af324f99fc15feadba391e6bfaa2ec19499d0df41fbae3d5c89762d510f',1,'MmRpc.h']]],
+  ['mmrpc_5fparamtype_5foffptr',['MmRpc_ParamType_OffPtr',['../_mm_rpc_8h.html#aa14265af324f99fc15feadba391e6bfaa12f27d7cd0802715d618114a8f3b2a48',1,'MmRpc.h']]],
+  ['mmrpc_5fparamtype_5fptr',['MmRpc_ParamType_Ptr',['../_mm_rpc_8h.html#aa14265af324f99fc15feadba391e6bfaa6bcbf1e9e6366e3a854dce4b2ba2f6f9',1,'MmRpc.h']]],
+  ['mmrpc_5fparamtype_5fscalar',['MmRpc_ParamType_Scalar',['../_mm_rpc_8h.html#aa14265af324f99fc15feadba391e6bfaa692612dc6e22b9b5165c162e4c0e4209',1,'MmRpc.h']]],
+  ['mmtype_5fdir_5fbi',['MmType_Dir_Bi',['../_mm_type_8h.html#a348f725c4ae9619a5230b9b88f9103ada2be873264be05524719f4159484361d8',1,'MmType.h']]],
+  ['mmtype_5fdir_5fin',['MmType_Dir_In',['../_mm_type_8h.html#a348f725c4ae9619a5230b9b88f9103ada237fc0d67052d3ef321f59ce85d6fd08',1,'MmType.h']]],
+  ['mmtype_5fdir_5fmax',['MmType_Dir_MAX',['../_mm_type_8h.html#a348f725c4ae9619a5230b9b88f9103adaf792803f6c082c5c92983e643437130c',1,'MmType.h']]],
+  ['mmtype_5fdir_5fout',['MmType_Dir_Out',['../_mm_type_8h.html#a348f725c4ae9619a5230b9b88f9103ada6daede0322b52a1ab07579c2e6d17dea',1,'MmType.h']]],
+  ['mmtype_5fparam_5fmax',['MmType_Param_MAX',['../_mm_type_8h.html#a32a8c9117ea1ad0fb1e63bd74ad1bc26a061d4680c966af9bda93846cb3746df5',1,'MmType.h']]],
+  ['mmtype_5fparam_5fptr',['MmType_Param_PTR',['../_mm_type_8h.html#a32a8c9117ea1ad0fb1e63bd74ad1bc26a78e1a7aa9af84be29e7d1f64ea3f0dd9',1,'MmType.h']]],
+  ['mmtype_5fparam_5fs08',['MmType_Param_S08',['../_mm_type_8h.html#a32a8c9117ea1ad0fb1e63bd74ad1bc26a6ebc2a9bc55869cbaf26dda3e3a5bd9c',1,'MmType.h']]],
+  ['mmtype_5fparam_5fs16',['MmType_Param_S16',['../_mm_type_8h.html#a32a8c9117ea1ad0fb1e63bd74ad1bc26a3fb46c271e6b87058cddad6c47286e8b',1,'MmType.h']]],
+  ['mmtype_5fparam_5fs32',['MmType_Param_S32',['../_mm_type_8h.html#a32a8c9117ea1ad0fb1e63bd74ad1bc26a33bacd7128f886a1cc011ffa61156ce9',1,'MmType.h']]],
+  ['mmtype_5fparam_5fs64',['MmType_Param_S64',['../_mm_type_8h.html#a32a8c9117ea1ad0fb1e63bd74ad1bc26a8e63bbde42e192146551dad7847fdc7e',1,'MmType.h']]],
+  ['mmtype_5fparam_5fu08',['MmType_Param_U08',['../_mm_type_8h.html#a32a8c9117ea1ad0fb1e63bd74ad1bc26a0f327fe0f80bf04cec81f62b46eeaec8',1,'MmType.h']]],
+  ['mmtype_5fparam_5fu16',['MmType_Param_U16',['../_mm_type_8h.html#a32a8c9117ea1ad0fb1e63bd74ad1bc26af9118deffce19d361120545cbb6147f7',1,'MmType.h']]],
+  ['mmtype_5fparam_5fu32',['MmType_Param_U32',['../_mm_type_8h.html#a32a8c9117ea1ad0fb1e63bd74ad1bc26a3e8dde002b6f82fe8b519e9604eada58',1,'MmType.h']]],
+  ['mmtype_5fparam_5fu64',['MmType_Param_U64',['../_mm_type_8h.html#a32a8c9117ea1ad0fb1e63bd74ad1bc26a35a7b5b10ad027850a94708e5416bcda',1,'MmType.h']]],
+  ['mmtype_5fparam_5fvoid',['MmType_Param_VOID',['../_mm_type_8h.html#a32a8c9117ea1ad0fb1e63bd74ad1bc26a5680e36a1af7ab6aa5cc6f79d0e5ffe6',1,'MmType.h']]]
+];

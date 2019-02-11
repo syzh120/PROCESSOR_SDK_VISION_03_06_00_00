@@ -1,0 +1,43 @@
+UseCase: chains_lvdsVipMultiCam_3d_perception
+
+//Capture and Graphics
+//////////////////////
+
+
+// Capture and sync
+Capture -> Sync_1 -> Dup_cap
+
+
+// Input sync'ed frames to Sgx3Dsfm
+Dup_cap -> Sgx3Dsfm (A15)
+
+//
+//SFM
+//////////////////////
+Dup_cap -> Dup_sof
+Dup_sof -> Alg_SparseOpticalFlow_0 (EVE1)
+Dup_sof -> Alg_SparseOpticalFlow_1 (EVE2)
+Dup_sof -> Alg_SparseOpticalFlow_2 (EVE3)
+Dup_sof -> Alg_SparseOpticalFlow_3 (EVE4)
+
+Alg_SparseOpticalFlow_0 -> Merge (DSP1)
+Alg_SparseOpticalFlow_1 -> Merge
+Alg_SparseOpticalFlow_2 -> Merge
+Alg_SparseOpticalFlow_3 -> Merge
+
+Merge -> Sync_2 (DSP1) -> Alg_SfmMain (DSP1) -> Dup_pose (DSP1)
+
+Dup_pose -> Sgx3Dsfm
+Alg_SfmMain -> Alg_SfmMap (DSP1) -> Sgx3Dsfm
+Dup_pose -> Alg_SfmMap
+Alg_SfmMain -> Alg_SfmLinearTwoView (DSP2)
+
+
+Sgx3Dsfm -> Display_M4 (IPU1_0)
+
+//
+// Graphics overlay display
+//
+GrpxSrc -> Display_Grpx
+
+

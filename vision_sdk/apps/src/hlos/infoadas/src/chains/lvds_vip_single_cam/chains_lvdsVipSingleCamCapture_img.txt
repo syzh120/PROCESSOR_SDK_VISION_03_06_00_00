@@ -1,0 +1,19 @@
+digraph chains_lvdsVipSingleCamCapture {
+
+       ColorScheme [shape=none, margin=0, label=<
+       <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+       <TR><TD bgcolor="lightblue">IPU1_0</TD></TR>
+       <TR><TD bgcolor="lightsalmon">A15</TD></TR>
+       </TABLE>>];
+
+       /************** LINKS ************************/
+       Capture [color=lightblue, style=filled]
+       IPCOut_IPU1_0_A15_0_0 [color=lightblue, style=filled]
+       IPCIn_A15_0_IPU1_0_0 [color=lightsalmon, style=filled]
+       EpSink [color=lightsalmon, style=filled]
+
+       /************** CONNECTIONS ************************/
+       Capture -> IPCOut_IPU1_0_A15_0_0
+       IPCOut_IPU1_0_A15_0_0 -> IPCIn_A15_0_IPU1_0_0
+       IPCIn_A15_0_IPU1_0_0 -> EpSink
+}

@@ -1,0 +1,171 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>module xdc.runtime.Rta</title>
+<meta name="googlebot" content="noindex,nofollow">
+<link rel="stylesheet" type="text/css" href="../../src.css"/>
+</head>
+<body>
+<pre class=src>
+     1    <span class="comment">/*
+</span>     2    <span class="comment"> *  ======== Rta.xdc ========
+</span>     3    <span class="comment"> */</span>
+     4    
+     5    <span class=key>package</span> xdc.runtime;
+     6    
+     7    <span class="xdoc">/*!
+</span>     8    <span class="xdoc"> *  ======== Rta ========
+</span>     9    <span class="xdoc"> *  The Rta module contains target and configuration code for providing RTA
+</span>    10    <span class="xdoc"> *  support.
+</span>    11    <span class="xdoc"> *
+</span>    12    <span class="xdoc"> *  The 'Command' enum defines the available control commands, and the
+</span>    13    <span class="xdoc"> *  'CommandPacket' structure defines the format of commands received from
+</span>    14    <span class="xdoc"> *  the host.
+</span>    15    <span class="xdoc"> *
+</span>    16    <span class="xdoc"> *  All commands should send back a response, even if only to acknowledge
+</span>    17    <span class="xdoc"> *  receipt and completion of the command. The format of the response
+</span>    18    <span class="xdoc"> *  is defined by the 'ResponsePacket' structure.
+</span>    19    <span class="xdoc"> *
+</span>    20    <span class="xdoc"> *  The Rta_processCommand can be used to process commands received from a
+</span>    21    <span class="xdoc"> *  host to call the appropriate API. Alternatively, the individual APIs can
+</span>    22    <span class="xdoc"> *  be called if not all of the defined commands are used.
+</span>    23    <span class="xdoc"> */</span>
+    24    @DirectCall
+    25    <span class=key>module</span> Rta {
+    26    
+    27        <span class="xdoc">/*! Logged when the Agent receives a command */</span>
+    28        <span class=key>config</span> Log.Event LD_cmdRcvd = {
+    29            mask: Diags.USER2,
+    30            msg: <span class="string">"LD_cmdRcvd: Received command: %d, arg0: 0x%x, arg1: 0x%x"</span>
+    31        };
+    32    
+    33        <span class="xdoc">/*! Logged when a diags mask is changed */</span>
+    34        <span class=key>config</span> Log.Event LD_writeMask = {
+    35            mask: Diags.USER2,
+    36            msg: <span class="string">"LD_writeMask: Mask addres: 0x%x, New mask value: 0x%x"</span>
+    37        };
+    38    
+    39        <span class="xdoc">/*! Assert if logger id in control command is invalid. */</span>
+    40        <span class=key>config</span> Assert.Id A_invalidLogger = {
+    41            msg: <span class="string">"A_invalidLogger: The logger id %d is invalid."</span>
+    42        };
+    43    
+    44        <span class="xdoc">/*! Error raised if Agent receives an invalid command. */</span>
+    45        <span class=key>config</span> Error.Id E_badCommand  = {
+    46            msg: <span class="string">"E_badCommand: Received invalid command, id: %d."</span>
+    47        };
+    48    
+    49        <span class="xdoc">/*! Command ids */</span>
+    50        <span class=key>enum</span> Command : Int {
+    51            Command_READ_MASK = 0,  
+    52            Command_WRITE_MASK = 1, 
+    53            Command_LOGGER_OFF = 2,
+    54            Command_LOGGER_ON = 3,
+    55            Command_GET_CPU_SPEED = 4,
+    56            Command_RESET_LOGGER = 5,
+    57            Command_CHANGE_PERIOD = 6,
+    58            Command_START_TX = 7,
+    59            Command_STOP_TX = 8
+    60        };
+    61        
+    62        <span class="xdoc">/*! 
+</span>    63    <span class="xdoc">     * Structure of command received from host 
+</span>    64    <span class="xdoc">     * TODO - Either the types should be changed to 32-bits, or the packet
+</span>    65    <span class="xdoc">     * size information should be added to the RTA XML file.
+</span>    66    <span class="xdoc">     */</span>
+    67        <span class=key>struct</span> CommandPacket {
+    68            Command  cmdId;
+    69            UArg     arg0;
+    70            UArg     arg1;
+    71        }
+    72    
+    73        <span class="xdoc">/*! Structure of response packet sent back to host */</span>
+    74        <span class=key>struct</span> ResponsePacket {
+    75            Command  cmdId;
+    76            UArg     resp0;
+    77            UArg     resp1;
+    78        }
+    79        
+    80        <span class="xdoc">/*! 
+</span>    81    <span class="xdoc">     *  ======== dataTransportClassName ========= 
+</span>    82    <span class="xdoc">     *  The name of the xdc.rta.IDataTransport class to use. 
+</span>    83    <span class="xdoc">     *  
+</span>    84    <span class="xdoc">     *  The class specified here can be used on the host for reading RTA data
+</span>    85    <span class="xdoc">     *  from this target application.
+</span>    86    <span class="xdoc">     */</span>
+    87        <span class=key>config</span> String dataTransportClassName = <span class="string">""</span>;
+    88    
+    89        <span class="xdoc">/*!
+</span>    90    <span class="xdoc">     *  ======== controlTransportClassName ========
+</span>    91    <span class="xdoc">     *  The name of the xdc.rta.IControlTransport class to use.
+</span>    92    <span class="xdoc">     *
+</span>    93    <span class="xdoc">     *  The class specified here can be used on the host for communicating with
+</span>    94    <span class="xdoc">     *  this target application to send control commands and receive responses.
+</span>    95    <span class="xdoc">     */</span>
+    96        <span class=key>config</span> String controlTransportClassName = <span class="string">""</span>;
+    97         
+    98        <span class="xdoc">/*!
+</span>    99    <span class="xdoc">     *  ======== processCommand ========
+</span>   100    <span class="xdoc">     *  Executes a command packet and prepares the response packet.
+</span>   101    <span class="xdoc">     *  
+</span>   102    <span class="xdoc">     *  This API will execute the command specified by the command packet
+</span>   103    <span class="xdoc">     *  argument, and will store the response information in the response
+</span>   104    <span class="xdoc">     *  packet argument.
+</span>   105    <span class="xdoc">     *
+</span>   106    <span class="xdoc">     *  <b>@param(cmd)</b>    The CommandPacket to execute.
+</span>   107    <span class="xdoc">     *  <b>@param(resp)</b>   The ResponsePacket to populate with the response.
+</span>   108    <span class="xdoc">     */</span>
+   109        Void processCommand(CommandPacket *cmd, ResponsePacket *resp);
+   110        
+   111        <span class="xdoc">/*!
+</span>   112    <span class="xdoc">     *  ======== acknowledgeCmd ========
+</span>   113    <span class="xdoc">     */</span>
+   114        Void acknowledgeCmd(ResponsePacket *resp);
+   115    
+   116        <span class="xdoc">/*!
+</span>   117    <span class="xdoc">     *  ======== readMask ========
+</span>   118    <span class="xdoc">     */</span>
+   119        Void readMask(ResponsePacket *resp, UArg addr);
+   120        
+   121        <span class="xdoc">/*!
+</span>   122    <span class="xdoc">     *  ======== writeMask ========
+</span>   123    <span class="xdoc">     */</span>   
+   124        Void writeMask(ResponsePacket *resp, UArg addr, UArg val);
+   125        
+   126        <span class="xdoc">/*!
+</span>   127    <span class="xdoc">     *  ======== enableLog ========
+</span>   128    <span class="xdoc">     */</span>
+   129        Void enableLog(ResponsePacket *resp, UArg log);
+   130        
+   131        <span class="xdoc">/*!
+</span>   132    <span class="xdoc">     *  ======== disableLog ========
+</span>   133    <span class="xdoc">     */</span>
+   134        Void disableLog(ResponsePacket *resp, UArg log);
+   135        
+   136        <span class="xdoc">/*!
+</span>   137    <span class="xdoc">     *  ======== getCpuSpeed ========
+</span>   138    <span class="xdoc">     */</span>
+   139        Void getCpuSpeed(ResponsePacket *resp);
+   140        
+   141        <span class="xdoc">/*!
+</span>   142    <span class="xdoc">     *  ======== resetLog ========
+</span>   143    <span class="xdoc">     */</span>
+   144        Void resetLog(ResponsePacket *resp, UArg log);
+   145        
+   146        <span class="xdoc">/*!
+</span>   147    <span class="xdoc">     *  ======== changePeriod ========
+</span>   148    <span class="xdoc">     */</span>
+   149        Void changePeriod(ResponsePacket *resp, UArg period);
+   150    
+   151        <span class="xdoc">/*!
+</span>   152    <span class="xdoc">     *  <b>@_nodoc</b>
+</span>   153    <span class="xdoc">     *  ======== genRta ========
+</span>   154    <span class="xdoc">     *  Generates the Rta XML file.
+</span>   155    <span class="xdoc">     */</span>
+   156        <span class=key>function</span> genRta(outputFileName);
+   157    
+   158    }
+   159    <span class="comment">/*
+</span>   160    <span class="comment"> *  @(#) xdc.runtime; 2, 1, 0,0; 12-9-2015 17:36:48; /db/ztree/library/trees/xdc/xdc-B06/src/packages/
+</span>   161    <span class="comment"> */</span>
+   162    
+</pre>
+</body></html>

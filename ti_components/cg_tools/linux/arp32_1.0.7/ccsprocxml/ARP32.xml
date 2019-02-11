@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deviceDefinitions>
+	<isaFamily
+		id="EVE"
+		name="EVE"
+		buildToolSuffix="-arp32"
+		binaryParser="org.eclipse.cdt.core.GNU_ELF"
+		supportedEndiannessTypes="little"/>
+	<isa
+		id="EVE"
+		name="EVE"
+		family="EVE"/>
+
+	<!-- EVE device -->
+        <genericDevice
+              id="EVE.genericDevice.EVE"
+              name="Generic EVE Device"
+              deviceVariant="EVE"
+              isa="EVE">
+              <property name="IsElfDefault" value="true"/>
+              <property name="RTSlib" value="rtsarp32_v200.lib"
+                   whenEndianness="little"
+                   whenToolChain="TI"
+                   whenOutputFormat="ELF"/>
+              <property name="CompilerBuildOptions" value="--silicon_version=210"
+                   whenToolChain="TI"/>
+        </genericDevice>
+</deviceDefinitions>

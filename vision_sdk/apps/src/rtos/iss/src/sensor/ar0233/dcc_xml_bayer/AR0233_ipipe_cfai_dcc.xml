@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<IPIPE_CFA_xml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!--this is comment-->
+  <dcc_name>ipipe_cfa</dcc_name>
+  <dcc_header>
+    <camera_module_id>     0233 </camera_module_id>
+      <dcc_descriptor_id>   9 </dcc_descriptor_id>
+      <algorithm_vendor_id>  1 </algorithm_vendor_id>
+      <tunning_tool_version> 0 </tunning_tool_version>
+  </dcc_header>
+  <!--=======================================================================-->
+    <typedef>
+        <iss_ipipe_cfa_dir type="struct">
+          <hpf_thr type="uint16"> </hpf_thr> <!-- high pass filter threshold: U13 -->
+          <hpf_slope type="uint16"> </hpf_slope> <!-- high pass filter slope: U10: 0 to 512 -->
+          <mix_thr type="uint16"> </mix_thr> <!-- mixing threshold: U13 -->
+          <mix_slope type="uint16"> </mix_slope> <!-- mixing slope: U10 -->
+          <dir_thr type="uint16"> </dir_thr> <!-- direction threshold: U10 -->
+          <dir_slope type="uint16"> </dir_slope> <!-- direction slope: U7 -->
+          <dir_ndwt type="uint16"> </dir_ndwt> <!-- direction non-directional weight: U6: 0 to 32 -->
+        </iss_ipipe_cfa_dir>
+        <iss_ipipe_cfa_daa type="struct">
+          <mono_hue_fra type="uint8"> </mono_hue_fra> <!-- mono hue fraction: U6: 0 to 32 -->
+          <mono_edg_thr type="uint8"> </mono_edg_thr> <!-- mono edge threshold: U8 -->
+          <mono_thr_min type="uint16"> </mono_thr_min> <!-- mono threshold min: U10 -->
+          <mono_thr_slope type="uint16"> </mono_thr_slope> <!-- mono threshold slope: U10Q5 -->
+          <mono_slp_min type="uint16"> </mono_slp_min> <!-- mono slope min: U10 -->
+          <mono_slp_slp type="uint16"> </mono_slp_slp> <!-- mono slope slope: U10Q5 -->
+          <mono_lpwt type="uint16"> </mono_lpwt> <!-- mono low-pass weight: U6: 0 to 32 -->
+        </iss_ipipe_cfa_daa>
+                <iss_ipipe_cfa type="struct">
+            <update type="uint8">           </update>
+                    <cfai_mode type="uint8"> </cfai_mode> <!-- select cfai mode: U2 -->
+                    <dir type="iss_ipipe_cfa_dir"> </dir> <!-- dir parameters -->
+            <daa type="iss_ipipe_cfa_daa"> </daa> <!-- daa parameters -->
+        </iss_ipipe_cfa>
+    </typedef>
+  <!--=======================================================================-->
+    <use_case val="1023"> <!-- DCC_USE_CASE_CAPTURE_ALL -->
+        <n-space>
+        <region0 class="0">
+            <exposure val="1" min="0" max="2000000">  </exposure>
+            <gain val="0" min="0" max="400">  </gain>
+        </region0>
+
+        </n-space>
+        <parameter_package>
+            <!--CFA parameters for photospace class 0-->
+            <ipipe_cfa_dcc type="iss_ipipe_cfa">
+              {
+                0, //update
+                0, // cfai_mode
+                    { // dir: ipipe_iss_ipipe_cfa_dir
+                       56, //900, // hpf_thr
+                       167, //32, // hpf_slope
+                       100, //0, // mix_thr
+                       10, //1023, // mix_slope
+                       16, //100, // dir_thr
+                       10, // 6, // dir_slope
+                       16  // dir_ndwt
+                    },
+                    { // daa: ipipe_iss_ipipe_cfa_daa
+                                      16, // mono_hue_fra
+                                      25, // mono_edg_thr
+                                      25, // mono_thr_min
+                                      20, // mono_thr_slope
+                                      500, // mono_slp_min
+                                      20, // mono_slp_slp
+                                      24  // mono_lpwt
+                    }
+              }
+            </ipipe_cfa_dcc>
+        </parameter_package>
+
+
+    </use_case>
+  <!--=====================================================================-->
+</IPIPE_CFA_xml>

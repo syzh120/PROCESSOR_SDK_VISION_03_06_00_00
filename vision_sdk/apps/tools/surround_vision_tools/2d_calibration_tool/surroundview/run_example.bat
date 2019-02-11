@@ -1,0 +1,1 @@
+SurroundView.exe -n 4 -c 3 -p ..\sample_data\ -i fishimg1.yuv fishimg2.yuv fishimg3.yuv fishimg4.yuv -o outimg.yuv -v 720 -h 1280 -j 1280 -V 1080 -H 880 -J 880 -m InitialPerspectiveParams_sample.csv -d distortion_center_sample.csv -X 160 -Y 320 -F 455 

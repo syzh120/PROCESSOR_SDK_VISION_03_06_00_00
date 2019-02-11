@@ -1,0 +1,393 @@
+﻿<!DOCTYPE html>
+<html lang="en" dir="ltr" class="client-nojs">
+<head>
+<meta charset="UTF-8" />
+<title>PDK/Maitaining Custom Changes Over TI Software Release - Texas Instruments Wiki</title>
+<meta name="generator" content="MediaWiki 1.25.1" />
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="search" type="application/opensearchdescription+xml" href="http://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)" />
+<link rel="EditURI" type="application/rsd+xml" href="http://processors.wiki.ti.com/api.php?action=rsd" />
+<link rel="alternate" hreflang="x-default" href="Maitaining_Custom_Changes_Over_TI_Software_Release.html" />
+<link rel="copyright" href="http://creativecommons.org/licenses/by-sa/3.0/" />
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="http://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom" />
+<link rel="stylesheet" href="load.php@debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%252Cshared%257Cmediawiki.sectionAnchor%257Cmediawiki.skinning.interface%257Cmediawiki.ui.button%257Cskins.vector.styles&amp;only=styles&amp;skin=vector&amp;%252A.css" />
+<meta name="ResourceLoaderDynamicStyles" content="" />
+<link rel="stylesheet" href="load.php@debug=false&amp;lang=en&amp;modules=site&amp;only=styles&amp;skin=vector&amp;%252A.css" />
+<style>a:lang(ar),a:lang(kk-arab),a:lang(mzn),a:lang(ps),a:lang(ur){text-decoration:none}
+/* cache key: davincid_wikidb:resourceloader:filter:minify-css:7:70500b672b667d946e900b286b62c126 */</style>
+<script src="load.php@debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector&amp;%252A"></script>
+<script>if(window.mw){
+mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"PDK/Maitaining_Custom_Changes_Over_TI_Software_Release","wgTitle":"PDK/Maitaining Custom Changes Over TI Software Release","wgCurRevisionId":233548,"wgRevisionId":233548,"wgArticleId":46322,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["PDK"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"PDK/Maitaining_Custom_Changes_Over_TI_Software_Release","wgRelevantArticleId":46322,"wgIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgWikiEditorEnabledModules":{"toolbar":true,"dialogs":true,"hidesig":true,"preview":true,"publish":false},"wgCategoryTreePageCategoryOptions":"{\"mode\":0,\"hideprefix\":20,\"showcount\":false,\"namespaces\":false}"});
+}</script><script>if(window.mw){
+mw.loader.implement("user.options",function($,jQuery){mw.user.options.set({"variant":"en"});});mw.loader.implement("user.tokens",function($,jQuery){mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\"});});
+/* cache key: davincid_wikidb:resourceloader:filter:minify-js:7:a5c52c063dc436c1ca7c9f456936a5e9 */
+}</script>
+<script>if(window.mw){
+mw.loader.load(["mediawiki.page.startup","mediawiki.legacy.wikibits","mediawiki.legacy.ajax","skins.vector.js"]);
+}</script>
+<!--[if lt IE 7]><style type="text/css">body{behavior:url("/skins/Vector/csshover.min.htc")}</style><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr ns-0 ns-subject page-PDK_Maitaining_Custom_Changes_Over_TI_Software_Release skin-vector action-view vector-animateLayout">
+		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+
+							<div id="siteNotice"><div id="localNotice" lang="en" dir="ltr"><p><br />
+<span style="color:#ff0000"><b>Please note as of Wednesday, August 15th, 2018 this wiki has been set to read only. If you are a TI Employee and require Edit ability please contact x0211426 from the company directory.</b></span>
+</p></div></div>
+						<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" class="firstHeading" lang="en"><span dir="auto">PDK/Maitaining Custom Changes Over TI Software Release</span></h1>
+						<div id="bodyContent" class="mw-body-content">
+									<div id="siteSub">From Texas Instruments Wiki</div>
+								<div id="contentSub"></div>
+												<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="Maitaining_Custom_Changes_Over_TI_Software_Release.html#mw-head">navigation</a>, 					<a href="Maitaining_Custom_Changes_Over_TI_Software_Release.html#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="hf-nsheader"><script language = "Javascript">
+var tiContentGroup;
+var tiwikicat = (typeof(mw.config.values.wgCategories[0]) === "undefined"? "":mw.config.values.wgCategories[0]);
+tiContentGroup = "/DSP/wiki/Ext/" +tiwikicat;
+var tiPageName;
+tiPageName = 'wiki/PDK/Maitaining_Custom_Changes_Over_TI_Software_Release';
+</script></div><div class="hf-header"></div><p>This guide will give you some tips on how you can maintain your custom changes over the TI Software release. These changes can be specific to the custom board, usecase specific updates etc. The key things we cover as part of this tutorial are
+</p>
+<ol><li> How to maintain custom changes over a TI software release</li>
+<li> If in case you need to migrate to a different version of the same TI Software</li>
+<li> How to take in Bug fixes from the latest and greatest TI Software release without really having to migrate to the latest version. (Note: This is available from the PDK 01.09.XX.XX version)</li></ol>
+<div id="toc" class="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="Maitaining_Custom_Changes_Over_TI_Software_Release.html#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="Maitaining_Custom_Changes_Over_TI_Software_Release.html#One_Time_Setup"><span class="tocnumber">2</span> <span class="toctext">One Time Setup</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="Maitaining_Custom_Changes_Over_TI_Software_Release.html#Migrating_to_a_New_Release"><span class="tocnumber">3</span> <span class="toctext">Migrating to a New Release</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="Maitaining_Custom_Changes_Over_TI_Software_Release.html#Applying_Bug_Fixes_to_older_releases"><span class="tocnumber">4</span> <span class="toctext">Applying Bug Fixes to older releases</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Introduction">Introduction</span></h2>
+<p>The basic idea is to use GIT (<a rel="nofollow" class="external free" href="https://git-scm.com/downloads">https://git-scm.com/downloads</a>) or any other version control mechanism to maintain changes on TI Software.
+The techniques mentioned below are applicable for PDK and Processor SDK.
+The top-level steps include:
+</p>
+<ul><li> Download the first base version of TI Software</li>
+<li> Use Instructions in <a href="Maitaining_Custom_Changes_Over_TI_Software_Release.html#One_Time_Setup">One Time Setup</a> to setup GIT on the TI Software release from which the development will start. (Lets say version XX.XX.XX.XX)</li>
+<li> Make changes to this version. Commit the changes to maintain change history with respect to the TI Software version.</li>
+<li> For any new release create a different branch from the base version TI Software commit.</li>
+<li> Cherry-pick custom changes from the previous branch. Resolve merge conflicts if any.</li></ul>
+<p>The advantage of following this methodology is:
+</p>
+<ul><li> You have a full history of custom changes.</li>
+<li> You can easily see changes between TI Software versions.</li>
+<li> You can easily switch between TI Software versions and custom change versions.</li>
+<li> It is easy to pick up bug fixes from TI.</li></ul>
+<p>The following picture helps understand this idea better. The Custom changes highlighted below are the changes that you make over the TI releases.
+</p>
+<div class="center"><div class="floatnone"><a href="http://processors.wiki.ti.com/index.php/File:Git_Tree_PDK_Migration.png" class="image" title="Maintaining custom changes over TI software releases using GIT."><img alt="Maintaining custom changes over TI software releases using GIT." src="Git_Tree_PDK_Migration.png" width="971" height="539" /></a></div></div>
+<h2><span class="mw-headline" id="One_Time_Setup">One Time Setup</span></h2>
+<p>The first step is to download the TI Software release version that you would like to start with from <a rel="nofollow" class="external free" href="http://www.ti.com/tool/processor-sdk-vision">http://www.ti.com/tool/processor-sdk-vision</a> or
+<a rel="nofollow" class="external free" href="http://www.ti.com/tool/processor-sdk-radar">http://www.ti.com/tool/processor-sdk-radar</a>. Let this be version XX.XX.
+</p><p>With PDK as the example next follow below steps:
+</p>
+<pre>&gt; mv pdk_xx_xx_xx_xx/ pdk_
+&gt; cd pdk_
+&gt; git init
+&gt; git add -A
+&gt; git commit -a -m “PDK Release xx_xx_xx_xx"
+</pre>
+<p>From PDK release 01.09.XX.XX you would find the git ignore files as a part of the folders. If you do have the gitignore files you can jump to <b>STEP 4</b>. Note: git ignore files are needed to ignore the generated files like library files which should not be committed to version by mistake.
+</p><p><b>STEP 1:</b> If you are on an older PDK release, you can copy the gitignore files from <a href="http://processors.wiki.ti.com/index.php/File:Pdk_gitignore.zip" title="File:Pdk gitignore.zip">File:Pdk gitignore.zip</a> to the PDK release folder.
+</p><p><b>STEP 2:</b> You would find below in the created PDK repository:
+</p>
+<pre>&gt; git status
+  On branch master
+  Untracked files:
+  (use "git add &lt;file&gt;..." to include in what will be committed)
+       packages/ti/.gitignore
+       packages/ti/boot/sbl_auto/.gitignore
+       packages/ti/csl/.gitignore
+       packages/ti/diag/.gitignore
+       packages/ti/drv/bsp_lld/.gitignore
+       packages/ti/drv/fw_l3l4/.gitignore
+       packages/ti/drv/ipc_lite/.gitignore
+       packages/ti/drv/pm/.gitignore
+       packages/ti/drv/stw_lld/.gitignore
+       packages/ti/drv/vps/.gitignore
+</pre>
+<p><b>STEP 3</b>: Once the .gitignore files have been added you can commit these changes as below:
+</p>
+<pre>&gt; git add -A
+&gt; git commit -a -m “Adding .gitignore files for libraries and binary"
+&gt; git log --pretty=oneline
+  &lt;Commit ID&gt; Adding .gitignore files for libraries and binary 
+  &lt;Commit ID&gt; PDK Release xx_xx_xx_xx
+</pre>
+<p><b>STEP 4</b>: Apply a tag to keep a record of base TI version. For example:
+</p>
+<pre>&gt; git tag -a PDK_RELEASE_XX_XX_XX_XX -m "Release version pdk_XX_XX_XX_XX"
+&gt; git tag
+  PDK_RELEASE_XX_XX_XX_XX
+&gt; git branch -m master PDK_RELEASE_XX_XX_XX_XX_BRANCH
+</pre>
+<h2><span class="mw-headline" id="Migrating_to_a_New_Release">Migrating to a New Release</span></h2>
+<div class="block-note"><span class="block-contents"><img alt="Note" src="Light_bulb_icon.png" title="Note" width="18" height="25" /><b>Note:</b> It is <b>not mandatory</b> to migrate and follow every TI software release for your development. You can stick to a given release and continue your work. In case, you decide to migrate to the latest TI software release version this section would give some guidelines </span></div>
+<p>Lets say you have made some changes over PDK in the release PDK_RELEASE_XX_XX_XX_XX and your git log is as below:
+</p>
+<pre>&gt; git log --pretty=oneline
+&lt;Commit ID Last Change&gt; Test Change 2
+&lt;Commit ID First Change&gt; Test Change 1
+9899209a3c7319b1a35b04bfff4844549e872bef Adding the .gitignore
+b7c1fa3f355c8fa37f69d64db68203a4843a65b1 Release 01_08_01_06
+</pre>
+<pre>&gt; git tag
+  PDK_RELEASE_XX_XX_XX_XX
+</pre>
+<pre>&gt; git branch
+  PDK_RELEASE_XX_XX_XX_XX_BRANCH
+</pre>
+<p>In order to migrate the latest PDK release from this point, 
+</p><p><b>STEP 1:</b> Create a new branch for holding the new PDK
+</p>
+<pre>&gt; git checkout -b PDK_RELEASE_YY_YY_YY_YY_BRANCH PDK_RELEASE_XX_XX_XX_XX
+&gt; git branch
+  PDK_RELEASE_XX_XX_XX_XX_BRANCH
+* PDK_RELEASE_YY_YY_YY_YY_BRANCH
+</pre>
+<p><b>STEP 2:</b> Copy and replace the all the files from the new release to the new branch. Note: Some files would have been removed from latest release. So delete the entire directory (except the .git folder) and then copy the new package. 
+</p><p><b>STEP 3:</b>Add all files to the git. This will make a baseline of the new release.
+</p>
+<pre>&gt; git add –A
+&gt; git commit -a -m “PDK Release yy_yy_yy_yy"
+&gt; git tag -a PDK_RELEASE_YY_YY_YY_YY -m "Release version pdk_YY_YY_YY_YY"
+&gt; git tag
+  PDK_RELEASE_XX_XX_XX_XX
+  PDK_RELEASE_YY_YY_YY_YY
+</pre>
+<p><b>STEP 4:</b>Copy the changes from the previous branch:
+</p>
+<pre>&gt; git cherry-pick &lt;Commit ID First Change&gt;^.. &lt;Commit ID Last Change&gt;
+  [PDK_RELEASE_YY_YY_YY_YY_BRANCH &lt;ID&gt;] Test Change 1
+  1 file changed, 2 insertions(+)
+  [PDK_RELEASE_YY_YY_YY_YY_BRANCH &lt;ID&gt;] Test Change 2
+  1 file changed, 2 insertions(+)
+</pre>
+<p><b>STEP 5:</b>Merge conflicts if any should be fixed while cherry-picking.
+</p>
+<h2><span class="mw-headline" id="Applying_Bug_Fixes_to_older_releases">Applying Bug Fixes to older releases</span></h2>
+<p>From PDK release version 01.09.XX.XX, TI will provide the .patch file along with PDK under docs/patches folder. Each bug will be in a folder for example PDK-1777 with multiple patch files (for fixes spanning across multiple components) and a readme.txt file. This will give the following details
+</p>
+<ol><li> The folders which are impacted by the bug.</li>
+<li> The files which are impacted by the bug.</li>
+<li> The order of patches that needs to be applied.</li></ol>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.092 seconds
+Real time usage: 0.122 seconds
+Preprocessor visited node count: 29/1000000
+Preprocessor generated node count: 92/1000000
+Post‐expand include size: 720/2097152 bytes
+Template argument size: 801/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+-->
+
+<!-- 
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    9.686      1 - -total
+100.00%    9.686      1 - Template:Note
+-->
+
+<!-- Saved in parser cache with key davincid_wikidb:pcache:idhash:46322-0!*!*!!en!5!* and timestamp 20190103113819 and revision id 233548
+ -->
+<div class="hf-footer"></div><div class="hf-nsfooter"><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="http://processors.wiki.ti.com/index.php/File:E2e.jpg" class="image"><img alt="E2e.jpg" src="E2e.jpg" width="305" height="63" /></a>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external free" href="http://e2e.ti.com">http://e2e.ti.com</a>. Please post only comments about the article <b>PDK/Maitaining Custom Changes Over TI Software Release</b> here.</i>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"> <a href="http://processors.wiki.ti.com/index.php/File:Hyperlink_blue.png" class="image"><img alt="Hyperlink blue.png" src="Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br />
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br />
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br />
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br />
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br />
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br />
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br />
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br />
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li> <a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li> <a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li> <a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li> <a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br />
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br />
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<p><!-- HitBox Sub accounts Code START -->
+<script language="JavaScript" src="http://focus.ti.com/js/shared/metrics/metrics-min.js?version=1" type="text/javascript"></script>
+<!-- HitBox Sub accounts Code END -->
+</p>
+<div id="tiPrivacy"></div>
+</div></div>									<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="http://processors.wiki.ti.com/index.php?title=PDK/Maitaining_Custom_Changes_Over_TI_Software_Release&amp;oldid=233548">http://processors.wiki.ti.com/index.php?title=PDK/Maitaining_Custom_Changes_Over_TI_Software_Release&amp;oldid=233548</a>"					</div>
+													<div id='catlinks' class='catlinks'><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="http://processors.wiki.ti.com/index.php/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="http://processors.wiki.ti.com/index.php/Category:PDK" title="Category:PDK">PDK</a></li></ul></div></div>												<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="http://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=PDK%2FMaitaining+Custom+Changes+Over+TI+Software+Release" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="http://processors.wiki.ti.com/index.php/Special:RequestAccount" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+															<li  id="ca-nstab-main" class="selected"><span><a href="Maitaining_Custom_Changes_Over_TI_Software_Release.html"  title="View the content page [c]" accesskey="c">Page</a></span></li>
+															<li  id="ca-talk" class="new"><span><a href="http://processors.wiki.ti.com/index.php?title=Talk:PDK/Maitaining_Custom_Changes_Over_TI_Software_Release&amp;action=edit&amp;redlink=1"  title="Discussion about the content page [t]" accesskey="t">Discussion</a></span></li>
+													</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<h3 id="p-variants-label"><span>Variants</span><a href="Maitaining_Custom_Changes_Over_TI_Software_Release.html#"></a></h3>
+
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+															<li id="ca-view" class="selected"><span><a href="Maitaining_Custom_Changes_Over_TI_Software_Release.html" >Read</a></span></li>
+															<li id="ca-viewsource"><span><a href="http://processors.wiki.ti.com/index.php?title=PDK/Maitaining_Custom_Changes_Over_TI_Software_Release&amp;action=edit"  title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li>
+															<li id="ca-history" class="collapsible"><span><a href="http://processors.wiki.ti.com/index.php?title=PDK/Maitaining_Custom_Changes_Over_TI_Software_Release&amp;action=history"  title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>
+													</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<h3 id="p-cactions-label"><span>More</span><a href="Maitaining_Custom_Changes_Over_TI_Software_Release.html#"></a></h3>
+
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+
+						<form action="http://processors.wiki.ti.com/index.php" id="searchform">
+														<div id="simpleSearch">
+															<input type="search" name="search" placeholder="Search" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput" /><input type="hidden" value="Special:Search" name="title" /><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton" /><input type="submit" name="go" value="Go" title="Go to a page with this exact name if exists" id="searchButton" class="searchButton" />								</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="http://processors.wiki.ti.com/index.php/Main_Page"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id='p-navigation' aria-labelledby='p-navigation-label'>
+			<h3 id='p-navigation-label'>Navigation</h3>
+
+			<div class="body">
+									<ul>
+													<li id="n-mainpage"><a href="http://processors.wiki.ti.com/index.php/Main_Page" title="Visit the main page [z]" accesskey="z">Main Page</a></li>
+													<li id="n-All-pages"><a href="http://processors.wiki.ti.com/index.php/Special:AllPages">All pages</a></li>
+													<li id="n-All-categories"><a href="http://processors.wiki.ti.com/index.php/Special:Categories">All categories</a></li>
+													<li id="n-recentchanges"><a href="http://processors.wiki.ti.com/index.php/Special:RecentChanges" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li>
+													<li id="n-randompage"><a href="http://processors.wiki.ti.com/index.php/Special:Random" title="Load a random page [x]" accesskey="x">Random page</a></li>
+													<li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>
+											</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id='p-coll-print_export' aria-labelledby='p-coll-print_export-label'>
+			<h3 id='p-coll-print_export-label'>Print/export</h3>
+
+			<div class="body">
+									<ul>
+													<li id="coll-create_a_book"><a href="http://processors.wiki.ti.com/index.php?title=Special:Book&amp;bookcmd=book_creator&amp;referer=PDK%2FMaitaining+Custom+Changes+Over+TI+Software+Release">Create a book</a></li>
+													<li id="coll-download-as-rl"><a href="http://processors.wiki.ti.com/index.php?title=Special:Book&amp;bookcmd=render_article&amp;arttitle=PDK%2FMaitaining+Custom+Changes+Over+TI+Software+Release&amp;oldid=233548&amp;writer=rl">Download as PDF</a></li>
+													<li id="t-print"><a href="http://processors.wiki.ti.com/index.php?title=PDK/Maitaining_Custom_Changes_Over_TI_Software_Release&amp;printable=yes" title="Printable version of this page [p]" accesskey="p">Printable version</a></li>
+											</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id='p-tb' aria-labelledby='p-tb-label'>
+			<h3 id='p-tb-label'>Toolbox</h3>
+
+			<div class="body">
+									<ul>
+													<li id="t-whatlinkshere"><a href="http://processors.wiki.ti.com/index.php/Special:WhatLinksHere/PDK/Maitaining_Custom_Changes_Over_TI_Software_Release" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li>
+													<li id="t-recentchangeslinked"><a href="http://processors.wiki.ti.com/index.php/Special:RecentChangesLinked/PDK/Maitaining_Custom_Changes_Over_TI_Software_Release" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li>
+													<li id="t-specialpages"><a href="http://processors.wiki.ti.com/index.php/Special:SpecialPages" title="A list of all special pages [q]" accesskey="q">Special pages</a></li>
+													<li id="t-permalink"><a href="http://processors.wiki.ti.com/index.php?title=PDK/Maitaining_Custom_Changes_Over_TI_Software_Release&amp;oldid=233548" title="Permanent link to this revision of the page">Permanent link</a></li>
+													<li id="t-info"><a href="http://processors.wiki.ti.com/index.php?title=PDK/Maitaining_Custom_Changes_Over_TI_Software_Release&amp;action=info" title="More information about this page">Page information</a></li>
+											</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+		<div id="footer" role="contentinfo">
+							<ul id="footer-info">
+											<li id="footer-info-lastmod"> This page was last modified on 9 March 2018, at 21:04.</li>
+											<li id="footer-info-viewcount">This page has been accessed 985 times.</li>
+											<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+									</ul>
+							<ul id="footer-places">
+											<li id="footer-places-privacy"><a href="http://processors.wiki.ti.com/index.php/Project:Privacy_policy" title="Project:Privacy policy">Privacy policy</a></li>
+											<li id="footer-places-about"><a href="http://processors.wiki.ti.com/index.php/Project:About" title="Project:About">About Texas Instruments Wiki</a></li>
+											<li id="footer-places-disclaimer"><a href="http://processors.wiki.ti.com/index.php/Project:General_disclaimer" title="Project:General disclaimer">Disclaimers</a></li>
+											<li id="footer-places-termsofservice"><a href="http://processors.wiki.ti.com/index.php/Project:Terms_of_Service" title="Project:Terms of Service">Terms of Use</a></li>
+									</ul>
+										<ul id="footer-icons" class="noprint">
+											<li id="footer-copyrightico">
+															<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31" /></a>
+													</li>
+											<li id="footer-poweredbyico">
+															<a href="http://www.mediawiki.org/"><img src="poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31" /></a>
+													</li>
+									</ul>
+						<div style="clear:both"></div>
+		</div>
+		<script>if(window.jQuery)jQuery.ready();</script><script>if(window.mw){
+mw.loader.state({"site":"loading","user":"ready","user.groups":"ready"});
+}</script>
+<script>if(window.mw){
+mw.loader.load(["mediawiki.toc","mediawiki.action.view.postEdit","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.searchSuggest"],null,true);
+}</script>
+<script>if(window.mw){
+document.write("\u003Cscript src=\"http://processors.wiki.ti.com/load.php?debug=false\u0026amp;lang=en\u0026amp;modules=site\u0026amp;only=scripts\u0026amp;skin=vector\u0026amp;*\"\u003E\u003C/script\u003E");
+}</script>
+<script>if(window.mw){
+mw.config.set({"wgBackendResponseTime":770});
+}</script>
+	</body>
+</html>

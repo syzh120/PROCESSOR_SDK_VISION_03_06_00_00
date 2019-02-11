@@ -1,0 +1,171 @@
+#define    CPU_IPU1 0
+#define   CPU_IPU2 1
+#define    CPU_DSP1 2
+#define   CPU_DSP2 3
+#define   CPU_EVE1 4
+#define   CPU_EVE2 5
+#define   CPU_EVE3 6
+#define   CPU_EVE4 7
+#define   CPU_PRUSS1 8
+#define   CPU_PRUSS2 9
+#define CPU_MPUSS   10
+
+
+#define AVATAR_INTR_DMA_OCPINTF__MPU_IRQ_4_5            0xA48
+#define AVATAR_INTR_DMA_OCPINTF__IPU1_IRQ_23_24         0x7E0
+#define AVATAR_INTR_DMA_OCPINTF__IPU2_IRQ_23_24         0x854
+#define	AVATAR_INTR_DMA_OCPINTF__DSP1_IRQ_32_33         0x948 
+#define	AVATAR_INTR_DMA_OCPINTF__DSP2_IRQ_32_33         0x9C8         
+#define	AVATAR_INTR_DMA_OCPINTF__EVE1_IRQ_0_1           0x7A0
+#define	AVATAR_INTR_DMA_OCPINTF__EVE2_IRQ_0_1           0x7B0
+#define	AVATAR_INTR_DMA_OCPINTF__EVE3_IRQ_0_1           0x7C0
+#define	AVATAR_INTR_DMA_OCPINTF__EVE4_IRQ_0_1           0x7D0         
+#define	AVATAR_INTR_DMA_OCPINTF__PRUSS1_IRQ_32_33       0x8C8
+#define	AVATAR_INTR_DMA_OCPINTF__PRUSS2_IRQ_32_33       0x908
+
+
+
+#define xbar_base 0x4A002000
+
+
+
+/*--------------------------------------------------------------*/
+xbar_init()
+{
+
+
+
+
+    /* Initializing the vip_ss xbar configuration */
+
+	// DISPC intrerrupt 
+	xbar_connect( CPU_IPU1,1,20); 
+    
+
+
+}
+
+
+
+
+
+XBAR_HAL_Get_Offset(unsigned int cpu, unsigned int xbar_inst)
+{
+    unsigned int offset;
+    unsigned int reg_offset;
+
+    if (cpu == CPU_MPUSS)
+        offset = AVATAR_INTR_DMA_OCPINTF__MPU_IRQ_4_5;
+
+    if (cpu == CPU_IPU1)
+        offset = AVATAR_INTR_DMA_OCPINTF__IPU1_IRQ_23_24;
+
+    if (cpu == CPU_IPU2)
+        offset = AVATAR_INTR_DMA_OCPINTF__IPU2_IRQ_23_24;
+
+    if (cpu == CPU_DSP1)
+        offset = AVATAR_INTR_DMA_OCPINTF__DSP1_IRQ_32_33;
+
+    if (cpu == CPU_DSP2)
+        offset = AVATAR_INTR_DMA_OCPINTF__DSP2_IRQ_32_33;
+
+    if (cpu == CPU_EVE1)
+        offset = AVATAR_INTR_DMA_OCPINTF__EVE1_IRQ_0_1;
+
+    if (cpu == CPU_EVE2)
+        offset = AVATAR_INTR_DMA_OCPINTF__EVE2_IRQ_0_1;
+
+    if (cpu == CPU_EVE3)
+        offset = AVATAR_INTR_DMA_OCPINTF__EVE3_IRQ_0_1;
+
+    if (cpu == CPU_EVE4)
+        offset = AVATAR_INTR_DMA_OCPINTF__EVE4_IRQ_0_1;
+
+    if (cpu == CPU_PRUSS1)
+        offset = AVATAR_INTR_DMA_OCPINTF__PRUSS1_IRQ_32_33;
+
+    if (cpu == CPU_PRUSS2)
+        offset = AVATAR_INTR_DMA_OCPINTF__PRUSS2_IRQ_32_33;
+
+    // Now we add an offset for the xbar_inst. 
+    // This assumes that we are packing two xbar config bitfields per 32-bit reg.
+    // Ie: if xbar_inst is n ( starting from 1 ) , that means that the
+    // bitfield for it is at the register  ( n - 1 ) /2 32-bit offset
+
+    reg_offset =  ( xbar_inst - 1 ) /2;
+    reg_offset *= 4; // 32-bit MMRs
+
+    return ( offset + reg_offset);
+}
+
+
+
+
+xbar_connect(unsigned int cpu, unsigned int xbar_inst, unsigned int intr_source )
+{
+    unsigned int offset = XBAR_HAL_Get_Offset(cpu, xbar_inst);
+    unsigned int addr = xbar_base + offset;
+
+    if ( xbar_inst % 2 )
+    {
+        //odd means lower bitfields
+        set_reg_field( addr, 0, 9, intr_source );
+
+    }
+    else 
+    {
+        //even means , higher bitfield - starting at bit offset 16 
+        set_reg_field( addr, 16, 9, intr_source);
+    }
+}
+
+set_reg_field( unsigned int address, unsigned int start, unsigned int width, unsigned int data )
+{
+    unsigned int reg = *(unsigned int*)address;
+    unsigned int write_data = ( reg & ~( ( ( 1 << width )  - 1 ) << start )  )  | ( data << start );
+    GEL_TextOut("Wrote %x to address %x\n",,,,, write_data, address);
+    *(unsigned int*)address = write_data;
+
+    GEL_TextOut("Read %x from address %x\n",,,,, *(unsigned int *)address, address);
+}
+
+
+
+
+
+
+
+hotmenu xbar_default()
+{
+
+    xbar_init();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

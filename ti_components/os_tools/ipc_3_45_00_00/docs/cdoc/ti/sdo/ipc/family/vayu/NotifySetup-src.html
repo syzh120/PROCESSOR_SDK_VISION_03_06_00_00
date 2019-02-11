@@ -1,0 +1,436 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>module ti.sdo.ipc.family.vayu.NotifySetup</title>
+<meta name="googlebot" content="noindex,nofollow">
+<link rel="stylesheet" type="text/css" href="../../../../../src.css"/>
+</head>
+<body>
+<pre class=src>
+     1    <span class="comment">/*
+</span>     2    <span class="comment"> * Copyright (c) 2012-2014 Texas Instruments Incorporated - http://www.ti.com
+</span>     3    <span class="comment"> * All rights reserved.
+</span>     4    <span class="comment"> *
+</span>     5    <span class="comment"> * Redistribution and use in source and binary forms, with or without
+</span>     6    <span class="comment"> * modification, are permitted provided that the following conditions
+</span>     7    <span class="comment"> * are met:
+</span>     8    <span class="comment"> *
+</span>     9    <span class="comment"> * *  Redistributions of source code must retain the above copyright
+</span>    10    <span class="comment"> *    notice, this list of conditions and the following disclaimer.
+</span>    11    <span class="comment"> *
+</span>    12    <span class="comment"> * *  Redistributions in binary form must reproduce the above copyright
+</span>    13    <span class="comment"> *    notice, this list of conditions and the following disclaimer in the
+</span>    14    <span class="comment"> *    documentation and/or other materials provided with the distribution.
+</span>    15    <span class="comment"> *
+</span>    16    <span class="comment"> * *  Neither the name of Texas Instruments Incorporated nor the names of
+</span>    17    <span class="comment"> *    its contributors may be used to endorse or promote products derived
+</span>    18    <span class="comment"> *    from this software without specific prior written permission.
+</span>    19    <span class="comment"> *
+</span>    20    <span class="comment"> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+</span>    21    <span class="comment"> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+</span>    22    <span class="comment"> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+</span>    23    <span class="comment"> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+</span>    24    <span class="comment"> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+</span>    25    <span class="comment"> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+</span>    26    <span class="comment"> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+</span>    27    <span class="comment"> * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+</span>    28    <span class="comment"> * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+</span>    29    <span class="comment"> * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+</span>    30    <span class="comment"> * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+</span>    31    <span class="comment"> */</span>
+    32    
+    33    <span class="comment">/*
+</span>    34    <span class="comment"> *  ======== NotifySetup.xdc ========
+</span>    35    <span class="comment"> */</span>
+    36    
+    37    <span class=key>package</span> ti.sdo.ipc.family.vayu;
+    38    
+    39    import xdc.runtime.Assert;
+    40    import ti.sdo.utils.MultiProc;
+    41    
+    42    <span class="xdoc">/*!
+</span>    43    <span class="xdoc"> *  ======== NotifySetup ========
+</span>    44    <span class="xdoc"> *  Notify driver setup proxy for Vayu
+</span>    45    <span class="xdoc"> *
+</span>    46    <span class="xdoc"> *  This module creates and registers the IPC Notify drivers for the Vayu
+</span>    47    <span class="xdoc"> *  device family. There are two types of notify drivers available: 1) shared
+</span>    48    <span class="xdoc"> *  memory driver, and 2) mailbox driver. Use the {<b>@link</b> #connections}
+</span>    49    <span class="xdoc"> *  configuration parameter to select which driver to use for communicating
+</span>    50    <span class="xdoc"> *  with each remote processor.
+</span>    51    <span class="xdoc"> *
+</span>    52    <span class="xdoc"> *  The shared memory notify driver is the default driver. It implements the
+</span>    53    <span class="xdoc"> *  full Notify API set. This driver uses memory for passing the notify
+</span>    54    <span class="xdoc"> *  payload between processors. The memory is allocated from SharedRegion #0.
+</span>    55    <span class="xdoc"> *
+</span>    56    <span class="xdoc"> *  The mailbox notify driver uses hardware FIFOs for passing the notify
+</span>    57    <span class="xdoc"> *  payload between processors. No shared memory is required. However, this
+</span>    58    <span class="xdoc"> *  driver does not implement the full Notify API set. For example, the
+</span>    59    <span class="xdoc"> *  `Notify_sendEvent()` API will never return `Notify_E_EVTNOTREGISTERED`
+</span>    60    <span class="xdoc"> *  because it does not track this information.
+</span>    61    <span class="xdoc"> *
+</span>    62    <span class="xdoc"> *  When configuring the notify driver, you specify which driver to use
+</span>    63    <span class="xdoc"> *  for communicating to each remote processor. If not configured, the
+</span>    64    <span class="xdoc"> *  shared memory driver will be used by default. Both sides of each connection
+</span>    65    <span class="xdoc"> *  must use the same driver. This is an easy mistake to make and there is
+</span>    66    <span class="xdoc"> *  no way to check this.
+</span>    67    <span class="xdoc"> *
+</span>    68    <span class="xdoc"> *  This module is primarily used by notify driver authors. It is not expected
+</span>    69    <span class="xdoc"> *  that any application would ever use this module in its runtime code.
+</span>    70    <span class="xdoc"> *  The typical use of this module is simply to configure which notify driver
+</span>    71    <span class="xdoc"> *  to use. See the following example for details.
+</span>    72    <span class="xdoc"> *
+</span>    73    <span class="xdoc"> *  <b>@a(Configuration Example)</b>
+</span>    74    <span class="xdoc"> *
+</span>    75    <span class="xdoc"> *  The following is a three processor example: HOST DSP1 EVE1. In this
+</span>    76    <span class="xdoc"> *  example, HOST and DSP1 will communicate using the shared memory driver
+</span>    77    <span class="xdoc"> *  and DSP1 and EVE1 will communicate using the mailbox driver. This example
+</span>    78    <span class="xdoc"> *  explicitly configures the shared memory driver for HOST and DSP1, but
+</span>    79    <span class="xdoc"> *  this is strictly not necessary. If left unconfigured, the shared memory
+</span>    80    <span class="xdoc"> *  driver would be used as the default. Also, the connection between HOST
+</span>    81    <span class="xdoc"> *  and EVE1 is left undefined as we don't expect to use this connection.
+</span>    82    <span class="xdoc"> *
+</span>    83    <span class="xdoc"> *  Notice that each connection configuration specifies the remote processor
+</span>    84    <span class="xdoc"> *  name and the driver type. This is how the local processor declares which
+</span>    85    <span class="xdoc"> *  driver it will use when communicating to that remote processor. The
+</span>    86    <span class="xdoc"> *  corresponding configuration on the remote processor must be complimentary.
+</span>    87    <span class="xdoc"> *
+</span>    88    <span class="xdoc"> *  Add the following to your HOST configuration script.
+</span>    89    <span class="xdoc"> *
+</span>    90    <span class="xdoc"> *  <b>@p(code)</b>
+</span>    91    <span class="xdoc"> *  // configure the notify driver
+</span>    92    <span class="xdoc"> *  var NotifySetup = xdc.useModule('ti.sdo.ipc.family.vayu.NotifySetup');
+</span>    93    <span class="xdoc"> *
+</span>    94    <span class="xdoc"> *  NotifySetup.connections.$add(
+</span>    95    <span class="xdoc"> *      new NotifySetup.Connection({
+</span>    96    <span class="xdoc"> *          driver: NotifySetup.Driver_SHAREDMEMORY,
+</span>    97    <span class="xdoc"> *          procName: "DSP1"
+</span>    98    <span class="xdoc"> *      })
+</span>    99    <span class="xdoc"> *  );
+</span>   100    <span class="xdoc"> *  <b>@p</b>
+</span>   101    <span class="xdoc"> *  Add the following to your DSP1 configuration script.
+</span>   102    <span class="xdoc"> *
+</span>   103    <span class="xdoc"> *  <b>@p(code)</b>
+</span>   104    <span class="xdoc"> *  // configure the notify driver
+</span>   105    <span class="xdoc"> *  var NotifySetup = xdc.useModule('ti.sdo.ipc.family.vayu.NotifySetup');
+</span>   106    <span class="xdoc"> *
+</span>   107    <span class="xdoc"> *  NotifySetup.connections.$add(
+</span>   108    <span class="xdoc"> *      new NotifySetup.Connection({
+</span>   109    <span class="xdoc"> *          driver: NotifySetup.Driver_SHAREDMEMORY,
+</span>   110    <span class="xdoc"> *          procName: "HOST"
+</span>   111    <span class="xdoc"> *      })
+</span>   112    <span class="xdoc"> *  );
+</span>   113    <span class="xdoc"> *
+</span>   114    <span class="xdoc"> *  NotifySetup.connections.$add(
+</span>   115    <span class="xdoc"> *      new NotifySetup.Connection({
+</span>   116    <span class="xdoc"> *          driver: NotifySetup.Driver_MAILBOX,
+</span>   117    <span class="xdoc"> *          procName: "EVE1"
+</span>   118    <span class="xdoc"> *      })
+</span>   119    <span class="xdoc"> *  );
+</span>   120    <span class="xdoc"> *  <b>@p</b>
+</span>   121    <span class="xdoc"> *  Add the following to your EVE1 configuration script.
+</span>   122    <span class="xdoc"> *
+</span>   123    <span class="xdoc"> *  <b>@p(code)</b>
+</span>   124    <span class="xdoc"> *  // configure the notify driver
+</span>   125    <span class="xdoc"> *  var NotifySetup = xdc.useModule('ti.sdo.ipc.family.vayu.NotifySetup');
+</span>   126    <span class="xdoc"> *
+</span>   127    <span class="xdoc"> *  NotifySetup.connections.$add(
+</span>   128    <span class="xdoc"> *      new NotifySetup.Connection({
+</span>   129    <span class="xdoc"> *          driver: NotifySetup.Driver_MAILBOX,
+</span>   130    <span class="xdoc"> *          procName: "DSP1"
+</span>   131    <span class="xdoc"> *      })
+</span>   132    <span class="xdoc"> *  );
+</span>   133    <span class="xdoc"> *  <b>@p</b>
+</span>   134    <span class="xdoc"> */</span>
+   135    
+   136    @ModuleStartup
+   137    @Template(<span class="string">"./NotifySetup.xdt"</span>)
+   138    
+   139    <span class=key>module</span> NotifySetup <span class=key>inherits</span> ti.sdo.ipc.interfaces.INotifySetup
+   140    {
+   141        <span class="xdoc">/*! <b>@_nodoc</b>
+</span>   142    <span class="xdoc">     *  ======== DriverIsr ========
+</span>   143    <span class="xdoc">     *  Notify driver isr function type definition
+</span>   144    <span class="xdoc">     *  param1 = mailbox table index
+</span>   145    <span class="xdoc">     */</span>
+   146        <span class=key>typedef</span> Void (*DriverIsr)(UInt16);
+   147    
+   148        <span class="xdoc">/*!
+</span>   149    <span class="xdoc">     *  ======== Driver ========
+</span>   150    <span class="xdoc">     *  Define the available notify drivers
+</span>   151    <span class="xdoc">     *
+</span>   152    <span class="xdoc">     *  For any given connection to a remote processor, one of the
+</span>   153    <span class="xdoc">     *  following notify driver types may be used. Each driver has
+</span>   154    <span class="xdoc">     *  different characteristics and system requirements.
+</span>   155    <span class="xdoc">     *
+</span>   156    <span class="xdoc">     *  <b>@p(html)</b>
+</span>   157    <span class="xdoc">     *  &lt;div class="xdocText"&gt;&lt;dl&gt;
+</span>   158    <span class="xdoc">     *  &lt;dt&gt;Driver_SHAREDMEMORY&lt;/dt&gt;
+</span>   159    <span class="xdoc">     *      &lt;dd&gt;
+</span>   160    <span class="xdoc">     *      This driver uses shared memory for passing the notify payload
+</span>   161    <span class="xdoc">     *      between processors. Additional state is also stored in the
+</span>   162    <span class="xdoc">     *      shared memory.&lt;br&gt;&lt;br&gt;
+</span>   163    <span class="xdoc">     *
+</span>   164    <span class="xdoc">     *      There is a separate, cache-aligned block of memory for each
+</span>   165    <span class="xdoc">     *      event number. This is necessary to maintain cache coherency.
+</span>   166    <span class="xdoc">     *      However, this requires a non-trivial amount of memory.&lt;br&gt;&lt;br&gt;
+</span>   167    <span class="xdoc">     *      &lt;/dd&gt;
+</span>   168    <span class="xdoc">     *
+</span>   169    <span class="xdoc">     *  &lt;dt&gt;Driver_MAILBOX&lt;/dt&gt;
+</span>   170    <span class="xdoc">     *      &lt;dd&gt;
+</span>   171    <span class="xdoc">     *      This driver uses a hardware FIFO (provided by the hardware
+</span>   172    <span class="xdoc">     *      mailbox) to pass the notify payload between processors. No
+</span>   173    <span class="xdoc">     *      shared memory is required by this driver.&lt;br&gt;&lt;br&gt;
+</span>   174    <span class="xdoc">     *
+</span>   175    <span class="xdoc">     *      This driver does not support the full Notify API set. This
+</span>   176    <span class="xdoc">     *      driver has lower delivery latency when compard to the shared
+</span>   177    <span class="xdoc">     *      memory driver.&lt;br&gt;&lt;br&gt;
+</span>   178    <span class="xdoc">     *      &lt;/dd&gt;
+</span>   179    <span class="xdoc">     *  &lt;/dl&gt;
+</span>   180    <span class="xdoc">     *  <b>@p</b>
+</span>   181    <span class="xdoc">     */</span>
+   182        <span class=key>enum</span> Driver {
+   183            Driver_SHAREDMEMORY = 0x01,     <span class="xdoc">/*! shared memory driver */</span>
+   184            Driver_MAILBOX = 0x02           <span class="xdoc">/*! hardware mailbox driver */</span>
+   185        };
+   186    
+   187        <span class="xdoc">/*!
+</span>   188    <span class="xdoc">     *  ======== Connection ========
+</span>   189    <span class="xdoc">     *  Define a notify driver connection
+</span>   190    <span class="xdoc">     *
+</span>   191    <span class="xdoc">     *  Each IPC connection is defined by two end-points: the local
+</span>   192    <span class="xdoc">     *  processor and the remote processor. Each connection supports
+</span>   193    <span class="xdoc">     *  only one type of notify driver. In other words, both ends of
+</span>   194    <span class="xdoc">     *  the connection must configure the same notify driver type.
+</span>   195    <span class="xdoc">     *
+</span>   196    <span class="xdoc">     *  However, when a processor has multiple connections (when
+</span>   197    <span class="xdoc">     *  communicating with multiple remote processors), each connection
+</span>   198    <span class="xdoc">     *  is configured independently. Therefore, different notify drivers
+</span>   199    <span class="xdoc">     *  may be used for different connections. Currently, IPC supports
+</span>   200    <span class="xdoc">     *  only one connection for each remote processor.
+</span>   201    <span class="xdoc">     *
+</span>   202    <span class="xdoc">     *  The configuration for a given connection must be coordinated with
+</span>   203    <span class="xdoc">     *  the remote processor. Each processor is only able to configure its
+</span>   204    <span class="xdoc">     *  local end-point for the connection. It is important that the remote
+</span>   205    <span class="xdoc">     *  processor use the same notify driver for the connection.
+</span>   206    <span class="xdoc">     *
+</span>   207    <span class="xdoc">     *  <b>@field(driver)</b>
+</span>   208    <span class="xdoc">     *  The driver to be used for this connection. See the {<b>@link</b> #Driver}
+</span>   209    <span class="xdoc">     *  enumeration for details.
+</span>   210    <span class="xdoc">     *
+</span>   211    <span class="xdoc">     *  <b>@field(procName)</b>
+</span>   212    <span class="xdoc">     *  The name of the remote processor for the given connection.
+</span>   213    <span class="xdoc">     *  <b>@p</b>
+</span>   214    <span class="xdoc">     */</span>
+   215        <span class=key>struct</span> Connection {
+   216            Driver driver;                  <span class="xdoc">/*! notify driver */</span>
+   217            String procName;                <span class="xdoc">/*! remote processor name */</span>
+   218        };
+   219    
+   220        <span class="xdoc">/*!
+</span>   221    <span class="xdoc">     *  ======== connections ========
+</span>   222    <span class="xdoc">     *  Configure the notify driver for each given connection
+</span>   223    <span class="xdoc">     *
+</span>   224    <span class="xdoc">     *  Use this configuration parameter to define which notify driver
+</span>   225    <span class="xdoc">     *  is to be used when communicating with remote processors. Create
+</span>   226    <span class="xdoc">     *  one entry in this array for each connection. Each entry you create,
+</span>   227    <span class="xdoc">     *  defines the local end-point of the connection. The remote processor
+</span>   228    <span class="xdoc">     *  must have a complimentary entry in its `connections` array.
+</span>   229    <span class="xdoc">     *
+</span>   230    <span class="xdoc">     *  Any connection which is undefined, will use the shared memory
+</span>   231    <span class="xdoc">     *  notify driver. It is not necessary to define all connections, just
+</span>   232    <span class="xdoc">     *  the ones which will not use the default.
+</span>   233    <span class="xdoc">     *
+</span>   234    <span class="xdoc">     *  To define a local end-point connection, establish a reference to
+</span>   235    <span class="xdoc">     *  this module and add a new entry to this array.
+</span>   236    <span class="xdoc">     *
+</span>   237    <span class="xdoc">     *  The following example show how to setup the mailbox driver for
+</span>   238    <span class="xdoc">     *  communicating from DSP1 to EVE1 and EVE2.
+</span>   239    <span class="xdoc">     *
+</span>   240    <span class="xdoc">     *  Add the following to your DSP1 configuration script.
+</span>   241    <span class="xdoc">     *
+</span>   242    <span class="xdoc">     *  <b>@p(code)</b>
+</span>   243    <span class="xdoc">     *  // configure the notify driver
+</span>   244    <span class="xdoc">     *  var NotifySetup = xdc.useModule('ti.sdo.ipc.family.vayu.NotifySetup');
+</span>   245    <span class="xdoc">     *
+</span>   246    <span class="xdoc">     *  NotifySetup.connections.$add(
+</span>   247    <span class="xdoc">     *      new NotifySetup.Connection({
+</span>   248    <span class="xdoc">     *          driver: NotifySetup.Driver_MAILBOX,
+</span>   249    <span class="xdoc">     *          procName: "EVE1"
+</span>   250    <span class="xdoc">     *      })
+</span>   251    <span class="xdoc">     *  );
+</span>   252    <span class="xdoc">     *
+</span>   253    <span class="xdoc">     *  NotifySetup.connections.$add(
+</span>   254    <span class="xdoc">     *      new NotifySetup.Connection({
+</span>   255    <span class="xdoc">     *          driver: NotifySetup.Driver_MAILBOX,
+</span>   256    <span class="xdoc">     *          procName: "EVE2"
+</span>   257    <span class="xdoc">     *      })
+</span>   258    <span class="xdoc">     *  );
+</span>   259    <span class="xdoc">     *  <b>@p</b>
+</span>   260    <span class="xdoc">     *
+</span>   261    <span class="xdoc">     *  Add the following to your EVE1 configuration script.
+</span>   262    <span class="xdoc">     *
+</span>   263    <span class="xdoc">     *  <b>@p(code)</b>
+</span>   264    <span class="xdoc">     *  // configure the notify driver
+</span>   265    <span class="xdoc">     *  var NotifySetup = xdc.useModule('ti.sdo.ipc.family.vayu.NotifySetup');
+</span>   266    <span class="xdoc">     *
+</span>   267    <span class="xdoc">     *  NotifySetup.connections.$add(
+</span>   268    <span class="xdoc">     *      new NotifySetup.Connection({
+</span>   269    <span class="xdoc">     *          driver: NotifySetup.Driver_MAILBOX,
+</span>   270    <span class="xdoc">     *          procName: "DSP1"
+</span>   271    <span class="xdoc">     *      })
+</span>   272    <span class="xdoc">     *  );
+</span>   273    <span class="xdoc">     *  <b>@p</b>
+</span>   274    <span class="xdoc">     *
+</span>   275    <span class="xdoc">     *  Add the following to your EVE2 configuration script.
+</span>   276    <span class="xdoc">     *
+</span>   277    <span class="xdoc">     *  <b>@p(code)</b>
+</span>   278    <span class="xdoc">     *  // configure the notify driver
+</span>   279    <span class="xdoc">     *  var NotifySetup = xdc.useModule('ti.sdo.ipc.family.vayu.NotifySetup');
+</span>   280    <span class="xdoc">     *
+</span>   281    <span class="xdoc">     *  NotifySetup.connections.$add(
+</span>   282    <span class="xdoc">     *      new NotifySetup.Connection({
+</span>   283    <span class="xdoc">     *          driver: NotifySetup.Driver_MAILBOX,
+</span>   284    <span class="xdoc">     *          procName: "DSP1"
+</span>   285    <span class="xdoc">     *      })
+</span>   286    <span class="xdoc">     *  );
+</span>   287    <span class="xdoc">     *  <b>@p</b>
+</span>   288    <span class="xdoc">     */</span>
+   289        <span class=key>metaonly</span> <span class=key>config</span> Connection connections[<span class=key>length</span>];
+   290    
+   291        <span class="xdoc">/*! <b>@_nodoc</b>
+</span>   292    <span class="xdoc">     *  ======== plugHwi ========
+</span>   293    <span class="xdoc">     *  Register an isr for the given interrupt and event.
+</span>   294    <span class="xdoc">     *
+</span>   295    <span class="xdoc">     *  <b>@param(remoteProcId)</b> The MutiProc Id of the remote processor
+</span>   296    <span class="xdoc">     *  which will raise the given interrupt.
+</span>   297    <span class="xdoc">     *
+</span>   298    <span class="xdoc">     *  <b>@param(cpuIntrNum)</b> The interrupt number which will be raised
+</span>   299    <span class="xdoc">     *  by the remote processor.
+</span>   300    <span class="xdoc">     *
+</span>   301    <span class="xdoc">     *  <b>@param(isr)</b> The ISR which should be invoked to service the
+</span>   302    <span class="xdoc">     *  given interrupt.
+</span>   303    <span class="xdoc">     */</span>
+   304        Void plugHwi(UInt16 remoteProcId, Int cpuIntrNum, DriverIsr isr);
+   305    
+   306        <span class="xdoc">/*! <b>@_nodoc</b>
+</span>   307    <span class="xdoc">     *  ======== unplugHwi ========
+</span>   308    <span class="xdoc">     *  Unregister the isr for the given interrupt.
+</span>   309    <span class="xdoc">     */</span>
+   310        Void unplugHwi(UInt16 remoteProcId, Int cpuIntrNum);
+   311    
+   312        <span class="xdoc">/*! <b>@_nodoc</b>
+</span>   313    <span class="xdoc">     *  ======== interruptTable ========
+</span>   314    <span class="xdoc">     *  Accessor method to return interrupt id for given virtual proc id
+</span>   315    <span class="xdoc">     */</span>
+   316        UInt16 interruptTable(Int srcVirtId);
+   317    
+   318    <span class=key>internal</span>:
+   319        <span class="comment">/* interrupt vector id for dsp */</span>
+   320        <span class=key>config</span> UInt dspIntVectId = 4;
+   321    
+   322        <span class="comment">/* interrupt vector id for eve */</span>
+   323        <span class=key>config</span> UInt eveIntVectId_INTC0 = 4;
+   324        <span class=key>config</span> UInt eveIntVectId_INTC1 = 8;
+   325    
+   326        <span class="comment">/* total number of cores on Vayu SoC */</span>
+   327        <span class=key>const</span> UInt8 NUM_CORES = 11;
+   328    
+   329        <span class="comment">/* number of cores in eve subsystem */</span>
+   330        <span class=key>const</span> UInt8 NUM_EVES = 4;
+   331    
+   332        <span class="comment">/* number of internal eve mailboxes */</span>
+   333        <span class=key>const</span> UInt8 NUM_EVE_MBX = 12;
+   334    
+   335        <span class="comment">/* number of system mailboxes (used by IPC) */</span>
+   336        <span class=key>const</span> UInt8 NUM_SYS_MBX = 4;
+   337    
+   338        <span class="comment">/*  Mailbox table for storing encoded base address, mailbox user ID,
+</span>   339    <span class="comment">     *  and sub-mailbox index.
+</span>   340    <span class="comment">     */</span>
+   341        <span class=key>config</span> UInt32 mailboxTable[NUM_CORES * NUM_CORES];
+   342    
+   343        <span class="comment">/* base address table for the mailbox subsystem */</span>
+   344        <span class=key>config</span> UInt32 mailboxBaseAddr[NUM_EVE_MBX + NUM_SYS_MBX];
+   345    
+   346        <span class="comment">/* map procId to discrete processor/core */</span>
+   347        <span class=key>config</span> UInt eve1ProcId = MultiProc.INVALIDID;
+   348        <span class=key>config</span> UInt eve2ProcId = MultiProc.INVALIDID;
+   349        <span class=key>config</span> UInt eve3ProcId = MultiProc.INVALIDID;
+   350        <span class=key>config</span> UInt eve4ProcId = MultiProc.INVALIDID;
+   351        <span class=key>config</span> UInt dsp1ProcId = MultiProc.INVALIDID;
+   352        <span class=key>config</span> UInt dsp2ProcId = MultiProc.INVALIDID;
+   353        <span class=key>config</span> UInt ipu1_0ProcId = MultiProc.INVALIDID;  <span class="comment">/* also used for ipu1 */</span>
+   354        <span class=key>config</span> UInt ipu1_1ProcId = MultiProc.INVALIDID;
+   355        <span class=key>config</span> UInt ipu2_0ProcId = MultiProc.INVALIDID;  <span class="comment">/* also used for ipu2 */</span>
+   356        <span class=key>config</span> UInt ipu2_1ProcId = MultiProc.INVALIDID;
+   357        <span class=key>config</span> UInt hostProcId = MultiProc.INVALIDID;
+   358    
+   359        <span class="comment">/* map MultiProc ID to virtual ID, virtId = procIdTable[procId] */</span>
+   360        <span class=key>config</span> UInt32 procIdTable[NUM_CORES];
+   361    
+   362        <span class="comment">/* runtime driver binding structure */</span>
+   363        <span class=key>struct</span> DrvBind {
+   364            Driver driver;                  <span class="comment">/* notify driver */</span>
+   365            UInt16 procId;                  <span class="comment">/* remote processor ID */</span>
+   366        };
+   367    
+   368        <span class="comment">/*
+</span>   369    <span class="comment">     *  ======== A_internal ========
+</span>   370    <span class="comment">     *  Internal implementation error.
+</span>   371    <span class="comment">     */</span>
+   372        <span class=key>config</span> Assert.Id A_internal = {
+   373            msg: <span class="string">"A_internal: internal implementation error"</span>
+   374        };
+   375    
+   376        <span class="comment">/*
+</span>   377    <span class="comment">     *  ======== driverType ========
+</span>   378    <span class="comment">     */</span>
+   379        Driver driverType(UInt16 remoteProcId);
+   380    
+   381        <span class="comment">/*
+</span>   382    <span class="comment">     *  ======== Shm_attach ========
+</span>   383    <span class="comment">     */</span>
+   384        Int Shm_attach(UInt16 remoteProcId, Ptr sharedAddr);
+   385    
+   386        <span class="comment">/*
+</span>   387    <span class="comment">     *  ======== Shm_sharedMemReq ========
+</span>   388    <span class="comment">     */</span>
+   389        SizeT Shm_sharedMemReq(UInt16 remoteProcId, Ptr sharedAddr);
+   390    
+   391        <span class="comment">/*
+</span>   392    <span class="comment">     *  ======== Mbx_attach ========
+</span>   393    <span class="comment">     */</span>
+   394        Int Mbx_attach(UInt16 remoteProcId, Ptr sharedAddr);
+   395    
+   396        <span class="comment">/*
+</span>   397    <span class="comment">     *  ======== Mbx_sharedMemReq ========
+</span>   398    <span class="comment">     */</span>
+   399        SizeT Mbx_sharedMemReq(UInt16 remoteProcId, Ptr sharedAddr);
+   400    
+   401        <span class="comment">/*
+</span>   402    <span class="comment">     *  ======== dispatchIsr ========
+</span>   403    <span class="comment">     *  Dispatch interrupt to notify driver instance.
+</span>   404    <span class="comment">     */</span>
+   405        Void dispatchIsr(UArg arg);
+   406    
+   407        <span class="comment">/*
+</span>   408    <span class="comment">     *  ======== Module_State ========
+</span>   409    <span class="comment">     */</span>
+   410        <span class=key>struct</span> Module_State {
+   411            <span class="comment">/* interrupt plug counter */</span>
+   412            UInt16 numPlugged[];
+   413    
+   414            <span class="comment">/* connection array */</span>
+   415            DrvBind connAry[<span class=key>length</span>];
+   416    
+   417            <span class="comment">/*  Interrupt event IDs used to communicate with this processor.
+</span>   418    <span class="comment">         *  This table is indexed by virtual processor ID.
+</span>   419    <span class="comment">         */</span>
+   420            UInt16 interruptTable[NUM_CORES];
+   421    
+   422            <span class="comment">/*  Notify driver isr dispatch table. This table is indexed
+</span>   423    <span class="comment">         *  by virtual processor ID.
+</span>   424    <span class="comment">         */</span>
+   425            DriverIsr isrDispatchTable[NUM_CORES];
+   426        };
+   427    }
+</pre>
+</body></html>

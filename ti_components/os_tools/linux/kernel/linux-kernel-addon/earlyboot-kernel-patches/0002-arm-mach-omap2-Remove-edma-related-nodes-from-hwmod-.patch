@@ -1,0 +1,35 @@
+From c11eef98b07a8c9093f2f5c71f8ba40451559e86 Mon Sep 17 00:00:00 2001
+From: Shravan Karthik <shravan.karthik@ti.com>
+Date: Mon, 31 Jul 2017 10:24:20 +0530
+Subject: [PATCH 2/4] arm: mach-omap2: Remove edma related nodes from hwmod
+ init sequence
+
+When doing late attach, kernel should not reset EDMA
+EDMA is setup by M4 and thus omap_hwmod needn't perform reset/setup.
+Nodes 'dra7xx_l3_main_1__tpcc', 'dra7xx_l3_main_1__tptc0' and
+'dra7xx_l3_main_1__tptc1' are thus disabled.
+
+Note that this breaks kernel boot if not late attached.
+
+Signed-off-by: Nikhil Devshatwar <nikhil.nd@ti.com>
+---
+ arch/arm/mach-omap2/omap_hwmod_7xx_data.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/arch/arm/mach-omap2/omap_hwmod_7xx_data.c b/arch/arm/mach-omap2/omap_hwmod_7xx_data.c
+index 26fcb1e..ff11cb2 100644
+--- a/arch/arm/mach-omap2/omap_hwmod_7xx_data.c
++++ b/arch/arm/mach-omap2/omap_hwmod_7xx_data.c
+@@ -4637,9 +4637,6 @@ static struct omap_hwmod_ocp_if *dra7xx_hwmod_ocp_ifs[] __initdata = {
+ 	&dra7xx_l4_per2__mcasp8,
+ 	&dra7xx_gmac__mdio,
+ 	&dra7xx_l4_cfg__dma_system,
+-	&dra7xx_l3_main_1__tpcc,
+-	&dra7xx_l3_main_1__tptc0,
+-	&dra7xx_l3_main_1__tptc1,
+ 	&dra7xx_l3_main_1__dss,
+ 	&dra7xx_l3_main_1__dispc,
+ 	&dra7xx_dsp1__l3_main_1,
+-- 
+2.7.4
+

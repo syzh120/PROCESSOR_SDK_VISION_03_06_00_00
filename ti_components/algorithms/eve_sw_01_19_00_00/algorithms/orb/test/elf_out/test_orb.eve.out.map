@@ -1,0 +1,1776 @@
+******************************************************************************
+                   ARP32 Linker PC v1.0.7                      
+******************************************************************************
+>> Linked Mon Jun 25 22:16:13 2018
+
+OUTPUT FILE NAME:   <.\elf_out\test_orb.eve.out>
+ENTRY POINT SYMBOL: "_reset_handler"  address: 80000100
+
+
+MEMORY CONFIGURATION
+
+         name            origin    length      used     unused   attr    fill
+----------------------  --------  ---------  --------  --------  ----  --------
+PAGE 0:
+  VECMEM                80000000   00000100  00000028  000000d8  RWIX
+  CMDMEM                80000100   00001000  00000028  00000fd8  RWIX
+  EXTMEM                80001100   00024000  0001a9f4  0000960c  RWIX
+
+PAGE 1:
+  DATMEM                40020000   00008000  00007f18  000000e8  RWIX
+  WMEM                  40040000   00007fe0  00007e00  000001e0  RWIX
+  IMEMLA                40050000   00004000  00004000  00000000  RWIX
+  IMEMHA                40054000   00004000  00004000  00000000  RWIX
+  IMEMLB                40070000   00004000  00004000  00000000  RWIX
+  IMEMHB                40074000   00004000  00004000  00000000  RWIX
+  L3MEM                 40300000   00100000  00000000  00100000  RWIX
+  GEM0_L2_MEM           40800000   00008000  00000000  00008000  RWIX
+  EXTDMEM               80030000   02000000  008092dc  017f6d24  RWIX
+
+
+SECTION ALLOCATION MAP
+
+ output                                  attributes/
+section   page    origin      length       input sections
+--------  ----  ----------  ----------   ----------------
+.cinit     1    40020000    00000000     UNINITIALIZED
+
+.init_array 
+*          1    40020000    00000000     UNINITIALIZED
+
+.intvecs   0    80000000    00000028     
+                  80000000    00000028     boot_arp32.obj (.intvecs)
+
+.inthandler 
+*          0    80000100    00000028     
+                  80000100    00000028     boot_arp32.obj (.inthandler)
+
+.text      0    80001100    0001a9f4     
+                  80001100    00000a54     orb_tb.obj (.text:ORBTest)
+                  80001b54    00000820     algframework.lib : bam_construct_int.obj (.text:BAM_initGraph)
+                  80002374    00000770                      : bam_construct_int.obj (.text:BAM_autoAllocMemRec)
+                  80002ae4    000006c8     libeveorb.eve.lib : orb_alg.obj (.text:ORB_TI_alloc)
+                  800031ac    00000690     libevekernels.eve.lib : vcop_fast9_kernel.obj (.text:vcop_fast9_init)
+                  8000383c    00000670                           : vcop_compute_rBrief_kernel.obj (.text:vcop_compute_rBrief_init)
+                  80003eac    00000664     libeveImagePyramid_u8.eve.lib : imagePyramid_u8_graph.obj (.text:IMAGE_PYRAMID_U8_TI_initArgs)
+                  80004510    00000640     dmautils.lib : edma_utils_autoincrement.obj (.text:EDMA_UTILS_autoIncrement_configure)
+                  80004b50    000005a0     libevekernels.eve.lib : vcop_multipoint_harrisScore_u16_kernel.obj (.text:vcop_multipoint_harrisScore_7x7_u16_init)
+                  800050f0    00000598     libeveorb.eve.lib : orb_alg.obj (.text:ORB_TI_init)
+                  80005688    00000574     algframework.lib : bam_execute.obj (.text:BAM_execute)
+                  80005bfc    000004f8     rtsarp32_v200.lib : _scanfi.obj (.text:_scanfi)
+                  800060f4    000004d0     libeveFAST9BestFeatureToFront.eve.lib : fast9_best_feature_to_front_alg.obj (.text:FAST9_BEST_FEATURE_TO_FRONT_TI_process)
+                  800065c4    000004bc     dmautils.lib : edma_utils_autoincrement_1d.obj (.text:EDMA_UTILS_autoIncrement1D_configure)
+                  80006a80    000004b8     libeveorb.eve.lib : orb_alg.obj (.text:ORB_TI_process)
+                  80006f38    000004b4     libevekernels.eve.lib : merge_sort_init.obj (.text:vcop_psort2_3steps)
+                  800073ec    0000047c     algframework.lib : bam_construct_int.obj (.text:BAM_finaliseGraph)
+                  80007868    00000428     libeveFast9CornerDetect.eve.lib : fast9_corner_detect_alg.obj (.text:FAST9_CORNER_DETECT_TI_init)
+                  80007c90    00000414     algframework.lib : bam_construct_int.obj (.text:BAM_optimizeGraph)
+                  800080a4    000003f4     libevekernels.eve.lib : merge_sort_init.obj (.text:vcop_psort2_2steps)
+                  80008498    000003e8     configparser.obj (.text:ParseContent)
+                  80008880    000003cc     libevekernels.eve.lib : merge_sort_init.obj (.text:mergeSort_init)
+                  80008c4c    000003c0                           : merge_sort_init.obj (.text:bitonic_merge_multi_step)
+                  8000900c    000003a0     rtsarp32_v200.lib : strtod.obj (.text:strtod)
+                  800093ac    0000039c                       : strtold.obj (.text:strtold)
+                  80009748    0000039c     libevekernels.eve.lib : vcop_fast9_score_kernel.obj (.text:vcop_fast9_thresh_score_init)
+                  80009ae4    00000398     libeveHarrisBestFeatureToFront.eve.lib : harris_best_feature_to_front_alg.obj (.text:HARRIS_BEST_FEATURE_TO_FRONT_TI_process)
+                  80009e7c    00000378     algframework.lib : bam_construct_int.obj (.text:BAM_getMemRec)
+                  8000a1f4    00000368     libeveFast9CornerDetect.eve.lib : fast9_corner_detect_alg.obj (.text:FAST9_CORNER_DETECT_TI_process)
+                  8000a55c    0000035c     libevekernels.eve.lib : vcop_horizontal_non_max_suppression_kernel.obj (.text:vcop_horizontal_non_max_suppression_init)
+                  8000a8b8    00000348                           : vcop_vertical_non_max_suppression_kernel.obj (.text:vcop_vertical_non_max_suppression_kernel_init)
+                  8000ac00    00000314                           : merge_sort_init.obj (.text:vcop_psort2_1step)
+                  8000af14    000002f8                           : vcop_multipoint_harrisScore_u16_kernel.obj (.text:vcop_multipoint_harrisScore_7x7_u16_vloops)
+                  8000b20c    000002d8     rtsarp32_v200.lib : strtoll.obj (.text:strtoll)
+                  8000b4e4    000002d4     libevekernels.eve.lib : bam_rBrief_exec_funcs.obj (.text:BAM_rBrief_initFrame)
+                  8000b7b8    000002c4                           : merge_sort_kernel.obj (.text:vcop_psort2_3steps_reverse_kernel_init)
+                  8000ba7c    000002bc     libeveHarrisBestFeatureToFront.eve.lib : best_feature_to_front_alg.obj (.text:BEST_FEATURE_TO_FRONT_TI_algCreate)
+                  8000bd38    000002ac     libevekernels.eve.lib : vcop_compute_rBrief_kernel.obj (.text:vcop_compute_rBrief_vloops)
+                  8000bfe4    000002a0     rtsarp32_v200.lib : _printfi.obj (.text:_setfield)
+                  8000c284    00000290     libevekernels.eve.lib : vcop_fast9_kernel.obj (.text:vcop_fast9_vloops)
+                  8000c514    0000028c                           : vcop_fast9_score_kernel.obj (.text:vcop_fast9_score_kernel_init)
+                  8000c7a0    00000288     dmautils.lib : edma_utils_autoincrement.obj (.text:EDMA_UTILS_autoIncrement_update)
+                  8000ca28    0000026c     libeveImagePyramid_u8.eve.lib : imagePyramid_u8_graph.obj (.text:IMAGE_PYRAMID_U8_TI_graphCreate)
+                  8000cc94    00000268     rtsarp32_v200.lib : _scanfi.obj (.text:_sproc_int)
+                  8000cefc    00000260                       : _scanfi.obj (.text:_sset_arg)
+                  8000d15c    0000025c                       : _printfi.obj (.text:_pproc_fge)
+                  8000d3b8    0000025c                       : _printfi.obj (.text:ecvt)
+                  8000d614    00000258                       : _printfi.obj (.text:fcvt)
+                  8000d86c    0000024c                       : strtoull.obj (.text:strtoull)
+                  8000dab8    00000230     libevekernels.eve.lib : merge_sort_kernel.obj (.text:vcop_psort2_3steps_kernel_init)
+                  8000dce8    0000022c     rtsarp32_v200.lib : _printfi.obj (.text:_printfi)
+                  8000df14    00000220                       : _printfi.obj (.text:_pconv_e)
+                  8000e134    00000214     libeveFAST9BestFeatureToFront.eve.lib : bam_dma_scattergather_orb_node.obj (.text:BAM_DMA_SCATTERGATHER_ORB_frameInitInChannel)
+                  8000e348    00000208     rtsarp32_v200.lib : _printfi.obj (.text:_getarg_diouxp)
+                  8000e550    00000200                       : frcdivd.obj (.text:_frcdivd)
+                  8000e750    000001f4     libeveHarrisBestFeatureToFront.eve.lib : sparse_harris_score_bam_dma_node.obj (.text:BAM_DMA_IN_SPARSE_HARRIS_SCATTERGATHER_frameInitChannel)
+                  8000e944    000001f4     libevekernels.eve.lib : merge_sort_kernel.obj (.text:vcop_psort2_2steps_reverse_kernel_init)
+                  8000eb38    000001e4     rtsarp32_v200.lib : divd.obj (.text:__arp32abi_divd)
+                  8000ed1c    000001cc     algframework.lib : bam_construct.obj (.text:BAM_createGraph)
+                  8000eee8    000001cc     rtsarp32_v200.lib : imath64.obj (.text:__arp32abi_divull)
+                  8000f0b4    000001cc                       : strtol.obj (.text:strtol)
+                  8000f280    000001c8                       : mpyd.obj (.text:__arp32abi_mpyd)
+                  8000f448    000001c4     dmautils.lib : dma_funcs.obj (.text:DMA_funcs_hardwareRegSetup)
+                  8000f60c    000001b8                  : edma_utils_autoincrement.obj (.text:EDMA_UTILS_autoIncrement_triggerOutChannel)
+                  8000f7c4    000001b8     rtsarp32_v200.lib : addd.obj (.text:__arp32abi_addd)
+                  8000f97c    000001a4     libeveHarrisBestFeatureToFront.eve.lib : best_feature_to_front_alg.obj (.text:BEST_FEATURE_TO_FRONT_TI_algExecute)
+                  8000fb20    000001a0     rtsarp32_v200.lib : strtoul.obj (.text:strtoul)
+                  8000fcc0    0000019c     libeveFAST9BestFeatureToFront.eve.lib : fast9_best_feature_to_front_alg.obj (.text:FAST9_BEST_FEATURE_TO_FRONT_TI_alloc)
+                  8000fe5c    00000190     dmautils.lib : edma_utils_scatterGather.obj (.text:EDMA_UTILS_scattherGather_init)
+                  8000ffec    00000190     libevekernels.eve.lib : merge_sort_kernel.obj (.text:vcop_psort2_1step_reverse_kernel_init)
+                  8001017c    0000018c     rtsarp32_v200.lib : _printfi.obj (.text:_pproc_diouxp)
+                  80010308    0000018c     libevekernels.eve.lib : vcop_horizontal_non_max_suppression_kernel.obj (.text:vcop_horizontal_non_max_suppression_vloops)
+                  80010494    00000184     algframework.lib : bam_memory.obj (.text:bam_mem_alloc)
+                  80010618    00000178     dmautils.lib : dma_resource_allocator.obj (.text:DMA_resourceAllocator_allocateResources)
+                  80010790    00000178     libeveRbrief.eve.lib : rbrief_graph.obj (.text:RBRIEF_TI_graphCreate)
+                  80010908    00000178     libeveHarrisBestFeatureToFront.eve.lib : sparse_harris_score_graph.obj (.text:SPARSE_HARRIS_SCORE_TI_graphCreate)
+                  80010a80    00000178     libevekernels.eve.lib : vcop_vertical_non_max_suppression_kernel.obj (.text:vcop_vertical_non_max_suppression_kernel_vloops)
+                  80010bf8    00000174     libeveFAST9BestFeatureToFront.eve.lib : fast9_score_graph.obj (.text:FAST9_SCORE_TI_graphCreate)
+                  80010d6c    00000174     libeveRbrief.eve.lib : rbrief_alg.obj (.text:RBRIEF_TI_process)
+                  80010ee0    00000170     rtsarp32_v200.lib : fputs.obj (.text:fputs)
+                  80011050    0000016c     libeveFAST9BestFeatureToFront.eve.lib : best_feature_to_front_graph.obj (.text:BEST_FEATURE_TO_FRONT_TI_graphCreate)
+                  800111bc    0000016c     libeveFast9CornerDetect.eve.lib : fast9_corner_detect_alg.obj (.text:FAST9_CORNER_DETECT_TI_alloc)
+                  80011328    00000168     rtsarp32_v200.lib : vcop_memory.obj (.text:vcop_memalign)
+                  80011490    00000164     dmautils.lib : edma_utils_autoincrement.obj (.text:EDMA_UTILS_autoIncrement_triggerInChannel)
+                  800115f4    00000164     libevekernels.eve.lib : merge_sort_kernel.obj (.text:vcop_psort2_2steps_kernel_init)
+                  80011758    00000160     libeveFast9CornerDetect.eve.lib : fast9_corner_detect_graph.obj (.text:FAST9_CORNER_DETECT_TI_graphCreate)
+                  800118b8    00000160     rtsarp32_v200.lib : frcaddd.obj (.text:_frcaddd)
+                  80011a18    0000015c                       : _scanfi.obj (.text:_sproc_float)
+                  80011b74    00000158     algframework.lib : bam_dma_autoincrement_node.obj (.text:BAM_DMA_AUTOINCREMENT_getMemRecFunc)
+                  80011ccc    00000158                      : bam_construct_int.obj (.text:BAM_updateNodes)
+                  80011e24    00000158     rtsarp32_v200.lib : llmpy.obj (.text:__arp32abi_mpyll)
+                  80011f7c    00000154     libeveRbrief.eve.lib : bam_dma_custom_rbrief_node.obj (.text:BAM_DMA_CUSTOM_RBRIEF_SCATTERGATHER_frameInitChannel)
+                  800120d0    00000154     libeveFast9CornerDetect.eve.lib : binary_image_to_list_graph.obj (.text:BIN_IMAGE_TO_LIST_TI_graphCreate)
+                  80012224    0000014c     libevekernels.eve.lib : merge_sort_kernel.obj (.text:vcop_sort8_simd8_XX_init)
+                  80012370    00000148     libeveFAST9BestFeatureToFront.eve.lib : bam_dma_one_shot_orb_node.obj (.text:BAM_DMA_ONESHOT_ORB_getMemRecFunc)
+                  800124b8    00000148                                           : fast9_best_feature_to_front_alg.obj (.text:FAST9_BEST_FEATURE_TO_FRONT_TI_init)
+                  80012600    00000144     rtsarp32_v200.lib : fread.obj (.text:fread)
+                  80012744    00000144     libevekernels.eve.lib : merge_sort_kernel.obj (.text:vcop_sort8_simd8_64_init)
+                  80012888    00000140     rtsarp32_v200.lib : frcmpyd.obj (.text:_frcmpyd)
+                  800129c8    00000140                       : _scanfi.obj (.text:_sget_conv)
+                  80012b08    0000013c     libeveHarrisBestFeatureToFront.eve.lib : harris_best_feature_to_front_alg.obj (.text:HARRIS_BEST_FEATURE_TO_FRONT_TI_alloc)
+                  80012c44    0000013c     rtsarp32_v200.lib : _printfi.obj (.text:_pproc_fwp)
+                  80012d80    00000138     algframework.lib : bam_execute.obj (.text:BAM_process)
+                  80012eb8    00000138     libeveFast9CornerDetect.eve.lib : fast9_corner_detect_graph.obj (.text:FAST9_CORNER_DETECT_TI_graphDmaControl)
+                  80012ff0    00000138     algframework.lib : bam_memory.obj (.text:bam_getMemPacket)
+                  80013128    0000012c     rtsarp32_v200.lib : fopen.obj (.text:_openfile)
+                  80013254    00000124     libeveHarrisBestFeatureToFront.eve.lib : harris_best_feature_to_front_alg.obj (.text:HARRIS_BEST_FEATURE_TO_FRONT_TI_init)
+                  80013378    00000120     algframework.lib : bam_construct_int.obj (.text:BAM_setNodeMemRec)
+                  80013498    00000120     libevekernels.eve.lib : vcop_fast9_score_kernel.obj (.text:vcop_fast9_thresh_score_vloops)
+                  800135b8    0000011c     algframework.lib : bam_dma_autoincrement_node.obj (.text:BAM_DMA_AUTOINCREMENT_setMemRecFunc)
+                  800136d4    0000011c     libevekernels.eve.lib : vcop_bin_image_to_list_kernel.obj (.text:vcop_bin_image_to_list_init)
+                  800137f0    0000011c                           : vcop_fast9_score_kernel.obj (.text:vcop_fast9_score_kernel_vloops)
+                  8001390c    00000118     rtsarp32_v200.lib : setvbuf.obj (.text:setvbuf)
+                  80013a24    00000114                       : _printfi.obj (.text:_pconv_g)
+                  80013b38    00000110     libeveFAST9BestFeatureToFront.eve.lib : bam_dma_scattergather_orb_node.obj (.text:BAM_DMA_SCATTERGATHER_ORB_waitInChannel)
+                  80013c48    00000110     algframework.lib : bam_construct_int.obj (.text:BAM_fillKernelInfo)
+                  80013d58    0000010c                      : bam_construct_int.obj (.text:BAM_getGraphMemSize)
+                  80013e64    0000010c     libevekernels.eve.lib : merge_sort_kernel.obj (.text:vcop_psort2_1step_kernel_init)
+                  80013f70    00000108     libeveImagePyramid_u8.eve.lib : imagePyramid_u8_alg.obj (.text:IMAGE_PYRAMID_U8_TI_process)
+                  80014078    00000108     libevekernels.eve.lib : vcop_prune_big_list_kernel.obj (.text:vcop_prune_big_list_init)
+                  80014180    00000104     libeveHarrisBestFeatureToFront.eve.lib : sparse_harris_score_bam_dma_node.obj (.text:BAM_DMA_IN_SPARSE_HARRIS_SCATTERGATHER_wait)
+                  80014284    00000104     libevekernels.eve.lib : bam_multipoint_harrisScore_u16_exec_funcs.obj (.text:Bam_Multipoint_Harris_Score_initFrame)
+                  80014388    00000100     libeveFAST9BestFeatureToFront.eve.lib : bam_dma_one_shot_orb_node.obj (.text:BAM_DMA_ONESHOT_ORB_setMemRecFunc)
+                  80014488    000000f8     libevekernels.eve.lib : bam_fast9_score_helper_funcs.obj (.text:BAM_Fast9_Score_getMemRecFunc)
+                  80014580    000000f8     libeveRbrief.eve.lib : rbrief_alg.obj (.text:RBRIEF_TI_alloc)
+                  80014678    000000f4     rtsarp32_v200.lib : _printfi.obj (.text:_pproc_str)
+                  8001476c    000000f0     libevekernels.eve.lib : bam_fast9_score_exec_funcs.obj (.text:Bam_Fast9_Score_initFrame)
+                  8001485c    000000ec     libeveFAST9BestFeatureToFront.eve.lib : bam_dma_one_shot_orb_node.obj (.text:BAM_DMA_ONESHOT_ORB_updateDDRptrInChannel)
+                  80014948    000000ec     libeveorb.eve.lib : orb_alg.obj (.text:ORB_TI_SetAlgToAppsMemRec)
+                  80014a34    000000ec     rtsarp32_v200.lib : lowlev.obj (.text:open)
+                  80014b20    000000e8     libeveRbrief.eve.lib : bam_dma_custom_rbrief_node.obj (.text:BAM_DMA_CUSTOM_RBRIEF_SCATTERGATHER_updateDDRptr)
+                  80014c08    000000e8     dmautils.lib : edma_utils_autoincrement.obj (.text:EDMA_UTILS_autoIncrement_init)
+                  80014cf0    000000e8     rtsarp32_v200.lib : fputc.obj (.text:fputc)
+                  80014dd8    000000e4     libeveFAST9BestFeatureToFront.eve.lib : best_feature_to_front_graph.obj (.text:BEST_FEATURE_TO_FRONT_TI_initKernelsArgs)
+                  80014ebc    000000e4     libeveFast9CornerDetect.eve.lib : binary_image_to_list_graph.obj (.text:BIN_IMAGE_TO_LIST_TI_graphDmaControl)
+                  80014fa0    000000e4     libevekernels.eve.lib : bam_bin_image_to_list_exec_funcs.obj (.text:Bam_Bin_image_to_list_initFrame)
+                  80015084    000000e4     libeveImagePyramid_u8.eve.lib : imagePyramid_u8_graph.obj (.text:IMAGE_PYRAMID_U8_TI_dmaControl)
+                  80015168    000000dc     libeveFAST9BestFeatureToFront.eve.lib : bam_dma_one_shot_orb_node.obj (.text:BAM_DMA_ONESHOT_ORB_updateDDRptrOutChannel)
+                  80015244    000000dc     rtsarp32_v200.lib : memcpy.obj (.text:memcpy)
+                  80015320    000000d8     configparser.obj (.text:readparamfile)
+                  800153f8    000000d4     libevenatckernels.eve.lib : vcop_gauss5x5PyramidKernel_8_c.obj (.text:vcop_gauss5x5PyramidKernel_8_vert_c)
+                  800154cc    000000d0     libevekernels.eve.lib : bam_rBrief_helper_funcs.obj (.text:BAM_rBrief_getMemRecFunc)
+                  8001559c    000000cc     libeveRbrief.eve.lib : bam_dma_custom_rbrief_node.obj (.text:BAM_DMA_CUSTOM_RBRIEF_AUTOINCREMENT_1D_updateDDRptr)
+                  80015668    000000cc     dmautils.lib : edma_utils_state.obj (.text:DMA_utils_updateStateStruct)
+                  80015734    000000cc     rtsarp32_v200.lib : cmpd.obj (.text:__arp32abi_cmpd)
+                  80015800    000000cc     algframework.lib : bam_memory.obj (.text:bam_mem_free)
+                  800158cc    000000c8     libevekernels.eve.lib : bam_multipoint_harrisScore_u16_helper_funcs.obj (.text:BAM_Multipoint_Harris_Score_getMemRecFunc)
+                  80015994    000000c8     libeveFast9CornerDetect.eve.lib : bin_img_to_list_bam_dma_node.obj (.text:BIN_IMG2LIST_BAM_DMA_updateInDDRptr)
+                  80015a5c    000000c4     rtsarp32_v200.lib : memory.obj (.text:mem_alloc)
+                  80015b20    000000c4     libevekernels.eve.lib : vcop_gauss5x5PyramidKernel_8_kernel.obj (.text:vcop_gauss5x5PyramidKernel_8_vert_init)
+                  80015be4    000000c0     libeveRbrief.eve.lib : rbrief_alg.obj (.text:RBRIEF_TI_init)
+                  80015ca4    000000bc     libeveImagePyramid_u8.eve.lib : imagePyramid_u8_alg.obj (.text:IMAGE_PYRAMID_U8_TI_alloc)
+                  80015d60    000000bc                                   : imagePyramid_u8_alg.obj (.text:IMAGE_PYRAMID_U8_TI_init)
+                  80015e1c    000000bc     rtsarp32_v200.lib : _printfi.obj (.text:_ltostr)
+                  80015ed8    000000bc                       : _scanfi.obj (.text:_sproc_str)
+                  80015f94    000000b8     libeveRbrief.eve.lib : bam_dma_custom_rbrief_node.obj (.text:BAM_DMA_CUSTOM_RBRIEF_SCATTERGATHER_wait)
+                  8001604c    000000b8     libevekernels.eve.lib : bam_multipoint_harrisScore_u16_helper_funcs.obj (.text:BAM_Multipoint_Harris_Score_setMemRecFunc)
+                  80016104    000000b8     dmautils.lib : edma_utils_autoincrement_1d.obj (.text:EDMA_UTILS_autoIncrement1D_init)
+                  800161bc    000000b4     libeveFAST9BestFeatureToFront.eve.lib : bam_dma_one_shot_orb_node.obj (.text:BAM_DMA_ONESHOT_ORB_triggerOutChannel)
+                  80016270    000000b4     algframework.lib : bam_execute.obj (.text:BAM_activateGraph)
+                  80016324    000000b4     rtsarp32_v200.lib : trgdrv.obj (.text:HOSTlseek)
+                  800163d8    000000b4                       : _scanfi.obj (.text:_sproc_lb)
+                  8001648c    000000ac     algframework.lib : bam_construct_int.obj (.text:BAM_copyIntMemRec2ExtMem)
+                  80016538    000000ac     rtsarp32_v200.lib : trgdrv.obj (.text:HOSTrename)
+                  800165e4    000000a8                       : fopen.obj (.text:_search_fp)
+                  8001668c    000000a8                       : memset.obj (.text:memset)
+                  80016734    000000a0     dmautils.lib : edma_utils_scatterGather.obj (.text:EDMA_UTILS_scattherGather_updateNtrigger)
+                  800167d4    000000a0     libeveFAST9BestFeatureToFront.eve.lib : fast9_best_feature_to_front_alg.obj (.text:FAST9_BEST_FEATURE_TO_FRONT_TI_diagonalSuppression)
+                  80016874    000000a0     algframework.lib : bam_memory.obj (.text:bam_minit)
+                  80016914    000000a0     rtsarp32_v200.lib : lowlev.obj (.text:getdevice)
+                  800169b4    000000a0     libevekernels.eve.lib : merge_sort_kernel.obj (.text:vcop_psort2_3steps_kernel_vloops)
+                  80016a54    000000a0                           : merge_sort_kernel.obj (.text:vcop_psort2_3steps_reverse_kernel_vloops)
+                  80016af4    0000009c     libeveHarrisBestFeatureToFront.eve.lib : sparse_harris_score_bam_dma_node.obj (.text:BAM_DMA_IN_SPARSE_HARRIS_SCATTERGATHER_getMemRecFunc)
+                  80016b90    0000009c     rtsarp32_v200.lib : _bufread.obj (.text:_buff_read)
+                  80016c2c    0000009c                       : _printfi.obj (.text:_mcpy)
+                  80016cc8    0000009c     libevekernels.eve.lib : merge_sort_kernel.obj (.text:vcop_sort8_simd8_64_vloops)
+                  80016d64    0000009c                           : merge_sort_kernel.obj (.text:vcop_sort8_simd8_XX_vloops)
+                  80016e00    00000098     algframework.lib : bam_execute.obj (.text:BAM_ARP32_computeWrapper)
+                  80016e98    00000098     libeveFAST9BestFeatureToFront.eve.lib : best_feature_to_front_graph.obj (.text:BEST_FEATURE_TO_FRONT_TI_dmaControl)
+                  80016f30    00000098     libeveFast9CornerDetect.eve.lib : bin_img_to_list_bam_dma_node.obj (.text:BIN_IMG2LIST_BAM_DMA_frameInitOutChannel)
+                  80016fc8    00000098                                     : bin_img_to_list_bam_dma_node.obj (.text:BIN_IMG2LIST_BAM_DMA_waitOutChannel)
+                  80017060    00000098     dmautils.lib : edma_utils_memcpy.obj (.text:EDMA_UTILS_memcpy2D)
+                  800170f8    00000098     rtsarp32_v200.lib : trgdrv.obj (.text:HOSTopen)
+                  80017190    00000098     libevekernels.eve.lib : merge_sort_kernel_hard.obj (.text:my_vcop_psort2_3steps_kernel_custom)
+                  80017228    00000098                           : merge_sort_kernel_hard.obj (.text:my_vcop_psort2_3steps_reverse_kernel_custom)
+                  800172c0    00000098     rtsarp32_v200.lib : vcop_memory.obj (.text:vcop_free)
+                  80017358    00000094                       : sscanf.obj (.text:_chkmbc)
+                  800173ec    00000094     orb_tb.obj (.text:main)
+                  80017480    00000094     rtsarp32_v200.lib : memory.obj (.text:mem_free)
+                  80017514    00000094     libevenatckernels.eve.lib : vcop_blockAverage2x2_cn.obj (.text:vcop_blockAverage2x2_uchar_cn)
+                  800175a8    00000090     libeveFast9CornerDetect.eve.lib : fast9_corner_detect_graph.obj (.text:FAST9_CORNER_DETECT_TI_initKernelsArgs)
+                  80017638    00000090     rtsarp32_v200.lib : trgdrv.obj (.text:HOSTread)
+                  800176c8    00000090                       : cvtdf.obj (.text:__arp32abi_cvtdf)
+                  80017758    00000090                       : _printfi.obj (.text:_pproc_fflags)
+                  800177e8    00000090                       : _io_perm.obj (.text:_wrt_ok)
+                  80017878    00000090     algframework.lib : bam_memory.obj (.text:bam_releaseMemPacket)
+                  80017908    00000090     rtsarp32_v200.lib : fseek.obj (.text:fseek)
+                  80017998    00000090                       : ftell.obj (.text:ftell)
+                  80017a28    00000090     libevekernels.eve.lib : merge_sort_kernel_hard.obj (.text:my_vcop_psort2_1step_kernel_custom)
+                  80017ab8    00000090                           : vcop_gauss5x5PyramidKernel_8_kernel.obj (.text:vcop_gauss5x5PyramidKernel_8_horiz_init)
+                  80017b48    00000090                           : vcop_prune_big_list_kernel.obj (.text:vcop_prune_big_list_vloops)
+                  80017bd8    0000008c     algframework.lib : bam_construct_int.obj (.text:BAM_copyNodeList)
+                  80017c64    0000008c     rtsarp32_v200.lib : trgdrv.obj (.text:HOSTwrite)
+                  80017cf0    00000088     libevekernels.eve.lib : bam_vertical_non_max_suppression_exec_funcs.obj (.text:Bam_Vertical_Non_Max_Suppression_initFrame)
+                  80017d78    00000088     rtsarp32_v200.lib : lowlev.obj (.text:close)
+                  80017e00    00000084     libeveRbrief.eve.lib : bam_dma_custom_rbrief_node.obj (.text:BAM_DMA_CUSTOM_RBRIEF_SCATTERGATHER_getMemRecFunc)
+                  80017e84    00000084     libeveFAST9BestFeatureToFront.eve.lib : fast9_score_graph.obj (.text:FAST9_SCORE_TI_dmaControl)
+                  80017f08    00000084     rtsarp32_v200.lib : _printfi.obj (.text:_ecpy)
+                  80017f8c    00000080                       : _scanfi.obj (.text:_sget_scanset)
+                  8001800c    00000080                       : printf.obj (.text:printf)
+                  8001808c    00000080     libevenatckernels.eve.lib : vcop_gauss5x5PyramidKernel_8_c.obj (.text:vcop_gauss5x5PyramidKernel_8_horiz_c)
+                  8001810c    0000007c     rtsarp32_v200.lib : fixdi.obj (.text:__arp32abi_fixdi)
+                  80018188    0000007c                       : fclose.obj (.text:_closefile)
+                  80018204    0000007c                       : atoi.obj (.text:atoi)
+                  80018280    0000007c                       : fflush.obj (.text:fflush)
+                  800182fc    0000007c     libevekernels.eve.lib : vcop_blockAverage2x2_kernel.obj (.text:vcop_blockAverage2x2_uchar_init)
+                  80018378    00000078     rtsarp32_v200.lib : trgdrv.obj (.text:HOSTunlink)
+                  800183f0    00000078                       : _printfi.obj (.text:_div)
+                  80018468    00000078                       : _printfi.obj (.text:_pconv_f)
+                  800184e0    00000078                       : memory.obj (.text:minit)
+                  80018558    00000078     libevekernels.eve.lib : vcop_bin_image_to_list_kernel.obj (.text:vcop_bin_image_to_list_vloops)
+                  800185d0    00000074     algframework.lib : bam_execute.obj (.text:BAM_initGraphInstance)
+                  80018644    00000074     dmautils.lib : dma_funcs.obj (.text:DMA_funcs_writeTransferParams)
+                  800186b8    00000074     rtsarp32_v200.lib : trgdrv.obj (.text:HOSTclose)
+                  8001872c    00000074     libeveorb.eve.lib : orb_alg.obj (.text:ORB_TI_numAlloc)
+                  800187a0    00000074     rtsarp32_v200.lib : fprintf.obj (.text:fprintf)
+                  80018814    00000074     libevekernels.eve.lib : merge_sort_kernel_hard.obj (.text:my_vcop_psort2_2steps_kernel_custom)
+                  80018888    00000074                           : merge_sort_kernel_hard.obj (.text:my_vcop_psort2_2steps_reverse_kernel_custom)
+                  800188fc    00000070     algframework.lib : bam_dma_autoincrement_node.obj (.text:BAM_DMA_AUTOINCREMENT_updateDDRptrInChannel)
+                  8001896c    00000070                      : bam_dma_autoincrement_node.obj (.text:BAM_DMA_AUTOINCREMENT_updateDDRptrOutChannel)
+                  800189dc    00000070     rtsarp32_v200.lib : autoinit.obj (.text:_auto_init)
+                  80018a4c    00000070                       : vfprintf.obj (.text:vfprintf)
+                  80018abc    0000006c     libeveHarrisBestFeatureToFront.eve.lib : sparse_harris_score_bam_dma_node.obj (.text:BAM_DMA_IN_SPARSE_HARRIS_SCATTERGATHER_setMemRecFunc)
+                  80018b28    0000006c     libeveFAST9BestFeatureToFront.eve.lib : bam_dma_one_shot_orb_node.obj (.text:BAM_DMA_ONESHOT_ORB_triggerInChannel)
+                  80018b94    0000006c     rtsarp32_v200.lib : _io_perm.obj (.text:_rd_ok)
+                  80018c00    00000068     libevekernels.eve.lib : bam_gauss5x5Pyramid_8_exec_funcs.obj (.text:BAM_gauss5x5Pyramid_initFrame)
+                  80018c68    00000068     libeveFast9CornerDetect.eve.lib : bin_img_to_list_bam_dma_node.obj (.text:BIN_IMG2LIST_BAM_DMA_IN_setMemRecFunc)
+                  80018cd0    00000068     libevekernels.eve.lib : bam_horizontal_non_max_suppression_exec_funcs.obj (.text:Bam_Horizontal_Non_Max_Suppression_initFrame)
+                  80018d38    00000068     dmautils.lib : edma_utils_autoincrement.obj (.text:EDMA_UTILS_autoIncrement_waitOutChannel)
+                  80018da0    00000068     rtsarp32_v200.lib : fltid.obj (.text:__arp32abi_fltid)
+                  80018e08    00000068                       : boot.obj (.text:_c_int00)
+                  80018e70    00000068     algframework.lib : bam_memory.obj (.text:bam_mcheck)
+                  80018ed8    00000068     rtsarp32_v200.lib : lowlev.obj (.text:lseek)
+                  80018f40    00000068                       : lowlev.obj (.text:read)
+                  80018fa8    00000068                       : lowlev.obj (.text:write)
+                  80019010    00000064     libeveHarrisBestFeatureToFront.eve.lib : sparse_harris_score_bam_dma_node.obj (.text:BAM_DMA_IN_SPARSE_HARRIS_SCATTERGATHER_updateDDRptr)
+                  80019074    00000064     libeveFAST9BestFeatureToFront.eve.lib : bam_dma_scattergather_orb_node.obj (.text:BAM_DMA_SCATTERGATHER_ORB_IngetMemRecFunc)
+                  800190d8    00000064     algframework.lib : bam_execute.obj (.text:BAM_DSP_computeWrapper)
+                  8001913c    00000064     libeveFAST9BestFeatureToFront.eve.lib : fast9_best_feature_to_front_alg.obj (.text:FAST9_BEST_FEATURE_TO_FRONT_TI_activate)
+                  800191a0    00000064                                           : fast9_best_feature_to_front_alg.obj (.text:FAST9_BEST_FEATURE_TO_FRONT_TI_deactivate)
+                  80019204    00000064     libeveFast9CornerDetect.eve.lib : fast9_corner_detect_alg.obj (.text:FAST9_CORNER_DETECT_TI_activate)
+                  80019268    00000064                                     : fast9_corner_detect_alg.obj (.text:FAST9_CORNER_DETECT_TI_deactivate)
+                  800192cc    00000064     libeveHarrisBestFeatureToFront.eve.lib : harris_best_feature_to_front_alg.obj (.text:HARRIS_BEST_FEATURE_TO_FRONT_TI_activate)
+                  80019330    00000064                                            : harris_best_feature_to_front_alg.obj (.text:HARRIS_BEST_FEATURE_TO_FRONT_TI_deactivate)
+                  80019394    00000064     rtsarp32_v200.lib : imath64.obj (.text:_subcull)
+                  800193f8    00000064                       : ltoa.obj (.text:ltoa)
+                  8001945c    00000064     libevekernels.eve.lib : merge_sort_kernel_hard.obj (.text:my_vcop_psort2_1step_reverse_kernel_custom)
+                  800194c0    00000064                           : merge_sort_kernel.obj (.text:vcop_remove_ex_col_init)
+                  80019524    00000060     libeveFast9CornerDetect.eve.lib : bin_img_to_list_bam_dma_node.obj (.text:BIN_IMG2LIST_BAM_DMA_frameInitInChannel)
+                  80019584    00000060     libeveorb.eve.lib : orb_alg.obj (.text:ORB_TI_activate)
+                  800195e4    00000060                       : orb_alg.obj (.text:ORB_TI_deactivate)
+                  80019644    00000060     rtsarp32_v200.lib : llshift.obj (.text:__arp32abi_llshl)
+                  800196a4    00000060                       : fflush.obj (.text:_doflush)
+                  80019704    0000005c     libeveFAST9BestFeatureToFront.eve.lib : bam_dma_scattergather_orb_node.obj (.text:BAM_DMA_SCATTERGATHER_ORB_InsetMemRecFunc)
+                  80019760    0000005c                                           : bam_dma_scattergather_orb_node.obj (.text:BAM_DMA_SCATTERGATHER_ORB_ReadupdateDDRptr)
+                  800197bc    0000005c     libeveFast9CornerDetect.eve.lib : bin_img_to_list_bam_dma_node.obj (.text:BIN_IMG2LIST_BAM_DMA_triggerOutChannel)
+                  80019818    0000005c     libeveImagePyramid_u8.eve.lib : imagePyramid_u8_alg.obj (.text:IMAGE_PYRAMID_U8_TI_activate)
+                  80019874    0000005c     libeveRbrief.eve.lib : rbrief_alg.obj (.text:RBRIEF_TI_activate)
+                  800198d0    0000005c                          : rbrief_alg.obj (.text:RBRIEF_TI_deactivate)
+                  8001992c    0000005c     rtsarp32_v200.lib : isinf.obj (.text:__arp32abi_isinf)
+                  80019988    0000005c                       : lowlev.obj (.text:tabinit)
+                  800199e4    0000005c     libevekernels.eve.lib : vcop_gauss5x5PyramidKernel_8_kernel.obj (.text:vcop_gauss5x5PyramidKernel_8_vert_vloops)
+                  80019a40    0000005c     rtsarp32_v200.lib : vcop_memory.obj (.text:vcop_minit)
+                  80019a9c    00000058     libeveRbrief.eve.lib : bam_dma_custom_rbrief_node.obj (.text:BAM_DMA_CUSTOM_RBRIEF_AUTOINCREMENT_1D_getMemRecFunc)
+                  80019af4    00000058                          : bam_dma_custom_rbrief_node.obj (.text:BAM_DMA_CUSTOM_RBRIEF_SCATTERGATHER_setMemRecFunc)
+                  80019b4c    00000058     libeveHarrisBestFeatureToFront.eve.lib : sparse_harris_score_bam_dma_node.obj (.text:BAM_DMA_OUT_SPARSE_HARRIS_DUMMY_getMemRecFunc)
+                  80019ba4    00000058     libeveFAST9BestFeatureToFront.eve.lib : bam_dma_scattergather_orb_node.obj (.text:BAM_DMA_SCATTERGATHER_ORB_triggerOutChannel)
+                  80019bfc    00000058     libevekernels.eve.lib : bam_fast9_helper_funcs.obj (.text:BAM_Fast9_getMemRecFunc)
+                  80019c54    00000058                           : bam_vertical_non_max_suppression_helper_funcs.obj (.text:BAM_Vertical_Non_Max_Suppression_getMemRecFunc)
+                  80019cac    00000058     libeveFast9CornerDetect.eve.lib : bin_img_to_list_bam_dma_node.obj (.text:BIN_IMG2LIST_BAM_DMA_OUT_setMemRecFunc)
+                  80019d04    00000058     ti_mem_manager.obj (.text:TI_GetMemoryChunk)
+                  80019d5c    00000058     libevekernels.eve.lib : vcop_extract_bit_field_u32_kernel.obj (.text:vcop_extract_bit_field_u32_init)
+                  80019db4    00000054     algframework.lib : bam_execute.obj (.text:BAM_controlNode)
+                  80019e08    00000054     libevekernels.eve.lib : bam_natcGauss5x5Pyramid_8_exec_funcs.obj (.text:BAM_natcGauss5x5Pyramid_computeFrame)
+                  80019e5c    00000054     dmautils.lib : edma_utils_autoincrement.obj (.text:EDMA_UTILS_autoIncrement_waitInChannel)
+                  80019eb0    00000054     libeveRbrief.eve.lib : rbrief_graph.obj (.text:RBRIEF_TI_initKernelsArgs)
+                  80019f04    00000054     rtsarp32_v200.lib : _printfi.obj (.text:_fcpy)
+                  80019f58    00000054                       : renormd.obj (.text:_renormd)
+                  80019fac    00000054     libeveImagePyramid_u8.eve.lib : imagePyramid_u8_graph.obj (.text:assignDMAautoIncrementParams)
+                  8001a000    00000054     rtsarp32_v200.lib : exit.obj (.text:exit)
+                  8001a054    00000054     libevekernels.eve.lib : merge_sort_kernel.obj (.text:vcop_psort2_2steps_kernel_vloops)
+                  8001a0a8    00000054                           : merge_sort_kernel.obj (.text:vcop_psort2_2steps_reverse_kernel_vloops)
+                  8001a0fc    00000050                           : bam_bin_image_to_list_helper_funcs.obj (.text:BAM_Bin_image_to_list_getMemRecFunc)
+                  8001a14c    00000050     libeveImagePyramid_u8.eve.lib : imagePyramid_u8_alg.obj (.text:IMAGE_PYRAMID_U8_TI_deactivate)
+                  8001a19c    00000050     libeveRbrief.eve.lib : rbrief_graph.obj (.text:RBRIEF_TI_graphDmaControl)
+                  8001a1ec    00000050     rtsarp32_v200.lib : fopen.obj (.text:_cleanup)
+                  8001a23c    00000050                       : lowlev.obj (.text:finddevice)
+                  8001a28c    00000050                       : rand.obj (.text:rand)
+                  8001a2dc    0000004c     algframework.lib : bam_dma_autoincrement_node.obj (.text:BAM_DMA_AUTOINCREMENT_frameInitInChannel)
+                  8001a328    0000004c     libeveRbrief.eve.lib : bam_dma_custom_rbrief_node.obj (.text:BAM_DMA_CUSTOM_RBRIEF_AUTOINCREMENT_1D_setMemRecFunc)
+                  8001a374    0000004c     libeveFAST9BestFeatureToFront.eve.lib : bam_dma_scattergather_orb_node.obj (.text:BAM_DMA_SCATTERGATHER_ORB_OutgetMemRecFunc)
+                  8001a3c0    0000004c                                           : bam_dma_scattergather_orb_node.obj (.text:BAM_DMA_SCATTERGATHER_ORB_WriteupdateDDRptr)
+                  8001a40c    0000004c     libevekernels.eve.lib : bam_horizontal_non_max_suppression_helper_funcs.obj (.text:BAM_Horizontal_Non_Max_Suppression_getMemRecFunc)
+                  8001a458    0000004c     algframework.lib : bam_construct.obj (.text:BAM_initKernelDB)
+                  8001a4a4    0000004c     libeveFast9CornerDetect.eve.lib : bin_img_to_list_bam_dma_node.obj (.text:BIN_IMG2LIST_BAM_DMA_IN_getMemRecFunc)
+                  8001a4f0    0000004c     dmautils.lib : edma_utils_autoincrement_1d.obj (.text:EDMA_UTILS_autoIncrement1D_waitOutChannel)
+                  8001a53c    0000004c                  : edma_utils.obj (.text:EDMA_UTILS_globalReset)
+                  8001a588    0000004c     rtsarp32_v200.lib : fltud.obj (.text:__arp32abi_fltud)
+                  8001a5d4    0000004c                       : memory.obj (.text:malloc)
+                  8001a620    00000048     libevekernels.eve.lib : bam_blockSortU32_exec_funcs.obj (.text:BAM_blockSortU32_initFrame)
+                  8001a668    00000048                           : bam_gauss5x5Pyramid_8_helper_funcs.obj (.text:BAM_gauss5x5Pyramid_getMemRecFunc)
+                  8001a6b0    00000048                           : bam_natcGauss5x5Pyramid_8_helper_funcs.obj (.text:BAM_natcGauss5x5Pyramid_getMemRecFunc)
+                  8001a6f8    00000048     libevestarterware_eve.lib : sctm.obj (.text:EVE_SCTM_CounterConfig)
+                  8001a740    00000048     rtsarp32_v200.lib : trgmsg.obj (.text:readmsg)
+                  8001a788    00000048                       : lowlev.obj (.text:unlink)
+                  8001a7d0    00000048                       : trgmsg.obj (.text:writemsg)
+                  8001a818    00000044     algframework.lib : bam_dma_autoincrement_node.obj (.text:BAM_DMA_AUTOINCREMENT_frameInitOutChannel)
+                  8001a85c    00000044     libeveFAST9BestFeatureToFront.eve.lib : bam_dma_one_shot_orb_node.obj (.text:BAM_DMA_ONESHOT_ORB_frameInitInChannel)
+                  8001a8a0    00000044     libevekernels.eve.lib : bam_prune_big_list_exec_funcs.obj (.text:Bam_Prune_Big_List_initFrame)
+                  8001a8e4    00000044     dmautils.lib : edma_utils_memcpy.obj (.text:EDMA_UTILS_memcpy2D_init)
+                  8001a928    00000044     libeveHarrisBestFeatureToFront.eve.lib : sparse_harris_score_graph.obj (.text:SPARSE_HARRIS_SCORE_TI_initKernelsArgs)
+                  8001a96c    00000040     libeveRbrief.eve.lib : bam_dma_custom_rbrief_node.obj (.text:BAM_DMA_CUSTOM_RBRIEF_AUTOINCREMENT_1D_frameInitChannel)
+                  8001a9ac    00000040     libevekernels.eve.lib : bam_blockSortU32_exec_funcs.obj (.text:BAM_blockSortU32_initInstance)
+                  8001a9ec    00000040     rtsarp32_v200.lib : args_main.obj (.text:_args_main)
+                  8001aa2c    00000040                       : sprintf.obj (.text:sprintf)
+                  8001aa6c    00000040     libevekernels.eve.lib : vcop_gauss5x5PyramidKernel_8_kernel.obj (.text:vcop_gauss5x5PyramidKernel_8_horiz_vloops)
+                  8001aaac    0000003c     libeveFast9CornerDetect.eve.lib : bin_img_to_list_bam_dma_node.obj (.text:BIN_IMG2LIST_BAM_DMA_updateOutDDRptr)
+                  8001aae8    0000003c     libevekernels.eve.lib : bam_fast9_exec_funcs.obj (.text:Bam_Fast9_initFrame)
+                  8001ab24    0000003c     libeveorb.eve.lib : orb_alg.obj (.text:ORB_TI_free)
+                  8001ab60    0000003c     libeveHarrisBestFeatureToFront.eve.lib : sparse_harris_score_graph.obj (.text:SPARSE_HARRIS_SCORE_TI_dmaControl)
+                  8001ab9c    0000003c     rtsarp32_v200.lib : _printfi.obj (.text:__arp32abi_isnan)
+                  8001abd8    0000003c                       : strasgi_c.obj (.text:__arp32abi_strasgi)
+                  8001ac14    0000003c                       : fopen.obj (.text:fopen)
+                  8001ac50    0000003c                       : vsprintf.obj (.text:vsprintf)
+                  8001ac8c    00000038     libevekernels.eve.lib : bam_blockSortU32_exec_funcs.obj (.text:BAM_blockSortU32_compute)
+                  8001acc4    00000038     algframework.lib : bam_construct_int.obj (.text:BAM_getMemPacket)
+                  8001acfc    00000038     libeveFAST9BestFeatureToFront.eve.lib : best_feature_to_front_graph.obj (.text:BEST_FEATURE_TO_FRONT_TI_graphControl)
+                  8001ad34    00000038     libeveFast9CornerDetect.eve.lib : bin_img_to_list_bam_dma_node.obj (.text:BIN_IMG2LIST_BAM_DMA_OUT_getMemRecFunc)
+                  8001ad6c    00000038     dmautils.lib : edma_utils_scatterGather.obj (.text:EDMA_UTILS_scattherGather_updateSrcNtrigger)
+                  8001ada4    00000038     rtsarp32_v200.lib : assert.obj (.text:__arp32abi_abort_msg)
+                  8001addc    00000038                       : imath64.obj (.text:__arp32abi_remull)
+                  8001ae14    00000038                       : sscanf.obj (.text:sscanf)
+                  8001ae4c    00000038     libevekernels.eve.lib : merge_sort_kernel.obj (.text:vcop_psort2_1step_kernel_vloops)
+                  8001ae84    00000038                           : merge_sort_kernel.obj (.text:vcop_psort2_1step_reverse_kernel_vloops)
+                  8001aebc    00000034     libeveFAST9BestFeatureToFront.eve.lib : bam_dma_one_shot_orb_node.obj (.text:BAM_DMA_ONESHOT_ORB_frameInitOutChannel)
+                  8001aef0    00000034     libevekernels.eve.lib : bam_bin_image_to_list_exec_funcs.obj (.text:Bam_Bin_image_to_list_control)
+                  8001af24    00000034     rtsarp32_v200.lib : llshift.obj (.text:__arp32abi_llshru)
+                  8001af58    00000030     libeveHarrisBestFeatureToFront.eve.lib : sparse_harris_score_bam_dma_node.obj (.text:BAM_DMA_OUT_SPARSE_HARRIS_DUMMY_updateDDRptr)
+                  8001af88    00000030     libevekernels.eve.lib : bam_prune_big_list_helper_funcs.obj (.text:BAM_Prune_Big_List_getMemRecFunc)
+                  8001afb8    00000030                           : bam_blockSortU32_helper_funcs.obj (.text:BAM_blockSortU32_getMemRecFunc)
+                  8001afe8    00000030     dmautils.lib : edma_utils_autoincrement_1d.obj (.text:EDMA_UTILS_autoIncrement1D_triggerOutChannel)
+                  8001b018    00000030     rtsarp32_v200.lib : fclose.obj (.text:fclose)
+                  8001b048    0000002c     libevekernels.eve.lib : bam_blockAverage2x2_exec_funcs.obj (.text:BAM_blockAverage2x2_initFrame)
+                  8001b074    0000002c     algframework.lib : bam_utils.obj (.text:BAM_printf)
+                  8001b0a0    0000002c     dmautils.lib : dma_resource_allocator.obj (.text:DMA_resourceAllocator_initResources)
+                  8001b0cc    0000002c     libevestarterware_eve.lib : sctm.obj (.text:EVE_SCTM_CounterTimerEnable)
+                  8001b0f8    0000002c                               : sctm.obj (.text:EVE_SCTM_InpEvtSelect)
+                  8001b124    0000002c                               : sctm.obj (.text:EVE_SCTM_SamplingSelect)
+                  8001b150    0000002c     libeveFAST9BestFeatureToFront.eve.lib : fast9_score_graph.obj (.text:FAST9_SCORE_TI_initKernelsArgs)
+                  8001b17c    0000002c     rtsarp32_v200.lib : subd.obj (.text:__arp32abi_subd)
+                  8001b1a8    0000002c     libevekernels.eve.lib : vcop_blockAverage2x2_kernel.obj (.text:vcop_blockAverage2x2_uchar_vloops)
+                  8001b1d4    00000028                           : bam_blockAverage2x2_helper_funcs.obj (.text:BAM_blockAverage2x2_getMemRecFunc)
+                  8001b1fc    00000028                           : bam_natcBlockAverage2x2_exec_funcs.obj (.text:BAM_natcBlockAverage2x2_computeFrame)
+                  8001b224    00000028                           : bam_natcBlockAverage2x2_helper_funcs.obj (.text:BAM_natcBlockAverage2x2_getMemRecFunc)
+                  8001b24c    00000028                           : bam_extract_bit_field_u32_exec_funcs.obj (.text:Bam_Extract_Bit_Field_initFrame)
+                  8001b274    00000028     rtsarp32_v200.lib : negd.obj (.text:__arp32abi_negd)
+                  8001b29c    00000028                       : mult.obj (.text:_mpyl)
+                  8001b2c4    00000024     libeveHarrisBestFeatureToFront.eve.lib : sparse_harris_score_bam_dma_node.obj (.text:BAM_DMA_OUT_SPARSE_HARRIS_DUMMY_setMemRecFunc)
+                  8001b2e8    00000024     libeveFAST9BestFeatureToFront.eve.lib : bam_dma_scattergather_orb_node.obj (.text:BAM_DMA_SCATTERGATHER_ORB_OutsetMemRecFunc)
+                  8001b30c    00000024     libevekernels.eve.lib : bam_fast9_score_exec_funcs.obj (.text:Bam_Fast9_Score_compute)
+                  8001b330    00000024     eve_profile.obj (.text:TEST_PRINTF)
+                  8001b354    00000024     rtsarp32_v200.lib : llcmp.obj (.text:__arp32abi_cmplls)
+                  8001b378    00000024                       : llcmp.obj (.text:__arp32abi_cmpllu)
+                  8001b39c    00000024     libevekernels.eve.lib : vcop_extract_bit_field_u32_kernel.obj (.text:vcop_extract_bit_field_u32_vloops)
+                  8001b3c0    00000020     libeveHarrisBestFeatureToFront.eve.lib : sparse_harris_score_bam_dma_node.obj (.text:BAM_DMA_OUT_SPARSE_HARRIS_DUMMY_trigger)
+                  8001b3e0    00000020     libevekernels.eve.lib : bam_blockSortU32_exec_funcs.obj (.text:BAM_blockSortU32_control)
+                  8001b400    00000020     libeveFAST9BestFeatureToFront.eve.lib : best_feature_to_front_graph.obj (.text:BEST_FEATURE_TO_FRONT_TI_execute)
+                  8001b420    00000020     libeveFast9CornerDetect.eve.lib : binary_image_to_list_graph.obj (.text:BIN_IMAGE_TO_LIST_TI_execute)
+                  8001b440    00000020     dmautils.lib : edma_utils_state.obj (.text:DMA_utils_resetStateStruct)
+                  8001b460    00000020                  : edma_utils_scatterGather.obj (.text:EDMA_UTILS_scattherGather_wait)
+                  8001b480    00000020     libeveFast9CornerDetect.eve.lib : fast9_corner_detect_graph.obj (.text:FAST9_CORNER_DETECT_TI_execute)
+                  8001b4a0    00000020     libeveFAST9BestFeatureToFront.eve.lib : fast9_score_graph.obj (.text:FAST9_SCORE_TI_execute)
+                  8001b4c0    00000020     libeveImagePyramid_u8.eve.lib : imagePyramid_u8_graph.obj (.text:IMAGE_PYRAMID_U8_TI_execute)
+                  8001b4e0    00000020     libeveRbrief.eve.lib : rbrief_graph.obj (.text:RBRIEF_TI_execute)
+                  8001b500    00000020     libeveHarrisBestFeatureToFront.eve.lib : sparse_harris_score_graph.obj (.text:SPARSE_HARRIS_SCORE_TI_execute)
+                  8001b520    00000020     rtsarp32_v200.lib : memccpy.obj (.text:memccpy)
+                  8001b540    0000001c     libevekernels.eve.lib : bam_extract_bit_field_u32_helper_funcs.obj (.text:BAM_Extract_Bit_Field_getMemRecFunc)
+                  8001b55c    0000001c                           : bam_gauss5x5Pyramid_8_exec_funcs.obj (.text:BAM_gauss5x5Pyramid_compute)
+                  8001b578    0000001c     libeveFAST9BestFeatureToFront.eve.lib : best_feature_to_front_graph.obj (.text:BEST_FEATURE_TO_FRONT_TI_getGraphMemReq)
+                  8001b594    0000001c     libevekernels.eve.lib : bam_fast9_exec_funcs.obj (.text:Bam_Fast9_control)
+                  8001b5b0    0000001c     libeveFast9CornerDetect.eve.lib : fast9_corner_detect_graph.obj (.text:FAST9_CORNER_DETECT_TI_getGraphMemReq)
+                  8001b5cc    0000001c     libeveFAST9BestFeatureToFront.eve.lib : fast9_score_graph.obj (.text:FAST9_SCORE_TI_getGraphMemReq)
+                  8001b5e8    0000001c     libeveImagePyramid_u8.eve.lib : imagePyramid_u8_graph.obj (.text:IMAGE_PYRAMID_U8_TI_getGraphMemReq)
+                  8001b604    0000001c     libeveRbrief.eve.lib : rbrief_graph.obj (.text:RBRIEF_TI_getGraphMemReq)
+                  8001b620    0000001c     libeveHarrisBestFeatureToFront.eve.lib : sparse_harris_score_graph.obj (.text:SPARSE_HARRIS_SCORE_TI_getGraphMemReq)
+                  8001b63c    0000001c     rtsarp32_v200.lib : lladdsub.obj (.text:__arp32abi_addll)
+                  8001b658    0000001c                       : sprintf.obj (.text:_outs)
+                  8001b674    0000001c                       : vsprintf.obj (.text:_outs)
+                  8001b690    0000001c     libevekernels.eve.lib : merge_sort_kernel_hard.obj (.text:my_vcop_sort8_simd8_64_custom)
+                  8001b6ac    0000001c                           : merge_sort_kernel_hard.obj (.text:my_vcop_sort8_simd8_XX_custom)
+                  8001b6c8    0000001c                           : merge_sort_kernel.obj (.text:vcop_remove_ex_col_vloops)
+                  8001b6e4    00000018     libeveRbrief.eve.lib : bam_dma_custom_rbrief_node.obj (.text:BAM_DMA_CUSTOM_RBRIEF_SCATTERGATHER_trigger)
+                  8001b6fc    00000018     libeveHarrisBestFeatureToFront.eve.lib : sparse_harris_score_bam_dma_node.obj (.text:BAM_DMA_IN_SPARSE_HARRIS_SCATTERGATHER_trigger)
+                  8001b714    00000018     libeveFAST9BestFeatureToFront.eve.lib : bam_dma_scattergather_orb_node.obj (.text:BAM_DMA_SCATTERGATHER_ORB_triggerInChannel)
+                  8001b72c    00000018     libeveFast9CornerDetect.eve.lib : binary_image_to_list_graph.obj (.text:BIN_IMAGE_TO_LIST_TI_getGraphMemReq)
+                  8001b744    00000018     libevestarterware_eve.lib : sctm.obj (.text:EVE_SCTM_CounterRead)
+                  8001b75c    00000018                               : sctm.obj (.text:EVE_SCTM_OverflowCheck)
+                  8001b774    00000018     libeveFAST9BestFeatureToFront.eve.lib : fast9_best_feature_to_front_alg.obj (.text:FAST9_BEST_FEATURE_TO_FRONT_TI_free)
+                  8001b78c    00000018     libeveFast9CornerDetect.eve.lib : fast9_corner_detect_alg.obj (.text:FAST9_CORNER_DETECT_TI_free)
+                  8001b7a4    00000018     libeveHarrisBestFeatureToFront.eve.lib : harris_best_feature_to_front_alg.obj (.text:HARRIS_BEST_FEATURE_TO_FRONT_TI_free)
+                  8001b7bc    00000018     libeveImagePyramid_u8.eve.lib : imagePyramid_u8_alg.obj (.text:IMAGE_PYRAMID_U8_TI_free)
+                  8001b7d4    00000018     libeveRbrief.eve.lib : rbrief_alg.obj (.text:RBRIEF_TI_free)
+                  8001b7ec    00000018     algframework.lib : bam_execute.obj (.text:VCOP_SET_MEM_VIEW)
+                  8001b804    00000018     libevekernels.eve.lib : bam_rBrief_exec_funcs.obj (.text:VCOP_SET_MEM_VIEW)
+                  8001b81c    00000018                           : merge_sort_kernel_hard.obj (.text:my_vcop_remove_ex_col_custom)
+                  8001b834    00000014     libevestarterware_eve.lib : sctm.obj (.text:EVE_SCTM_Enable)
+                  8001b848    00000014     rtsarp32_v200.lib : lladdsub.obj (.text:__arp32abi_subll)
+                  8001b85c    00000014                       : memory.obj (.text:free)
+                  8001b870    00000010     libeveRbrief.eve.lib : bam_dma_custom_rbrief_node.obj (.text:BAM_DMA_CUSTOM_RBRIEF_AUTOINCREMENT_1D_trigger)
+                  8001b880    00000010                          : bam_dma_custom_rbrief_node.obj (.text:BAM_DMA_CUSTOM_RBRIEF_AUTOINCREMENT_1D_wait)
+                  8001b890    00000010     libeveFAST9BestFeatureToFront.eve.lib : bam_dma_scattergather_orb_node.obj (.text:BAM_DMA_SCATTERGATHER_ORB_waitOutChannel)
+                  8001b8a0    00000010     libeveHarrisBestFeatureToFront.eve.lib : best_feature_to_front_alg.obj (.text:BEST_FEATURE_TO_FRONT_TI_getAlgMemReq)
+                  8001b8b0    00000010     libeveFast9CornerDetect.eve.lib : binary_image_to_list_graph.obj (.text:BIN_IMAGE_TO_LIST_TI_graphControl)
+                  8001b8c0    00000010     libevekernels.eve.lib : bam_prune_big_list_exec_funcs.obj (.text:Bam_Prune_Big_List_control)
+                  8001b8d0    00000010                           : bam_vertical_non_max_suppression_exec_funcs.obj (.text:Bam_Vertical_Non_Max_Suppression_control)
+                  8001b8e0    00000010     dmautils.lib : edma_utils_scatterGather.obj (.text:EDMA_UTILS_scattherGather_configure)
+                  8001b8f0    00000010     libeveFast9CornerDetect.eve.lib : fast9_corner_detect_graph.obj (.text:FAST9_CORNER_DETECT_TI_graphControl)
+                  8001b900    00000010     rtsarp32_v200.lib : lladdsub.obj (.text:__arp32abi_negll)
+                  8001b910    00000010                       : sscanf.obj (.text:_inpchar)
+                  8001b920    00000010                       : sprintf.obj (.text:_outc)
+                  8001b930    00000010                       : vsprintf.obj (.text:_outc)
+                  8001b940    00000010     libevekernels.eve.lib : merge_sort_init.obj (.text:transp_idx)
+                  8001b950    00000010     rtsarp32_v200.lib : vcop_memory.obj (.text:vcop_malloc)
+                  8001b960    0000000c     libevekernels.eve.lib : bam_fast9_score_exec_funcs.obj (.text:Bam_Fast9_Score_initInstance)
+                  8001b96c    0000000c                           : bam_horizontal_non_max_suppression_exec_funcs.obj (.text:Bam_Horizontal_Non_Max_Suppression_control)
+                  8001b978    0000000c                           : bam_multipoint_harrisScore_u16_exec_funcs.obj (.text:Bam_Multipoint_Harris_Score_initInstance)
+                  8001b984    0000000c                           : bam_vertical_non_max_suppression_exec_funcs.obj (.text:Bam_Vertical_Non_Max_Suppression_initInstance)
+                  8001b990    0000000c     dmautils.lib : dma_resource_allocator.obj (.text:DMA_resourceAllocator_setEdma3RmHandle)
+                  8001b99c    0000000c     ti_mem_manager.obj (.text:TI_CreateMemoryHandle)
+                  8001b9a8    0000000c     rtsarp32_v200.lib : fprintf.obj (.text:_outc)
+                  8001b9b4    0000000c                       : printf.obj (.text:_outc)
+                  8001b9c0    0000000c                       : vfprintf.obj (.text:_outc)
+                  8001b9cc    0000000c                       : fprintf.obj (.text:_outs)
+                  8001b9d8    0000000c                       : printf.obj (.text:_outs)
+                  8001b9e4    0000000c                       : vfprintf.obj (.text:_outs)
+                  8001b9f0    0000000c                       : sscanf.obj (.text:_uninpchar)
+                  8001b9fc    0000000c                       : remove.obj (.text:remove)
+                  8001ba08    00000008     libevekernels.eve.lib : bam_prune_big_list_exec_funcs.obj (.text:Bam_Prune_Big_List_initInstance)
+                  8001ba10    00000008     rtsarp32_v200.lib : exit.obj (.text:abort)
+                  8001ba18    00000008     libevekernels.eve.lib : vcop_bin_image_to_list_kernel.obj (.text:vcop_bin_image_to_list_param_count)
+                  8001ba20    00000008                           : vcop_compute_rBrief_kernel.obj (.text:vcop_compute_rBrief_param_count)
+                  8001ba28    00000008                           : vcop_fast9_kernel.obj (.text:vcop_fast9_param_count)
+                  8001ba30    00000008                           : vcop_fast9_score_kernel.obj (.text:vcop_fast9_score_kernel_param_count)
+                  8001ba38    00000008                           : vcop_fast9_score_kernel.obj (.text:vcop_fast9_thresh_score_param_count)
+                  8001ba40    00000008                           : vcop_horizontal_non_max_suppression_kernel.obj (.text:vcop_horizontal_non_max_suppression_param_count)
+                  8001ba48    00000008                           : vcop_multipoint_harrisScore_u16_kernel.obj (.text:vcop_multipoint_harrisScore_7x7_u16_param_count)
+                  8001ba50    00000008                           : vcop_prune_big_list_kernel.obj (.text:vcop_prune_big_list_param_count)
+                  8001ba58    00000008                           : merge_sort_kernel.obj (.text:vcop_psort2_2steps_kernel_param_count)
+                  8001ba60    00000008                           : merge_sort_kernel.obj (.text:vcop_psort2_2steps_reverse_kernel_param_count)
+                  8001ba68    00000008                           : merge_sort_kernel.obj (.text:vcop_psort2_3steps_kernel_param_count)
+                  8001ba70    00000008                           : merge_sort_kernel.obj (.text:vcop_psort2_3steps_reverse_kernel_param_count)
+                  8001ba78    00000008                           : merge_sort_kernel.obj (.text:vcop_sort8_simd8_64_param_count)
+                  8001ba80    00000008                           : merge_sort_kernel.obj (.text:vcop_sort8_simd8_XX_param_count)
+                  8001ba88    00000008                           : vcop_vertical_non_max_suppression_kernel.obj (.text:vcop_vertical_non_max_suppression_kernel_param_count)
+                  8001ba90    00000004     libeveFAST9BestFeatureToFront.eve.lib : bam_dma_one_shot_orb_node.obj (.text:BAM_DMA_ONESHOT_ORB_waitChannel)
+                  8001ba94    00000004     libeveHarrisBestFeatureToFront.eve.lib : sparse_harris_score_bam_dma_node.obj (.text:BAM_DMA_OUT_SPARSE_HARRIS_DUMMY_wait)
+                  8001ba98    00000004     algframework.lib : bam_execute.obj (.text:BAM_dummyKernelFunc)
+                  8001ba9c    00000004     libeveFast9CornerDetect.eve.lib : binary_image_to_list_graph.obj (.text:BIN_IMAGE_TO_LIST_TI_initKernelsArgs)
+                  8001baa0    00000004     dmautils.lib : edma3lld_support.obj (.text:EDMA3LLD_SUPPORT_requestResources)
+                  8001baa4    00000004     libeveFAST9BestFeatureToFront.eve.lib : fast9_best_feature_to_front_alg.obj (.text:FAST9_BEST_FEATURE_TO_FRONT_TI_control)
+                  8001baa8    00000004                                           : fast9_best_feature_to_front_alg.obj (.text:FAST9_BEST_FEATURE_TO_FRONT_TI_numAlloc)
+                  8001baac    00000004     libeveFast9CornerDetect.eve.lib : fast9_corner_detect_alg.obj (.text:FAST9_CORNER_DETECT_TI_control)
+                  8001bab0    00000004                                     : fast9_corner_detect_alg.obj (.text:FAST9_CORNER_DETECT_TI_numAlloc)
+                  8001bab4    00000004     libeveHarrisBestFeatureToFront.eve.lib : harris_best_feature_to_front_alg.obj (.text:HARRIS_BEST_FEATURE_TO_FRONT_TI_control)
+                  8001bab8    00000004                                            : harris_best_feature_to_front_alg.obj (.text:HARRIS_BEST_FEATURE_TO_FRONT_TI_numAlloc)
+                  8001babc    00000004     libeveImagePyramid_u8.eve.lib : imagePyramid_u8_alg.obj (.text:IMAGE_PYRAMID_U8_TI_control)
+                  8001bac0    00000004                                   : imagePyramid_u8_alg.obj (.text:IMAGE_PYRAMID_U8_TI_numAlloc)
+                  8001bac4    00000004     libeveorb.eve.lib : orb_alg.obj (.text:ORB_TI_control)
+                  8001bac8    00000004     libeveRbrief.eve.lib : rbrief_alg.obj (.text:RBRIEF_TI_control)
+                  8001bacc    00000004                          : rbrief_alg.obj (.text:RBRIEF_TI_numAlloc)
+                  8001bad0    00000004     rtsarp32_v200.lib : _lock.obj (.text:_nop)
+                  8001bad4    00000004                       : pre_init.obj (.text:_system_pre_init)
+                  8001bad8    00000004     libevekernels.eve.lib : vcop_blockAverage2x2_kernel.obj (.text:vcop_blockAverage2x2_uchar_param_count)
+                  8001badc    00000004                           : vcop_extract_bit_field_u32_kernel.obj (.text:vcop_extract_bit_field_u32_param_count)
+                  8001bae0    00000004                           : vcop_gauss5x5PyramidKernel_8_kernel.obj (.text:vcop_gauss5x5PyramidKernel_8_horiz_param_count)
+                  8001bae4    00000004                           : vcop_gauss5x5PyramidKernel_8_kernel.obj (.text:vcop_gauss5x5PyramidKernel_8_vert_param_count)
+                  8001bae8    00000004                           : merge_sort_kernel.obj (.text:vcop_psort2_1step_kernel_param_count)
+                  8001baec    00000004                           : merge_sort_kernel.obj (.text:vcop_psort2_1step_reverse_kernel_param_count)
+                  8001baf0    00000004                           : merge_sort_kernel.obj (.text:vcop_remove_ex_col_param_count)
+
+.dmemSect 
+*          1    40020000    00006800     UNINITIALIZED
+                  40020000    00006800     orb_tb.obj (.dmemSect)
+
+.stack     1    40026800    00001440     UNINITIALIZED
+                  40026800    00000004     rtsarp32_v200.lib : boot.obj (.stack)
+                  40026804    0000143c     --HOLE--
+
+.bss       1    40027c40    00000120     UNINITIALIZED
+                  40027c40    000000a8     dmautils.lib : dma_resource_allocator.obj (.bss)
+                  40027ce8    00000060                  : edma_utils_state.obj (.bss)
+                  40027d48    00000014     algframework.lib : bam_memory.obj (.bss)
+                  40027d5c    00000004     orb_config.obj (.bss)
+
+.data      1    40027d60    0000002c     
+                  40027d60    00000020     boot_arp32.obj (.data)
+                  40027d80    00000005     algframework.lib : bam_memory.obj (.data)
+                  40027d85    00000003     --HOLE-- [fill = 0]
+                  40027d88    00000004     dmautils.lib : dma_resource_allocator.obj (.data)
+
+.rodata    1    40027d8c    00000068     
+                  40027d8c    0000001c     libeveHarrisBestFeatureToFront.eve.lib : best_feature_to_front_alg.obj (.rodata)
+                  40027da8    00000014     libevekernels.eve.lib : bam_rBrief_exec_funcs.obj (.rodata)
+                  40027dbc    00000008     algframework.lib : bam_construct_int.obj (.rodata)
+                  40027dc4    00000008     dmautils.lib : edma_utils_autoincrement.obj (.rodata)
+                  40027dcc    00000008     libeveFast9CornerDetect.eve.lib : bin_img_to_list_bam_dma_node.obj (.rodata)
+                  40027dd4    00000004     algframework.lib : bam_execute.obj (.rodata)
+                  40027dd8    00000004                      : bam_memory.obj (.rodata)
+                  40027ddc    00000004     dmautils.lib : edma_utils_memcpy.obj (.rodata)
+                  40027de0    00000004                  : edma_utils_scatterGather.obj (.rodata)
+                  40027de4    00000004     libeveFast9CornerDetect.eve.lib : fast9_corner_detect_alg.obj (.rodata)
+                  40027de8    00000004     libevekernels.eve.lib : bam_multipoint_harrisScore_u16_helper_funcs.obj (.rodata)
+                  40027dec    00000004                           : vcop_fast9_score_kernel.obj (.rodata)
+                  40027df0    00000004     orb_tb.obj (.rodata)
+
+.cio       1    40027df4    00000120     UNINITIALIZED
+                  40027df4    00000120     rtsarp32_v200.lib : trgmsg.obj (.cio)
+
+.edma_utils_lib_fardata 
+*          1    40027f14    00000004     
+                  40027f14    00000004     dmautils.lib : edma_utils.obj (.const:edmaBase)
+
+.wmem      1    40040000    00007e00     UNINITIALIZED
+                  40040000    00000008     rtsarp32_v200.lib : vcop_memory.obj (.wmem)
+                  40040008    00007df8     --HOLE--
+
+.imemla    1    40050000    00004000     UNINITIALIZED
+                  40050000    00000008     rtsarp32_v200.lib : vcop_memory.obj (.imemla)
+                  40050008    00003ff8     --HOLE--
+
+.imemha    1    40054000    00004000     UNINITIALIZED
+                  40054000    00000008     rtsarp32_v200.lib : vcop_memory.obj (.imemha)
+                  40054008    00003ff8     --HOLE--
+
+.imemlb    1    40070000    00004000     UNINITIALIZED
+                  40070000    00000008     rtsarp32_v200.lib : vcop_memory.obj (.imemlb)
+                  40070008    00003ff8     --HOLE--
+
+.imemhb    1    40074000    00004000     UNINITIALIZED
+                  40074000    00000008     rtsarp32_v200.lib : vcop_memory.obj (.imemhb)
+                  40074008    00003ff8     --HOLE--
+
+.sysmem    1    80030000    00800000     UNINITIALIZED
+                  80030000    00000008     rtsarp32_v200.lib : memory.obj (.sysmem)
+                  80030008    007ffff8     --HOLE--
+
+.const     1    80830000    00003e84     
+                  80830000    0000044b     libeveRbrief.eve.lib : bam_dma_custom_rbrief_node.obj (.const:.string)
+                  8083044b    00000001     --HOLE-- [fill = 0]
+                  8083044c    00000400     libevekernels.eve.lib : bam_rBrief_helper_funcs.obj (.const:.string:BAM_RBRIEF_TI_MOMENTS_COL_MASK)
+                  8083084c    00000400                           : bam_rBrief_helper_funcs.obj (.const:.string:BAM_RBRIEF_TI_MOMENTS_ROW_MASK)
+                  80830c4c    00000400     orb_tb.obj (.const:.string:orbPattern)
+                  8083104c    00000319     libeveHarrisBestFeatureToFront.eve.lib : sparse_harris_score_bam_dma_node.obj (.const:.string)
+                  80831365    000002e7     libeveImagePyramid_u8.eve.lib : imagePyramid_u8_graph.obj (.const:.string)
+                  8083164c    000002db     libeveFAST9BestFeatureToFront.eve.lib : bam_dma_one_shot_orb_node.obj (.const:.string)
+                  80831927    0000027d     orb_tb.obj (.const:.string)
+                  80831ba4    00000256     configparser.obj (.const:.string)
+                  80831dfa    00000212     libevekernels.eve.lib : bam_rBrief_exec_funcs.obj (.const:.string:BAM_RBRIEF_ZERO_TABLE)
+                  8083200c    000001fc     libeveFAST9BestFeatureToFront.eve.lib : bam_dma_scattergather_orb_node.obj (.const:.string)
+                  80832208    000001f8     algframework.lib : bam_dma_autoincrement_node.obj (.const:.string)
+                  80832400    000001bb     libeveRbrief.eve.lib : rbrief_graph.obj (.const:.string)
+                  808325bb    000001b7     libeveHarrisBestFeatureToFront.eve.lib : harris_best_feature_to_front_alg.obj (.const:.string)
+                  80832772    00000188                                            : best_feature_to_front_alg.obj (.const:.string)
+                  808328fa    00000169     libeveFAST9BestFeatureToFront.eve.lib : best_feature_to_front_graph.obj (.const:.string)
+                  80832a63    00000138     libeveHarrisBestFeatureToFront.eve.lib : sparse_harris_score_graph.obj (.const:.string)
+                  80832b9b    00000133     libeveFast9CornerDetect.eve.lib : bin_img_to_list_bam_dma_node.obj (.const:.string)
+                  80832cce    00000130     libeveFAST9BestFeatureToFront.eve.lib : fast9_score_graph.obj (.const:.string)
+                  80832dfe    0000012a     libeveFast9CornerDetect.eve.lib : binary_image_to_list_graph.obj (.const:.string)
+                  80832f28    00000122                                     : fast9_corner_detect_graph.obj (.const:.string)
+                  8083304a    00000121     algframework.lib : bam_construct_int.obj (.const:.string)
+                  8083316b    00000001     --HOLE-- [fill = 0]
+                  8083316c    00000101     rtsarp32_v200.lib : ctype.obj (.const:.string:_ctypes_)
+                  8083326d    000000d9     libevekernels.eve.lib : merge_sort_init.obj (.const:.string)
+                  80833346    000000c8                           : bam_fast9_score_helper_funcs.obj (.const:.string:LUT_EXT_IDX_THR)
+                  8083340e    000000b7     orb_config.obj (.const:.string)
+                  808334c5    00000098     libeveRbrief.eve.lib : rbrief_alg.obj (.const:.string)
+                  8083355d    00000092     libeveFast9CornerDetect.eve.lib : fast9_corner_detect_alg.obj (.const:.string)
+                  808335ef    00000090     algframework.lib : bam_execute.obj (.const:.string)
+                  8083367f    00000001     --HOLE-- [fill = 0]
+                  80833680    00000088     libevekernels.eve.lib : bam_fast9_score_helper_funcs.obj (.const:.string:LUT_EXT_IDX_SAD)
+                  80833708    00000066     libeveFAST9BestFeatureToFront.eve.lib : fast9_best_feature_to_front_alg.obj (.const:.string)
+                  8083376e    00000002     --HOLE-- [fill = 0]
+                  80833770    00000060                                           : best_feature_to_front_graph.obj (.const:$P$T0$1)
+                  808337d0    00000060     libeveImagePyramid_u8.eve.lib : imagePyramid_u8_graph.obj (.const:$P$T0$1)
+                  80833830    00000056     ti_mem_manager.obj (.const:.string)
+                  80833886    00000002     --HOLE-- [fill = 0]
+                  80833888    00000054     libeveFAST9BestFeatureToFront.eve.lib : fast9_best_feature_to_front_alg.obj (.const)
+                  808338dc    00000054     libeveFast9CornerDetect.eve.lib : fast9_corner_detect_alg.obj (.const)
+                  80833930    00000054     libeveHarrisBestFeatureToFront.eve.lib : harris_best_feature_to_front_alg.obj (.const)
+                  80833984    00000054     libeveImagePyramid_u8.eve.lib : imagePyramid_u8_alg.obj (.const)
+                  808339d8    00000054     libeveRbrief.eve.lib : rbrief_alg.obj (.const)
+                  80833a2c    00000054     libeveorb.eve.lib : orb_alg.obj (.const)
+                  80833a80    00000050     rtsarp32_v200.lib : strtod.obj (.const:digits)
+                  80833ad0    00000050                       : strtold.obj (.const:digits)
+                  80833b20    00000048                       : strtod.obj (.const:powerof10)
+                  80833b68    00000048                       : strtold.obj (.const:powerof10)
+                  80833bb0    00000042     libevekernels.eve.lib : bam_rBrief_helper_funcs.obj (.const:BAM_RBRIEF_TI_COSQ14_2)
+                  80833bf2    00000042                           : bam_rBrief_helper_funcs.obj (.const:BAM_RBRIEF_TI_SINQ14_2)
+                  80833c34    00000034     libeveImagePyramid_u8.eve.lib : imagePyramid_u8_alg.obj (.const:.string)
+                  80833c68    00000030     libeveFAST9BestFeatureToFront.eve.lib : fast9_score_graph.obj (.const:$P$T0$1)
+                  80833c98    00000030     libeveFast9CornerDetect.eve.lib : binary_image_to_list_graph.obj (.const:$P$T0$1)
+                  80833cc8    00000030                                     : fast9_corner_detect_graph.obj (.const:$P$T0$1)
+                  80833cf8    00000030     libeveHarrisBestFeatureToFront.eve.lib : sparse_harris_score_graph.obj (.const:$P$T0$1)
+                  80833d28    00000030     libeveRbrief.eve.lib : rbrief_graph.obj (.const:$P$T0$1)
+                  80833d58    0000002c     libeveFAST9BestFeatureToFront.eve.lib : best_feature_to_front_graph.obj (.const:$P$T1$2)
+                  80833d84    0000002c     libeveImagePyramid_u8.eve.lib : imagePyramid_u8_graph.obj (.const:$P$T1$2)
+                  80833db0    00000023     rtsarp32_v200.lib : _printfi.obj (.const:.string)
+                  80833dd3    00000001     --HOLE-- [fill = 0]
+                  80833dd4    00000010     libeveFast9CornerDetect.eve.lib : binary_image_to_list_graph.obj (.const:$P$T1$2)
+                  80833de4    00000010     libeveHarrisBestFeatureToFront.eve.lib : sparse_harris_score_graph.obj (.const:$P$T1$2)
+                  80833df4    00000010     libevekernels.eve.lib : bam_rBrief_helper_funcs.obj (.const:BAM_RBRIEF_TI_ARCTAN_XTHR)
+                  80833e04    00000010                           : bam_rBrief_helper_funcs.obj (.const:BAM_RBRIEF_TI_TRAN_OFFSET)
+                  80833e14    0000000c     libeveFAST9BestFeatureToFront.eve.lib : fast9_score_graph.obj (.const:$P$T1$2)
+                  80833e20    0000000c     libeveFast9CornerDetect.eve.lib : fast9_corner_detect_graph.obj (.const:$P$T1$2)
+                  80833e2c    0000000c     libeveRbrief.eve.lib : rbrief_graph.obj (.const:$P$T1$2)
+                  80833e38    00000008     configparser.obj (.const:.string:$P$T0$1)
+                  80833e40    00000008     libevekernels.eve.lib : merge_sort_kernel.obj (.const:.string:$P$T0$1)
+                  80833e48    00000008                           : merge_sort_kernel.obj (.const:.string:$P$T1$2)
+                  80833e50    00000008                           : merge_sort_kernel.obj (.const:.string:$P$T2$3)
+                  80833e58    00000008                           : bam_horizontal_non_max_suppression_helper_funcs.obj (.const:.string:ID_EXT_IDX)
+                  80833e60    00000008                           : bam_vertical_non_max_suppression_helper_funcs.obj (.const:.string:IN_ID_IDX)
+                  80833e68    00000008     orb_tb.obj (.const:.string:__FUNCTION__$1)
+                  80833e70    00000007     rtsarp32_v200.lib : _scanfi.obj (.const:.string:flit$1)
+                  80833e77    00000001     --HOLE-- [fill = 0]
+                  80833e78    00000006                       : _scanfi.obj (.const:.string:barr$2)
+                  80833e7e    00000003     algframework.lib : bam_construct_int.obj (.const:.string:$P$T0$1)
+                  80833e81    00000003     rtsarp32_v200.lib : assert.obj (.const:.string)
+
+.far       1    80833e84    00002ac0     UNINITIALIZED
+                  80833e84    00002968     orb_config.obj (.far)
+                  808367ec    000000a0     rtsarp32_v200.lib : defs.obj (.far)
+                  8083688c    00000078     algframework.lib : bam_memory.obj (.far)
+                  80836904    00000010     orb_tb.obj (.far)
+                  80836914    0000000c     algframework.lib : bam_execute.obj (.far)
+                  80836920    0000000c     rtsarp32_v200.lib : memory.obj (.far)
+                  8083692c    00000008     algframework.lib : bam_construct.obj (.far)
+                  80836934    00000008     rtsarp32_v200.lib : boot.obj (.far)
+                  8083693c    00000008                       : trgdrv.obj (.far)
+
+.fardata   1    80836944    00002998     
+                  80836944    00001800     orb_config.obj (.fardata:gsTokenMap_ORB)
+                  80838144    00000400     algframework.lib : bam_utils.obj (.fardata:gBAM_memPrintfArr)
+                  80838544    000001f4     libevestarterware_eve.lib : cred.obj (.fardata:CRED_instVirtAddr)
+                  80838738    000000f0     rtsarp32_v200.lib : defs.obj (.fardata:_ftable)
+                  80838828    00000078                       : lowlev.obj (.fardata:_device)
+                  808388a0    00000068     algframework.lib : bam_dma_autoincrement_node.obj (.fardata)
+                  80838908    00000068     libeveFAST9BestFeatureToFront.eve.lib : bam_dma_one_shot_orb_node.obj (.fardata)
+                  80838970    00000068                                           : bam_dma_scattergather_orb_node.obj (.fardata)
+                  808389d8    00000068     libeveFast9CornerDetect.eve.lib : bin_img_to_list_bam_dma_node.obj (.fardata)
+                  80838a40    00000068     libeveHarrisBestFeatureToFront.eve.lib : sparse_harris_score_bam_dma_node.obj (.fardata)
+                  80838aa8    00000068     libeveRbrief.eve.lib : bam_dma_custom_rbrief_node.obj (.fardata)
+                  80838b10    00000064     algframework.lib : bam_memory.obj (.fardata:vcop_mem)
+                  80838b74    00000064     rtsarp32_v200.lib : vcop_memory.obj (.fardata:vcop_mem)
+                  80838bd8    00000060     libeveFAST9BestFeatureToFront.eve.lib : best_feature_to_front_graph.obj (.fardata:bamBestFeatureToFrontKernelExecFuncDB)
+                  80838c38    00000060                                           : best_feature_to_front_graph.obj (.fardata:bamBestFeatureToFrontKernelHostDB)
+                  80838c98    00000060     libeveImagePyramid_u8.eve.lib : imagePyramid_u8_graph.obj (.fardata:bamKernelExecFuncDB)
+                  80838cf8    00000060                                   : imagePyramid_u8_graph.obj (.fardata:bamKernelHostDB)
+                  80838d58    00000050     rtsarp32_v200.lib : lowlev.obj (.fardata:_stream)
+                  80838da8    00000030     libeveFast9CornerDetect.eve.lib : fast9_corner_detect_graph.obj (.fardata:bamFast9CornerDetectKernelExecFuncDB)
+                  80838dd8    00000030                                     : fast9_corner_detect_graph.obj (.fardata:bamFast9CornerDetectKernelHostDB)
+                  80838e08    00000030     libeveFAST9BestFeatureToFront.eve.lib : fast9_score_graph.obj (.fardata:bamFast9ScoreKernelExecFuncDB)
+                  80838e38    00000030                                           : fast9_score_graph.obj (.fardata:bamFast9ScoreKernelHostDB)
+                  80838e68    00000030     libeveFast9CornerDetect.eve.lib : binary_image_to_list_graph.obj (.fardata:bamKernelExecFuncDB_binToList)
+                  80838e98    00000030                                     : binary_image_to_list_graph.obj (.fardata:bamKernelHostDB_binToList)
+                  80838ec8    00000030     libeveRbrief.eve.lib : rbrief_graph.obj (.fardata:bamRbriefCornerDetectKernelExecFuncDB)
+                  80838ef8    00000030                          : rbrief_graph.obj (.fardata:bamRbriefCornerDetectKernelHostDB)
+                  80838f28    00000030     libeveHarrisBestFeatureToFront.eve.lib : sparse_harris_score_graph.obj (.fardata:bamSparseHarrisScoreKernelExecFuncDB)
+                  80838f58    00000030                                            : sparse_harris_score_graph.obj (.fardata:bamSparseHarrisScoreKernelHostDB)
+                  80838f88    0000001c     libevekernels.eve.lib : bam_bin_image_to_list_helper_funcs.obj (.fardata)
+                  80838fa4    0000001c                           : bam_blockAverage2x2_helper_funcs.obj (.fardata)
+                  80838fc0    0000001c                           : bam_blockSortU32_helper_funcs.obj (.fardata)
+                  80838fdc    0000001c                           : bam_extract_bit_field_u32_helper_funcs.obj (.fardata)
+                  80838ff8    0000001c                           : bam_fast9_helper_funcs.obj (.fardata)
+                  80839014    0000001c                           : bam_fast9_score_helper_funcs.obj (.fardata)
+                  80839030    0000001c                           : bam_gauss5x5Pyramid_8_helper_funcs.obj (.fardata)
+                  8083904c    0000001c                           : bam_horizontal_non_max_suppression_helper_funcs.obj (.fardata)
+                  80839068    0000001c                           : bam_multipoint_harrisScore_u16_helper_funcs.obj (.fardata)
+                  80839084    0000001c                           : bam_natcBlockAverage2x2_helper_funcs.obj (.fardata)
+                  808390a0    0000001c                           : bam_natcGauss5x5Pyramid_8_helper_funcs.obj (.fardata)
+                  808390bc    0000001c                           : bam_prune_big_list_helper_funcs.obj (.fardata)
+                  808390d8    0000001c                           : bam_rBrief_helper_funcs.obj (.fardata)
+                  808390f4    0000001c                           : bam_vertical_non_max_suppression_helper_funcs.obj (.fardata)
+                  80839110    00000018                           : bam_bin_image_to_list_exec_funcs.obj (.fardata)
+                  80839128    00000018                           : bam_blockAverage2x2_exec_funcs.obj (.fardata)
+                  80839140    00000018                           : bam_blockSortU32_exec_funcs.obj (.fardata)
+                  80839158    00000018                           : bam_extract_bit_field_u32_exec_funcs.obj (.fardata)
+                  80839170    00000018                           : bam_fast9_exec_funcs.obj (.fardata)
+                  80839188    00000018                           : bam_fast9_score_exec_funcs.obj (.fardata)
+                  808391a0    00000018                           : bam_gauss5x5Pyramid_8_exec_funcs.obj (.fardata)
+                  808391b8    00000018                           : bam_horizontal_non_max_suppression_exec_funcs.obj (.fardata)
+                  808391d0    00000018                           : bam_multipoint_harrisScore_u16_exec_funcs.obj (.fardata)
+                  808391e8    00000018                           : bam_natcBlockAverage2x2_exec_funcs.obj (.fardata)
+                  80839200    00000018                           : bam_natcGauss5x5Pyramid_8_exec_funcs.obj (.fardata)
+                  80839218    00000018                           : bam_prune_big_list_exec_funcs.obj (.fardata)
+                  80839230    00000018                           : bam_rBrief_exec_funcs.obj (.fardata)
+                  80839248    00000018                           : bam_vertical_non_max_suppression_exec_funcs.obj (.fardata)
+                  80839260    0000000c     libeveFAST9BestFeatureToFront.eve.lib : best_feature_to_front_graph.obj (.fardata)
+                  8083926c    0000000c                                           : fast9_score_graph.obj (.fardata)
+                  80839278    0000000c     libeveFast9CornerDetect.eve.lib : binary_image_to_list_graph.obj (.fardata)
+                  80839284    0000000c                                     : fast9_corner_detect_graph.obj (.fardata)
+                  80839290    0000000c     libeveHarrisBestFeatureToFront.eve.lib : sparse_harris_score_graph.obj (.fardata)
+                  8083929c    0000000c     libeveImagePyramid_u8.eve.lib : imagePyramid_u8_graph.obj (.fardata)
+                  808392a8    0000000c     libeveRbrief.eve.lib : rbrief_graph.obj (.fardata)
+                  808392b4    00000008     rtsarp32_v200.lib : _lock.obj (.fardata)
+                  808392bc    00000005                       : vcop_memory.obj (.fardata)
+                  808392c1    00000003     --HOLE-- [fill = 0]
+                  808392c4    00000004                       : defs.obj (.fardata)
+                  808392c8    00000004                       : errno.obj (.fardata)
+                  808392cc    00000004                       : fopen.obj (.fardata)
+                  808392d0    00000004                       : lowlev.obj (.fardata)
+                  808392d4    00000004                       : memory.obj (.fardata)
+                  808392d8    00000004                       : rand.obj (.fardata)
+
+
+SEGMENT ATTRIBUTES
+
+    id tag      seg value
+    -- ---      --- -----
+     0 PHA_PAGE 3   1    
+     1 PHA_PAGE 4   1    
+     2 PHA_PAGE 5   1    
+     3 PHA_PAGE 6   1    
+     4 PHA_PAGE 7   1    
+     5 PHA_PAGE 8   1    
+     6 PHA_PAGE 9   1    
+     7 PHA_PAGE 10  1    
+     8 PHA_PAGE 11  1    
+     9 PHA_PAGE 12  1    
+    10 PHA_PAGE 13  1    
+    11 PHA_PAGE 14  1    
+
+
+GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name 
+
+address    name
+--------   ----
+80016e00   BAM_ARP32_computeWrapper
+8001a2dc   BAM_DMA_AUTOINCREMENT_frameInitInChannel
+8001a818   BAM_DMA_AUTOINCREMENT_frameInitOutChannel
+80011b74   BAM_DMA_AUTOINCREMENT_getMemRecFunc
+800135b8   BAM_DMA_AUTOINCREMENT_setMemRecFunc
+800188fc   BAM_DMA_AUTOINCREMENT_updateDDRptrInChannel
+8001896c   BAM_DMA_AUTOINCREMENT_updateDDRptrOutChannel
+80833df4   BAM_RBRIEF_TI_ARCTAN_XTHR
+80833bb0   BAM_RBRIEF_TI_COSQ14_2
+8083044c   BAM_RBRIEF_TI_MOMENTS_COL_MASK
+8083084c   BAM_RBRIEF_TI_MOMENTS_ROW_MASK
+80833bf2   BAM_RBRIEF_TI_SINQ14_2
+80833e04   BAM_RBRIEF_TI_TRAN_OFFSET
+80016270   BAM_activateGraph
+80019db4   BAM_controlNode
+8001648c   BAM_copyIntMemRec2ExtMem
+80017bd8   BAM_copyNodeList
+8000ed1c   BAM_createGraph
+8001ba98   BAM_dummyKernelFunc
+80013c48   BAM_fillKernelInfo
+80013d58   BAM_getGraphMemSize
+8001acc4   BAM_getMemPacket
+80001b54   BAM_initGraph
+800185d0   BAM_initGraphInstance
+8001a458   BAM_initKernelDB
+80007c90   BAM_optimizeGraph
+8001b074   BAM_printf
+80012d80   BAM_process
+80011ccc   BAM_updateNodes
+8000ba7c   BEST_FEATURE_TO_FRONT_TI_algCreate
+8000f97c   BEST_FEATURE_TO_FRONT_TI_algExecute
+80016e98   BEST_FEATURE_TO_FRONT_TI_dmaControl
+8001b400   BEST_FEATURE_TO_FRONT_TI_execute
+8001b8a0   BEST_FEATURE_TO_FRONT_TI_getAlgMemReq
+8001b578   BEST_FEATURE_TO_FRONT_TI_getGraphMemReq
+8001acfc   BEST_FEATURE_TO_FRONT_TI_graphControl
+80011050   BEST_FEATURE_TO_FRONT_TI_graphCreate
+8001b420   BIN_IMAGE_TO_LIST_TI_execute
+8001b72c   BIN_IMAGE_TO_LIST_TI_getGraphMemReq
+8001b8b0   BIN_IMAGE_TO_LIST_TI_graphControl
+800120d0   BIN_IMAGE_TO_LIST_TI_graphCreate
+80014ebc   BIN_IMAGE_TO_LIST_TI_graphDmaControl
+80016f30   BIN_IMG2LIST_BAM_DMA_frameInitOutChannel
+800197bc   BIN_IMG2LIST_BAM_DMA_triggerOutChannel
+80015994   BIN_IMG2LIST_BAM_DMA_updateInDDRptr
+8001aaac   BIN_IMG2LIST_BAM_DMA_updateOutDDRptr
+80016fc8   BIN_IMG2LIST_BAM_DMA_waitOutChannel
+8001ba10   C$$EXIT
+8001a810   C$$IO$$
+80838544   CRED_instVirtAddr
+8000f448   DMA_funcs_hardwareRegSetup
+80018644   DMA_funcs_writeTransferParams
+80010618   DMA_resourceAllocator_allocateResources
+8001b0a0   DMA_resourceAllocator_initResources
+8001b990   DMA_resourceAllocator_setEdma3RmHandle
+8001b440   DMA_utils_resetStateStruct
+80015668   DMA_utils_updateStateStruct
+40020000   DMEM_SCRATCH
+8001baa0   EDMA3LLD_SUPPORT_requestResources
+800065c4   EDMA_UTILS_autoIncrement1D_configure
+80016104   EDMA_UTILS_autoIncrement1D_init
+8001afe8   EDMA_UTILS_autoIncrement1D_triggerOutChannel
+8001a4f0   EDMA_UTILS_autoIncrement1D_waitOutChannel
+80004510   EDMA_UTILS_autoIncrement_configure
+80014c08   EDMA_UTILS_autoIncrement_init
+80011490   EDMA_UTILS_autoIncrement_triggerInChannel
+8000f60c   EDMA_UTILS_autoIncrement_triggerOutChannel
+8000c7a0   EDMA_UTILS_autoIncrement_update
+80019e5c   EDMA_UTILS_autoIncrement_waitInChannel
+80018d38   EDMA_UTILS_autoIncrement_waitOutChannel
+8001a53c   EDMA_UTILS_globalReset
+80017060   EDMA_UTILS_memcpy2D
+8001b8e0   EDMA_UTILS_scattherGather_configure
+8000fe5c   EDMA_UTILS_scattherGather_init
+80016734   EDMA_UTILS_scattherGather_updateNtrigger
+8001ad6c   EDMA_UTILS_scattherGather_updateSrcNtrigger
+8001b460   EDMA_UTILS_scattherGather_wait
+8001a6f8   EVE_SCTM_CounterConfig
+8001b744   EVE_SCTM_CounterRead
+8001b0cc   EVE_SCTM_CounterTimerEnable
+8001b834   EVE_SCTM_Enable
+8001b0f8   EVE_SCTM_InpEvtSelect
+8001b75c   EVE_SCTM_OverflowCheck
+8001b124   EVE_SCTM_SamplingSelect
+808338b4   FAST9_BEST_FEATURE_TO_FRONT_TI_IRES
+80833888   FAST9_BEST_FEATURE_TO_FRONT_TI_VISION_FXNS
+8001913c   FAST9_BEST_FEATURE_TO_FRONT_TI_activate
+8000fcc0   FAST9_BEST_FEATURE_TO_FRONT_TI_alloc
+8001baa4   FAST9_BEST_FEATURE_TO_FRONT_TI_control
+800191a0   FAST9_BEST_FEATURE_TO_FRONT_TI_deactivate
+8001b774   FAST9_BEST_FEATURE_TO_FRONT_TI_free
+800124b8   FAST9_BEST_FEATURE_TO_FRONT_TI_init
+8001baa8   FAST9_BEST_FEATURE_TO_FRONT_TI_numAlloc
+800060f4   FAST9_BEST_FEATURE_TO_FRONT_TI_process
+80833908   FAST9_CORNER_DETECT_TI_IRES
+808338dc   FAST9_CORNER_DETECT_TI_VISION_FXNS
+80019204   FAST9_CORNER_DETECT_TI_activate
+800111bc   FAST9_CORNER_DETECT_TI_alloc
+8001baac   FAST9_CORNER_DETECT_TI_control
+80019268   FAST9_CORNER_DETECT_TI_deactivate
+8001b480   FAST9_CORNER_DETECT_TI_execute
+8001b78c   FAST9_CORNER_DETECT_TI_free
+8001b5b0   FAST9_CORNER_DETECT_TI_getGraphMemReq
+8001b8f0   FAST9_CORNER_DETECT_TI_graphControl
+80011758   FAST9_CORNER_DETECT_TI_graphCreate
+80012eb8   FAST9_CORNER_DETECT_TI_graphDmaControl
+80007868   FAST9_CORNER_DETECT_TI_init
+8001bab0   FAST9_CORNER_DETECT_TI_numAlloc
+8000a1f4   FAST9_CORNER_DETECT_TI_process
+80017e84   FAST9_SCORE_TI_dmaControl
+8001b4a0   FAST9_SCORE_TI_execute
+8001b5cc   FAST9_SCORE_TI_getGraphMemReq
+80010bf8   FAST9_SCORE_TI_graphCreate
+8083395c   HARRIS_BEST_FEATURE_TO_FRONT_TI_IRES
+80833930   HARRIS_BEST_FEATURE_TO_FRONT_TI_VISION_FXNS
+800192cc   HARRIS_BEST_FEATURE_TO_FRONT_TI_activate
+80012b08   HARRIS_BEST_FEATURE_TO_FRONT_TI_alloc
+8001bab4   HARRIS_BEST_FEATURE_TO_FRONT_TI_control
+80019330   HARRIS_BEST_FEATURE_TO_FRONT_TI_deactivate
+8001b7a4   HARRIS_BEST_FEATURE_TO_FRONT_TI_free
+80013254   HARRIS_BEST_FEATURE_TO_FRONT_TI_init
+8001bab8   HARRIS_BEST_FEATURE_TO_FRONT_TI_numAlloc
+80009ae4   HARRIS_BEST_FEATURE_TO_FRONT_TI_process
+800186b8   HOSTclose
+80016324   HOSTlseek
+800170f8   HOSTopen
+80017638   HOSTread
+80016538   HOSTrename
+80018378   HOSTunlink
+80017c64   HOSTwrite
+80833e58   ID_EXT_IDX
+808339b0   IMAGE_PYRAMID_U8_TI_IRES
+80833984   IMAGE_PYRAMID_U8_TI_VISION_FXNS
+80019818   IMAGE_PYRAMID_U8_TI_activate
+80015ca4   IMAGE_PYRAMID_U8_TI_alloc
+8001babc   IMAGE_PYRAMID_U8_TI_control
+8001a14c   IMAGE_PYRAMID_U8_TI_deactivate
+80015084   IMAGE_PYRAMID_U8_TI_dmaControl
+8001b4c0   IMAGE_PYRAMID_U8_TI_execute
+8001b7bc   IMAGE_PYRAMID_U8_TI_free
+8001b5e8   IMAGE_PYRAMID_U8_TI_getGraphMemReq
+8000ca28   IMAGE_PYRAMID_U8_TI_graphCreate
+80015d60   IMAGE_PYRAMID_U8_TI_init
+8001bac0   IMAGE_PYRAMID_U8_TI_numAlloc
+80013f70   IMAGE_PYRAMID_U8_TI_process
+00004000   IMEMH_SIZE
+00004000   IMEML_SIZE
+80833e60   IN_ID_IDX
+80833680   LUT_EXT_IDX_SAD
+80833346   LUT_EXT_IDX_THR
+80001100   ORBTest
+80833a58   ORB_TI_IRES
+80833a2c   ORB_TI_VISION_FXNS
+80019584   ORB_TI_activate
+80002ae4   ORB_TI_alloc
+8001bac4   ORB_TI_control
+800195e4   ORB_TI_deactivate
+8001ab24   ORB_TI_free
+800050f0   ORB_TI_init
+8001872c   ORB_TI_numAlloc
+80006a80   ORB_TI_process
+80833a04   RBRIEF_TI_IRES
+808339d8   RBRIEF_TI_VISION_FXNS
+80019874   RBRIEF_TI_activate
+80014580   RBRIEF_TI_alloc
+8001bac8   RBRIEF_TI_control
+800198d0   RBRIEF_TI_deactivate
+8001b4e0   RBRIEF_TI_execute
+8001b7d4   RBRIEF_TI_free
+8001b604   RBRIEF_TI_getGraphMemReq
+80010790   RBRIEF_TI_graphCreate
+8001a19c   RBRIEF_TI_graphDmaControl
+80015be4   RBRIEF_TI_init
+8001bacc   RBRIEF_TI_numAlloc
+80010d6c   RBRIEF_TI_process
+8001ab60   SPARSE_HARRIS_SCORE_TI_dmaControl
+8001b500   SPARSE_HARRIS_SCORE_TI_execute
+8001b620   SPARSE_HARRIS_SCORE_TI_getGraphMemReq
+80010908   SPARSE_HARRIS_SCORE_TI_graphCreate
+8001b330   TEST_PRINTF
+8001b99c   TI_CreateMemoryHandle
+80019d04   TI_GetMemoryChunk
+00007e00   WMEM_SIZE
+40027df4   __CIOBUF_
+UNDEFED    __TI_CINIT_Base
+UNDEFED    __TI_CINIT_Limit
+UNDEFED    __TI_Handler_Table_Base
+UNDEFED    __TI_Handler_Table_Limit
+UNDEFED    __TI_INITARRAY_Base
+UNDEFED    __TI_INITARRAY_Limit
+40027c40   __TI_STACK_END
+00001440   __TI_STACK_SIZE
+40027c40   __TI_STATIC_BASE
+00800000   __TI_SYSMEM_SIZE
+00000001   __TI_args_main
+00000001   __TI_exit
+8001ada4   __arp32abi_abort_msg
+8000f7c4   __arp32abi_addd
+8001b63c   __arp32abi_addll
+80015734   __arp32abi_cmpd
+8001b354   __arp32abi_cmplls
+8001b378   __arp32abi_cmpllu
+800176c8   __arp32abi_cvtdf
+8000eb38   __arp32abi_divd
+8000eee8   __arp32abi_divull
+8001810c   __arp32abi_fixdi
+80018da0   __arp32abi_fltid
+8001a588   __arp32abi_fltud
+8001992c   __arp32abi_isinf
+80019644   __arp32abi_llshl
+8001af24   __arp32abi_llshru
+8000f280   __arp32abi_mpyd
+80011e24   __arp32abi_mpyll
+8001b274   __arp32abi_negd
+8001b900   __arp32abi_negll
+8001addc   __arp32abi_remull
+8001abd8   __arp32abi_strasgi
+8001b17c   __arp32abi_subd
+8001b848   __arp32abi_subll
+ffffffff   __binit__
+ffffffff   __c_args__
+8001a9ec   _args_main
+800189dc   _auto_init
+80016b90   _buff_read
+80018e08   _c_int00
+8001a1ec   _cleanup
+80836934   _cleanup_ptr
+80018188   _closefile
+8083316c   _ctypes_
+800196a4   _doflush
+80836938   _dtors_ptr
+80000120   _dummy_handler
+800118b8   _frcaddd
+8000e550   _frcdivd
+80012888   _frcmpyd
+808392c4   _ft_end
+80838738   _ftable
+40054000   _imemha_memory
+40074000   _imemhb_memory
+40050000   _imemla_memory
+40070000   _imemlb_memory
+808392b4   _lock
+8001b29c   _mpyl
+40027d60   _my_stack
+8001bad0   _nop
+8000dce8   _printfi
+80018b94   _rd_ok
+80019f58   _renormd
+80000100   _reset_handler
+80005bfc   _scanfi
+40026800   _stack
+80030000   _sys_memory
+8001bad4   _system_pre_init
+808367ec   _tmpnams
+808392b8   _unlock
+80000000   _vec_table
+40040000   _wmem_memory
+800177e8   _wrt_ok
+8001ba10   abort
+80018204   atoi
+80012ff0   bam_getMemPacket
+80018e70   bam_mcheck
+80010494   bam_mem_alloc
+80015800   bam_mem_free
+80016874   bam_minit
+80017878   bam_releaseMemPacket
+40027d50   bam_stat_num_packets
+ffffffff   binit
+80008c4c   bitonic_merge_multi_step
+80017d78   close
+40027f14   edmaBase
+808392c8   errno
+8001a000   exit
+8001b018   fclose
+80018280   fflush
+8001ac14   fopen
+800187a0   fprintf
+80014cf0   fputc
+80010ee0   fputs
+80012600   fread
+8001b85c   free
+80017908   fseek
+80017998   ftell
+80839110   gBAM_TI_binImageToListExecFunc
+80838f9c   gBAM_TI_binImageToListHelperFunc
+80838f88   gBAM_TI_binImageToListKernel
+808389d8   gBAM_TI_binImg2ListReadKernel
+80838a0c   gBAM_TI_binImg2ListWriteKernel
+80839128   gBAM_TI_blockAverage2x2ExecFunc
+80838fb8   gBAM_TI_blockAverage2x2HelperFunc
+80838fa4   gBAM_TI_blockAverage2x2Kernel
+80839140   gBAM_TI_blockSortU32ExecFunc
+80838fd4   gBAM_TI_blockSortU32HelperFunc
+80838fc0   gBAM_TI_blockSortU32Kernel
+808388a0   gBAM_TI_dmaAutoIncrementReadKernel
+808388b4   gBAM_TI_dmaAutoIncrementWriteKernel
+80838aa8   gBAM_TI_dmaCustomRbriefNodeReadKernel
+80838ac4   gBAM_TI_dmaCustomRbriefNodeReadKernelExecFunc
+80838abc   gBAM_TI_dmaCustomRbriefNodeReadKernelHelperFunc
+80838adc   gBAM_TI_dmaCustomRbriefNodeWriteKernel
+80838af8   gBAM_TI_dmaCustomRbriefNodeWriteKernelExecFunc
+80838af0   gBAM_TI_dmaCustomRbriefNodeWriteKernelHelperFunc
+80838908   gBAM_TI_dmaOrbOneShotReadKernel
+8083891c   gBAM_TI_dmaOrbOneShotWriteKernel
+80838940   gBAM_TI_dmaOrbReadOneShotKernelExecFunc
+80838930   gBAM_TI_dmaOrbReadOneShotKernelHelperFunc
+80838958   gBAM_TI_dmaOrbWriteOneShotKernelExecFunc
+80838938   gBAM_TI_dmaOrbWriteOneShotKernelHelperFunc
+808388d8   gBAM_TI_dmaReadAutoIncrementKernelExecFunc
+808388c8   gBAM_TI_dmaReadAutoIncrementKernelHelperFunc
+808389f4   gBAM_TI_dmaReadBinImg2ListExecFunc
+808389ec   gBAM_TI_dmaReadBinImg2ListHelperFunc
+808389a8   gBAM_TI_dmaReadScatterGatherKernelExecFunc
+80838998   gBAM_TI_dmaReadScatterGatherKernelHelperFunc
+80838970   gBAM_TI_dmaScatterGatherReadKernel
+80838984   gBAM_TI_dmaScatterGatherWriteKernel
+808388f0   gBAM_TI_dmaWriteAutoIncrementKernelExecFunc
+808388d0   gBAM_TI_dmaWriteAutoIncrementKernelHelperFunc
+80838a28   gBAM_TI_dmaWriteBinImg2ListExecFunc
+80838a20   gBAM_TI_dmaWriteBinImg2ListHelperFunc
+808389c0   gBAM_TI_dmaWriteScatterGatherKernelExecFunc
+808389a0   gBAM_TI_dmaWriteScatterGatherKernelHelperFunc
+80839158   gBAM_TI_extract_bit_field_u32ExecFunc
+80838ff0   gBAM_TI_extract_bit_field_u32HelperFunc
+80838fdc   gBAM_TI_extract_bit_field_u32Kernel
+80839170   gBAM_TI_fast9ExecFunc
+8083900c   gBAM_TI_fast9HelperFunc
+80838ff8   gBAM_TI_fast9Kernel
+80839188   gBAM_TI_fast9scoreExecFunc
+80839028   gBAM_TI_fast9scoreHelperFunc
+80839014   gBAM_TI_fast9scoreKernel
+808391a0   gBAM_TI_gauss5x5PyramidExecFunc
+80839044   gBAM_TI_gauss5x5PyramidHelperFunc
+80839030   gBAM_TI_gauss5x5PyramidKernel
+808391b8   gBAM_TI_horizontalnonmaxsuppressionExecFunc
+80839060   gBAM_TI_horizontalnonmaxsuppressionHelperFunc
+8083904c   gBAM_TI_horizontalnonmaxsuppressionKernel
+80839278   gBAM_TI_kernelDBdef_binToList
+808391d0   gBAM_TI_multipointHarrisScoreExecFunc
+8083907c   gBAM_TI_multipointHarrisScoreHelperFunc
+80839068   gBAM_TI_multipointHarrisScoreKernel
+808391e8   gBAM_TI_natcBlockAverage2x2ExecFunc
+80839098   gBAM_TI_natcBlockAverage2x2HelperFunc
+80839084   gBAM_TI_natcBlockAverage2x2Kernel
+80839200   gBAM_TI_natcGauss5x5PyramidExecFunc
+808390b4   gBAM_TI_natcGauss5x5PyramidHelperFunc
+808390a0   gBAM_TI_natcGauss5x5PyramidKernel
+80839218   gBAM_TI_prune_big_listExecFunc
+808390d0   gBAM_TI_prune_big_listHelperFunc
+808390bc   gBAM_TI_prune_big_listKernel
+80839230   gBAM_TI_rBriefExecFunc
+808390ec   gBAM_TI_rBriefHelperFunc
+808390d8   gBAM_TI_rBriefKernel
+80838a40   gBAM_TI_sparseHarrisScoreDmaNodeReadKernel
+80838a5c   gBAM_TI_sparseHarrisScoreDmaNodeReadKernelExecFunc
+80838a54   gBAM_TI_sparseHarrisScoreDmaNodeReadKernelHelperFunc
+80838a74   gBAM_TI_sparseHarrisScoreDmaNodeWriteKernel
+80838a90   gBAM_TI_sparseHarrisScoreDmaNodeWriteKernelExecFunc
+80838a88   gBAM_TI_sparseHarrisScoreDmaNodeWriteKernelHelperFunc
+80839248   gBAM_TI_verticalnonmaxsuppressionExecFunc
+80839108   gBAM_TI_verticalnonmaxsuppressionHelperFunc
+808390f4   gBAM_TI_verticalnonmaxsuppressionKernel
+80838144   gBAM_memPrintfArr
+80833e84   gConfig_ORB
+40027ce8   gDmaUtilsStateStruct
+80836944   gsTokenMap_ORB
+80018ed8   lseek
+800193f8   ltoa
+800173ec   main
+8001a5d4   malloc
+80836904   memObj_DMEM
+80015a5c   mem_alloc
+80017480   mem_free
+8001b520   memccpy
+80015244   memcpy
+8001668c   memset
+80008880   mergeSort_init
+800184e0   minit
+80017a28   my_vcop_psort2_1step_kernel_custom
+8001945c   my_vcop_psort2_1step_reverse_kernel_custom
+80018814   my_vcop_psort2_2steps_kernel_custom
+80018888   my_vcop_psort2_2steps_reverse_kernel_custom
+80017190   my_vcop_psort2_3steps_kernel_custom
+80017228   my_vcop_psort2_3steps_reverse_kernel_custom
+8001b81c   my_vcop_remove_ex_col_custom
+8001b690   my_vcop_sort8_simd8_64_custom
+8001b6ac   my_vcop_sort8_simd8_XX_custom
+80014a34   open
+80830c4c   orbPattern
+40027d5c   orb_numTestCases
+8001800c   printf
+8001a28c   rand
+80018f40   read
+8001a740   readmsg
+80015320   readparamfile
+8001b9fc   remove
+8001390c   setvbuf
+8001aa2c   sprintf
+8001ae14   sscanf
+8000900c   strtod
+8000f0b4   strtol
+800093ac   strtold
+8000b20c   strtoll
+8000fb20   strtoul
+8000d86c   strtoull
+8001b940   transp_idx
+8001a788   unlink
+800136d4   vcop_bin_image_to_list_init
+8001ba18   vcop_bin_image_to_list_param_count
+80018558   vcop_bin_image_to_list_vloops
+80017514   vcop_blockAverage2x2_uchar_cn
+800182fc   vcop_blockAverage2x2_uchar_init
+8001bad8   vcop_blockAverage2x2_uchar_param_count
+8001b1a8   vcop_blockAverage2x2_uchar_vloops
+8000383c   vcop_compute_rBrief_init
+8001ba20   vcop_compute_rBrief_param_count
+8000bd38   vcop_compute_rBrief_vloops
+80019d5c   vcop_extract_bit_field_u32_init
+8001badc   vcop_extract_bit_field_u32_param_count
+8001b39c   vcop_extract_bit_field_u32_vloops
+800031ac   vcop_fast9_init
+8001ba28   vcop_fast9_param_count
+8000c514   vcop_fast9_score_kernel_init
+8001ba30   vcop_fast9_score_kernel_param_count
+800137f0   vcop_fast9_score_kernel_vloops
+80009748   vcop_fast9_thresh_score_init
+8001ba38   vcop_fast9_thresh_score_param_count
+80013498   vcop_fast9_thresh_score_vloops
+8000c284   vcop_fast9_vloops
+800172c0   vcop_free
+8001808c   vcop_gauss5x5PyramidKernel_8_horiz_c
+80017ab8   vcop_gauss5x5PyramidKernel_8_horiz_init
+8001bae0   vcop_gauss5x5PyramidKernel_8_horiz_param_count
+8001aa6c   vcop_gauss5x5PyramidKernel_8_horiz_vloops
+800153f8   vcop_gauss5x5PyramidKernel_8_vert_c
+80015b20   vcop_gauss5x5PyramidKernel_8_vert_init
+8001bae4   vcop_gauss5x5PyramidKernel_8_vert_param_count
+800199e4   vcop_gauss5x5PyramidKernel_8_vert_vloops
+8000a55c   vcop_horizontal_non_max_suppression_init
+8001ba40   vcop_horizontal_non_max_suppression_param_count
+80010308   vcop_horizontal_non_max_suppression_vloops
+8001b950   vcop_malloc
+80011328   vcop_memalign
+80019a40   vcop_minit
+80004b50   vcop_multipoint_harrisScore_7x7_u16_init
+8001ba48   vcop_multipoint_harrisScore_7x7_u16_param_count
+8000af14   vcop_multipoint_harrisScore_7x7_u16_vloops
+80014078   vcop_prune_big_list_init
+8001ba50   vcop_prune_big_list_param_count
+80017b48   vcop_prune_big_list_vloops
+8000ac00   vcop_psort2_1step
+80013e64   vcop_psort2_1step_kernel_init
+8001bae8   vcop_psort2_1step_kernel_param_count
+8001ae4c   vcop_psort2_1step_kernel_vloops
+8000ffec   vcop_psort2_1step_reverse_kernel_init
+8001baec   vcop_psort2_1step_reverse_kernel_param_count
+8001ae84   vcop_psort2_1step_reverse_kernel_vloops
+800080a4   vcop_psort2_2steps
+800115f4   vcop_psort2_2steps_kernel_init
+8001ba58   vcop_psort2_2steps_kernel_param_count
+8001a054   vcop_psort2_2steps_kernel_vloops
+8000e944   vcop_psort2_2steps_reverse_kernel_init
+8001ba60   vcop_psort2_2steps_reverse_kernel_param_count
+8001a0a8   vcop_psort2_2steps_reverse_kernel_vloops
+80006f38   vcop_psort2_3steps
+8000dab8   vcop_psort2_3steps_kernel_init
+8001ba68   vcop_psort2_3steps_kernel_param_count
+800169b4   vcop_psort2_3steps_kernel_vloops
+8000b7b8   vcop_psort2_3steps_reverse_kernel_init
+8001ba70   vcop_psort2_3steps_reverse_kernel_param_count
+80016a54   vcop_psort2_3steps_reverse_kernel_vloops
+800194c0   vcop_remove_ex_col_init
+8001baf0   vcop_remove_ex_col_param_count
+8001b6c8   vcop_remove_ex_col_vloops
+80012744   vcop_sort8_simd8_64_init
+8001ba78   vcop_sort8_simd8_64_param_count
+80016cc8   vcop_sort8_simd8_64_vloops
+80012224   vcop_sort8_simd8_XX_init
+8001ba80   vcop_sort8_simd8_XX_param_count
+80016d64   vcop_sort8_simd8_XX_vloops
+8000a8b8   vcop_vertical_non_max_suppression_kernel_init
+8001ba88   vcop_vertical_non_max_suppression_kernel_param_count
+80010a80   vcop_vertical_non_max_suppression_kernel_vloops
+80018a4c   vfprintf
+8001ac50   vsprintf
+80018fa8   write
+8001a7d0   writemsg
+
+
+GLOBAL SYMBOLS: SORTED BY Symbol Address 
+
+address    name
+--------   ----
+00000001   __TI_args_main
+00000001   __TI_exit
+00001440   __TI_STACK_SIZE
+00004000   IMEMH_SIZE
+00004000   IMEML_SIZE
+00007e00   WMEM_SIZE
+00800000   __TI_SYSMEM_SIZE
+40020000   DMEM_SCRATCH
+40026800   _stack
+40027c40   __TI_STACK_END
+40027c40   __TI_STATIC_BASE
+40027ce8   gDmaUtilsStateStruct
+40027d50   bam_stat_num_packets
+40027d5c   orb_numTestCases
+40027d60   _my_stack
+40027df4   __CIOBUF_
+40027f14   edmaBase
+40040000   _wmem_memory
+40050000   _imemla_memory
+40054000   _imemha_memory
+40070000   _imemlb_memory
+40074000   _imemhb_memory
+80000000   _vec_table
+80000100   _reset_handler
+80000120   _dummy_handler
+80001100   ORBTest
+80001b54   BAM_initGraph
+80002ae4   ORB_TI_alloc
+800031ac   vcop_fast9_init
+8000383c   vcop_compute_rBrief_init
+80004510   EDMA_UTILS_autoIncrement_configure
+80004b50   vcop_multipoint_harrisScore_7x7_u16_init
+800050f0   ORB_TI_init
+80005bfc   _scanfi
+800060f4   FAST9_BEST_FEATURE_TO_FRONT_TI_process
+800065c4   EDMA_UTILS_autoIncrement1D_configure
+80006a80   ORB_TI_process
+80006f38   vcop_psort2_3steps
+80007868   FAST9_CORNER_DETECT_TI_init
+80007c90   BAM_optimizeGraph
+800080a4   vcop_psort2_2steps
+80008880   mergeSort_init
+80008c4c   bitonic_merge_multi_step
+8000900c   strtod
+800093ac   strtold
+80009748   vcop_fast9_thresh_score_init
+80009ae4   HARRIS_BEST_FEATURE_TO_FRONT_TI_process
+8000a1f4   FAST9_CORNER_DETECT_TI_process
+8000a55c   vcop_horizontal_non_max_suppression_init
+8000a8b8   vcop_vertical_non_max_suppression_kernel_init
+8000ac00   vcop_psort2_1step
+8000af14   vcop_multipoint_harrisScore_7x7_u16_vloops
+8000b20c   strtoll
+8000b7b8   vcop_psort2_3steps_reverse_kernel_init
+8000ba7c   BEST_FEATURE_TO_FRONT_TI_algCreate
+8000bd38   vcop_compute_rBrief_vloops
+8000c284   vcop_fast9_vloops
+8000c514   vcop_fast9_score_kernel_init
+8000c7a0   EDMA_UTILS_autoIncrement_update
+8000ca28   IMAGE_PYRAMID_U8_TI_graphCreate
+8000d86c   strtoull
+8000dab8   vcop_psort2_3steps_kernel_init
+8000dce8   _printfi
+8000e550   _frcdivd
+8000e944   vcop_psort2_2steps_reverse_kernel_init
+8000eb38   __arp32abi_divd
+8000ed1c   BAM_createGraph
+8000eee8   __arp32abi_divull
+8000f0b4   strtol
+8000f280   __arp32abi_mpyd
+8000f448   DMA_funcs_hardwareRegSetup
+8000f60c   EDMA_UTILS_autoIncrement_triggerOutChannel
+8000f7c4   __arp32abi_addd
+8000f97c   BEST_FEATURE_TO_FRONT_TI_algExecute
+8000fb20   strtoul
+8000fcc0   FAST9_BEST_FEATURE_TO_FRONT_TI_alloc
+8000fe5c   EDMA_UTILS_scattherGather_init
+8000ffec   vcop_psort2_1step_reverse_kernel_init
+80010308   vcop_horizontal_non_max_suppression_vloops
+80010494   bam_mem_alloc
+80010618   DMA_resourceAllocator_allocateResources
+80010790   RBRIEF_TI_graphCreate
+80010908   SPARSE_HARRIS_SCORE_TI_graphCreate
+80010a80   vcop_vertical_non_max_suppression_kernel_vloops
+80010bf8   FAST9_SCORE_TI_graphCreate
+80010d6c   RBRIEF_TI_process
+80010ee0   fputs
+80011050   BEST_FEATURE_TO_FRONT_TI_graphCreate
+800111bc   FAST9_CORNER_DETECT_TI_alloc
+80011328   vcop_memalign
+80011490   EDMA_UTILS_autoIncrement_triggerInChannel
+800115f4   vcop_psort2_2steps_kernel_init
+80011758   FAST9_CORNER_DETECT_TI_graphCreate
+800118b8   _frcaddd
+80011b74   BAM_DMA_AUTOINCREMENT_getMemRecFunc
+80011ccc   BAM_updateNodes
+80011e24   __arp32abi_mpyll
+800120d0   BIN_IMAGE_TO_LIST_TI_graphCreate
+80012224   vcop_sort8_simd8_XX_init
+800124b8   FAST9_BEST_FEATURE_TO_FRONT_TI_init
+80012600   fread
+80012744   vcop_sort8_simd8_64_init
+80012888   _frcmpyd
+80012b08   HARRIS_BEST_FEATURE_TO_FRONT_TI_alloc
+80012d80   BAM_process
+80012eb8   FAST9_CORNER_DETECT_TI_graphDmaControl
+80012ff0   bam_getMemPacket
+80013254   HARRIS_BEST_FEATURE_TO_FRONT_TI_init
+80013498   vcop_fast9_thresh_score_vloops
+800135b8   BAM_DMA_AUTOINCREMENT_setMemRecFunc
+800136d4   vcop_bin_image_to_list_init
+800137f0   vcop_fast9_score_kernel_vloops
+8001390c   setvbuf
+80013c48   BAM_fillKernelInfo
+80013d58   BAM_getGraphMemSize
+80013e64   vcop_psort2_1step_kernel_init
+80013f70   IMAGE_PYRAMID_U8_TI_process
+80014078   vcop_prune_big_list_init
+80014580   RBRIEF_TI_alloc
+80014a34   open
+80014c08   EDMA_UTILS_autoIncrement_init
+80014cf0   fputc
+80014ebc   BIN_IMAGE_TO_LIST_TI_graphDmaControl
+80015084   IMAGE_PYRAMID_U8_TI_dmaControl
+80015244   memcpy
+80015320   readparamfile
+800153f8   vcop_gauss5x5PyramidKernel_8_vert_c
+80015668   DMA_utils_updateStateStruct
+80015734   __arp32abi_cmpd
+80015800   bam_mem_free
+80015994   BIN_IMG2LIST_BAM_DMA_updateInDDRptr
+80015a5c   mem_alloc
+80015b20   vcop_gauss5x5PyramidKernel_8_vert_init
+80015be4   RBRIEF_TI_init
+80015ca4   IMAGE_PYRAMID_U8_TI_alloc
+80015d60   IMAGE_PYRAMID_U8_TI_init
+80016104   EDMA_UTILS_autoIncrement1D_init
+80016270   BAM_activateGraph
+80016324   HOSTlseek
+8001648c   BAM_copyIntMemRec2ExtMem
+80016538   HOSTrename
+8001668c   memset
+80016734   EDMA_UTILS_scattherGather_updateNtrigger
+80016874   bam_minit
+800169b4   vcop_psort2_3steps_kernel_vloops
+80016a54   vcop_psort2_3steps_reverse_kernel_vloops
+80016b90   _buff_read
+80016cc8   vcop_sort8_simd8_64_vloops
+80016d64   vcop_sort8_simd8_XX_vloops
+80016e00   BAM_ARP32_computeWrapper
+80016e98   BEST_FEATURE_TO_FRONT_TI_dmaControl
+80016f30   BIN_IMG2LIST_BAM_DMA_frameInitOutChannel
+80016fc8   BIN_IMG2LIST_BAM_DMA_waitOutChannel
+80017060   EDMA_UTILS_memcpy2D
+800170f8   HOSTopen
+80017190   my_vcop_psort2_3steps_kernel_custom
+80017228   my_vcop_psort2_3steps_reverse_kernel_custom
+800172c0   vcop_free
+800173ec   main
+80017480   mem_free
+80017514   vcop_blockAverage2x2_uchar_cn
+80017638   HOSTread
+800176c8   __arp32abi_cvtdf
+800177e8   _wrt_ok
+80017878   bam_releaseMemPacket
+80017908   fseek
+80017998   ftell
+80017a28   my_vcop_psort2_1step_kernel_custom
+80017ab8   vcop_gauss5x5PyramidKernel_8_horiz_init
+80017b48   vcop_prune_big_list_vloops
+80017bd8   BAM_copyNodeList
+80017c64   HOSTwrite
+80017d78   close
+80017e84   FAST9_SCORE_TI_dmaControl
+8001800c   printf
+8001808c   vcop_gauss5x5PyramidKernel_8_horiz_c
+8001810c   __arp32abi_fixdi
+80018188   _closefile
+80018204   atoi
+80018280   fflush
+800182fc   vcop_blockAverage2x2_uchar_init
+80018378   HOSTunlink
+800184e0   minit
+80018558   vcop_bin_image_to_list_vloops
+800185d0   BAM_initGraphInstance
+80018644   DMA_funcs_writeTransferParams
+800186b8   HOSTclose
+8001872c   ORB_TI_numAlloc
+800187a0   fprintf
+80018814   my_vcop_psort2_2steps_kernel_custom
+80018888   my_vcop_psort2_2steps_reverse_kernel_custom
+800188fc   BAM_DMA_AUTOINCREMENT_updateDDRptrInChannel
+8001896c   BAM_DMA_AUTOINCREMENT_updateDDRptrOutChannel
+800189dc   _auto_init
+80018a4c   vfprintf
+80018b94   _rd_ok
+80018d38   EDMA_UTILS_autoIncrement_waitOutChannel
+80018da0   __arp32abi_fltid
+80018e08   _c_int00
+80018e70   bam_mcheck
+80018ed8   lseek
+80018f40   read
+80018fa8   write
+8001913c   FAST9_BEST_FEATURE_TO_FRONT_TI_activate
+800191a0   FAST9_BEST_FEATURE_TO_FRONT_TI_deactivate
+80019204   FAST9_CORNER_DETECT_TI_activate
+80019268   FAST9_CORNER_DETECT_TI_deactivate
+800192cc   HARRIS_BEST_FEATURE_TO_FRONT_TI_activate
+80019330   HARRIS_BEST_FEATURE_TO_FRONT_TI_deactivate
+800193f8   ltoa
+8001945c   my_vcop_psort2_1step_reverse_kernel_custom
+800194c0   vcop_remove_ex_col_init
+80019584   ORB_TI_activate
+800195e4   ORB_TI_deactivate
+80019644   __arp32abi_llshl
+800196a4   _doflush
+800197bc   BIN_IMG2LIST_BAM_DMA_triggerOutChannel
+80019818   IMAGE_PYRAMID_U8_TI_activate
+80019874   RBRIEF_TI_activate
+800198d0   RBRIEF_TI_deactivate
+8001992c   __arp32abi_isinf
+800199e4   vcop_gauss5x5PyramidKernel_8_vert_vloops
+80019a40   vcop_minit
+80019d04   TI_GetMemoryChunk
+80019d5c   vcop_extract_bit_field_u32_init
+80019db4   BAM_controlNode
+80019e5c   EDMA_UTILS_autoIncrement_waitInChannel
+80019f58   _renormd
+8001a000   exit
+8001a054   vcop_psort2_2steps_kernel_vloops
+8001a0a8   vcop_psort2_2steps_reverse_kernel_vloops
+8001a14c   IMAGE_PYRAMID_U8_TI_deactivate
+8001a19c   RBRIEF_TI_graphDmaControl
+8001a1ec   _cleanup
+8001a28c   rand
+8001a2dc   BAM_DMA_AUTOINCREMENT_frameInitInChannel
+8001a458   BAM_initKernelDB
+8001a4f0   EDMA_UTILS_autoIncrement1D_waitOutChannel
+8001a53c   EDMA_UTILS_globalReset
+8001a588   __arp32abi_fltud
+8001a5d4   malloc
+8001a6f8   EVE_SCTM_CounterConfig
+8001a740   readmsg
+8001a788   unlink
+8001a7d0   writemsg
+8001a810   C$$IO$$
+8001a818   BAM_DMA_AUTOINCREMENT_frameInitOutChannel
+8001a9ec   _args_main
+8001aa2c   sprintf
+8001aa6c   vcop_gauss5x5PyramidKernel_8_horiz_vloops
+8001aaac   BIN_IMG2LIST_BAM_DMA_updateOutDDRptr
+8001ab24   ORB_TI_free
+8001ab60   SPARSE_HARRIS_SCORE_TI_dmaControl
+8001abd8   __arp32abi_strasgi
+8001ac14   fopen
+8001ac50   vsprintf
+8001acc4   BAM_getMemPacket
+8001acfc   BEST_FEATURE_TO_FRONT_TI_graphControl
+8001ad6c   EDMA_UTILS_scattherGather_updateSrcNtrigger
+8001ada4   __arp32abi_abort_msg
+8001addc   __arp32abi_remull
+8001ae14   sscanf
+8001ae4c   vcop_psort2_1step_kernel_vloops
+8001ae84   vcop_psort2_1step_reverse_kernel_vloops
+8001af24   __arp32abi_llshru
+8001afe8   EDMA_UTILS_autoIncrement1D_triggerOutChannel
+8001b018   fclose
+8001b074   BAM_printf
+8001b0a0   DMA_resourceAllocator_initResources
+8001b0cc   EVE_SCTM_CounterTimerEnable
+8001b0f8   EVE_SCTM_InpEvtSelect
+8001b124   EVE_SCTM_SamplingSelect
+8001b17c   __arp32abi_subd
+8001b1a8   vcop_blockAverage2x2_uchar_vloops
+8001b274   __arp32abi_negd
+8001b29c   _mpyl
+8001b330   TEST_PRINTF
+8001b354   __arp32abi_cmplls
+8001b378   __arp32abi_cmpllu
+8001b39c   vcop_extract_bit_field_u32_vloops
+8001b400   BEST_FEATURE_TO_FRONT_TI_execute
+8001b420   BIN_IMAGE_TO_LIST_TI_execute
+8001b440   DMA_utils_resetStateStruct
+8001b460   EDMA_UTILS_scattherGather_wait
+8001b480   FAST9_CORNER_DETECT_TI_execute
+8001b4a0   FAST9_SCORE_TI_execute
+8001b4c0   IMAGE_PYRAMID_U8_TI_execute
+8001b4e0   RBRIEF_TI_execute
+8001b500   SPARSE_HARRIS_SCORE_TI_execute
+8001b520   memccpy
+8001b578   BEST_FEATURE_TO_FRONT_TI_getGraphMemReq
+8001b5b0   FAST9_CORNER_DETECT_TI_getGraphMemReq
+8001b5cc   FAST9_SCORE_TI_getGraphMemReq
+8001b5e8   IMAGE_PYRAMID_U8_TI_getGraphMemReq
+8001b604   RBRIEF_TI_getGraphMemReq
+8001b620   SPARSE_HARRIS_SCORE_TI_getGraphMemReq
+8001b63c   __arp32abi_addll
+8001b690   my_vcop_sort8_simd8_64_custom
+8001b6ac   my_vcop_sort8_simd8_XX_custom
+8001b6c8   vcop_remove_ex_col_vloops
+8001b72c   BIN_IMAGE_TO_LIST_TI_getGraphMemReq
+8001b744   EVE_SCTM_CounterRead
+8001b75c   EVE_SCTM_OverflowCheck
+8001b774   FAST9_BEST_FEATURE_TO_FRONT_TI_free
+8001b78c   FAST9_CORNER_DETECT_TI_free
+8001b7a4   HARRIS_BEST_FEATURE_TO_FRONT_TI_free
+8001b7bc   IMAGE_PYRAMID_U8_TI_free
+8001b7d4   RBRIEF_TI_free
+8001b81c   my_vcop_remove_ex_col_custom
+8001b834   EVE_SCTM_Enable
+8001b848   __arp32abi_subll
+8001b85c   free
+8001b8a0   BEST_FEATURE_TO_FRONT_TI_getAlgMemReq
+8001b8b0   BIN_IMAGE_TO_LIST_TI_graphControl
+8001b8e0   EDMA_UTILS_scattherGather_configure
+8001b8f0   FAST9_CORNER_DETECT_TI_graphControl
+8001b900   __arp32abi_negll
+8001b940   transp_idx
+8001b950   vcop_malloc
+8001b990   DMA_resourceAllocator_setEdma3RmHandle
+8001b99c   TI_CreateMemoryHandle
+8001b9fc   remove
+8001ba10   C$$EXIT
+8001ba10   abort
+8001ba18   vcop_bin_image_to_list_param_count
+8001ba20   vcop_compute_rBrief_param_count
+8001ba28   vcop_fast9_param_count
+8001ba30   vcop_fast9_score_kernel_param_count
+8001ba38   vcop_fast9_thresh_score_param_count
+8001ba40   vcop_horizontal_non_max_suppression_param_count
+8001ba48   vcop_multipoint_harrisScore_7x7_u16_param_count
+8001ba50   vcop_prune_big_list_param_count
+8001ba58   vcop_psort2_2steps_kernel_param_count
+8001ba60   vcop_psort2_2steps_reverse_kernel_param_count
+8001ba68   vcop_psort2_3steps_kernel_param_count
+8001ba70   vcop_psort2_3steps_reverse_kernel_param_count
+8001ba78   vcop_sort8_simd8_64_param_count
+8001ba80   vcop_sort8_simd8_XX_param_count
+8001ba88   vcop_vertical_non_max_suppression_kernel_param_count
+8001ba98   BAM_dummyKernelFunc
+8001baa0   EDMA3LLD_SUPPORT_requestResources
+8001baa4   FAST9_BEST_FEATURE_TO_FRONT_TI_control
+8001baa8   FAST9_BEST_FEATURE_TO_FRONT_TI_numAlloc
+8001baac   FAST9_CORNER_DETECT_TI_control
+8001bab0   FAST9_CORNER_DETECT_TI_numAlloc
+8001bab4   HARRIS_BEST_FEATURE_TO_FRONT_TI_control
+8001bab8   HARRIS_BEST_FEATURE_TO_FRONT_TI_numAlloc
+8001babc   IMAGE_PYRAMID_U8_TI_control
+8001bac0   IMAGE_PYRAMID_U8_TI_numAlloc
+8001bac4   ORB_TI_control
+8001bac8   RBRIEF_TI_control
+8001bacc   RBRIEF_TI_numAlloc
+8001bad0   _nop
+8001bad4   _system_pre_init
+8001bad8   vcop_blockAverage2x2_uchar_param_count
+8001badc   vcop_extract_bit_field_u32_param_count
+8001bae0   vcop_gauss5x5PyramidKernel_8_horiz_param_count
+8001bae4   vcop_gauss5x5PyramidKernel_8_vert_param_count
+8001bae8   vcop_psort2_1step_kernel_param_count
+8001baec   vcop_psort2_1step_reverse_kernel_param_count
+8001baf0   vcop_remove_ex_col_param_count
+80030000   _sys_memory
+8083044c   BAM_RBRIEF_TI_MOMENTS_COL_MASK
+8083084c   BAM_RBRIEF_TI_MOMENTS_ROW_MASK
+80830c4c   orbPattern
+8083316c   _ctypes_
+80833346   LUT_EXT_IDX_THR
+80833680   LUT_EXT_IDX_SAD
+80833888   FAST9_BEST_FEATURE_TO_FRONT_TI_VISION_FXNS
+808338b4   FAST9_BEST_FEATURE_TO_FRONT_TI_IRES
+808338dc   FAST9_CORNER_DETECT_TI_VISION_FXNS
+80833908   FAST9_CORNER_DETECT_TI_IRES
+80833930   HARRIS_BEST_FEATURE_TO_FRONT_TI_VISION_FXNS
+8083395c   HARRIS_BEST_FEATURE_TO_FRONT_TI_IRES
+80833984   IMAGE_PYRAMID_U8_TI_VISION_FXNS
+808339b0   IMAGE_PYRAMID_U8_TI_IRES
+808339d8   RBRIEF_TI_VISION_FXNS
+80833a04   RBRIEF_TI_IRES
+80833a2c   ORB_TI_VISION_FXNS
+80833a58   ORB_TI_IRES
+80833bb0   BAM_RBRIEF_TI_COSQ14_2
+80833bf2   BAM_RBRIEF_TI_SINQ14_2
+80833df4   BAM_RBRIEF_TI_ARCTAN_XTHR
+80833e04   BAM_RBRIEF_TI_TRAN_OFFSET
+80833e58   ID_EXT_IDX
+80833e60   IN_ID_IDX
+80833e84   gConfig_ORB
+808367ec   _tmpnams
+80836904   memObj_DMEM
+80836934   _cleanup_ptr
+80836938   _dtors_ptr
+80836944   gsTokenMap_ORB
+80838144   gBAM_memPrintfArr
+80838544   CRED_instVirtAddr
+80838738   _ftable
+808388a0   gBAM_TI_dmaAutoIncrementReadKernel
+808388b4   gBAM_TI_dmaAutoIncrementWriteKernel
+808388c8   gBAM_TI_dmaReadAutoIncrementKernelHelperFunc
+808388d0   gBAM_TI_dmaWriteAutoIncrementKernelHelperFunc
+808388d8   gBAM_TI_dmaReadAutoIncrementKernelExecFunc
+808388f0   gBAM_TI_dmaWriteAutoIncrementKernelExecFunc
+80838908   gBAM_TI_dmaOrbOneShotReadKernel
+8083891c   gBAM_TI_dmaOrbOneShotWriteKernel
+80838930   gBAM_TI_dmaOrbReadOneShotKernelHelperFunc
+80838938   gBAM_TI_dmaOrbWriteOneShotKernelHelperFunc
+80838940   gBAM_TI_dmaOrbReadOneShotKernelExecFunc
+80838958   gBAM_TI_dmaOrbWriteOneShotKernelExecFunc
+80838970   gBAM_TI_dmaScatterGatherReadKernel
+80838984   gBAM_TI_dmaScatterGatherWriteKernel
+80838998   gBAM_TI_dmaReadScatterGatherKernelHelperFunc
+808389a0   gBAM_TI_dmaWriteScatterGatherKernelHelperFunc
+808389a8   gBAM_TI_dmaReadScatterGatherKernelExecFunc
+808389c0   gBAM_TI_dmaWriteScatterGatherKernelExecFunc
+808389d8   gBAM_TI_binImg2ListReadKernel
+808389ec   gBAM_TI_dmaReadBinImg2ListHelperFunc
+808389f4   gBAM_TI_dmaReadBinImg2ListExecFunc
+80838a0c   gBAM_TI_binImg2ListWriteKernel
+80838a20   gBAM_TI_dmaWriteBinImg2ListHelperFunc
+80838a28   gBAM_TI_dmaWriteBinImg2ListExecFunc
+80838a40   gBAM_TI_sparseHarrisScoreDmaNodeReadKernel
+80838a54   gBAM_TI_sparseHarrisScoreDmaNodeReadKernelHelperFunc
+80838a5c   gBAM_TI_sparseHarrisScoreDmaNodeReadKernelExecFunc
+80838a74   gBAM_TI_sparseHarrisScoreDmaNodeWriteKernel
+80838a88   gBAM_TI_sparseHarrisScoreDmaNodeWriteKernelHelperFunc
+80838a90   gBAM_TI_sparseHarrisScoreDmaNodeWriteKernelExecFunc
+80838aa8   gBAM_TI_dmaCustomRbriefNodeReadKernel
+80838abc   gBAM_TI_dmaCustomRbriefNodeReadKernelHelperFunc
+80838ac4   gBAM_TI_dmaCustomRbriefNodeReadKernelExecFunc
+80838adc   gBAM_TI_dmaCustomRbriefNodeWriteKernel
+80838af0   gBAM_TI_dmaCustomRbriefNodeWriteKernelHelperFunc
+80838af8   gBAM_TI_dmaCustomRbriefNodeWriteKernelExecFunc
+80838f88   gBAM_TI_binImageToListKernel
+80838f9c   gBAM_TI_binImageToListHelperFunc
+80838fa4   gBAM_TI_blockAverage2x2Kernel
+80838fb8   gBAM_TI_blockAverage2x2HelperFunc
+80838fc0   gBAM_TI_blockSortU32Kernel
+80838fd4   gBAM_TI_blockSortU32HelperFunc
+80838fdc   gBAM_TI_extract_bit_field_u32Kernel
+80838ff0   gBAM_TI_extract_bit_field_u32HelperFunc
+80838ff8   gBAM_TI_fast9Kernel
+8083900c   gBAM_TI_fast9HelperFunc
+80839014   gBAM_TI_fast9scoreKernel
+80839028   gBAM_TI_fast9scoreHelperFunc
+80839030   gBAM_TI_gauss5x5PyramidKernel
+80839044   gBAM_TI_gauss5x5PyramidHelperFunc
+8083904c   gBAM_TI_horizontalnonmaxsuppressionKernel
+80839060   gBAM_TI_horizontalnonmaxsuppressionHelperFunc
+80839068   gBAM_TI_multipointHarrisScoreKernel
+8083907c   gBAM_TI_multipointHarrisScoreHelperFunc
+80839084   gBAM_TI_natcBlockAverage2x2Kernel
+80839098   gBAM_TI_natcBlockAverage2x2HelperFunc
+808390a0   gBAM_TI_natcGauss5x5PyramidKernel
+808390b4   gBAM_TI_natcGauss5x5PyramidHelperFunc
+808390bc   gBAM_TI_prune_big_listKernel
+808390d0   gBAM_TI_prune_big_listHelperFunc
+808390d8   gBAM_TI_rBriefKernel
+808390ec   gBAM_TI_rBriefHelperFunc
+808390f4   gBAM_TI_verticalnonmaxsuppressionKernel
+80839108   gBAM_TI_verticalnonmaxsuppressionHelperFunc
+80839110   gBAM_TI_binImageToListExecFunc
+80839128   gBAM_TI_blockAverage2x2ExecFunc
+80839140   gBAM_TI_blockSortU32ExecFunc
+80839158   gBAM_TI_extract_bit_field_u32ExecFunc
+80839170   gBAM_TI_fast9ExecFunc
+80839188   gBAM_TI_fast9scoreExecFunc
+808391a0   gBAM_TI_gauss5x5PyramidExecFunc
+808391b8   gBAM_TI_horizontalnonmaxsuppressionExecFunc
+808391d0   gBAM_TI_multipointHarrisScoreExecFunc
+808391e8   gBAM_TI_natcBlockAverage2x2ExecFunc
+80839200   gBAM_TI_natcGauss5x5PyramidExecFunc
+80839218   gBAM_TI_prune_big_listExecFunc
+80839230   gBAM_TI_rBriefExecFunc
+80839248   gBAM_TI_verticalnonmaxsuppressionExecFunc
+80839278   gBAM_TI_kernelDBdef_binToList
+808392b4   _lock
+808392b8   _unlock
+808392c4   _ft_end
+808392c8   errno
+ffffffff   __binit__
+ffffffff   __c_args__
+ffffffff   binit
+UNDEFED    __TI_CINIT_Base
+UNDEFED    __TI_CINIT_Limit
+UNDEFED    __TI_Handler_Table_Base
+UNDEFED    __TI_Handler_Table_Limit
+UNDEFED    __TI_INITARRAY_Base
+UNDEFED    __TI_INITARRAY_Limit
+
+[487 symbols]

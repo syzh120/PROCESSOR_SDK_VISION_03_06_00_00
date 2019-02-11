@@ -1,0 +1,40 @@
+/*******************************************************************/
+/* This GEL file is loaded on the command line of Code Composer    */
+/* The StartUp() function is called every time you start           */
+/* Code Composer.  You can customize this function to              */
+/* initialize wait states or to perform other initialization.      */
+/*                                                                 */
+/* ECC CFG                                                         */
+/*                                                                 */
+/*                                                                 */
+/*******************************************************************/
+
+#define IPU1_MMU_CFG                 (IPU1_TARGET_TARG + 0x80000)
+
+hotmenu
+AMMU_config_IPU_ECC_Test()
+{
+    uint32_t regVal, regAddr;
+
+    GEL_TextOut("--->>>Starting A-MMU config for IPU ECC test... <<<---\n");
+
+    /* Default gel map is 0x00000000 (vector table) to IPU L2 RAM.
+     * Changing for IPU Test: 0x00000000 is mapped to ocmc addr (0x40300000) */
+
+    regAddr = IPU_MMU_CFG;
+    regAddr += 0x920;
+	WR_MEM_32(regAddr,         0x00000000); regAddr += 0x8;
+
+    /* Small page Virtual Address */
+    regAddr = IPU_MMU_CFG;
+    regAddr += 0x9A0;
+	WR_MEM_32(regAddr,         0x40300000); regAddr += 0x8;
+
+    regAddr = IPU_MMU_CFG;
+    regAddr += 0xA20;
+	WR_MEM_32(regAddr,         0x00000003); regAddr += 0x8;
+
+
+    GEL_TextOut("--->>> A-MMU config for IPU ECC Test completed. <<<---\n");
+
+}

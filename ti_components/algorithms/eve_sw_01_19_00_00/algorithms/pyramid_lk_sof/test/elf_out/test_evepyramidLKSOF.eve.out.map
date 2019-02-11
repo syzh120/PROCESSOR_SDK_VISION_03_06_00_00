@@ -1,0 +1,2657 @@
+******************************************************************************
+                   ARP32 Linker PC v1.0.7                      
+******************************************************************************
+>> Linked Mon Jun 25 22:16:11 2018
+
+OUTPUT FILE NAME:   <.\elf_out\test_evepyramidLKSOF.eve.out>
+ENTRY POINT SYMBOL: "_reset_handler"  address: 80000100
+
+
+MEMORY CONFIGURATION
+
+         name            origin    length      used     unused   attr    fill
+----------------------  --------  ---------  --------  --------  ----  --------
+PAGE 0:
+  VECMEM                80000000   00000100  00000050  000000b0  RWIX
+  CMDMEM                80000100   00001000  00000028  00000fd8  RWIX
+  EXTMEM                80001100   00040000  00027780  00018880  RWIX
+
+PAGE 1:
+  DATMEM                40020000   00008000  00007c4c  000003b4  RWIX
+  WMEM                  40040000   00007fe0  00000000  00007fe0  RWIX
+  IMEMLA                40050000   00004000  00000000  00004000  RWIX
+  IMEMHA                40054000   00004000  00000000  00004000  RWIX
+  IMEMLB                40070000   00004000  00000000  00004000  RWIX
+  IMEMHB                40074000   00004000  00000000  00004000  RWIX
+  L3MEM                 40300000   00100000  00000000  00100000  RWIX
+  GEM0_L2_MEM           40800000   00008000  00000000  00008000  RWIX
+  EXTDMEM               80050000   03000000  0280878b  007f7875  RWIX
+
+
+SECTION ALLOCATION MAP
+
+ output                                  attributes/
+section   page    origin      length       input sections
+--------  ----  ----------  ----------   ----------------
+.cinit     1    40020000    00000000     UNINITIALIZED
+
+.init_array 
+*          1    40020000    00000000     UNINITIALIZED
+
+.intvecs   0    80000000    00000028     
+                  80000000    00000028     boot_arp32.obj (.intvecs)
+
+.imemha    0    80000028    00000008     UNINITIALIZED
+                  80000028    00000008     rtsarp32_v200.lib : vcop_memory.obj (.imemha)
+
+.imemhb    0    80000030    00000008     UNINITIALIZED
+                  80000030    00000008     rtsarp32_v200.lib : vcop_memory.obj (.imemhb)
+
+.imemla    0    80000038    00000008     UNINITIALIZED
+                  80000038    00000008     rtsarp32_v200.lib : vcop_memory.obj (.imemla)
+
+.imemlb    0    80000040    00000008     UNINITIALIZED
+                  80000040    00000008     rtsarp32_v200.lib : vcop_memory.obj (.imemlb)
+
+.wmem      0    80000048    00000008     UNINITIALIZED
+                  80000048    00000008     rtsarp32_v200.lib : vcop_memory.obj (.wmem)
+
+.inthandler 
+*          0    80000100    00000028     
+                  80000100    00000028     boot_arp32.obj (.inthandler)
+
+.algo_text 
+*          0    80001100    0001530c     
+                  80001100    00000690     libevekernels.eve.lib : vcop_fast9_kernel.obj (.text:vcop_fast9_init)
+                  80001790    000004b4                           : merge_sort_init.obj (.text:vcop_psort2_3steps)
+                  80001c44    000003f4                           : merge_sort_init.obj (.text:vcop_psort2_2steps)
+                  80002038    000003cc                           : merge_sort_init.obj (.text:mergeSort_init)
+                  80002404    000003c0                           : merge_sort_init.obj (.text:bitonic_merge_multi_step)
+                  800027c4    0000039c                           : vcop_fast9_score_kernel.obj (.text:vcop_fast9_thresh_score_init)
+                  80002b60    0000035c                           : vcop_horizontal_non_max_suppression_kernel.obj (.text:vcop_horizontal_non_max_suppression_init)
+                  80002ebc    00000358                           : vcop_nonMaxSuppress_mxn_32s_kernel.obj (.text:vcop_nonMaxSuppress_mxn_32s_init)
+                  80003214    00000348                           : vcop_vertical_non_max_suppression_kernel.obj (.text:vcop_vertical_non_max_suppression_kernel_init)
+                  8000355c    00000314                           : merge_sort_init.obj (.text:vcop_psort2_1step)
+                  80003870    000002f0                           : vcop_nonMaxSuppress_mxn_32s_kernel.obj (.text:vcop_nonMaxSuppress_mxn_32s_bitPack_init)
+                  80003b60    000002ec                           : vcop_harrisScore_32_7x7_kernel.obj (.text:vcop_harrisScore_32_7x7_1_init)
+                  80003e4c    000002c4                           : merge_sort_kernel.obj (.text:vcop_psort2_3steps_reverse_kernel_init)
+                  80004110    00000290                           : vcop_fast9_kernel.obj (.text:vcop_fast9_vloops)
+                  800043a0    0000028c                           : vcop_fast9_score_kernel.obj (.text:vcop_fast9_score_kernel_init)
+                  8000462c    00000278                           : vcop_harrisScore_32_7x7_kernel.obj (.text:vcop_harrisScore_32_methodB_init)
+                  800048a4    00000258                           : vcop_calc_new_lk_xy_kernel.obj (.text:vcop_calc_new_lk_xy_init)
+                  80004afc    00000234                           : bam_generateList_exec_funcs.obj (.text:BAM_generateList_initFrame)
+                  80004d30    00000234                           : vcop_harrisScore_32_7x7_kernel.obj (.text:vcop_harrisScore_32_7x7_2_init)
+                  80004f64    00000230                           : merge_sort_kernel.obj (.text:vcop_psort2_3steps_kernel_init)
+                  80005194    00000220                           : vcop_sad_error_measure_lk_kernel.obj (.text:vcop_sad_error_measure_lk_init)
+                  800053b4    000001f8                           : vcop_harrisScore_32_7x7_kernel.obj (.text:vcop_harrisScore_32_7x7_2_vloops)
+                  800055ac    000001f4                           : merge_sort_kernel.obj (.text:vcop_psort2_2steps_reverse_kernel_init)
+                  800057a0    000001f0                           : vcop_generateList_kernel.obj (.text:vcop_generateList_init)
+                  80005990    000001bc                           : vcop_calc_inverse_structure_tensor_2x2_kernel.obj (.text:vcop_calc_inverse_structure_tensor_2x2_init)
+                  80005b4c    000001b8                           : vcop_tensor_matrix_7x7_s16_grad_kernel.obj (.text:vcop_tensor_matrix_7x7_s16_grad_init)
+                  80005d04    000001b0                           : vcop_calc_new_lk_xy_kernel.obj (.text:vcop_calc_new_lk_xy_vloops)
+                  80005eb4    000001b0                           : vcop_weight_address_bilinear_interpolation_kernel.obj (.text:vcop_weight_address_bilinear_interpolation_init)
+                  80006064    00000190                           : merge_sort_kernel.obj (.text:vcop_psort2_1step_reverse_kernel_init)
+                  800061f4    0000018c                           : vcop_horizontal_non_max_suppression_kernel.obj (.text:vcop_horizontal_non_max_suppression_vloops)
+                  80006380    00000178                           : vcop_vertical_non_max_suppression_kernel.obj (.text:vcop_vertical_non_max_suppression_kernel_vloops)
+                  800064f8    00000164                           : merge_sort_kernel.obj (.text:vcop_psort2_2steps_kernel_init)
+                  8000665c    0000015c                           : vcop_multiblock_bilinear_interp_intlv_7x7_s16_kernel.obj (.text:vcop_multiblock_bilinear_interp_intlv_7x7_s16_init)
+                  800067b8    00000158                           : vcop_sum_grad_cross_inter_frame_diff_7x7_kernel.obj (.text:vcop_sum_grad_cross_inter_frame_diff_7x7_init)
+                  80006910    00000154                           : vcop_foreach_multiblock_bilinear_interp_7x7_u8_kernel.obj (.text:vcop_foreach_multiblock_bilinear_interp_7x7_u8_init)
+                  80006a64    0000014c                           : merge_sort_kernel.obj (.text:vcop_sort8_simd8_XX_init)
+                  80006bb0    00000144                           : merge_sort_kernel.obj (.text:vcop_sort8_simd8_64_init)
+                  80006cf4    00000128                           : vcop_multiblock_bilinear_interp_7x7_u8_kernel.obj (.text:vcop_multiblock_bilinear_interp_7x7_u8_init)
+                  80006e1c    00000120                           : vcop_fast9_score_kernel.obj (.text:vcop_fast9_thresh_score_vloops)
+                  80006f3c    0000011c                           : vcop_bin_image_to_list_kernel.obj (.text:vcop_bin_image_to_list_init)
+                  80007058    0000011c                           : vcop_fast9_score_kernel.obj (.text:vcop_fast9_score_kernel_vloops)
+                  80007174    0000010c                           : merge_sort_kernel.obj (.text:vcop_psort2_1step_kernel_init)
+                  80007280    00000108                           : vcop_prune_big_list_kernel.obj (.text:vcop_prune_big_list_init)
+                  80007388    000000f8                           : bam_fast9_score_helper_funcs.obj (.text:BAM_Fast9_Score_getMemRecFunc)
+                  80007480    000000f8                           : bam_natcGenerateList_exec_funcs.obj (.text:BAM_natcGenerateList_computeFrame)
+                  80007578    000000f8                           : vcop_weight_address_bilinear_interpolation_kernel.obj (.text:vcop_weight_address_bilinear_interpolation_vloops)
+                  80007670    000000f0                           : bam_fast9_score_exec_funcs.obj (.text:Bam_Fast9_Score_initFrame)
+                  80007760    000000ec                           : vcop_multiblock_gradient_xy_kernel.obj (.text:vcop_multiblock_gradient_xy_init)
+                  8000784c    000000e4                           : bam_bin_image_to_list_exec_funcs.obj (.text:Bam_Bin_image_to_list_initFrame)
+                  80007930    000000e4                           : vcop_calc_determinant_tensor_matrix_kernel.obj (.text:vcop_calc_determinant_tensor_matrix_vloops)
+                  80007a14    000000e4                           : vcop_calc_inverse_structure_tensor_2x2_kernel.obj (.text:vcop_calc_inverse_structure_tensor_2x2_vloops)
+                  80007af8    000000e4                           : vcop_vec_gradients_xy_and_magnitude_kernel.obj (.text:vcop_vec_gradients_xy_magnitudeu8_init)
+                  80007bdc    000000e0                           : bam_harrisScore_32_7x7_helper_funcs.obj (.text:BAM_harrisScore_32_7x7_getMemRecFunc)
+                  80007cbc    000000e0                           : bam_natcHarrisScore_32_7x7_helper_funcs.obj (.text:BAM_natcHarrisScore_32_7x7_getMemRecFunc)
+                  80007d9c    000000dc                           : bam_select_list_elements_exec_funcs.obj (.text:Bam_Select_list_elements_initFrame)
+                  80007e78    000000d8                           : vcop_sad_error_measure_lk_kernel.obj (.text:vcop_sad_error_measure_lk_vloops)
+                  80007f50    000000d8                           : vcop_select_list_elements_kernel.obj (.text:vcop_select_list_elements_init)
+                  80008028    000000d4                           : vcop_generateList_kernel.obj (.text:vcop_generateList_vloops)
+                  800080fc    000000d4                           : vcop_harrisScore_32_7x7_kernel.obj (.text:vcop_harrisScore_32_7x7_1_vloops)
+                  800081d0    000000d0                           : vcop_copy_new_lk_xy_kernel.obj (.text:vcop_copy_new_lk_xy_init)
+                  800082a0    000000c8                           : bam_multiblock_bilinear_interp_intlv_7x7_s16_exec_funcs.obj (.text:Bam_Multiblock_Bilinear_Interp_Intlv_7x7_S16_initFrame)
+                  80008368    000000c4                           : vcop_gauss5x5PyramidKernel_8_kernel.obj (.text:vcop_gauss5x5PyramidKernel_8_vert_init)
+                  8000842c    000000c4                           : vcop_vec_gradients_xy_and_magnitude_kernel.obj (.text:vcop_vec_gradients_xy_and_magnitude_init)
+                  800084f0    000000c0                           : bam_gradXYmag_helper_funcs.obj (.text:BAM_gradXYmag_getMemRecFunc)
+                  800085b0    000000c0                           : bam_natcGradXYmag_helper_funcs.obj (.text:BAM_natcGradXYmag_getMemRecFunc)
+                  80008670    000000c0                           : vcop_calc_determinant_tensor_matrix_kernel.obj (.text:vcop_calc_determinant_tensor_matrix_init)
+                  80008730    000000c0                           : vcop_nonMaxSuppress_mxn_32s_kernel.obj (.text:vcop_nonMaxSuppress_mxn_32s_vloops)
+                  800087f0    000000b8                           : bam_multiblock_bilinear_interp_7x7_u8_exec_funcs.obj (.text:Bam_Multiblock_Bilinear_Interp_7x7_U8_initFrame)
+                  800088a8    000000b4                           : bam_harrisScore_32_7x7_exec_funcs.obj (.text:BAM_harrisScore_32_7x7_initFrame)
+                  8000895c    000000b4                           : vcop_nonMaxSuppress_mxn_32s_kernel.obj (.text:vcop_nonMaxSuppress_mxn_32s_bitPack_vloops)
+                  80008a10    000000a8                           : vcop_tensor_matrix_7x7_s16_grad_kernel.obj (.text:vcop_tensor_matrix_7x7_s16_grad_vloops)
+                  80008ab8    000000a4                           : bam_nonMaxSuppress_mxn_S32_helper_funcs.obj (.text:BAM_nonMaxSuppress_mxn_S32_getMemRecFunc)
+                  80008b5c    000000a0                           : vcop_generateList_kernel.obj (.text:vcop_copyListToOutBuff_init)
+                  80008bfc    000000a0                           : merge_sort_kernel.obj (.text:vcop_psort2_3steps_kernel_vloops)
+                  80008c9c    000000a0                           : merge_sort_kernel.obj (.text:vcop_psort2_3steps_reverse_kernel_vloops)
+                  80008d3c    0000009c                           : merge_sort_kernel.obj (.text:vcop_sort8_simd8_64_vloops)
+                  80008dd8    0000009c                           : merge_sort_kernel.obj (.text:vcop_sort8_simd8_XX_vloops)
+                  80008e74    00000098                           : bam_generateList_helper_funcs.obj (.text:BAM_generateList_getMemRecFunc)
+                  80008f0c    00000098                           : bam_natcGenerateList_helper_funcs.obj (.text:BAM_natcGenerateList_getMemRecFunc)
+                  80008fa4    00000098                           : bam_nonMaxSuppress_mxn_S32_exec_funcs.obj (.text:BAM_nonMaxSuppress_mxn_S32_initFrame)
+                  8000903c    00000098                           : merge_sort_kernel_hard.obj (.text:my_vcop_psort2_3steps_kernel_custom)
+                  800090d4    00000098                           : merge_sort_kernel_hard.obj (.text:my_vcop_psort2_3steps_reverse_kernel_custom)
+                  8000916c    00000098                           : vcop_harrisScore_32_7x7_kernel.obj (.text:vcop_harrisScore_32_methodB_vloops)
+                  80009204    00000090                           : bam_natcNonMaxSuppress_mxn_S32_helper_funcs.obj (.text:BAM_natcNonMaxSuppress_mxn_S32_getMemRecFunc)
+                  80009294    00000090                           : merge_sort_kernel_hard.obj (.text:my_vcop_psort2_1step_kernel_custom)
+                  80009324    00000090                           : vcop_gauss5x5PyramidKernel_8_kernel.obj (.text:vcop_gauss5x5PyramidKernel_8_horiz_init)
+                  800093b4    00000090                           : vcop_prune_big_list_kernel.obj (.text:vcop_prune_big_list_vloops)
+                  80009444    0000008c                           : bam_gradXYmag_exec_funcs.obj (.text:BAM_gradXYmag_initFrame)
+                  800094d0    0000008c                           : vcop_weight_computation_kernel.obj (.text:vcop_weight_computation_init)
+                  8000955c    00000088                           : bam_vertical_non_max_suppression_exec_funcs.obj (.text:Bam_Vertical_Non_Max_Suppression_initFrame)
+                  800095e4    0000007c                           : vcop_binary_masking_kernel.obj (.text:vcop_binary_masking_init)
+                  80009660    0000007c                           : vcop_blockAverage2x2_kernel.obj (.text:vcop_blockAverage2x2_uchar_init)
+                  800096dc    00000078                           : vcop_bin_image_to_list_kernel.obj (.text:vcop_bin_image_to_list_vloops)
+                  80009754    00000074                           : bam_vcop_yuv_left_right_padding_exec_funcs.obj (.text:Bam_yuvLeftRightPadding_initFrame)
+                  800097c8    00000074                           : merge_sort_kernel_hard.obj (.text:my_vcop_psort2_2steps_kernel_custom)
+                  8000983c    00000074                           : merge_sort_kernel_hard.obj (.text:my_vcop_psort2_2steps_reverse_kernel_custom)
+                  800098b0    00000070                           : bam_harrisScore_32_methodB_helper_funcs.obj (.text:BAM_harrisScore_32_methodB_getMemRecFunc)
+                  80009920    00000070                           : bam_vcop_yuv_left_right_padding_helper_funcs.obj (.text:BAM_yuvLeftRightPadding_getMemRecFunc)
+                  80009990    00000070                           : vcop_sum_grad_cross_inter_frame_diff_7x7_kernel.obj (.text:vcop_sum_grad_cross_inter_frame_diff_7x7_vloops)
+                  80009a00    0000006c                           : bam_calc_inverse_structure_tensor_2x2_exec_funcs.obj (.text:Bam_Calc_Inverse_Structure_Tensor_2x2_initFrame)
+                  80009a6c    0000006c                           : vcop_generateList_kernel.obj (.text:vcop_updateGenerateList_init)
+                  80009ad8    00000068                           : bam_gauss5x5Pyramid_8_exec_funcs.obj (.text:BAM_gauss5x5Pyramid_initFrame)
+                  80009b40    00000068                           : bam_horizontal_non_max_suppression_exec_funcs.obj (.text:Bam_Horizontal_Non_Max_Suppression_initFrame)
+                  80009ba8    00000068                           : vcop_yuv_left_right_padding_kernel.obj (.text:vcop_yuv_left_right_padding_u16_init)
+                  80009c10    00000064                           : bam_weight_computation_exec_funcs.obj (.text:Bam_Weight_Computation_initFrame)
+                  80009c74    00000064                           : merge_sort_kernel_hard.obj (.text:my_vcop_psort2_1step_reverse_kernel_custom)
+                  80009cd8    00000064                           : merge_sort_kernel.obj (.text:vcop_remove_ex_col_init)
+                  80009d3c    00000060                           : bam_natcGenerateList_exec_funcs.obj (.text:BAM_natcGenerateList_initInstance)
+                  80009d9c    00000060                           : vcop_multiblock_bilinear_interp_intlv_7x7_s16_kernel.obj (.text:vcop_multiblock_bilinear_interp_intlv_7x7_s16_vloops)
+                  80009dfc    00000060                           : vcop_yuv_left_right_padding_kernel.obj (.text:vcop_yuv_left_right_padding_u8_init)
+                  80009e5c    0000005c                           : bam_multiblock_gradient_xy_exec_funcs.obj (.text:Bam_Multiblock_Gradient_XY_initFrame)
+                  80009eb8    0000005c                           : vcop_foreach_multiblock_bilinear_interp_7x7_u8_kernel.obj (.text:vcop_foreach_multiblock_bilinear_interp_7x7_u8_vloops)
+                  80009f14    0000005c                           : vcop_gauss5x5PyramidKernel_8_kernel.obj (.text:vcop_gauss5x5PyramidKernel_8_vert_vloops)
+                  80009f70    00000058                           : bam_fast9_helper_funcs.obj (.text:BAM_Fast9_getMemRecFunc)
+                  80009fc8    00000058                           : bam_multiblock_bilinear_interp_intlv_7x7_s16_helper_funcs.obj (.text:BAM_Multiblock_Bilinear_Interp_Intlv_7x7_S16_getMemRecFunc)
+                  8000a020    00000058                           : bam_vertical_non_max_suppression_helper_funcs.obj (.text:BAM_Vertical_Non_Max_Suppression_getMemRecFunc)
+                  8000a078    00000058                           : bam_tensor_matrix_7x7_s16_grad_exec_funcs.obj (.text:Bam_Tensor_Matrix_7x7_S16_Grad_initFrame)
+                  8000a0d0    00000058                           : vcop_vec_gradients_xy_and_magnitude_kernel.obj (.text:vcop_vec_gradients_xy_and_magnitude_vloops)
+                  8000a128    00000058                           : vcop_vec_gradients_xy_and_magnitude_kernel.obj (.text:vcop_vec_gradients_xy_magnitudeu8_vloops)
+                  8000a180    00000054                           : bam_natcGauss5x5Pyramid_8_exec_funcs.obj (.text:BAM_natcGauss5x5Pyramid_computeFrame)
+                  8000a1d4    00000054                           : bam_calc_determinant_tensor_matrix_exec_funcs.obj (.text:Bam_Calc_Determinant_Tensor_Matrix_initFrame)
+                  8000a228    00000054                           : merge_sort_kernel.obj (.text:vcop_psort2_2steps_kernel_vloops)
+                  8000a27c    00000054                           : merge_sort_kernel.obj (.text:vcop_psort2_2steps_reverse_kernel_vloops)
+                  8000a2d0    00000050                           : bam_bin_image_to_list_helper_funcs.obj (.text:BAM_Bin_image_to_list_getMemRecFunc)
+                  8000a320    00000050                           : bam_select_list_elements_helper_funcs.obj (.text:BAM_Select_list_elements_getMemRecFunc)
+                  8000a370    0000004c                           : bam_horizontal_non_max_suppression_helper_funcs.obj (.text:BAM_Horizontal_Non_Max_Suppression_getMemRecFunc)
+                  8000a3bc    0000004c                           : vcop_copy_new_lk_xy_kernel.obj (.text:vcop_copy_new_lk_xy_vloops)
+                  8000a408    0000004c                           : vcop_multiblock_bilinear_interp_7x7_u8_kernel.obj (.text:vcop_multiblock_bilinear_interp_7x7_u8_vloops)
+                  8000a454    0000004c                           : vcop_weight_computation_kernel.obj (.text:vcop_weight_computation_vloops)
+                  8000a4a0    00000048                           : bam_blockSortU32_exec_funcs.obj (.text:BAM_blockSortU32_initFrame)
+                  8000a4e8    00000048                           : bam_gauss5x5Pyramid_8_helper_funcs.obj (.text:BAM_gauss5x5Pyramid_getMemRecFunc)
+                  8000a530    00000048                           : bam_natcGauss5x5Pyramid_8_helper_funcs.obj (.text:BAM_natcGauss5x5Pyramid_getMemRecFunc)
+                  8000a578    00000048                           : vcop_select_list_elements_kernel.obj (.text:vcop_select_list_elements_param_block_update_init)
+                  8000a5c0    00000048                           : vcop_select_list_elements_kernel.obj (.text:vcop_select_list_elements_vloops)
+                  8000a608    00000044                           : bam_harrisScore_32_methodB_exec_funcs.obj (.text:BAM_harrisScore_32_methodB_initFrame)
+                  8000a64c    00000044                           : bam_prune_big_list_exec_funcs.obj (.text:Bam_Prune_Big_List_initFrame)
+                  8000a690    00000040                           : bam_calc_determinant_tensor_matrix_helper_funcs.obj (.text:BAM_Calc_Determinant_Tensor_Matrix_getMemRecFunc)
+                  8000a6d0    00000040                           : bam_calc_inverse_structure_tensor_2x2_helper_funcs.obj (.text:BAM_Calc_Inverse_Structure_Tensor_2x2_getMemRecFunc)
+                  8000a710    00000040                           : bam_multiblock_gradient_xy_helper_funcs.obj (.text:BAM_Multiblock_Gradient_XY_getMemRecFunc)
+                  8000a750    00000040                           : bam_tensor_matrix_7x7_s16_grad_helper_funcs.obj (.text:BAM_Tensor_Matrix_7x7_S16_Grad_getMemRecFunc)
+                  8000a790    00000040                           : bam_blockSortU32_exec_funcs.obj (.text:BAM_blockSortU32_initInstance)
+                  8000a7d0    00000040                           : bam_natcHarrisScore_32_7x7_exec_funcs.obj (.text:BAM_natcHarrisScore_32_7x7_computeFrame)
+                  8000a810    00000040                           : bam_natcNonMaxSuppress_mxn_S32_exec_funcs.obj (.text:BAM_natcNonMaxSuppress_mxn_S32_computeFrame)
+                  8000a850    00000040                           : vcop_gauss5x5PyramidKernel_8_kernel.obj (.text:vcop_gauss5x5PyramidKernel_8_horiz_vloops)
+                  8000a890    0000003c                           : bam_binary_masking_exec_funcs.obj (.text:Bam_BinaryMasking_initFrame)
+                  8000a8cc    0000003c                           : bam_fast9_exec_funcs.obj (.text:Bam_Fast9_initFrame)
+                  8000a908    0000003c                           : bam_select_list_elements_exec_funcs.obj (.text:Bam_Select_list_elements_control)
+                  8000a944    0000003c                           : vcop_generateList_kernel.obj (.text:vcop_copyListToOutBuff_vloops)
+                  8000a980    00000038                           : bam_blockSortU32_exec_funcs.obj (.text:BAM_blockSortU32_compute)
+                  8000a9b8    00000038                           : bam_generateList_exec_funcs.obj (.text:BAM_generateList_compute)
+                  8000a9f0    00000038                           : bam_natcGenerateList_exec_funcs.obj (.text:BAM_natcGenerateList_initFrame)
+                  8000aa28    00000038                           : bam_select_list_elements_exec_funcs.obj (.text:Bam_Select_list_elements_computeFrame)
+                  8000aa60    00000038                           : merge_sort_kernel.obj (.text:vcop_psort2_1step_kernel_vloops)
+                  8000aa98    00000038                           : merge_sort_kernel.obj (.text:vcop_psort2_1step_reverse_kernel_vloops)
+                  8000aad0    00000038                           : vcop_generateList_kernel.obj (.text:vcop_updateGenerateList_vloops)
+                  8000ab08    00000034                           : bam_binary_masking_helper_funcs.obj (.text:BAM_BinaryMasking_getMemRecFunc)
+                  8000ab3c    00000034                           : bam_multiblock_bilinear_interp_7x7_u8_helper_funcs.obj (.text:BAM_Multiblock_Bilinear_Interp_7x7_U8_getMemRecFunc)
+                  8000ab70    00000034                           : bam_bin_image_to_list_exec_funcs.obj (.text:Bam_Bin_image_to_list_control)
+                  8000aba4    00000030                           : bam_prune_big_list_helper_funcs.obj (.text:BAM_Prune_Big_List_getMemRecFunc)
+                  8000abd4    00000030                           : bam_blockSortU32_helper_funcs.obj (.text:BAM_blockSortU32_getMemRecFunc)
+                  8000ac04    00000030                           : bam_natcGradXYmag_exec_funcs.obj (.text:BAM_natcGradXYmag_computeFrame)
+                  8000ac34    00000030                           : bam_binary_masking_exec_funcs.obj (.text:Bam_BinaryMasking_control)
+                  8000ac64    00000030                           : vcop_binary_masking_kernel.obj (.text:vcop_binary_masking_vloops)
+                  8000ac94    00000030                           : vcop_multiblock_gradient_xy_kernel.obj (.text:vcop_multiblock_gradient_xy_vloops)
+                  8000acc4    0000002c                           : bam_weight_computation_helper_funcs.obj (.text:BAM_Weight_Computation_getMemRecFunc)
+                  8000acf0    0000002c                           : bam_blockAverage2x2_exec_funcs.obj (.text:BAM_blockAverage2x2_initFrame)
+                  8000ad1c    0000002c                           : bam_nonMaxSuppress_mxn_S32_exec_funcs.obj (.text:BAM_nonMaxSuppress_mxn_S32_control)
+                  8000ad48    0000002c                           : vcop_blockAverage2x2_kernel.obj (.text:vcop_blockAverage2x2_uchar_vloops)
+                  8000ad74    00000028                           : bam_blockAverage2x2_helper_funcs.obj (.text:BAM_blockAverage2x2_getMemRecFunc)
+                  8000ad9c    00000028                           : bam_natcBlockAverage2x2_exec_funcs.obj (.text:BAM_natcBlockAverage2x2_computeFrame)
+                  8000adc4    00000028                           : bam_natcBlockAverage2x2_helper_funcs.obj (.text:BAM_natcBlockAverage2x2_getMemRecFunc)
+                  8000adec    00000024                           : bam_fast9_score_exec_funcs.obj (.text:Bam_Fast9_Score_compute)
+                  8000ae10    00000024                           : vcop_yuv_left_right_padding_kernel.obj (.text:vcop_yuv_left_right_padding_u16_vloops)
+                  8000ae34    00000024                           : vcop_yuv_left_right_padding_kernel.obj (.text:vcop_yuv_left_right_padding_u8_vloops)
+                  8000ae58    00000020                           : bam_blockSortU32_exec_funcs.obj (.text:BAM_blockSortU32_control)
+                  8000ae78    00000020                           : vcop_select_list_elements_kernel.obj (.text:vcop_select_list_elements_param_block_update_vloops)
+                  8000ae98    0000001c                           : bam_gauss5x5Pyramid_8_exec_funcs.obj (.text:BAM_gauss5x5Pyramid_compute)
+                  8000aeb4    0000001c                           : bam_harrisScore_32_7x7_exec_funcs.obj (.text:BAM_harrisScore_32_7x7_compute)
+                  8000aed0    0000001c                           : bam_fast9_exec_funcs.obj (.text:Bam_Fast9_control)
+                  8000aeec    0000001c                           : bam_vcop_yuv_left_right_padding_exec_funcs.obj (.text:Bam_yuvLeftRightPadding_compute)
+                  8000af08    0000001c                           : merge_sort_kernel_hard.obj (.text:my_vcop_sort8_simd8_64_custom)
+                  8000af24    0000001c                           : merge_sort_kernel_hard.obj (.text:my_vcop_sort8_simd8_XX_custom)
+                  8000af40    0000001c                           : merge_sort_kernel.obj (.text:vcop_remove_ex_col_vloops)
+                  8000af5c    00000018                           : merge_sort_kernel_hard.obj (.text:my_vcop_remove_ex_col_custom)
+                  8000af74    00000010                           : bam_prune_big_list_exec_funcs.obj (.text:Bam_Prune_Big_List_control)
+                  8000af84    00000010                           : bam_vertical_non_max_suppression_exec_funcs.obj (.text:Bam_Vertical_Non_Max_Suppression_control)
+                  8000af94    00000010                           : merge_sort_init.obj (.text:transp_idx)
+                  8000afa4    0000000c                           : bam_gradXYmag_exec_funcs.obj (.text:BAM_gradXYmag_Compute)
+                  8000afb0    0000000c                           : bam_calc_inverse_structure_tensor_2x2_exec_funcs.obj (.text:Bam_Calc_Inverse_Structure_Tensor_2x2_control)
+                  8000afbc    0000000c                           : bam_fast9_score_exec_funcs.obj (.text:Bam_Fast9_Score_initInstance)
+                  8000afc8    0000000c                           : bam_horizontal_non_max_suppression_exec_funcs.obj (.text:Bam_Horizontal_Non_Max_Suppression_control)
+                  8000afd4    0000000c                           : bam_multiblock_bilinear_interp_7x7_u8_exec_funcs.obj (.text:Bam_Multiblock_Bilinear_Interp_7x7_U8_control)
+                  8000afe0    0000000c                           : bam_multiblock_bilinear_interp_intlv_7x7_s16_exec_funcs.obj (.text:Bam_Multiblock_Bilinear_Interp_Intlv_7x7_S16_control)
+                  8000afec    0000000c                           : bam_vertical_non_max_suppression_exec_funcs.obj (.text:Bam_Vertical_Non_Max_Suppression_initInstance)
+                  8000aff8    0000000c                           : bam_weight_computation_exec_funcs.obj (.text:Bam_Weight_Computation_control)
+                  8000b004    00000008                           : bam_prune_big_list_exec_funcs.obj (.text:Bam_Prune_Big_List_initInstance)
+                  8000b00c    00000008                           : vcop_bin_image_to_list_kernel.obj (.text:vcop_bin_image_to_list_param_count)
+                  8000b014    00000008                           : vcop_calc_inverse_structure_tensor_2x2_kernel.obj (.text:vcop_calc_inverse_structure_tensor_2x2_param_count)
+                  8000b01c    00000008                           : vcop_calc_new_lk_xy_kernel.obj (.text:vcop_calc_new_lk_xy_param_count)
+                  8000b024    00000008                           : vcop_fast9_kernel.obj (.text:vcop_fast9_param_count)
+                  8000b02c    00000008                           : vcop_fast9_score_kernel.obj (.text:vcop_fast9_score_kernel_param_count)
+                  8000b034    00000008                           : vcop_fast9_score_kernel.obj (.text:vcop_fast9_thresh_score_param_count)
+                  8000b03c    00000008                           : vcop_foreach_multiblock_bilinear_interp_7x7_u8_kernel.obj (.text:vcop_foreach_multiblock_bilinear_interp_7x7_u8_param_count)
+                  8000b044    00000008                           : vcop_generateList_kernel.obj (.text:vcop_generateList_param_count)
+                  8000b04c    00000008                           : vcop_harrisScore_32_7x7_kernel.obj (.text:vcop_harrisScore_32_7x7_1_param_count)
+                  8000b054    00000008                           : vcop_harrisScore_32_7x7_kernel.obj (.text:vcop_harrisScore_32_7x7_2_param_count)
+                  8000b05c    00000008                           : vcop_harrisScore_32_7x7_kernel.obj (.text:vcop_harrisScore_32_methodB_param_count)
+                  8000b064    00000008                           : vcop_horizontal_non_max_suppression_kernel.obj (.text:vcop_horizontal_non_max_suppression_param_count)
+                  8000b06c    00000008                           : vcop_multiblock_bilinear_interp_intlv_7x7_s16_kernel.obj (.text:vcop_multiblock_bilinear_interp_intlv_7x7_s16_param_count)
+                  8000b074    00000008                           : vcop_nonMaxSuppress_mxn_32s_kernel.obj (.text:vcop_nonMaxSuppress_mxn_32s_bitPack_param_count)
+                  8000b07c    00000008                           : vcop_nonMaxSuppress_mxn_32s_kernel.obj (.text:vcop_nonMaxSuppress_mxn_32s_param_count)
+                  8000b084    00000008                           : vcop_prune_big_list_kernel.obj (.text:vcop_prune_big_list_param_count)
+                  8000b08c    00000008                           : merge_sort_kernel.obj (.text:vcop_psort2_2steps_kernel_param_count)
+                  8000b094    00000008                           : merge_sort_kernel.obj (.text:vcop_psort2_2steps_reverse_kernel_param_count)
+                  8000b09c    00000008                           : merge_sort_kernel.obj (.text:vcop_psort2_3steps_kernel_param_count)
+                  8000b0a4    00000008                           : merge_sort_kernel.obj (.text:vcop_psort2_3steps_reverse_kernel_param_count)
+                  8000b0ac    00000008                           : merge_sort_kernel.obj (.text:vcop_sort8_simd8_64_param_count)
+                  8000b0b4    00000008                           : merge_sort_kernel.obj (.text:vcop_sort8_simd8_XX_param_count)
+                  8000b0bc    00000008                           : vcop_sum_grad_cross_inter_frame_diff_7x7_kernel.obj (.text:vcop_sum_grad_cross_inter_frame_diff_7x7_param_count)
+                  8000b0c4    00000008                           : vcop_tensor_matrix_7x7_s16_grad_kernel.obj (.text:vcop_tensor_matrix_7x7_s16_grad_param_count)
+                  8000b0cc    00000008                           : vcop_vertical_non_max_suppression_kernel.obj (.text:vcop_vertical_non_max_suppression_kernel_param_count)
+                  8000b0d4    00000008                           : vcop_weight_address_bilinear_interpolation_kernel.obj (.text:vcop_weight_address_bilinear_interpolation_param_count)
+                  8000b0dc    00000004                           : vcop_binary_masking_kernel.obj (.text:vcop_binary_masking_param_count)
+                  8000b0e0    00000004                           : vcop_blockAverage2x2_kernel.obj (.text:vcop_blockAverage2x2_uchar_param_count)
+                  8000b0e4    00000004                           : vcop_calc_determinant_tensor_matrix_kernel.obj (.text:vcop_calc_determinant_tensor_matrix_param_count)
+                  8000b0e8    00000004                           : vcop_generateList_kernel.obj (.text:vcop_copyListToOutBuff_param_count)
+                  8000b0ec    00000004                           : vcop_copy_new_lk_xy_kernel.obj (.text:vcop_copy_new_lk_xy_param_count)
+                  8000b0f0    00000004                           : vcop_gauss5x5PyramidKernel_8_kernel.obj (.text:vcop_gauss5x5PyramidKernel_8_horiz_param_count)
+                  8000b0f4    00000004                           : vcop_gauss5x5PyramidKernel_8_kernel.obj (.text:vcop_gauss5x5PyramidKernel_8_vert_param_count)
+                  8000b0f8    00000004                           : vcop_multiblock_bilinear_interp_7x7_u8_kernel.obj (.text:vcop_multiblock_bilinear_interp_7x7_u8_param_count)
+                  8000b0fc    00000004                           : vcop_multiblock_gradient_xy_kernel.obj (.text:vcop_multiblock_gradient_xy_param_count)
+                  8000b100    00000004                           : merge_sort_kernel.obj (.text:vcop_psort2_1step_kernel_param_count)
+                  8000b104    00000004                           : merge_sort_kernel.obj (.text:vcop_psort2_1step_reverse_kernel_param_count)
+                  8000b108    00000004                           : merge_sort_kernel.obj (.text:vcop_remove_ex_col_param_count)
+                  8000b10c    00000004                           : vcop_select_list_elements_kernel.obj (.text:vcop_select_list_elements_param_block_update_param_count)
+                  8000b110    00000004                           : vcop_select_list_elements_kernel.obj (.text:vcop_select_list_elements_param_count)
+                  8000b114    00000004                           : vcop_generateList_kernel.obj (.text:vcop_updateGenerateList_param_count)
+                  8000b118    00000004                           : vcop_vec_gradients_xy_and_magnitude_kernel.obj (.text:vcop_vec_gradients_xy_and_magnitude_param_count)
+                  8000b11c    00000004                           : vcop_vec_gradients_xy_and_magnitude_kernel.obj (.text:vcop_vec_gradients_xy_magnitudeu8_param_count)
+                  8000b120    00000004                           : vcop_weight_computation_kernel.obj (.text:vcop_weight_computation_param_count)
+                  8000b124    00000004                           : vcop_yuv_left_right_padding_kernel.obj (.text:vcop_yuv_left_right_padding_u16_param_count)
+                  8000b128    00000004                           : vcop_yuv_left_right_padding_kernel.obj (.text:vcop_yuv_left_right_padding_u8_param_count)
+                  8000b12c    00000c8c     libevePyramidLKTracker.eve.lib : bam_lk_iterative_loop_exec_funcs.obj (.text:Bam_LK_Iterative_Loop_initFrame)
+                  8000bdb8    000009a8                                    : bam_lk_iterative_loop_exec_funcs.obj (.text:Bam_LK_Iterative_Loop_computeFrame)
+                  8000c760    000002c0                                    : pyramid_lk_tracker_alg.obj (.text:PYRAMID_LK_TRACKER_TI_process)
+                  8000ca20    0000022c                                    : pyramid_lk_tracker_graph.obj (.text:LK_TRACKER_TI_initKernelsArgs)
+                  8000cc4c    0000020c                                    : bam_pyramid_lk_tracker_dma_node.obj (.text:BAM_DMA_PYRAMID_LK_TRACKER_frameInitInChannel)
+                  8000ce58    0000017c                                    : pyramid_lk_tracker_graph.obj (.text:LK_TRACKER_TI_graphCreate)
+                  8000cfd4    0000017c                                    : pyramid_lk_tracker_alg.obj (.text:PYRAMID_LK_TRACKER_TI_init)
+                  8000d150    0000013c                                    : pyramid_lk_tracker_alg.obj (.text:PYRAMID_LK_TRACKER_TI_alloc)
+                  8000d28c    00000118                                    : bam_pyramid_lk_tracker_dma_node.obj (.text:BAM_DMA_PYRAMID_LK_TRACKER_dmaWriteGetMemRecFunc)
+                  8000d3a4    0000010c                                    : bam_pyramid_lk_tracker_dma_node.obj (.text:BAM_DMA_PYRAMID_LK_TRACKER_dmaWriteSetMemRecFunc)
+                  8000d4b0    000000d8                                    : bam_pyramid_lk_tracker_dma_node.obj (.text:BAM_DMA_PYRAMID_LK_TRACKER_dmaReadGetMemRecFunc)
+                  8000d588    000000d0                                    : bam_pyramid_lk_tracker_dma_node.obj (.text:BAM_DMA_PYRAMID_LK_TRACKER_dmaReadSetMemRecFunc)
+                  8000d658    000000c4                                    : bam_pyramid_lk_tracker_dma_node.obj (.text:BAM_DMA_PYRAMID_LK_TRACKER_dmaWriteUpdateDDRptr)
+                  8000d71c    000000a0                                    : pyramid_lk_tracker_graph.obj (.text:LK_TRACKER_TI_bamControl)
+                  8000d7bc    0000009c                                    : bam_pyramid_lk_tracker_dma_node.obj (.text:BAM_DMA_PYRAMID_LK_TRACKER_waitOutChannel)
+                  8000d858    00000090                                    : bam_pyramid_lk_tracker_dma_node.obj (.text:BAM_DMA_PYRAMID_LK_TRACKER_dmaReadUpdateDDRptr)
+                  8000d8e8    00000064                                    : pyramid_lk_tracker_alg.obj (.text:PYRAMID_LK_TRACKER_TI_activate)
+                  8000d94c    00000060                                    : bam_lk_iterative_loop_helper_funcs.obj (.text:BAM_LK_Iterative_Loop_getMemRecFunc)
+                  8000d9ac    00000058                                    : pyramid_lk_tracker_alg.obj (.text:PYRAMID_LK_TRACKER_TI_deactivate)
+                  8000da04    00000044                                    : bam_pyramid_lk_tracker_dma_node.obj (.text:BAM_DMA_PYRAMID_LK_TRACKER_frameInitOutChannel)
+                  8000da48    0000003c                                    : bam_pyramid_lk_tracker_dma_node.obj (.text:BAM_DMA_PYRAMID_LK_TRACKER_waitInChannel)
+                  8000da84    00000028                                    : pyramid_lk_tracker_graph.obj (.text:LK_TRACKER_TI_FindMaxSearchRange)
+                  8000daac    00000024                                    : bam_pyramid_lk_tracker_dma_node.obj (.text:BAM_DMA_PYRAMID_LK_TRACKER_triggerOutChannel)
+                  8000dad0    00000024                                    : pyramid_lk_tracker_graph.obj (.text:LK_TRACKER_TI_FindNumKeyPointsPerCall)
+                  8000daf4    00000020                                    : pyramid_lk_tracker_graph.obj (.text:LK_TRACKER_TI_execute)
+                  8000db14    0000001c                                    : pyramid_lk_tracker_graph.obj (.text:LK_TRACKER_TI_getGraphMemReq)
+                  8000db30    00000018                                    : pyramid_lk_tracker_alg.obj (.text:PYRAMID_LK_TRACKER_TI_free)
+                  8000db48    00000014                                    : bam_pyramid_lk_tracker_dma_node.obj (.text:BAM_DMA_PYRAMID_LK_TRACKER_triggerInChannel)
+                  8000db5c    0000000c                                    : bam_lk_iterative_loop_exec_funcs.obj (.text:Bam_LK_Iterative_Loop_control)
+                  8000db68    00000004                                    : pyramid_lk_tracker_alg.obj (.text:PYRAMID_LK_TRACKER_TI_control)
+                  8000db6c    00000004                                    : pyramid_lk_tracker_alg.obj (.text:PYRAMID_LK_TRACKER_TI_numAlloc)
+                  8000db70    00000934     libevesof.eve.lib : sof_alg.obj (.text:SOF_TI_alloc)
+                  8000e4a4    00000580                       : sof_alg.obj (.text:SOF_TI_init)
+                  8000ea24    000004fc                       : sof_filter_tracked_points.obj (.text:filterTrackedPoints)
+                  8000ef20    000004b8                       : sof_alg.obj (.text:SOF_TI_process)
+                  8000f3d8    00000328                       : sof_track_key_points.obj (.text:createByteMask)
+                  8000f700    00000318                       : sof_filter_tracked_points.obj (.text:filterTrackedPoints_chunk)
+                  8000fa18    000002c8                       : sof_track_key_points.obj (.text:binImageToListProcess)
+                  8000fce0    00000218                       : sof_alg.obj (.text:pyramidLkTrackerProcess)
+                  8000fef8    000001d8                       : sof_track_key_points.obj (.text:AddkeyPointstoTrack)
+                  800100d0    000001a8                       : sof_alg.obj (.text:assignIOBufPtrs)
+                  80010278    00000150                       : sof_alg.obj (.text:fast9BestFeatureToFrontProcess)
+                  800103c8    0000013c                       : sof_alg.obj (.text:harrisKeyPointDetectionProcess)
+                  80010504    00000138                       : sof_alg.obj (.text:checkForPaddingRequirement)
+                  8001063c    00000110                       : sof_alg.obj (.text:fast9KeyPointDetectionProcess)
+                  8001074c    000000f0                       : sof_alg.obj (.text:yuvPaddingTestProcess)
+                  8001083c    000000ec                       : sof_alg.obj (.text:SOF_TI_SetAlgToAppsMemRec)
+                  80010928    000000d4                       : sof_alg.obj (.text:copyImageToInternalMemAndPad)
+                  800109fc    000000cc                       : sof_alg.obj (.text:imPyramidTestProcess)
+                  80010ac8    000000c4                       : sof_alg.obj (.text:SOF_TI_UpdateHarrisCornerParams)
+                  80010b8c    000000a8                       : sof_track_key_points.obj (.text:AddHarrisKeyPointstoTrack)
+                  80010c34    000000a8                       : sof_alg.obj (.text:SOF_TI_SetAppsToAlgMemRec)
+                  80010cdc    000000a0                       : sof_alg.obj (.text:SOF_TI_numAlloc)
+                  80010d7c    0000009c                       : sof_filter_tracked_points.obj (.text:filterTrackedPoints_TI_generateSelectionMask)
+                  80010e18    00000090                       : sof_alg.obj (.text:detectKeyPoints)
+                  80010ea8    0000007c                       : sof_alg.obj (.text:SOF_TI_UpdateImagePyramidParams)
+                  80010f24    0000006c                       : sof_alg.obj (.text:computeImagePyramids)
+                  80010f90    00000060                       : sof_alg.obj (.text:SOF_TI_activate)
+                  80010ff0    00000060                       : sof_alg.obj (.text:SOF_TI_deactivate)
+                  80011050    0000005c                       : sof_alg.obj (.text:SOF_TI_UpdateLKTrackerParams)
+                  800110ac    00000050                       : sof_alg.obj (.text:SOF_TI_UpdateYUVPaddingParams)
+                  800110fc    00000050                       : sof_track_key_points.obj (.text:initTrackInfo)
+                  8001114c    0000003c                       : sof_alg.obj (.text:SOF_TI_free)
+                  80011188    0000002c                       : sof_alg.obj (.text:SOF_TI_UpdateBinImageToListParams)
+                  800111b4    0000002c                       : sof_alg.obj (.text:SOF_TI_UpdateFast9BFFTParams)
+                  800111e0    00000028                       : sof_alg.obj (.text:calcExtraBoderRequirement)
+                  80011208    00000024                       : sof_alg.obj (.text:SOF_TI_UpdateFast9CornerCreateParams)
+                  8001122c    00000004                       : sof_alg.obj (.text:SOF_TI_control)
+                  80011230    00000428     libeveFast9CornerDetect.eve.lib : fast9_corner_detect_alg.obj (.text:FAST9_CORNER_DETECT_TI_init)
+                  80011658    00000368                                     : fast9_corner_detect_alg.obj (.text:FAST9_CORNER_DETECT_TI_process)
+                  800119c0    0000016c                                     : fast9_corner_detect_alg.obj (.text:FAST9_CORNER_DETECT_TI_alloc)
+                  80011b2c    00000160                                     : fast9_corner_detect_graph.obj (.text:FAST9_CORNER_DETECT_TI_graphCreate)
+                  80011c8c    00000154                                     : binary_image_to_list_graph.obj (.text:BIN_IMAGE_TO_LIST_TI_graphCreate)
+                  80011de0    00000138                                     : fast9_corner_detect_graph.obj (.text:FAST9_CORNER_DETECT_TI_graphDmaControl)
+                  80011f18    000000e4                                     : binary_image_to_list_graph.obj (.text:BIN_IMAGE_TO_LIST_TI_graphDmaControl)
+                  80011ffc    000000c8                                     : bin_img_to_list_bam_dma_node.obj (.text:BIN_IMG2LIST_BAM_DMA_updateInDDRptr)
+                  800120c4    00000098                                     : bin_img_to_list_bam_dma_node.obj (.text:BIN_IMG2LIST_BAM_DMA_frameInitOutChannel)
+                  8001215c    00000098                                     : bin_img_to_list_bam_dma_node.obj (.text:BIN_IMG2LIST_BAM_DMA_waitOutChannel)
+                  800121f4    00000090                                     : fast9_corner_detect_graph.obj (.text:FAST9_CORNER_DETECT_TI_initKernelsArgs)
+                  80012284    00000068                                     : bin_img_to_list_bam_dma_node.obj (.text:BIN_IMG2LIST_BAM_DMA_IN_setMemRecFunc)
+                  800122ec    00000064                                     : fast9_corner_detect_alg.obj (.text:FAST9_CORNER_DETECT_TI_activate)
+                  80012350    00000064                                     : fast9_corner_detect_alg.obj (.text:FAST9_CORNER_DETECT_TI_deactivate)
+                  800123b4    00000060                                     : bin_img_to_list_bam_dma_node.obj (.text:BIN_IMG2LIST_BAM_DMA_frameInitInChannel)
+                  80012414    0000005c                                     : bin_img_to_list_bam_dma_node.obj (.text:BIN_IMG2LIST_BAM_DMA_triggerOutChannel)
+                  80012470    00000058                                     : bin_img_to_list_bam_dma_node.obj (.text:BIN_IMG2LIST_BAM_DMA_OUT_setMemRecFunc)
+                  800124c8    0000004c                                     : bin_img_to_list_bam_dma_node.obj (.text:BIN_IMG2LIST_BAM_DMA_IN_getMemRecFunc)
+                  80012514    0000003c                                     : bin_img_to_list_bam_dma_node.obj (.text:BIN_IMG2LIST_BAM_DMA_updateOutDDRptr)
+                  80012550    00000038                                     : bin_img_to_list_bam_dma_node.obj (.text:BIN_IMG2LIST_BAM_DMA_OUT_getMemRecFunc)
+                  80012588    00000020                                     : binary_image_to_list_graph.obj (.text:BIN_IMAGE_TO_LIST_TI_execute)
+                  800125a8    00000020                                     : fast9_corner_detect_graph.obj (.text:FAST9_CORNER_DETECT_TI_execute)
+                  800125c8    0000001c                                     : fast9_corner_detect_graph.obj (.text:FAST9_CORNER_DETECT_TI_getGraphMemReq)
+                  800125e4    00000018                                     : binary_image_to_list_graph.obj (.text:BIN_IMAGE_TO_LIST_TI_getGraphMemReq)
+                  800125fc    00000018                                     : fast9_corner_detect_alg.obj (.text:FAST9_CORNER_DETECT_TI_free)
+                  80012614    00000010                                     : binary_image_to_list_graph.obj (.text:BIN_IMAGE_TO_LIST_TI_graphControl)
+                  80012624    00000010                                     : fast9_corner_detect_graph.obj (.text:FAST9_CORNER_DETECT_TI_graphControl)
+                  80012634    00000004                                     : binary_image_to_list_graph.obj (.text:BIN_IMAGE_TO_LIST_TI_initKernelsArgs)
+                  80012638    00000004                                     : fast9_corner_detect_alg.obj (.text:FAST9_CORNER_DETECT_TI_control)
+                  8001263c    00000004                                     : fast9_corner_detect_alg.obj (.text:FAST9_CORNER_DETECT_TI_numAlloc)
+                  80012640    000004d0     libeveFAST9BestFeatureToFront.eve.lib : fast9_best_feature_to_front_alg.obj (.text:FAST9_BEST_FEATURE_TO_FRONT_TI_process)
+                  80012b10    00000214                                           : bam_dma_scattergather_orb_node.obj (.text:BAM_DMA_SCATTERGATHER_ORB_frameInitInChannel)
+                  80012d24    0000019c                                           : fast9_best_feature_to_front_alg.obj (.text:FAST9_BEST_FEATURE_TO_FRONT_TI_alloc)
+                  80012ec0    00000174                                           : fast9_score_graph.obj (.text:FAST9_SCORE_TI_graphCreate)
+                  80013034    0000016c                                           : best_feature_to_front_graph.obj (.text:BEST_FEATURE_TO_FRONT_TI_graphCreate)
+                  800131a0    00000148                                           : bam_dma_one_shot_orb_node.obj (.text:BAM_DMA_ONESHOT_ORB_getMemRecFunc)
+                  800132e8    00000148                                           : fast9_best_feature_to_front_alg.obj (.text:FAST9_BEST_FEATURE_TO_FRONT_TI_init)
+                  80013430    00000110                                           : bam_dma_scattergather_orb_node.obj (.text:BAM_DMA_SCATTERGATHER_ORB_waitInChannel)
+                  80013540    00000100                                           : bam_dma_one_shot_orb_node.obj (.text:BAM_DMA_ONESHOT_ORB_setMemRecFunc)
+                  80013640    000000ec                                           : bam_dma_one_shot_orb_node.obj (.text:BAM_DMA_ONESHOT_ORB_updateDDRptrInChannel)
+                  8001372c    000000e4                                           : best_feature_to_front_graph.obj (.text:BEST_FEATURE_TO_FRONT_TI_initKernelsArgs)
+                  80013810    000000dc                                           : bam_dma_one_shot_orb_node.obj (.text:BAM_DMA_ONESHOT_ORB_updateDDRptrOutChannel)
+                  800138ec    000000b4                                           : bam_dma_one_shot_orb_node.obj (.text:BAM_DMA_ONESHOT_ORB_triggerOutChannel)
+                  800139a0    000000a0                                           : fast9_best_feature_to_front_alg.obj (.text:FAST9_BEST_FEATURE_TO_FRONT_TI_diagonalSuppression)
+                  80013a40    00000098                                           : best_feature_to_front_graph.obj (.text:BEST_FEATURE_TO_FRONT_TI_dmaControl)
+                  80013ad8    00000084                                           : fast9_score_graph.obj (.text:FAST9_SCORE_TI_dmaControl)
+                  80013b5c    0000006c                                           : bam_dma_one_shot_orb_node.obj (.text:BAM_DMA_ONESHOT_ORB_triggerInChannel)
+                  80013bc8    00000064                                           : bam_dma_scattergather_orb_node.obj (.text:BAM_DMA_SCATTERGATHER_ORB_IngetMemRecFunc)
+                  80013c2c    00000064                                           : fast9_best_feature_to_front_alg.obj (.text:FAST9_BEST_FEATURE_TO_FRONT_TI_activate)
+                  80013c90    00000064                                           : fast9_best_feature_to_front_alg.obj (.text:FAST9_BEST_FEATURE_TO_FRONT_TI_deactivate)
+                  80013cf4    0000005c                                           : bam_dma_scattergather_orb_node.obj (.text:BAM_DMA_SCATTERGATHER_ORB_InsetMemRecFunc)
+                  80013d50    0000005c                                           : bam_dma_scattergather_orb_node.obj (.text:BAM_DMA_SCATTERGATHER_ORB_ReadupdateDDRptr)
+                  80013dac    00000058                                           : bam_dma_scattergather_orb_node.obj (.text:BAM_DMA_SCATTERGATHER_ORB_triggerOutChannel)
+                  80013e04    0000004c                                           : bam_dma_scattergather_orb_node.obj (.text:BAM_DMA_SCATTERGATHER_ORB_OutgetMemRecFunc)
+                  80013e50    0000004c                                           : bam_dma_scattergather_orb_node.obj (.text:BAM_DMA_SCATTERGATHER_ORB_WriteupdateDDRptr)
+                  80013e9c    00000044                                           : bam_dma_one_shot_orb_node.obj (.text:BAM_DMA_ONESHOT_ORB_frameInitInChannel)
+                  80013ee0    00000038                                           : best_feature_to_front_graph.obj (.text:BEST_FEATURE_TO_FRONT_TI_graphControl)
+                  80013f18    00000034                                           : bam_dma_one_shot_orb_node.obj (.text:BAM_DMA_ONESHOT_ORB_frameInitOutChannel)
+                  80013f4c    0000002c                                           : fast9_score_graph.obj (.text:FAST9_SCORE_TI_initKernelsArgs)
+                  80013f78    00000024                                           : bam_dma_scattergather_orb_node.obj (.text:BAM_DMA_SCATTERGATHER_ORB_OutsetMemRecFunc)
+                  80013f9c    00000020                                           : best_feature_to_front_graph.obj (.text:BEST_FEATURE_TO_FRONT_TI_execute)
+                  80013fbc    00000020                                           : fast9_score_graph.obj (.text:FAST9_SCORE_TI_execute)
+                  80013fdc    0000001c                                           : best_feature_to_front_graph.obj (.text:BEST_FEATURE_TO_FRONT_TI_getGraphMemReq)
+                  80013ff8    0000001c                                           : fast9_score_graph.obj (.text:FAST9_SCORE_TI_getGraphMemReq)
+                  80014014    00000018                                           : bam_dma_scattergather_orb_node.obj (.text:BAM_DMA_SCATTERGATHER_ORB_triggerInChannel)
+                  8001402c    00000018                                           : fast9_best_feature_to_front_alg.obj (.text:FAST9_BEST_FEATURE_TO_FRONT_TI_free)
+                  80014044    00000010                                           : bam_dma_scattergather_orb_node.obj (.text:BAM_DMA_SCATTERGATHER_ORB_waitOutChannel)
+                  80014054    00000004                                           : bam_dma_one_shot_orb_node.obj (.text:BAM_DMA_ONESHOT_ORB_waitChannel)
+                  80014058    00000004                                           : fast9_best_feature_to_front_alg.obj (.text:FAST9_BEST_FEATURE_TO_FRONT_TI_control)
+                  8001405c    00000004                                           : fast9_best_feature_to_front_alg.obj (.text:FAST9_BEST_FEATURE_TO_FRONT_TI_numAlloc)
+                  80014060    000002d4     libeveHarrisCornerDetection32.eve.lib : harrisCornerDetection32_graph.obj (.text:HARRIS_CORNER_DETECTION_32_TI_initArgs)
+                  80014334    00000250                                           : harrisCornerDetection32_graph.obj (.text:HARRIS_CORNER_DETECTION_32_TI_graphCreate)
+                  80014584    00000150                                           : harrisCornerDetection32_alg.obj (.text:HARRIS_CORNER_DETECTION_32_TI_process)
+                  800146d4    00000124                                           : harrisCornerDetection32_alg.obj (.text:HARRIS_CORNER_DETECTION_32_TI_init)
+                  800147f8    000000cc                                           : harrisCornerDetection32_graph.obj (.text:HARRIS_CORNER_DETECTION_32_TI_dmaControl)
+                  800148c4    000000bc                                           : harrisCornerDetection32_alg.obj (.text:HARRIS_CORNER_DETECTION_32_TI_alloc)
+                  80014980    0000005c                                           : harrisCornerDetection32_alg.obj (.text:HARRIS_CORNER_DETECTION_32_TI_activate)
+                  800149dc    00000050                                           : harrisCornerDetection32_alg.obj (.text:HARRIS_CORNER_DETECTION_32_TI_deactivate)
+                  80014a2c    00000050                                           : harrisCornerDetection32_graph.obj (.text:assignDMAautoIncrementParams)
+                  80014a7c    00000040                                           : harrisCornerDetection32_graph.obj (.text:HARRIS_CORNER_DETECTION_32_TI_graphControl)
+                  80014abc    0000002c                                           : harrisCornerDetection32_alg.obj (.text:HARRIS_CORNER_DETECTION_32_TI_control)
+                  80014ae8    00000020                                           : harrisCornerDetection32_graph.obj (.text:HARRIS_CORNER_DETECTION_32_TI_execute)
+                  80014b08    0000001c                                           : harrisCornerDetection32_graph.obj (.text:HARRIS_CORNER_DETECTION_32_TI_getGraphMemReq)
+                  80014b24    00000018                                           : harrisCornerDetection32_alg.obj (.text:HARRIS_CORNER_DETECTION_32_TI_free)
+                  80014b3c    00000004                                           : harrisCornerDetection32_alg.obj (.text:HARRIS_CORNER_DETECTION_32_TI_numAlloc)
+                  80014b40    00000664     libeveImagePyramid_u8.eve.lib : imagePyramid_u8_graph.obj (.text:IMAGE_PYRAMID_U8_TI_initArgs)
+                  800151a4    0000026c                                   : imagePyramid_u8_graph.obj (.text:IMAGE_PYRAMID_U8_TI_graphCreate)
+                  80015410    00000108                                   : imagePyramid_u8_alg.obj (.text:IMAGE_PYRAMID_U8_TI_process)
+                  80015518    000000e4                                   : imagePyramid_u8_graph.obj (.text:IMAGE_PYRAMID_U8_TI_dmaControl)
+                  800155fc    000000bc                                   : imagePyramid_u8_alg.obj (.text:IMAGE_PYRAMID_U8_TI_alloc)
+                  800156b8    000000bc                                   : imagePyramid_u8_alg.obj (.text:IMAGE_PYRAMID_U8_TI_init)
+                  80015774    0000005c                                   : imagePyramid_u8_alg.obj (.text:IMAGE_PYRAMID_U8_TI_activate)
+                  800157d0    00000054                                   : imagePyramid_u8_graph.obj (.text:assignDMAautoIncrementParams)
+                  80015824    00000050                                   : imagePyramid_u8_alg.obj (.text:IMAGE_PYRAMID_U8_TI_deactivate)
+                  80015874    00000020                                   : imagePyramid_u8_graph.obj (.text:IMAGE_PYRAMID_U8_TI_execute)
+                  80015894    0000001c                                   : imagePyramid_u8_graph.obj (.text:IMAGE_PYRAMID_U8_TI_getGraphMemReq)
+                  800158b0    00000018                                   : imagePyramid_u8_alg.obj (.text:IMAGE_PYRAMID_U8_TI_free)
+                  800158c8    00000004                                   : imagePyramid_u8_alg.obj (.text:IMAGE_PYRAMID_U8_TI_control)
+                  800158cc    00000004                                   : imagePyramid_u8_alg.obj (.text:IMAGE_PYRAMID_U8_TI_numAlloc)
+                  800158d0    000002a4     libeveYUVPAdding.eve.lib : yuv_padding_graph.obj (.text:YUV_PADDING_initArgs)
+                  80015b74    000002a0                              : yuv_padding_alg.obj (.text:YUV_PADDING_TI_process)
+                  80015e14    000001c8                              : yuv_padding_graph.obj (.text:YUV_PADDING_TI_dmaControl)
+                  80015fdc    00000190                              : yuv_padding_graph.obj (.text:YUV_PADDING_TI_graphCreate)
+                  8001616c    000000e0                              : yuv_padding_alg.obj (.text:YUV_PADDING_TI_alloc)
+                  8001624c    000000b8                              : yuv_padding_alg.obj (.text:YUV_PADDING_TI_init)
+                  80016304    0000005c                              : yuv_padding_alg.obj (.text:YUV_PADDING_TI_activate)
+                  80016360    00000050                              : yuv_padding_alg.obj (.text:YUV_PADDING_TI_deactivate)
+                  800163b0    00000020                              : yuv_padding_graph.obj (.text:YUV_PADDING_TI_execute)
+                  800163d0    0000001c                              : yuv_padding_graph.obj (.text:YUV_PADDING_TI_getGraphMemReq)
+                  800163ec    00000018                              : yuv_padding_alg.obj (.text:YUV_PADDING_TI_free)
+                  80016404    00000004                              : yuv_padding_alg.obj (.text:YUV_PADDING_TI_control)
+                  80016408    00000004                              : yuv_padding_alg.obj (.text:YUV_PADDING_TI_numAlloc)
+
+.text      0    8001640c    00007560     
+                  8001640c    00000d8c     ti_stats_collector.obj (.text:statCollectorControl)
+                  80017198    00000a60     pyramid_lk_sof_tb.obj (.text:pyramidLkSofTest)
+                  80017bf8    00000640     dmautils.lib : edma_utils_autoincrement.obj (.text:EDMA_UTILS_autoIncrement_configure)
+                  80018238    0000052c     libeveBinImageToList.eve.lib : bin_image_to_list_alg.obj (.text:BIN_IMAGE_TO_LIST_TI_process)
+                  80018764    000004bc     dmautils.lib : edma_utils_autoincrement_1d.obj (.text:EDMA_UTILS_autoIncrement1D_configure)
+                  80018c20    0000040c     pyramid_lk_sof_tb.obj (.text:main)
+                  8001902c    000003e8     configparser.obj (.text:ParseContent)
+                  80019414    000003d4     pyramid_lk_sof_tb.obj (.text:APP_drawFlow)
+                  800197e8    00000308     configparser.obj (.text:printparams)
+                  80019af0    00000288     dmautils.lib : edma_utils_autoincrement.obj (.text:EDMA_UTILS_autoIncrement_update)
+                  80019d78    00000234     eve_profile.obj (.text:profiler_end)
+                  80019fac    0000020c     pyramid_lk_sof_config.obj (.text:printConfigParams)
+                  8001a1b8    00000204     pyramid_lk_sof_tb.obj (.text:sofhandleCreate)
+                  8001a3bc    000001c8     ti_draw_utils.obj (.text:APP_drawLineRGB)
+                  8001a584    000001c4     libeveBinImageToList.eve.lib : bin_image_to_list_with_masking_graph.obj (.text:BIN_IMAGE_TO_LIST_WITH_MASKING_TI_graphCreate)
+                  8001a748    000001c4     dmautils.lib : dma_funcs.obj (.text:DMA_funcs_hardwareRegSetup)
+                  8001a90c    000001b8                  : edma_utils_autoincrement.obj (.text:EDMA_UTILS_autoIncrement_triggerOutChannel)
+                  8001aac4    000001b0     libevenatckernels.eve.lib : vcop_harrisScore_32_7x7_cn.obj (.text:vcop_harrisScore_32_7x7_cn)
+                  8001ac74    00000190     dmautils.lib : edma_utils_scatterGather.obj (.text:EDMA_UTILS_scattherGather_init)
+                  8001ae04    00000178                  : dma_resource_allocator.obj (.text:DMA_resourceAllocator_allocateResources)
+                  8001af7c    0000016c                  : edma_utils_autoincrement_1d.obj (.text:EDMA_UTILS_autoIncrement1D_update)
+                  8001b0e8    00000164                  : edma_utils_autoincrement.obj (.text:EDMA_UTILS_autoIncrement_triggerInChannel)
+                  8001b24c    0000015c     libeveBinImageToList.eve.lib : bin_image_to_list_select_list_elems_graph.obj (.text:BIN_IMAGE_TO_LIST_SELECT_LIST_ELEMENTS_TI_graphCreate)
+                  8001b3a8    00000158     ti_draw_utils.obj (.text:APP_convertYUV420ptoRGB888)
+                  8001b500    00000154     report_utils.obj (.text:report_printAppletInfo)
+                  8001b654    0000014c     libeveBinImageToList.eve.lib : bin_image_to_list_alg.obj (.text:BIN_IMAGE_TO_LIST_TI_alloc)
+                  8001b7a0    0000013c     ti_draw_utils.obj (.text:APP_drawBoxRGB)
+                  8001b8dc    0000013c     pyramid_lk_sof_tb.obj (.text:sofProcess)
+                  8001ba18    00000134     libevenatckernels.eve.lib : vcop_nonMaxSuppress_mxn_32s_c.obj (.text:vcop_nonMaxSuppress_mxn_32s_cn)
+                  8001bb4c    00000128     libeveBinImageToList.eve.lib : bam_dma_custom_bin_to_list_node.obj (.text:BAM_DMA_CUSTOM_BIN_TO_LIST_IN_updateDDRptr)
+                  8001bc74    00000120     ti_draw_utils.obj (.text:APP_convertRGB888toYUV420p)
+                  8001bd94    00000110     libevenatckernels.eve.lib : vcop_generateList_c.obj (.text:vcop_generateList_cn)
+                  8001bea4    00000100     libeveBinImageToList.eve.lib : bin_image_to_list_with_masking_graph.obj (.text:BIN_IMAGE_TO_LIST_WITH_MASKING_TI_dmaControl)
+                  8001bfa4    000000e8     dmautils.lib : edma_utils_autoincrement.obj (.text:EDMA_UTILS_autoIncrement_init)
+                  8001c08c    000000d8     configparser.obj (.text:readparamfile)
+                  8001c164    000000d4     libevenatckernels.eve.lib : vcop_gauss5x5PyramidKernel_8_c.obj (.text:vcop_gauss5x5PyramidKernel_8_vert_c)
+                  8001c238    000000cc     dmautils.lib : edma_utils_state.obj (.text:DMA_utils_updateStateStruct)
+                  8001c304    000000c4     libeveBinImageToList.eve.lib : bin_image_to_list_alg.obj (.text:BIN_IMAGE_TO_LIST_TI_init)
+                  8001c3c8    000000c4     eve_profile.obj (.text:profiler_init)
+                  8001c48c    000000bc     libevenatckernels.eve.lib : vcop_vec_gradients_xy_and_magnitude_c.obj (.text:vcop_vec_gradients_xy_and_magnitude_cn2)
+                  8001c548    000000b8     libeveBinImageToList.eve.lib : bam_dma_custom_bin_to_list_node.obj (.text:BAM_DMA_CUSTOM_BIN_TO_LIST_OUT_frameInitChannel)
+                  8001c600    000000b8                                  : bam_dma_custom_select_list_elem_node.obj (.text:BAM_DMA_CUSTOM_SELECT_LIST_ELEM_OUT_frameInitChannel)
+                  8001c6b8    000000b8     dmautils.lib : edma_utils_autoincrement_1d.obj (.text:EDMA_UTILS_autoIncrement1D_init)
+                  8001c770    000000a4     libeveBinImageToList.eve.lib : bam_dma_custom_select_list_elem_node.obj (.text:BAM_DMA_CUSTOM_SELECT_LIST_ELEM_IN_updateDDRptr)
+                  8001c814    000000a0     dmautils.lib : edma_utils_scatterGather.obj (.text:EDMA_UTILS_scattherGather_updateNtrigger)
+                  8001c8b4    00000098                  : edma_utils_memcpy.obj (.text:EDMA_UTILS_memcpy2D)
+                  8001c94c    00000094     libevenatckernels.eve.lib : vcop_blockAverage2x2_cn.obj (.text:vcop_blockAverage2x2_uchar_cn)
+                  8001c9e0    00000088     libeveBinImageToList.eve.lib : bam_dma_custom_bin_to_list_node.obj (.text:BAM_DMA_CUSTOM_BIN_TO_LIST_IN_setMemRecFunc)
+                  8001ca68    00000084                                  : bam_dma_custom_bin_to_list_node.obj (.text:BAM_DMA_CUSTOM_BIN_TO_LIST_IN_getMemRecFunc)
+                  8001caec    00000080     libevenatckernels.eve.lib : get_generateListPtr.obj (.text:get_generateListPtr)
+                  8001cb6c    00000080                               : vcop_gauss5x5PyramidKernel_8_c.obj (.text:vcop_gauss5x5PyramidKernel_8_horiz_c)
+                  8001cbec    00000078     libeveBinImageToList.eve.lib : bam_dma_custom_bin_to_list_node.obj (.text:BAM_DMA_CUSTOM_BIN_TO_LIST_OUT_wait)
+                  8001cc64    00000074                                  : bam_dma_custom_bin_to_list_node.obj (.text:BAM_DMA_CUSTOM_BIN_TO_LIST_OUT_trigger)
+                  8001ccd8    00000074                                  : bin_image_to_list_with_masking_graph.obj (.text:BIN_IMAGE_TO_LIST_WITH_MASKING_TI_kernelControl)
+                  8001cd4c    00000074     dmautils.lib : dma_funcs.obj (.text:DMA_funcs_writeTransferParams)
+                  8001cdc0    00000074     libevenatckernels.eve.lib : vcop_harrisScore_32_7x7_cn.obj (.text:leftmostbit)
+                  8001ce34    00000070     libeveBinImageToList.eve.lib : bin_image_to_list_alg.obj (.text:BIN_IMAGE_TO_LIST_TI_activate)
+                  8001cea4    00000070                                  : bin_image_to_list_alg.obj (.text:BIN_IMAGE_TO_LIST_TI_deactivate)
+                  8001cf14    00000070     ti_stats_collector.obj (.text:statCollectorInit)
+                  8001cf84    0000006c     libeveBinImageToList.eve.lib : bam_dma_custom_select_list_elem_node.obj (.text:BAM_DMA_CUSTOM_SELECT_LIST_ELEM_OUT_wait)
+                  8001cff0    0000006c     eve_profile.obj (.text:profiler_getStackDepth)
+                  8001d05c    00000068     libeveBinImageToList.eve.lib : bam_dma_custom_select_list_elem_node.obj (.text:BAM_DMA_CUSTOM_SELECT_LIST_ELEM_IN_setMemRecFunc)
+                  8001d0c4    00000068                                  : bam_dma_custom_select_list_elem_node.obj (.text:BAM_DMA_CUSTOM_SELECT_LIST_ELEM_OUT_trigger)
+                  8001d12c    00000068                                  : bin_image_to_list_select_list_elems_graph.obj (.text:BIN_IMAGE_TO_LIST_SELECT_LIST_ELEMENTS_TI_dmaControl)
+                  8001d194    00000068     dmautils.lib : edma_utils_autoincrement.obj (.text:EDMA_UTILS_autoIncrement_waitOutChannel)
+                  8001d1fc    0000005c     pyramid_lk_sof_tb.obj (.text:TestApp_AllocMemRecords)
+                  8001d258    00000058     libeveBinImageToList.eve.lib : bam_dma_custom_bin_to_list_node.obj (.text:BAM_DMA_CUSTOM_BIN_TO_LIST_OUT_setMemRecFunc)
+                  8001d2b0    00000058                                  : bam_dma_custom_select_list_elem_node.obj (.text:BAM_DMA_CUSTOM_SELECT_LIST_ELEM_OUT_setMemRecFunc)
+                  8001d308    00000058     ti_mem_manager.obj (.text:TI_GetMemoryChunk)
+                  8001d360    00000054     libeveBinImageToList.eve.lib : bam_dma_custom_select_list_elem_node.obj (.text:BAM_DMA_CUSTOM_SELECT_LIST_ELEM_IN_getMemRecFunc)
+                  8001d3b4    00000054     dmautils.lib : edma_utils_autoincrement.obj (.text:EDMA_UTILS_autoIncrement_waitInChannel)
+                  8001d408    00000050     libeveBinImageToList.eve.lib : bam_dma_custom_select_list_elem_node.obj (.text:BAM_DMA_CUSTOM_SELECT_LIST_ELEM_IN_frameInitChannel)
+                  8001d458    00000050     eve_profile.obj (.text:profiler_testCaseInfo)
+                  8001d4a8    0000004c     dmautils.lib : edma_utils.obj (.text:EDMA_UTILS_globalReset)
+                  8001d4f4    00000048     eve_profile.obj (.text:profiler_start)
+                  8001d53c    00000044     dmautils.lib : edma_utils_memcpy.obj (.text:EDMA_UTILS_memcpy2D_init)
+                  8001d580    0000003c     libeveBinImageToList.eve.lib : bam_dma_custom_bin_to_list_node.obj (.text:BAM_DMA_CUSTOM_BIN_TO_LIST_OUT_updateOutDDRptr)
+                  8001d5bc    0000003c                                  : bam_dma_custom_select_list_elem_node.obj (.text:BAM_DMA_CUSTOM_SELECT_LIST_ELEM_OUT_updateOutDDRptr)
+                  8001d5f8    00000038                                  : bam_dma_custom_bin_to_list_node.obj (.text:BAM_DMA_CUSTOM_BIN_TO_LIST_OUT_getMemRecFunc)
+                  8001d630    00000038                                  : bam_dma_custom_select_list_elem_node.obj (.text:BAM_DMA_CUSTOM_SELECT_LIST_ELEM_OUT_getMemRecFunc)
+                  8001d668    00000038     dmautils.lib : edma_utils_autoincrement_1d.obj (.text:EDMA_UTILS_autoIncrement1D_waitInChannel)
+                  8001d6a0    00000038                  : edma_utils_scatterGather.obj (.text:EDMA_UTILS_scattherGather_updateDstNtrigger)
+                  8001d6d8    00000038                  : edma_utils_scatterGather.obj (.text:EDMA_UTILS_scattherGather_updateSrcNtrigger)
+                  8001d710    00000038     eve_profile.obj (.text:profiler_printStatus)
+                  8001d748    00000030     eve_profile.obj (.text:profiler_initStack)
+                  8001d778    0000002c     dmautils.lib : dma_resource_allocator.obj (.text:DMA_resourceAllocator_initResources)
+                  8001d7a4    00000024     libeveBinImageToList.eve.lib : bin_image_to_list_select_list_elems_graph.obj (.text:BIN_IMAGE_TO_LIST_SELECT_LIST_ELEMENTS_TI_kernelControl)
+                  8001d7c8    00000024     eve_profile.obj (.text:TEST_PRINTF)
+                  8001d7ec    00000020     libeveBinImageToList.eve.lib : bin_image_to_list_select_list_elems_graph.obj (.text:BIN_IMAGE_TO_LIST_SELECT_LIST_ELEMENTS_TI_execute)
+                  8001d80c    00000020                                  : bin_image_to_list_with_masking_graph.obj (.text:BIN_IMAGE_TO_LIST_WITH_MASKING_TI_execute)
+                  8001d82c    00000020                                  : bin_image_to_list_with_masking_graph.obj (.text:BIN_IMAGE_TO_LIST_WITH_MASKING_TI_initKernelsArgs)
+                  8001d84c    00000020     dmautils.lib : edma_utils_state.obj (.text:DMA_utils_resetStateStruct)
+                  8001d86c    00000020                  : edma_utils_autoincrement_1d.obj (.text:EDMA_UTILS_autoIncrement1D_triggerInChannel)
+                  8001d88c    00000020                  : edma_utils_scatterGather.obj (.text:EDMA_UTILS_scattherGather_wait)
+                  8001d8ac    00000018     libeveBinImageToList.eve.lib : bin_image_to_list_select_list_elems_graph.obj (.text:BIN_IMAGE_TO_LIST_SELECT_LIST_ELEMENTS_TI_getGraphMemReq)
+                  8001d8c4    00000018                                  : bin_image_to_list_alg.obj (.text:BIN_IMAGE_TO_LIST_TI_free)
+                  8001d8dc    00000018                                  : bin_image_to_list_with_masking_graph.obj (.text:BIN_IMAGE_TO_LIST_WITH_MASKING_TI_getGraphMemReq)
+                  8001d8f4    00000018     eve_profile.obj (.text:profiler_getSP)
+                  8001d90c    00000010     libeveBinImageToList.eve.lib : bin_image_to_list_select_list_elems_graph.obj (.text:BIN_IMAGE_TO_LIST_SELECT_LIST_ELEMENTS_TI_initKernelsArgs)
+                  8001d91c    00000010     dmautils.lib : edma_utils_scatterGather.obj (.text:EDMA_UTILS_scattherGather_configure)
+                  8001d92c    00000010     eve_profile.obj (.text:profiler_end_print)
+                  8001d93c    0000000c     dmautils.lib : dma_resource_allocator.obj (.text:DMA_resourceAllocator_setEdma3RmHandle)
+                  8001d948    0000000c     ti_mem_manager.obj (.text:TI_CreateMemoryHandle)
+                  8001d954    0000000c     libevenatckernels.eve.lib : get_generateListPtr.obj (.text:reset_generateListPtr)
+                  8001d960    00000004     libeveBinImageToList.eve.lib : bin_image_to_list_alg.obj (.text:BIN_IMAGE_TO_LIST_TI_control)
+                  8001d964    00000004                                  : bin_image_to_list_alg.obj (.text:BIN_IMAGE_TO_LIST_TI_numAlloc)
+                  8001d968    00000004     dmautils.lib : edma3lld_support.obj (.text:EDMA3LLD_SUPPORT_requestResources)
+
+.rts_text 
+*          0    8001d96c    00007228     
+                  8001d96c    000004f8     rtsarp32_v200.lib : _scanfi.obj (.text:_scanfi)
+                  8001de64    000003a0                       : strtod.obj (.text:strtod)
+                  8001e204    0000039c                       : strtold.obj (.text:strtold)
+                  8001e5a0    000002d8                       : strtoll.obj (.text:strtoll)
+                  8001e878    000002a0                       : _printfi.obj (.text:_setfield)
+                  8001eb18    00000268                       : _scanfi.obj (.text:_sproc_int)
+                  8001ed80    00000260                       : _scanfi.obj (.text:_sset_arg)
+                  8001efe0    0000025c                       : _printfi.obj (.text:_pproc_fge)
+                  8001f23c    0000025c                       : _printfi.obj (.text:ecvt)
+                  8001f498    00000258                       : _printfi.obj (.text:fcvt)
+                  8001f6f0    0000024c                       : strtoull.obj (.text:strtoull)
+                  8001f93c    0000022c                       : _printfi.obj (.text:_printfi)
+                  8001fb68    00000220                       : _printfi.obj (.text:_pconv_e)
+                  8001fd88    0000021c                       : fwrite.obj (.text:fwrite)
+                  8001ffa4    00000208                       : _printfi.obj (.text:_getarg_diouxp)
+                  800201ac    00000200                       : frcdivd.obj (.text:_frcdivd)
+                  800203ac    000001e4                       : divd.obj (.text:__arp32abi_divd)
+                  80020590    000001cc                       : imath64.obj (.text:__arp32abi_divull)
+                  8002075c    000001cc                       : strtol.obj (.text:strtol)
+                  80020928    000001c8                       : mpyd.obj (.text:__arp32abi_mpyd)
+                  80020af0    000001c8                       : fgets.obj (.text:_dofgets)
+                  80020cb8    000001b8                       : addd.obj (.text:__arp32abi_addd)
+                  80020e70    000001a0                       : strtoul.obj (.text:strtoul)
+                  80021010    0000018c                       : _printfi.obj (.text:_pproc_diouxp)
+                  8002119c    00000170                       : fputs.obj (.text:fputs)
+                  8002130c    00000164                       : mpyf.obj (.text:__arp32abi_mpyf)
+                  80021470    00000160                       : frcaddd.obj (.text:_frcaddd)
+                  800215d0    0000015c                       : _scanfi.obj (.text:_sproc_float)
+                  8002172c    00000158                       : llmpy.obj (.text:__arp32abi_mpyll)
+                  80021884    00000144                       : fread.obj (.text:fread)
+                  800219c8    00000140                       : frcmpyd.obj (.text:_frcmpyd)
+                  80021b08    00000140                       : _scanfi.obj (.text:_sget_conv)
+                  80021c48    0000013c                       : _printfi.obj (.text:_pproc_fwp)
+                  80021d84    0000012c                       : fopen.obj (.text:_openfile)
+                  80021eb0    00000118                       : setvbuf.obj (.text:setvbuf)
+                  80021fc8    00000114                       : _printfi.obj (.text:_pconv_g)
+                  800220dc    000000f4                       : _printfi.obj (.text:_pproc_str)
+                  800221d0    000000ec                       : lowlev.obj (.text:open)
+                  800222bc    000000e8                       : fputc.obj (.text:fputc)
+                  800223a4    000000dc                       : memcpy.obj (.text:memcpy)
+                  80022480    000000cc                       : cmpd.obj (.text:__arp32abi_cmpd)
+                  8002254c    000000c8                       : fscanf.obj (.text:_chkmbc)
+                  80022614    000000c4                       : memory.obj (.text:mem_alloc)
+                  800226d8    000000c0                       : fgetc.obj (.text:fgetc)
+                  80022798    000000bc                       : _printfi.obj (.text:_ltostr)
+                  80022854    000000bc                       : _scanfi.obj (.text:_sproc_str)
+                  80022910    000000b4                       : trgdrv.obj (.text:HOSTlseek)
+                  800229c4    000000b4                       : _scanfi.obj (.text:_sproc_lb)
+                  80022a78    000000ac                       : trgdrv.obj (.text:HOSTrename)
+                  80022b24    000000ac                       : ungetc.obj (.text:ungetc)
+                  80022bd0    000000a8                       : fopen.obj (.text:_search_fp)
+                  80022c78    000000a8                       : memset.obj (.text:memset)
+                  80022d20    000000a0                       : lowlev.obj (.text:getdevice)
+                  80022dc0    0000009c                       : _bufread.obj (.text:_buff_read)
+                  80022e5c    0000009c                       : _printfi.obj (.text:_mcpy)
+                  80022ef8    00000098                       : trgdrv.obj (.text:HOSTopen)
+                  80022f90    00000094                       : sscanf.obj (.text:_chkmbc)
+                  80023024    00000094                       : memory.obj (.text:mem_free)
+                  800230b8    00000090                       : trgdrv.obj (.text:HOSTread)
+                  80023148    00000090                       : cvtdf.obj (.text:__arp32abi_cvtdf)
+                  800231d8    00000090                       : _printfi.obj (.text:_pproc_fflags)
+                  80023268    00000090                       : _io_perm.obj (.text:_wrt_ok)
+                  800232f8    00000090                       : fseek.obj (.text:fseek)
+                  80023388    00000090                       : ftell.obj (.text:ftell)
+                  80023418    0000008c                       : trgdrv.obj (.text:HOSTwrite)
+                  800234a4    0000008c                       : fixdu.obj (.text:__arp32abi_fixdu)
+                  80023530    00000088                       : lowlev.obj (.text:close)
+                  800235b8    00000084                       : _printfi.obj (.text:_ecpy)
+                  8002363c    00000080                       : cvtfd.obj (.text:__arp32abi_cvtfd)
+                  800236bc    00000080                       : _scanfi.obj (.text:_sget_scanset)
+                  8002373c    00000080                       : printf.obj (.text:printf)
+                  800237bc    0000007c                       : fixdi.obj (.text:__arp32abi_fixdi)
+                  80023838    0000007c                       : fclose.obj (.text:_closefile)
+                  800238b4    0000007c                       : atoi.obj (.text:atoi)
+                  80023930    0000007c                       : fflush.obj (.text:fflush)
+                  800239ac    00000078                       : trgdrv.obj (.text:HOSTunlink)
+                  80023a24    00000078                       : _printfi.obj (.text:_div)
+                  80023a9c    00000078                       : _printfi.obj (.text:_pconv_f)
+                  80023b14    00000078                       : fscanf.obj (.text:fscanf)
+                  80023b8c    00000078                       : memory.obj (.text:minit)
+                  80023c04    00000074                       : trgdrv.obj (.text:HOSTclose)
+                  80023c78    00000074                       : fprintf.obj (.text:fprintf)
+                  80023cec    00000070                       : autoinit.obj (.text:_auto_init)
+                  80023d5c    00000070                       : vfprintf.obj (.text:vfprintf)
+                  80023dcc    0000006c                       : frcmpyf.obj (.text:_frcmpyf)
+                  80023e38    0000006c                       : _io_perm.obj (.text:_rd_ok)
+                  80023ea4    00000068                       : fltid.obj (.text:__arp32abi_fltid)
+                  80023f0c    00000068                       : boot.obj (.text:_c_int00)
+                  80023f74    00000068                       : lowlev.obj (.text:lseek)
+                  80023fdc    00000068                       : lowlev.obj (.text:read)
+                  80024044    00000068                       : lowlev.obj (.text:write)
+                  800240ac    00000064                       : imath64.obj (.text:_subcull)
+                  80024110    00000064                       : ltoa.obj (.text:ltoa)
+                  80024174    00000060                       : llshift.obj (.text:__arp32abi_llshl)
+                  800241d4    00000060                       : fflush.obj (.text:_doflush)
+                  80024234    0000005c                       : isinf.obj (.text:__arp32abi_isinf)
+                  80024290    0000005c                       : lowlev.obj (.text:tabinit)
+                  800242ec    0000005c                       : vcop_memory.obj (.text:vcop_minit)
+                  80024348    00000058                       : fltif.obj (.text:__arp32abi_fltif)
+                  800243a0    00000054                       : _printfi.obj (.text:_fcpy)
+                  800243f4    00000054                       : renormd.obj (.text:_renormd)
+                  80024448    00000054                       : exit.obj (.text:exit)
+                  8002449c    00000050                       : fopen.obj (.text:_cleanup)
+                  800244ec    00000050                       : lowlev.obj (.text:finddevice)
+                  8002453c    0000004c                       : fltud.obj (.text:__arp32abi_fltud)
+                  80024588    0000004c                       : memory.obj (.text:malloc)
+                  800245d4    00000048                       : trgmsg.obj (.text:readmsg)
+                  8002461c    00000048                       : lowlev.obj (.text:unlink)
+                  80024664    00000048                       : trgmsg.obj (.text:writemsg)
+                  800246ac    00000040                       : args_main.obj (.text:_args_main)
+                  800246ec    0000003c                       : _printfi.obj (.text:__arp32abi_isnan)
+                  80024728    0000003c                       : strasgi_c.obj (.text:__arp32abi_strasgi)
+                  80024764    0000003c                       : fopen.obj (.text:fopen)
+                  800247a0    0000003c                       : vsprintf.obj (.text:vsprintf)
+                  800247dc    00000038                       : assert.obj (.text:__arp32abi_abort_msg)
+                  80024814    00000038                       : llshift.obj (.text:__arp32abi_llshr)
+                  8002484c    00000038                       : imath64.obj (.text:__arp32abi_remull)
+                  80024884    00000038                       : sscanf.obj (.text:sscanf)
+                  800248bc    00000034                       : llshift.obj (.text:__arp32abi_llshru)
+                  800248f0    00000030                       : fclose.obj (.text:fclose)
+                  80024920    00000030                       : rand.obj (.text:srand)
+                  80024950    0000002c                       : subd.obj (.text:__arp32abi_subd)
+                  8002497c    0000002c                       : feof.obj (.text:feof)
+                  800249a8    00000028                       : negd.obj (.text:__arp32abi_negd)
+                  800249d0    00000028                       : mult.obj (.text:_mpyl)
+                  800249f8    00000024                       : llcmp.obj (.text:__arp32abi_cmplls)
+                  80024a1c    00000024                       : llcmp.obj (.text:__arp32abi_cmpllu)
+                  80024a40    00000020                       : memccpy.obj (.text:memccpy)
+                  80024a60    0000001c                       : lladdsub.obj (.text:__arp32abi_addll)
+                  80024a7c    0000001c                       : vsprintf.obj (.text:_outs)
+                  80024a98    00000018                       : fgets.obj (.text:fgets)
+                  80024ab0    00000014                       : lladdsub.obj (.text:__arp32abi_subll)
+                  80024ac4    00000014                       : memory.obj (.text:free)
+                  80024ad8    00000010                       : lladdsub.obj (.text:__arp32abi_negll)
+                  80024ae8    00000010                       : sscanf.obj (.text:_inpchar)
+                  80024af8    00000010                       : vsprintf.obj (.text:_outc)
+                  80024b08    00000010                       : fscanf.obj (.text:_uninpchar)
+                  80024b18    0000000c                       : fscanf.obj (.text:_inpchar)
+                  80024b24    0000000c                       : fprintf.obj (.text:_outc)
+                  80024b30    0000000c                       : printf.obj (.text:_outc)
+                  80024b3c    0000000c                       : vfprintf.obj (.text:_outc)
+                  80024b48    0000000c                       : fprintf.obj (.text:_outs)
+                  80024b54    0000000c                       : printf.obj (.text:_outs)
+                  80024b60    0000000c                       : vfprintf.obj (.text:_outs)
+                  80024b6c    0000000c                       : sscanf.obj (.text:_uninpchar)
+                  80024b78    0000000c                       : remove.obj (.text:remove)
+                  80024b84    00000008                       : exit.obj (.text:abort)
+                  80024b8c    00000004                       : _lock.obj (.text:_nop)
+                  80024b90    00000004                       : pre_init.obj (.text:_system_pre_init)
+
+.bam_text 
+*          0    80024b94    00003bdc     
+                  80024b94    00000820     algframework.lib : bam_construct_int.obj (.text:BAM_initGraph)
+                  800253b4    00000770                      : bam_construct_int.obj (.text:BAM_autoAllocMemRec)
+                  80025b24    00000574                      : bam_execute.obj (.text:BAM_execute)
+                  80026098    0000047c                      : bam_construct_int.obj (.text:BAM_finaliseGraph)
+                  80026514    00000414                      : bam_construct_int.obj (.text:BAM_optimizeGraph)
+                  80026928    00000378                      : bam_construct_int.obj (.text:BAM_getMemRec)
+                  80026ca0    000001cc                      : bam_construct.obj (.text:BAM_createGraph)
+                  80026e6c    00000184                      : bam_memory.obj (.text:bam_mem_alloc)
+                  80026ff0    00000158                      : bam_dma_autoincrement_node.obj (.text:BAM_DMA_AUTOINCREMENT_getMemRecFunc)
+                  80027148    00000158                      : bam_dma_one_shot_node.obj (.text:BAM_DMA_ONESHOT_getMemRecFunc)
+                  800272a0    00000158                      : bam_construct_int.obj (.text:BAM_updateNodes)
+                  800273f8    00000138                      : bam_execute.obj (.text:BAM_process)
+                  80027530    00000138                      : bam_memory.obj (.text:bam_getMemPacket)
+                  80027668    00000120                      : bam_construct_int.obj (.text:BAM_setNodeMemRec)
+                  80027788    0000011c                      : bam_dma_autoincrement_node.obj (.text:BAM_DMA_AUTOINCREMENT_setMemRecFunc)
+                  800278a4    00000110                      : bam_construct_int.obj (.text:BAM_fillKernelInfo)
+                  800279b4    0000010c                      : bam_construct_int.obj (.text:BAM_getGraphMemSize)
+                  80027ac0    000000f8                      : bam_dma_one_shot_node.obj (.text:BAM_DMA_ONESHOT_setMemRecFunc)
+                  80027bb8    000000dc                      : bam_dma_one_shot_node.obj (.text:BAM_DMA_ONESHOT_updateDDRptrInChannel)
+                  80027c94    000000dc                      : bam_dma_one_shot_node.obj (.text:BAM_DMA_ONESHOT_updateDDRptrOutChannel)
+                  80027d70    000000cc                      : bam_memory.obj (.text:bam_mem_free)
+                  80027e3c    000000b4                      : bam_dma_one_shot_node.obj (.text:BAM_DMA_ONESHOT_triggerOutChannel)
+                  80027ef0    000000b4                      : bam_execute.obj (.text:BAM_activateGraph)
+                  80027fa4    000000ac                      : bam_construct_int.obj (.text:BAM_copyIntMemRec2ExtMem)
+                  80028050    000000a0                      : bam_memory.obj (.text:bam_minit)
+                  800280f0    00000098                      : bam_execute.obj (.text:BAM_ARP32_computeWrapper)
+                  80028188    00000090                      : bam_memory.obj (.text:bam_releaseMemPacket)
+                  80028218    0000008c                      : bam_construct_int.obj (.text:BAM_copyNodeList)
+                  800282a4    00000080                      : bam_dma_one_shot_node.obj (.text:BAM_DMA_ONESHOT_triggerInChannel)
+                  80028324    00000074                      : bam_execute.obj (.text:BAM_initGraphInstance)
+                  80028398    00000070                      : bam_dma_autoincrement_node.obj (.text:BAM_DMA_AUTOINCREMENT_updateDDRptrInChannel)
+                  80028408    00000070                      : bam_dma_autoincrement_node.obj (.text:BAM_DMA_AUTOINCREMENT_updateDDRptrOutChannel)
+                  80028478    00000068                      : bam_memory.obj (.text:bam_mcheck)
+                  800284e0    00000064                      : bam_execute.obj (.text:BAM_DSP_computeWrapper)
+                  80028544    00000054                      : bam_execute.obj (.text:BAM_controlNode)
+                  80028598    0000004c                      : bam_dma_autoincrement_node.obj (.text:BAM_DMA_AUTOINCREMENT_frameInitInChannel)
+                  800285e4    0000004c                      : bam_construct.obj (.text:BAM_initKernelDB)
+                  80028630    00000044                      : bam_dma_autoincrement_node.obj (.text:BAM_DMA_AUTOINCREMENT_frameInitOutChannel)
+                  80028674    00000044                      : bam_dma_one_shot_node.obj (.text:BAM_DMA_ONESHOT_frameInitInChannel)
+                  800286b8    00000038                      : bam_construct_int.obj (.text:BAM_getMemPacket)
+                  800286f0    00000034                      : bam_dma_one_shot_node.obj (.text:BAM_DMA_ONESHOT_frameInitOutChannel)
+                  80028724    0000002c                      : bam_utils.obj (.text:BAM_printf)
+                  80028750    00000018                      : bam_execute.obj (.text:VCOP_SET_MEM_VIEW)
+                  80028768    00000004                      : bam_dma_one_shot_node.obj (.text:BAM_DMA_ONESHOT_waitChannel)
+                  8002876c    00000004                      : bam_execute.obj (.text:BAM_dummyKernelFunc)
+
+.starterware_text 
+*          0    80028770    00000110     
+                  80028770    00000048     libevestarterware_eve.lib : sctm.obj (.text:EVE_SCTM_CounterConfig)
+                  800287b8    0000002c                               : sctm.obj (.text:EVE_SCTM_CounterTimerEnable)
+                  800287e4    0000002c                               : sctm.obj (.text:EVE_SCTM_InpEvtSelect)
+                  80028810    0000002c                               : sctm.obj (.text:EVE_SCTM_SamplingSelect)
+                  8002883c    00000018                               : sctm.obj (.text:EVE_SCTM_CounterRead)
+                  80028854    00000018                               : sctm.obj (.text:EVE_SCTM_OverflowCheck)
+                  8002886c    00000014                               : sctm.obj (.text:EVE_SCTM_Enable)
+
+.algo_neardata 
+*          1    40020000    00000000     UNINITIALIZED
+
+.starterware_neardata 
+*          1    40020000    00000000     UNINITIALIZED
+
+.dmemSect 
+*          1    40020000    00006200     UNINITIALIZED
+                  40020000    00006200     pyramid_lk_sof_tb.obj (.dmemSect)
+
+.stack     1    40026200    00001800     UNINITIALIZED
+                  40026200    00000004     rtsarp32_v200.lib : boot.obj (.stack)
+                  40026204    000017fc     --HOLE--
+
+.bss       1    40027a00    00000166     UNINITIALIZED
+                  40027a00    000000a8     dmautils.lib : dma_resource_allocator.obj (.bss)
+                  40027aa8    00000060                  : edma_utils_state.obj (.bss)
+                  40027b08    00000048     eve_profile.obj (.bss)
+                  40027b50    00000014     algframework.lib : bam_memory.obj (.bss)
+                  40027b64    00000002     libevesof.eve.lib : sof_filter_tracked_points.obj (.bss)
+
+.data      1    40027b68    00000030     
+                  40027b68    00000020     boot_arp32.obj (.data)
+                  40027b88    00000005     algframework.lib : bam_memory.obj (.data)
+                  40027b8d    00000003     --HOLE-- [fill = 0]
+                  40027b90    00000004     dmautils.lib : dma_resource_allocator.obj (.data)
+                  40027b94    00000004     eve_profile.obj (.data)
+
+.rodata    1    40027b98    000000b0     
+                  40027b98    00000028     ti_stats_collector.obj (.rodata)
+                  40027bc0    0000000c     pyramid_lk_sof_tb.obj (.rodata)
+                  40027bcc    00000008     algframework.lib : bam_construct_int.obj (.rodata)
+                  40027bd4    00000008     dmautils.lib : edma_utils_autoincrement.obj (.rodata)
+                  40027bdc    00000008     eve_profile.obj (.rodata)
+                  40027be4    00000008     libeveFast9CornerDetect.eve.lib : bin_img_to_list_bam_dma_node.obj (.rodata)
+                  40027bec    00000008     libevePyramidLKTracker.eve.lib : bam_lk_iterative_loop_exec_funcs.obj (.rodata)
+                  40027bf4    00000008     libevesof.eve.lib : sof_filter_tracked_points.obj (.rodata)
+                  40027bfc    00000008                       : sof_track_key_points.obj (.rodata)
+                  40027c04    00000004     algframework.lib : bam_execute.obj (.rodata)
+                  40027c08    00000004                      : bam_memory.obj (.rodata)
+                  40027c0c    00000004     dmautils.lib : edma_utils_memcpy.obj (.rodata)
+                  40027c10    00000004                  : edma_utils_scatterGather.obj (.rodata)
+                  40027c14    00000004     libeveBinImageToList.eve.lib : bam_dma_custom_bin_to_list_node.obj (.rodata)
+                  40027c18    00000004                                  : bam_dma_custom_select_list_elem_node.obj (.rodata)
+                  40027c1c    00000004     libeveFast9CornerDetect.eve.lib : fast9_corner_detect_alg.obj (.rodata)
+                  40027c20    00000004     libeveHarrisCornerDetection32.eve.lib : harrisCornerDetection32_alg.obj (.rodata)
+                  40027c24    00000004     libevePyramidLKTracker.eve.lib : bam_pyramid_lk_tracker_dma_node.obj (.rodata)
+                  40027c28    00000004     libevekernels.eve.lib : bam_generateList_exec_funcs.obj (.rodata)
+                  40027c2c    00000004                           : bam_generateList_helper_funcs.obj (.rodata)
+                  40027c30    00000004                           : bam_gradXYmag_helper_funcs.obj (.rodata)
+                  40027c34    00000004                           : bam_natcGenerateList_helper_funcs.obj (.rodata)
+                  40027c38    00000004                           : bam_natcGradXYmag_helper_funcs.obj (.rodata)
+                  40027c3c    00000004                           : bam_select_list_elements_exec_funcs.obj (.rodata)
+                  40027c40    00000004                           : vcop_fast9_score_kernel.obj (.rodata)
+                  40027c44    00000004     ti_draw_utils.obj (.rodata)
+
+.edma_utils_lib_fardata 
+*          1    40027c48    00000004     
+                  40027c48    00000004     dmautils.lib : edma_utils.obj (.const:edmaBase)
+
+.bam_neardata 
+*          1    80050000    00000000     UNINITIALIZED
+
+.sysmem    1    80050000    02800000     UNINITIALIZED
+                  80050000    00000008     rtsarp32_v200.lib : memory.obj (.sysmem)
+                  80050008    027ffff8     --HOLE--
+
+.const     1    82850000    00004565     
+                  82850000    000004e1     libeveHarrisCornerDetection32.eve.lib : harrisCornerDetection32_graph.obj (.const:.string)
+                  828504e1    000004bb     pyramid_lk_sof_config.obj (.const:.string)
+                  8285099c    000003d2     eve_profile.obj (.const:.string)
+                  82850d6e    000002e7     libeveImagePyramid_u8.eve.lib : imagePyramid_u8_graph.obj (.const:.string)
+                  82851055    000002db     libeveFAST9BestFeatureToFront.eve.lib : bam_dma_one_shot_orb_node.obj (.const:.string)
+                  82851330    000002b2     libeveBinImageToList.eve.lib : bam_dma_custom_select_list_elem_node.obj (.const:.string)
+                  828515e2    0000029c     algframework.lib : bam_dma_one_shot_node.obj (.const:.string)
+                  8285187e    00000256     configparser.obj (.const:.string)
+                  82851ad4    00000234     libeveBinImageToList.eve.lib : bam_dma_custom_bin_to_list_node.obj (.const:.string)
+                  82851d08    0000022a     pyramid_lk_sof_tb.obj (.const:.string)
+                  82851f32    00000223     libevePyramidLKTracker.eve.lib : pyramid_lk_tracker_graph.obj (.const:.string)
+                  82852155    0000020a                                    : bam_pyramid_lk_tracker_dma_node.obj (.const:.string)
+                  8285235f    000001fc     libeveFAST9BestFeatureToFront.eve.lib : bam_dma_scattergather_orb_node.obj (.const:.string)
+                  8285255b    000001f8     algframework.lib : bam_dma_autoincrement_node.obj (.const:.string)
+                  82852753    00000192     libeveBinImageToList.eve.lib : bin_image_to_list_alg.obj (.const:.string)
+                  828528e5    00000188                                  : bin_image_to_list_with_masking_graph.obj (.const:.string)
+                  82852a6d    00000175                                  : bin_image_to_list_select_list_elems_graph.obj (.const:.string)
+                  82852be2    00000169     libeveFAST9BestFeatureToFront.eve.lib : best_feature_to_front_graph.obj (.const:.string)
+                  82852d4b    00000133     libeveFast9CornerDetect.eve.lib : bin_img_to_list_bam_dma_node.obj (.const:.string)
+                  82852e7e    00000130     libeveFAST9BestFeatureToFront.eve.lib : fast9_score_graph.obj (.const:.string)
+                  82852fae    0000012a     libeveFast9CornerDetect.eve.lib : binary_image_to_list_graph.obj (.const:.string)
+                  828530d8    00000128     ti_stats_collector.obj (.const:.switchtab)
+                  82853200    00000126     libeveYUVPAdding.eve.lib : yuv_padding_graph.obj (.const:.string)
+                  82853326    00000122     libeveFast9CornerDetect.eve.lib : fast9_corner_detect_graph.obj (.const:.string)
+                  82853448    00000121     algframework.lib : bam_construct_int.obj (.const:.string)
+                  82853569    000000fd     report_utils.obj (.const:.string)
+                  82853666    000000d9     libevekernels.eve.lib : merge_sort_init.obj (.const:.string)
+                  8285373f    00000001     --HOLE-- [fill = 0]
+                  82853740    000000c8                           : bam_fast9_score_helper_funcs.obj (.const:.string:LUT_EXT_IDX_THR)
+                  82853808    000000b3     libeveHarrisCornerDetection32.eve.lib : harrisCornerDetection32_alg.obj (.const:.string)
+                  828538bb    000000aa     libevekernels.eve.lib : bam_natcNonMaxSuppress_mxn_S32_helper_funcs.obj (.const:.string)
+                  82853965    0000009c                           : bam_nonMaxSuppress_mxn_S32_helper_funcs.obj (.const:.string)
+                  82853a01    00000092     libeveFast9CornerDetect.eve.lib : fast9_corner_detect_alg.obj (.const:.string)
+                  82853a93    00000090     algframework.lib : bam_execute.obj (.const:.string)
+                  82853b23    00000001     --HOLE-- [fill = 0]
+                  82853b24    00000088     libevekernels.eve.lib : bam_fast9_score_helper_funcs.obj (.const:.string:LUT_EXT_IDX_SAD)
+                  82853bac    00000084     libevePyramidLKTracker.eve.lib : pyramid_lk_tracker_graph.obj (.const:$P$T0$1)
+                  82853c30    00000068                                    : pyramid_lk_tracker_graph.obj (.const:$P$T1$2)
+                  82853c98    00000066     libeveFAST9BestFeatureToFront.eve.lib : fast9_best_feature_to_front_alg.obj (.const:.string)
+                  82853cfe    00000002     --HOLE-- [fill = 0]
+                  82853d00    00000060                                           : best_feature_to_front_graph.obj (.const:$P$T0$1)
+                  82853d60    00000060     libeveImagePyramid_u8.eve.lib : imagePyramid_u8_graph.obj (.const:$P$T0$1)
+                  82853dc0    00000056     ti_mem_manager.obj (.const:.string)
+                  82853e16    00000002     --HOLE-- [fill = 0]
+                  82853e18    00000054     libeveHarrisCornerDetection32.eve.lib : harrisCornerDetection32_graph.obj (.const:$P$T0$1)
+                  82853e6c    00000054     libeveBinImageToList.eve.lib : bin_image_to_list_alg.obj (.const)
+                  82853ec0    00000054     libeveFAST9BestFeatureToFront.eve.lib : fast9_best_feature_to_front_alg.obj (.const)
+                  82853f14    00000054     libeveFast9CornerDetect.eve.lib : fast9_corner_detect_alg.obj (.const)
+                  82853f68    00000054     libeveHarrisCornerDetection32.eve.lib : harrisCornerDetection32_alg.obj (.const)
+                  82853fbc    00000054     libeveImagePyramid_u8.eve.lib : imagePyramid_u8_alg.obj (.const)
+                  82854010    00000054     libevePyramidLKTracker.eve.lib : pyramid_lk_tracker_alg.obj (.const)
+                  82854064    00000054     libeveYUVPAdding.eve.lib : yuv_padding_alg.obj (.const)
+                  828540b8    00000054     libevesof.eve.lib : sof_alg.obj (.const)
+                  8285410c    00000048     libeveHarrisCornerDetection32.eve.lib : harrisCornerDetection32_graph.obj (.const:$P$T1$2)
+                  82854154    00000043     ti_stats_collector.obj (.const:.string)
+                  82854197    00000001     --HOLE-- [fill = 0]
+                  82854198    0000003c     libeveBinImageToList.eve.lib : bin_image_to_list_with_masking_graph.obj (.const:$P$T0$1)
+                  828541d4    00000036     libevePyramidLKTracker.eve.lib : pyramid_lk_tracker_alg.obj (.const:.string)
+                  8285420a    00000034     libeveImagePyramid_u8.eve.lib : imagePyramid_u8_alg.obj (.const:.string)
+                  8285423e    00000002     --HOLE-- [fill = 0]
+                  82854240    00000030     libeveBinImageToList.eve.lib : bin_image_to_list_select_list_elems_graph.obj (.const:$P$T0$1)
+                  82854270    00000030     libeveFAST9BestFeatureToFront.eve.lib : fast9_score_graph.obj (.const:$P$T0$1)
+                  828542a0    00000030     libeveFast9CornerDetect.eve.lib : binary_image_to_list_graph.obj (.const:$P$T0$1)
+                  828542d0    00000030                                     : fast9_corner_detect_graph.obj (.const:$P$T0$1)
+                  82854300    00000030     libeveYUVPAdding.eve.lib : yuv_padding_graph.obj (.const:$P$T0$1)
+                  82854330    00000030     libeveBinImageToList.eve.lib : bin_image_to_list_with_masking_graph.obj (.const:$P$T2$3)
+                  82854360    0000002f     libeveYUVPAdding.eve.lib : yuv_padding_alg.obj (.const:.string)
+                  8285438f    00000001     --HOLE-- [fill = 0]
+                  82854390    0000002c     libeveFAST9BestFeatureToFront.eve.lib : best_feature_to_front_graph.obj (.const:$P$T1$2)
+                  828543bc    0000002c     libeveImagePyramid_u8.eve.lib : imagePyramid_u8_graph.obj (.const:$P$T1$2)
+                  828543e8    00000024     libeveYUVPAdding.eve.lib : yuv_padding_graph.obj (.const:$P$T1$2)
+                  8285440c    00000024     libeveHarrisCornerDetection32.eve.lib : harrisCornerDetection32_graph.obj (.const:$P$T2$3)
+                  82854430    0000001c                                           : harrisCornerDetection32_graph.obj (.const:$P$T3$4)
+                  8285444c    00000018     libeveBinImageToList.eve.lib : bin_image_to_list_with_masking_graph.obj (.const:$P$T1$2)
+                  82854464    00000015     pyramid_lk_sof_tb.obj (.const:.string:__FUNCTION__$3)
+                  82854479    00000001     --HOLE-- [fill = 0]
+                  8285447a    00000011     pyramid_lk_sof_tb.obj (.const:.string:__FUNCTION__$2)
+                  8285448b    00000001     --HOLE-- [fill = 0]
+                  8285448c    00000011     pyramid_lk_sof_tb.obj (.const:.string:__FUNCTION__$8)
+                  8285449d    00000001     --HOLE-- [fill = 0]
+                  8285449e    00000010     libeveBinImageToList.eve.lib : bin_image_to_list_select_list_elems_graph.obj (.const:$P$T1$2)
+                  828544ae    00000010     libeveFast9CornerDetect.eve.lib : binary_image_to_list_graph.obj (.const:$P$T1$2)
+                  828544be    00000010     libeveBinImageToList.eve.lib : bin_image_to_list_with_masking_graph.obj (.const:$P$T3$4)
+                  828544ce    00000010     pyramid_lk_sof_tb.obj (.const:.string:__FUNCTION__$1)
+                  828544de    00000010     pyramid_lk_sof_tb.obj (.const:.string:__FUNCTION__$4)
+                  828544ee    00000010     pyramid_lk_sof_tb.obj (.const:.string:__FUNCTION__$5)
+                  828544fe    00000010     pyramid_lk_sof_tb.obj (.const:.string:__FUNCTION__$6)
+                  8285450e    0000000c     libeveFAST9BestFeatureToFront.eve.lib : fast9_score_graph.obj (.const:$P$T1$2)
+                  8285451a    0000000c     libeveFast9CornerDetect.eve.lib : fast9_corner_detect_graph.obj (.const:$P$T1$2)
+                  82854526    0000000b     pyramid_lk_sof_tb.obj (.const:.string:__FUNCTION__$7)
+                  82854531    00000001     --HOLE-- [fill = 0]
+                  82854532    00000008     configparser.obj (.const:.string:$P$T0$1)
+                  8285453a    00000008     libevekernels.eve.lib : merge_sort_kernel.obj (.const:.string:$P$T0$1)
+                  82854542    00000008                           : merge_sort_kernel.obj (.const:.string:$P$T1$2)
+                  8285454a    00000008                           : merge_sort_kernel.obj (.const:.string:$P$T2$3)
+                  82854552    00000008                           : bam_horizontal_non_max_suppression_helper_funcs.obj (.const:.string:ID_EXT_IDX)
+                  8285455a    00000008                           : bam_vertical_non_max_suppression_helper_funcs.obj (.const:.string:IN_ID_IDX)
+                  82854562    00000003     algframework.lib : bam_construct_int.obj (.const:.string:$P$T0$1)
+
+.fardata   1    82854568    00002d4c     
+                  82854568    00001800     pyramid_lk_sof_config.obj (.fardata:init)
+                  82855d68    00000b64     pyramid_lk_sof_config.obj (.fardata:uninit) [fill = 0]
+                  828568cc    000000d0     libeveHarrisCornerDetection32.eve.lib : harrisCornerDetection32_graph.obj (.fardata:bamKernelExecFuncDB)
+                  8285699c    000000d0                                           : harrisCornerDetection32_graph.obj (.fardata:bamKernelHostDB)
+                  82856a6c    000000a0     libevePyramidLKTracker.eve.lib : pyramid_lk_tracker_graph.obj (.fardata:bamKernelExecFuncDB)
+                  82856b0c    000000a0                                    : pyramid_lk_tracker_graph.obj (.fardata:bamKernelHostDB)
+                  82856bac    00000068     libeveBinImageToList.eve.lib : bam_dma_custom_bin_to_list_node.obj (.fardata)
+                  82856c14    00000068                                  : bam_dma_custom_select_list_elem_node.obj (.fardata)
+                  82856c7c    00000068     libeveFAST9BestFeatureToFront.eve.lib : bam_dma_one_shot_orb_node.obj (.fardata)
+                  82856ce4    00000068                                           : bam_dma_scattergather_orb_node.obj (.fardata)
+                  82856d4c    00000068     libeveFast9CornerDetect.eve.lib : bin_img_to_list_bam_dma_node.obj (.fardata)
+                  82856db4    00000068     libevePyramidLKTracker.eve.lib : bam_pyramid_lk_tracker_dma_node.obj (.fardata)
+                  82856e1c    00000060     libeveFAST9BestFeatureToFront.eve.lib : best_feature_to_front_graph.obj (.fardata:bamBestFeatureToFrontKernelExecFuncDB)
+                  82856e7c    00000060                                           : best_feature_to_front_graph.obj (.fardata:bamBestFeatureToFrontKernelHostDB)
+                  82856edc    00000060     libeveImagePyramid_u8.eve.lib : imagePyramid_u8_graph.obj (.fardata:bamKernelExecFuncDB)
+                  82856f3c    00000060                                   : imagePyramid_u8_graph.obj (.fardata:bamKernelHostDB)
+                  82856f9c    00000040     libeveBinImageToList.eve.lib : bin_image_to_list_with_masking_graph.obj (.fardata:bamBinToListKernelExecFuncDB)
+                  82856fdc    00000040                                  : bin_image_to_list_with_masking_graph.obj (.fardata:bamBinToListKernelHostDB)
+                  8285701c    00000030     libeveFast9CornerDetect.eve.lib : fast9_corner_detect_graph.obj (.fardata:bamFast9CornerDetectKernelExecFuncDB)
+                  8285704c    00000030                                     : fast9_corner_detect_graph.obj (.fardata:bamFast9CornerDetectKernelHostDB)
+                  8285707c    00000030     libeveFAST9BestFeatureToFront.eve.lib : fast9_score_graph.obj (.fardata:bamFast9ScoreKernelExecFuncDB)
+                  828570ac    00000030                                           : fast9_score_graph.obj (.fardata:bamFast9ScoreKernelHostDB)
+                  828570dc    00000030     libeveYUVPAdding.eve.lib : yuv_padding_graph.obj (.fardata:bamKernelExecFuncDB)
+                  8285710c    00000030     libeveFast9CornerDetect.eve.lib : binary_image_to_list_graph.obj (.fardata:bamKernelExecFuncDB_binToList)
+                  8285713c    00000030     libeveYUVPAdding.eve.lib : yuv_padding_graph.obj (.fardata:bamKernelHostDB)
+                  8285716c    00000030     libeveFast9CornerDetect.eve.lib : binary_image_to_list_graph.obj (.fardata:bamKernelHostDB_binToList)
+                  8285719c    00000030     libeveBinImageToList.eve.lib : bin_image_to_list_select_list_elems_graph.obj (.fardata:bamSelectListElemKernelExecFuncDB)
+                  828571cc    00000030                                  : bin_image_to_list_select_list_elems_graph.obj (.fardata:bamSelectListElemKernelHostDB)
+                  828571fc    0000001c     libevePyramidLKTracker.eve.lib : bam_lk_iterative_loop_helper_funcs.obj (.fardata)
+                  82857218    00000018                                    : bam_lk_iterative_loop_exec_funcs.obj (.fardata)
+                  82857230    0000000c     pyramid_lk_sof_config.obj (.fardata:SOFKeyPointMethos)
+                  8285723c    0000000c     libeveBinImageToList.eve.lib : bin_image_to_list_select_list_elems_graph.obj (.fardata)
+                  82857248    0000000c                                  : bin_image_to_list_with_masking_graph.obj (.fardata)
+                  82857254    0000000c     libeveFAST9BestFeatureToFront.eve.lib : best_feature_to_front_graph.obj (.fardata)
+                  82857260    0000000c                                           : fast9_score_graph.obj (.fardata)
+                  8285726c    0000000c     libeveFast9CornerDetect.eve.lib : binary_image_to_list_graph.obj (.fardata)
+                  82857278    0000000c                                     : fast9_corner_detect_graph.obj (.fardata)
+                  82857284    0000000c     libeveHarrisCornerDetection32.eve.lib : harrisCornerDetection32_graph.obj (.fardata)
+                  82857290    0000000c     libeveImagePyramid_u8.eve.lib : imagePyramid_u8_graph.obj (.fardata)
+                  8285729c    0000000c     libevePyramidLKTracker.eve.lib : pyramid_lk_tracker_graph.obj (.fardata)
+                  828572a8    0000000c     libeveYUVPAdding.eve.lib : yuv_padding_graph.obj (.fardata)
+
+.algo_fardata 
+*          1    828572b4    00000644     
+                  828572b4    00000030     libevekernels.eve.lib : bam_nonMaxSuppress_mxn_S32_exec_funcs.obj (.fardata)
+                  828572e4    00000030                           : bam_nonMaxSuppress_mxn_S32_helper_funcs.obj (.fardata)
+                  82857314    0000001c                           : bam_bin_image_to_list_helper_funcs.obj (.fardata)
+                  82857330    0000001c                           : bam_binary_masking_helper_funcs.obj (.fardata)
+                  8285734c    0000001c                           : bam_blockAverage2x2_helper_funcs.obj (.fardata)
+                  82857368    0000001c                           : bam_blockSortU32_helper_funcs.obj (.fardata)
+                  82857384    0000001c                           : bam_calc_determinant_tensor_matrix_helper_funcs.obj (.fardata)
+                  828573a0    0000001c                           : bam_calc_inverse_structure_tensor_2x2_helper_funcs.obj (.fardata)
+                  828573bc    0000001c                           : bam_fast9_helper_funcs.obj (.fardata)
+                  828573d8    0000001c                           : bam_fast9_score_helper_funcs.obj (.fardata)
+                  828573f4    0000001c                           : bam_gauss5x5Pyramid_8_helper_funcs.obj (.fardata)
+                  82857410    0000001c                           : bam_generateList_helper_funcs.obj (.fardata)
+                  8285742c    0000001c                           : bam_gradXYmag_helper_funcs.obj (.fardata)
+                  82857448    0000001c                           : bam_harrisScore_32_7x7_helper_funcs.obj (.fardata)
+                  82857464    0000001c                           : bam_harrisScore_32_methodB_helper_funcs.obj (.fardata)
+                  82857480    0000001c                           : bam_horizontal_non_max_suppression_helper_funcs.obj (.fardata)
+                  8285749c    0000001c                           : bam_multiblock_bilinear_interp_7x7_u8_helper_funcs.obj (.fardata)
+                  828574b8    0000001c                           : bam_multiblock_bilinear_interp_intlv_7x7_s16_helper_funcs.obj (.fardata)
+                  828574d4    0000001c                           : bam_multiblock_gradient_xy_helper_funcs.obj (.fardata)
+                  828574f0    0000001c                           : bam_natcBlockAverage2x2_helper_funcs.obj (.fardata)
+                  8285750c    0000001c                           : bam_natcGauss5x5Pyramid_8_helper_funcs.obj (.fardata)
+                  82857528    0000001c                           : bam_natcGenerateList_helper_funcs.obj (.fardata)
+                  82857544    0000001c                           : bam_natcGradXYmag_helper_funcs.obj (.fardata)
+                  82857560    0000001c                           : bam_natcHarrisScore_32_7x7_helper_funcs.obj (.fardata)
+                  8285757c    0000001c                           : bam_natcNonMaxSuppress_mxn_S32_helper_funcs.obj (.fardata)
+                  82857598    0000001c                           : bam_prune_big_list_helper_funcs.obj (.fardata)
+                  828575b4    0000001c                           : bam_select_list_elements_helper_funcs.obj (.fardata)
+                  828575d0    0000001c                           : bam_tensor_matrix_7x7_s16_grad_helper_funcs.obj (.fardata)
+                  828575ec    0000001c                           : bam_vcop_yuv_left_right_padding_helper_funcs.obj (.fardata)
+                  82857608    0000001c                           : bam_vertical_non_max_suppression_helper_funcs.obj (.fardata)
+                  82857624    0000001c                           : bam_weight_computation_helper_funcs.obj (.fardata)
+                  82857640    00000018                           : bam_bin_image_to_list_exec_funcs.obj (.fardata)
+                  82857658    00000018                           : bam_binary_masking_exec_funcs.obj (.fardata)
+                  82857670    00000018                           : bam_blockAverage2x2_exec_funcs.obj (.fardata)
+                  82857688    00000018                           : bam_blockSortU32_exec_funcs.obj (.fardata)
+                  828576a0    00000018                           : bam_calc_determinant_tensor_matrix_exec_funcs.obj (.fardata)
+                  828576b8    00000018                           : bam_calc_inverse_structure_tensor_2x2_exec_funcs.obj (.fardata)
+                  828576d0    00000018                           : bam_fast9_exec_funcs.obj (.fardata)
+                  828576e8    00000018                           : bam_fast9_score_exec_funcs.obj (.fardata)
+                  82857700    00000018                           : bam_gauss5x5Pyramid_8_exec_funcs.obj (.fardata)
+                  82857718    00000018                           : bam_generateList_exec_funcs.obj (.fardata)
+                  82857730    00000018                           : bam_gradXYmag_exec_funcs.obj (.fardata)
+                  82857748    00000018                           : bam_harrisScore_32_7x7_exec_funcs.obj (.fardata)
+                  82857760    00000018                           : bam_harrisScore_32_methodB_exec_funcs.obj (.fardata)
+                  82857778    00000018                           : bam_horizontal_non_max_suppression_exec_funcs.obj (.fardata)
+                  82857790    00000018                           : bam_multiblock_bilinear_interp_7x7_u8_exec_funcs.obj (.fardata)
+                  828577a8    00000018                           : bam_multiblock_bilinear_interp_intlv_7x7_s16_exec_funcs.obj (.fardata)
+                  828577c0    00000018                           : bam_multiblock_gradient_xy_exec_funcs.obj (.fardata)
+                  828577d8    00000018                           : bam_natcBlockAverage2x2_exec_funcs.obj (.fardata)
+                  828577f0    00000018                           : bam_natcGauss5x5Pyramid_8_exec_funcs.obj (.fardata)
+                  82857808    00000018                           : bam_natcGenerateList_exec_funcs.obj (.fardata)
+                  82857820    00000018                           : bam_natcGradXYmag_exec_funcs.obj (.fardata)
+                  82857838    00000018                           : bam_natcHarrisScore_32_7x7_exec_funcs.obj (.fardata)
+                  82857850    00000018                           : bam_natcNonMaxSuppress_mxn_S32_exec_funcs.obj (.fardata)
+                  82857868    00000018                           : bam_prune_big_list_exec_funcs.obj (.fardata)
+                  82857880    00000018                           : bam_select_list_elements_exec_funcs.obj (.fardata)
+                  82857898    00000018                           : bam_tensor_matrix_7x7_s16_grad_exec_funcs.obj (.fardata)
+                  828578b0    00000018                           : bam_vcop_yuv_left_right_padding_exec_funcs.obj (.fardata)
+                  828578c8    00000018                           : bam_vertical_non_max_suppression_exec_funcs.obj (.fardata)
+                  828578e0    00000018                           : bam_weight_computation_exec_funcs.obj (.fardata)
+
+.bam_fardata 
+*          1    828578f8    000005c0     
+                  828578f8    00000078     algframework.lib : bam_memory.obj (.far) [fill = 0]
+                  82857970    0000000c                      : bam_execute.obj (.far) [fill = 0]
+                  8285797c    00000008                      : bam_construct.obj (.far) [fill = 0]
+                  82857984    00000400                      : bam_utils.obj (.fardata:gBAM_memPrintfArr)
+                  82857d84    00000068                      : bam_dma_autoincrement_node.obj (.fardata)
+                  82857dec    00000068                      : bam_dma_one_shot_node.obj (.fardata)
+                  82857e54    00000064                      : bam_memory.obj (.fardata:vcop_mem)
+
+.rts_fardata 
+*          1    82857eb8    00000300     
+                  82857eb8    000000a0     rtsarp32_v200.lib : defs.obj (.far) [fill = 0]
+                  82857f58    0000000c                       : memory.obj (.far) [fill = 0]
+                  82857f64    00000008                       : boot.obj (.far) [fill = 0]
+                  82857f6c    00000008                       : trgdrv.obj (.far) [fill = 0]
+                  82857f74    000000f0                       : defs.obj (.fardata:_ftable)
+                  82858064    00000078                       : lowlev.obj (.fardata:_device)
+                  828580dc    00000064                       : vcop_memory.obj (.fardata:vcop_mem)
+                  82858140    00000050                       : lowlev.obj (.fardata:_stream)
+                  82858190    00000008                       : _lock.obj (.fardata)
+                  82858198    00000005                       : vcop_memory.obj (.fardata)
+                  8285819d    00000003     --HOLE-- [fill = 0]
+                  828581a0    00000004                       : defs.obj (.fardata)
+                  828581a4    00000004                       : errno.obj (.fardata)
+                  828581a8    00000004                       : fopen.obj (.fardata)
+                  828581ac    00000004                       : lowlev.obj (.fardata)
+                  828581b0    00000004                       : memory.obj (.fardata)
+                  828581b4    00000004                       : rand.obj (.fardata)
+
+.rts_neardata 
+*          1    828581b8    00000266     
+                  828581b8    00000101     rtsarp32_v200.lib : ctype.obj (.const:.string:_ctypes_)
+                  828582b9    00000003                       : assert.obj (.const:.string)
+                  828582bc    00000050                       : strtod.obj (.const:digits)
+                  8285830c    00000050                       : strtold.obj (.const:digits)
+                  8285835c    00000048                       : strtod.obj (.const:powerof10)
+                  828583a4    00000048                       : strtold.obj (.const:powerof10)
+                  828583ec    00000023                       : _printfi.obj (.const:.string)
+                  8285840f    00000001     --HOLE-- [fill = 0]
+                  82858410    00000007                       : _scanfi.obj (.const:.string:flit$1)
+                  82858417    00000001     --HOLE-- [fill = 0]
+                  82858418    00000006                       : _scanfi.obj (.const:.string:barr$2)
+
+.starterware_fardata 
+*          1    82858420    000001f4     
+                  82858420    000001f4     libevestarterware_eve.lib : cred.obj (.fardata:CRED_instVirtAddr)
+
+.cio       1    82858614    00000120     UNINITIALIZED
+                  82858614    00000120     rtsarp32_v200.lib : trgmsg.obj (.cio)
+
+.far       1    82858734    0000005c     UNINITIALIZED
+                  82858734    00000028     ti_stats_collector.obj (.far)
+                  8285875c    00000020     eve_profile.obj (.far)
+                  8285877c    00000010     pyramid_lk_sof_tb.obj (.far)
+                  8285878c    00000004     libevekernels.eve.lib : vcop_foreach_multiblock_bilinear_interp_7x7_u8_kernel.obj (.far)
+
+
+SEGMENT ATTRIBUTES
+
+    id tag      seg value
+    -- ---      --- -----
+     0 PHA_PAGE 4   1    
+     1 PHA_PAGE 5   1    
+     2 PHA_PAGE 6   1    
+     3 PHA_PAGE 7   1    
+     4 PHA_PAGE 8   1    
+     5 PHA_PAGE 9   1    
+     6 PHA_PAGE 10  1    
+     7 PHA_PAGE 11  1    
+
+
+GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name 
+
+address    name
+--------   ----
+8001bc74   APP_convertRGB888toYUV420p
+8001b3a8   APP_convertYUV420ptoRGB888
+8001b7a0   APP_drawBoxRGB
+80019414   APP_drawFlow
+8001a3bc   APP_drawLineRGB
+80010b8c   AddHarrisKeyPointstoTrack
+8000fef8   AddkeyPointstoTrack
+800280f0   BAM_ARP32_computeWrapper
+80028598   BAM_DMA_AUTOINCREMENT_frameInitInChannel
+80028630   BAM_DMA_AUTOINCREMENT_frameInitOutChannel
+80026ff0   BAM_DMA_AUTOINCREMENT_getMemRecFunc
+80027788   BAM_DMA_AUTOINCREMENT_setMemRecFunc
+80028398   BAM_DMA_AUTOINCREMENT_updateDDRptrInChannel
+80028408   BAM_DMA_AUTOINCREMENT_updateDDRptrOutChannel
+80028674   BAM_DMA_ONESHOT_frameInitInChannel
+800286f0   BAM_DMA_ONESHOT_frameInitOutChannel
+80027148   BAM_DMA_ONESHOT_getMemRecFunc
+80027ac0   BAM_DMA_ONESHOT_setMemRecFunc
+800282a4   BAM_DMA_ONESHOT_triggerInChannel
+80027e3c   BAM_DMA_ONESHOT_triggerOutChannel
+80027bb8   BAM_DMA_ONESHOT_updateDDRptrInChannel
+80027c94   BAM_DMA_ONESHOT_updateDDRptrOutChannel
+80028768   BAM_DMA_ONESHOT_waitChannel
+8000d4b0   BAM_DMA_PYRAMID_LK_TRACKER_dmaReadGetMemRecFunc
+8000d588   BAM_DMA_PYRAMID_LK_TRACKER_dmaReadSetMemRecFunc
+8000d858   BAM_DMA_PYRAMID_LK_TRACKER_dmaReadUpdateDDRptr
+8000d28c   BAM_DMA_PYRAMID_LK_TRACKER_dmaWriteGetMemRecFunc
+8000d3a4   BAM_DMA_PYRAMID_LK_TRACKER_dmaWriteSetMemRecFunc
+8000d658   BAM_DMA_PYRAMID_LK_TRACKER_dmaWriteUpdateDDRptr
+8000cc4c   BAM_DMA_PYRAMID_LK_TRACKER_frameInitInChannel
+8000da04   BAM_DMA_PYRAMID_LK_TRACKER_frameInitOutChannel
+8000db48   BAM_DMA_PYRAMID_LK_TRACKER_triggerInChannel
+8000daac   BAM_DMA_PYRAMID_LK_TRACKER_triggerOutChannel
+8000da48   BAM_DMA_PYRAMID_LK_TRACKER_waitInChannel
+8000d7bc   BAM_DMA_PYRAMID_LK_TRACKER_waitOutChannel
+80027ef0   BAM_activateGraph
+80028544   BAM_controlNode
+80027fa4   BAM_copyIntMemRec2ExtMem
+80028218   BAM_copyNodeList
+80026ca0   BAM_createGraph
+8002876c   BAM_dummyKernelFunc
+800278a4   BAM_fillKernelInfo
+800279b4   BAM_getGraphMemSize
+800286b8   BAM_getMemPacket
+80024b94   BAM_initGraph
+80028324   BAM_initGraphInstance
+800285e4   BAM_initKernelDB
+80026514   BAM_optimizeGraph
+80028724   BAM_printf
+800273f8   BAM_process
+800272a0   BAM_updateNodes
+80013a40   BEST_FEATURE_TO_FRONT_TI_dmaControl
+80013f9c   BEST_FEATURE_TO_FRONT_TI_execute
+80013fdc   BEST_FEATURE_TO_FRONT_TI_getGraphMemReq
+80013ee0   BEST_FEATURE_TO_FRONT_TI_graphControl
+80013034   BEST_FEATURE_TO_FRONT_TI_graphCreate
+8001d12c   BIN_IMAGE_TO_LIST_SELECT_LIST_ELEMENTS_TI_dmaControl
+8001d7ec   BIN_IMAGE_TO_LIST_SELECT_LIST_ELEMENTS_TI_execute
+8001d8ac   BIN_IMAGE_TO_LIST_SELECT_LIST_ELEMENTS_TI_getGraphMemReq
+8001b24c   BIN_IMAGE_TO_LIST_SELECT_LIST_ELEMENTS_TI_graphCreate
+8001d7a4   BIN_IMAGE_TO_LIST_SELECT_LIST_ELEMENTS_TI_kernelControl
+82853e98   BIN_IMAGE_TO_LIST_TI_IRES
+82853e6c   BIN_IMAGE_TO_LIST_TI_VISION_FXNS
+8001ce34   BIN_IMAGE_TO_LIST_TI_activate
+8001b654   BIN_IMAGE_TO_LIST_TI_alloc
+8001d960   BIN_IMAGE_TO_LIST_TI_control
+8001cea4   BIN_IMAGE_TO_LIST_TI_deactivate
+80012588   BIN_IMAGE_TO_LIST_TI_execute
+8001d8c4   BIN_IMAGE_TO_LIST_TI_free
+800125e4   BIN_IMAGE_TO_LIST_TI_getGraphMemReq
+80012614   BIN_IMAGE_TO_LIST_TI_graphControl
+80011c8c   BIN_IMAGE_TO_LIST_TI_graphCreate
+80011f18   BIN_IMAGE_TO_LIST_TI_graphDmaControl
+8001c304   BIN_IMAGE_TO_LIST_TI_init
+8001d964   BIN_IMAGE_TO_LIST_TI_numAlloc
+80018238   BIN_IMAGE_TO_LIST_TI_process
+8001bea4   BIN_IMAGE_TO_LIST_WITH_MASKING_TI_dmaControl
+8001d80c   BIN_IMAGE_TO_LIST_WITH_MASKING_TI_execute
+8001d8dc   BIN_IMAGE_TO_LIST_WITH_MASKING_TI_getGraphMemReq
+8001a584   BIN_IMAGE_TO_LIST_WITH_MASKING_TI_graphCreate
+8001ccd8   BIN_IMAGE_TO_LIST_WITH_MASKING_TI_kernelControl
+800120c4   BIN_IMG2LIST_BAM_DMA_frameInitOutChannel
+80012414   BIN_IMG2LIST_BAM_DMA_triggerOutChannel
+80011ffc   BIN_IMG2LIST_BAM_DMA_updateInDDRptr
+80012514   BIN_IMG2LIST_BAM_DMA_updateOutDDRptr
+8001215c   BIN_IMG2LIST_BAM_DMA_waitOutChannel
+80024b84   C$$EXIT
+800246a4   C$$IO$$
+82858420   CRED_instVirtAddr
+8001a748   DMA_funcs_hardwareRegSetup
+8001cd4c   DMA_funcs_writeTransferParams
+8001ae04   DMA_resourceAllocator_allocateResources
+8001d778   DMA_resourceAllocator_initResources
+8001d93c   DMA_resourceAllocator_setEdma3RmHandle
+8001d84c   DMA_utils_resetStateStruct
+8001c238   DMA_utils_updateStateStruct
+40020000   DMEM_SCRATCH
+8001d968   EDMA3LLD_SUPPORT_requestResources
+80018764   EDMA_UTILS_autoIncrement1D_configure
+8001c6b8   EDMA_UTILS_autoIncrement1D_init
+8001d86c   EDMA_UTILS_autoIncrement1D_triggerInChannel
+8001af7c   EDMA_UTILS_autoIncrement1D_update
+8001d668   EDMA_UTILS_autoIncrement1D_waitInChannel
+80017bf8   EDMA_UTILS_autoIncrement_configure
+8001bfa4   EDMA_UTILS_autoIncrement_init
+8001b0e8   EDMA_UTILS_autoIncrement_triggerInChannel
+8001a90c   EDMA_UTILS_autoIncrement_triggerOutChannel
+80019af0   EDMA_UTILS_autoIncrement_update
+8001d3b4   EDMA_UTILS_autoIncrement_waitInChannel
+8001d194   EDMA_UTILS_autoIncrement_waitOutChannel
+8001d4a8   EDMA_UTILS_globalReset
+8001c8b4   EDMA_UTILS_memcpy2D
+8001d91c   EDMA_UTILS_scattherGather_configure
+8001ac74   EDMA_UTILS_scattherGather_init
+8001d6a0   EDMA_UTILS_scattherGather_updateDstNtrigger
+8001c814   EDMA_UTILS_scattherGather_updateNtrigger
+8001d6d8   EDMA_UTILS_scattherGather_updateSrcNtrigger
+8001d88c   EDMA_UTILS_scattherGather_wait
+80028770   EVE_SCTM_CounterConfig
+8002883c   EVE_SCTM_CounterRead
+800287b8   EVE_SCTM_CounterTimerEnable
+8002886c   EVE_SCTM_Enable
+800287e4   EVE_SCTM_InpEvtSelect
+80028854   EVE_SCTM_OverflowCheck
+80028810   EVE_SCTM_SamplingSelect
+82853eec   FAST9_BEST_FEATURE_TO_FRONT_TI_IRES
+82853ec0   FAST9_BEST_FEATURE_TO_FRONT_TI_VISION_FXNS
+80013c2c   FAST9_BEST_FEATURE_TO_FRONT_TI_activate
+80012d24   FAST9_BEST_FEATURE_TO_FRONT_TI_alloc
+80014058   FAST9_BEST_FEATURE_TO_FRONT_TI_control
+80013c90   FAST9_BEST_FEATURE_TO_FRONT_TI_deactivate
+8001402c   FAST9_BEST_FEATURE_TO_FRONT_TI_free
+800132e8   FAST9_BEST_FEATURE_TO_FRONT_TI_init
+8001405c   FAST9_BEST_FEATURE_TO_FRONT_TI_numAlloc
+80012640   FAST9_BEST_FEATURE_TO_FRONT_TI_process
+82853f40   FAST9_CORNER_DETECT_TI_IRES
+82853f14   FAST9_CORNER_DETECT_TI_VISION_FXNS
+800122ec   FAST9_CORNER_DETECT_TI_activate
+800119c0   FAST9_CORNER_DETECT_TI_alloc
+80012638   FAST9_CORNER_DETECT_TI_control
+80012350   FAST9_CORNER_DETECT_TI_deactivate
+800125a8   FAST9_CORNER_DETECT_TI_execute
+800125fc   FAST9_CORNER_DETECT_TI_free
+800125c8   FAST9_CORNER_DETECT_TI_getGraphMemReq
+80012624   FAST9_CORNER_DETECT_TI_graphControl
+80011b2c   FAST9_CORNER_DETECT_TI_graphCreate
+80011de0   FAST9_CORNER_DETECT_TI_graphDmaControl
+80011230   FAST9_CORNER_DETECT_TI_init
+8001263c   FAST9_CORNER_DETECT_TI_numAlloc
+80011658   FAST9_CORNER_DETECT_TI_process
+80013ad8   FAST9_SCORE_TI_dmaControl
+80013fbc   FAST9_SCORE_TI_execute
+80013ff8   FAST9_SCORE_TI_getGraphMemReq
+80012ec0   FAST9_SCORE_TI_graphCreate
+82853f94   HARRIS_CORNER_DETECTION_32_TI_IRES
+82853f68   HARRIS_CORNER_DETECTION_32_TI_VISION_FXNS
+80014980   HARRIS_CORNER_DETECTION_32_TI_activate
+800148c4   HARRIS_CORNER_DETECTION_32_TI_alloc
+80014abc   HARRIS_CORNER_DETECTION_32_TI_control
+800149dc   HARRIS_CORNER_DETECTION_32_TI_deactivate
+800147f8   HARRIS_CORNER_DETECTION_32_TI_dmaControl
+80014ae8   HARRIS_CORNER_DETECTION_32_TI_execute
+80014b24   HARRIS_CORNER_DETECTION_32_TI_free
+80014b08   HARRIS_CORNER_DETECTION_32_TI_getGraphMemReq
+80014a7c   HARRIS_CORNER_DETECTION_32_TI_graphControl
+80014334   HARRIS_CORNER_DETECTION_32_TI_graphCreate
+800146d4   HARRIS_CORNER_DETECTION_32_TI_init
+80014b3c   HARRIS_CORNER_DETECTION_32_TI_numAlloc
+80014584   HARRIS_CORNER_DETECTION_32_TI_process
+80023c04   HOSTclose
+80022910   HOSTlseek
+80022ef8   HOSTopen
+800230b8   HOSTread
+80022a78   HOSTrename
+800239ac   HOSTunlink
+80023418   HOSTwrite
+82854552   ID_EXT_IDX
+82853fe8   IMAGE_PYRAMID_U8_TI_IRES
+82853fbc   IMAGE_PYRAMID_U8_TI_VISION_FXNS
+80015774   IMAGE_PYRAMID_U8_TI_activate
+800155fc   IMAGE_PYRAMID_U8_TI_alloc
+800158c8   IMAGE_PYRAMID_U8_TI_control
+80015824   IMAGE_PYRAMID_U8_TI_deactivate
+80015518   IMAGE_PYRAMID_U8_TI_dmaControl
+80015874   IMAGE_PYRAMID_U8_TI_execute
+800158b0   IMAGE_PYRAMID_U8_TI_free
+80015894   IMAGE_PYRAMID_U8_TI_getGraphMemReq
+800151a4   IMAGE_PYRAMID_U8_TI_graphCreate
+800156b8   IMAGE_PYRAMID_U8_TI_init
+800158cc   IMAGE_PYRAMID_U8_TI_numAlloc
+80015410   IMAGE_PYRAMID_U8_TI_process
+00000000   IMEMH_SIZE
+00000000   IMEML_SIZE
+8285455a   IN_ID_IDX
+8000da84   LK_TRACKER_TI_FindMaxSearchRange
+8000dad0   LK_TRACKER_TI_FindNumKeyPointsPerCall
+8000d71c   LK_TRACKER_TI_bamControl
+8000daf4   LK_TRACKER_TI_execute
+8000db14   LK_TRACKER_TI_getGraphMemReq
+8000ce58   LK_TRACKER_TI_graphCreate
+82853b24   LUT_EXT_IDX_SAD
+82853740   LUT_EXT_IDX_THR
+8285403c   PYRAMID_LK_TRACKER_TI_IRES
+82854010   PYRAMID_LK_TRACKER_TI_VISION_FXNS
+8000d8e8   PYRAMID_LK_TRACKER_TI_activate
+8000d150   PYRAMID_LK_TRACKER_TI_alloc
+8000db68   PYRAMID_LK_TRACKER_TI_control
+8000d9ac   PYRAMID_LK_TRACKER_TI_deactivate
+8000db30   PYRAMID_LK_TRACKER_TI_free
+8000cfd4   PYRAMID_LK_TRACKER_TI_init
+8000db6c   PYRAMID_LK_TRACKER_TI_numAlloc
+8000c760   PYRAMID_LK_TRACKER_TI_process
+82857230   SOFKeyPointMethos
+828540e4   SOF_TI_IRES
+828540b8   SOF_TI_VISION_FXNS
+80010f90   SOF_TI_activate
+8000db70   SOF_TI_alloc
+8001122c   SOF_TI_control
+80010ff0   SOF_TI_deactivate
+8001114c   SOF_TI_free
+8000e4a4   SOF_TI_init
+80010cdc   SOF_TI_numAlloc
+8000ef20   SOF_TI_process
+8001d7c8   TEST_PRINTF
+8001d948   TI_CreateMemoryHandle
+8001d308   TI_GetMemoryChunk
+8001d1fc   TestApp_AllocMemRecords
+00000000   WMEM_SIZE
+82854090   YUV_PADDING_TI_IRES
+82854064   YUV_PADDING_TI_VISION_FXNS
+80016304   YUV_PADDING_TI_activate
+8001616c   YUV_PADDING_TI_alloc
+80016404   YUV_PADDING_TI_control
+80016360   YUV_PADDING_TI_deactivate
+80015e14   YUV_PADDING_TI_dmaControl
+800163b0   YUV_PADDING_TI_execute
+800163ec   YUV_PADDING_TI_free
+800163d0   YUV_PADDING_TI_getGraphMemReq
+80015fdc   YUV_PADDING_TI_graphCreate
+8001624c   YUV_PADDING_TI_init
+80016408   YUV_PADDING_TI_numAlloc
+80015b74   YUV_PADDING_TI_process
+82858614   __CIOBUF_
+UNDEFED    __TI_CINIT_Base
+UNDEFED    __TI_CINIT_Limit
+UNDEFED    __TI_Handler_Table_Base
+UNDEFED    __TI_Handler_Table_Limit
+UNDEFED    __TI_INITARRAY_Base
+UNDEFED    __TI_INITARRAY_Limit
+40027a00   __TI_STACK_END
+00001800   __TI_STACK_SIZE
+40027a00   __TI_STATIC_BASE
+02800000   __TI_SYSMEM_SIZE
+00000001   __TI_args_main
+00000001   __TI_exit
+800247dc   __arp32abi_abort_msg
+80020cb8   __arp32abi_addd
+80024a60   __arp32abi_addll
+80022480   __arp32abi_cmpd
+800249f8   __arp32abi_cmplls
+80024a1c   __arp32abi_cmpllu
+80023148   __arp32abi_cvtdf
+8002363c   __arp32abi_cvtfd
+800203ac   __arp32abi_divd
+80020590   __arp32abi_divull
+800237bc   __arp32abi_fixdi
+800234a4   __arp32abi_fixdu
+80023ea4   __arp32abi_fltid
+80024348   __arp32abi_fltif
+8002453c   __arp32abi_fltud
+80024234   __arp32abi_isinf
+80024174   __arp32abi_llshl
+80024814   __arp32abi_llshr
+800248bc   __arp32abi_llshru
+80020928   __arp32abi_mpyd
+8002130c   __arp32abi_mpyf
+8002172c   __arp32abi_mpyll
+800249a8   __arp32abi_negd
+80024ad8   __arp32abi_negll
+8002484c   __arp32abi_remull
+80024728   __arp32abi_strasgi
+80024950   __arp32abi_subd
+80024ab0   __arp32abi_subll
+ffffffff   __binit__
+ffffffff   __c_args__
+8285878c   __ctrl_vcop_foreach_multiblock_bilinear_interp_7x7_u8
+00000644   _algo_fardata_size
+00000000   _algo_neardata_size
+0001530c   _algo_text_size
+800246ac   _args_main
+80023cec   _auto_init
+000005c0   _bam_fardata_size
+00000000   _bam_neardata_size
+00003bdc   _bam_text_size
+80022dc0   _buff_read
+80023f0c   _c_int00
+8002449c   _cleanup
+82857f64   _cleanup_ptr
+80023838   _closefile
+828581b8   _ctypes_
+800241d4   _doflush
+82857f68   _dtors_ptr
+80000120   _dummy_handler
+80021470   _frcaddd
+800201ac   _frcdivd
+800219c8   _frcmpyd
+80023dcc   _frcmpyf
+828581a0   _ft_end
+82857f74   _ftable
+80000028   _imemha_memory
+80000030   _imemhb_memory
+80000038   _imemla_memory
+80000040   _imemlb_memory
+82858190   _lock
+800249d0   _mpyl
+40027b68   _my_stack
+80024b8c   _nop
+8001f93c   _printfi
+80023e38   _rd_ok
+800243f4   _renormd
+80000100   _reset_handler
+00000300   _rts_fardata_size
+00000266   _rts_neardata_size
+00007228   _rts_text_size
+8001d96c   _scanfi
+40026200   _stack
+000001f4   _starterware_fardata_size
+00000000   _starterware_neardata_size
+00000110   _starterware_text_size
+80050000   _sys_memory
+80024b90   _system_pre_init
+00007560   _text_size
+82857eb8   _tmpnams
+82858194   _unlock
+80000000   _vec_table
+80000048   _wmem_memory
+80023268   _wrt_ok
+80024b84   abort
+800238b4   atoi
+80027530   bam_getMemPacket
+80028478   bam_mcheck
+80026e6c   bam_mem_alloc
+80027d70   bam_mem_free
+80028050   bam_minit
+80028188   bam_releaseMemPacket
+40027b58   bam_stat_num_packets
+ffffffff   binit
+80002404   bitonic_merge_multi_step
+80023530   close
+80010f24   computeImagePyramids
+80010928   copyImageToInternalMemAndPad
+80010e18   detectKeyPoints
+40027c48   edmaBase
+828581a4   errno
+80024448   exit
+80010278   fast9BestFeatureToFrontProcess
+8001063c   fast9KeyPointDetectionProcess
+800248f0   fclose
+8002497c   feof
+80023930   fflush
+800226d8   fgetc
+80024a98   fgets
+8000ea24   filterTrackedPoints
+8000f700   filterTrackedPoints_chunk
+80024764   fopen
+80023c78   fprintf
+800222bc   fputc
+8002119c   fputs
+80021884   fread
+80024ac4   free
+80023b14   fscanf
+800232f8   fseek
+80023388   ftell
+8001fd88   fwrite
+82857640   gBAM_TI_binImageToListExecFunc
+82857328   gBAM_TI_binImageToListHelperFunc
+82857314   gBAM_TI_binImageToListKernel
+82856d4c   gBAM_TI_binImg2ListReadKernel
+82856d80   gBAM_TI_binImg2ListWriteKernel
+82857658   gBAM_TI_binaryMaskingExecFunc
+82857344   gBAM_TI_binaryMaskingHelperFunc
+82857330   gBAM_TI_binaryMaskingKernel
+82857670   gBAM_TI_blockAverage2x2ExecFunc
+82857360   gBAM_TI_blockAverage2x2HelperFunc
+8285734c   gBAM_TI_blockAverage2x2Kernel
+82857688   gBAM_TI_blockSortU32ExecFunc
+8285737c   gBAM_TI_blockSortU32HelperFunc
+82857368   gBAM_TI_blockSortU32Kernel
+828576a0   gBAM_TI_calcDeterminantTensorMatrixExecFunc
+82857398   gBAM_TI_calcDeterminantTensorMatrixHelperFunc
+82857384   gBAM_TI_calcDeterminantTensorMatrixKernel
+828576b8   gBAM_TI_calcInverseStructureTensor2x2ExecFunc
+828573b4   gBAM_TI_calcInverseStructureTensor2x2HelperFunc
+828573a0   gBAM_TI_calcInverseStructureTensor2x2Kernel
+82857d84   gBAM_TI_dmaAutoIncrementReadKernel
+82857d98   gBAM_TI_dmaAutoIncrementWriteKernel
+82856bac   gBAM_TI_dmaCustomBinToListNodeReadKernel
+82856bc8   gBAM_TI_dmaCustomBinToListNodeReadKernelExecFunc
+82856bc0   gBAM_TI_dmaCustomBinToListNodeReadKernelHelperFunc
+82856be0   gBAM_TI_dmaCustomBinToListNodeWriteKernel
+82856bfc   gBAM_TI_dmaCustomBinToListNodeWriteKernelExecFunc
+82856bf4   gBAM_TI_dmaCustomBinToListNodeWriteKernelHelperFunc
+82856c14   gBAM_TI_dmaCustomSelectListElemNodeReadKernel
+82856c30   gBAM_TI_dmaCustomSelectListElemNodeReadKernelExecFunc
+82856c28   gBAM_TI_dmaCustomSelectListElemNodeReadKernelHelperFunc
+82856c48   gBAM_TI_dmaCustomSelectListElemNodeWriteKernel
+82856c64   gBAM_TI_dmaCustomSelectListElemNodeWriteKernelExecFunc
+82856c5c   gBAM_TI_dmaCustomSelectListElemNodeWriteKernelHelperFunc
+82857dec   gBAM_TI_dmaOneShotReadKernel
+82857e00   gBAM_TI_dmaOneShotWriteKernel
+82856c7c   gBAM_TI_dmaOrbOneShotReadKernel
+82856c90   gBAM_TI_dmaOrbOneShotWriteKernel
+82856cb4   gBAM_TI_dmaOrbReadOneShotKernelExecFunc
+82856ca4   gBAM_TI_dmaOrbReadOneShotKernelHelperFunc
+82856ccc   gBAM_TI_dmaOrbWriteOneShotKernelExecFunc
+82856cac   gBAM_TI_dmaOrbWriteOneShotKernelHelperFunc
+82856db4   gBAM_TI_dmaPyramidLKTrackerReadKernel
+82856dc8   gBAM_TI_dmaPyramidLKTrackerWriteKernel
+82857dbc   gBAM_TI_dmaReadAutoIncrementKernelExecFunc
+82857dac   gBAM_TI_dmaReadAutoIncrementKernelHelperFunc
+82856d68   gBAM_TI_dmaReadBinImg2ListExecFunc
+82856d60   gBAM_TI_dmaReadBinImg2ListHelperFunc
+82857e24   gBAM_TI_dmaReadOneShotKernelExecFunc
+82857e14   gBAM_TI_dmaReadOneShotKernelHelperFunc
+82856dec   gBAM_TI_dmaReadPyramidLKTrackerKernelExecFunc
+82856ddc   gBAM_TI_dmaReadPyramidLKTrackerKernelHelperFunc
+82856d1c   gBAM_TI_dmaReadScatterGatherKernelExecFunc
+82856d0c   gBAM_TI_dmaReadScatterGatherKernelHelperFunc
+82856ce4   gBAM_TI_dmaScatterGatherReadKernel
+82856cf8   gBAM_TI_dmaScatterGatherWriteKernel
+82857dd4   gBAM_TI_dmaWriteAutoIncrementKernelExecFunc
+82857db4   gBAM_TI_dmaWriteAutoIncrementKernelHelperFunc
+82856d9c   gBAM_TI_dmaWriteBinImg2ListExecFunc
+82856d94   gBAM_TI_dmaWriteBinImg2ListHelperFunc
+82857e3c   gBAM_TI_dmaWriteOneShotKernelExecFunc
+82857e1c   gBAM_TI_dmaWriteOneShotKernelHelperFunc
+82856e04   gBAM_TI_dmaWritePyramidLKTrackerKernelExecFunc
+82856de4   gBAM_TI_dmaWritePyramidLKTrackerKernelHelperFunc
+82856d34   gBAM_TI_dmaWriteScatterGatherKernelExecFunc
+82856d14   gBAM_TI_dmaWriteScatterGatherKernelHelperFunc
+828576d0   gBAM_TI_fast9ExecFunc
+828573d0   gBAM_TI_fast9HelperFunc
+828573bc   gBAM_TI_fast9Kernel
+828576e8   gBAM_TI_fast9scoreExecFunc
+828573ec   gBAM_TI_fast9scoreHelperFunc
+828573d8   gBAM_TI_fast9scoreKernel
+82857700   gBAM_TI_gauss5x5PyramidExecFunc
+82857408   gBAM_TI_gauss5x5PyramidHelperFunc
+828573f4   gBAM_TI_gauss5x5PyramidKernel
+82857718   gBAM_TI_generateListExecFunc
+82857424   gBAM_TI_generateListHelperFunc
+82857410   gBAM_TI_generateListKernel
+82857730   gBAM_TI_gradXYmagExecFunc
+82857440   gBAM_TI_gradXYmagHelperFunc
+8285742c   gBAM_TI_gradXYmagKernel
+82857748   gBAM_TI_harrisScore_32_7x7_ExecFunc
+8285745c   gBAM_TI_harrisScore_32_7x7_HelperFunc
+82857448   gBAM_TI_harrisScore_32_7x7_Kernel
+82857760   gBAM_TI_harrisScore_32_methodB_ExecFunc
+82857478   gBAM_TI_harrisScore_32_methodB_HelperFunc
+82857464   gBAM_TI_harrisScore_32_methodB_Kernel
+82857778   gBAM_TI_horizontalnonmaxsuppressionExecFunc
+82857494   gBAM_TI_horizontalnonmaxsuppressionHelperFunc
+82857480   gBAM_TI_horizontalnonmaxsuppressionKernel
+8285729c   gBAM_TI_kernelDBdef
+8285726c   gBAM_TI_kernelDBdef_binToList
+82857218   gBAM_TI_lkIterativeLoopExecFunc
+82857210   gBAM_TI_lkIterativeLoopHelperFunc
+828571fc   gBAM_TI_lkIterativeLoopKernel
+82857790   gBAM_TI_multiblockBilinearInterp7x7U8ExecFunc
+828574b0   gBAM_TI_multiblockBilinearInterp7x7U8HelperFunc
+8285749c   gBAM_TI_multiblockBilinearInterp7x7U8Kernel
+828577a8   gBAM_TI_multiblockBilinearInterpIntlv7x7S16ExecFunc
+828574cc   gBAM_TI_multiblockBilinearInterpIntlv7x7S16HelperFunc
+828574b8   gBAM_TI_multiblockBilinearInterpIntlv7x7S16Kernel
+828577c0   gBAM_TI_multiblockGradientXYExecFunc
+828574e8   gBAM_TI_multiblockGradientXYHelperFunc
+828574d4   gBAM_TI_multiblockGradientXYKernel
+828577d8   gBAM_TI_natcBlockAverage2x2ExecFunc
+82857504   gBAM_TI_natcBlockAverage2x2HelperFunc
+828574f0   gBAM_TI_natcBlockAverage2x2Kernel
+828577f0   gBAM_TI_natcGauss5x5PyramidExecFunc
+82857520   gBAM_TI_natcGauss5x5PyramidHelperFunc
+8285750c   gBAM_TI_natcGauss5x5PyramidKernel
+82857808   gBAM_TI_natcGenerateListExecFunc
+8285753c   gBAM_TI_natcGenerateListHelperFunc
+82857528   gBAM_TI_natcGenerateListKernel
+82857820   gBAM_TI_natcGradXYmagExecFunc
+82857558   gBAM_TI_natcGradXYmagHelperFunc
+82857544   gBAM_TI_natcGradXYmagKernel
+82857838   gBAM_TI_natcHarrisScore_32_7x7_ExecFunc
+82857574   gBAM_TI_natcHarrisScore_32_7x7_HelperFunc
+82857560   gBAM_TI_natcHarrisScore_32_7x7_Kernel
+82857850   gBAM_TI_natcNonMaxSuppress_mxn_S32_ExecFunc
+82857590   gBAM_TI_natcNonMaxSuppress_mxn_S32_HelperFunc
+8285757c   gBAM_TI_natcNonMaxSuppress_mxn_S32_Kernel
+828572b4   gBAM_TI_nonMaxSuppress_mxn_S32_ExecFunc
+8285730c   gBAM_TI_nonMaxSuppress_mxn_S32_HelperFunc
+828572e4   gBAM_TI_nonMaxSuppress_mxn_S32_Kernel
+828572cc   gBAM_TI_nonMaxSuppress_mxn_S32_binPack_ExecFunc
+828572f8   gBAM_TI_nonMaxSuppress_mxn_S32_binPack_Kernel
+82857868   gBAM_TI_prune_big_listExecFunc
+828575ac   gBAM_TI_prune_big_listHelperFunc
+82857598   gBAM_TI_prune_big_listKernel
+82857880   gBAM_TI_selecListElementsExecFunc
+828575c8   gBAM_TI_selecListElementsHelperFunc
+828575b4   gBAM_TI_selecListElementsKernel
+82857898   gBAM_TI_tensorMatrix7x7S16GradExecFunc
+828575e4   gBAM_TI_tensorMatrix7x7S16GradHelperFunc
+828575d0   gBAM_TI_tensorMatrix7x7S16GradKernel
+828578c8   gBAM_TI_verticalnonmaxsuppressionExecFunc
+8285761c   gBAM_TI_verticalnonmaxsuppressionHelperFunc
+82857608   gBAM_TI_verticalnonmaxsuppressionKernel
+828578e0   gBAM_TI_weightComputationExecFunc
+82857638   gBAM_TI_weightComputationHelperFunc
+82857624   gBAM_TI_weightComputationKernel
+828578b0   gBAM_TI_yuvLeftRightPaddingExecFunc
+82857600   gBAM_TI_yuvLeftRightPaddingHelperFunc
+828575ec   gBAM_TI_yuvLeftRightPaddingKernel
+82857984   gBAM_memPrintfArr
+82857248   gBinToList_BAM_TI_kernelDBdef
+40027aa8   gDmaUtilsStateStruct
+82855d68   gParams
+8285723c   gSelectListElem_BAM_TI_kernelDBdef
+8285876c   gTest_TI_profileSctm
+40027b34   gTest_TI_profileTsc
+828572a8   gYUV_PADDING_BAM_kernelDBdef
+8001caec   get_generateListPtr
+82854568   gsTokenMap_sof
+800103c8   harrisKeyPointDetectionProcess
+800109fc   imPyramidTestProcess
+800110fc   initTrackInfo
+80023f74   lseek
+80024110   ltoa
+80018c20   main
+80024588   malloc
+8285877c   memObj_DMEM
+80022614   mem_alloc
+80023024   mem_free
+80024a40   memccpy
+800223a4   memcpy
+80022c78   memset
+80002038   mergeSort_init
+80023b8c   minit
+80009294   my_vcop_psort2_1step_kernel_custom
+80009c74   my_vcop_psort2_1step_reverse_kernel_custom
+800097c8   my_vcop_psort2_2steps_kernel_custom
+8000983c   my_vcop_psort2_2steps_reverse_kernel_custom
+8000903c   my_vcop_psort2_3steps_kernel_custom
+800090d4   my_vcop_psort2_3steps_reverse_kernel_custom
+8000af5c   my_vcop_remove_ex_col_custom
+8000af08   my_vcop_sort8_simd8_64_custom
+8000af24   my_vcop_sort8_simd8_XX_custom
+800221d0   open
+80019fac   printConfigParams
+8002373c   printf
+800197e8   printparams
+80019d78   profiler_end
+8001d92c   profiler_end_print
+8001d8f4   profiler_getSP
+8001cff0   profiler_getStackDepth
+8001c3c8   profiler_init
+8001d748   profiler_initStack
+8001d710   profiler_printStatus
+8001d4f4   profiler_start
+8001d458   profiler_testCaseInfo
+80017198   pyramidLkSofTest
+8000fce0   pyramidLkTrackerProcess
+80023fdc   read
+800245d4   readmsg
+8001c08c   readparamfile
+80024b78   remove
+8001b500   report_printAppletInfo
+8001d954   reset_generateListPtr
+80021eb0   setvbuf
+8001b8dc   sofProcess
+8001a1b8   sofhandleCreate
+80024920   srand
+80024884   sscanf
+8001640c   statCollectorControl
+8001cf14   statCollectorInit
+8001de64   strtod
+8002075c   strtol
+8001e204   strtold
+8001e5a0   strtoll
+80020e70   strtoul
+8001f6f0   strtoull
+40027b10   test_module_cyles
+8000af94   transp_idx
+80022b24   ungetc
+8002461c   unlink
+80006f3c   vcop_bin_image_to_list_init
+8000b00c   vcop_bin_image_to_list_param_count
+800096dc   vcop_bin_image_to_list_vloops
+800095e4   vcop_binary_masking_init
+8000b0dc   vcop_binary_masking_param_count
+8000ac64   vcop_binary_masking_vloops
+8001c94c   vcop_blockAverage2x2_uchar_cn
+80009660   vcop_blockAverage2x2_uchar_init
+8000b0e0   vcop_blockAverage2x2_uchar_param_count
+8000ad48   vcop_blockAverage2x2_uchar_vloops
+80008670   vcop_calc_determinant_tensor_matrix_init
+8000b0e4   vcop_calc_determinant_tensor_matrix_param_count
+80007930   vcop_calc_determinant_tensor_matrix_vloops
+80005990   vcop_calc_inverse_structure_tensor_2x2_init
+8000b014   vcop_calc_inverse_structure_tensor_2x2_param_count
+80007a14   vcop_calc_inverse_structure_tensor_2x2_vloops
+800048a4   vcop_calc_new_lk_xy_init
+8000b01c   vcop_calc_new_lk_xy_param_count
+80005d04   vcop_calc_new_lk_xy_vloops
+80008b5c   vcop_copyListToOutBuff_init
+8000b0e8   vcop_copyListToOutBuff_param_count
+8000a944   vcop_copyListToOutBuff_vloops
+800081d0   vcop_copy_new_lk_xy_init
+8000b0ec   vcop_copy_new_lk_xy_param_count
+8000a3bc   vcop_copy_new_lk_xy_vloops
+80001100   vcop_fast9_init
+8000b024   vcop_fast9_param_count
+800043a0   vcop_fast9_score_kernel_init
+8000b02c   vcop_fast9_score_kernel_param_count
+80007058   vcop_fast9_score_kernel_vloops
+800027c4   vcop_fast9_thresh_score_init
+8000b034   vcop_fast9_thresh_score_param_count
+80006e1c   vcop_fast9_thresh_score_vloops
+80004110   vcop_fast9_vloops
+80006910   vcop_foreach_multiblock_bilinear_interp_7x7_u8_init
+8000b03c   vcop_foreach_multiblock_bilinear_interp_7x7_u8_param_count
+80009eb8   vcop_foreach_multiblock_bilinear_interp_7x7_u8_vloops
+8001cb6c   vcop_gauss5x5PyramidKernel_8_horiz_c
+80009324   vcop_gauss5x5PyramidKernel_8_horiz_init
+8000b0f0   vcop_gauss5x5PyramidKernel_8_horiz_param_count
+8000a850   vcop_gauss5x5PyramidKernel_8_horiz_vloops
+8001c164   vcop_gauss5x5PyramidKernel_8_vert_c
+80008368   vcop_gauss5x5PyramidKernel_8_vert_init
+8000b0f4   vcop_gauss5x5PyramidKernel_8_vert_param_count
+80009f14   vcop_gauss5x5PyramidKernel_8_vert_vloops
+8001bd94   vcop_generateList_cn
+800057a0   vcop_generateList_init
+8000b044   vcop_generateList_param_count
+80008028   vcop_generateList_vloops
+80003b60   vcop_harrisScore_32_7x7_1_init
+8000b04c   vcop_harrisScore_32_7x7_1_param_count
+800080fc   vcop_harrisScore_32_7x7_1_vloops
+80004d30   vcop_harrisScore_32_7x7_2_init
+8000b054   vcop_harrisScore_32_7x7_2_param_count
+800053b4   vcop_harrisScore_32_7x7_2_vloops
+8001aac4   vcop_harrisScore_32_7x7_cn
+8000462c   vcop_harrisScore_32_methodB_init
+8000b05c   vcop_harrisScore_32_methodB_param_count
+8000916c   vcop_harrisScore_32_methodB_vloops
+80002b60   vcop_horizontal_non_max_suppression_init
+8000b064   vcop_horizontal_non_max_suppression_param_count
+800061f4   vcop_horizontal_non_max_suppression_vloops
+800242ec   vcop_minit
+80006cf4   vcop_multiblock_bilinear_interp_7x7_u8_init
+8000b0f8   vcop_multiblock_bilinear_interp_7x7_u8_param_count
+8000a408   vcop_multiblock_bilinear_interp_7x7_u8_vloops
+8000665c   vcop_multiblock_bilinear_interp_intlv_7x7_s16_init
+8000b06c   vcop_multiblock_bilinear_interp_intlv_7x7_s16_param_count
+80009d9c   vcop_multiblock_bilinear_interp_intlv_7x7_s16_vloops
+80007760   vcop_multiblock_gradient_xy_init
+8000b0fc   vcop_multiblock_gradient_xy_param_count
+8000ac94   vcop_multiblock_gradient_xy_vloops
+80003870   vcop_nonMaxSuppress_mxn_32s_bitPack_init
+8000b074   vcop_nonMaxSuppress_mxn_32s_bitPack_param_count
+8000895c   vcop_nonMaxSuppress_mxn_32s_bitPack_vloops
+8001ba18   vcop_nonMaxSuppress_mxn_32s_cn
+80002ebc   vcop_nonMaxSuppress_mxn_32s_init
+8000b07c   vcop_nonMaxSuppress_mxn_32s_param_count
+80008730   vcop_nonMaxSuppress_mxn_32s_vloops
+80007280   vcop_prune_big_list_init
+8000b084   vcop_prune_big_list_param_count
+800093b4   vcop_prune_big_list_vloops
+8000355c   vcop_psort2_1step
+80007174   vcop_psort2_1step_kernel_init
+8000b100   vcop_psort2_1step_kernel_param_count
+8000aa60   vcop_psort2_1step_kernel_vloops
+80006064   vcop_psort2_1step_reverse_kernel_init
+8000b104   vcop_psort2_1step_reverse_kernel_param_count
+8000aa98   vcop_psort2_1step_reverse_kernel_vloops
+80001c44   vcop_psort2_2steps
+800064f8   vcop_psort2_2steps_kernel_init
+8000b08c   vcop_psort2_2steps_kernel_param_count
+8000a228   vcop_psort2_2steps_kernel_vloops
+800055ac   vcop_psort2_2steps_reverse_kernel_init
+8000b094   vcop_psort2_2steps_reverse_kernel_param_count
+8000a27c   vcop_psort2_2steps_reverse_kernel_vloops
+80001790   vcop_psort2_3steps
+80004f64   vcop_psort2_3steps_kernel_init
+8000b09c   vcop_psort2_3steps_kernel_param_count
+80008bfc   vcop_psort2_3steps_kernel_vloops
+80003e4c   vcop_psort2_3steps_reverse_kernel_init
+8000b0a4   vcop_psort2_3steps_reverse_kernel_param_count
+80008c9c   vcop_psort2_3steps_reverse_kernel_vloops
+80009cd8   vcop_remove_ex_col_init
+8000b108   vcop_remove_ex_col_param_count
+8000af40   vcop_remove_ex_col_vloops
+80005194   vcop_sad_error_measure_lk_init
+80007e78   vcop_sad_error_measure_lk_vloops
+80007f50   vcop_select_list_elements_init
+8000a578   vcop_select_list_elements_param_block_update_init
+8000b10c   vcop_select_list_elements_param_block_update_param_count
+8000ae78   vcop_select_list_elements_param_block_update_vloops
+8000b110   vcop_select_list_elements_param_count
+8000a5c0   vcop_select_list_elements_vloops
+80006bb0   vcop_sort8_simd8_64_init
+8000b0ac   vcop_sort8_simd8_64_param_count
+80008d3c   vcop_sort8_simd8_64_vloops
+80006a64   vcop_sort8_simd8_XX_init
+8000b0b4   vcop_sort8_simd8_XX_param_count
+80008dd8   vcop_sort8_simd8_XX_vloops
+800067b8   vcop_sum_grad_cross_inter_frame_diff_7x7_init
+8000b0bc   vcop_sum_grad_cross_inter_frame_diff_7x7_param_count
+80009990   vcop_sum_grad_cross_inter_frame_diff_7x7_vloops
+80005b4c   vcop_tensor_matrix_7x7_s16_grad_init
+8000b0c4   vcop_tensor_matrix_7x7_s16_grad_param_count
+80008a10   vcop_tensor_matrix_7x7_s16_grad_vloops
+80009a6c   vcop_updateGenerateList_init
+8000b114   vcop_updateGenerateList_param_count
+8000aad0   vcop_updateGenerateList_vloops
+8001c48c   vcop_vec_gradients_xy_and_magnitude_cn2
+8000842c   vcop_vec_gradients_xy_and_magnitude_init
+8000b118   vcop_vec_gradients_xy_and_magnitude_param_count
+8000a0d0   vcop_vec_gradients_xy_and_magnitude_vloops
+80007af8   vcop_vec_gradients_xy_magnitudeu8_init
+8000b11c   vcop_vec_gradients_xy_magnitudeu8_param_count
+8000a128   vcop_vec_gradients_xy_magnitudeu8_vloops
+80003214   vcop_vertical_non_max_suppression_kernel_init
+8000b0cc   vcop_vertical_non_max_suppression_kernel_param_count
+80006380   vcop_vertical_non_max_suppression_kernel_vloops
+80005eb4   vcop_weight_address_bilinear_interpolation_init
+8000b0d4   vcop_weight_address_bilinear_interpolation_param_count
+80007578   vcop_weight_address_bilinear_interpolation_vloops
+800094d0   vcop_weight_computation_init
+8000b120   vcop_weight_computation_param_count
+8000a454   vcop_weight_computation_vloops
+80009ba8   vcop_yuv_left_right_padding_u16_init
+8000b124   vcop_yuv_left_right_padding_u16_param_count
+8000ae10   vcop_yuv_left_right_padding_u16_vloops
+80009dfc   vcop_yuv_left_right_padding_u8_init
+8000b128   vcop_yuv_left_right_padding_u8_param_count
+8000ae34   vcop_yuv_left_right_padding_u8_vloops
+80023d5c   vfprintf
+800247a0   vsprintf
+80024044   write
+80024664   writemsg
+8001074c   yuvPaddingTestProcess
+
+
+GLOBAL SYMBOLS: SORTED BY Symbol Address 
+
+address    name
+--------   ----
+00000000   IMEMH_SIZE
+00000000   IMEML_SIZE
+00000000   WMEM_SIZE
+00000000   _algo_neardata_size
+00000000   _bam_neardata_size
+00000000   _starterware_neardata_size
+00000001   __TI_args_main
+00000001   __TI_exit
+00000110   _starterware_text_size
+000001f4   _starterware_fardata_size
+00000266   _rts_neardata_size
+00000300   _rts_fardata_size
+000005c0   _bam_fardata_size
+00000644   _algo_fardata_size
+00001800   __TI_STACK_SIZE
+00003bdc   _bam_text_size
+00007228   _rts_text_size
+00007560   _text_size
+0001530c   _algo_text_size
+02800000   __TI_SYSMEM_SIZE
+40020000   DMEM_SCRATCH
+40026200   _stack
+40027a00   __TI_STACK_END
+40027a00   __TI_STATIC_BASE
+40027aa8   gDmaUtilsStateStruct
+40027b10   test_module_cyles
+40027b34   gTest_TI_profileTsc
+40027b58   bam_stat_num_packets
+40027b68   _my_stack
+40027c48   edmaBase
+80000000   _vec_table
+80000028   _imemha_memory
+80000030   _imemhb_memory
+80000038   _imemla_memory
+80000040   _imemlb_memory
+80000048   _wmem_memory
+80000100   _reset_handler
+80000120   _dummy_handler
+80001100   vcop_fast9_init
+80001790   vcop_psort2_3steps
+80001c44   vcop_psort2_2steps
+80002038   mergeSort_init
+80002404   bitonic_merge_multi_step
+800027c4   vcop_fast9_thresh_score_init
+80002b60   vcop_horizontal_non_max_suppression_init
+80002ebc   vcop_nonMaxSuppress_mxn_32s_init
+80003214   vcop_vertical_non_max_suppression_kernel_init
+8000355c   vcop_psort2_1step
+80003870   vcop_nonMaxSuppress_mxn_32s_bitPack_init
+80003b60   vcop_harrisScore_32_7x7_1_init
+80003e4c   vcop_psort2_3steps_reverse_kernel_init
+80004110   vcop_fast9_vloops
+800043a0   vcop_fast9_score_kernel_init
+8000462c   vcop_harrisScore_32_methodB_init
+800048a4   vcop_calc_new_lk_xy_init
+80004d30   vcop_harrisScore_32_7x7_2_init
+80004f64   vcop_psort2_3steps_kernel_init
+80005194   vcop_sad_error_measure_lk_init
+800053b4   vcop_harrisScore_32_7x7_2_vloops
+800055ac   vcop_psort2_2steps_reverse_kernel_init
+800057a0   vcop_generateList_init
+80005990   vcop_calc_inverse_structure_tensor_2x2_init
+80005b4c   vcop_tensor_matrix_7x7_s16_grad_init
+80005d04   vcop_calc_new_lk_xy_vloops
+80005eb4   vcop_weight_address_bilinear_interpolation_init
+80006064   vcop_psort2_1step_reverse_kernel_init
+800061f4   vcop_horizontal_non_max_suppression_vloops
+80006380   vcop_vertical_non_max_suppression_kernel_vloops
+800064f8   vcop_psort2_2steps_kernel_init
+8000665c   vcop_multiblock_bilinear_interp_intlv_7x7_s16_init
+800067b8   vcop_sum_grad_cross_inter_frame_diff_7x7_init
+80006910   vcop_foreach_multiblock_bilinear_interp_7x7_u8_init
+80006a64   vcop_sort8_simd8_XX_init
+80006bb0   vcop_sort8_simd8_64_init
+80006cf4   vcop_multiblock_bilinear_interp_7x7_u8_init
+80006e1c   vcop_fast9_thresh_score_vloops
+80006f3c   vcop_bin_image_to_list_init
+80007058   vcop_fast9_score_kernel_vloops
+80007174   vcop_psort2_1step_kernel_init
+80007280   vcop_prune_big_list_init
+80007578   vcop_weight_address_bilinear_interpolation_vloops
+80007760   vcop_multiblock_gradient_xy_init
+80007930   vcop_calc_determinant_tensor_matrix_vloops
+80007a14   vcop_calc_inverse_structure_tensor_2x2_vloops
+80007af8   vcop_vec_gradients_xy_magnitudeu8_init
+80007e78   vcop_sad_error_measure_lk_vloops
+80007f50   vcop_select_list_elements_init
+80008028   vcop_generateList_vloops
+800080fc   vcop_harrisScore_32_7x7_1_vloops
+800081d0   vcop_copy_new_lk_xy_init
+80008368   vcop_gauss5x5PyramidKernel_8_vert_init
+8000842c   vcop_vec_gradients_xy_and_magnitude_init
+80008670   vcop_calc_determinant_tensor_matrix_init
+80008730   vcop_nonMaxSuppress_mxn_32s_vloops
+8000895c   vcop_nonMaxSuppress_mxn_32s_bitPack_vloops
+80008a10   vcop_tensor_matrix_7x7_s16_grad_vloops
+80008b5c   vcop_copyListToOutBuff_init
+80008bfc   vcop_psort2_3steps_kernel_vloops
+80008c9c   vcop_psort2_3steps_reverse_kernel_vloops
+80008d3c   vcop_sort8_simd8_64_vloops
+80008dd8   vcop_sort8_simd8_XX_vloops
+8000903c   my_vcop_psort2_3steps_kernel_custom
+800090d4   my_vcop_psort2_3steps_reverse_kernel_custom
+8000916c   vcop_harrisScore_32_methodB_vloops
+80009294   my_vcop_psort2_1step_kernel_custom
+80009324   vcop_gauss5x5PyramidKernel_8_horiz_init
+800093b4   vcop_prune_big_list_vloops
+800094d0   vcop_weight_computation_init
+800095e4   vcop_binary_masking_init
+80009660   vcop_blockAverage2x2_uchar_init
+800096dc   vcop_bin_image_to_list_vloops
+800097c8   my_vcop_psort2_2steps_kernel_custom
+8000983c   my_vcop_psort2_2steps_reverse_kernel_custom
+80009990   vcop_sum_grad_cross_inter_frame_diff_7x7_vloops
+80009a6c   vcop_updateGenerateList_init
+80009ba8   vcop_yuv_left_right_padding_u16_init
+80009c74   my_vcop_psort2_1step_reverse_kernel_custom
+80009cd8   vcop_remove_ex_col_init
+80009d9c   vcop_multiblock_bilinear_interp_intlv_7x7_s16_vloops
+80009dfc   vcop_yuv_left_right_padding_u8_init
+80009eb8   vcop_foreach_multiblock_bilinear_interp_7x7_u8_vloops
+80009f14   vcop_gauss5x5PyramidKernel_8_vert_vloops
+8000a0d0   vcop_vec_gradients_xy_and_magnitude_vloops
+8000a128   vcop_vec_gradients_xy_magnitudeu8_vloops
+8000a228   vcop_psort2_2steps_kernel_vloops
+8000a27c   vcop_psort2_2steps_reverse_kernel_vloops
+8000a3bc   vcop_copy_new_lk_xy_vloops
+8000a408   vcop_multiblock_bilinear_interp_7x7_u8_vloops
+8000a454   vcop_weight_computation_vloops
+8000a578   vcop_select_list_elements_param_block_update_init
+8000a5c0   vcop_select_list_elements_vloops
+8000a850   vcop_gauss5x5PyramidKernel_8_horiz_vloops
+8000a944   vcop_copyListToOutBuff_vloops
+8000aa60   vcop_psort2_1step_kernel_vloops
+8000aa98   vcop_psort2_1step_reverse_kernel_vloops
+8000aad0   vcop_updateGenerateList_vloops
+8000ac64   vcop_binary_masking_vloops
+8000ac94   vcop_multiblock_gradient_xy_vloops
+8000ad48   vcop_blockAverage2x2_uchar_vloops
+8000ae10   vcop_yuv_left_right_padding_u16_vloops
+8000ae34   vcop_yuv_left_right_padding_u8_vloops
+8000ae78   vcop_select_list_elements_param_block_update_vloops
+8000af08   my_vcop_sort8_simd8_64_custom
+8000af24   my_vcop_sort8_simd8_XX_custom
+8000af40   vcop_remove_ex_col_vloops
+8000af5c   my_vcop_remove_ex_col_custom
+8000af94   transp_idx
+8000b00c   vcop_bin_image_to_list_param_count
+8000b014   vcop_calc_inverse_structure_tensor_2x2_param_count
+8000b01c   vcop_calc_new_lk_xy_param_count
+8000b024   vcop_fast9_param_count
+8000b02c   vcop_fast9_score_kernel_param_count
+8000b034   vcop_fast9_thresh_score_param_count
+8000b03c   vcop_foreach_multiblock_bilinear_interp_7x7_u8_param_count
+8000b044   vcop_generateList_param_count
+8000b04c   vcop_harrisScore_32_7x7_1_param_count
+8000b054   vcop_harrisScore_32_7x7_2_param_count
+8000b05c   vcop_harrisScore_32_methodB_param_count
+8000b064   vcop_horizontal_non_max_suppression_param_count
+8000b06c   vcop_multiblock_bilinear_interp_intlv_7x7_s16_param_count
+8000b074   vcop_nonMaxSuppress_mxn_32s_bitPack_param_count
+8000b07c   vcop_nonMaxSuppress_mxn_32s_param_count
+8000b084   vcop_prune_big_list_param_count
+8000b08c   vcop_psort2_2steps_kernel_param_count
+8000b094   vcop_psort2_2steps_reverse_kernel_param_count
+8000b09c   vcop_psort2_3steps_kernel_param_count
+8000b0a4   vcop_psort2_3steps_reverse_kernel_param_count
+8000b0ac   vcop_sort8_simd8_64_param_count
+8000b0b4   vcop_sort8_simd8_XX_param_count
+8000b0bc   vcop_sum_grad_cross_inter_frame_diff_7x7_param_count
+8000b0c4   vcop_tensor_matrix_7x7_s16_grad_param_count
+8000b0cc   vcop_vertical_non_max_suppression_kernel_param_count
+8000b0d4   vcop_weight_address_bilinear_interpolation_param_count
+8000b0dc   vcop_binary_masking_param_count
+8000b0e0   vcop_blockAverage2x2_uchar_param_count
+8000b0e4   vcop_calc_determinant_tensor_matrix_param_count
+8000b0e8   vcop_copyListToOutBuff_param_count
+8000b0ec   vcop_copy_new_lk_xy_param_count
+8000b0f0   vcop_gauss5x5PyramidKernel_8_horiz_param_count
+8000b0f4   vcop_gauss5x5PyramidKernel_8_vert_param_count
+8000b0f8   vcop_multiblock_bilinear_interp_7x7_u8_param_count
+8000b0fc   vcop_multiblock_gradient_xy_param_count
+8000b100   vcop_psort2_1step_kernel_param_count
+8000b104   vcop_psort2_1step_reverse_kernel_param_count
+8000b108   vcop_remove_ex_col_param_count
+8000b10c   vcop_select_list_elements_param_block_update_param_count
+8000b110   vcop_select_list_elements_param_count
+8000b114   vcop_updateGenerateList_param_count
+8000b118   vcop_vec_gradients_xy_and_magnitude_param_count
+8000b11c   vcop_vec_gradients_xy_magnitudeu8_param_count
+8000b120   vcop_weight_computation_param_count
+8000b124   vcop_yuv_left_right_padding_u16_param_count
+8000b128   vcop_yuv_left_right_padding_u8_param_count
+8000c760   PYRAMID_LK_TRACKER_TI_process
+8000cc4c   BAM_DMA_PYRAMID_LK_TRACKER_frameInitInChannel
+8000ce58   LK_TRACKER_TI_graphCreate
+8000cfd4   PYRAMID_LK_TRACKER_TI_init
+8000d150   PYRAMID_LK_TRACKER_TI_alloc
+8000d28c   BAM_DMA_PYRAMID_LK_TRACKER_dmaWriteGetMemRecFunc
+8000d3a4   BAM_DMA_PYRAMID_LK_TRACKER_dmaWriteSetMemRecFunc
+8000d4b0   BAM_DMA_PYRAMID_LK_TRACKER_dmaReadGetMemRecFunc
+8000d588   BAM_DMA_PYRAMID_LK_TRACKER_dmaReadSetMemRecFunc
+8000d658   BAM_DMA_PYRAMID_LK_TRACKER_dmaWriteUpdateDDRptr
+8000d71c   LK_TRACKER_TI_bamControl
+8000d7bc   BAM_DMA_PYRAMID_LK_TRACKER_waitOutChannel
+8000d858   BAM_DMA_PYRAMID_LK_TRACKER_dmaReadUpdateDDRptr
+8000d8e8   PYRAMID_LK_TRACKER_TI_activate
+8000d9ac   PYRAMID_LK_TRACKER_TI_deactivate
+8000da04   BAM_DMA_PYRAMID_LK_TRACKER_frameInitOutChannel
+8000da48   BAM_DMA_PYRAMID_LK_TRACKER_waitInChannel
+8000da84   LK_TRACKER_TI_FindMaxSearchRange
+8000daac   BAM_DMA_PYRAMID_LK_TRACKER_triggerOutChannel
+8000dad0   LK_TRACKER_TI_FindNumKeyPointsPerCall
+8000daf4   LK_TRACKER_TI_execute
+8000db14   LK_TRACKER_TI_getGraphMemReq
+8000db30   PYRAMID_LK_TRACKER_TI_free
+8000db48   BAM_DMA_PYRAMID_LK_TRACKER_triggerInChannel
+8000db68   PYRAMID_LK_TRACKER_TI_control
+8000db6c   PYRAMID_LK_TRACKER_TI_numAlloc
+8000db70   SOF_TI_alloc
+8000e4a4   SOF_TI_init
+8000ea24   filterTrackedPoints
+8000ef20   SOF_TI_process
+8000f700   filterTrackedPoints_chunk
+8000fce0   pyramidLkTrackerProcess
+8000fef8   AddkeyPointstoTrack
+80010278   fast9BestFeatureToFrontProcess
+800103c8   harrisKeyPointDetectionProcess
+8001063c   fast9KeyPointDetectionProcess
+8001074c   yuvPaddingTestProcess
+80010928   copyImageToInternalMemAndPad
+800109fc   imPyramidTestProcess
+80010b8c   AddHarrisKeyPointstoTrack
+80010cdc   SOF_TI_numAlloc
+80010e18   detectKeyPoints
+80010f24   computeImagePyramids
+80010f90   SOF_TI_activate
+80010ff0   SOF_TI_deactivate
+800110fc   initTrackInfo
+8001114c   SOF_TI_free
+8001122c   SOF_TI_control
+80011230   FAST9_CORNER_DETECT_TI_init
+80011658   FAST9_CORNER_DETECT_TI_process
+800119c0   FAST9_CORNER_DETECT_TI_alloc
+80011b2c   FAST9_CORNER_DETECT_TI_graphCreate
+80011c8c   BIN_IMAGE_TO_LIST_TI_graphCreate
+80011de0   FAST9_CORNER_DETECT_TI_graphDmaControl
+80011f18   BIN_IMAGE_TO_LIST_TI_graphDmaControl
+80011ffc   BIN_IMG2LIST_BAM_DMA_updateInDDRptr
+800120c4   BIN_IMG2LIST_BAM_DMA_frameInitOutChannel
+8001215c   BIN_IMG2LIST_BAM_DMA_waitOutChannel
+800122ec   FAST9_CORNER_DETECT_TI_activate
+80012350   FAST9_CORNER_DETECT_TI_deactivate
+80012414   BIN_IMG2LIST_BAM_DMA_triggerOutChannel
+80012514   BIN_IMG2LIST_BAM_DMA_updateOutDDRptr
+80012588   BIN_IMAGE_TO_LIST_TI_execute
+800125a8   FAST9_CORNER_DETECT_TI_execute
+800125c8   FAST9_CORNER_DETECT_TI_getGraphMemReq
+800125e4   BIN_IMAGE_TO_LIST_TI_getGraphMemReq
+800125fc   FAST9_CORNER_DETECT_TI_free
+80012614   BIN_IMAGE_TO_LIST_TI_graphControl
+80012624   FAST9_CORNER_DETECT_TI_graphControl
+80012638   FAST9_CORNER_DETECT_TI_control
+8001263c   FAST9_CORNER_DETECT_TI_numAlloc
+80012640   FAST9_BEST_FEATURE_TO_FRONT_TI_process
+80012d24   FAST9_BEST_FEATURE_TO_FRONT_TI_alloc
+80012ec0   FAST9_SCORE_TI_graphCreate
+80013034   BEST_FEATURE_TO_FRONT_TI_graphCreate
+800132e8   FAST9_BEST_FEATURE_TO_FRONT_TI_init
+80013a40   BEST_FEATURE_TO_FRONT_TI_dmaControl
+80013ad8   FAST9_SCORE_TI_dmaControl
+80013c2c   FAST9_BEST_FEATURE_TO_FRONT_TI_activate
+80013c90   FAST9_BEST_FEATURE_TO_FRONT_TI_deactivate
+80013ee0   BEST_FEATURE_TO_FRONT_TI_graphControl
+80013f9c   BEST_FEATURE_TO_FRONT_TI_execute
+80013fbc   FAST9_SCORE_TI_execute
+80013fdc   BEST_FEATURE_TO_FRONT_TI_getGraphMemReq
+80013ff8   FAST9_SCORE_TI_getGraphMemReq
+8001402c   FAST9_BEST_FEATURE_TO_FRONT_TI_free
+80014058   FAST9_BEST_FEATURE_TO_FRONT_TI_control
+8001405c   FAST9_BEST_FEATURE_TO_FRONT_TI_numAlloc
+80014334   HARRIS_CORNER_DETECTION_32_TI_graphCreate
+80014584   HARRIS_CORNER_DETECTION_32_TI_process
+800146d4   HARRIS_CORNER_DETECTION_32_TI_init
+800147f8   HARRIS_CORNER_DETECTION_32_TI_dmaControl
+800148c4   HARRIS_CORNER_DETECTION_32_TI_alloc
+80014980   HARRIS_CORNER_DETECTION_32_TI_activate
+800149dc   HARRIS_CORNER_DETECTION_32_TI_deactivate
+80014a7c   HARRIS_CORNER_DETECTION_32_TI_graphControl
+80014abc   HARRIS_CORNER_DETECTION_32_TI_control
+80014ae8   HARRIS_CORNER_DETECTION_32_TI_execute
+80014b08   HARRIS_CORNER_DETECTION_32_TI_getGraphMemReq
+80014b24   HARRIS_CORNER_DETECTION_32_TI_free
+80014b3c   HARRIS_CORNER_DETECTION_32_TI_numAlloc
+800151a4   IMAGE_PYRAMID_U8_TI_graphCreate
+80015410   IMAGE_PYRAMID_U8_TI_process
+80015518   IMAGE_PYRAMID_U8_TI_dmaControl
+800155fc   IMAGE_PYRAMID_U8_TI_alloc
+800156b8   IMAGE_PYRAMID_U8_TI_init
+80015774   IMAGE_PYRAMID_U8_TI_activate
+80015824   IMAGE_PYRAMID_U8_TI_deactivate
+80015874   IMAGE_PYRAMID_U8_TI_execute
+80015894   IMAGE_PYRAMID_U8_TI_getGraphMemReq
+800158b0   IMAGE_PYRAMID_U8_TI_free
+800158c8   IMAGE_PYRAMID_U8_TI_control
+800158cc   IMAGE_PYRAMID_U8_TI_numAlloc
+80015b74   YUV_PADDING_TI_process
+80015e14   YUV_PADDING_TI_dmaControl
+80015fdc   YUV_PADDING_TI_graphCreate
+8001616c   YUV_PADDING_TI_alloc
+8001624c   YUV_PADDING_TI_init
+80016304   YUV_PADDING_TI_activate
+80016360   YUV_PADDING_TI_deactivate
+800163b0   YUV_PADDING_TI_execute
+800163d0   YUV_PADDING_TI_getGraphMemReq
+800163ec   YUV_PADDING_TI_free
+80016404   YUV_PADDING_TI_control
+80016408   YUV_PADDING_TI_numAlloc
+8001640c   statCollectorControl
+80017198   pyramidLkSofTest
+80017bf8   EDMA_UTILS_autoIncrement_configure
+80018238   BIN_IMAGE_TO_LIST_TI_process
+80018764   EDMA_UTILS_autoIncrement1D_configure
+80018c20   main
+80019414   APP_drawFlow
+800197e8   printparams
+80019af0   EDMA_UTILS_autoIncrement_update
+80019d78   profiler_end
+80019fac   printConfigParams
+8001a1b8   sofhandleCreate
+8001a3bc   APP_drawLineRGB
+8001a584   BIN_IMAGE_TO_LIST_WITH_MASKING_TI_graphCreate
+8001a748   DMA_funcs_hardwareRegSetup
+8001a90c   EDMA_UTILS_autoIncrement_triggerOutChannel
+8001aac4   vcop_harrisScore_32_7x7_cn
+8001ac74   EDMA_UTILS_scattherGather_init
+8001ae04   DMA_resourceAllocator_allocateResources
+8001af7c   EDMA_UTILS_autoIncrement1D_update
+8001b0e8   EDMA_UTILS_autoIncrement_triggerInChannel
+8001b24c   BIN_IMAGE_TO_LIST_SELECT_LIST_ELEMENTS_TI_graphCreate
+8001b3a8   APP_convertYUV420ptoRGB888
+8001b500   report_printAppletInfo
+8001b654   BIN_IMAGE_TO_LIST_TI_alloc
+8001b7a0   APP_drawBoxRGB
+8001b8dc   sofProcess
+8001ba18   vcop_nonMaxSuppress_mxn_32s_cn
+8001bc74   APP_convertRGB888toYUV420p
+8001bd94   vcop_generateList_cn
+8001bea4   BIN_IMAGE_TO_LIST_WITH_MASKING_TI_dmaControl
+8001bfa4   EDMA_UTILS_autoIncrement_init
+8001c08c   readparamfile
+8001c164   vcop_gauss5x5PyramidKernel_8_vert_c
+8001c238   DMA_utils_updateStateStruct
+8001c304   BIN_IMAGE_TO_LIST_TI_init
+8001c3c8   profiler_init
+8001c48c   vcop_vec_gradients_xy_and_magnitude_cn2
+8001c6b8   EDMA_UTILS_autoIncrement1D_init
+8001c814   EDMA_UTILS_scattherGather_updateNtrigger
+8001c8b4   EDMA_UTILS_memcpy2D
+8001c94c   vcop_blockAverage2x2_uchar_cn
+8001caec   get_generateListPtr
+8001cb6c   vcop_gauss5x5PyramidKernel_8_horiz_c
+8001ccd8   BIN_IMAGE_TO_LIST_WITH_MASKING_TI_kernelControl
+8001cd4c   DMA_funcs_writeTransferParams
+8001ce34   BIN_IMAGE_TO_LIST_TI_activate
+8001cea4   BIN_IMAGE_TO_LIST_TI_deactivate
+8001cf14   statCollectorInit
+8001cff0   profiler_getStackDepth
+8001d12c   BIN_IMAGE_TO_LIST_SELECT_LIST_ELEMENTS_TI_dmaControl
+8001d194   EDMA_UTILS_autoIncrement_waitOutChannel
+8001d1fc   TestApp_AllocMemRecords
+8001d308   TI_GetMemoryChunk
+8001d3b4   EDMA_UTILS_autoIncrement_waitInChannel
+8001d458   profiler_testCaseInfo
+8001d4a8   EDMA_UTILS_globalReset
+8001d4f4   profiler_start
+8001d668   EDMA_UTILS_autoIncrement1D_waitInChannel
+8001d6a0   EDMA_UTILS_scattherGather_updateDstNtrigger
+8001d6d8   EDMA_UTILS_scattherGather_updateSrcNtrigger
+8001d710   profiler_printStatus
+8001d748   profiler_initStack
+8001d778   DMA_resourceAllocator_initResources
+8001d7a4   BIN_IMAGE_TO_LIST_SELECT_LIST_ELEMENTS_TI_kernelControl
+8001d7c8   TEST_PRINTF
+8001d7ec   BIN_IMAGE_TO_LIST_SELECT_LIST_ELEMENTS_TI_execute
+8001d80c   BIN_IMAGE_TO_LIST_WITH_MASKING_TI_execute
+8001d84c   DMA_utils_resetStateStruct
+8001d86c   EDMA_UTILS_autoIncrement1D_triggerInChannel
+8001d88c   EDMA_UTILS_scattherGather_wait
+8001d8ac   BIN_IMAGE_TO_LIST_SELECT_LIST_ELEMENTS_TI_getGraphMemReq
+8001d8c4   BIN_IMAGE_TO_LIST_TI_free
+8001d8dc   BIN_IMAGE_TO_LIST_WITH_MASKING_TI_getGraphMemReq
+8001d8f4   profiler_getSP
+8001d91c   EDMA_UTILS_scattherGather_configure
+8001d92c   profiler_end_print
+8001d93c   DMA_resourceAllocator_setEdma3RmHandle
+8001d948   TI_CreateMemoryHandle
+8001d954   reset_generateListPtr
+8001d960   BIN_IMAGE_TO_LIST_TI_control
+8001d964   BIN_IMAGE_TO_LIST_TI_numAlloc
+8001d968   EDMA3LLD_SUPPORT_requestResources
+8001d96c   _scanfi
+8001de64   strtod
+8001e204   strtold
+8001e5a0   strtoll
+8001f6f0   strtoull
+8001f93c   _printfi
+8001fd88   fwrite
+800201ac   _frcdivd
+800203ac   __arp32abi_divd
+80020590   __arp32abi_divull
+8002075c   strtol
+80020928   __arp32abi_mpyd
+80020cb8   __arp32abi_addd
+80020e70   strtoul
+8002119c   fputs
+8002130c   __arp32abi_mpyf
+80021470   _frcaddd
+8002172c   __arp32abi_mpyll
+80021884   fread
+800219c8   _frcmpyd
+80021eb0   setvbuf
+800221d0   open
+800222bc   fputc
+800223a4   memcpy
+80022480   __arp32abi_cmpd
+80022614   mem_alloc
+800226d8   fgetc
+80022910   HOSTlseek
+80022a78   HOSTrename
+80022b24   ungetc
+80022c78   memset
+80022dc0   _buff_read
+80022ef8   HOSTopen
+80023024   mem_free
+800230b8   HOSTread
+80023148   __arp32abi_cvtdf
+80023268   _wrt_ok
+800232f8   fseek
+80023388   ftell
+80023418   HOSTwrite
+800234a4   __arp32abi_fixdu
+80023530   close
+8002363c   __arp32abi_cvtfd
+8002373c   printf
+800237bc   __arp32abi_fixdi
+80023838   _closefile
+800238b4   atoi
+80023930   fflush
+800239ac   HOSTunlink
+80023b14   fscanf
+80023b8c   minit
+80023c04   HOSTclose
+80023c78   fprintf
+80023cec   _auto_init
+80023d5c   vfprintf
+80023dcc   _frcmpyf
+80023e38   _rd_ok
+80023ea4   __arp32abi_fltid
+80023f0c   _c_int00
+80023f74   lseek
+80023fdc   read
+80024044   write
+80024110   ltoa
+80024174   __arp32abi_llshl
+800241d4   _doflush
+80024234   __arp32abi_isinf
+800242ec   vcop_minit
+80024348   __arp32abi_fltif
+800243f4   _renormd
+80024448   exit
+8002449c   _cleanup
+8002453c   __arp32abi_fltud
+80024588   malloc
+800245d4   readmsg
+8002461c   unlink
+80024664   writemsg
+800246a4   C$$IO$$
+800246ac   _args_main
+80024728   __arp32abi_strasgi
+80024764   fopen
+800247a0   vsprintf
+800247dc   __arp32abi_abort_msg
+80024814   __arp32abi_llshr
+8002484c   __arp32abi_remull
+80024884   sscanf
+800248bc   __arp32abi_llshru
+800248f0   fclose
+80024920   srand
+80024950   __arp32abi_subd
+8002497c   feof
+800249a8   __arp32abi_negd
+800249d0   _mpyl
+800249f8   __arp32abi_cmplls
+80024a1c   __arp32abi_cmpllu
+80024a40   memccpy
+80024a60   __arp32abi_addll
+80024a98   fgets
+80024ab0   __arp32abi_subll
+80024ac4   free
+80024ad8   __arp32abi_negll
+80024b78   remove
+80024b84   C$$EXIT
+80024b84   abort
+80024b8c   _nop
+80024b90   _system_pre_init
+80024b94   BAM_initGraph
+80026514   BAM_optimizeGraph
+80026ca0   BAM_createGraph
+80026e6c   bam_mem_alloc
+80026ff0   BAM_DMA_AUTOINCREMENT_getMemRecFunc
+80027148   BAM_DMA_ONESHOT_getMemRecFunc
+800272a0   BAM_updateNodes
+800273f8   BAM_process
+80027530   bam_getMemPacket
+80027788   BAM_DMA_AUTOINCREMENT_setMemRecFunc
+800278a4   BAM_fillKernelInfo
+800279b4   BAM_getGraphMemSize
+80027ac0   BAM_DMA_ONESHOT_setMemRecFunc
+80027bb8   BAM_DMA_ONESHOT_updateDDRptrInChannel
+80027c94   BAM_DMA_ONESHOT_updateDDRptrOutChannel
+80027d70   bam_mem_free
+80027e3c   BAM_DMA_ONESHOT_triggerOutChannel
+80027ef0   BAM_activateGraph
+80027fa4   BAM_copyIntMemRec2ExtMem
+80028050   bam_minit
+800280f0   BAM_ARP32_computeWrapper
+80028188   bam_releaseMemPacket
+80028218   BAM_copyNodeList
+800282a4   BAM_DMA_ONESHOT_triggerInChannel
+80028324   BAM_initGraphInstance
+80028398   BAM_DMA_AUTOINCREMENT_updateDDRptrInChannel
+80028408   BAM_DMA_AUTOINCREMENT_updateDDRptrOutChannel
+80028478   bam_mcheck
+80028544   BAM_controlNode
+80028598   BAM_DMA_AUTOINCREMENT_frameInitInChannel
+800285e4   BAM_initKernelDB
+80028630   BAM_DMA_AUTOINCREMENT_frameInitOutChannel
+80028674   BAM_DMA_ONESHOT_frameInitInChannel
+800286b8   BAM_getMemPacket
+800286f0   BAM_DMA_ONESHOT_frameInitOutChannel
+80028724   BAM_printf
+80028768   BAM_DMA_ONESHOT_waitChannel
+8002876c   BAM_dummyKernelFunc
+80028770   EVE_SCTM_CounterConfig
+800287b8   EVE_SCTM_CounterTimerEnable
+800287e4   EVE_SCTM_InpEvtSelect
+80028810   EVE_SCTM_SamplingSelect
+8002883c   EVE_SCTM_CounterRead
+80028854   EVE_SCTM_OverflowCheck
+8002886c   EVE_SCTM_Enable
+80050000   _sys_memory
+82853740   LUT_EXT_IDX_THR
+82853b24   LUT_EXT_IDX_SAD
+82853e6c   BIN_IMAGE_TO_LIST_TI_VISION_FXNS
+82853e98   BIN_IMAGE_TO_LIST_TI_IRES
+82853ec0   FAST9_BEST_FEATURE_TO_FRONT_TI_VISION_FXNS
+82853eec   FAST9_BEST_FEATURE_TO_FRONT_TI_IRES
+82853f14   FAST9_CORNER_DETECT_TI_VISION_FXNS
+82853f40   FAST9_CORNER_DETECT_TI_IRES
+82853f68   HARRIS_CORNER_DETECTION_32_TI_VISION_FXNS
+82853f94   HARRIS_CORNER_DETECTION_32_TI_IRES
+82853fbc   IMAGE_PYRAMID_U8_TI_VISION_FXNS
+82853fe8   IMAGE_PYRAMID_U8_TI_IRES
+82854010   PYRAMID_LK_TRACKER_TI_VISION_FXNS
+8285403c   PYRAMID_LK_TRACKER_TI_IRES
+82854064   YUV_PADDING_TI_VISION_FXNS
+82854090   YUV_PADDING_TI_IRES
+828540b8   SOF_TI_VISION_FXNS
+828540e4   SOF_TI_IRES
+82854552   ID_EXT_IDX
+8285455a   IN_ID_IDX
+82854568   gsTokenMap_sof
+82855d68   gParams
+82856bac   gBAM_TI_dmaCustomBinToListNodeReadKernel
+82856bc0   gBAM_TI_dmaCustomBinToListNodeReadKernelHelperFunc
+82856bc8   gBAM_TI_dmaCustomBinToListNodeReadKernelExecFunc
+82856be0   gBAM_TI_dmaCustomBinToListNodeWriteKernel
+82856bf4   gBAM_TI_dmaCustomBinToListNodeWriteKernelHelperFunc
+82856bfc   gBAM_TI_dmaCustomBinToListNodeWriteKernelExecFunc
+82856c14   gBAM_TI_dmaCustomSelectListElemNodeReadKernel
+82856c28   gBAM_TI_dmaCustomSelectListElemNodeReadKernelHelperFunc
+82856c30   gBAM_TI_dmaCustomSelectListElemNodeReadKernelExecFunc
+82856c48   gBAM_TI_dmaCustomSelectListElemNodeWriteKernel
+82856c5c   gBAM_TI_dmaCustomSelectListElemNodeWriteKernelHelperFunc
+82856c64   gBAM_TI_dmaCustomSelectListElemNodeWriteKernelExecFunc
+82856c7c   gBAM_TI_dmaOrbOneShotReadKernel
+82856c90   gBAM_TI_dmaOrbOneShotWriteKernel
+82856ca4   gBAM_TI_dmaOrbReadOneShotKernelHelperFunc
+82856cac   gBAM_TI_dmaOrbWriteOneShotKernelHelperFunc
+82856cb4   gBAM_TI_dmaOrbReadOneShotKernelExecFunc
+82856ccc   gBAM_TI_dmaOrbWriteOneShotKernelExecFunc
+82856ce4   gBAM_TI_dmaScatterGatherReadKernel
+82856cf8   gBAM_TI_dmaScatterGatherWriteKernel
+82856d0c   gBAM_TI_dmaReadScatterGatherKernelHelperFunc
+82856d14   gBAM_TI_dmaWriteScatterGatherKernelHelperFunc
+82856d1c   gBAM_TI_dmaReadScatterGatherKernelExecFunc
+82856d34   gBAM_TI_dmaWriteScatterGatherKernelExecFunc
+82856d4c   gBAM_TI_binImg2ListReadKernel
+82856d60   gBAM_TI_dmaReadBinImg2ListHelperFunc
+82856d68   gBAM_TI_dmaReadBinImg2ListExecFunc
+82856d80   gBAM_TI_binImg2ListWriteKernel
+82856d94   gBAM_TI_dmaWriteBinImg2ListHelperFunc
+82856d9c   gBAM_TI_dmaWriteBinImg2ListExecFunc
+82856db4   gBAM_TI_dmaPyramidLKTrackerReadKernel
+82856dc8   gBAM_TI_dmaPyramidLKTrackerWriteKernel
+82856ddc   gBAM_TI_dmaReadPyramidLKTrackerKernelHelperFunc
+82856de4   gBAM_TI_dmaWritePyramidLKTrackerKernelHelperFunc
+82856dec   gBAM_TI_dmaReadPyramidLKTrackerKernelExecFunc
+82856e04   gBAM_TI_dmaWritePyramidLKTrackerKernelExecFunc
+828571fc   gBAM_TI_lkIterativeLoopKernel
+82857210   gBAM_TI_lkIterativeLoopHelperFunc
+82857218   gBAM_TI_lkIterativeLoopExecFunc
+82857230   SOFKeyPointMethos
+8285723c   gSelectListElem_BAM_TI_kernelDBdef
+82857248   gBinToList_BAM_TI_kernelDBdef
+8285726c   gBAM_TI_kernelDBdef_binToList
+8285729c   gBAM_TI_kernelDBdef
+828572a8   gYUV_PADDING_BAM_kernelDBdef
+828572b4   gBAM_TI_nonMaxSuppress_mxn_S32_ExecFunc
+828572cc   gBAM_TI_nonMaxSuppress_mxn_S32_binPack_ExecFunc
+828572e4   gBAM_TI_nonMaxSuppress_mxn_S32_Kernel
+828572f8   gBAM_TI_nonMaxSuppress_mxn_S32_binPack_Kernel
+8285730c   gBAM_TI_nonMaxSuppress_mxn_S32_HelperFunc
+82857314   gBAM_TI_binImageToListKernel
+82857328   gBAM_TI_binImageToListHelperFunc
+82857330   gBAM_TI_binaryMaskingKernel
+82857344   gBAM_TI_binaryMaskingHelperFunc
+8285734c   gBAM_TI_blockAverage2x2Kernel
+82857360   gBAM_TI_blockAverage2x2HelperFunc
+82857368   gBAM_TI_blockSortU32Kernel
+8285737c   gBAM_TI_blockSortU32HelperFunc
+82857384   gBAM_TI_calcDeterminantTensorMatrixKernel
+82857398   gBAM_TI_calcDeterminantTensorMatrixHelperFunc
+828573a0   gBAM_TI_calcInverseStructureTensor2x2Kernel
+828573b4   gBAM_TI_calcInverseStructureTensor2x2HelperFunc
+828573bc   gBAM_TI_fast9Kernel
+828573d0   gBAM_TI_fast9HelperFunc
+828573d8   gBAM_TI_fast9scoreKernel
+828573ec   gBAM_TI_fast9scoreHelperFunc
+828573f4   gBAM_TI_gauss5x5PyramidKernel
+82857408   gBAM_TI_gauss5x5PyramidHelperFunc
+82857410   gBAM_TI_generateListKernel
+82857424   gBAM_TI_generateListHelperFunc
+8285742c   gBAM_TI_gradXYmagKernel
+82857440   gBAM_TI_gradXYmagHelperFunc
+82857448   gBAM_TI_harrisScore_32_7x7_Kernel
+8285745c   gBAM_TI_harrisScore_32_7x7_HelperFunc
+82857464   gBAM_TI_harrisScore_32_methodB_Kernel
+82857478   gBAM_TI_harrisScore_32_methodB_HelperFunc
+82857480   gBAM_TI_horizontalnonmaxsuppressionKernel
+82857494   gBAM_TI_horizontalnonmaxsuppressionHelperFunc
+8285749c   gBAM_TI_multiblockBilinearInterp7x7U8Kernel
+828574b0   gBAM_TI_multiblockBilinearInterp7x7U8HelperFunc
+828574b8   gBAM_TI_multiblockBilinearInterpIntlv7x7S16Kernel
+828574cc   gBAM_TI_multiblockBilinearInterpIntlv7x7S16HelperFunc
+828574d4   gBAM_TI_multiblockGradientXYKernel
+828574e8   gBAM_TI_multiblockGradientXYHelperFunc
+828574f0   gBAM_TI_natcBlockAverage2x2Kernel
+82857504   gBAM_TI_natcBlockAverage2x2HelperFunc
+8285750c   gBAM_TI_natcGauss5x5PyramidKernel
+82857520   gBAM_TI_natcGauss5x5PyramidHelperFunc
+82857528   gBAM_TI_natcGenerateListKernel
+8285753c   gBAM_TI_natcGenerateListHelperFunc
+82857544   gBAM_TI_natcGradXYmagKernel
+82857558   gBAM_TI_natcGradXYmagHelperFunc
+82857560   gBAM_TI_natcHarrisScore_32_7x7_Kernel
+82857574   gBAM_TI_natcHarrisScore_32_7x7_HelperFunc
+8285757c   gBAM_TI_natcNonMaxSuppress_mxn_S32_Kernel
+82857590   gBAM_TI_natcNonMaxSuppress_mxn_S32_HelperFunc
+82857598   gBAM_TI_prune_big_listKernel
+828575ac   gBAM_TI_prune_big_listHelperFunc
+828575b4   gBAM_TI_selecListElementsKernel
+828575c8   gBAM_TI_selecListElementsHelperFunc
+828575d0   gBAM_TI_tensorMatrix7x7S16GradKernel
+828575e4   gBAM_TI_tensorMatrix7x7S16GradHelperFunc
+828575ec   gBAM_TI_yuvLeftRightPaddingKernel
+82857600   gBAM_TI_yuvLeftRightPaddingHelperFunc
+82857608   gBAM_TI_verticalnonmaxsuppressionKernel
+8285761c   gBAM_TI_verticalnonmaxsuppressionHelperFunc
+82857624   gBAM_TI_weightComputationKernel
+82857638   gBAM_TI_weightComputationHelperFunc
+82857640   gBAM_TI_binImageToListExecFunc
+82857658   gBAM_TI_binaryMaskingExecFunc
+82857670   gBAM_TI_blockAverage2x2ExecFunc
+82857688   gBAM_TI_blockSortU32ExecFunc
+828576a0   gBAM_TI_calcDeterminantTensorMatrixExecFunc
+828576b8   gBAM_TI_calcInverseStructureTensor2x2ExecFunc
+828576d0   gBAM_TI_fast9ExecFunc
+828576e8   gBAM_TI_fast9scoreExecFunc
+82857700   gBAM_TI_gauss5x5PyramidExecFunc
+82857718   gBAM_TI_generateListExecFunc
+82857730   gBAM_TI_gradXYmagExecFunc
+82857748   gBAM_TI_harrisScore_32_7x7_ExecFunc
+82857760   gBAM_TI_harrisScore_32_methodB_ExecFunc
+82857778   gBAM_TI_horizontalnonmaxsuppressionExecFunc
+82857790   gBAM_TI_multiblockBilinearInterp7x7U8ExecFunc
+828577a8   gBAM_TI_multiblockBilinearInterpIntlv7x7S16ExecFunc
+828577c0   gBAM_TI_multiblockGradientXYExecFunc
+828577d8   gBAM_TI_natcBlockAverage2x2ExecFunc
+828577f0   gBAM_TI_natcGauss5x5PyramidExecFunc
+82857808   gBAM_TI_natcGenerateListExecFunc
+82857820   gBAM_TI_natcGradXYmagExecFunc
+82857838   gBAM_TI_natcHarrisScore_32_7x7_ExecFunc
+82857850   gBAM_TI_natcNonMaxSuppress_mxn_S32_ExecFunc
+82857868   gBAM_TI_prune_big_listExecFunc
+82857880   gBAM_TI_selecListElementsExecFunc
+82857898   gBAM_TI_tensorMatrix7x7S16GradExecFunc
+828578b0   gBAM_TI_yuvLeftRightPaddingExecFunc
+828578c8   gBAM_TI_verticalnonmaxsuppressionExecFunc
+828578e0   gBAM_TI_weightComputationExecFunc
+82857984   gBAM_memPrintfArr
+82857d84   gBAM_TI_dmaAutoIncrementReadKernel
+82857d98   gBAM_TI_dmaAutoIncrementWriteKernel
+82857dac   gBAM_TI_dmaReadAutoIncrementKernelHelperFunc
+82857db4   gBAM_TI_dmaWriteAutoIncrementKernelHelperFunc
+82857dbc   gBAM_TI_dmaReadAutoIncrementKernelExecFunc
+82857dd4   gBAM_TI_dmaWriteAutoIncrementKernelExecFunc
+82857dec   gBAM_TI_dmaOneShotReadKernel
+82857e00   gBAM_TI_dmaOneShotWriteKernel
+82857e14   gBAM_TI_dmaReadOneShotKernelHelperFunc
+82857e1c   gBAM_TI_dmaWriteOneShotKernelHelperFunc
+82857e24   gBAM_TI_dmaReadOneShotKernelExecFunc
+82857e3c   gBAM_TI_dmaWriteOneShotKernelExecFunc
+82857eb8   _tmpnams
+82857f64   _cleanup_ptr
+82857f68   _dtors_ptr
+82857f74   _ftable
+82858190   _lock
+82858194   _unlock
+828581a0   _ft_end
+828581a4   errno
+828581b8   _ctypes_
+82858420   CRED_instVirtAddr
+82858614   __CIOBUF_
+8285876c   gTest_TI_profileSctm
+8285877c   memObj_DMEM
+8285878c   __ctrl_vcop_foreach_multiblock_bilinear_interp_7x7_u8
+ffffffff   __binit__
+ffffffff   __c_args__
+ffffffff   binit
+UNDEFED    __TI_CINIT_Base
+UNDEFED    __TI_CINIT_Limit
+UNDEFED    __TI_Handler_Table_Base
+UNDEFED    __TI_Handler_Table_Limit
+UNDEFED    __TI_INITARRAY_Base
+UNDEFED    __TI_INITARRAY_Limit
+
+[747 symbols]

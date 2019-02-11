@@ -1,0 +1,46 @@
+UseCase: chains_avbRxSrvDisplay
+
+//<===To enable DMA Mosaic view COMMENT below===>
+AvbRx (IPU1_1) -> Decode -> Sync_sv -> Dup_sv
+
+//
+// surround view original video display (DMA Mosaic view)
+//
+
+//<===To enable DMA Mosaic view UNCOMMENT below===>
+
+//AvbRx (IPU1_1) -> Decode
+//Decode -> Dup_sv_org -> Select
+//Select -> VPE_sv_org1 -> Sync_sv_org1 -> Alg_DmaSwMs_sv_org1 -> Display_sv_org1
+//Select -> VPE_sv_org2 -> Sync_sv_org2 -> Alg_DmaSwMs_sv_org2 -> Display_sv_org2
+//Dup_sv_org -> Sync_sv -> Dup_sv
+
+//
+// surround view algorithm and display
+//
+
+Dup_sv -> Alg_GeoAlign (DSP1)
+
+// Original sync'ed frames MUST be Q0 input to Synthesis
+Dup_sv -> Alg_Synthesis (DSP1)
+
+// Input for Display MUST be Q0 from Synthesis
+Alg_Synthesis -> Display_sv
+
+// Input to PhotoAlign MUST be Q1 from Synthesis
+Alg_Synthesis -> Alg_PhotoAlign (DSP1)
+
+// GeoAlign MUST be Q1 input to Synthesis
+Alg_GeoAlign -> Alg_Synthesis
+
+// PhotoAlign MUST be Q2 input to Synthesis
+Alg_PhotoAlign -> Alg_Synthesis
+
+// This sends to 2nd evm for display
+//Dup_disp -> Encode -> Null(IPU1_1)
+
+// This sends to 2nd evm for display
+Capture_dsswb -> Encode -> AvbTx(IPU1_1)
+
+// Graphics overlay display
+GrpxSrc -> Display_Grpx

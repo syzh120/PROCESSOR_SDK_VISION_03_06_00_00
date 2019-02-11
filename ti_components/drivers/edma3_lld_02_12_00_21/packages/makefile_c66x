@@ -1,0 +1,1159 @@
+#
+# EDMA3 LLD
+#
+
+ifeq ($(ROOTDIR),)
+  $(error Error: Environment variable ROOTDIR not set)
+endif
+
+# Begin block - Build options
+#  By the end of this block, we'd have either xdc or make or both in BUILD_OPTIONS
+#  using which, we'd build either XDC packages (+run configuro) 
+#  or make based components (+link) or both.
+BUILD_OPTIONS = xdc make
+VALID_BUILD_OPTIONS = full $(BUILD_OPTIONS)
+ifeq ($(filter $(BUILD),$(VALID_BUILD_OPTIONS)),)
+ ifeq ($(BUILD),)
+  BUILD = full
+ else
+  $(error Error: Invalid value specified for BUILD. Valid values are - $(VALID_BUILD_OPTIONS))
+ endif
+endif
+ifneq ($(BUILD),full)
+ BUILD_OPTIONS = $(BUILD)
+endif
+# End block - Build options
+
+include $(ROOTDIR)/makerules/build_config.mk
+include $(ROOTDIR)/makerules/env.mk
+include component.mk
+
+# Listing common targets
+edma3_lld_COMP_LIST_ALL = $(edma3_lld_COMP_LIST_c6xdsp)
+edma3_lld_PKG_LIST_ALL = $(foreach PKG,$(edma3_lld_COMP_LIST_ALL),$($(PKG)_PKG_LIST))
+CLEANALL_TARGETS = $(addsuffix _clean, $(edma3_lld_PKG_LIST_ALL))
+CLEANALL_EXAMPLES = $(addsuffix _clean, $(edma3_lld_EXAMPLES_LIST))
+
+.PHONY : $(edma3_lld_LIBS_ALL) $(edma3_lld_EXAMPLES_LIST)
+
+all: libs examples
+
+libs: $(edma3_lld_LIBS_ALL)
+
+examples: $(edma3_lld_EXAMPLES_LIST)
+
+clean: $(CLEANALL_TARGETS)
+
+cleanall: $(CLEANALL_TARGETS) $(CLEANALL_EXAMPLES)
+
+#
+# Rule to build all modules
+#
+
+edma3_lld_drv:
+ifeq ($(FORMAT),ELF)
+	$(ECHO) \# Making c66:debug:edma3_lld_drv
+	$(MAKE) -C $($@_PATH) PLATFORM=c6678-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Making c66:release:edma3_lld_drv
+	$(MAKE) -C $($@_PATH) PLATFORM=c6678-evm PROFILE_c6xdsp=release
+	$(ECHO) \# Making c66:debug:edma3_lld_drv -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=c6678-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making c66:release:edma3_lld_drv -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=c6678-evm PROFILE_c6xdsp=release ENDIAN=big
+endif
+
+edma3_lld_rm: edma3_lld_rm_generic
+ifeq ($(FORMAT),ELF)
+	$(ECHO) \# Making tci6608-sim:debug:edma3_lld_rm 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6608-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Making tci6616-sim:debug:edma3_lld_rm 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6616-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Making tci6614-sim:debug:edma3_lld_rm 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6614-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Making c6657-sim:debug:edma3_lld_rm 
+	$(MAKE) -C $($@_PATH) PLATFORM=c6657-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Making tci6638k2k-sim:debug:edma3_lld_rm 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6638k2k-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Making c6670-evm:debug:edma3_lld_rm 
+	$(MAKE) -C $($@_PATH) PLATFORM=c6670-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Making c6678-evm:debug:edma3_lld_rm 
+	$(MAKE) -C $($@_PATH) PLATFORM=c6678-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Making tci6614-evm:debug:edma3_lld_rm 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6614-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Making c6657-evm:debug:edma3_lld_rm -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=c6657-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Making tci6638k2k-evm:debug:edma3_lld_rm -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6638k2k-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Making tci6636k2h-evm:debug:edma3_lld_rm -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6636k2h-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Making tci6608-sim:debug:edma3_lld_rm -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6608-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making tci6616-sim:debug:edma3_lld_rm -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6616-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making tci6614-sim:debug:edma3_lld_rm -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6614-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making c6657-sim:debug:edma3_lld_rm -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=c6657-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making tci6638k2k-sim:debug:edma3_lld_rm -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6638k2k-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making c6670-evm:debug:edma3_lld_rm -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=c6670-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making c6678-evm:debug:edma3_lld_rm -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=c6678-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making tci6614-evm:debug:edma3_lld_rm -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6614-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making c6657-evm:debug:edma3_lld_rm -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=c6657-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making tci6638k2k-evm:debug:edma3_lld_rm -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6638k2k-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making tci6636k2h-evm:debug:edma3_lld_rm -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6636k2h-evm PROFILE_c6xdsp=debug ENDIAN=big
+
+	$(ECHO) \# Making tci6608-sim:release:edma3_lld_rm 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6608-sim PROFILE_c6xdsp=release
+	$(ECHO) \# Making tci6616-sim:release:edma3_lld_rm 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6616-sim PROFILE_c6xdsp=release
+	$(ECHO) \# Making tci6614-sim:release:edma3_lld_rm 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6614-sim PROFILE_c6xdsp=release
+	$(ECHO) \# Making c6657-sim:release:edma3_lld_rm 
+	$(MAKE) -C $($@_PATH) PLATFORM=c6657-sim PROFILE_c6xdsp=release
+	$(ECHO) \# Making tci6638k2k-sim:release:edma3_lld_rm 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6638k2k-sim PROFILE_c6xdsp=release
+	$(ECHO) \# Making c6670-evm:release:edma3_lld_rm 
+	$(MAKE) -C $($@_PATH) PLATFORM=c6670-evm PROFILE_c6xdsp=release
+	$(ECHO) \# Making c6678-evm:release:edma3_lld_rm 
+	$(MAKE) -C $($@_PATH) PLATFORM=c6678-evm PROFILE_c6xdsp=release
+	$(ECHO) \# Making tci6614-evm:release:edma3_lld_rm 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6614-evm PROFILE_c6xdsp=release
+	$(ECHO) \# Making c6657-evm:release:edma3_lld_rm 
+	$(MAKE) -C $($@_PATH) PLATFORM=c6657-evm PROFILE_c6xdsp=release
+	$(ECHO) \# Making tci6638k2k-evm:release:edma3_lld_rm 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6638k2k-evm PROFILE_c6xdsp=release
+	$(ECHO) \# Making tci6636k2h-evm:release:edma3_lld_rm 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6636k2h-evm PROFILE_c6xdsp=release
+
+	$(ECHO) \# Making tci6608-sim:release:edma3_lld_rm for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6608-sim PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making tci6616-sim:release:edma3_lld_rm for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6616-sim PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making tci6614-sim:release:edma3_lld_rm for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6614-sim PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making c6657-sim:release:edma3_lld_rm for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=c6657-sim PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making tci6638k2k-sim:release:edma3_lld_rm for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6638k2k-sim PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making c6670-evm:release:edma3_lld_rm for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=c6670-evm PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making c6678-evm:release:edma3_lld_rm for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=c6678-evm PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making tci6614-evm:release:edma3_lld_rm for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6614-evm PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making c6657-evm:release:edma3_lld_rm for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=c6657-evm PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making tci6638k2k-evm:release:edma3_lld_rm for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6638k2k-evm PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making tci6636k2h-evm:release:edma3_lld_rm for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6636k2h-evm PROFILE_c6xdsp=release ENDIAN=big
+endif
+
+# Generic platform
+edma3_lld_rm_generic:
+ifeq ($(FORMAT),ELF)
+	$(ECHO) \# Making generic/c66:debug:edma3_lld_rm: -for big_endian
+	$(MAKE) -C $($(subst _generic,,$@)_PATH) PLATFORM=generic CORE=66 PROFILE_66=debug ENDIAN=big
+	$(ECHO) \# Making generic/c66:release:edma3_lld_rm: -for big_endian
+	$(MAKE) -C $($(subst _generic,,$@)_PATH) PLATFORM=generic CORE=66 PROFILE_66=release ENDIAN=big
+	$(ECHO) \# Making generic/c66:debug:edma3_lld_rm 
+	$(MAKE) -C $($(subst _generic,,$@)_PATH) PLATFORM=generic CORE=66 PROFILE_66=debug ENDIAN=little
+	$(ECHO) \# Making generic/c66:release:edma3_lld_rm 
+	$(MAKE) -C $($(subst _generic,,$@)_PATH) PLATFORM=generic CORE=66 PROFILE_66=release ENDIAN=little
+endif
+ 
+edma3_lld_rm_sample:
+ifeq ($(FORMAT),ELF)
+	$(ECHO) \# Making tci6608-sim:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6608-sim CORE=c6xdsp PROFILE_c6xdsp=debug
+	$(ECHO) \# Making tci6616-sim:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6616-sim CORE=c6xdsp PROFILE_c6xdsp=debug
+	$(ECHO) \# Making tci6614-sim:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6614-sim CORE=c6xdsp PROFILE_c6xdsp=debug
+	$(ECHO) \# Making c6657-sim:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=c6657-sim CORE=c6xdsp PROFILE_c6xdsp=debug
+	$(ECHO) \# Making tci6638k2k-sim:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6638k2k-sim CORE=c6xdsp PROFILE_c6xdsp=debug
+	$(ECHO) \# Making c6670-evm:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=c6670-evm CORE=c6xdsp PROFILE_c6xdsp=debug
+	$(ECHO) \# Making c6678-evm:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=c6678-evm CORE=c6xdsp PROFILE_c6xdsp=debug
+	$(ECHO) \# Making tci6614-evm:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6614-evm CORE=c6xdsp PROFILE_c6xdsp=debug
+	$(ECHO) \# Making c6657-evm:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=c6657-evm CORE=c6xdsp PROFILE_c6xdsp=debug
+	$(ECHO) \# Making tci6638k2k-evm:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6638k2k-evm CORE=c6xdsp PROFILE_c6xdsp=debug
+	$(ECHO) \# Making tci6636k2h-evm:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6636k2h-evm CORE=c6xdsp PROFILE_c6xdsp=debug
+
+	$(ECHO) \# Making tci6608-sim:debug:edma3_lld_rm_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6608-sim CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making tci6616-sim:debug:edma3_lld_rm_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6616-sim CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making tci6614-sim:debug:edma3_lld_rm_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6614-sim CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making c6657-sim:debug:edma3_lld_rm_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=c6657-sim CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making tci6638k2k-sim:debug:edma3_lld_rm_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6638k2k-sim CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making c6670-evm:debug:edma3_lld_rm_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=c6670-evm CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making c6678-evm:debug:edma3_lld_rm_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=c6678-evm CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making tci6614-evm:debug:edma3_lld_rm_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6614-evm CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making c6657-evm:debug:edma3_lld_rm_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=c6657-evm CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making tci6638k2k-evm:debug:edma3_lld_rm_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6638k2k-evm CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making tci6636k2h-evm:debug:edma3_lld_rm_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6636k2h-evm CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+
+	$(ECHO) \# Making tci6608-sim:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6608-sim CORE=c6xdsp PROFILE_c6xdsp=release
+	$(ECHO) \# Making tci6616-sim:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6616-sim CORE=c6xdsp PROFILE_c6xdsp=release
+	$(ECHO) \# Making tci6614-sim:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6614-sim CORE=c6xdsp PROFILE_c6xdsp=release
+	$(ECHO) \# Making c6657-sim:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=c6657-sim CORE=c6xdsp PROFILE_c6xdsp=release
+	$(ECHO) \# Making tci6638k2k-sim:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6638k2k-sim CORE=c6xdsp PROFILE_c6xdsp=release
+	$(ECHO) \# Making c6670-evm:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=c6670-evm CORE=c6xdsp PROFILE_c6xdsp=release
+	$(ECHO) \# Making c6678-evm:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=c6678-evm CORE=c6xdsp PROFILE_c6xdsp=release
+	$(ECHO) \# Making tci6614-evm:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6614-evm CORE=c6xdsp PROFILE_c6xdsp=release
+	$(ECHO) \# Making c6657-evm:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=c6657-evm CORE=c6xdsp PROFILE_c6xdsp=release
+	$(ECHO) \# Making tci6638k2k-evm:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6638k2k-evm CORE=c6xdsp PROFILE_c6xdsp=release
+	$(ECHO) \# Making tci6636k2h-evm:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6636k2h-evm CORE=c6xdsp PROFILE_c6xdsp=release
+
+	$(ECHO) \# Making tci6608-sim:debug:edma3_lld_rm_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6608-sim CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making tci6616-sim:debug:edma3_lld_rm_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6616-sim CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making tci6614-sim:debug:edma3_lld_rm_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6614-sim CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making c6657-sim:debug:edma3_lld_rm_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=c6657-sim CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making tci6638k2k-sim:debug:edma3_lld_rm_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6638k2k-sim CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making c6670-evm:debug:edma3_lld_rm_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=c6670-evm CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making c6678-evm:debug:edma3_lld_rm_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=c6678-evm CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making tci6614-evm:debug:edma3_lld_rm_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6614-evm CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making c6657-evm:debug:edma3_lld_rm_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=c6657-evm CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making tci6638k2k-evm:debug:edma3_lld_rm_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6638k2k-evm CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making tci6636k2h-evm:debug:edma3_lld_rm_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6636k2h-evm CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+endif
+
+edma3_lld_drv_sample:
+ifeq ($(FORMAT),ELF)
+	$(ECHO) \# Making tci6608-sim:debug:edma3_lld_drv_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6608-sim CORE=c6xdsp PROFILE_c6xdsp=debug 
+	$(ECHO) \# Making tci6616-sim:debug:edma3_lld_drv_sample
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6616-sim CORE=c6xdsp PROFILE_c6xdsp=debug 
+	$(ECHO) \# Making tci6614-sim:debug:edma3_lld_drv_sample
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6614-sim CORE=c6xdsp PROFILE_c6xdsp=debug 
+	$(ECHO) \# Making c6657-sim:debug:edma3_lld_drv_sample
+	$(MAKE) -C $($@_PATH) PLATFORM=c6657-sim CORE=c6xdsp PROFILE_c6xdsp=debug 
+	$(ECHO) \# Making tci6638k2k-sim:debug:edma3_lld_drv_sample
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6638k2k-sim CORE=c6xdsp PROFILE_c6xdsp=debug 
+	$(ECHO) \# Making c6670-evm:debug:edma3_lld_drv_sample
+	$(MAKE) -C $($@_PATH) PLATFORM=c6670-evm CORE=c6xdsp PROFILE_c6xdsp=debug 
+	$(ECHO) \# Making c6678-evm:debug:edma3_lld_drv_sample
+	$(MAKE) -C $($@_PATH) PLATFORM=c6678-evm CORE=c6xdsp PROFILE_c6xdsp=debug 
+	$(ECHO) \# Making tci6614-evm:debug:edma3_lld_drv_sample
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6614-evm CORE=c6xdsp PROFILE_c6xdsp=debug 
+	$(ECHO) \# Making c6657-evm:debug:edma3_lld_drv_sample
+	$(MAKE) -C $($@_PATH) PLATFORM=c6657-evm CORE=c6xdsp PROFILE_c6xdsp=debug 
+	$(ECHO) \# Making tci6638k2k-evm:debug:edma3_lld_drv_sample
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6638k2k-evm CORE=c6xdsp PROFILE_c6xdsp=debug 
+	$(ECHO) \# Making tci6636k2h-evm:debug:edma3_lld_drv_sample
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6636k2h-evm CORE=c6xdsp PROFILE_c6xdsp=debug 
+
+	$(ECHO) \# Making tci6608-sim:debug:edma3_lld_drv_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6608-sim CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making tci6616-sim:debug:edma3_lld_drv_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6616-sim CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making tci6614-sim:debug:edma3_lld_drv_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6614-sim CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making c6657-sim:debug:edma3_lld_drv_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=c6657-sim CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making tci6638k2k-sim:debug:edma3_lld_drv_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6638k2k-sim CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making c6670-evm:debug:edma3_lld_drv_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=c6670-evm CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making c6678-evm:debug:edma3_lld_drv_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=c6678-evm CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making tci6614-evm:debug:edma3_lld_drv_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6614-evm CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making c6657-evm:debug:edma3_lld_drv_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=c6657-evm CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making tci6638k2k-evm:debug:edma3_lld_drv_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6638k2k-evm CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making tci6636k2h-evm:debug:edma3_lld_drv_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6636k2h-evm CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+
+	$(ECHO) \# Making tci6608-sim:release:edma3_lld_drv_sample
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6608-sim CORE=c6xdsp PROFILE_c6xdsp=release 
+	$(ECHO) \# Making tci6616-sim:release:edma3_lld_drv_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6616-sim CORE=c6xdsp PROFILE_c6xdsp=release 
+	$(ECHO) \# Making tci6614-sim:release:edma3_lld_drv_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6614-sim CORE=c6xdsp PROFILE_c6xdsp=release 
+	$(ECHO) \# Making c6657-sim:release:edma3_lld_drv_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=c6657-sim CORE=c6xdsp PROFILE_c6xdsp=release 
+	$(ECHO) \# Making tci6638k2k-sim:release:edma3_lld_drv_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6638k2k-sim CORE=c6xdsp PROFILE_c6xdsp=release 
+	$(ECHO) \# Making c6670-evm:release:edma3_lld_drv_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=c6670-evm CORE=c6xdsp PROFILE_c6xdsp=release 
+	$(ECHO) \# Making c6678-evm:release:edma3_lld_drv_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=c6678-evm CORE=c6xdsp PROFILE_c6xdsp=release 
+	$(ECHO) \# Making tci6614-evm:release:edma3_lld_drv_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6614-evm CORE=c6xdsp PROFILE_c6xdsp=release 
+	$(ECHO) \# Making c6657-evm:release:edma3_lld_drv_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=c6657-evm CORE=c6xdsp PROFILE_c6xdsp=release 
+	$(ECHO) \# Making tci6638k2k-evm:release:edma3_lld_drv_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6638k2k-evm CORE=c6xdsp PROFILE_c6xdsp=release 
+	$(ECHO) \# Making tci6636k2h-evm:release:edma3_lld_drv_sample 
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6636k2h-evm CORE=c6xdsp PROFILE_c6xdsp=release 
+
+	$(ECHO) \# Making tci6608-sim:release:edma3_lld_drv_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6608-sim CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making tci6616-sim:release:edma3_lld_drv_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6616-sim CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making tci6614-sim:release:edma3_lld_drv_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6614-sim CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making c6657-sim:release:edma3_lld_drv_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=c6657-sim CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making tci6638k2k-sim:release:edma3_lld_drv_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6638k2k-sim CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making c6670-evm:release:edma3_lld_drv_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=c6670-evm CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making c6678-evm:release:edma3_lld_drv_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=c6678-evm CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making tci6614-evm:release:edma3_lld_drv_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6614-evm CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making c6657-evm:release:edma3_lld_drv_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=c6657-evm CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making tci6638k2k-evm:release:edma3_lld_drv_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6638k2k-evm CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making tci6636k2h-evm:release:edma3_lld_drv_sample -for big_endian
+	$(MAKE) -C $($@_PATH) PLATFORM=tci6636k2h-evm CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+endif
+
+#
+# Rule to build all examples
+#
+
+ 
+edma3_drv_tci6608_sample:
+ifeq ($(FORMAT),ELF)
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=tci6608-sim CORE=c6xdsp PROFILE_c6xdsp=debug
+	$(ECHO) \# Making example $@:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=tci6608-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=tci6608-sim CORE=c6xdsp PROFILE_c6xdsp=release
+	$(ECHO) \# Making example $@:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=tci6608-sim PROFILE_c6xdsp=release
+endif
+ 
+edma3_drv_tci6608be_sample:
+ifeq ($(FORMAT),ELF)
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=tci6608-sim CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making example $@:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=tci6608-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=tci6608-sim CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making example $@:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=tci6608-sim PROFILE_c6xdsp=release ENDIAN=big
+endif
+
+edma3_drv_tci6616_sample:
+ifeq ($(FORMAT),ELF)
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=tci6616-sim CORE=c6xdsp PROFILE_c6xdsp=debug
+	$(ECHO) \# Making example $@:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=tci6616-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=tci6616-sim CORE=c6xdsp PROFILE_c6xdsp=release
+	$(ECHO) \# Making example $@:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=tci6616-sim PROFILE_c6xdsp=release
+endif
+ 
+edma3_drv_tci6616be_sample:
+ifeq ($(FORMAT),ELF)
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=tci6616-sim CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making example $@:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=tci6616-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=tci6616-sim CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making example $@:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=tci6616-sim PROFILE_c6xdsp=release ENDIAN=big
+endif
+
+edma3_drv_SIMtci6614_sample:
+ifeq ($(FORMAT),ELF)
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=tci6614-sim CORE=c6xdsp PROFILE_c6xdsp=debug
+	$(ECHO) \# Making example $@:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=tci6614-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=tci6614-sim CORE=c6xdsp PROFILE_c6xdsp=release
+	$(ECHO) \# Making example $@:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=tci6614-sim PROFILE_c6xdsp=release
+endif
+ 
+edma3_drv_SIMtci6614be_sample:
+ifeq ($(FORMAT),ELF)
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=tci6614-sim CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making example $@:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=tci6614-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=tci6614-sim CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making example $@:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=tci6614-sim PROFILE_c6xdsp=release ENDIAN=big
+endif
+
+edma3_drv_SIMc6657_sample:
+ifeq ($(FORMAT),ELF)
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=c6657-sim CORE=c6xdsp PROFILE_c6xdsp=debug
+	$(ECHO) \# Making example $@:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=c6657-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=c6657-sim CORE=c6xdsp PROFILE_c6xdsp=release
+	$(ECHO) \# Making example $@:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=c6657-sim PROFILE_c6xdsp=release
+endif
+ 
+edma3_drv_SIMc6657be_sample:
+ifeq ($(FORMAT),ELF)
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=c6657-sim CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making example $@:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=c6657-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=c6657-sim CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making example $@:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=c6657-sim PROFILE_c6xdsp=release ENDIAN=big
+endif
+
+edma3_drv_SIMtci6638k2k_sample:
+ifeq ($(FORMAT),ELF)
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=tci6638k2k-sim CORE=c6xdsp PROFILE_c6xdsp=debug
+	$(ECHO) \# Making example $@:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=tci6638k2k-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=tci6638k2k-sim CORE=c6xdsp PROFILE_c6xdsp=release
+	$(ECHO) \# Making example $@:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=tci6638k2k-sim PROFILE_c6xdsp=release
+endif
+ 
+edma3_drv_SIMtci6638k2kbe_sample:
+ifeq ($(FORMAT),ELF)
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=tci6638k2k-sim CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making example $@:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=tci6638k2k-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=tci6638k2k-sim CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making example $@:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=tci6638k2k-sim PROFILE_c6xdsp=release ENDIAN=big
+endif
+
+edma3_drv_c6670_sample:
+ifeq ($(FORMAT),ELF)
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=c6670-evm CORE=c6xdsp PROFILE_c6xdsp=debug
+	$(ECHO) \# Making example $@:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=c6670-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=c6670-evm CORE=c6xdsp PROFILE_c6xdsp=release
+	$(ECHO) \# Making example $@:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=c6670-evm PROFILE_c6xdsp=release
+endif
+
+edma3_drv_c6670be_sample:
+ifeq ($(FORMAT),ELF)
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=c6670-evm CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making example $@:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=c6670-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=c6670-evm CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making example $@:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=c6670-evm PROFILE_c6xdsp=release ENDIAN=big
+endif
+ 
+edma3_drv_c6678_sample:
+ifeq ($(FORMAT),ELF)
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=c6678-evm CORE=c6xdsp PROFILE_c6xdsp=debug
+	$(ECHO) \# Making example $@:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=c6678-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=c6678-evm CORE=c6xdsp PROFILE_c6xdsp=release
+	$(ECHO) \# Making example $@:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=c6678-evm PROFILE_c6xdsp=release
+endif
+ 
+edma3_drv_c6678be_sample:
+ifeq ($(FORMAT),ELF)
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=c6678-evm CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making example $@:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=c6678-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=c6678-evm CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making example $@:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=c6678-evm PROFILE_c6xdsp=release ENDIAN=big
+endif
+
+edma3_drv_EVMtci6614_sample:
+ifeq ($(FORMAT),ELF)
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=tci6614-evm CORE=c6xdsp PROFILE_c6xdsp=debug
+	$(ECHO) \# Making example $@:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=tci6614-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=tci6614-evm CORE=c6xdsp PROFILE_c6xdsp=release
+	$(ECHO) \# Making example $@:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=tci6614-evm PROFILE_c6xdsp=release
+endif
+ 
+edma3_drv_EVMtci6614be_sample:
+ifeq ($(FORMAT),ELF)
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=tci6614-evm CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making example $@:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=tci6614-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=tci6614-evm CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making example $@:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=tci6614-evm PROFILE_c6xdsp=release ENDIAN=big
+endif
+
+edma3_drv_EVM6657_sample:
+ifeq ($(FORMAT),ELF)
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=c6657-evm CORE=c6xdsp PROFILE_c6xdsp=debug
+	$(ECHO) \# Making example $@:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=c6657-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=c6657-evm CORE=c6xdsp PROFILE_c6xdsp=release
+	$(ECHO) \# Making example $@:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=c6657-evm PROFILE_c6xdsp=release
+endif
+ 
+edma3_drv_EVM6657be_sample:
+ifeq ($(FORMAT),ELF)
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=c6657-evm CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making example $@:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=c6657-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=c6657-evm CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making example $@:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=c6657-evm PROFILE_c6xdsp=release ENDIAN=big
+endif
+
+edma3_drv_EVMtci6638k2k_sample:
+ifeq ($(FORMAT),ELF)
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=tci6638k2k-evm CORE=c6xdsp PROFILE_c6xdsp=debug
+	$(ECHO) \# Making example $@:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=tci6638k2k-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=tci6638k2k-evm CORE=c6xdsp PROFILE_c6xdsp=release
+	$(ECHO) \# Making example $@:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=tci6638k2k-evm PROFILE_c6xdsp=release
+endif
+ 
+edma3_drv_EVMtci6638k2kbe_sample:
+ifeq ($(FORMAT),ELF)
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=tci6638k2k-evm CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making example $@:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=tci6638k2k-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=tci6638k2k-evm CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making example $@:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=tci6638k2k-evm PROFILE_c6xdsp=release ENDIAN=big
+endif
+
+edma3_drv_EVMtci6636k2h_sample:
+ifeq ($(FORMAT),ELF)
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=tci6636k2h-evm CORE=c6xdsp PROFILE_c6xdsp=debug
+	$(ECHO) \# Making example $@:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=tci6636k2h-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=tci6636k2h-evm CORE=c6xdsp PROFILE_c6xdsp=release
+	$(ECHO) \# Making example $@:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=tci6636k2h-evm PROFILE_c6xdsp=release
+endif
+ 
+edma3_drv_EVMtci6636k2hbe_sample:
+ifeq ($(FORMAT),ELF)
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=tci6636k2h-evm CORE=c6xdsp PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Making example $@:debug
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=tci6636k2h-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Configuring XDC packages for $@:c6xdsp:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) xdc_configuro PLATFORM=tci6636k2h-evm CORE=c6xdsp PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Making example $@:release
+	$(MAKE) -C $($@_EXAMPLES_PATH) PLATFORM=tci6636k2h-evm PROFILE_c6xdsp=release ENDIAN=big
+endif
+
+
+# Clean targets
+
+edma3_lld_drv_clean:
+	$(ECHO) \# Cleaning c66:debug:edma3_lld_drv
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6608-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning c66:release:edma3_lld_drv
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6608-sim PROFILE_c6xdsp=release
+	$(ECHO) \# Cleaning c66:debug:edma3_lld_drv -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6608-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning c66:release:edma3_lld_drv -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6608-sim PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning c66:debug:edma3_lld_drv
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6616-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning c66:release:edma3_lld_drv
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6616-sim PROFILE_c6xdsp=release
+	$(ECHO) \# Cleaning c66:debug:edma3_lld_drv -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6616-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning c66:release:edma3_lld_drv -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6616-sim PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning c66:debug:edma3_lld_drv
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6614-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning c66:release:edma3_lld_drv
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6614-sim PROFILE_c6xdsp=release
+	$(ECHO) \# Cleaning c66:debug:edma3_lld_drv -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6614-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning c66:release:edma3_lld_drv -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6614-sim PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning c66:debug:edma3_lld_drv
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6657-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning c66:release:edma3_lld_drv
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6657-sim PROFILE_c6xdsp=release
+	$(ECHO) \# Cleaning c66:debug:edma3_lld_drv -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6657-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning c66:release:edma3_lld_drv -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6657-sim PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning c66:debug:edma3_lld_drv
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6638k2k-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning c66:release:edma3_lld_drv
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6638k2k-sim PROFILE_c6xdsp=release
+	$(ECHO) \# Cleaning c66:debug:edma3_lld_drv -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6638k2k-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning c66:release:edma3_lld_drv -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6638k2k-sim PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning c66:debug:edma3_lld_drv
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6670-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning c66:release:edma3_lld_drv
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6670-evm PROFILE_c6xdsp=release
+	$(ECHO) \# Cleaning c66:debug:edma3_lld_drv -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6670-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning c66:release:edma3_lld_drv -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6670-evm PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning c66:debug:edma3_lld_drv
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6678-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning c66:release:edma3_lld_drv
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6678-evm PROFILE_c6xdsp=release
+	$(ECHO) \# Cleaning c66:debug:edma3_lld_drv -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6678-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning c66:release:edma3_lld_drv -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6678-evm PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning c66:debug:edma3_lld_drv
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6614-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning c66:release:edma3_lld_drv
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6614-evm PROFILE_c6xdsp=release
+	$(ECHO) \# Cleaning c66:debug:edma3_lld_drv -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6614-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning c66:release:edma3_lld_drv -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6614-evm PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning c66:debug:edma3_lld_drv
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6657-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning c66:release:edma3_lld_drv
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6657-evm PROFILE_c6xdsp=release
+	$(ECHO) \# Cleaning c66:debug:edma3_lld_drv -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6657-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning c66:release:edma3_lld_drv -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6657-evm PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning c66:debug:edma3_lld_drv
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6638k2k-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning c66:release:edma3_lld_drv
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6638k2k-evm PROFILE_c6xdsp=release
+	$(ECHO) \# Cleaning c66:debug:edma3_lld_drv -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6638k2k-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning c66:release:edma3_lld_drv -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6638k2k-evm PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning c66:debug:edma3_lld_drv
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6636k2h-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning c66:release:edma3_lld_drv
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6636k2h-evm PROFILE_c6xdsp=release
+	$(ECHO) \# Cleaning c66:debug:edma3_lld_drv -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6636k2h-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning c66:release:edma3_lld_drv -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6636k2h-evm PROFILE_c6xdsp=release ENDIAN=big
+
+edma3_lld_rm_clean: edma3_lld_rm_generic_clean
+	$(ECHO) \# Cleaning tci6608-sim:debug:edma3_lld_rm 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6608-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning tci6616-sim:debug:edma3_lld_rm 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6616-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning tci6614-sim:debug:edma3_lld_rm 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6614-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning c6657-sim:debug:edma3_lld_rm 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6657-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning tci6638k2k-sim:debug:edma3_lld_rm 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6638k2k-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning c6670-evm:debug:edma3_lld_rm 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6670-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning c6678-evm:debug:edma3_lld_rm 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6678-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning tci6614-evm:debug:edma3_lld_rm 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6614-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning c6657-evm:debug:edma3_lld_rm 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6657-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning tci6638k2k-evm:debug:edma3_lld_rm 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6638k2k-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning tci6636k2h-evm:debug:edma3_lld_rm 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6636k2h-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning tci6608-sim:debug:edma3_lld_rm  -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6608-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning tci6616-sim:debug:edma3_lld_rm   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6616-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning tci6614-sim:debug:edma3_lld_rm   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6614-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning c6657-sim:debug:edma3_lld_rm   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6657-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning tci6638k2k-sim:debug:edma3_lld_rm   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6638k2k-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning c6670-evm:debug:edma3_lld_rm   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6670-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning c6678-evm:debug:edma3_lld_rm   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6678-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning tci6614-evm:debug:edma3_lld_rm   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6614-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning c6657-evm:debug:edma3_lld_rm   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6657-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning tci6638k2k-evm:debug:edma3_lld_rm   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6638k2k-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning tci6636k2h-evm:debug:edma3_lld_rm   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6636k2h-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning tci6608-sim:release:edma3_lld_rm 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6608-sim PROFILE_c6xdsp=release
+	$(ECHO) \# Cleaning tci6616-sim:release:edma3_lld_rm 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6616-sim PROFILE_c6xdsp=release
+	$(ECHO) \# Cleaning tci6614-sim:release:edma3_lld_rm 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6614-sim PROFILE_c6xdsp=release
+	$(ECHO) \# Cleaning c6657-sim:release:edma3_lld_rm 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6657-sim PROFILE_c6xdsp=release
+	$(ECHO) \# Cleaning tci6638k2k-sim:release:edma3_lld_rm 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6638k2k-sim PROFILE_c6xdsp=release
+	$(ECHO) \# Cleaning c6670-evm:release:edma3_lld_rm 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6670-evm PROFILE_c6xdsp=release
+	$(ECHO) \# Cleaning c6678-evm:release:edma3_lld_rm 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6678-evm PROFILE_c6xdsp=release
+	$(ECHO) \# Cleaning tci6614-evm:release:edma3_lld_rm 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6614-evm PROFILE_c6xdsp=release
+	$(ECHO) \# Cleaning c6657-evm:release:edma3_lld_rm 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6657-evm PROFILE_c6xdsp=release
+	$(ECHO) \# Cleaning tci6638k2k-evm:release:edma3_lld_rm 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6638k2k-evm PROFILE_c6xdsp=release
+	$(ECHO) \# Cleaning tci6636k2h-evm:release:edma3_lld_rm 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6636k2h-evm PROFILE_c6xdsp=release
+
+	$(ECHO) \# Cleaning tci6608-sim:release:edma3_lld_rm  -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6608-sim PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning tci6616-sim:release:edma3_lld_rm   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6616-sim PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning tci6614-sim:release:edma3_lld_rm   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6614-sim PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning c6657-sim:release:edma3_lld_rm   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6657-sim PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning tci6638k2k-sim:release:edma3_lld_rm   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6638k2k-sim PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning c6670-evm:release:edma3_lld_rm   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6670-evm PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning c6678-evm:release:edma3_lld_rm   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6678-evm PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning tci6614-evm:release:edma3_lld_rm   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6614-evm PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning c6657-evm:release:edma3_lld_rm   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6657-evm PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning tci6638k2k-evm:release:edma3_lld_rm   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6638k2k-evm PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning tci6636k2h-evm:release:edma3_lld_rm   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6636k2h-evm PROFILE_c6xdsp=release ENDIAN=big
+
+# Generic platform
+edma3_lld_rm_generic_clean:
+
+	$(ECHO) \# Cleaning generic/c66:debug:edma3_lld_rm: -for big_endian
+	$(MAKE) -C $($(subst _generic_clean,,$@)_PATH) PLATFORM=generic CORE=66 PROFILE_66=debug ENDIAN=big
+	$(ECHO) \# Cleaning generic/c66:release:edma3_lld_rm: -for big_endian
+	$(MAKE) -C $($(subst _generic_clean,,$@)_PATH) PLATFORM=generic CORE=66 PROFILE_66=release ENDIAN=big
+	$(ECHO) \# Cleaning generic/c66:debug:edma3_lld_rm 
+	$(MAKE) -C $($(subst _generic_clean,,$@)_PATH) PLATFORM=generic CORE=66 PROFILE_66=debug ENDIAN=little
+	$(ECHO) \# Cleaning generic/c66:release:edma3_lld_rm 
+	$(MAKE) -C $($(subst _generic_clean,,$@)_PATH) PLATFORM=generic CORE=66 PROFILE_66=release ENDIAN=little
+   
+edma3_lld_rm_sample_clean:
+	$(ECHO) \# Cleaning tci6608-sim:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6608-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning tci6616-sim:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6616-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning tci6614-sim:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6614-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning c6657-sim:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6657-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning tci6638k2k-sim:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6638k2k-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning c6670-evm:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6670-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning c6678-evm:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6678-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning tci6614-evm:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6614-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning c6657-evm:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6657-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning tci6638k2k-evm:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6638k2k-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning tci6636k2h-evm:debug:edma3_lld_rm_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6636k2h-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning tci6608-sim:release:edma3_lld_rm_sample  -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6608-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning tci6616-sim:debug:edma3_lld_rm_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6616-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning tci6614-sim:debug:edma3_lld_rm_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6614-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning c6657-sim:debug:edma3_lld_rm_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6657-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning tci6638k2k-sim:debug:edma3_lld_rm_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6638k2k-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning c6670-evm:debug:edma3_lld_rm_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6670-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning c6678-evm:debug:edma3_lld_rm_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6678-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning tci6614-evm:debug:edma3_lld_rm_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6614-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning c6657-evm:debug:edma3_lld_rm_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6657-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning tci6638k2k-evm:debug:edma3_lld_rm_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6638k2k-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning tci6636k2h-evm:debug:edma3_lld_rm_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6636k2h-evm PROFILE_c6xdsp=debug ENDIAN=big
+
+	$(ECHO) \# Cleaning tci6608-sim:release:edma3_lld_rm_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6608-sim PROFILE_c6xdsp=release
+	$(ECHO) \# Cleaning tci6616-sim:release:edma3_lld_rm_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6616-sim PROFILE_c6xdsp=release
+	$(ECHO) \# Cleaning tci6614-sim:release:edma3_lld_rm_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6614-sim PROFILE_c6xdsp=release
+	$(ECHO) \# Cleaning c6657-sim:release:edma3_lld_rm_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6657-sim PROFILE_c6xdsp=release
+	$(ECHO) \# Cleaning tci6638k2k-sim:release:edma3_lld_rm_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6638k2k-sim PROFILE_c6xdsp=release
+	$(ECHO) \# Cleaning c6670-evm:release:edma3_lld_rm_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6670-evm PROFILE_c6xdsp=release
+	$(ECHO) \# Cleaning c6678-evm:release:edma3_lld_rm_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6678-evm PROFILE_c6xdsp=release
+	$(ECHO) \# Cleaning tci6614-evm:release:edma3_lld_rm_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6614-evm PROFILE_c6xdsp=release
+	$(ECHO) \# Cleaning c6657-evm:release:edma3_lld_rm_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6657-evm PROFILE_c6xdsp=release
+	$(ECHO) \# Cleaning tci6638k2k-evm:release:edma3_lld_rm_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6638k2k-evm PROFILE_c6xdsp=release
+	$(ECHO) \# Cleaning tci6636k2h-evm:release:edma3_lld_rm_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6636k2h-evm PROFILE_c6xdsp=release
+	$(ECHO) \# Cleaning tci6608-sim:release:edma3_lld_rm_sample  -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6608-sim PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning tci6616-sim:debug:edma3_lld_rm_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6616-sim PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning tci6614-sim:debug:edma3_lld_rm_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6614-sim PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning c6657-sim:debug:edma3_lld_rm_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6657-sim PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning tci6638k2k-sim:debug:edma3_lld_rm_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6638k2k-sim PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning c6670-evm:debug:edma3_lld_rm_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6670-evm PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning c6678-evm:debug:edma3_lld_rm_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6678-evm PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning tci6614-evm:debug:edma3_lld_rm_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6614-evm PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning c6657-evm:debug:edma3_lld_rm_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6657-evm PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning tci6638k2k-evm:debug:edma3_lld_rm_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6638k2k-evm PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning tci6636k2h-evm:debug:edma3_lld_rm_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6636k2h-evm PROFILE_c6xdsp=release ENDIAN=big
+ 
+edma3_lld_drv_sample_clean:
+	$(ECHO) \# Cleaning tci6608-sim:debug:edma3_lld_drv_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6608-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning tci6616-sim:debug:edma3_lld_drv_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6616-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning tci6614-sim:debug:edma3_lld_drv_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6614-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning c6657-sim:debug:edma3_lld_drv_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6657-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning tci6638k2k-sim:debug:edma3_lld_drv_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6638k2k-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning c6670-evm:debug:edma3_lld_drv_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6670-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning c6678-evm:debug:edma3_lld_drv_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6678-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning tci6614-evm:debug:edma3_lld_drv_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6614-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning c6657-evm:debug:edma3_lld_drv_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6657-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning tci6638k2k-evm:debug:edma3_lld_drv_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6638k2k-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning tci6636k2h-evm:debug:edma3_lld_drv_sample 
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6636k2h-evm PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning tci6608-sim:debug:edma3_lld_drv_sample  -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6608-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning tci6616-sim:debug:edma3_lld_drv_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6616-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning tci6614-sim:debug:edma3_lld_drv_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6614-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning c6657-sim:debug:edma3_lld_drv_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6657-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning tci6638k2k-sim:debug:edma3_lld_drv_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6638k2k-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning c6670-evm:debug:edma3_lld_drv_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6670-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning c6678-evm:debug:edma3_lld_drv_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6678-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning tci6614-evm:debug:edma3_lld_drv_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6614-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning c6657-evm:debug:edma3_lld_drv_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6657-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning tci6638k2k-evm:debug:edma3_lld_drv_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6638k2k-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning tci6636k2h-evm:debug:edma3_lld_drv_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6636k2h-evm PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning tci6608-sim:release:edma3_lld_drv_sample  
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6608-sim PROFILE_c6xdsp=release 
+	$(ECHO) \# Cleaning tci6616-sim:release:edma3_lld_drv_sample  
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6616-sim PROFILE_c6xdsp=release 
+	$(ECHO) \# Cleaning tci6614-sim:release:edma3_lld_drv_sample  
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6614-sim PROFILE_c6xdsp=release 
+	$(ECHO) \# Cleaning c6657-sim:release:edma3_lld_drv_sample  
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6657-sim PROFILE_c6xdsp=release 
+	$(ECHO) \# Cleaning tci6638k2k-sim:release:edma3_lld_drv_sample  
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6638k2k-sim PROFILE_c6xdsp=release 
+	$(ECHO) \# Cleaning c6670-evm:release:edma3_lld_drv_sample   
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6670-evm PROFILE_c6xdsp=release 
+	$(ECHO) \# Cleaning c6678-evm:release:edma3_lld_drv_sample   
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6678-evm PROFILE_c6xdsp=release 
+	$(ECHO) \# Cleaning tci6614-evm:release:edma3_lld_drv_sample   
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6614-evm PROFILE_c6xdsp=release 
+	$(ECHO) \# Cleaning c6657-evm:release:edma3_lld_drv_sample   
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6657-evm PROFILE_c6xdsp=release 
+	$(ECHO) \# Cleaning tci6638k2k-evm:release:edma3_lld_drv_sample   
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6638k2k-evm PROFILE_c6xdsp=release 
+	$(ECHO) \# Cleaning tci6636k2h-evm:release:edma3_lld_drv_sample   
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6636k2h-evm PROFILE_c6xdsp=release 
+
+	$(ECHO) \# Cleaning tci6608-sim:release:edma3_lld_drv_sample  -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6608-sim PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning tci6616-sim:release:edma3_lld_drv_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6616-sim PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning tci6614-sim:release:edma3_lld_drv_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6614-sim PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning c6657-sim:release:edma3_lld_drv_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6657-sim PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning tci6638k2k-sim:release:edma3_lld_drv_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6638k2k-sim PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning c6670-evm:release:edma3_lld_drv_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6670-evm PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning c6678-evm:release:edma3_lld_drv_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6678-evm PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning tci6614-evm:release:edma3_lld_drv_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6614-evm PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning c6657-evm:release:edma3_lld_drv_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=c6657-evm PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning tci6638k2k-evm:release:edma3_lld_drv_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6638k2k-evm PROFILE_c6xdsp=release ENDIAN=big
+	$(ECHO) \# Cleaning tci6636k2h-evm:release:edma3_lld_drv_sample   -for big_endian
+	$(MAKE) -C $($(subst _clean,,$@)_PATH) clean PLATFORM=tci6636k2h-evm PROFILE_c6xdsp=release ENDIAN=big
+
+
+#
+# Rule to clean all examples
+#
+
+ 
+edma3_drv_tci6608_sample_clean:
+	$(ECHO) \# Cleaning example $@:debug
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=tci6608-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning example $@:release
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=tci6608-sim PROFILE_c6xdsp=release
+ 
+edma3_drv_tci6608be_sample_clean:
+	$(ECHO) \# Cleaning example $@:debug
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=tci6608-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning example $@:release
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=tci6608-sim PROFILE_c6xdsp=release ENDIAN=big
+
+edma3_drv_tci6616_sample_clean:
+	$(ECHO) \# Cleaning example $@:debug
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=tci6616-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning example $@:release
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=tci6616-sim PROFILE_c6xdsp=release
+ 
+edma3_drv_tci6616be_sample_clean:
+	$(ECHO) \# Cleaning example $@:debug
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=tci6616-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning example $@:release
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=tci6616-sim PROFILE_c6xdsp=release ENDIAN=big
+
+edma3_drv_SIMtci6614_sample_clean:
+	$(ECHO) \# Cleaning example $@:debug
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=tci6614-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning example $@:release
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=tci6614-sim PROFILE_c6xdsp=release
+ 
+edma3_drv_SIMtci6614be_sample_clean:
+	$(ECHO) \# Cleaning example $@:debug
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=tci6614-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning example $@:release
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=tci6614-sim PROFILE_c6xdsp=release ENDIAN=big
+
+edma3_drv_SIMc6657_sample_clean:
+	$(ECHO) \# Cleaning example $@:debug
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=c6657-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning example $@:release
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=c6657-sim PROFILE_c6xdsp=release
+ 
+edma3_drv_SIMc6657be_sample_clean:
+	$(ECHO) \# Cleaning example $@:debug
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=c6657-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning example $@:release
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=c6657-sim PROFILE_c6xdsp=release ENDIAN=big
+
+edma3_drv_SIMtci6638k2k_sample_clean:
+	$(ECHO) \# Cleaning example $@:debug
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=tci6638k2k-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning example $@:release
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=tci6638k2k-sim PROFILE_c6xdsp=release
+ 
+edma3_drv_SIMtci6638k2kbe_sample_clean:
+	$(ECHO) \# Cleaning example $@:debug
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=tci6638k2k-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning example $@:release
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=tci6638k2k-sim PROFILE_c6xdsp=release ENDIAN=big
+
+edma3_drv_c6670_sample_clean:
+	$(ECHO) \# Cleaning example $@:debug
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=c6670-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning example $@:release
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=c6670-sim PROFILE_c6xdsp=release
+ 
+edma3_drv_c6670be_sample_clean:
+	$(ECHO) \# Cleaning example $@:debug
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=c6670-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning example $@:release
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=c6670-sim PROFILE_c6xdsp=release ENDIAN=big
+
+edma3_drv_c6678_sample_clean:
+	$(ECHO) \# Cleaning example $@:debug
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=c6678-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning example $@:release
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=c6678-sim PROFILE_c6xdsp=release
+ 
+edma3_drv_c6678be_sample_clean:
+	$(ECHO) \# Cleaning example $@:debug
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=c6678-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning example $@:release
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=c6678-sim PROFILE_c6xdsp=release ENDIAN=big
+
+edma3_drv_EVMtci6614_sample_clean:
+	$(ECHO) \# Cleaning example $@:debug
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=tci6614-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning example $@:release
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=tci6614-sim PROFILE_c6xdsp=release
+ 
+edma3_drv_EVMtci6614be_sample_clean:
+	$(ECHO) \# Cleaning example $@:debug
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=tci6614-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning example $@:release
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=tci6614-sim PROFILE_c6xdsp=release ENDIAN=big
+
+edma3_drv_EVM6657_sample_clean:
+	$(ECHO) \# Cleaning example $@:debug
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=c6657-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning example $@:release
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=c6657-sim PROFILE_c6xdsp=release
+ 
+edma3_drv_EVM6657be_sample_clean:
+	$(ECHO) \# Cleaning example $@:debug
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=c6657-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning example $@:release
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=c6657-sim PROFILE_c6xdsp=release ENDIAN=big
+
+edma3_drv_EVMtci6638k2k_sample_clean:
+	$(ECHO) \# Cleaning example $@:debug
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=tci6638k2k-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning example $@:release
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=tci6638k2k-sim PROFILE_c6xdsp=release
+
+edma3_drv_EVMtci6638k2kbe_sample_clean:
+	$(ECHO) \# Cleaning example $@:debug
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=tci6638k2k-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning example $@:release
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=tci6638k2k-sim PROFILE_c6xdsp=release ENDIAN=big
+
+edma3_drv_EVMtci6636k2h_sample_clean:
+	$(ECHO) \# Cleaning example $@:debug
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=tci6636k2h-sim PROFILE_c6xdsp=debug
+	$(ECHO) \# Cleaning example $@:release
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=tci6636k2h-sim PROFILE_c6xdsp=release
+
+edma3_drv_EVMtci6636k2hbe_sample_clean:
+	$(ECHO) \# Cleaning example $@:debug
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=tci6636k2h-sim PROFILE_c6xdsp=debug ENDIAN=big
+	$(ECHO) \# Cleaning example $@:release
+	$(MAKE) -C $($(subst _clean,,$@)_EXAMPLES_PATH) clean  PLATFORM=tci6636k2h-sim PROFILE_c6xdsp=release ENDIAN=big
+    
+# Help
+help:
+	$(ECHO) EDMA3 LLD Driver Help page
+	$(ECHO) To build libraries and examples:
+	$(ECHO) "Command line: make [all\|libs\|examples] [FORMAT=\{ELF\|COFF\}]"
+	$(ECHO) "	Default target is "all", which builds both libraries and examples"
+	$(ECHO) "	Default FORMAT is specified in makerules/build_config.mk. This can be"
+	$(ECHO) "	 overridden by specifying a different FORMAT here."
+	$(ECHO) To clean the build files:
+	$(ECHO) "Command line: make \{clean\|cleanall\}"
+
+
+# Nothing beyond this point

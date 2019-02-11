@@ -1,0 +1,36 @@
+digraph chains_lvdsVipSingleStereoAutoCalib {
+
+       ColorScheme [shape=none, margin=0, label=<
+       <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+       <TR><TD bgcolor="lightblue">IPU1_0</TD></TR>
+       <TR><TD bgcolor="palegreen">DSP1</TD></TR>
+       </TABLE>>];
+
+       /************** LINKS ************************/
+       Capture [color=lightblue, style=filled]
+       VPE_capture [color=lightblue, style=filled]
+       Dup_Capture [color=lightblue, style=filled]
+       VPE_org [color=lightblue, style=filled]
+       Sync_org [color=lightblue, style=filled]
+       Alg_DmaSwMs [color=lightblue, style=filled]
+       Display_org [color=lightblue, style=filled]
+       Sync_ar [color=lightblue, style=filled]
+       IPCOut_IPU1_0_DSP1_0 [color=lightblue, style=filled]
+       IPCIn_DSP1_IPU1_0_0 [color=palegreen, style=filled]
+       Alg_AutoRemap [color=palegreen, style=filled]
+       GrpxSrc [color=lightblue, style=filled]
+       Display_Grpx [color=lightblue, style=filled]
+
+       /************** CONNECTIONS ************************/
+       Dup_Capture -> Sync_ar[taillabel=Q0, minlen=2, labeldistance=3]
+       Dup_Capture -> VPE_org[taillabel=Q1, minlen=2, labeldistance=3]
+       VPE_capture -> Dup_Capture
+       Capture -> VPE_capture
+       Sync_ar -> IPCOut_IPU1_0_DSP1_0
+       Alg_DmaSwMs -> Display_org
+       Sync_org -> Alg_DmaSwMs
+       VPE_org -> Sync_org
+       GrpxSrc -> Display_Grpx
+       IPCOut_IPU1_0_DSP1_0 -> IPCIn_DSP1_IPU1_0_0
+       IPCIn_DSP1_IPU1_0_0 -> Alg_AutoRemap
+}

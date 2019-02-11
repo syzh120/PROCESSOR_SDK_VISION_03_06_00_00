@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<gep name="DhcpServer" title="DHCP Server Settings" version="1">
+
+<page name="Module" title="Module Settings">
+<html><body><table>
+  <tr>
+    <td>
+      <form>
+        <p>The DhcpServer module allows you to configure and create a DHCP server in your application.  To create a DHCP server, add a new DhcpServer instance to your configuration.</p>
+        <p></p> <!-- create some white space -->
+      </form>
+    </td>
+  </tr>
+  <tr>
+    <td><control type="checkbox" label="Add the DHCP server module to my configuration" value="value:this.$used" bold="true"/></td>
+  </tr>
+</table></body></html>
+</page>
+
+<page name="Instance" title="Instance Settings" DPI="10">
+<html><body><table>
+  <!-- instance box section -->
+  <tr>
+    <td>
+      <h1>DHCP Servers</h1>
+
+      <table><tr>
+        <td><control type="listbox" id="master" width="10" height="15" align="fill" labels="value:this"/></td>
+        <td>
+          <control type="pushbutton" label="Add ..." align="fill" link="action:New"/>
+		  <control type="pushbutton" label="Remove" align="fill" link="action:Delete" context="value:widget.master.selection"/>
+        </td>
+      </tr></table>
+
+    </td>
+
+      <td context="value:widget.master.selection">
+        <h1>Parameters</h1>
+        <table>
+              <!-- Row 1 (contains 1 columns) -->
+                    <tr>
+                      <td><control type="label" label="Basic Settings" align="left" bold="true"/></td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <control type="label"
+                                label="Server interface ID"
+                                align="left"/>
+                      </td>
+
+                      <td>
+                        <control type="editbox" 
+                                value="value:this.ifIdx"
+                                tooltip="value:this.ifIdx.$summary"/>
+                      </td>
+                    </tr>
+
+                    <tr><td colspan="2">
+                      <control type="checkbox" label="Supply local DNS server to clients" value="value:this.localDNS" tooltip="value:this.DHCPS_FLG_LOCALDNS.$summary" bold="false"/></td>
+                    </tr>
+                    <tr><td colspan="2">
+                      <control type="checkbox" label="Supply local domain name to clients" value="value:this.localDomain" tooltip="value:this.DHCPS_FLG_LOCALDOMAIN.$summary" bold="false"/></td>
+                    </tr>
+              <!-- End Row 1 -->
+
+              <!-- Row 2 (contains 2 columns) -->
+                    <tr>
+                      <td>
+                        <form>
+                          <p></p> <!-- create some white space -->
+                        </form>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><control type="label" label="Address Settings" align="left" bold="true"/></td>
+                    </tr>
+
+                    <tr>
+                      <td>
+                        <control type="label"
+                               label="Address pool base"
+                               align="left"/>
+                      </td>
+                      <td>
+                        <control type="editbox" 
+                                value="value:this.ipAddrPoolBase"
+                                tooltip="value:this.ipAddrPoolBase.$summary"/>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td>
+                        <control type="label"
+                               label="Number of addresses in IP address pool"
+                               align="left"/>
+                      </td>
+                      <td>
+                        <control type="editbox" 
+                                value="value:this.ipAddrPoolCount"
+                                tooltip="value:this.ipAddrPoolCount.$summary"/>
+                      </td>
+                    </tr>
+                    <tr></tr> <!-- create some white space -->
+
+                    <tr>
+                      <td><control type="label" label="Callback and Service Reporting Functions" align="left" bold="true"/></td>
+                    </tr>
+
+                    <tr>
+                      <td>
+                        <control type="label"
+                                label="Service report function"
+                                align="left"/>
+                      </td>
+                      <td>
+                        <control type="editbox" 
+                                value="value:this.pCbSrv"
+                                tooltip="value:this.pCbSrv.$summary"/>
+                      </td>
+                    </tr>
+              <!-- End Row 2 -->
+
+            </table>
+          </td>
+        </tr>
+</table></body></html>
+</page>
+<properties name="Advanced" title="All Options" enabled="true" visible="true" link="this"/>
+</gep>
+

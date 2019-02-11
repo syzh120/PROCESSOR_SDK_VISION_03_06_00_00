@@ -1,0 +1,36 @@
+digraph chains_vipSingleCam_Enc_Dec_SgxDisplay {
+
+       ColorScheme [shape=none, margin=0, label=<
+       <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+       <TR><TD bgcolor="lightblue">IPU1_0</TD></TR>
+       <TR><TD bgcolor="lightsalmon">A15</TD></TR>
+       </TABLE>>];
+
+       /************** LINKS ************************/
+       Capture [color=lightblue, style=filled]
+       Encode [color=lightblue, style=filled]
+       Decode [color=lightblue, style=filled]
+       VPE [color=lightblue, style=filled]
+       Sync [color=lightblue, style=filled]
+       IPCOut_IPU1_0_A15_0_0 [color=lightblue, style=filled]
+       IPCIn_A15_0_IPU1_0_0 [color=lightsalmon, style=filled]
+       SgxFrmcpy [color=lightsalmon, style=filled]
+       IPCOut_A15_0_IPU1_0_0 [color=lightsalmon, style=filled]
+       IPCIn_IPU1_0_A15_0_0 [color=lightblue, style=filled]
+       Display_M4 [color=lightblue, style=filled]
+       GrpxSrc [color=lightblue, style=filled]
+       Display_Grpx [color=lightblue, style=filled]
+
+       /************** CONNECTIONS ************************/
+       SgxFrmcpy -> IPCOut_A15_0_IPU1_0_0
+       Sync -> IPCOut_IPU1_0_A15_0_0
+       VPE -> Sync
+       Decode -> VPE
+       Encode -> Decode
+       Capture -> Encode
+       GrpxSrc -> Display_Grpx
+       IPCOut_IPU1_0_A15_0_0 -> IPCIn_A15_0_IPU1_0_0
+       IPCIn_A15_0_IPU1_0_0 -> SgxFrmcpy
+       IPCOut_A15_0_IPU1_0_0 -> IPCIn_IPU1_0_A15_0_0
+       IPCIn_IPU1_0_A15_0_0 -> Display_M4
+}

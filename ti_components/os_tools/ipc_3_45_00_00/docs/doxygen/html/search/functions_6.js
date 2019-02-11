@@ -1,0 +1,28 @@
+var searchData=
+[
+  ['nameserver_5fadd',['NameServer_add',['../_name_server_8h.html#ad7d45ed8fe5bcd1f10da5914c8da39f5',1,'NameServer.h']]],
+  ['nameserver_5fadduint32',['NameServer_addUInt32',['../_name_server_8h.html#ac130195a04a34dfa2daba6ec3fff65d6',1,'NameServer.h']]],
+  ['nameserver_5fcreate',['NameServer_create',['../_name_server_8h.html#a7345e78debfbf6d5da6ae1603764429a',1,'NameServer.h']]],
+  ['nameserver_5fdelete',['NameServer_delete',['../_name_server_8h.html#a3419fc2bf3e6c34289c620cf9be38a04',1,'NameServer.h']]],
+  ['nameserver_5fget',['NameServer_get',['../_name_server_8h.html#a5f1013e57e7c5da9f003063d70a76e01',1,'NameServer.h']]],
+  ['nameserver_5fgethandle',['NameServer_getHandle',['../_name_server_8h.html#abaebe428fbf536448c99acb6faf25134',1,'NameServer.h']]],
+  ['nameserver_5fgetlocal',['NameServer_getLocal',['../_name_server_8h.html#a46d3826bc4ef4bc6cc45d5287c697122',1,'NameServer.h']]],
+  ['nameserver_5fgetlocaluint32',['NameServer_getLocalUInt32',['../_name_server_8h.html#a9e824f111db640d1bce81bfe25963b76',1,'NameServer.h']]],
+  ['nameserver_5fgetuint32',['NameServer_getUInt32',['../_name_server_8h.html#ac3b6fa4f8f0ed572f1a5f6b7cb05679e',1,'NameServer.h']]],
+  ['nameserver_5fparams_5finit',['NameServer_Params_init',['../_name_server_8h.html#a9bb546e8a7d656ce5e919650febe4989',1,'NameServer.h']]],
+  ['nameserver_5fremove',['NameServer_remove',['../_name_server_8h.html#ab21d262bcfa187f21e235b36ce17d6de',1,'NameServer.h']]],
+  ['nameserver_5fremoveentry',['NameServer_removeEntry',['../_name_server_8h.html#a84b6883f07de21bcaf8f4dbdc2e55e63',1,'NameServer.h']]],
+  ['notify_5fattach',['Notify_attach',['../_notify_8h.html#a2d6e7fc00357b58ddc2a860e6bd4bf80',1,'Notify.h']]],
+  ['notify_5fdisable',['Notify_disable',['../_notify_8h.html#a0eeb5a2e898a287ec0e31be4e6a92364',1,'Notify.h']]],
+  ['notify_5fdisableevent',['Notify_disableEvent',['../_notify_8h.html#acb0512fe9bdbc30a1bd6d055d3c662d0',1,'Notify.h']]],
+  ['notify_5fenableevent',['Notify_enableEvent',['../_notify_8h.html#a701ab77f8cd9b811dcca05e243815b85',1,'Notify.h']]],
+  ['notify_5feventavailable',['Notify_eventAvailable',['../_notify_8h.html#a35609c7bf129016087dd520be69c14cf',1,'Notify.h']]],
+  ['notify_5fintlineregistered',['Notify_intLineRegistered',['../_notify_8h.html#a696ca01e7ee01649e5685081f6f8a425',1,'Notify.h']]],
+  ['notify_5fnumintlines',['Notify_numIntLines',['../_notify_8h.html#a195f48cdad4a2db36eb00bdbc752f8f9',1,'Notify.h']]],
+  ['notify_5fregisterevent',['Notify_registerEvent',['../_notify_8h.html#af0e6797faaeea3d07121ad83394dd1cb',1,'Notify.h']]],
+  ['notify_5fregistereventsingle',['Notify_registerEventSingle',['../_notify_8h.html#ad3d08088f515d57a3e4999a046267f49',1,'Notify.h']]],
+  ['notify_5frestore',['Notify_restore',['../_notify_8h.html#a07248810e2b457664a2a1f24a4179621',1,'Notify.h']]],
+  ['notify_5fsendevent',['Notify_sendEvent',['../_notify_8h.html#ac0f8b4cb2245dd897b5b75485f6b5c13',1,'Notify.h']]],
+  ['notify_5funregisterevent',['Notify_unregisterEvent',['../_notify_8h.html#a04733f534741df34fb5c0fbd7cbab8bc',1,'Notify.h']]],
+  ['notify_5funregistereventsingle',['Notify_unregisterEventSingle',['../_notify_8h.html#a7d8a78106ebe364b994f828d9b90f12f',1,'Notify.h']]]
+];

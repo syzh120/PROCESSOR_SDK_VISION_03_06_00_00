@@ -1,0 +1,546 @@
+******************************************************************************
+               TMS320C6x Linker PC v7.4.2                      
+******************************************************************************
+>> Linked Mon Nov 04 23:06:11 2013
+
+OUTPUT FILE NAME:   <tandp_66_LE_ELF.out>
+ENTRY POINT SYMBOL: "_c_int00"  address: 00838500
+
+
+MEMORY CONFIGURATION
+
+         name            origin    length      used     unused   attr    fill
+----------------------  --------  ---------  --------  --------  ----  --------
+  L2SRAM                00800000   00080000  000431c9  0003ce37  RW X
+  MSMCSRAM              0c000000   00200000  00000000  00200000  RW X
+
+
+SEGMENT ALLOCATION MAP
+
+run origin  load origin   length   init length attrs members
+----------  ----------- ---------- ----------- ----- -------
+00800000    00800000    0002fa68   00000000    rw-
+  00800000    00800000    00023a68   00000000    rw- .far
+  00823a68    00823a68    0000c000   00000000    rw- .stack
+0082fa68    0082fa68    00000018   00000018    rw-
+  0082fa68    0082fa68    00000018   00000018    rw- .fardata.1
+0082fa80    0082fa80    00009280   00009280    r-x
+  0082fa80    0082fa80    00009280   00009280    r-x .text
+00838d00    00838d00    00008000   00000000    rw-
+  00838d00    00838d00    00008000   00000000    rw- .sysmem
+00840d00    00840d00    000009ac   000009ac    rw-
+  00840d00    00840d00    000009ac   000009ac    rw- .fardata.2
+008416b0    008416b0    00000385   00000385    r--
+  008416b0    008416b0    00000385   00000385    r-- .const
+00841a38    00841a38    00000120   00000000    rw-
+  00841a38    00841a38    00000120   00000000    rw- .cio
+00841b60    00841b60    00001678   00001678    r-x
+  00841b60    00841b60    00000960   00000960    r-x .kernel_vec
+  008424c0    008424c0    000005c0   000005c0    r-x .kernel_ci
+  00842a80    00842a80    00000020   00000020    r-x .kernel_asm
+  00842aa0    00842aa0    00000738   00000738    r-- .cinit
+
+
+SECTION ALLOCATION MAP
+
+ output                                  attributes/
+section   page    origin      length       input sections
+--------  ----  ----------  ----------   ----------------
+.init_array 
+*          0    00800000    00000000     UNINITIALIZED
+
+xdc.meta   0    00800000    00000000     COPY SECTION
+
+.far       0    00800000    00023a68     UNINITIALIZED
+                  00800000    000238c0     drvdp.obj (.far)
+                  008238c0    00000140     rts6600_elf.lib : defs.obj (.far)
+                  00823a00    00000060     driver.obj (.far)
+                  00823a60    00000008     rts6600_elf.lib : trgdrv.obj (.far)
+
+.stack     0    00823a68    0000c000     UNINITIALIZED
+                  00823a68    00000008     rts6600_elf.lib : boot.obj (.stack)
+                  00823a70    0000bff8     --HOLE--
+
+.fardata.1 
+*          0    0082fa68    00000018     
+                  0082fa68    00000018     rts6600_elf.lib : tan.obj (.fardata:P$1)
+
+.text      0    0082fa80    00009280     
+                  0082fa80    00001ae0     tandp_d.obj (.text)
+                  00831560    00000660     driver.obj (.text)
+                  00831bc0    000005c0     rts6600_elf.lib : divd.obj (.text:__c6xabi_divd)
+                  00832180    000005c0                     : _printfi.obj (.text:_getarg_diouxp)
+                  00832740    00000460                     : _printfi.obj (.text:_printfi)
+                  00832ba0    00000460                     : _printfi.obj (.text:_setfield)
+                  00833000    000003a0                     : fputs.obj (.text:fputs)
+                  008333a0    00000360     drvdp.obj (.text)
+                  00833700    00000320     rts6600_elf.lib : _printfi.obj (.text:_pproc_fge)
+                  00833a20    000002e0                     : _printfi.obj (.text:_pproc_fwp)
+                  00833d00    000002c0                     : tan.obj (.text:tan)
+                  00833fc0    000002a0                     : _printfi.obj (.text:fcvt)
+                  00834260    00000280                     : _printfi.obj (.text:ecvt)
+                  008344e0    00000280                     : memory.obj (.text:free)
+                  00834760    00000240                     : imath64.obj (.text:__c6xabi_divull)
+                  008349a0    00000240                     : _printfi.obj (.text:_pconv_e)
+                  00834be0    00000240                     : _printfi.obj (.text:_pproc_diouxp)
+                  00834e20    00000220                     : _printfi.obj (.text:_pproc_str)
+                  00835040    00000220                     : fputc.obj (.text:fputc)
+                  00835260    00000200                     : _printfi.obj (.text:_pconv_g)
+                  00835460    00000200                     : setvbuf.obj (.text:setvbuf)
+                  00835660    000001c0                     : _printfi.obj (.text:_mcpy)
+                  00835820    000001c0                     : fopen.obj (.text:_openfile)
+                  008359e0    000001a0                     : trgdrv.obj (.text:HOSTrename)
+                  00835b80    000001a0                     : imath40.obj (.text:__c6xabi_divul)
+                  00835d20    00000180                     : copy_decompress_rle.obj (.text:__TI_decompress_rle_core)
+                  00835ea0    00000180                     : memory.obj (.text:malloc)
+                  00836020    00000180                     : lowlev.obj (.text:open)
+                  008361a0    00000140                     : _printfi.obj (.text:_pproc_fflags)
+                  008362e0    00000140                     : lowlev.obj (.text:getdevice)
+                  00836420    00000120                     : fclose.obj (.text:_closefile)
+                  00836540    00000120                     : _printfi.obj (.text:_ltostr)
+                  00836660    00000120                     : fopen.obj (.text:_search_fp)
+                  00836780    00000120                     : fseek.obj (.text:fseek)
+                  008368a0    00000100                     : trgdrv.obj (.text:HOSTlseek)
+                  008369a0    00000100                     : fixdlli.obj (.text:__c6xabi_fixdlli)
+                  00836aa0    00000100                     : autoinit.obj (.text:_auto_init_elf)
+                  00836ba0    00000100                     : _io_perm.obj (.text:_wrt_ok)
+                  00836ca0    00000100                     : cpy_tbl.obj (.text:copy_in)
+                  00836da0    00000100                     : fprintf.obj (.text:fprintf)
+                  00836ea0    000000e0                     : trgdrv.obj (.text:HOSTopen)
+                  00836f80    000000e0                     : fltllif.obj (.text:__c6xabi_fltllif)
+                  00837060    000000e0                     : _printfi.obj (.text:_div)
+                  00837140    000000e0                     : atoi.obj (.text:atoi)
+                  00837220    000000e0                     : lowlev.obj (.text:close)
+                  00837300    000000e0                     : copy_zero_init.obj (.text:decompress:ZI:__TI_zero_init)
+                  008373e0    000000e0                     : ltoa.obj (.text:ltoa)
+                  008374c0    000000e0                     : memset.obj (.text:memset)
+                  008375a0    000000e0                     : printf.obj (.text:printf)
+                  00837680    000000c0                     : trgdrv.obj (.text:HOSTread)
+                  00837740    000000c0                     : trgdrv.obj (.text:HOSTunlink)
+                  00837800    000000c0                     : trgdrv.obj (.text:HOSTwrite)
+                  008378c0    000000c0                     : divu.obj (.text:__divu)
+                  00837980    000000c0                     : fflush.obj (.text:_doflush)
+                  00837a40    000000c0                     : exit.obj (.text:exit)
+                  00837b00    000000c0                     : tls.obj (.text:tls:init:__TI_tls_init)
+                  00837bc0    000000a0                     : trgdrv.obj (.text:HOSTclose)
+                  00837c60    000000a0                     : round.obj (.text:__c6xabi_nround)
+                  00837d00    000000a0                     : fopen.obj (.text:_cleanup)
+                  00837da0    000000a0                     : _printfi.obj (.text:_ecpy)
+                  00837e40    000000a0                     : _printfi.obj (.text:_fcpy)
+                  00837ee0    000000a0                     : memory.obj (.text:_minit)
+                  00837f80    000000a0                     : _printfi.obj (.text:_pconv_f)
+                  00838020    000000a0                     : lowlev.obj (.text:finddevice)
+                  008380c0    000000a0                     : lowlev.obj (.text:lseek)
+                  00838160    000000a0                     : memcpy64.obj (.text:memcpy)
+                  00838200    000000a0                     : memory.obj (.text:minsert)
+                  008382a0    000000a0                     : modf.obj (.text:modf)
+                  00838340    000000a0                     : memory.obj (.text:mremove)
+                  008383e0    000000a0                     : lowlev.obj (.text:write)
+                  00838480    00000080                     : llshift.obj (.text:__c6xabi_llshl)
+                  00838500    00000080                     : boot.obj (.text:_c_int00)
+                  00838580    00000080                     : rand.obj (.text:rand)
+                  00838600    00000080                     : trgmsg.obj (.text:readmsg)
+                  00838680    00000080                     : lowlev.obj (.text:unlink)
+                  00838700    00000060                     : cpp_init.obj (.text:__TI_cpp_init)
+                  00838760    00000060                     : frcmpyd_div.obj (.text:__c6xabi_frcmpyd_div)
+                  008387c0    00000060                     : llshift.obj (.text:__c6xabi_llshru)
+                  00838820    00000060                     : imath64.obj (.text:_subcull)
+                  00838880    00000060                     : fclose.obj (.text:fclose)
+                  008388e0    00000060                     : fopen.obj (.text:fopen)
+                  00838940    00000060                     : memccpy.obj (.text:memccpy)
+                  008389a0    00000060                     : rand.obj (.text:srand)
+                  00838a00    00000060                     : lowlev.obj (.text:tabinit)
+                  00838a60    00000060                     : trgmsg.obj (.text:writemsg)
+                  00838ac0    00000040                     : isinf.obj (.text:__c6xabi_isinf)
+                  00838b00    00000040                     : _printfi.obj (.text:__c6xabi_isnan)
+                  00838b40    00000040                     : args_main.obj (.text:_args_main)
+                  00838b80    00000020                     : negll.obj (.text:__c6xabi_negll)
+                  00838ba0    00000020                     : trunc.obj (.text:__c6xabi_trunc)
+                  00838bc0    00000020                     : _lock.obj (.text:_nop)
+                  00838be0    00000020                     : fprintf.obj (.text:_outc)
+                  00838c00    00000020                     : printf.obj (.text:_outc)
+                  00838c20    00000020                     : fprintf.obj (.text:_outs)
+                  00838c40    00000020                     : printf.obj (.text:_outs)
+                  00838c60    00000020                     : exit.obj (.text:abort)
+                  00838c80    00000020                     : copy_decompress_none.obj (.text:decompress:none:__TI_decompress_none)
+                  00838ca0    00000020                     : copy_decompress_rle.obj (.text:decompress:rle24:__TI_decompress_rle24)
+                  00838cc0    00000010     mathlib.ae66 : tandp_v.oe66 ($Tramp$S$$tandp_v)
+                  00838cd0    00000010                  : tandp_c.oe66 ($Tramp$S$$tandp_c)
+                  00838ce0    00000010                  : tandp.oe66 ($Tramp$S$$tandp)
+                  00838cf0    00000010     --HOLE-- [fill = 0]
+
+.sysmem    0    00838d00    00008000     UNINITIALIZED
+                  00838d00    00000008     rts6600_elf.lib : memory.obj (.sysmem)
+                  00838d08    00007ff8     --HOLE--
+
+.fardata.2 
+*          0    00840d00    000009ac     
+                  00840d00    00000648     tandp_d.obj (.fardata:a)
+                  00841348    000001e0     rts6600_elf.lib : defs.obj (.fardata:_ftable)
+                  00841528    000000a0                     : lowlev.obj (.fardata:_stream)
+                  008415c8    00000078                     : lowlev.obj (.fardata:_device)
+                  00841640    00000020                     : tan.obj (.fardata:Q$2)
+                  00841660    00000014     drvdp.obj (.fardata:output)
+                  00841674    0000000c     rts6600_elf.lib : exit.obj (.fardata)
+                  00841680    0000000c                     : memory.obj (.fardata)
+                  0084168c    00000004                     : defs.obj (.fardata)
+                  00841690    00000008     drvdp.obj (.fardata:input)
+                  00841698    00000008     rts6600_elf.lib : _lock.obj (.fardata)
+                  008416a0    00000004                     : fopen.obj (.fardata)
+                  008416a4    00000004                     : lowlev.obj (.fardata)
+                  008416a8    00000004                     : rand.obj (.fardata)
+
+.const     0    008416b0    00000385     
+                  008416b0    00000203     driver.obj (.const:.string)
+                  008418b3    00000005     --HOLE-- [fill = 0]
+                  008418b8    00000101     rts6600_elf.lib : ctype.obj (.const:.string:_ctypes_)
+                  008419b9    00000059     tandp_d.obj (.const:.string)
+                  00841a12    00000023     rts6600_elf.lib : _printfi.obj (.const:.string)
+
+.cio       0    00841a38    00000120     UNINITIALIZED
+                  00841a38    00000120     rts6600_elf.lib : trgmsg.obj (.cio)
+
+.kernel_vec 
+*          0    00841b60    00000960     
+                  00841b60    00000960     mathlib.ae66 : tandp_v.oe66 (.text:optvec)
+
+.kernel_ci 
+*          0    008424c0    000005c0     
+                  008424c0    000002e0     mathlib.ae66 : tandp.oe66 (.text:optci)
+                  008427a0    000002e0                  : tandp_c.oe66 (.text:optci)
+
+.kernel_asm 
+*          0    00842a80    00000020     
+                  00842a80    00000020     mathlib.ae66 : tandp.oe66 (.text:optasm)
+
+.cinit     0    00842aa0    00000738     
+                  00842aa0    000006eb     (.cinit..fardata.2.load) [load image, compression = rle]
+                  0084318b    00000001     --HOLE-- [fill = 0]
+                  0084318c    0000001e     (.cinit..fardata.1.load) [load image, compression = rle]
+                  008431aa    00000002     --HOLE-- [fill = 0]
+                  008431ac    0000000c     (__TI_handler_table)
+                  008431b8    00000008     (.cinit..far.load) [load image, compression = zero_init]
+                  008431c0    00000018     (__TI_cinit_table)
+
+
+LINKER GENERATED COPY TABLES
+
+__TI_cinit_table @ 008431c0 records: 3, size/record: 8, table size: 24
+	.fardata.2: load addr=00842aa0, load size=000006eb bytes, run addr=00840d00, run size=000009ac bytes, compression=rle
+	.fardata.1: load addr=0084318c, load size=0000001e bytes, run addr=0082fa68, run size=00000018 bytes, compression=rle
+	.far: load addr=008431b8, load size=00000008 bytes, run addr=00800000, run size=00023a68 bytes, compression=zero_init
+
+
+LINKER GENERATED HANDLER TABLE
+
+__TI_handler_table @ 008431ac records: 3, size/record: 4, table size: 12
+	index: 0, handler: __TI_zero_init
+	index: 1, handler: __TI_decompress_rle24
+	index: 2, handler: __TI_decompress_none
+
+
+FAR CALL TRAMPOLINES
+
+callee name               trampoline name
+   callee addr  tramp addr   call addr  call info
+--------------  -----------  ---------  ----------------
+$.text:optvec:mathlib.ae66<tandp_v.oe66>$0x0  $Tramp$S$$tandp_v
+   00841b60     00838cc0     0083008c   tandp_d.obj (.text)
+                             0083055c   tandp_d.obj (.text)
+                             008309f8   tandp_d.obj (.text)
+                             00831214   tandp_d.obj (.text)
+$.text:optci:mathlib.ae66<tandp_c.oe66>$0x0  $Tramp$S$$tandp_c
+   008427a0     00838cd0     0082fc98   tandp_d.obj (.text)
+                             0082fcc0   tandp_d.obj (.text)
+                             00830178   tandp_d.obj (.text)
+                             008305ec   tandp_d.obj (.text)
+                             008310f8   tandp_d.obj (.text)
+$.text:optasm:mathlib.ae66<tandp.oe66>$0x0  $Tramp$S$$tandp
+   00842a80     00838ce0     0082fc58   tandp_d.obj (.text)
+                             0082fc8c   tandp_d.obj (.text)
+                             0083015c   tandp_d.obj (.text)
+                             008305cc   tandp_d.obj (.text)
+                             00831308   tandp_d.obj (.text)
+
+[3 trampolines]
+[14 trampoline calls]
+
+
+GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name 
+
+address    name
+--------   ----
+00838c60   C$$EXIT
+00838ab8   C$$IO$$
+00837bc0   HOSTclose
+008368a0   HOSTlseek
+00836ea0   HOSTopen
+00837680   HOSTread
+008359e0   HOSTrename
+00837740   HOSTunlink
+00837800   HOSTwrite
+00841a38   __CIOBUF_
+008431c0   __TI_CINIT_Base
+008431d8   __TI_CINIT_Limit
+008431ac   __TI_Handler_Table_Base
+008431b8   __TI_Handler_Table_Limit
+UNDEFED    __TI_INITARRAY_Base
+UNDEFED    __TI_INITARRAY_Limit
+0082fa68   __TI_STACK_END
+0000c000   __TI_STACK_SIZE
+00000000   __TI_STATIC_BASE
+00008000   __TI_SYSMEM_SIZE
+UNDEFED    __TI_TLS_INIT_Base
+UNDEFED    __TI_TLS_INIT_Limit
+00000001   __TI_args_main
+00838700   __TI_cpp_init
+00838c80   __TI_decompress_none
+00838ca0   __TI_decompress_rle24
+0084167c   __TI_enable_exit_profile_output
+ffffffff   __TI_pprof_out_hndl
+ffffffff   __TI_prof_data_size
+ffffffff   __TI_prof_data_start
+00837b00   __TI_tls_init
+00837300   __TI_zero_init
+ffffffff   __binit__
+00831bc0   __c6xabi_divd
+008378c0   __c6xabi_divu
+00835b80   __c6xabi_divul
+00834760   __c6xabi_divull
+008369a0   __c6xabi_fixdlli
+00836f80   __c6xabi_fltllif
+00838760   __c6xabi_frcmpyd_div
+00838ac0   __c6xabi_isinf
+00838480   __c6xabi_llshl
+008387c0   __c6xabi_llshru
+00838b80   __c6xabi_negll
+00837c60   __c6xabi_nround
+00838ba0   __c6xabi_trunc
+ffffffff   __c_args__
+008378c0   __divu
+00838b40   _args_main
+00000200   _argsize
+00836aa0   _auto_init_elf
+00838500   _c_int00
+00837d00   _cleanup
+00841674   _cleanup_ptr
+00836420   _closefile
+008418b8   _ctypes_
+00837980   _doflush
+00841678   _dtors_ptr
+0084168c   _ft_end
+00841348   _ftable
+00000020   _kernel_asm_size
+000005c0   _kernel_ci_size
+00000960   _kernel_vec_size
+00841698   _lock
+00837ee0   _minit
+00838bc0   _nop
+00832740   _printfi
+00823a68   _stack
+00838820   _subcull
+00838d00   _sys_memory
+008238c0   _tmpnams
+0084169c   _unlock
+00836ba0   _wrt_ok
+00840d00   a
+00800000   a_ext
+00807d00   a_sc
+00838c60   abort
+00823a5c   all_pass
+00837140   atoi
+00803e80   b_ext
+00808020   b_sc
+ffffffff   binit
+00837220   close
+00000385   const_size
+008416b0   const_start
+00836ca0   copy_in
+00823a20   cycle_counts
+00831b0c   driver_init
+00837a40   exit
+00838880   fclose
+00823a48   fcn_pass
+008388e0   fopen
+00823a04   fp
+00836da0   fprintf
+00835040   fputc
+00833000   fputs
+008344e0   free
+00836780   fseek
+00833698   gimme_random
+00841690   input
+0081bbc0   input_data
+008333c8   isequal
+008380c0   lseek
+008373e0   ltoa
+0082fbd8   main
+00835ea0   malloc
+00838940   memccpy
+00838160   memcpy
+008374c0   memset
+008382a0   modf
+00836020   open
+00841660   output
+00808340   output_data
+00831a2c   print_memory_results
+0083190c   print_profile_results
+00831560   print_test_results
+008375a0   printf
+00838580   rand
+00838600   readmsg
+00838680   remove
+00823a00   seed
+00835460   setvbuf
+008389a0   srand
+00823a18   t_offset
+00823a08   t_start
+00823a10   t_stop
+00833d00   tan
+00842a80   tandp
+008427a0   tandp_c
+00841b60   tandp_v
+00838680   unlink
+008383e0   write
+00838a60   writemsg
+
+
+GLOBAL SYMBOLS: SORTED BY Symbol Address 
+
+address    name
+--------   ----
+00000000   __TI_STATIC_BASE
+00000001   __TI_args_main
+00000020   _kernel_asm_size
+00000200   _argsize
+00000385   const_size
+000005c0   _kernel_ci_size
+00000960   _kernel_vec_size
+00008000   __TI_SYSMEM_SIZE
+0000c000   __TI_STACK_SIZE
+00800000   a_ext
+00803e80   b_ext
+00807d00   a_sc
+00808020   b_sc
+00808340   output_data
+0081bbc0   input_data
+008238c0   _tmpnams
+00823a00   seed
+00823a04   fp
+00823a08   t_start
+00823a10   t_stop
+00823a18   t_offset
+00823a20   cycle_counts
+00823a48   fcn_pass
+00823a5c   all_pass
+00823a68   _stack
+0082fa68   __TI_STACK_END
+0082fbd8   main
+00831560   print_test_results
+0083190c   print_profile_results
+00831a2c   print_memory_results
+00831b0c   driver_init
+00831bc0   __c6xabi_divd
+00832740   _printfi
+00833000   fputs
+008333c8   isequal
+00833698   gimme_random
+00833d00   tan
+008344e0   free
+00834760   __c6xabi_divull
+00835040   fputc
+00835460   setvbuf
+008359e0   HOSTrename
+00835b80   __c6xabi_divul
+00835ea0   malloc
+00836020   open
+00836420   _closefile
+00836780   fseek
+008368a0   HOSTlseek
+008369a0   __c6xabi_fixdlli
+00836aa0   _auto_init_elf
+00836ba0   _wrt_ok
+00836ca0   copy_in
+00836da0   fprintf
+00836ea0   HOSTopen
+00836f80   __c6xabi_fltllif
+00837140   atoi
+00837220   close
+00837300   __TI_zero_init
+008373e0   ltoa
+008374c0   memset
+008375a0   printf
+00837680   HOSTread
+00837740   HOSTunlink
+00837800   HOSTwrite
+008378c0   __c6xabi_divu
+008378c0   __divu
+00837980   _doflush
+00837a40   exit
+00837b00   __TI_tls_init
+00837bc0   HOSTclose
+00837c60   __c6xabi_nround
+00837d00   _cleanup
+00837ee0   _minit
+008380c0   lseek
+00838160   memcpy
+008382a0   modf
+008383e0   write
+00838480   __c6xabi_llshl
+00838500   _c_int00
+00838580   rand
+00838600   readmsg
+00838680   remove
+00838680   unlink
+00838700   __TI_cpp_init
+00838760   __c6xabi_frcmpyd_div
+008387c0   __c6xabi_llshru
+00838820   _subcull
+00838880   fclose
+008388e0   fopen
+00838940   memccpy
+008389a0   srand
+00838a60   writemsg
+00838ab8   C$$IO$$
+00838ac0   __c6xabi_isinf
+00838b40   _args_main
+00838b80   __c6xabi_negll
+00838ba0   __c6xabi_trunc
+00838bc0   _nop
+00838c60   C$$EXIT
+00838c60   abort
+00838c80   __TI_decompress_none
+00838ca0   __TI_decompress_rle24
+00838d00   _sys_memory
+00840d00   a
+00841348   _ftable
+00841660   output
+00841674   _cleanup_ptr
+00841678   _dtors_ptr
+0084167c   __TI_enable_exit_profile_output
+0084168c   _ft_end
+00841690   input
+00841698   _lock
+0084169c   _unlock
+008416b0   const_start
+008418b8   _ctypes_
+00841a38   __CIOBUF_
+00841b60   tandp_v
+008427a0   tandp_c
+00842a80   tandp
+008431ac   __TI_Handler_Table_Base
+008431b8   __TI_Handler_Table_Limit
+008431c0   __TI_CINIT_Base
+008431d8   __TI_CINIT_Limit
+ffffffff   __TI_pprof_out_hndl
+ffffffff   __TI_prof_data_size
+ffffffff   __TI_prof_data_start
+ffffffff   __binit__
+ffffffff   __c_args__
+ffffffff   binit
+UNDEFED    __TI_INITARRAY_Base
+UNDEFED    __TI_INITARRAY_Limit
+UNDEFED    __TI_TLS_INIT_Base
+UNDEFED    __TI_TLS_INIT_Limit
+
+[133 symbols]

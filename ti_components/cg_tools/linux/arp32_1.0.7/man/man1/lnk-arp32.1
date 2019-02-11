@@ -1,0 +1,186 @@
+.bd B 3
+.TH lnk-arp32 1 "Jan 05, 2015" "TI Tools" "TI Code Generation Tools"
+.SH NAME
+lnk-arp32 - ELF Linker
+.SH SYNOPSIS
+.B lnk-arp32
+[
+.I options
+] [
+.I file(s)
+]
+.SH DESCRIPTION
+The ELF Linker creates executable modules by combining ELF object files.  For more information on using the linker, see the 
+.B Assembly Language Tools User's Guide
+
+.SH OPTIONS
+The following options are accepted by this tool:
+.SS Basic Options:
+.SS
+.TP
+--heap=size
+Specify the maximum heap size for C/C++ dynamic memory allocation. [Same as -heap]
+.TP
+-heap=size
+Specify the maximum heap size for C/C++ dynamic memory allocation. [Same as --heap]
+.TP
+-m=file
+Produce a listing of all input and output sections into <file>.
+.TP
+-o=file
+Full filename of the output file.
+.TP
+--stack=size
+Set C system stack size [Same as -stack]
+.TP
+-stack=size
+Set C system stack size [Same as --stack]
+.SS File Search Path Options:
+.SS
+.TP
+--disable_auto_rts
+Do not attempt to automatically select and link a runtime library.
+.TP
+-i=dir
+Alter the library-search algorithm to look in dir before looking in the default location.  This option must appear before the -l option.
+.TP
+-l=file
+Include library file or command file as input
+.TP
+-priority
+Search libraries in priority order
+.TP
+-x
+Reread libraries; resolve backward references
+.SS Diagnostics Options:
+.SS
+.TP
+-pdew
+Treat warnings as errors
+.TP
+-w
+Warn if an unspecified output section is created
+.SS Linker Output Options:
+.SS
+.TP
+-a
+Produce absolute executable object file (default)
+.TP
+-abs
+Produce absolute listing file
+.TP
+--mapfile_contents=attribute
+Enable the display of <attribute> or disable with no<attribute> in the linker generated map file.  Multiple attributes can be specified by separating them with commas (e.g. --mapfile_contents=sections,nosymbols).  Type --mapfile_contents=help for a list of attributes.
+.TP
+-r
+Produce a relocatable output module
+.TP
+--rom
+This option allows the creation of ROM object module
+.TP
+-xml_link_info=file
+Produce a detailed link information data-base into the file named <file>.
+.SS Symbol Management Options:
+.SS
+.TP
+-b
+Disable type merging in symbolic debugging information.
+.TP
+-e=symbol
+Specify program entry point for the output module
+.TP
+-g=symbol
+Don't make global symbol static if -h is specified
+.TP
+--globalize=pattern
+The option '--localize=l_pattern' makes the symbols matching the l_pattern hidden. The '--globalilze=g_pattern' option excludes symbols matching g_pattern from symbol localization provided g_pattern is more restrictive than l_pattern. 
+.TP
+-h
+Make all global symbols static
+.TP
+--hide=pattern
+Hide the symbols matching the pattern by changing the name to empty string
+.TP
+--localize=pattern
+Given a symbol name pattern, make all the symbols matching this pattern local
+.TP
+--retain=sym_or_scn_spec
+When --unused_section_elimination is enabled, the ELF linker does not include a section in the final link if it is not needed in the executable to resolve references. This option can be used to tell the linker to retain a list of sections that would otherwise be not retained. This option accepts the wild cards '*' and '?' and when wild cards are used, the argument should be in quotes. The following option parameters are accepted:
+
+--retain=symbol_spec retains sections that define symbol matching the argument. For ex, --retain='init*' retains sections that define symbols that start with 'init'. User may not specify --retain='*'.
+
+--retain=file_spec(scn_spec [,scn_spec ...]) retains sections matching scn_spec(s) from files matching file_spec. For ex, the argument '*(.initvec)' causes the linker to retain .initvec sections from all input files.
+
+NOTE: User can specify --retain='*(*)' to retain all the sections from all the input object files. Note that this does not prevent sections from library members from being optimized out. If you want to totally disable unused section elimination, please use --unused_section_elimination=off.
+
+--retain=ar_spec<mem_spec, [mem_spec ...]>(scn_spec, [scn_spec ...]) retains sections matching scn_spec(s) from members matching mem_spec(s) from archive files matching ar_spec. For ex, rts32eabi.lib<printf.obj>(.text) causes the linker to retain .text section from printf.obj in rts32eabi.lib. If the library is specified with -l option (-lrts32eabi.lib) the library search path is used to search the library. User may not specify '*<*>(*)'. 
+.TP
+-s
+Strip symbol table and line number entries
+.TP
+-u=sym
+Add <sym> to symbol table as an unresolved symbol
+.TP
+--unhide=pattern
+The option --hide=hide_pattern makes the symbols matching the hide_pattern hidden. The --unhide=unhide_pattern option excludes symbols matching unhide_pattern from symbol hiding provided unhide_pattern is more restrictive than hide_pattern. 
+.SS Runtime Environment Options:
+.SS
+.TP
+--args=size
+Set C argc/argv memory size
+.TP
+-c
+Link using ROM autoinitialization model
+.TP
+-cr
+Link using RAM autoinitialization model
+.TP
+-f=value
+Set the default fill value for filling holes in output sections.
+.TP
+--trampolines[=on,off]
+Generate far call trampolines The argument to the option is optional, and if not specified it will default to: on
+.SS Linktime Optimization Options:
+.SS
+.TP
+--cinit_compression[=compression_kind]
+Specify the compression to apply to the c auto initialization data The argument to the option is optional, and if not specified it will default to: rle
+.TP
+--copy_compression[=compression_kind]
+Overlays can be managed by using linker generated copy tables. To save ROM space, the linker can compress the data copied by copy tables. The compressed data is decompressed during copy. The argument to the option is optional, and if not specified it will default to: rle
+.SS Miscellaneous Options:
+.SS
+.TP
+-help
+Display usage information.  Followed by another option, will display detailed information on that option. [Same as --help]
+.TP
+--help
+Display usage information.  Followed by another option, will display detailed information on that option. [Same as -help]
+.TP
+-j
+Disable conditional linking; ignore all .clink directives.
+.TP
+--minimize_trampolines[=postorder,off]
+This option attempts to place sections so as to minimize the number of far call trampolines required, possibly at the expense of optimal memory packing. The argument selects a heuristic to use. The 'postorder' heuristic attempts to place functions before their callers so that the PC-relative offset is known when the caller is placed. The argument to the option is optional, and if not specified it will default to: postorder
+.TP
+--preferred_order=function
+Insert a function into the preferred function order list for placement.  Functions that are close to each other in the preferred function order list will tend to be placed close together (increase program locality between them).  Static functions of the same name can be distinguished from each other by prefixing the function name with the path and file in which the function is defined followed by a ':' character to delimit the beginning of the function name.
+.TP
+--trampoline_min_spacing=size
+When trampoline reservations are spaced more closely than this limit, try to make them adjacent.  A higher value minimizes fragmentation, but may result in more trampolines. A lower value may reduce trampolines, at the expense of fragmentation and linker running time.  Specifying 0 for this option disables coalescing.  The default is 16K.
+.TP
+--zero_init[=on,off]
+This option indicates that the linker should generate compressed cinit table records that zero initializes ELF uninitialized sections during boot. This option is ignored if --rom_model option is not specified. The argument to the option is optional, and if not specified it will default to: on
+.SH EXIT STATUS
+The following error values are returned:
+.PD 0
+.TP 10
+.B 0
+Successful completion.
+.TP
+.B >0
+Unsuccessful completion; an error occured.
+.PD
+.SH COPYRIGHT
+.TP
+Copyright (c) 2015, Texas Instruments, Inc.

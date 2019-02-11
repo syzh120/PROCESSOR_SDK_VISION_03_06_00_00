@@ -1,0 +1,79 @@
+digraph chains_vipSingleCameraDenseOpticalFlow_4eve {
+
+       ColorScheme [shape=none, margin=0, label=<
+       <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+       <TR><TD bgcolor="lightblue">IPU1_0</TD></TR>
+       <TR><TD bgcolor="palegreen">DSP1</TD></TR>
+       <TR><TD bgcolor="yellow">EVE1</TD></TR>
+       <TR><TD bgcolor="gold">EVE2</TD></TR>
+       <TR><TD bgcolor="orange">EVE3</TD></TR>
+       <TR><TD bgcolor="goldenrod4">EVE4</TD></TR>
+       </TABLE>>];
+
+       /************** LINKS ************************/
+       Capture [color=lightblue, style=filled]
+       Dup_capture [color=lightblue, style=filled]
+       IPCOut_IPU1_0_EVE4_3 [color=lightblue, style=filled]
+       IPCIn_EVE4_IPU1_0_0 [color=goldenrod4, style=filled]
+       Alg_DenseOptFlow_4 [color=goldenrod4, style=filled]
+       IPCOut_EVE4_DSP1_0 [color=goldenrod4, style=filled]
+       IPCIn_DSP1_EVE4_3 [color=palegreen, style=filled]
+       IPCOut_IPU1_0_EVE3_2 [color=lightblue, style=filled]
+       IPCIn_EVE3_IPU1_0_0 [color=orange, style=filled]
+       Alg_DenseOptFlow_3 [color=orange, style=filled]
+       IPCOut_EVE3_DSP1_0 [color=orange, style=filled]
+       IPCIn_DSP1_EVE3_2 [color=palegreen, style=filled]
+       IPCOut_IPU1_0_EVE2_1 [color=lightblue, style=filled]
+       IPCIn_EVE2_IPU1_0_0 [color=gold, style=filled]
+       Alg_DenseOptFlow_2 [color=gold, style=filled]
+       IPCOut_EVE2_DSP1_0 [color=gold, style=filled]
+       IPCIn_DSP1_EVE2_1 [color=palegreen, style=filled]
+       IPCOut_IPU1_0_EVE1_0 [color=lightblue, style=filled]
+       IPCIn_EVE1_IPU1_0_0 [color=yellow, style=filled]
+       Alg_DenseOptFlow_1 [color=yellow, style=filled]
+       IPCOut_EVE1_DSP1_0 [color=yellow, style=filled]
+       IPCIn_DSP1_EVE1_0 [color=palegreen, style=filled]
+       Merge_Dof [color=palegreen, style=filled]
+       Alg_VectorToImage [color=palegreen, style=filled]
+       IPCOut_DSP1_IPU1_0_0 [color=palegreen, style=filled]
+       IPCIn_IPU1_0_DSP1_0 [color=lightblue, style=filled]
+       Display_VideoDof [color=lightblue, style=filled]
+       VPE_capture [color=lightblue, style=filled]
+       Display_VideoOriginal [color=lightblue, style=filled]
+       GrpxSrc [color=lightblue, style=filled]
+       Display_Grpx [color=lightblue, style=filled]
+
+       /************** CONNECTIONS ************************/
+       Dup_capture -> VPE_capture[taillabel=Q4, minlen=2, labeldistance=3]
+       Dup_capture -> IPCOut_IPU1_0_EVE1_0[taillabel=Q0, minlen=2, labeldistance=3]
+       Dup_capture -> IPCOut_IPU1_0_EVE2_1[taillabel=Q1, minlen=2, labeldistance=3]
+       Dup_capture -> IPCOut_IPU1_0_EVE3_2[taillabel=Q2, minlen=2, labeldistance=3]
+       Dup_capture -> IPCOut_IPU1_0_EVE4_3[taillabel=Q3, minlen=2, labeldistance=3]
+       Capture -> Dup_capture
+       Merge_Dof -> Alg_VectorToImage
+       Alg_DenseOptFlow_1 -> IPCOut_EVE1_DSP1_0
+       Alg_DenseOptFlow_2 -> IPCOut_EVE2_DSP1_0
+       Alg_DenseOptFlow_3 -> IPCOut_EVE3_DSP1_0
+       Alg_DenseOptFlow_4 -> IPCOut_EVE4_DSP1_0
+       Alg_VectorToImage -> IPCOut_DSP1_IPU1_0_0
+       VPE_capture -> Display_VideoOriginal
+       GrpxSrc -> Display_Grpx
+       IPCOut_IPU1_0_EVE1_0 -> IPCIn_EVE1_IPU1_0_0
+       IPCIn_EVE1_IPU1_0_0 -> Alg_DenseOptFlow_1
+       IPCOut_EVE1_DSP1_0 -> IPCIn_DSP1_EVE1_0
+       IPCIn_DSP1_EVE1_0 -> Merge_Dof[headlabel=Q0 minlen=2, labeldistance=3]
+       IPCOut_IPU1_0_EVE2_1 -> IPCIn_EVE2_IPU1_0_0
+       IPCIn_EVE2_IPU1_0_0 -> Alg_DenseOptFlow_2
+       IPCOut_EVE2_DSP1_0 -> IPCIn_DSP1_EVE2_1
+       IPCIn_DSP1_EVE2_1 -> Merge_Dof[headlabel=Q1 minlen=2, labeldistance=3]
+       IPCOut_IPU1_0_EVE3_2 -> IPCIn_EVE3_IPU1_0_0
+       IPCIn_EVE3_IPU1_0_0 -> Alg_DenseOptFlow_3
+       IPCOut_EVE3_DSP1_0 -> IPCIn_DSP1_EVE3_2
+       IPCIn_DSP1_EVE3_2 -> Merge_Dof[headlabel=Q2 minlen=2, labeldistance=3]
+       IPCOut_IPU1_0_EVE4_3 -> IPCIn_EVE4_IPU1_0_0
+       IPCIn_EVE4_IPU1_0_0 -> Alg_DenseOptFlow_4
+       IPCOut_EVE4_DSP1_0 -> IPCIn_DSP1_EVE4_3
+       IPCIn_DSP1_EVE4_3 -> Merge_Dof[headlabel=Q3 minlen=2, labeldistance=3]
+       IPCOut_DSP1_IPU1_0_0 -> IPCIn_IPU1_0_DSP1_0
+       IPCIn_IPU1_0_DSP1_0 -> Display_VideoDof
+}

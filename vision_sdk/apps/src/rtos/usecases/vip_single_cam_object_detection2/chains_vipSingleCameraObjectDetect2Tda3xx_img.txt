@@ -1,0 +1,69 @@
+digraph chains_vipSingleCameraObjectDetect2Tda3xx {
+
+       ColorScheme [shape=none, margin=0, label=<
+       <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+       <TR><TD bgcolor="lightblue">IPU1_0</TD></TR>
+       <TR><TD bgcolor="palegreen">DSP1</TD></TR>
+       <TR><TD bgcolor="yellow">EVE1</TD></TR>
+       </TABLE>>];
+
+       /************** LINKS ************************/
+       Capture [color=lightblue, style=filled]
+       IPCOut_IPU1_0_EVE1_0 [color=lightblue, style=filled]
+       IPCIn_EVE1_IPU1_0_0 [color=yellow, style=filled]
+       Alg_ImagePreProcess [color=yellow, style=filled]
+       IPCOut_EVE1_IPU1_0_0 [color=yellow, style=filled]
+       IPCIn_IPU1_0_EVE1_0 [color=lightblue, style=filled]
+       Dup_capture [color=lightblue, style=filled]
+       Alg_ImgPyramid [color=lightblue, style=filled]
+       Dup_imgPyramid [color=lightblue, style=filled]
+       IPCOut_IPU1_0_DSP1_2 [color=lightblue, style=filled]
+       IPCIn_DSP1_IPU1_0_1 [color=palegreen, style=filled]
+       IPCOut_IPU1_0_EVE1_1 [color=lightblue, style=filled]
+       IPCIn_EVE1_IPU1_0_1 [color=yellow, style=filled]
+       Alg_FPCompute [color=yellow, style=filled]
+       IPCOut_EVE1_DSP1_1 [color=yellow, style=filled]
+       IPCIn_DSP1_EVE1_0 [color=palegreen, style=filled]
+       Alg_ObjectDetection [color=palegreen, style=filled]
+       Merge_objectDetect [color=palegreen, style=filled]
+       Sync_objectDetect [color=palegreen, style=filled]
+       Alg_ObjectClassification [color=palegreen, style=filled]
+       IPCOut_DSP1_IPU1_0_0 [color=palegreen, style=filled]
+       IPCIn_IPU1_0_DSP1_1 [color=lightblue, style=filled]
+       Merge_alg [color=lightblue, style=filled]
+       Sync_alg [color=lightblue, style=filled]
+       Alg_ObjectDraw [color=lightblue, style=filled]
+       Display_alg [color=lightblue, style=filled]
+       GrpxSrc [color=lightblue, style=filled]
+       Display_Grpx [color=lightblue, style=filled]
+
+       /************** CONNECTIONS ************************/
+       Merge_alg -> Sync_alg
+       Dup_capture -> Merge_alg[headlabel=Q0, taillabel=Q0, minlen=2, labeldistance=3]
+       Dup_capture -> Alg_ImgPyramid[taillabel=Q1, minlen=2, labeldistance=3]
+       Alg_ImagePreProcess -> IPCOut_EVE1_IPU1_0_0
+       Capture -> IPCOut_IPU1_0_EVE1_0
+       Merge_objectDetect -> Sync_objectDetect
+       Alg_ObjectDetection -> Merge_objectDetect[headlabel=Q0 minlen=2, labeldistance=3]
+       Alg_FPCompute -> IPCOut_EVE1_DSP1_1
+       Dup_imgPyramid -> IPCOut_IPU1_0_EVE1_1[taillabel=Q0, minlen=2, labeldistance=3]
+       Dup_imgPyramid -> IPCOut_IPU1_0_DSP1_2[taillabel=Q1, minlen=2, labeldistance=3]
+       Alg_ImgPyramid -> Dup_imgPyramid
+       Alg_ObjectDraw -> Display_alg
+       Sync_alg -> Alg_ObjectDraw
+       Alg_ObjectClassification -> IPCOut_DSP1_IPU1_0_0
+       Sync_objectDetect -> Alg_ObjectClassification
+       GrpxSrc -> Display_Grpx
+       IPCOut_IPU1_0_EVE1_0 -> IPCIn_EVE1_IPU1_0_0
+       IPCIn_EVE1_IPU1_0_0 -> Alg_ImagePreProcess
+       IPCOut_EVE1_IPU1_0_0 -> IPCIn_IPU1_0_EVE1_0
+       IPCIn_IPU1_0_EVE1_0 -> Dup_capture
+       IPCOut_IPU1_0_EVE1_1 -> IPCIn_EVE1_IPU1_0_1
+       IPCIn_EVE1_IPU1_0_1 -> Alg_FPCompute
+       IPCOut_EVE1_DSP1_1 -> IPCIn_DSP1_EVE1_0
+       IPCIn_DSP1_EVE1_0 -> Alg_ObjectDetection
+       IPCOut_IPU1_0_DSP1_2 -> IPCIn_DSP1_IPU1_0_1
+       IPCIn_DSP1_IPU1_0_1 -> Merge_objectDetect[headlabel=Q1 minlen=2, labeldistance=3]
+       IPCOut_DSP1_IPU1_0_0 -> IPCIn_IPU1_0_DSP1_1
+       IPCIn_IPU1_0_DSP1_1 -> Merge_alg[headlabel=Q1 minlen=2, labeldistance=3]
+}

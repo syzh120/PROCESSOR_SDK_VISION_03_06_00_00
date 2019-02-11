@@ -1,0 +1,912 @@
+From 1af93c34c753e0d49ac2a1fef28d9b2c0cfecd99 Mon Sep 17 00:00:00 2001
+From: Venkateswara Rao Mandela <venkat.mandela@ti.com>
+Date: Fri, 8 May 2015 15:57:22 +0530
+Subject: [PATCH 1/4] dra7xx: Kernel Optimizations for early-use-case
+ enablement
+
+dra7xx: add functions for timestamping execution
+Add two functions for timestamping various points in the
+execution of kernel.
+1. read_fast_counter() - This function reads the 32 KHz counter present
+on the dra7xx SOC. This counter starts counting from 0 from the PORZ of
+the SOC and provides an indication of the time elapsed since powering
+the device on. One tick of the counter is equal to 30.5 us.
+2. ARM_CCNT_Read() - This funtions reads the counter present in the
+Performance Monitor Unit(PMU) in the A15 core. The counter is configured
+is using the function ARM_CCNT_Reset(). The PMU counter is configured to
+count at a frequency of (1/64) of the A15 clock. This provides a higher
+resolution counter compared to the 32 KHz counter.
+
+config_fragments: choose lzo as the compression format
+lzo offers the best tradeoff between decompression time and
+image size.
+
+dra7xx: timestamp various points in execution
+This commit timestamps various points in execution of kernel. These
+functions were found to consume major portion of the initialization time
+in the kernel.
+The approach used to execute benchmark and report execution time can be
+extended to other portions of the initialization sequence if necessary.
+1. start_time - The time at which the execution reaches the function
+init/main.c:start_kernel(). This time along with the time at which the
+boot loader started the kernel provides an indication of the amount of
+the time spent in decompressing the kernel.
+2. mm_init_dur - The time taken to setup the memory management
+subsystem in init/main.c:mm_init().
+3. omaphwmod_dur - Time spent in the
+arch/arm/mach-omap2/omap_hwmod.c:omap_hwmod_setup_all() function call.
+4. init_call_time - Time spent in the init calls. The function concerned
+in init/main.c:do_initcalls().
+5. rest_init_time - Time spent in the init/main.c:rest_init() function.
+6. cust_machine_dur - Time spent in the
+arch/arm/kernel/setup.c:customize_machine() function call.
+
+dra7xx: timestamp various points in execution
+Timestamp various points in execution of kernel. These
+functions were found to consume major portion of the initialization time
+in the kernel.
+The approach used to execute benchmark and report execution time can be
+extended to other portions of the initialization sequence if necessary.
+1. start_time - The time at which the execution reaches the function
+init/main.c:start_kernel(). This time along with the time at which the
+boot loader started the kernel provides an indication of the amount of
+the time spent in decompressing the kernel.
+2. mm_init_dur - The time taken to setup the memory management
+subsystem in init/main.c:mm_init().
+3. omaphwmod_dur - Time spent in the
+arch/arm/mach-omap2/omap_hwmod.c:omap_hwmod_setup_all() function call.
+4. init_call_time - Time spent in the init calls. The function concerned
+in init/main.c:do_initcalls().
+5. rest_init_time - Time spent in the init/main.c:rest_init() function.
+6. cust_machine_dur - Time spent in the
+arch/arm/kernel/setup.c:customize_machine() function call.
+
+arch: arm: omap2: optimize hwmod lookup during init
+Instead of searching through the device tree for nodes
+with "ti,hwmods" property for every hwmod,
+1. traverse the tree once and build a list.
+2. search in the list for the hwmod.
+3. In case the list is empty, fall back to the original
+search mechanism.
+This approach saves ~100 ms of initialization time on a DRA7xx
+processor running at 1 GHz.
+TODO: Free the allocated list
+TODO: Check if the list can be allocated even earlier.
+
+ti_fragments: add configuration options to reduce boot time.
+This fragment converts much of the unused functionality into
+modules saving ~1000 ms from the kernel initialization time.
+
+dra7: dts: disable mmc4 to save on boot time
+
+Signed-off-by: Venkateswara Rao Mandela <venkat.mandela@ti.com>
+Signed-off-by: Nikhil Devshatwar <nikhil.nd@ti.com>
+---
+ arch/arm/boot/dts/dra7-evm.dts         |   2 +-
+ arch/arm/boot/dts/dra7.dtsi            |  30 +++++
+ arch/arm/kernel/setup.c                |   5 +
+ arch/arm/mach-omap2/Makefile           |   8 ++
+ arch/arm/mach-omap2/board-dra7xx.c     |  53 +++++++++
+ arch/arm/mach-omap2/board-dra7xx.h     |  19 +++
+ arch/arm/mach-omap2/omap4-common.c     |  13 ++
+ arch/arm/mach-omap2/omap_hwmod.c       |  84 +++++++++++++
+ arch/arm/mach-omap2/performance_unit.S |  50 ++++++++
+ init/do_mounts.c                       |   4 +
+ init/main.c                            |  47 +++++++-
+ ti_config_fragments/auto.cfg           |   5 +
+ ti_config_fragments/boot_opt.cfg       | 210 +++++++++++++++++++++++++++++++++
+ ti_config_fragments/defconfig_map.txt  |   2 +-
+ 14 files changed, 527 insertions(+), 5 deletions(-)
+ create mode 100644 arch/arm/mach-omap2/board-dra7xx.c
+ create mode 100644 arch/arm/mach-omap2/board-dra7xx.h
+ create mode 100644 arch/arm/mach-omap2/performance_unit.S
+ create mode 100644 ti_config_fragments/boot_opt.cfg
+
+diff --git a/arch/arm/boot/dts/dra7-evm.dts b/arch/arm/boot/dts/dra7-evm.dts
+index 7da016d..2b0064e 100644
+--- a/arch/arm/boot/dts/dra7-evm.dts
++++ b/arch/arm/boot/dts/dra7-evm.dts
+@@ -905,7 +905,7 @@ i2c_p3_exp: &i2c2 {
+ };
+ 
+ &mmc4 {
+-	status = "okay";
++	status = "disabled";
+ 	vmmc-supply = <&vmmcwl_fixed>;
+ 	bus-width = <4>;
+ 	cap-power-off-card;
+diff --git a/arch/arm/boot/dts/dra7.dtsi b/arch/arm/boot/dts/dra7.dtsi
+index 3c5f10f..335d42e 100755
+--- a/arch/arm/boot/dts/dra7.dtsi
++++ b/arch/arm/boot/dts/dra7.dtsi
+@@ -2404,3 +2404,33 @@
+ };
+ 
+ /include/ "dra7xx-clocks.dtsi"
++
++/ {
++	chosen {
++		/* Counters for events in bootloader */
++		m-entry-time = <0x0000000>;
++		m-boardinit-time = <0x00000000>;
++		m-heap-init-dur = <0x00000000>;
++		m-spi-init-dur = <0x00000000>;
++		m-mmc-init-dur = <0x00000000>;
++		m-image-load-dur = <0x00000000>;
++		m-kernelstart-time = <0x00000000>;
++
++		/* For future use in bootloader */
++		m-display-time = <0x00000000>;
++		m-dsp1start-time = <0x00000000>;
++		m-dsp2start-time = <0x00000000>;
++		m-ipu1start-time = <0x00000000>;
++		m-ipu2start-time = <0x00000000>;
++
++		/* counters for events in kernel */
++		k-start-time = <0x00000000>;
++		k-hwmod-dur = <0x00000000>;
++		k-mm-init-dur = <0x00000000>;
++		k-rest-init-time = <0x00000000>;
++		k-cust-machine-dur = <0x00000000>;
++		k-user-space-entry-time = <0x00000000>;
++		k-init-call-dur = <0x00000000>;
++		k-root-wait-dur = <0x00000000>;
++	};
++};
+diff --git a/arch/arm/kernel/setup.c b/arch/arm/kernel/setup.c
+index 97a0dea..dce6c55 100644
+--- a/arch/arm/kernel/setup.c
++++ b/arch/arm/kernel/setup.c
+@@ -841,8 +841,12 @@ struct screen_info screen_info = {
+ };
+ #endif
+ 
++extern u32 read_fast_counter(void);
++extern u32 cust_machine_dur;
++
+ static int __init customize_machine(void)
+ {
++	cust_machine_dur = read_fast_counter();
+ 	/*
+ 	 * customizes platform devices, or adds new ones
+ 	 * On DT based machines, we fall back to populating the
+@@ -857,6 +861,7 @@ static int __init customize_machine(void)
+ 		of_platform_populate(NULL, of_default_bus_match_table,
+ 					NULL, NULL);
+ #endif
++	cust_machine_dur = read_fast_counter() - cust_machine_dur;
+ 	return 0;
+ }
+ arch_initcall(customize_machine);
+diff --git a/arch/arm/mach-omap2/Makefile b/arch/arm/mach-omap2/Makefile
+index a101d94..3466e05 100644
+--- a/arch/arm/mach-omap2/Makefile
++++ b/arch/arm/mach-omap2/Makefile
+@@ -45,6 +45,10 @@ AFLAGS_omap-headsmp.o			:=-Wa,-march=armv7-a$(plus_sec)
+ AFLAGS_omap-smc.o			:=-Wa,-march=armv7-a$(plus_sec)
+ AFLAGS_sleep44xx.o			:=-Wa,-march=armv7-a$(plus_sec)
+ 
++# Add PMU access for performance monitoring
++obj-y += performance_unit.o
++AFLAGS_performance_unit.o := -Wa,-march=armv7-a
++
+ # Functions loaded to SRAM
+ obj-$(CONFIG_SOC_OMAP2420)		+= sram242x.o
+ obj-$(CONFIG_SOC_OMAP2430)		+= sram243x.o
+@@ -269,3 +273,7 @@ obj-$(CONFIG_OMAP_IOMMU)		+= omap-iommu.o
+ ifneq ($(CONFIG_OMAP_REMOTEPROC),)
+ obj-y					+= remoteproc.o
+ endif
++
++CFLAGS_omap_hwmod.o += -O0
++CFLAGS_remoteproc.o += -O0
++obj-$(CONFIG_SOC_DRA7XX) += board-dra7xx.o
+diff --git a/arch/arm/mach-omap2/board-dra7xx.c b/arch/arm/mach-omap2/board-dra7xx.c
+new file mode 100644
+index 0000000..71462a0
+--- /dev/null
++++ b/arch/arm/mach-omap2/board-dra7xx.c
+@@ -0,0 +1,53 @@
++/*
++ * Copyright (C) 2015 Texas Instruments Incorporated - http://www.ti.com/
++ * Author: Venkateswara Rao Mandela <venkat.mandela@ti.com>
++ *
++ * Modified from the original mach-omap/omap2/board-generic.c did by Paul
++ * to support the OMAP2+ device tree boards with an unique board file.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ */
++#include <linux/of.h>
++#include <asm/byteorder.h>
++#include "board-dra7xx.h"
++
++
++static void kernel_set_boottime_vals(struct device_node *chosen,
++			      const char *propname,
++			      u32 boot_time){
++	struct property *prop;
++
++	prop = of_find_property(chosen, propname, NULL);
++	if (prop) {
++		u32 *intPtr;
++
++		intPtr = (u32 *)prop->value;
++		*intPtr = cpu_to_be32(boot_time);
++	} else {
++		pr_err("%s not found\n", propname);
++	}
++}
++
++void kernel_update_dt_with_boottimes(void)
++{
++	struct device_node *bus;
++	u32 user_entry = read_fast_counter();
++
++	bus = of_find_node_by_name(NULL, "chosen");
++	if (!bus) {
++		pr_err("Could not find chosen node");
++		return;
++	}
++
++	pr_err("Kernel Entry time %d ticks\n", start_time);
++	kernel_set_boottime_vals(bus, "k-start-time", start_time);
++	kernel_set_boottime_vals(bus, "k-hwmod-dur", omaphwmod_dur);
++	kernel_set_boottime_vals(bus, "k-mm-init-dur", mm_init_dur);
++	kernel_set_boottime_vals(bus, "k-rest-init-time", rest_init_time);
++	kernel_set_boottime_vals(bus, "k-cust-machine-dur", cust_machine_dur);
++	kernel_set_boottime_vals(bus, "k-user-space-entry-time", user_entry);
++	kernel_set_boottime_vals(bus, "k-init-call-dur", init_call_time);
++	kernel_set_boottime_vals(bus, "k-root-wait-dur", root_wait_time);
++}
+diff --git a/arch/arm/mach-omap2/board-dra7xx.h b/arch/arm/mach-omap2/board-dra7xx.h
+new file mode 100644
+index 0000000..dcfd6bf
+--- /dev/null
++++ b/arch/arm/mach-omap2/board-dra7xx.h
+@@ -0,0 +1,19 @@
++/*
++ * Copyright (C) 2017 Texas Instruments Incorporated - http://www.ti.com/
++ * Author: Venkateswara Rao Mandela <venkat.mandela@ti.com>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ */
++
++#include <linux/types.h>
++
++extern u32 start_time;
++extern u32 mm_init_dur;
++extern u32 omaphwmod_dur;
++extern u32 rest_init_time;
++extern u32 init_call_time;
++extern u32 cust_machine_dur;
++extern u32 root_wait_time;
++extern u32 read_fast_counter(void);
+diff --git a/arch/arm/mach-omap2/omap4-common.c b/arch/arm/mach-omap2/omap4-common.c
+index 949696b..442534f 100644
+--- a/arch/arm/mach-omap2/omap4-common.c
++++ b/arch/arm/mach-omap2/omap4-common.c
+@@ -48,6 +48,7 @@ static void __iomem *l2cache_base;
+ static void __iomem *sar_ram_base;
+ static void __iomem *gic_dist_base_addr;
+ static void __iomem *twd_base;
++static void __iomem *timer_32k;
+ 
+ #define IRQ_LOCALTIMER		29
+ 
+@@ -170,6 +171,18 @@ void __init omap_barriers_init(void)
+ 	soc_mb = omap4_mb;
+ }
+ 
++#define COUNTER32K_CR	0x4AE04030
++
++u32 read_fast_counter(void)
++{
++	u32 reg_val;
++
++	timer_32k = ioremap(COUNTER32K_CR, SZ_512);
++	reg_val = (u32) __raw_readw(timer_32k);
++	reg_val |= (u32)(__raw_readw(timer_32k+2) << 16);
++	return reg_val;
++}
++
+ #endif
+ 
+ void gic_dist_disable(void)
+diff --git a/arch/arm/mach-omap2/omap_hwmod.c b/arch/arm/mach-omap2/omap_hwmod.c
+index c8eb5f4..24e05ad 100644
+--- a/arch/arm/mach-omap2/omap_hwmod.c
++++ b/arch/arm/mach-omap2/omap_hwmod.c
+@@ -235,6 +235,14 @@ static unsigned short free_ls, max_ls, ls_supp;
+ /* inited: set to true once the hwmod code is initialized */
+ static bool inited;
+ 
++static LIST_HEAD(omap_ti_hwmod_list);
++struct oh_np_index_list {
++	struct device_node *np;
++	int index;
++	struct list_head node;
++	const char *name;
++};
++
+ /* Private functions */
+ 
+ /**
+@@ -2347,6 +2355,71 @@ static int of_dev_find_hwmod(struct device_node *np,
+ 	return -ENODEV;
+ }
+ 
++static int of_dev_hwmod_list_lookup(const char *oh_name,
++				    int *index,
++				    struct device_node **found)
++{
++	struct oh_np_index_list *temp_node;
++
++	if (list_empty(&omap_ti_hwmod_list))
++		return 1;
++
++	*found = NULL;
++	*index = 0;
++
++	list_for_each_entry(temp_node, &omap_ti_hwmod_list, node) {
++		if (strcmp(oh_name, temp_node->name) == 0) {
++			*index = temp_node->index;
++			*found =  temp_node->np;
++			return 0;
++		}
++	}
++
++	return -ENODEV;
++}
++/**
++ * Builds a list of "ti,hwmods" and their indices for use by later
++ * code.
++ *
++ */
++static int __init omap_hwmod_build_ti_hwmod_list(void)
++{
++	struct device_node *bus;
++	struct device_node *np;
++	int count, i, res;
++	const char *p;
++
++	if (!of_have_populated_dt())
++		return 0;
++
++	bus = of_find_node_by_name(NULL, "ocp");
++	if (!bus)
++		return -ENODEV;
++
++	for_each_node_with_property(np, "ti,hwmods") {
++		count = of_property_count_strings(np, "ti,hwmods");
++		if (count < 1)
++			continue;
++		for (i = 0; i < count; i++) {
++			struct oh_np_index_list *item = NULL;
++
++			res = of_property_read_string_index(np, "ti,hwmods",
++							    i, &p);
++			if (res)
++				continue;
++			item = kzalloc(sizeof(*item), GFP_KERNEL);
++			if (!item)
++				return -ENOMEM;
++			item->index = i;
++			item->np = np;
++			item->name = p;
++			list_add(&item->node, &omap_ti_hwmod_list);
++		}
++
++
++	}
++	return 0;
++}
+ /**
+  * of_dev_hwmod_lookup - look up needed hwmod from dt blob
+  * @np: struct device_node *
+@@ -2366,6 +2439,11 @@ static int of_dev_hwmod_lookup(struct device_node *np,
+ 	struct device_node *np0 = NULL;
+ 	int res;
+ 
++	res = of_dev_hwmod_list_lookup(oh->name, index,
++				     found);
++	if (res <= 0)
++		return res;
++
+ 	res = of_dev_find_hwmod(np, oh);
+ 	if (res >= 0) {
+ 		*found = np;
+@@ -2481,6 +2559,7 @@ static int __init _init_mpu_rt_base(struct omap_hwmod *oh, void *data,
+ 	return 0;
+ }
+ 
++
+ /**
+  * _init - initialize internal data for the hwmod @oh
+  * @oh: struct omap_hwmod *
+@@ -3377,6 +3456,8 @@ int __init omap_hwmod_setup_one(const char *oh_name)
+ 	return 0;
+ }
+ 
++extern u32 read_fast_counter(void);
++extern u32 omaphwmod_dur;
+ /**
+  * omap_hwmod_setup_all - set up all registered IP blocks
+  *
+@@ -3387,10 +3468,13 @@ int __init omap_hwmod_setup_one(const char *oh_name)
+  */
+ static int __init omap_hwmod_setup_all(void)
+ {
++	omaphwmod_dur = read_fast_counter();
++	omap_hwmod_build_ti_hwmod_list();
+ 	_ensure_mpu_hwmod_is_setup(NULL);
+ 
+ 	omap_hwmod_for_each(_init, NULL);
+ 	omap_hwmod_for_each(_setup, NULL);
++	omaphwmod_dur = read_fast_counter() - omaphwmod_dur;
+ 
+ 	return 0;
+ }
+diff --git a/arch/arm/mach-omap2/performance_unit.S b/arch/arm/mach-omap2/performance_unit.S
+new file mode 100644
+index 0000000..49a5ddb
+--- /dev/null
++++ b/arch/arm/mach-omap2/performance_unit.S
+@@ -0,0 +1,50 @@
++﻿/*---------------------------------------------------------------------------
++* File: performance_unit.S
++* Author: vinoth: Modified the original SDO code for cortex-A15
++*---------------------------------------------------------------------------
++
++*---------------------------------------------------------------------------
++*
++* Functions to Enable, Reset & Read the Cycle Count Register (CCNT)
++*
++* CCNT enabled and reset via Performance Monitor Control Register (PMNC)
++* The CCNT is divided by 64 (by setting Bit 3 of PMNC to 1)
++* CCNT is checked for overflow by looking at bit 10 of PMNC
++* CCNT Read returns the clock value divided by 64 cycles.
++* To get the actual CPU cycle multiple it with 64
++*---------------------------------------------------------------------------*/
++
++	.text
++
++.set CCNT_CP1, C9
++.set CCNT_CP2, C13
++
++	.global  ARM_CCNT_Enable
++	.global  ARM_CCNT_Reset
++	.global  ARM_CPCT_Read
++	.global  ARM_CFRQ_Read
++
++ARM_CCNT_Enable:
++ARM_CCNT_Reset:
++	@Write Performance Monitor Control Register
++	@PMCCNTR counts once every 64 clock cycles
++	MRC P15, #0, R0, C9, C12, #0
++	ORR R0, R0, #0xD
++
++	MCR P15, #0, R0, C9, C12, #0 @Reset Cycle count register
++	MOV R1, #0x80000000
++	MCR P15, #0, R1, C9, C12, #1	@Enable the cycle count
++	BX  LR
++
++	.global  ARM_CCNT_Read
++ARM_CCNT_Read:
++	MRC P15, #0, R0, C9, C13, #0
++	BX  LR
++
++ARM_CPCT_Read:
++	@Read the 64-bit Physical counter value
++	MRRC P15, #0, R0, R1, C14
++
++ARM_CFRQ_Read:
++	@Read the clk freq of the system counter
++	MRC P15, #0, R0, C14, C0, #0
+diff --git a/init/do_mounts.c b/init/do_mounts.c
+index dea5de9..eb171b5 100644
+--- a/init/do_mounts.c
++++ b/init/do_mounts.c
+@@ -543,6 +543,8 @@ void __init mount_root(void)
+ #endif
+ }
+ 
++extern u32 root_wait_time;
++extern u32 read_fast_counter(void);
+ /*
+  * Prepare the namespace - decide what/where to mount, load ramdisks, etc.
+  */
+@@ -582,6 +584,7 @@ void __init prepare_namespace(void)
+ 	if (initrd_load())
+ 		goto out;
+ 
++	root_wait_time = read_fast_counter();
+ 	/* wait for any asynchronous scanning to complete */
+ 	if ((ROOT_DEV == 0) && root_wait) {
+ 		printk(KERN_INFO "Waiting for root device %s...\n",
+@@ -591,6 +594,7 @@ void __init prepare_namespace(void)
+ 			msleep(100);
+ 		async_synchronize_full();
+ 	}
++	root_wait_time = read_fast_counter() - root_wait_time;
+ 
+ 	is_floppy = MAJOR(ROOT_DEV) == FLOPPY_MAJOR;
+ 
+diff --git a/init/main.c b/init/main.c
+index fbafa27..649c622 100644
+--- a/init/main.c
++++ b/init/main.c
+@@ -352,6 +352,16 @@ static inline void setup_nr_cpu_ids(void) { }
+ static inline void smp_prepare_cpus(unsigned int maxcpus) { }
+ #endif
+ 
++extern u32 ARM_CCNT_Read(void);
++extern u32 read_fast_counter(void);
++u32 start_time;
++u32 mm_init_dur;
++u32 omaphwmod_dur;
++u32 rest_init_time;
++u32 init_call_time;
++u32 cust_machine_dur;
++u32 root_wait_time;
++
+ /*
+  * We need to store the untouched command line for future reference.
+  * We also need to store the touched command line since the parameter
+@@ -384,6 +394,7 @@ static noinline void __init_refok rest_init(void)
+ {
+ 	int pid;
+ 
++	rest_init_time = read_fast_counter();
+ 	rcu_scheduler_starting();
+ 	smpboot_thread_init();
+ 	/*
+@@ -478,6 +489,7 @@ void __init __weak thread_info_cache_init(void)
+  */
+ static void __init mm_init(void)
+ {
++	mm_init_dur = read_fast_counter();
+ 	/*
+ 	 * page_ext requires contiguous pages,
+ 	 * bigger than MAX_ORDER unless SPARSEMEM.
+@@ -489,12 +501,20 @@ static void __init mm_init(void)
+ 	pgtable_init();
+ 	vmalloc_init();
+ 	ioremap_huge_init();
++	mm_init_dur = read_fast_counter() - mm_init_dur;
+ }
+ 
+ asmlinkage __visible void __init start_kernel(void)
+ {
+ 	char *command_line;
+ 	char *after_dashes;
++	u32 start_time_pmu;
++	u32 setup_arch_time_pmu;
++	u32 setup_arch_time_32k;
++
++	start_time_pmu = ARM_CCNT_Read();
++
++	start_time_pmu = ARM_CCNT_Read();
+ 
+ 	/*
+ 	 * Need to run as early as possible, to initialize the
+@@ -523,6 +543,18 @@ asmlinkage __visible void __init start_kernel(void)
+ 	page_address_init();
+ 	pr_notice("%s", linux_banner);
+ 	setup_arch(&command_line);
++
++	setup_arch_time_pmu = ARM_CCNT_Read();
++	setup_arch_time_32k = read_fast_counter();
++
++	{
++		/* This is in CPU ticks. Assuming 1 GHz */
++		u32 till_set_arch_dur = (setup_arch_time_pmu - start_time_pmu);
++
++		till_set_arch_dur = (till_set_arch_dur/477);
++		start_time = setup_arch_time_32k - till_set_arch_dur;
++	}
++
+ 	mm_init_cpumask(&init_mm);
+ 	setup_command_line(command_line);
+ 	setup_nr_cpu_ids();
+@@ -879,7 +911,9 @@ static void __init do_basic_setup(void)
+ 	init_irq_proc();
+ 	do_ctors();
+ 	usermodehelper_enable();
++	init_call_time = read_fast_counter();
+ 	do_initcalls();
++	init_call_time = read_fast_counter() - init_call_time;
+ 	random_int_secret_init();
+ }
+ 
+@@ -925,6 +959,7 @@ static int try_to_run_init_process(const char *init_filename)
+ }
+ 
+ static noinline void __init kernel_init_freeable(void);
++extern void kernel_update_dt_with_boottimes(void);
+ 
+ #ifdef CONFIG_DEBUG_RODATA
+ static bool rodata_enabled = true;
+@@ -964,8 +999,10 @@ static int __ref kernel_init(void *unused)
+ 
+ 	if (ramdisk_execute_command) {
+ 		ret = run_init_process(ramdisk_execute_command);
+-		if (!ret)
++		if (!ret) {
++			kernel_update_dt_with_boottimes();
+ 			return 0;
++		}
+ 		pr_err("Failed to execute %s (error %d)\n",
+ 		       ramdisk_execute_command, ret);
+ 	}
+@@ -978,16 +1015,20 @@ static int __ref kernel_init(void *unused)
+ 	 */
+ 	if (execute_command) {
+ 		ret = run_init_process(execute_command);
+-		if (!ret)
++		if (!ret) {
++			kernel_update_dt_with_boottimes();
+ 			return 0;
++		}
+ 		panic("Requested init %s failed (error %d).",
+ 		      execute_command, ret);
+ 	}
+ 	if (!try_to_run_init_process("/sbin/init") ||
+ 	    !try_to_run_init_process("/etc/init") ||
+ 	    !try_to_run_init_process("/bin/init") ||
+-	    !try_to_run_init_process("/bin/sh"))
++	    !try_to_run_init_process("/bin/sh")) {
++		kernel_update_dt_with_boottimes();
+ 		return 0;
++	}
+ 
+ 	panic("No working init found.  Try passing init= option to kernel. "
+ 	      "See Linux Documentation/init.txt for guidance.");
+diff --git a/ti_config_fragments/auto.cfg b/ti_config_fragments/auto.cfg
+index ce09628..44e377d 100644
+--- a/ti_config_fragments/auto.cfg
++++ b/ti_config_fragments/auto.cfg
+@@ -50,3 +50,8 @@ CONFIG_ICS932S401=n
+ CONFIG_VMEM_EXP_DMABUF=y
+ CONFIG_DEBUG_INFO=y
+ CONFIG_ARM_LPAE=y
++#CONFIG_DEBUG_INFO=y
++# Boot time options
++# Change kernel compression to LZO which has faster decompression
++# times compared to gzip.
++CONFIG_RD_LZO=y
+diff --git a/ti_config_fragments/boot_opt.cfg b/ti_config_fragments/boot_opt.cfg
+new file mode 100644
+index 0000000..6f11376
+--- /dev/null
++++ b/ti_config_fragments/boot_opt.cfg
+@@ -0,0 +1,210 @@
++# This file contains configuration options that
++# can be used to reduce the boot time of the Linux
++# Kernel. These options need to be customized as per
++# the end use case
++
++# Make unused file systems into modules
++CONFIG_EXT2_FS=m
++CONFIG_EXT3_FS=m
++CONFIG_JBD=m
++CONFIG_FAT_FS=m
++CONFIG_MSDOS_FS=m
++CONFIG_VFAT_FS=m
++CONFIG_CRAMFS=n
++
++## Convert MTD support and related functionality into
++## Modules
++# Turn MTD into a module
++CONFIG_MTD=m
++
++# Make NAND support into a module
++CONFIG_MTD_NAND=m
++
++# Make QSPI a module
++CONFIG_SPI_TI_QSPI=m
++
++# Make NAND File system support into a module
++CONFIG_JFFS2_FS=m
++
++CONFIG_UBIFS_FS=m
++
++# Make SCSI and ATA into modules
++CONFIG_SCSI=m
++CONFIG_ATA=m
++CONFIG_SATA_AHCI_PLATFORM=m
++
++# Make CAN into module
++CONFIG_CAN=m
++CONFIG_CAN_RAW=m
++
++# Disable PCI.
++CONFIG_PCI=n
++CONFIG_PCI_DRA7XX=n
++
++# Set default CPU governor to performance
++CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE=y
++
++## Debug related options
++# Disable debug fs
++CONFIG_DEBUG_FS=n
++
++# Disable Kprobes debug infrastructure. This is a requirement for
++# removing all debug symbols.
++CONFIG_KPROBES=n
++
++# Remove debug info from kernel to reduce size
++CONFIG_DEBUG_INFO=n
++
++# Change kernel compression to LZO which has faster decompression
++# times compared to gzip.
++CONFIG_KERNEL_LZO=y
++CONFIG_RD_LZO=y
++
++# This will reduce the number of probe deferrals due to sound
++CONFIG_SND=m
++CONFIG_SOUND=m
++
++# We are relying solely on device tree
++# ATAGS support is not required.
++CONFIG_ATAGS=n
++
++# Convert crypto accelerator support
++# into modules
++CONFIG_CRYPTO_DEV_OMAP_SHAM=m
++CONFIG_CRYPTO_DEV_OMAP_AES=m
++CONFIG_CRYPTO_DEV_OMAP_DES=m
++
++##################################
++##################################
++## Networking support
++# Network file system support
++CONFIG_NFS_FS=m
++
++# Make CPSW support into a module
++CONFIG_TI_CPSW=m
++
++# Netfilter is a framework for filtering and mangling network packets
++# that pass through your Linux box.
++CONFIG_NETFILTER=n
++
++## Networking options
++CONFIG_XFRM_USER=m
++CONFIG_IP_PNP_RARP=n
++CONFIG_DNS_RESOLVER=m
++CONFIG_VLAN_8021Q=m
++
++# Disable other net vendors
++CONFIG_NET_VENDOR_ARC=n
++CONFIG_NET_VENDOR_BROADCOM=n
++CONFIG_NET_VENDOR_CIRRUS=n
++CONFIG_NET_VENDOR_FARADAY=n
++CONFIG_NET_VENDOR_INTEL=n
++CONFIG_NET_VENDOR_I825XX=n
++CONFIG_NET_VENDOR_MARVELL=n
++CONFIG_NET_VENDOR_MICREL=n
++CONFIG_NET_VENDOR_MICROCHIP=n
++CONFIG_NET_VENDOR_NATSEMI=n
++CONFIG_NET_VENDOR_8390=n
++CONFIG_NET_VENDOR_SEEQ=n
++CONFIG_NET_VENDOR_SMSC=n
++CONFIG_NET_VENDOR_STMICRO=n
++CONFIG_NET_VENDOR_VIA=n
++CONFIG_NET_VENDOR_WIZNET=n
++
++# Turn some power management features into modules.
++CONFIG_TI_COPROC=y
++CONFIG_PM_DEBUG=n
++CONFIG_CPU_FREQ_STAT=m
++
++#Turn media into module
++CONFIG_MEDIA=m
++
++# Disable block dev and loop dev
++CONFIG_BLK_DEV_RAM=m
++CONFIG_BLK_DEV_LOOP=m
++
++# Turn support for the touch screen controller with the 7" LCD into a
++# module. We now use 10" LCD as a default with GLSDK.
++CONFIG_TOUCHSCREEN_ATMEL_MXT=m
++
++# Make video decoder support into a module
++CONFIG_VIDEO_TVP5158=m
++
++# Make USB into module
++CONFIG_USB=m
++CONFIG_OMAP_USB2=m
++
++# Make thermal functionality into module
++CONFIG_THERMAL=m
++CONFIG_SENSORS_TMP102=m
++CONFIG_SENSORS_GPIO_FAN=m
++
++# Dallas 1-Wire bus
++CONFIG_W1=m
++
++CONFIG_TI_ST=m
++CONFIG_ST_HCI=m
++
++# Turn framebuffer console into module
++CONFIG_FRAMEBUFFER_CONSOLE=m
++
++# Turn LED helpers into modules
++CONFIG_LEDS_CLASS=y
++CONFIG_LEDS_TRIGGERS=y
++
++## Disable control over RF switches found on wireless modules.
++CONFIG_RFKILL=n
++
++## External connector class
++CONFIG_EXTCON=m
++
++# Reduce the kernel log buffer size
++CONFIG_LOG_BUF_SHIFT=11
++
++
++# Make 1063x into module
++CONFIG_VIDEO_OV1063X=m
++
++# Set oprofile as module
++CONFIG_OPROFILE=m
++
++# Set remoteproc into module
++CONFIG_OMAP_REMOTEPROC=m
++
++CONFIG_TWL4030_CORE=n
++CONFIG_TWL4030_POWER=n
++CONFIG_TWL6040_CORE=n
++
++CONFIG_PWM_TIECAP=m
++CONFIG_PWM_TIEHRPWM=m
++
++CONFIG_DRA7XX_RADIO_HELPER=m
++
++
++CONFIG_LOCALVERSION_AUTO=n
++
++CONFIG_INPUT_MOUSEDEV=m
++CONFIG_INPUT_JOYDEV=m
++CONFIG_MOUSE_PS2=m
++CONFIG_SERIO=m
++CONFIG_KEYBOARD_ATKBD=n
++
++CONFIG_TI_DAVINCI_MDIO=m
++CONFIG_TI_DAVINCI_CPDMA=m
++
++
++#CONFIG_REGULATOR_FIXED_VOLTAGE=m
++CONFIG_REGULATOR_GPIO=y
++CONFIG_REGULATOR_PALMAS=y
++CONFIG_REGULATOR_PBIAS=y
++CONFIG_REGULATOR_TPS65023=m
++CONFIG_REGULATOR_TPS6507X=m
++CONFIG_REGULATOR_TPS65217=m
++CONFIG_REGULATOR_TPS65218=m
++CONFIG_REGULATOR_TPS65910=m
++
++# Disable all debug symbols
++CONFIG_KALLSYMS=n
++CONFIG_KALLSYMS_ALL=n
++
++CONFIG_MMC_BLOCK_MINORS=16
+diff --git a/ti_config_fragments/defconfig_map.txt b/ti_config_fragments/defconfig_map.txt
+index 8a53acf..7ba6afe 100644
+--- a/ti_config_fragments/defconfig_map.txt
++++ b/ti_config_fragments/defconfig_map.txt
+@@ -1,7 +1,7 @@
+ # Release Defconfigs
+ classification: SDK_Release_Defconfigs type: ti_sdk_am3x_release defconfig: multi_v7_defconfig config_file: None extra_configs: multi_v7_prune.cfg baseport.cfg ipc.cfg connectivity.cfg audio_display.cfg wlan.cfg omap_soc.cfg am33xx_only.cfg systemd.cfg
+ classification: SDK_Release_Defconfigs type: ti_sdk_am4x_release defconfig: multi_v7_defconfig config_file: None extra_configs: multi_v7_prune.cfg baseport.cfg ipc.cfg connectivity.cfg audio_display.cfg wlan.cfg omap_soc.cfg am43xx_only.cfg systemd.cfg
+-classification: SDK_Release_Defconfigs type: ti_sdk_dra7x_release defconfig: multi_v7_defconfig config_file: None extra_configs: multi_v7_prune.cfg baseport.cfg ipc.cfg connectivity.cfg audio_display.cfg wlan.cfg omap_soc.cfg dra7_only.cfg systemd.cfg auto.cfg
++classification: SDK_Release_Defconfigs type: ti_sdk_dra7x_release defconfig: multi_v7_defconfig config_file: None extra_configs: multi_v7_prune.cfg baseport.cfg ipc.cfg connectivity.cfg audio_display.cfg wlan.cfg omap_soc.cfg dra7_only.cfg systemd.cfg auto.cfg boot_opt.cfg
+ classification: SDK_Release_Defconfigs type: ti_sdk_omap2_release defconfig: multi_v7_defconfig config_file: None extra_configs: multi_v7_prune.cfg baseport.cfg ipc.cfg connectivity.cfg audio_display.cfg wlan.cfg omap_soc.cfg systemd.cfg
+ classification: SDK_Release_Defconfigs type: ti_sdk_k2g_release defconfig: multi_v7_defconfig config_file: None extra_configs: multi_v7_prune.cfg baseport.cfg ipc.cfg connectivity.cfg audio_display.cfg keystone.cfg lpae.cfg k2g_only.cfg systemd.cfg
+ classification: SDK_Release_Defconfigs type: ti_sdk_keystone_release defconfig: multi_v7_defconfig config_file: None extra_configs: multi_v7_prune.cfg baseport.cfg ipc.cfg connectivity.cfg audio_display.cfg keystone.cfg lpae.cfg systemd.cfg
+-- 
+2.7.4
+

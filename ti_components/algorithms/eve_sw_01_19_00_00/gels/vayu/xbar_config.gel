@@ -1,0 +1,472 @@
+/*
+*
+* Copyright (c) {YEAR} Texas Instruments Incorporated
+*
+* All rights reserved not granted herein.
+*
+* Limited License.
+*
+* Texas Instruments Incorporated grants a world-wide, royalty-free, non-exclusive
+* license under copyrights and patents it now or hereafter owns or controls to make,
+* have made, use, import, offer to sell and sell ("Utilize") this software subject to the
+* terms herein.  With respect to the foregoing patent license, such license is granted
+* solely to the extent that any such patent is necessary to Utilize the software alone.
+* The patent license shall not apply to any combinations which include this software,
+* other than combinations with devices manufactured by or for TI ("TI Devices").
+* No hardware patent is licensed hereunder.
+*
+* Redistributions must preserve existing copyright notices and reproduce this license
+* (including the above copyright notice and the disclaimer and (if applicable) source
+* code license limitations below) in the documentation and/or other materials provided
+* with the distribution
+*
+* Redistribution and use in binary form, without modification, are permitted provided
+* that the following conditions are met:
+*
+* *       No reverse engineering, decompilation, or disassembly of this software is
+* permitted with respect to any software provided in binary form.
+*
+* *       any redistribution and use are licensed by TI for use only with TI Devices.
+*
+* *       Nothing shall obligate TI to provide you with source code for the software
+* licensed and provided to you in object code.
+*
+* If software source code is provided to you, modification and redistribution of the
+* source code are permitted provided that the following conditions are met:
+*
+* *       any redistribution and use of the source code, including any resulting derivative
+* works, are licensed by TI for use only with TI Devices.
+*
+* *       any redistribution and use of any object code compiled from the source code
+* and any resulting derivative works, are licensed by TI for use only with TI Devices.
+*
+* Neither the name of Texas Instruments Incorporated nor the names of its suppliers
+*
+* may be used to endorse or promote products derived from this software without
+* specific prior written permission.
+*
+* DISCLAIMER.
+*
+* THIS SOFTWARE IS PROVIDED BY TI AND TI'S LICENSORS "AS IS" AND ANY EXPRESS
+* OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+* OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+* IN NO EVENT SHALL TI AND TI'S LICENSORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+* INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+* BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+* DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+* OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+* OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+* OF THE POSSIBILITY OF SUCH DAMAGE.
+*
+*/
+
+
+
+#define    CPU_IPU1 0
+#define   CPU_IPU2 1
+#define    CPU_DSP1 2
+#define   CPU_DSP2 3
+#define   CPU_EVE1 4
+#define   CPU_EVE2 5
+#define   CPU_EVE3 6
+#define   CPU_EVE4 7
+#define   CPU_PRUSS1 8
+#define   CPU_PRUSS2 9
+#define CPU_MPUSS   10
+
+
+#define AVATAR_INTR_DMA_OCPINTF__MPU_IRQ_4_5            0xA48
+#define AVATAR_INTR_DMA_OCPINTF__IPU1_IRQ_23_24         0x7E0
+#define AVATAR_INTR_DMA_OCPINTF__IPU2_IRQ_23_24         0x854
+#define	AVATAR_INTR_DMA_OCPINTF__DSP1_IRQ_32_33         0x948 
+#define	AVATAR_INTR_DMA_OCPINTF__DSP2_IRQ_32_33         0x9C8         
+#define	AVATAR_INTR_DMA_OCPINTF__EVE1_IRQ_0_1           0x7A0
+#define	AVATAR_INTR_DMA_OCPINTF__EVE2_IRQ_0_1           0x7B0
+#define	AVATAR_INTR_DMA_OCPINTF__EVE3_IRQ_0_1           0x7C0
+#define	AVATAR_INTR_DMA_OCPINTF__EVE4_IRQ_0_1           0x7D0         
+#define	AVATAR_INTR_DMA_OCPINTF__PRUSS1_IRQ_32_33       0x8C8
+#define	AVATAR_INTR_DMA_OCPINTF__PRUSS2_IRQ_32_33       0x908
+
+
+
+#define xbar_base 0x4A002000
+
+
+
+/*--------------------------------------------------------------*/
+xbar_init()
+{
+
+
+
+
+    /* Initializing the vip_ss xbar configuration */
+    
+    xbar_connect ( CPU_IPU1, 45, 351 ); // cpu_name, xbar_inst_no, intr_source_no
+    xbar_connect ( CPU_IPU2, 45, 351 );
+    xbar_connect ( CPU_IPU1, 46, 392 );
+    xbar_connect ( CPU_IPU2, 46, 392 );
+
+    /* VPE Configuration */
+    xbar_connect ( CPU_IPU1, 25, 354 );
+    xbar_connect ( CPU_IPU2, 25, 354 );
+
+
+    /*
+       xbar_connect (xbar_base + ipu1_xbar_inst_44,44, 351);
+       xbar_connect (xbar_base + ipu2_xbar_inst_44,44, 351);
+       xbar_connect (xbar_base + ipu1_xbar_inst_44,45, 392);
+       xbar_connect (xbar_base + ipu2_xbar_inst_44,45, 392);
+     */
+
+
+    xbar_connect ( CPU_IPU1, 49, 352 );
+    xbar_connect ( CPU_IPU2, 49, 352 );
+    xbar_connect ( CPU_IPU1, 50, 393 );
+    xbar_connect ( CPU_IPU2, 50, 393 );
+
+    /*
+       xbar_connect (xbar_base + ipu1_xbar_inst_48,48, 352);
+       xbar_connect (xbar_base + ipu2_xbar_inst_48,48, 352);
+       xbar_connect (xbar_base + ipu1_xbar_inst_48,49, 393);
+       xbar_connect (xbar_base + ipu2_xbar_inst_48,49, 393);
+     */
+
+
+
+    xbar_connect ( CPU_IPU1, 53, 353 );
+    xbar_connect ( CPU_IPU2, 53, 353 );
+    xbar_connect ( CPU_IPU1, 54, 394 );
+    xbar_connect ( CPU_IPU2, 54, 394 );
+    /*
+
+       xbar_connect (xbar_base + ipu1_xbar_inst_52,52, 352);
+       xbar_connect (xbar_base + ipu2_xbar_inst_52,52, 352);
+       xbar_connect (xbar_base + ipu1_xbar_inst_52,53, 394);
+       xbar_connect (xbar_base + ipu2_xbar_inst_52,53, 394);
+     */
+
+    //! Vip_ss with eve connections
+
+
+    xbar_connect ( CPU_EVE1, 5, 392 );
+    xbar_connect ( CPU_EVE2, 5, 392 );
+    xbar_connect ( CPU_EVE3, 5, 392 );
+    xbar_connect ( CPU_EVE4, 5, 392 );
+
+    /*
+       xbar_connect ( xbar_base + eve1_xbar_inst_4,4, 392 );
+       xbar_connect ( xbar_base + eve2_xbar_inst_4,4, 392 );
+       xbar_connect ( xbar_base + eve3_xbar_inst_4,4, 392 );
+       xbar_connect ( xbar_base + eve4_xbar_inst_4,4, 392 );
+     */
+
+    xbar_connect ( CPU_EVE1, 6, 393 );
+    xbar_connect ( CPU_EVE2, 6, 393 );
+    xbar_connect ( CPU_EVE3, 6, 393 );
+    xbar_connect ( CPU_EVE4, 6, 393 );
+
+    /*
+       xbar_connect ( xbar_base + eve1_xbar_inst_4,5, 393 );
+       xbar_connect ( xbar_base + eve2_xbar_inst_4,5, 393 );
+       xbar_connect ( xbar_base + eve3_xbar_inst_4,5, 393 );
+       xbar_connect ( xbar_base + eve4_xbar_inst_4,5, 393 );
+
+     */
+
+    xbar_connect ( CPU_EVE1, 7, 394 );
+    xbar_connect ( CPU_EVE2, 7, 394 );
+    xbar_connect ( CPU_EVE3, 7, 394 );
+    xbar_connect ( CPU_EVE4, 7, 394 );
+
+    /*
+
+       xbar_connect ( xbar_base + eve1_xbar_inst_6,6, 394 );
+       xbar_connect ( xbar_base + eve2_xbar_inst_6,6, 394 );
+       xbar_connect ( xbar_base + eve3_xbar_inst_6,6, 394 );
+       xbar_connect ( xbar_base + eve4_xbar_inst_6,6, 394 );
+     */
+
+    /* OCMC_CBUF xbar value */
+    //cbuf_1_intr_0
+    xbar_connect ( CPU_IPU1, 39, 164 );
+    xbar_connect ( CPU_IPU2, 39, 164 );
+    /*
+       xbar_connect (xbar_base + ipu1_xbar_inst_38,38, 164);
+       xbar_connect (xbar_base + ipu2_xbar_inst_38,38, 164);
+     */
+
+    //cbuf_1_intr_1
+    xbar_connect( CPU_IPU1, 40, 372 );
+    xbar_connect( CPU_IPU2, 40, 372 );
+
+    /*
+       xbar_connect (xbar_base + ipu1_xbar_inst_38,39, 372);
+       xbar_connect (xbar_base + ipu2_xbar_inst_38,39, 372);
+     */
+
+
+    //cbuf_2_intr_0
+    xbar_connect( CPU_IPU1, 41, 165 );
+    xbar_connect( CPU_IPU2, 41, 165 );
+
+    /*
+       xbar_connect (xbar_base + ipu1_xbar_inst_40,40, 165);
+       xbar_connect (xbar_base + ipu2_xbar_inst_40,40, 165);
+     */
+
+    //cbuf_2_intr_1
+
+    xbar_connect( CPU_IPU1, 42, 373 );
+    xbar_connect( CPU_IPU2, 42, 373 );
+
+    /*
+       xbar_connect (xbar_base + ipu1_xbar_inst_40,41, 373);
+       xbar_connect (xbar_base + ipu2_xbar_inst_40,41, 373);
+     */
+
+    //cbuf_3_intr_0
+
+    xbar_connect( CPU_IPU1, 43, 165 );
+    xbar_connect( CPU_IPU2, 43, 165 );
+
+    /*
+       xbar_connect (xbar_base + ipu1_xbar_inst_42,42, 166);
+       xbar_connect (xbar_base + ipu2_xbar_inst_42,42, 166);
+     */
+
+    //cbuf_3_intr_1
+
+    xbar_connect( CPU_IPU1, 44, 374 );
+    xbar_connect( CPU_IPU1, 44, 374 );
+
+    /*
+       xbar_connect (xbar_base + ipu1_xbar_inst_42,43, 374);
+       xbar_connect (xbar_base + ipu2_xbar_inst_42,43, 374);
+     */
+
+    // DSP1 connection with EVE
+
+    xbar_connect(CPU_DSP1, 59, 284); //EVE1 mailbox user 1
+    xbar_connect(CPU_DSP1, 60, 293); //EVE2 mailbox user 1
+    xbar_connect(CPU_DSP1, 61, 302); //EVE3 mailbox user 1
+    xbar_connect(CPU_DSP1, 62, 311); //EVE4 mailbox user 1
+    xbar_connect(CPU_DSP1, 30, 237); //mailbox2 user 0 
+    xbar_connect(CPU_DSP1, 31, 257); //mailbox7 user 0 
+    xbar_connect(CPU_DSP1, 9, 32); //DMTIMER connection
+    xbar_connect(CPU_DSP1, 10, 33); //DMTIMER connection
+    xbar_connect(CPU_DSP1, 11, 34); //DMTIMER connection
+    xbar_connect(CPU_DSP1, 12, 35); //DMTIMER connection
+    xbar_connect(CPU_DSP1, 13, 36); //DMTIMER connection
+    xbar_connect(CPU_DSP1, 14, 37); //DMTIMER connection
+    xbar_connect(CPU_DSP1, 15, 38); //DMTIMER connection
+    xbar_connect(CPU_DSP1, 16, 39); //DMTIMER connection
+    xbar_connect(CPU_DSP1, 17, 40); //DMTIMER connection
+    xbar_connect(CPU_DSP1, 18, 41); //DMTIMER connection
+    xbar_connect(CPU_DSP1, 19, 42); //DMTIMER connection
+    xbar_connect(CPU_DSP1, 20, 90); //DMTIMER connection
+    xbar_connect(CPU_DSP1, 21, 339); //DMTIMER connection
+    xbar_connect(CPU_DSP1, 22, 340); //DMTIMER connection
+    xbar_connect(CPU_DSP1, 23, 341); //DMTIMER connection
+    xbar_connect(CPU_DSP1, 24, 342); //DMTIMER connection
+
+
+    // DSP2 connection with EVE
+
+    xbar_connect(CPU_DSP2, 59, 287); //EVE1 mailbox user 1
+    xbar_connect(CPU_DSP2, 60, 296); //EVE2 mailbox user 1
+    xbar_connect(CPU_DSP2, 61, 305); //EVE2 mailbox user 1
+    xbar_connect(CPU_DSP2, 62, 314); //EVE2 mailbox user 1
+    xbar_connect(CPU_DSP2, 30, 238); //mailbox2 user 0 
+    xbar_connect(CPU_DSP2, 31, 258); //mailbox7 user 0 
+    xbar_connect(CPU_DSP2, 9, 32); //DMTIMER connection
+    xbar_connect(CPU_DSP2, 10, 33); //DMTIMER connection
+    xbar_connect(CPU_DSP2, 11, 34); //DMTIMER connection
+    xbar_connect(CPU_DSP2, 12, 35); //DMTIMER connection
+    xbar_connect(CPU_DSP2, 13, 36); //DMTIMER connection
+    xbar_connect(CPU_DSP2, 14, 37); //DMTIMER connection
+    xbar_connect(CPU_DSP2, 15, 38); //DMTIMER connection
+    xbar_connect(CPU_DSP2, 16, 39); //DMTIMER connection
+    xbar_connect(CPU_DSP2, 17, 40); //DMTIMER connection
+    xbar_connect(CPU_DSP2, 18, 41); //DMTIMER connection
+    xbar_connect(CPU_DSP2, 19, 42); //DMTIMER connection
+    xbar_connect(CPU_DSP2, 20, 90); //DMTIMER connection
+    xbar_connect(CPU_DSP2, 21, 339); //DMTIMER connection
+    xbar_connect(CPU_DSP2, 22, 340); //DMTIMER connection
+    xbar_connect(CPU_DSP2, 23, 341); //DMTIMER connection
+    xbar_connect(CPU_DSP2, 24, 342); //DMTIMER connection
+
+   //Benelli core 0 connectionw with EVE and System peripherals
+    xbar_connect(CPU_IPU1, 32, 285); //eve1 mailbox 
+    xbar_connect(CPU_IPU1, 33, 294); //eve2 mailbox
+    xbar_connect(CPU_IPU1, 34, 303); //eve3 mailbox
+    xbar_connect(CPU_IPU1, 35, 312); //eve4 mailbox
+    xbar_connect(CPU_IPU1, 36, 259); //system mailbox 7
+    xbar_connect(CPU_IPU1, 9, 32); //DMTIMER connection
+    xbar_connect(CPU_IPU1, 10, 33); //DMTIMER connection
+    xbar_connect(CPU_IPU1, 11, 34); //DMTIMER connection
+    xbar_connect(CPU_IPU1, 12, 35); //DMTIMER connection
+    xbar_connect(CPU_IPU1, 13, 36); //DMTIMER connection
+    xbar_connect(CPU_IPU1, 14, 37); //DMTIMER connection
+    xbar_connect(CPU_IPU1, 15, 38); //DMTIMER connection
+    xbar_connect(CPU_IPU1, 16, 39); //DMTIMER connection
+    xbar_connect(CPU_IPU1, 17, 40); //DMTIMER connection
+    xbar_connect(CPU_IPU1, 18, 41); //DMTIMER connection
+    xbar_connect(CPU_IPU1, 19, 42); //DMTIMER connection
+    xbar_connect(CPU_IPU1, 20, 90); //DMTIMER connection
+    xbar_connect(CPU_IPU1, 21, 339); //DMTIMER connection
+    xbar_connect(CPU_IPU1, 22, 340); //DMTIMER connection
+    xbar_connect(CPU_IPU1, 23, 341); //DMTIMER connection
+    xbar_connect(CPU_IPU1, 24, 342); //DMTIMER connection
+
+
+   //Benelli core 1 connectionw with EVE and System peripherals
+    xbar_connect(CPU_IPU2, 32, 288); //eve1 mailbox 
+    xbar_connect(CPU_IPU2, 33, 297); //eve2 mailbox
+    xbar_connect(CPU_IPU2, 34, 306); //eve3 mailbox
+    xbar_connect(CPU_IPU2, 35, 315); //eve4 mailbox
+    xbar_connect(CPU_IPU2, 36, 260); //system mailbox 7
+    xbar_connect(CPU_IPU2, 9, 32); //DMTIMER connection
+    xbar_connect(CPU_IPU2, 10, 33); //DMTIMER connection
+    xbar_connect(CPU_IPU2, 11, 34); //DMTIMER connection
+    xbar_connect(CPU_IPU2, 12, 35); //DMTIMER connection
+    xbar_connect(CPU_IPU2, 13, 36); //DMTIMER connection
+    xbar_connect(CPU_IPU2, 14, 37); //DMTIMER connection
+    xbar_connect(CPU_IPU2, 15, 38); //DMTIMER connection
+    xbar_connect(CPU_IPU2, 16, 39); //DMTIMER connection
+    xbar_connect(CPU_IPU2, 17, 40); //DMTIMER connection
+    xbar_connect(CPU_IPU2, 18, 41); //DMTIMER connection
+    xbar_connect(CPU_IPU2, 19, 42); //DMTIMER connection
+    xbar_connect(CPU_IPU2, 20, 90); //DMTIMER connection
+    xbar_connect(CPU_IPU2, 21, 339); //DMTIMER connection
+    xbar_connect(CPU_IPU2, 22, 340); //DMTIMER connection
+    xbar_connect(CPU_IPU2, 23, 341); //DMTIMER connection
+    xbar_connect(CPU_IPU2, 24, 342); //DMTIMER connection
+
+
+}
+
+
+
+
+
+XBAR_HAL_Get_Offset(unsigned int cpu, unsigned int xbar_inst)
+{
+    unsigned int offset;
+    unsigned int reg_offset;
+
+    if (cpu == CPU_MPUSS)
+        offset = AVATAR_INTR_DMA_OCPINTF__MPU_IRQ_4_5;
+
+    if (cpu == CPU_IPU1)
+        offset = AVATAR_INTR_DMA_OCPINTF__IPU1_IRQ_23_24;
+
+    if (cpu == CPU_IPU2)
+        offset = AVATAR_INTR_DMA_OCPINTF__IPU2_IRQ_23_24;
+
+    if (cpu == CPU_DSP1)
+        offset = AVATAR_INTR_DMA_OCPINTF__DSP1_IRQ_32_33;
+
+    if (cpu == CPU_DSP2)
+        offset = AVATAR_INTR_DMA_OCPINTF__DSP2_IRQ_32_33;
+
+    if (cpu == CPU_EVE1)
+        offset = AVATAR_INTR_DMA_OCPINTF__EVE1_IRQ_0_1;
+
+    if (cpu == CPU_EVE2)
+        offset = AVATAR_INTR_DMA_OCPINTF__EVE2_IRQ_0_1;
+
+    if (cpu == CPU_EVE3)
+        offset = AVATAR_INTR_DMA_OCPINTF__EVE3_IRQ_0_1;
+
+    if (cpu == CPU_EVE4)
+        offset = AVATAR_INTR_DMA_OCPINTF__EVE4_IRQ_0_1;
+
+    if (cpu == CPU_PRUSS1)
+        offset = AVATAR_INTR_DMA_OCPINTF__PRUSS1_IRQ_32_33;
+
+    if (cpu == CPU_PRUSS2)
+        offset = AVATAR_INTR_DMA_OCPINTF__PRUSS2_IRQ_32_33;
+
+    // Now we add an offset for the xbar_inst. 
+    // This assumes that we are packing two xbar config bitfields per 32-bit reg.
+    // Ie: if xbar_inst is n ( starting from 1 ) , that means that the
+    // bitfield for it is at the register  ( n - 1 ) /2 32-bit offset
+
+    reg_offset =  ( xbar_inst - 1 ) /2;
+    reg_offset *= 4; // 32-bit MMRs
+
+    return ( offset + reg_offset);
+}
+
+
+
+
+xbar_connect(unsigned int cpu, unsigned int xbar_inst, unsigned int intr_source )
+{
+    unsigned int offset = XBAR_HAL_Get_Offset(cpu, xbar_inst);
+    unsigned int addr = xbar_base + offset;
+
+    if ( xbar_inst % 2 )
+    {
+        //odd means lower bitfields
+        set_reg_field( addr, 0, 9, intr_source );
+
+    }
+    else 
+    {
+        //even means , higher bitfield - starting at bit offset 16 
+        set_reg_field( addr, 16, 9, intr_source);
+    }
+}
+
+set_reg_field( unsigned int address, unsigned int start, unsigned int width, unsigned int data )
+{
+    unsigned int reg = *(unsigned int*)address;
+    unsigned int write_data = ( reg & ~( ( ( 1 << width )  - 1 ) << start )  )  | ( data << start );
+    GEL_TextOut("Wrote %x to address %x\n",,,,, write_data, address);
+    *(unsigned int*)address = write_data;
+
+    GEL_TextOut("Read %x from address %x\n",,,,, *(unsigned int *)address, address);
+}
+
+
+
+
+
+
+
+hotmenu xbar_default()
+{
+
+    xbar_init();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

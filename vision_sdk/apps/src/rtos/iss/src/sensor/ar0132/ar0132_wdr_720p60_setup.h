@@ -1,0 +1,445 @@
+/******************************************************************************
+Copyright (c) [2012 - 2017] Texas Instruments Incorporated
+
+All rights reserved not granted herein.
+
+Limited License.
+
+ Texas Instruments Incorporated grants a world-wide, royalty-free, non-exclusive
+ license under copyrights and patents it now or hereafter owns or controls to
+ make,  have made, use, import, offer to sell and sell ("Utilize") this software
+ subject to the terms herein.  With respect to the foregoing patent license,
+ such license is granted  solely to the extent that any such patent is necessary
+ to Utilize the software alone.  The patent license shall not apply to any
+ combinations which include this software, other than combinations with devices
+ manufactured by or for TI ("TI Devices").  No hardware patent is licensed
+ hereunder.
+
+ Redistributions must preserve existing copyright notices and reproduce this
+ license (including the above copyright notice and the disclaimer and
+ (if applicable) source code license limitations below) in the documentation
+ and/or other materials provided with the distribution
+
+ Redistribution and use in binary form, without modification, are permitted
+ provided that the following conditions are met:
+
+ * No reverse engineering, decompilation, or disassembly of this software
+   is permitted with respect to any software provided in binary form.
+
+ * Any redistribution and use are licensed by TI for use only with TI Devices.
+
+ * Nothing shall obligate TI to provide you with source code for the software
+   licensed and provided to you in object code.
+
+ If software source code is provided to you, modification and redistribution of
+ the source code are permitted provided that the following conditions are met:
+
+ * Any redistribution and use of the source code, including any resulting
+   derivative works, are licensed by TI for use only with TI Devices.
+
+ * Any redistribution and use of any object code compiled from the source code
+   and any resulting derivative works, are licensed by TI for use only with TI
+   Devices.
+
+ Neither the name of Texas Instruments Incorporated nor the names of its
+ suppliers may be used to endorse or promote products derived from this software
+ without specific prior written permission.
+
+ DISCLAIMER.
+
+ THIS SOFTWARE IS PROVIDED BY TI AND TI’S LICENSORS "AS IS" AND ANY EXPRESS OR
+ IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ IN NO EVENT SHALL TI AND TI’S LICENSORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+******************************************************************************/
+/**
+ *  \file ar0132_wdr_720p60_setup.h
+ *
+ *  \brief Aptina AR0132 sensor configuration for 720 P 60
+ *
+ */
+
+#ifndef AR0132_WDR_720P60_SETUP_H_
+#define AR0132_WDR_720P60_SETUP_H_
+
+/** \brief Video sensor dummy register used for introducing delay in sensor  */
+#define SENSOR_DLY_REG                  (0xABCD)
+/** Delay after reset */
+#define AR0132_DLY_IN_MS_AFTER_RESET    (200)
+/** \brief Video sensor dummy register mask  */
+#define SENSOR_DLY_REG_MASK             (0xFF00)
+
+#define AR01320_WDR_1280X720_P60_CONFIG      \
+{                                           \
+    {0x301A, 0x10D8, 0x0},                  \
+    {SENSOR_DLY_REG, SENSOR_DLY_REG_MASK, AR0132_DLY_IN_MS_AFTER_RESET},    \
+    {0x3088, 0x8000, 0x0},                  \
+    {0x3086, 0x25,   0x0},                  \
+    {0x3086, 0x5050, 0x0},                  \
+    {0x3086, 0x2D26, 0x0},                  \
+    {0x3086, 0x828,  0x0},                  \
+    {0x3086, 0xD17,  0x0},                  \
+    {0x3086, 0x926,  0x0},                  \
+    {0x3086, 0x28,   0x0},                  \
+    {0x3086, 0x526,  0x0},                  \
+    {0x3086, 0xA728, 0x0},                  \
+    {0x3086, 0x725,  0x0},                  \
+    {0x3086, 0x8080, 0x0},                  \
+    {0x3086, 0x2925, 0x0},                  \
+    {0x3086, 0x40,   0x0},                  \
+    {0x3086, 0x2702, 0x0},                  \
+    {0x3086, 0x1616, 0x0},                  \
+    {0x3086, 0x2706, 0x0},                  \
+    {0x3086, 0x1F17, 0x0},                  \
+    {0x3086, 0x3626, 0x0},                  \
+    {0x3086, 0xA617, 0x0},                  \
+    {0x3086, 0x326,  0x0},                  \
+    {0x3086, 0xA417, 0x0},                  \
+    {0x3086, 0x1F28, 0x0},                  \
+    {0x3086, 0x526,  0x0},                  \
+    {0x3086, 0x2028, 0x0},                  \
+    {0x3086, 0x425,  0x0},                  \
+    {0x3086, 0x2020, 0x0},                  \
+    {0x3086, 0x2700, 0x0},                  \
+    {0x3086, 0x171D, 0x0},                  \
+    {0x3086, 0x2500, 0x0},                  \
+    {0x3086, 0x2017, 0x0},                  \
+    {0x3086, 0x1219, 0x0},                  \
+    {0x3086, 0x1703, 0x0},                  \
+    {0x3086, 0x2706, 0x0},                  \
+    {0x3086, 0x1728, 0x0},                  \
+    {0x3086, 0x2805, 0x0},                  \
+    {0x3086, 0x171A, 0x0},                  \
+    {0x3086, 0x2660, 0x0},                  \
+    {0x3086, 0x175A, 0x0},                  \
+    {0x3086, 0x2317, 0x0},                  \
+    {0x3086, 0x1122, 0x0},                  \
+    {0x3086, 0x1741, 0x0},                  \
+    {0x3086, 0x2500, 0x0},                  \
+    {0x3086, 0x9027, 0x0},                  \
+    {0x3086, 0x26,   0x0},                  \
+    {0x3086, 0x1828, 0x0},                  \
+    {0x3086, 0x2E,   0x0},                  \
+    {0x3086, 0x2A28, 0x0},                  \
+    {0x3086, 0x81C,  0x0},                  \
+    {0x3086, 0x1470, 0x0},                  \
+    {0x3086, 0x7003, 0x0},                  \
+    {0x3086, 0x1470, 0x0},                  \
+    {0x3086, 0x7004, 0x0},                  \
+    {0x3086, 0x1470, 0x0},                  \
+    {0x3086, 0x7005, 0x0},                  \
+    {0x3086, 0x1470, 0x0},                  \
+    {0x3086, 0x7009, 0x0},                  \
+    {0x3086, 0x170C, 0x0},                  \
+    {0x3086, 0x14,   0x0},                  \
+    {0x3086, 0x20,   0x0},                  \
+    {0x3086, 0x14,   0x0},                  \
+    {0x3086, 0x50,   0x0},                  \
+    {0x3086, 0x314,  0x0},                  \
+    {0x3086, 0x20,   0x0},                  \
+    {0x3086, 0x314,  0x0},                  \
+    {0x3086, 0x50,   0x0},                  \
+    {0x3086, 0x414,  0x0},                  \
+    {0x3086, 0x20,   0x0},                  \
+    {0x3086, 0x414,  0x0},                  \
+    {0x3086, 0x50,   0x0},                  \
+    {0x3086, 0x514,  0x0},                  \
+    {0x3086, 0x20,   0x0},                  \
+    {0x3086, 0x2405, 0x0},                  \
+    {0x3086, 0x1400, 0x0},                  \
+    {0x3086, 0x5001, 0x0},                  \
+    {0x3086, 0x2550, 0x0},                  \
+    {0x3086, 0x502D, 0x0},                  \
+    {0x3086, 0x2608, 0x0},                  \
+    {0x3086, 0x280D, 0x0},                  \
+    {0x3086, 0x1709, 0x0},                  \
+    {0x3086, 0x2600, 0x0},                  \
+    {0x3086, 0x2805, 0x0},                  \
+    {0x3086, 0x26A7, 0x0},                  \
+    {0x3086, 0x2807, 0x0},                  \
+    {0x3086, 0x2580, 0x0},                  \
+    {0x3086, 0x8029, 0x0},                  \
+    {0x3086, 0x2500, 0x0},                  \
+    {0x3086, 0x4027, 0x0},                  \
+    {0x3086, 0x216,  0x0},                  \
+    {0x3086, 0x1627, 0x0},                  \
+    {0x3086, 0x620,  0x0},                  \
+    {0x3086, 0x1736, 0x0},                  \
+    {0x3086, 0x26A6, 0x0},                  \
+    {0x3086, 0x1703, 0x0},                  \
+    {0x3086, 0x26A4, 0x0},                  \
+    {0x3086, 0x171F, 0x0},                  \
+    {0x3086, 0x2805, 0x0},                  \
+    {0x3086, 0x2620, 0x0},                  \
+    {0x3086, 0x2804, 0x0},                  \
+    {0x3086, 0x2520, 0x0},                  \
+    {0x3086, 0x2027, 0x0},                  \
+    {0x3086, 0x17,   0x0},                  \
+    {0x3086, 0x1D25, 0x0},                  \
+    {0x3086, 0x20,   0x0},                  \
+    {0x3086, 0x1712, 0x0},                  \
+    {0x3086, 0x1A17, 0x0},                  \
+    {0x3086, 0x327,  0x0},                  \
+    {0x3086, 0x617,  0x0},                  \
+    {0x3086, 0x2828, 0x0},                  \
+    {0x3086, 0x517,  0x0},                  \
+    {0x3086, 0x1A26, 0x0},                  \
+    {0x3086, 0x6017, 0x0},                  \
+    {0x3086, 0xAE25, 0x0},                  \
+    {0x3086, 0x90,   0x0},                  \
+    {0x3086, 0x2700, 0x0},                  \
+    {0x3086, 0x2618, 0x0},                  \
+    {0x3086, 0x2800, 0x0},                  \
+    {0x3086, 0x2E2A, 0x0},                  \
+    {0x3086, 0x2808, 0x0},                  \
+    {0x3086, 0x1D05, 0x0},                  \
+    {0x3086, 0x1470, 0x0},                  \
+    {0x3086, 0x7009, 0x0},                  \
+    {0x3086, 0x1720, 0x0},                  \
+    {0x3086, 0x1400, 0x0},                  \
+    {0x3086, 0x2024, 0x0},                  \
+    {0x3086, 0x1400, 0x0},                  \
+    {0x3086, 0x5002, 0x0},                  \
+    {0x3086, 0x2550, 0x0},                  \
+    {0x3086, 0x502D, 0x0},                  \
+    {0x3086, 0x2608, 0x0},                  \
+    {0x3086, 0x280D, 0x0},                  \
+    {0x3086, 0x1709, 0x0},                  \
+    {0x3086, 0x2600, 0x0},                  \
+    {0x3086, 0x2805, 0x0},                  \
+    {0x3086, 0x26A7, 0x0},                  \
+    {0x3086, 0x2807, 0x0},                  \
+    {0x3086, 0x2580, 0x0},                  \
+    {0x3086, 0x8029, 0x0},                  \
+    {0x3086, 0x2500, 0x0},                  \
+    {0x3086, 0x4027, 0x0},                  \
+    {0x3086, 0x216,  0x0},                  \
+    {0x3086, 0x1627, 0x0},                  \
+    {0x3086, 0x617,  0x0},                  \
+    {0x3086, 0x3626, 0x0},                  \
+    {0x3086, 0xA617, 0x0},                  \
+    {0x3086, 0x326,  0x0},                  \
+    {0x3086, 0xA417, 0x0},                  \
+    {0x3086, 0x1F28, 0x0},                  \
+    {0x3086, 0x526,  0x0},                  \
+    {0x3086, 0x2028, 0x0},                  \
+    {0x3086, 0x425,  0x0},                  \
+    {0x3086, 0x2020, 0x0},                  \
+    {0x3086, 0x2700, 0x0},                  \
+    {0x3086, 0x171D, 0x0},                  \
+    {0x3086, 0x2500, 0x0},                  \
+    {0x3086, 0x2021, 0x0},                  \
+    {0x3086, 0x1712, 0x0},                  \
+    {0x3086, 0x1B17, 0x0},                  \
+    {0x3086, 0x327,  0x0},                  \
+    {0x3086, 0x617,  0x0},                  \
+    {0x3086, 0x2828, 0x0},                  \
+    {0x3086, 0x517,  0x0},                  \
+    {0x3086, 0x1A26, 0x0},                  \
+    {0x3086, 0x6017, 0x0},                  \
+    {0x3086, 0xAE25, 0x0},                  \
+    {0x3086, 0x90,   0x0},                  \
+    {0x3086, 0x2700, 0x0},                  \
+    {0x3086, 0x2618, 0x0},                  \
+    {0x3086, 0x2800, 0x0},                  \
+    {0x3086, 0x2E2A, 0x0},                  \
+    {0x3086, 0x2808, 0x0},                  \
+    {0x3086, 0x1E17, 0x0},                  \
+    {0x3086, 0xA05,  0x0},                  \
+    {0x3086, 0x1470, 0x0},                  \
+    {0x3086, 0x7009, 0x0},                  \
+    {0x3086, 0x1616, 0x0},                  \
+    {0x3086, 0x1616, 0x0},                  \
+    {0x3086, 0x1616, 0x0},                  \
+    {0x3086, 0x1616, 0x0},                  \
+    {0x3086, 0x1616, 0x0},                  \
+    {0x3086, 0x1616, 0x0},                  \
+    {0x3086, 0x1616, 0x0},                  \
+    {0x3086, 0x1616, 0x0},                  \
+    {0x3086, 0x1616, 0x0},                  \
+    {0x3086, 0x1616, 0x0},                  \
+    {0x3086, 0x1616, 0x0},                  \
+    {0x3086, 0x1616, 0x0},                  \
+    {0x3086, 0x1616, 0x0},                  \
+    {0x3086, 0x1614, 0x0},                  \
+    {0x3086, 0x20,   0x0},                  \
+    {0x3086, 0x2414, 0x0},                  \
+    {0x3086, 0x50,   0x0},                  \
+    {0x3086, 0x2B2B, 0x0},                  \
+    {0x3086, 0x2C2C, 0x0},                  \
+    {0x3086, 0x2C2C, 0x0},                  \
+    {0x3086, 0x2C00, 0x0},                  \
+    {0x3086, 0x225,  0x0},                  \
+    {0x3086, 0x5050, 0x0},                  \
+    {0x3086, 0x2D26, 0x0},                  \
+    {0x3086, 0x828,  0x0},                  \
+    {0x3086, 0xD17,  0x0},                  \
+    {0x3086, 0x926,  0x0},                  \
+    {0x3086, 0x28,   0x0},                  \
+    {0x3086, 0x526,  0x0},                  \
+    {0x3086, 0xA728, 0x0},                  \
+    {0x3086, 0x725,  0x0},                  \
+    {0x3086, 0x8080, 0x0},                  \
+    {0x3086, 0x2917, 0x0},                  \
+    {0x3086, 0x525,  0x0},                  \
+    {0x3086, 0x40,   0x0},                  \
+    {0x3086, 0x2702, 0x0},                  \
+    {0x3086, 0x1616, 0x0},                  \
+    {0x3086, 0x2706, 0x0},                  \
+    {0x3086, 0x1736, 0x0},                  \
+    {0x3086, 0x26A6, 0x0},                  \
+    {0x3086, 0x1703, 0x0},                  \
+    {0x3086, 0x26A4, 0x0},                  \
+    {0x3086, 0x171F, 0x0},                  \
+    {0x3086, 0x2805, 0x0},                  \
+    {0x3086, 0x2620, 0x0},                  \
+    {0x3086, 0x2804, 0x0},                  \
+    {0x3086, 0x2520, 0x0},                  \
+    {0x3086, 0x2027, 0x0},                  \
+    {0x3086, 0x17,   0x0},                  \
+    {0x3086, 0x1E25, 0x0},                  \
+    {0x3086, 0x20,   0x0},                  \
+    {0x3086, 0x2117, 0x0},                  \
+    {0x3086, 0x1028, 0x0},                  \
+    {0x3086, 0x51B,  0x0},                  \
+    {0x3086, 0x1703, 0x0},                  \
+    {0x3086, 0x2706, 0x0},                  \
+    {0x3086, 0x1703, 0x0},                  \
+    {0x3086, 0x1747, 0x0},                  \
+    {0x3086, 0x2660, 0x0},                  \
+    {0x3086, 0x17AE, 0x0},                  \
+    {0x3086, 0x2500, 0x0},                  \
+    {0x3086, 0x9027, 0x0},                  \
+    {0x3086, 0x26,   0x0},                  \
+    {0x3086, 0x1828, 0x0},                  \
+    {0x3086, 0x2E,   0x0},                  \
+    {0x3086, 0x2A28, 0x0},                  \
+    {0x3086, 0x81E,  0x0},                  \
+    {0x3086, 0x831,  0x0},                  \
+    {0x3086, 0x1440, 0x0},                  \
+    {0x3086, 0x4014, 0x0},                  \
+    {0x3086, 0x2020, 0x0},                  \
+    {0x3086, 0x1410, 0x0},                  \
+    {0x3086, 0x1034, 0x0},                  \
+    {0x3086, 0x1400, 0x0},                  \
+    {0x3086, 0x1014, 0x0},                  \
+    {0x3086, 0x20,   0x0},                  \
+    {0x3086, 0x1400, 0x0},                  \
+    {0x3086, 0x4013, 0x0},                  \
+    {0x3086, 0x1802, 0x0},                  \
+    {0x3086, 0x1470, 0x0},                  \
+    {0x3086, 0x7004, 0x0},                  \
+    {0x3086, 0x1470, 0x0},                  \
+    {0x3086, 0x7003, 0x0},                  \
+    {0x3086, 0x1470, 0x0},                  \
+    {0x3086, 0x7017, 0x0},                  \
+    {0x3086, 0x2002, 0x0},                  \
+    {0x3086, 0x1400, 0x0},                  \
+    {0x3086, 0x2002, 0x0},                  \
+    {0x3086, 0x1400, 0x0},                  \
+    {0x3086, 0x5004, 0x0},                  \
+    {0x3086, 0x1400, 0x0},                  \
+    {0x3086, 0x2004, 0x0},                  \
+    {0x3086, 0x1400, 0x0},                  \
+    {0x3086, 0x5022, 0x0},                  \
+    {0x3086, 0x314,  0x0},                  \
+    {0x3086, 0x20,   0x0},                  \
+    {0x3086, 0x314,  0x0},                  \
+    {0x3086, 0x50,   0x0},                  \
+    {0x3086, 0x2C2C, 0x0},                  \
+    {0x3086, 0x2C2C, 0x0},                  \
+    {0x309E, 0x0186, 0x0}, /*Differs with default val*/                 \
+    {0x0,    200,    0xFFFF},               \
+    {0x3082, 0x0028, 0x0},/*0x29 = linear 0x28 = HDR*/                  \
+    {0x318C, 0xC300, 0x0},                  \
+    {0x318A, 0x0FA0, 0x0},                  \
+    {0x318E, 0x0320, 0x0},                  \
+    {0x3192, 0x0800, 0x0},                  \
+    {0x301E, 0x00C8, 0x0},                  \
+/*Register configuration to support AR136 and AR132 with same driver*/ \
+/*These settings cause AE to break*/        \
+/*Both AR0132 and AR0136 have tested to be functonal without these settings*/ \
+/*Therefore these settings are being removed from sensor config*/   \
+/*BSP_AR0132_NUM_REGS is adjusted accordingly*/                     \
+/*  {0x3EDA, 0x0F02, 0x0},*/                \
+/*  {0x3EDE, 0xC005, 0x0},*/                \
+/*  {0x3ED8, 0x0ADF, 0x0},*/                \
+/*  {0x3EE2, 0xA46B, 0x0},*/                \
+/*  {0x3EE0, 0x027D, 0x0},*/                \
+/*  {0x3EDC, 0x00A0, 0x0},*/                \
+/*  {0x3044, 0x0404, 0x0},*/                \
+/*  {0x3EE6, 0x8303, 0x0},*/                \
+/*  {0x3EE4, 0xD208, 0x0},*/                \
+/*  {0x3ED6, 0x00AB, 0x0},*/                \
+/*                        */                \
+/*ADC settings to improve noise performance*/                   \
+/*  {0x30E4, 0x6372, 0x0},*/                \
+/*  {0x30E2, 0x7253, 0x0},*/                \
+/*  {0x30E0, 0x5470, 0x0},*/                \
+/*  {0x30E6, 0xC4CC, 0x0},*/                \
+/*  {0x30E8, 0x8050, 0x0},*/                \
+/*                        */                \
+    {0x30B0, 0x1300, 0x0},/* SET TO BAYER*/ \
+    {0x30D4, 0xE007, 0x0},                  \
+    {0x30BA, 0x0008, 0x0},                  \
+    {0x301A, 0x10DC, 0x0},                  \
+    {0x0,    200,    0xFFFF},               \
+    {0x301A, 0x10D8, 0x0},                  \
+    {0x0,    200,    0xFFFF},               \
+    {0x3012, 0x02A0, 0x0}, /* Differs with default val*/                    \
+    {0x301A, 0x10DC, 0x0}, /* Differs with default val*/                    \
+/*Full resln 45FPS*/                        \
+/*{0x3032, 0x0000, 0x0}, */                 \
+/*{0x3002, 0x0002, 0x0}, */                 \
+/*{0x3004, 0x0000, 0x0}, */                 \
+/*{0x3006, 0x03C1, 0x0}, */                 \
+/*{0x3008, 0x04FF, 0x0}, */                 \
+/*{0x300A, 0x03DE, 0x0}, */                 \
+/*{0x300C, 0x0672, 0x0}, */                 \
+/*720P 60fps*/                              \
+    {0x3032, 0x0000, 0x0},                  \
+    {0x3002, 0x0002, 0x0},                  \
+    {0x3004, 0x0000, 0x0},                  \
+    {0x3006, 0x02D1, 0x0},                  \
+    {0x3008, 0x0503, 0x0},/*60fps*/         \
+    {0x300A, 0x02EE, 0x0},/*60fps*/         \
+    {0x300C, 0x0672, 0x0},                  \
+    {0x301A, 0x10D8, 0x0},                  \
+    {0x31D0, 0x0001, 0x0},                  \
+    {0x302C, 0x0002, 0x0},                  \
+    {0x302A, 0x0004, 0x0},                  \
+    {0x302E, 0x0002, 0x0},                  \
+    {0x3030, 0x002C, 0x0},                  \
+/*{0x30B0, 0x1370, 0x0}, */              /* HDVPSS config of MT9M024*/  \
+    {0x30B0, 0x1300, 0x0},                  \
+    {0,      100,    0x0},                  \
+    {0x301A, 0x10DC, 0x0},                  \
+    {0x3058, 0x0020, 0x0},              /* Blue Gain*/                  \
+    {0x3064, 0x1982, 0x0},              /* Disable Emb data and stats*/ \
+    {0x3100, 0x001B, 0x0},              /* Enable Auto Exposure */      \
+    {0x3112, 0x029F, 0x0},                  \
+    {0x3114, 0x008C, 0x0},                  \
+    {0x3116, 0x02C0, 0x0},                  \
+    {0x3118, 0x005B, 0x0},                  \
+    {0x3102, 0x0384, 0x0},                  \
+    {0x3104, 0x1000, 0x0},                  \
+    {0x3126, 0x0064, 0x0},                  \
+    {0x311C, 0x02A0, 0x0},                  \
+    {0x311E, 0x0080, 0x0},                  \
+    {0x301A, 0x10DC, 0x0},                  \
+/*TEST PATTERN*/                            \
+/*{0x3070,0x0002, 0x0},*/                   \
+/*{0x3072,0x0FFF, 0x0},*/                   \
+/*{0x3074,0x0FFF, 0x0},*/                   \
+/*{0x3076,0x0FFF, 0x0},*/                   \
+/*{0x3078,0x0FFF, 0x0},*/                   \
+    {0x0,    200,    0xFFFF},               \
+}
+
+#endif /* End of #ifndef AR0132_WDR_720P60_SETUP_H_ */

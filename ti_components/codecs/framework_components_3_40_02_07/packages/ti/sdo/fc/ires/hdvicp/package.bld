@@ -1,0 +1,84 @@
+/*
+ * Copyright (c) 2012 - 2013, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ */
+
+/*
+ *  ======== package.bld ========
+ *    Build script for IRES RESMANs and Protocols package.
+ */
+var Pkg = xdc.useModule('xdc.bld.PackageContents');
+
+/* lib/ is a generated directory that 'xdc clean' should remove */
+Pkg.generatedFiles.$add("lib/");
+
+Pkg.attrs.exportSrc = true;
+
+var LIBBASE = "hdvicp";
+var LIBBASE2 = "hdvicp2";
+
+var SRCS = ["iresman_hdvicp", "ires_hdvicp", "hdvicp_config"];
+var SRCS2 = ["iresman_hdvicp2", "ires_hdvicp2",
+        "iresman_hdvicp2_setup", "hdvicp2cfg.c"];
+             //"nullHdvicpFxns"];
+
+Pkg.otherFiles = [
+    "iresman_hdvicp.h",
+    "ires_hdvicp.h",
+    "iresman_protocol_hdvicp.h",
+    "_hdvicp.h",
+    "ires_hdvicp2.h",
+    "_hdvicp2.h",
+    "hdvicp2.h",
+    "iresman_protocol_hdvicp2.h",
+    "package.bld",
+    //"simple_GCArmv5T.mak"
+];
+
+for (var i = 0; i < Build.targets.length; i++) {
+
+    var targ = Build.targets[i];
+
+    if ((targ.name == "M3") || (targ.name == "M4")) {
+        var name  = LIBBASE2;
+        var srcs = SRCS2;
+    }
+    else {
+        var name  = LIBBASE;
+        var srcs = SRCS;
+    }
+
+    for (profile in targ.profiles) {
+        Pkg.addLibrary("lib/" + profile + "/" + name, targ, {
+            profile: profile
+        }).addObjects(srcs);
+    }
+}

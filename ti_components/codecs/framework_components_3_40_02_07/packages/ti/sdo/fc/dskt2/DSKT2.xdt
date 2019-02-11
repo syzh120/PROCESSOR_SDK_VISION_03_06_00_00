@@ -1,0 +1,130 @@
+%%{
+/*
+ * Copyright (c) 2012-2013, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ */
+%%}
+%%{
+    /*
+     *  ======== DSKT2.xdt ========
+     *  Generate DSKT2 configuration and initialization structures
+     */
+
+    var wbInvFxn = this.cacheWritebackInvalidateFxn;
+    if (wbInvFxn == null) {
+        wbInvFxn = "NULL";
+    }
+
+    var DARAM0 = (this.DARAM0 == null) ? "NULL" : this.DARAM0;
+    var DARAM1 = (this.DARAM1 == null) ? "NULL" : this.DARAM1;
+    var DARAM2 = (this.DARAM2 == null) ? "NULL" : this.DARAM2;
+    var SARAM0 = (this.SARAM0 == null) ? "NULL" : this.SARAM0;
+    var SARAM1 = (this.SARAM1 == null) ? "NULL" : this.SARAM1;
+    var SARAM2 = (this.SARAM2 == null) ? "NULL" : this.SARAM2;
+    var IPROG = (this.IPROG == null) ? "NULL" : this.IPROG;
+    var EPROG = (this.EPROG == null) ? "NULL" : this.EPROG;
+    var ESDATA = (this.ESDATA == null) ? "NULL" : this.ESDATA;
+    var DSKT2_HEAP = (this.DSKT2_HEAP == null) ? "NULL" : this.DSKT2_HEAP;
+    var deviceName = Program.cpu.deviceName;
+%%}
+/* C code contribution from ti/sdo/fc/DSKT2.xdt */
+
+#include <xdc/std.h>
+#include <ti/sdo/fc/dskt2/dskt2.h>
+
+/*
+#pragma DATA_SECTION(_DSKT2_ALLOW_EXTERNAL_SCRATCH, ".dskt2Globals");
+#pragma DATA_SECTION(_DSKT2_DARAM_SCRATCH_SIZES, ".dskt2Globals");
+#pragma DATA_SECTION(_DSKT2_SARAM_SCRATCH_SIZES, ".dskt2Globals");
+#pragma DATA_SECTION(ti_sdo_fc_dskt2_DSKT2_disableLazyDeactivate, ".dskt2Globals");
+ */
+
+%if (this.cacheWritebackInvalidateFxn != null) {
+extern Void `this.cacheWritebackInvalidateFxn`(Ptr blockPtr, size_t byteCnt,
+        Bool wait);
+%}
+
+__FAR__ DSKT2_CacheWBInvFxn DSKT2_cacheWBInvFxn = (DSKT2_CacheWBInvFxn)`wbInvFxn`;
+
+__FAR__ Uns _DSKT2_ALLOW_EXTERNAL_SCRATCH = `this.ALLOW_EXTERNAL_SCRATCH ? 1 : 0`;
+
+#if `this.DARAM_SCRATCH_SIZES.length` > DSKT2_NUM_SCRATCH_GROUPS
+#error too many values in DARAM_SCRATCH_SIZES array, please fix your .cfg
+#endif
+
+#if `this.SARAM_SCRATCH_SIZES.length` > DSKT2_NUM_SCRATCH_GROUPS
+#error too many values in SARAM_SCRATCH_SIZES array, please fix your .cfg
+#endif
+
+__FAR__ Uns _DSKT2_DARAM_SCRATCH_SIZES[DSKT2_NUM_SCRATCH_GROUPS] = {
+% for (var i = 0; i < this.DARAM_SCRATCH_SIZES.length; i++) {
+    `this.DARAM_SCRATCH_SIZES[i]``i < this.DARAM_SCRATCH_SIZES.length-1?",":""`
+% }
+};
+
+__FAR__ Uns _DSKT2_SARAM_SCRATCH_SIZES[DSKT2_NUM_SCRATCH_GROUPS] = {
+% for (var i = 0; i < this.SARAM_SCRATCH_SIZES.length; i++) {
+    `this.SARAM_SCRATCH_SIZES[i]``i < this.SARAM_SCRATCH_SIZES.length-1?",":""`
+% }
+};
+
+%// NOTE: xdc/cfg/global.h will #include the generated header file containing
+%// global variables declared in the .cfg file with the Program.global prefix.
+#include <xdc/cfg/global.h>
+#include <xdc/runtime/IHeap.h>
+
+__FAR__ xdc_runtime_IHeap_Handle DSKT2_daram0Heap = NULL;
+__FAR__ xdc_runtime_IHeap_Handle DSKT2_daram1Heap = NULL;
+__FAR__ xdc_runtime_IHeap_Handle DSKT2_daram2Heap = NULL;
+__FAR__ xdc_runtime_IHeap_Handle DSKT2_saram0Heap = NULL;
+__FAR__ xdc_runtime_IHeap_Handle DSKT2_saram1Heap = NULL;
+__FAR__ xdc_runtime_IHeap_Handle DSKT2_saram2Heap = NULL;
+__FAR__ xdc_runtime_IHeap_Handle DSKT2_iprogHeap = NULL;
+__FAR__ xdc_runtime_IHeap_Handle DSKT2_eprogHeap = NULL;
+__FAR__ xdc_runtime_IHeap_Handle DSKT2_esdataHeap = NULL;
+__FAR__ xdc_runtime_IHeap_Handle _DSKT2_heap = NULL;
+
+
+Void DSKT2_cfgInit()
+{
+    DSKT2_daram0Heap = (xdc_runtime_IHeap_Handle)`DARAM0`;
+    DSKT2_daram1Heap = (xdc_runtime_IHeap_Handle)`DARAM1`;
+    DSKT2_daram2Heap = (xdc_runtime_IHeap_Handle)`DARAM2`;
+    DSKT2_saram0Heap = (xdc_runtime_IHeap_Handle)`SARAM0`;
+    DSKT2_saram1Heap = (xdc_runtime_IHeap_Handle)`SARAM1`;
+    DSKT2_saram2Heap = (xdc_runtime_IHeap_Handle)`SARAM2`;
+    DSKT2_iprogHeap = (xdc_runtime_IHeap_Handle)`IPROG`;
+    DSKT2_eprogHeap = (xdc_runtime_IHeap_Handle)`EPROG`;
+    DSKT2_esdataHeap = (xdc_runtime_IHeap_Handle)`ESDATA`;
+    _DSKT2_heap = (xdc_runtime_IHeap_Handle)`DSKT2_HEAP`;
+}
+
+__FAR__ Bool ti_sdo_fc_dskt2_DSKT2_disableLazyDeactivate = `this.disableLazyDeactivate == false ? "FALSE" : "TRUE"`;

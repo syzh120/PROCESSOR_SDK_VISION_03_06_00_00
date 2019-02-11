@@ -1,0 +1,1 @@
+SBL User Guide(SBL_UserGuide.pdf) is moved to http://processors.wiki.ti.com/images/b/b7/TDA_SBL_UserGuide.pdf.

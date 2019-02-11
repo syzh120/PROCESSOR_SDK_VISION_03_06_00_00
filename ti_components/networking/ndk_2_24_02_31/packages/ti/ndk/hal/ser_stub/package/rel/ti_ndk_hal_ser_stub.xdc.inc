@@ -1,0 +1,10 @@
+package/package.bld.xml
+package/build.cfg
+package/package.xdc.inc
+package.bld
+package/package.cfg.xdc.inc
+lib/hal_ser_stub.aem4f
+package/package_ti.ndk.hal.ser_stub.c
+llserstb.c
+lib/hal_ser_stub.ae66
+lib/hal_ser_stub.aa15fg

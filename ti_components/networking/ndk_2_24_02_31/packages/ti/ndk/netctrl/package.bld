@@ -1,0 +1,226 @@
+/*
+ * Copyright (c) 2012, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * */
+/*
+ * ======== package.bld ========
+ */
+
+Pkg.otherFiles = ["package.bld"];
+
+/* List of all the NETCTRL Files */
+var netCtrlLibFiles = [
+    "netctrl.c",
+    "netsrv.c",
+];
+
+
+/*
+ *     Build 3 different library variations for NETCTRL
+ * 
+ *  The NETCTRL library is designed to support "potential" stack features
+ *  that the user may desire within their application (e.g. DHCP server). 
+ *  However, the drawback of this is that the code for such features will
+ *  be included in the executable even if the application never uses said 
+ *  feature. This results in a larger footprint than is usually necessary.
+ * 
+ *  To minimize this problem, there are now 3 different versions of the 
+ *  NETCTRL library that are available:
+ * 
+ *     - netctrl_min:	This minimal library enables the following
+ *                          services.  It should be used when a minimal
+ *                          footprint is desired:
+ * 
+ *           - DHCP client
+ * 
+ * 
+ *     - netctrl: 	This "standard" version of the NETCTRL library
+ *                          enables the following features and has a medium
+ *                          footprint:
+ * 
+ *           - Telnet server
+ *           - Http server
+ *           - DHCP client
+ * 
+ * 
+ *     - netctrl_full:	This "full" library enables all supported
+ *                          NETCTRL features, which include:
+ * 
+ *           - Telnet server
+ *           - Http server
+ *           - NAT server
+ *           - DHCP client
+ *           - DHCP server
+ *           - DNS server
+ * 
+ *  In turn, each of the above is built for both pure IPv4 as well as IPv6.
+ * 
+ *  The library flavors specified above take advantage of the define 
+ *  "_NDK_EXTERN_CONFIG".  This allows the build to override the following
+ *  definitions that exist in netsrv.h, which, without defining 
+ *  "_NDK_EXTERN_CONFIG", would control the features that are brought into
+ *  the netctrl library:
+ * 
+ *      - NETSRV_ENABLE_TELNET
+ *      - NETSRV_ENABLE_HTTP
+ *      - NETSRV_ENABLE_NAT
+ *      - NETSRV_ENABLE_DHCPCLIENT
+ *      - NETSRV_ENABLE_DHCPSERVER
+ *      - NETSRV_ENABLE_DNSSERVER
+ * 
+ */
+
+/* Build the libraries for all the targets specified. */
+for (var i = 0; i < Build.targets.length; i++) {
+    var target = Build.targets[i];
+
+    /* We build two versions of the library, i.e. NIMU + IPv6 with and without
+     * Jumbo Frame Support Enabled.
+     */
+    /*********************************************************************
+     ************** IPv6 and no Jumbo Frame Support Version **************
+     *********************************************************************/
+    /* IPv6 netctrl_min library */
+    var libOptions = {
+    	copts: " -D_NDK_EXTERN_CONFIG " +
+               " -DNETSRV_ENABLE_TELNET=0 " +
+               " -DNETSRV_ENABLE_HTTP=0 " +
+               " -DNETSRV_ENABLE_NAT=0 " +
+               " -DNETSRV_ENABLE_DHCPCLIENT=1	" +
+               " -DNETSRV_ENABLE_DHCPSERVER=0 " +
+               " -DNETSRV_ENABLE_DNSSERVER=0 " +
+               " -DUSE_EVENT_SEMAPHORE=1 -DUSE_SERIAL_PORT=0 " +
+               " -D_INCLUDE_NIMU_CODE -D_INCLUDE_IPv6_CODE",
+        incs: ndkPathInclude, 
+    };
+
+    // first library to build
+    var libName = "netctrl_min";
+
+    var lib = Pkg.addLibrary("lib/" + libName, target, libOptions);
+    lib.addObjects(netCtrlLibFiles);
+
+    /* IPv6 netctrl "standard" library */
+    var libName = "netctrl";
+    var libOptions = {
+    	copts: " -D_NDK_EXTERN_CONFIG " +
+               " -DNETSRV_ENABLE_TELNET=1 " +
+               " -DNETSRV_ENABLE_HTTP=1 " +
+               " -DNETSRV_ENABLE_NAT=0 " +
+               " -DNETSRV_ENABLE_DHCPCLIENT=1 " +
+               " -DNETSRV_ENABLE_DHCPSERVER=0 " +
+               " -DNETSRV_ENABLE_DNSSERVER=0 " +
+               " -DUSE_EVENT_SEMAPHORE=1 -DUSE_SERIAL_PORT=0 " +
+               " -D_INCLUDE_NIMU_CODE -D_INCLUDE_IPv6_CODE",
+        incs: ndkPathInclude, 
+    };
+
+    var lib = Pkg.addLibrary("lib/" + libName, target, libOptions);
+    lib.addObjects(netCtrlLibFiles);
+   
+    /* IPv6 netctrl_full library */
+    var libName = "netctrl_full";
+    var libOptions = {
+    	copts: " -D_NDK_EXTERN_CONFIG " +
+               " -DNETSRV_ENABLE_TELNET=1 " +
+               " -DNETSRV_ENABLE_HTTP=1 " +
+               " -DNETSRV_ENABLE_NAT=1 " +
+               " -DNETSRV_ENABLE_DHCPCLIENT=1 " +
+               " -DNETSRV_ENABLE_DHCPSERVER=1 " +
+               " -DNETSRV_ENABLE_DNSSERVER=1 " +
+               " -DUSE_EVENT_SEMAPHORE=1 -DUSE_SERIAL_PORT=0 " +
+               " -D_INCLUDE_NIMU_CODE -D_INCLUDE_IPv6_CODE",
+        incs: ndkPathInclude, 
+    };
+
+    var lib = Pkg.addLibrary("lib/" + libName, target, libOptions);
+    lib.addObjects(netCtrlLibFiles);
+    
+    /*********************************************************************
+     ************** IPv4 and no Jumbo Frame Support Version **************
+     *********************************************************************/
+    /* IPv4 netctrl_min library */
+    var libName = "netctrl_min_ipv4";
+    var libOptions = {
+    	copts: " -D_NDK_EXTERN_CONFIG " +
+               " -DNETSRV_ENABLE_TELNET=0" +
+               " -DNETSRV_ENABLE_HTTP=0"   +
+               " -DNETSRV_ENABLE_NAT=0"    +
+               " -DNETSRV_ENABLE_DHCPCLIENT=1" +
+               " -DNETSRV_ENABLE_DHCPSERVER=0" +
+               " -DNETSRV_ENABLE_DNSSERVER=0"  +
+               " -DUSE_EVENT_SEMAPHORE=1 -DUSE_SERIAL_PORT=0 " +
+               " -D_INCLUDE_NIMU_CODE ",
+        incs: ndkPathInclude, 
+    };
+
+    var lib = Pkg.addLibrary("lib/" + libName, target, libOptions);
+    lib.addObjects(netCtrlLibFiles);
+
+    /* IPv4 netctrl "standard" library */
+    var libName = "netctrl_ipv4";
+    var libOptions = {
+    	copts: " -D_NDK_EXTERN_CONFIG " +
+    	       " -DNETSRV_ENABLE_TELNET=1" +
+               " -DNETSRV_ENABLE_HTTP=1"   +
+               " -DNETSRV_ENABLE_NAT=0"    +
+               " -DNETSRV_ENABLE_DHCPCLIENT=1" +
+               " -DNETSRV_ENABLE_DHCPSERVER=0" +
+               " -DNETSRV_ENABLE_DNSSERVER=0"  +
+               " -DUSE_EVENT_SEMAPHORE=1 -DUSE_SERIAL_PORT=0 " +
+               " -D_INCLUDE_NIMU_CODE ",
+        incs: ndkPathInclude, 
+    };
+
+    var lib = Pkg.addLibrary("lib/" + libName, target, libOptions);
+    lib.addObjects(netCtrlLibFiles);
+
+    /* IPv4 netctrl_full library */
+    var libName = "netctrl_full_ipv4";
+    var libOptions = {
+    	copts: " -D_NDK_EXTERN_CONFIG " +
+    	       " -DNETSRV_ENABLE_TELNET=1" +
+               " -DNETSRV_ENABLE_HTTP=1"   +
+               " -DNETSRV_ENABLE_NAT=1"    +
+               " -DNETSRV_ENABLE_DHCPCLIENT=1" +
+               " -DNETSRV_ENABLE_DHCPSERVER=1" +
+               " -DNETSRV_ENABLE_DNSSERVER=1"  +
+               " -DUSE_EVENT_SEMAPHORE=1 -DUSE_SERIAL_PORT=0 " +
+               " -D_INCLUDE_NIMU_CODE ",
+        incs: ndkPathInclude, 
+    };
+
+    var lib = Pkg.addLibrary("lib/" + libName, target, libOptions);
+    lib.addObjects(netCtrlLibFiles);
+}
+
+/* include source files in the release package */
+Pkg.attrs.exportSrc = true;
+Pkg.attrs.exportCfg = true;

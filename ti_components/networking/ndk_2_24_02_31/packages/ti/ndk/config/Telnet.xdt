@@ -1,0 +1,84 @@
+%%{
+/*
+ * Copyright (c) 2012, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * */
+/*
+ *  ======== Telnet.xdt ========
+ *  Template to generate C code for the Telnet module
+ */
+
+// get handles to needed modules
+var Global = xdc.module('ti.ndk.config.Global');
+var Telnet = xdc.module('ti.ndk.config.Telnet');
+%%}
+
+% if (Telnet.$used > 0 && Telnet.$instances.length > 0 &&
+%         Global.enableCodeGeneration) {
+
+#include <ti/ndk/inc/netmain.h>
+#include <ti/ndk/config/prototypes.h>
+
+%     // must declare user defined callBackFxn as extern
+%     for (var i = 0; i < Telnet.$instances.length; i++) {
+%         if (Telnet.$instances[i].callBackFxn != null) {
+%             var callBkFxnName = Telnet.$instances[i].callBackFxn + "";
+%             callBkFxnName = callBkFxnName.replace('\&','');
+extern SOCKET `callBkFxnName`(PSA pSinClient);
+%         }
+%     } // end "for (i = 0, i < Telnet.instances..."
+ 
+Void ti_ndk_config_telnet_init(HANDLE hCfg)
+{
+% // declare a telnet struct for configuring Telnet module instances
+    CI_SERVICE_TELNET telnet;
+
+%     for (var i = 0; i < Telnet.$instances.length; i++) {
+    /* Specify Telnet service for Telnet instance `i` */
+    bzero (&telnet, sizeof(telnet));
+    telnet.cisargs.Mode   = `Telnet.$instances[i].mode`;
+    telnet.cisargs.IPAddr = inet_addr("`Telnet.$instances[i].ipAddr`");
+    telnet.cisargs.pCbSrv = `Telnet.$instances[i].pCbSrv`;
+    telnet.cisargs.IfIdx  = `Telnet.$instances[i].ifIdx`;
+    telnet.param.MaxCon   = `Telnet.$instances[i].maxCon`;
+    telnet.param.Port     = `Telnet.$instances[i].port`;
+%
+%         if (Telnet.$instances[i].callBackFxn != null) {
+    telnet.param.Callback = `Telnet.$instances[i].callBackFxn`;
+%         }
+%         else {
+    telnet.param.Callback = NULL;
+%         }
+    CfgAddEntry(hCfg, CFGTAG_SERVICE, CFGITEM_SERVICE_TELNET, 0,
+            sizeof(telnet), (UINT8 *)&telnet, 0);
+
+%     } // end "for (i = 0, i < Telnet.instances ..."
+}
+% } // end "if (Telnet.$used ..."

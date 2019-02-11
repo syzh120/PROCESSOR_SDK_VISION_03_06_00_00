@@ -1,0 +1,19 @@
+digraph chains_cascadeRadarCapture {
+
+       ColorScheme [shape=none, margin=0, label=<
+       <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+       <TR><TD bgcolor="lightblue">IPU1_0</TD></TR>
+       <TR><TD bgcolor="darkturquoise">IPU1_1</TD></TR>
+       </TABLE>>];
+
+       /************** LINKS ************************/
+       Capture [color=lightblue, style=filled]
+       IPCOut_IPU1_0_IPU1_1_0 [color=lightblue, style=filled]
+       IPCIn_IPU1_1_IPU1_0_0 [color=darkturquoise, style=filled]
+       NetworkTx [color=darkturquoise, style=filled]
+
+       /************** CONNECTIONS ************************/
+       Capture -> IPCOut_IPU1_0_IPU1_1_0
+       IPCOut_IPU1_0_IPU1_1_0 -> IPCIn_IPU1_1_IPU1_0_0
+       IPCIn_IPU1_1_IPU1_0_0 -> NetworkTx
+}

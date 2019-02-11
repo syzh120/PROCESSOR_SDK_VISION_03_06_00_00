@@ -1,0 +1,58 @@
+ifeq ($(AVB_INCLUDE),yes)
+UC_avbtx_vip_single_cam=yes
+UC_avbrx_dec_display_avbtx=yes
+UC_avbrx_sv_display_avbtx=yes
+endif
+
+UC_srv_calibration=yes
+UC_lvds_vip_dual_cam_dual_display=yes
+UC_lvds_vip_multi_cam_view=yes
+UC_lvds_vip_sv_analytics_us=yes
+UC_lvds_vip_sv_standalone=yes
+UC_lvds_vip_single_stereo=yes
+UC_lvds_vip_single_stereo_auto_calib=yes
+UC_lvds_vip_single_stereo_calibration=yes
+UC_network_rx_tx=yes
+UC_saveDisFrame=yes
+UC_vip_single_cam_analytics2=yes
+UC_vip_single_cam_dense_optical_flow=yes
+UC_vip_single_cam_dual_display=yes
+UC_vip_single_cam_edge_detection=yes
+UC_vip_single_cam_frame_copy=yes
+UC_vip_single_cam_frame_copy_safety=yes
+UC_vip_single_cam_lane_detection=yes
+UC_vip_single_cam_object_detection2=yes
+UC_vip_single_cam_sfm=yes
+UC_vip_single_cam_sparse_optical_flow=yes
+UC_vip_single_cam_subframe_copy=yes
+UC_vip_single_cam_tlr=yes
+UC_vip_single_cam_view=yes
+ifeq ($(AUTOSAR_APP),yes)
+UC_vip_single_cam_view_autosar_app=yes
+endif
+UC_vip_single_cam_view_encdec=yes
+UC_ov490_vip_sv_standalone=yes
+UC_network_stereo_display=yes
+
+ifeq ($(OPENCL_INCLUDE),yes)
+UC_vip_single_cam_openclcanny_edge=yes
+UC_vip_single_cam_openclframe_copy=yes
+endif
+
+ifeq ($(ENABLE_OPENCV),yes)
+UC_vip_single_cam_opencvcanny=yes
+UC_vip_single_cam_opencvopencldilation=yes
+endif
+
+# TI Deep Learning Use Case
+UC_tidl=yes
+UC_semSeg=yes
+UC_tidl_OD=yes
+
+ifeq ($(OPENVX_INCLUDE),yes)
+# OpenVX Usecase
+UC_vip_single_cam_openvx=yes
+endif
+
+UC_null_src_dec_display=yes
+UC_null_src_display=yes

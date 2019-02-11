@@ -1,0 +1,15 @@
+UC_a15source_2d_srv=yes
+UC_a15source_3d_srv=yes
+UC_lvds_vip_2d_srv=yes
+UC_lvds_vip_3d_srv=yes
+UC_lvds_vip_multi_cam=yes
+UC_lvds_vip_single_cam=yes
+UC_buf_loop=no
+UC_lvds_vip_single_cam_analytics=yes
+UC_lvds_vip_single_cam_analytics2=no
+UC_srv_calibration=yes
+UC_csi2Cal_multi_cam_view=yes
+
+ifeq ($(ISS_INCLUDE),yes)
+UC_iss_multi_cam_isp_sgx_3d_srv_display=yes
+endif

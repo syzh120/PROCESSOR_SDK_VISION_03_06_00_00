@@ -1,0 +1,279 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>module ti.sdo.fc.ires.hdvicp.HDVICP2</title>
+<meta name="googlebot" content="noindex,nofollow">
+<link rel="stylesheet" type="text/css" href="../../../../../src.css"/>
+</head>
+<body>
+<pre class=src>
+     1    <span class="comment">/*
+</span>     2    <span class="comment"> * Copyright (c) 2012 - 2013, Texas Instruments Incorporated
+</span>     3    <span class="comment"> * All rights reserved.
+</span>     4    <span class="comment"> *
+</span>     5    <span class="comment"> * Redistribution and use in source and binary forms, with or without
+</span>     6    <span class="comment"> * modification, are permitted provided that the following conditions
+</span>     7    <span class="comment"> * are met:
+</span>     8    <span class="comment"> *
+</span>     9    <span class="comment"> * *  Redistributions of source code must retain the above copyright
+</span>    10    <span class="comment"> *    notice, this list of conditions and the following disclaimer.
+</span>    11    <span class="comment"> *
+</span>    12    <span class="comment"> * *  Redistributions in binary form must reproduce the above copyright
+</span>    13    <span class="comment"> *    notice, this list of conditions and the following disclaimer in the
+</span>    14    <span class="comment"> *    documentation and/or other materials provided with the distribution.
+</span>    15    <span class="comment"> *
+</span>    16    <span class="comment"> * *  Neither the name of Texas Instruments Incorporated nor the names of
+</span>    17    <span class="comment"> *    its contributors may be used to endorse or promote products derived
+</span>    18    <span class="comment"> *    from this software without specific prior written permission.
+</span>    19    <span class="comment"> *
+</span>    20    <span class="comment"> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+</span>    21    <span class="comment"> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+</span>    22    <span class="comment"> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+</span>    23    <span class="comment"> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+</span>    24    <span class="comment"> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+</span>    25    <span class="comment"> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+</span>    26    <span class="comment"> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+</span>    27    <span class="comment"> * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+</span>    28    <span class="comment"> * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+</span>    29    <span class="comment"> * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+</span>    30    <span class="comment"> * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+</span>    31    <span class="comment"> *
+</span>    32    <span class="comment"> */</span>
+    33    <span class="xdoc">/*!
+</span>    34    <span class="xdoc"> *  ======== HDVICP2 ========
+</span>    35    <span class="xdoc"> *  HDVICP2-specific IRES Resman and Protocol Implementation
+</span>    36    <span class="xdoc"> *
+</span>    37    <span class="xdoc"> */</span>
+    38    @Template(<span class="string">"./HDVICP2.xdt"</span>)
+    39    
+    40    <span class=key>metaonly</span> <span class=key>module</span> HDVICP2 <span class=key>inherits</span> ti.sdo.fc.ires.IRESMAN {
+    41    
+    42        <span class=key>const</span> Int MAXRESOURCES = 10;  <span class="xdoc">/*! Maximum number of HDVICP2 resources
+</span>    43    <span class="xdoc">                                      this module can manage. */</span>
+    44        <span class="xdoc">/*!
+</span>    45    <span class="xdoc">     *  ======= memoryBaseAddress =======
+</span>    46    <span class="xdoc">     *
+</span>    47    <span class="xdoc">     */</span>
+    48        <span class=key>config</span> UInt memoryBaseAddress[MAXRESOURCES];
+    49    
+    50        <span class="xdoc">/*!
+</span>    51    <span class="xdoc">     *  ======= resetControlAddress =======
+</span>    52    <span class="xdoc">     *
+</span>    53    <span class="xdoc">     */</span>
+    54        <span class=key>config</span> UInt resetControlAddress[MAXRESOURCES];
+    55    
+    56    
+    57        <span class="xdoc">/*!
+</span>    58    <span class="xdoc">     *  =======  registerBaseAddress =======
+</span>    59    <span class="xdoc">     *  Base-address of the IVA-HD register space
+</span>    60    <span class="xdoc">     *
+</span>    61    <span class="xdoc">     */</span>
+    62        <span class=key>config</span> UInt registerBaseAddress[MAXRESOURCES];
+    63    
+    64        <span class="xdoc">/*!
+</span>    65    <span class="xdoc">     *  ======= configureFxn =======
+</span>    66    <span class="xdoc">     *  Function to configure the interrupt associated with the IVAHD and
+</span>    67    <span class="xdoc">     *  register a callback function.
+</span>    68    <span class="xdoc">     *
+</span>    69    <span class="xdoc">     *  Function signature of callback is:
+</span>    70    <span class="xdoc">     *  <b>@p(code)</b>
+</span>    71    <span class="xdoc">     *  Void _cbFunction(Void * cbArgs);
+</span>    72    <span class="xdoc">     *
+</span>    73    <span class="xdoc">     *  Function signature of configure is:
+</span>    74    <span class="xdoc">     *  <b>@p(code)</b>
+</span>    75    <span class="xdoc">     *  XDAS_Void _configure(IALG_Handle algHandle,
+</span>    76    <span class="xdoc">     *          IRES_HDVICP2_Obj * hdvicpHandle,
+</span>    77    <span class="xdoc">     *          IRES_HDVICP2_CallbackFxn cbFunctionPtr, XDAS_Void * cbArgs);
+</span>    78    <span class="xdoc">     */</span>
+    79        <span class=key>config</span> String configureFxn;
+    80    
+    81        <span class="xdoc">/*!
+</span>    82    <span class="xdoc">     *  ======= waitFxn =======
+</span>    83    <span class="xdoc">     *  Function to wait on the interrupt associated with the IVAHD to fire
+</span>    84    <span class="xdoc">     *
+</span>    85    <span class="xdoc">     *  Function signature is:
+</span>    86    <span class="xdoc">     *  <b>@p(code)</b>
+</span>    87    <span class="xdoc">     *  XDAS_UInt32 _wait(IALG_Handle algHandle,
+</span>    88    <span class="xdoc">     *          IRES_HDVICP2_Obj * hdvicpHandle,
+</span>    89    <span class="xdoc">     *          IRES_YieldContext * yieldContext);
+</span>    90    <span class="xdoc">     */</span>
+    91        <span class=key>config</span> String waitFxn;
+    92    
+    93        <span class="xdoc">/*!
+</span>    94    <span class="xdoc">     *  ======= doneFxn =======
+</span>    95    <span class="xdoc">     *  Function indicating "done".
+</span>    96    <span class="xdoc">     *
+</span>    97    <span class="xdoc">     *  This is the function called from the ISR interrupt associated with
+</span>    98    <span class="xdoc">     *  the IVAHD to  unblock the {<b>@link</b> #waitFxn}.
+</span>    99    <span class="xdoc">     *
+</span>   100    <span class="xdoc">     *  Function signature is:
+</span>   101    <span class="xdoc">     *  <b>@p(code)</b>
+</span>   102    <span class="xdoc">     *  XDAS_Void _done(IALG_Handle algHandle, IRES_HDVICP2_Obj * hdvicpHandle);
+</span>   103    <span class="xdoc">     */</span>
+   104        <span class=key>config</span> String doneFxn;
+   105    
+   106        <span class="xdoc">/*!
+</span>   107    <span class="xdoc">     *  ======= resetFxn =======
+</span>   108    <span class="xdoc">     *  Function to reset the IVAHD.
+</span>   109    <span class="xdoc">     *
+</span>   110    <span class="xdoc">     *  This is a callback function implemented by the framework and called by
+</span>   111    <span class="xdoc">     *  the codec.
+</span>   112    <span class="xdoc">     *
+</span>   113    <span class="xdoc">     *  Function signature is:
+</span>   114    <span class="xdoc">     *  <b>@p(code)</b>
+</span>   115    <span class="xdoc">     *  XDAS_UInt32 _reset(IALG_Handle algHandle,
+</span>   116    <span class="xdoc">     *          IRES_HDVICP2_Obj * hdvicpHandle);
+</span>   117    <span class="xdoc">     */</span>
+   118        <span class=key>config</span> String resetFxn;
+   119    
+   120    
+   121        <span class="xdoc">/*!
+</span>   122    <span class="xdoc">     *  ======= clearPRCMRegister =======
+</span>   123    <span class="xdoc">     *  Boolean value that indicates whether the PRCM register needs to be
+</span>   124    <span class="xdoc">     *  cleared in the default implementation of the "reset" function
+</span>   125    <span class="xdoc">     */</span>
+   126        <span class=key>config</span> Bool clearPRCMRegister;
+   127    
+   128        <span class="xdoc">/*!
+</span>   129    <span class="xdoc">     *  ======= timeout =======
+</span>   130    <span class="xdoc">     *  Timeout value representing "Wait forever" to be used to configure the
+</span>   131    <span class="xdoc">     *  {<b>@link</b> #timeout} configuration below.
+</span>   132    <span class="xdoc">     */</span>
+   133        <span class=key>const</span> UInt FOREVER = -1;
+   134    
+   135        <span class="xdoc">/*!
+</span>   136    <span class="xdoc">     *  ======= timeout =======
+</span>   137    <span class="xdoc">     * Timeout setting in microseconds, used by the "waitFxn" while waiting for      * a configured IVAHD's interrupt to fire.
+</span>   138    <span class="xdoc">     */</span>
+   139        <span class=key>config</span> UInt timeout;
+   140    
+   141        <span class="xdoc">/*!
+</span>   142    <span class="xdoc">     *  ======= delegate =======
+</span>   143    <span class="xdoc">     *  Package name that implements the above configure, wait, done, reset
+</span>   144    <span class="xdoc">     *  functions for the IVA-HD.
+</span>   145    <span class="xdoc">     */</span>
+   146        <span class=key>config</span> String delegate;
+   147    
+   148        <span class="xdoc">/*!
+</span>   149    <span class="xdoc">     *  ======== semCreateFxn ========
+</span>   150    <span class="xdoc">     * Function to create semaphores used by the resource manager
+</span>   151    <span class="xdoc">     *
+</span>   152    <span class="xdoc">     *  Function signature is:
+</span>   153    <span class="xdoc">     *  <b>@p(code)</b>
+</span>   154    <span class="xdoc">     * Void * _semCreate(Int key, Int count);
+</span>   155    <span class="xdoc">     */</span>
+   156        <span class=key>config</span> String semCreateFxn = <span class=key>null</span>;
+   157    
+   158        <span class="xdoc">/*!
+</span>   159    <span class="xdoc">     *  ======== semDeleteFxn ========
+</span>   160    <span class="xdoc">     * Function to delete semaphores used by the resource manager
+</span>   161    <span class="xdoc">     *
+</span>   162    <span class="xdoc">     *  Function signature is:
+</span>   163    <span class="xdoc">     *  <b>@p(code)</b>
+</span>   164    <span class="xdoc">     *  Void _semDelete(Void * sem);
+</span>   165    <span class="xdoc">     */</span>
+   166        <span class=key>config</span> String semDeleteFxn = <span class=key>null</span>;
+   167    
+   168        <span class="xdoc">/*!
+</span>   169    <span class="xdoc">     *  ======== semPendFxn ========
+</span>   170    <span class="xdoc">     * Function to pend on semaphores used by the resource manager
+</span>   171    <span class="xdoc">     *
+</span>   172    <span class="xdoc">     *  Function signature is:
+</span>   173    <span class="xdoc">     *  <b>@p(code)</b>
+</span>   174    <span class="xdoc">     *  Int _semPend(Void * sem, unsigned int timeout);
+</span>   175    <span class="xdoc">     */</span>
+   176        <span class=key>config</span> String semPendFxn = <span class=key>null</span>;
+   177    
+   178        <span class="xdoc">/*!
+</span>   179    <span class="xdoc">     *  ======== semPostFxn ========
+</span>   180    <span class="xdoc">     * Function to post on Semaphores used by the resource manager
+</span>   181    <span class="xdoc">     *
+</span>   182    <span class="xdoc">     *  Function signature is:
+</span>   183    <span class="xdoc">     *  <b>@p(code)</b>
+</span>   184    <span class="xdoc">     * Void _semPost(Void * sem);
+</span>   185    <span class="xdoc">     */</span>
+   186        <span class=key>config</span> String semPostFxn = <span class=key>null</span>;
+   187    
+   188        <span class="xdoc">/*!
+</span>   189    <span class="xdoc">     *  ======== ipcKeyBase ========
+</span>   190    <span class="xdoc">     *  Base value of keys of Linux IPC objects used by HDVICP2.
+</span>   191    <span class="xdoc">     *
+</span>   192    <span class="xdoc">     *  This applies only to Linux-based environments. The IPC objects
+</span>   193    <span class="xdoc">     *  created by HDVICP2 will use keys starting at this
+</span>   194    <span class="xdoc">     *  value, and incrementing with each new object. There are currently
+</span>   195    <span class="xdoc">     *  three IPC objects, so keys in the range of ipcKeyBase to ipcKeyBase + 2
+</span>   196    <span class="xdoc">     *  will be reserved for HDVICP. The default value of ipcKeyBase is
+</span>   197    <span class="xdoc">     *  ascii code for "2VDH".
+</span>   198    <span class="xdoc">     *
+</span>   199    <span class="xdoc">     *  WARNING: This value should only be changed if it conflicts with
+</span>   200    <span class="xdoc">     *  another IPC key in the system that cannot be changed. If this value
+</span>   201    <span class="xdoc">     *  is changed, all programs using HDVICP that will be run simultaneously
+</span>   202    <span class="xdoc">     *  must have the ipcKeyBase configured to the new value.
+</span>   203    <span class="xdoc">     *  <b>@_nodoc</b>
+</span>   204    <span class="xdoc">     */</span>
+   205        <span class=key>config</span> UInt ipcKeyBase = 0x32564448;
+   206    
+   207        <span class="comment">/*  @_nodoc */</span>
+   208        <span class=key>override</span> <span class=key>config</span> Bool autoRegister = <span class=key>true</span>;
+   209    
+   210        <span class="comment">/*
+</span>   211    <span class="comment">     *  ======== getHDVICP2Fxn ========
+</span>   212    <span class="comment">     *  Optional plug-in function that returns an IVAHD instance. If not
+</span>   213    <span class="comment">     *  provided, the default scheduler will be used
+</span>   214    <span class="comment">     *  IRES_Status (*getHDVICP2) (Int *Id, IALG_Handle alg,
+</span>   215    <span class="comment">     *          IRES_HDVICP2_Handle h);
+</span>   216    <span class="comment">     *  Note:- This API is currently experimental
+</span>   217    <span class="comment">     */</span>
+   218        <span class="comment">/* @_nodoc */</span>
+   219        <span class=key>config</span> String getHDVICP2Fxn;
+   220    
+   221        <span class="comment">/*
+</span>   222    <span class="comment">     *  ======== freeHDVICP2Fxn ========
+</span>   223    <span class="comment">     *  Optional plug-in function that frees up the IVAHD instance requested.
+</span>   224    <span class="comment">     *  Is required if a non-NULL getHDVICP2Fxn is provided.
+</span>   225    <span class="comment">     *  IRES_Status (*freeHDVICP2) (Int Id, IALG_Handle alg,
+</span>   226    <span class="comment">     *          IRES_HDVICP2_Handle h);
+</span>   227    <span class="comment">     *  Note:- This API is currently experimental
+</span>   228    <span class="comment">     */</span>
+   229        <span class="comment">/* @_nodoc */</span>
+   230        <span class=key>config</span> String freeHDVICP2Fxn;
+   231    
+   232        <span class="xdoc">/*!
+</span>   233    <span class="xdoc">     *  ======== yieldReleaseFxn ========
+</span>   234    <span class="xdoc">     */</span>
+   235        <span class=key>config</span> String yieldReleaseFxn;
+   236    
+   237        <span class="xdoc">/*!
+</span>   238    <span class="xdoc">     *  ======== yieldAcquireFxn ========
+</span>   239    <span class="xdoc">     */</span>
+   240        <span class=key>config</span> String yieldAcquireFxn;
+   241    
+   242        <span class="xdoc">/*!
+</span>   243    <span class="xdoc">     *  ======== getYieldArgsFxn ========
+</span>   244    <span class="xdoc">     */</span>
+   245        <span class=key>config</span> String getYieldArgsFxn;
+   246    
+   247        <span class="xdoc">/*!
+</span>   248    <span class="xdoc">     *  ======== maxHdvicp2ResetDelay ========
+</span>   249    <span class="xdoc">     * Maximum number of cycles to wait for HDVICP2 to reset, after a call is
+</span>   250    <span class="xdoc">     * issued.
+</span>   251    <span class="xdoc">     */</span>
+   252        <span class=key>config</span> UInt maxHdvicp2ResetDelay = 1000;
+   253    
+   254        <span class="xdoc">/*!
+</span>   255    <span class="xdoc">     *  ======= numHdvicp2 =======
+</span>   256    <span class="xdoc">     *  If catalog part does not declare peripheral information, it can be
+</span>   257    <span class="xdoc">     *  configured here. Number of IVAHD or HDVICP2s on this part
+</span>   258    <span class="xdoc">     *  <b>@_nodoc</b>
+</span>   259    <span class="xdoc">     */</span>
+   260        <span class=key>config</span> UInt numHdvicp2;
+   261    
+   262        <span class="comment">/*
+</span>   263    <span class="comment">     *  ======== intArray ========
+</span>   264    <span class="comment">     *  If catalog part does not declare peripheral information, it can be
+</span>   265    <span class="comment">     *  configured here. Array of length {@link #numHdvicp2}, that declares
+</span>   266    <span class="comment">     *  the interrupt numbers for each IVAHD.
+</span>   267    <span class="comment">     *  @_nodoc
+</span>   268    <span class="comment">     */</span>
+   269        <span class=key>config</span> UInt intArray[8];
+   270    }
+</pre>
+</body></html>

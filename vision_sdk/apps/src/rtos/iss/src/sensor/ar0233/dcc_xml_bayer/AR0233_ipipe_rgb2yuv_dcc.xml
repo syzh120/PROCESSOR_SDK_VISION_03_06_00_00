@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<IPIPE_RGB2YUV_xml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!--this is comment-->
+  <dcc_name>ipipe_rgb2yuv</dcc_name>
+  <dcc_header>
+    <camera_module_id>     0233 </camera_module_id>
+      <dcc_descriptor_id>   15 </dcc_descriptor_id>
+      <algorithm_vendor_id>  1 </algorithm_vendor_id>
+      <tunning_tool_version> 0 </tunning_tool_version>
+  </dcc_header>
+  <!--=======================================================================-->
+    <typedef>
+                <iss_ipipe_rgb2yuv type="struct">
+          <update type="uint8">       </update>
+            <!--[CSCRY]   [CSCGY]  [CSCBY]
+                [CSCRCB] [CSCGCB] [CSCBCB]
+                [CSCRCR] [CSCGCR] [CSCBCR] -->
+            <!--Color space conversion coefficients (S12Q8)-->
+            <matrix type="int16[3][3]"> </matrix>
+            <!--CSC offset values for Y offset, CB offset
+              and CR offset respectively (S11) -->
+            <offset type="int16[3]"> </offset>
+            <brightness type="uint8"> </brightness>
+            <contrast type="uint8">   </contrast>
+            <y_min type="uint8"> </y_min> <!-- output data clipping: U8 -->
+            <y_max type="uint8"> </y_max> <!-- output data clipping: U8 -->
+            <c_min type="uint8"> </c_min> <!-- output data clipping: U8 -->
+            <c_max type="uint8"> </c_max> <!-- output data clipping: U8 -->
+        </iss_ipipe_rgb2yuv>
+    </typedef>
+  <!--=======================================================================-->
+        <use_case val="1023"> <!-- DCC_USE_CASE_PREVIEW_ALL -->
+        <n-space>
+            <region0 class="0">
+                <gain val="0" min="0" max="500">  </gain>
+            </region0>
+        </n-space>
+          <parameter_package>
+            <ipipe_rgb2yuv_dcc type="iss_ipipe_rgb2yuv">
+              {
+                0,
+                {
+                    {  66,  129,  25 },
+                    { -38,  -74, 112 },
+                    { 112, -94, -18 }
+                },
+                { 16,0,0 },
+                0,
+                16,
+                              0, // y_min
+                              255, // y_max
+                              0, // c_min
+                              255  // c_max
+              }
+            </ipipe_rgb2yuv_dcc>
+        </parameter_package>
+    </use_case>
+
+  <!--=====================================================================-->
+</IPIPE_RGB2YUV_xml>

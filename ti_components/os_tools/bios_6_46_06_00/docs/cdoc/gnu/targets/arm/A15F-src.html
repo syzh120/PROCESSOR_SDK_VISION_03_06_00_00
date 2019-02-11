@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>module gnu.targets.arm.A15F</title>
+<meta name="googlebot" content="noindex,nofollow">
+<link rel="stylesheet" type="text/css" href="../../../src.css"/>
+</head>
+<body>
+<pre class=src>
+     1    <span class="comment">/* 
+</span>     2    <span class="comment"> *  Copyright (c) 2012 Texas Instruments and others.
+</span>     3    <span class="comment"> *  All rights reserved. This program and the accompanying materials
+</span>     4    <span class="comment"> *  are made available under the terms of the Eclipse Public License v1.0
+</span>     5    <span class="comment"> *  which accompanies this distribution, and is available at
+</span>     6    <span class="comment"> *  http://www.eclipse.org/legal/epl-v10.html
+</span>     7    <span class="comment"> *
+</span>     8    <span class="comment"> *  Contributors:
+</span>     9    <span class="comment"> *      Texas Instruments - initial implementation
+</span>    10    <span class="comment"> *
+</span>    11    <span class="comment"> * */</span>
+    12    import xdc.bld.ITarget2;
+    13    
+    14    <span class="xdoc">/*!
+</span>    15    <span class="xdoc"> *  ======== A15F.xdc ========
+</span>    16    <span class="xdoc"> *  Embedded Cortex A15, little endian, hard-float, bare metal target
+</span>    17    <span class="xdoc"> *
+</span>    18    <span class="xdoc"> *  This module defines an embedded bare metal target on Cortex A15. The target
+</span>    19    <span class="xdoc"> *  generates code compatible with the "v7A" architecture.
+</span>    20    <span class="xdoc"> *
+</span>    21    <span class="xdoc"> */</span>
+    22    <span class=key>metaonly</span> <span class=key>module</span> A15F <span class=key>inherits</span> gnu.targets.arm.ITarget {
+    23        <span class=key>override</span> <span class=key>readonly</span> <span class=key>config</span> string name                = <span class="string">"A15F"</span>;
+    24        <span class=key>override</span> <span class=key>readonly</span> <span class=key>config</span> string suffix              = <span class="string">"a15fg"</span>;
+    25        <span class=key>override</span> <span class=key>readonly</span> <span class=key>config</span> string isa                 = <span class="string">"v7A15"</span>;
+    26        <span class=key>override</span> <span class=key>readonly</span> <span class=key>config</span> xdc.bld.ITarget.Model model= {
+    27            endian: <span class="string">"little"</span>,
+    28            shortEnums: <span class=key>true</span>
+    29        };
+    30    
+    31        <span class=key>override</span> <span class=key>readonly</span> <span class=key>config</span> Bool alignDirectiveSupported = <span class=key>true</span>;
+    32    
+    33        <span class=key>override</span> <span class=key>readonly</span> <span class=key>config</span> string rts = <span class="string">"gnu.targets.arm.rtsv7A"</span>;
+    34        <span class=key>override</span> <span class=key>config</span> string platform     = <span class="string">"ti.platforms.sdp5430"</span>;
+    35    
+    36        <span class=key>override</span> <span class=key>config</span> string GCCTARG = <span class="string">"arm-none-eabi"</span>;
+    37    
+    38        <span class=key>override</span> <span class=key>readonly</span> <span class=key>config</span> String stdInclude = <span class="string">"gnu/targets/arm/std.h"</span>;
+    39    
+    40        <span class=key>override</span> <span class=key>readonly</span> <span class=key>config</span> ITarget2.Command cc = {
+    41            cmd: <span class="string">"$(rootDir)/bin/$(GCCTARG)-gcc -c -MD -MF $@.dep"</span>,
+    42            opts: <span class="string">"-mcpu=cortex-a15 -mfpu=neon -mfloat-abi=hard -mabi=aapcs -g"</span>
+    43        };
+    44    
+    45        <span class=key>readonly</span> <span class=key>config</span> ITarget2.Command ccBin = {
+    46            cmd: <span class="string">"bin/arm-none-eabi-gcc -c -MD -MF $@.dep"</span>,
+    47            opts: <span class="string">"-mcpu=cortex-a15 -mfpu=neon -mfloat-abi=hard -mabi=aapcs -g"</span>
+    48        };
+    49    
+    50        <span class=key>override</span> <span class=key>config</span> ITarget2.Options ccOpts = {
+    51            prefix: <span class="string">"-Wunused -Wunknown-pragmas -ffunction-sections -fdata-sections "</span>,
+    52            suffix: <span class="string">"-Dfar= -D__DYNAMIC_REENT__ "</span>
+    53        };
+    54    
+    55        <span class="xdoc">/*!
+</span>    56    <span class="xdoc">     *  ======== ccConfigOpts ========
+</span>    57    <span class="xdoc">     *  User configurable compiler options for the generated config C file.
+</span>    58    <span class="xdoc">     */</span>
+    59        <span class=key>override</span> <span class=key>config</span> ITarget2.Options ccConfigOpts = {
+    60            prefix: <span class="string">"$(ccOpts.prefix)"</span>,
+    61            suffix: <span class="string">"$(ccOpts.suffix)"</span>
+    62        };
+    63    
+    64        <span class=key>override</span> <span class=key>readonly</span> <span class=key>config</span> ITarget2.Command asm = {
+    65            cmd: <span class="string">"$(rootDir)/bin/$(GCCTARG)-gcc -c -x assembler-with-cpp"</span>,
+    66            opts: <span class="string">"-mcpu=cortex-a15 -mfpu=neon -mfloat-abi=hard"</span>
+    67        };
+    68    
+    69        <span class=key>readonly</span> <span class=key>config</span> ITarget2.Command asmBin = {
+    70            cmd: <span class="string">"bin/arm-none-eabi-gcc -c -x assembler-with-cpp"</span>,
+    71            opts: <span class="string">"-mcpu=cortex-a15 -mfpu=neon -mfloat-abi=hard"</span>
+    72        };
+    73    
+    74        <span class=key>override</span> <span class=key>config</span> ITarget2.Options lnkOpts = {
+    75            prefix: <span class="string">"-mfloat-abi=hard -nostartfiles -Wl,-static -Wl,--gc-sections"</span>,
+    76            suffix: <span class="string">"-Wl,--start-group -lgcc -lc -lm -Wl,--end-group -Wl,-Map=$(XDCCFGDIR)/$@.map"</span>
+    77        };
+    78    
+    79        <span class=key>readonly</span> <span class=key>config</span> ITarget2.Command arBin = {
+    80            cmd: <span class="string">"bin/arm-none-eabi-ar "</span>,
+    81            opts: <span class="string">""</span>
+    82        };
+    83    
+    84        <span class="xdoc">/*!
+</span>    85    <span class="xdoc">     *  ======== bspLib ========
+</span>    86    <span class="xdoc">     *  bspLib is assigned the name of the BSP library. The specified library
+</span>    87    <span class="xdoc">     *  is included on the link line.
+</span>    88    <span class="xdoc">     *
+</span>    89    <span class="xdoc">     *  Possible values for this field are "nosys" and "rdimon" with the default
+</span>    90    <span class="xdoc">     *  being "nosys".
+</span>    91    <span class="xdoc">     */</span>
+    92        <span class=key>override</span> <span class=key>config</span> string bspLib = <span class="string">"nosys"</span>;
+    93    
+    94        <span class="xdoc">/*!
+</span>    95    <span class="xdoc">     *  ======== targetPkgPath ========
+</span>    96    <span class="xdoc">     *  targetPkgPath controls the path to the package that contains the GNU
+</span>    97    <span class="xdoc">     *  libraries.
+</span>    98    <span class="xdoc">     */</span>
+    99        <span class=key>config</span> string targetPkgPath = <span class=key>null</span>;
+   100    
+   101        <span class="comment">/*
+</span>   102    <span class="comment">     *  ======== profiles ========
+</span>   103    <span class="comment">     */</span>
+   104        <span class=key>override</span> <span class=key>config</span> xdc.bld.ITarget.OptionSet profiles[string] = [
+   105            [<span class="string">"debug"</span>, {
+   106                compileOpts: {
+   107                    copts: <span class="string">"-g"</span>,
+   108                    defs:  <span class="string">"-D_DEBUG_=1"</span>,
+   109                },
+   110                linkOpts: <span class="string">"-g"</span>,
+   111            }],
+   112    
+   113            [<span class="string">"release"</span>, {
+   114                compileOpts: {
+   115                    copts: <span class="string">" -O2 "</span>,
+   116                },
+   117                linkOpts: <span class="string">" "</span>,
+   118            }],
+   119        ];
+   120    
+   121        <span class="comment">/*
+</span>   122    <span class="comment">     *  ======== compatibleSuffixes ========
+</span>   123    <span class="comment">     */</span>
+   124        <span class=key>override</span> <span class=key>config</span> String compatibleSuffixes[] = [];
+   125    
+   126        <span class=key>override</span> <span class=key>readonly</span> <span class=key>config</span> xdc.bld.ITarget.StdTypes stdTypes = {
+   127            t_IArg          : { size: 4, align: 4 },
+   128            t_Char          : { size: 1, align: 1 },
+   129            t_Double        : { size: 8, align: 8 },
+   130            t_Float         : { size: 4, align: 4 },
+   131            t_Fxn           : { size: 4, align: 4 },
+   132            t_Int           : { size: 4, align: 4 },
+   133            t_Int8          : { size: 1, align: 1 },
+   134            t_Int16         : { size: 2, align: 2 },
+   135            t_Int32         : { size: 4, align: 4 },
+   136            t_Int64         : { size: 8, align: 8 },
+   137            t_Long          : { size: 4, align: 4 },
+   138            t_LDouble       : { size: 8, align: 8 },
+   139            t_LLong         : { size: 8, align: 8 },
+   140            t_Ptr           : { size: 4, align: 4 },
+   141            t_Short         : { size: 2, align: 2 },
+   142            t_Size          : { size: 4, align: 4 },
+   143        };
+   144    }
+   145    <span class="comment">/*
+</span>   146    <span class="comment"> *  @(#) gnu.targets.arm; 1, 0, 0,0; 10-21-2016 18:16:47; /db/ztree/library/trees/xdctargets/xdctargets-l07/src/ xlibrary
+</span>   147    <span class="comment">
+</span>   148    <span class="comment"> */</span>
+   149    
+</pre>
+</body></html>

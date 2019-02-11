@@ -1,0 +1,431 @@
+diff -rupN newlib_orig/newlib/libc/include/sys/lock.h newlib/newlib/libc/include/sys/lock.h
+--- newlib_orig/newlib/libc/include/sys/lock.h	2012-08-21 01:21:44.000000000 -0700
++++ newlib/newlib/libc/include/sys/lock.h	2016-04-26 13:41:06.000632000 -0700
+@@ -1,24 +1,77 @@
+ #ifndef __SYS_LOCK_H__
+ #define __SYS_LOCK_H__
+ 
+-/* dummy lock routines for single-threaded aps */
++/* 
++ * Lock routines for multi-threaded apps. The implementation
++ * is provided by the OS.
++ */
+ 
+-typedef int _LOCK_T;
+-typedef int _LOCK_RECURSIVE_T;
++/*
++ * Dummy semaphore structure of size 32 bytes. This is will be
++ * type casted to Semaphore_struct in SYS/BIOS RTOS.
++ */
++typedef struct {
++    void *dummy[8];
++} __dummy_sem_t;
++
++typedef struct {
++    __dummy_sem_t sem;
++    unsigned char init_done;
++} __lock_mutex_t;
++
++typedef struct {
++    void *owner;
++    __dummy_sem_t sem;
++    unsigned int count;
++    unsigned char init_done;
++} __lock_recursive_mutex_t;
++
++typedef __lock_mutex_t _LOCK_T;
++typedef __lock_recursive_mutex_t _LOCK_RECURSIVE_T;
+  
+ #include <_ansi.h>
+ 
+-#define __LOCK_INIT(class,lock) static int lock = 0;
+-#define __LOCK_INIT_RECURSIVE(class,lock) static int lock = 0;
+-#define __lock_init(lock) (_CAST_VOID 0)
+-#define __lock_init_recursive(lock) (_CAST_VOID 0)
+-#define __lock_close(lock) (_CAST_VOID 0)
+-#define __lock_close_recursive(lock) (_CAST_VOID 0)
+-#define __lock_acquire(lock) (_CAST_VOID 0)
+-#define __lock_acquire_recursive(lock) (_CAST_VOID 0)
+-#define __lock_try_acquire(lock) (_CAST_VOID 0)
+-#define __lock_try_acquire_recursive(lock) (_CAST_VOID 0)
+-#define __lock_release(lock) (_CAST_VOID 0)
+-#define __lock_release_recursive(lock) (_CAST_VOID 0)
++#define __LOCK_INIT(class,lock) \
++    class _LOCK_T lock = { .sem.dummy = {0, 0, 0, 0, 0, 0, 0, 0}, \
++        .init_done = 0 }
++
++#define __LOCK_INIT_RECURSIVE(class,lock) \
++    class _LOCK_RECURSIVE_T lock = { .owner = 0, \
++        .sem.dummy = {0, 0, 0, 0, 0, 0, 0, 0}, .count = 0, \
++        .init_done = 0 }
++
++extern void __libc_lock_init(_LOCK_T *lock);
++extern void __libc_lock_init_recursive(_LOCK_RECURSIVE_T *lock);
++extern void __libc_lock_close(_LOCK_T *lock);
++extern void __libc_lock_close_recursive(_LOCK_RECURSIVE_T *lock);
++extern void __libc_lock_acquire(_LOCK_T *lock);
++extern void __libc_lock_acquire_recursive(_LOCK_RECURSIVE_T *lock);
++extern void __libc_lock_release(_LOCK_T *lock);
++extern void __libc_lock_release_recursive(_LOCK_RECURSIVE_T *lock);
++
++/* Returns 0 for success and non-zero for failure */
++extern int __libc_lock_try_acquire(_LOCK_T *lock);
++extern int __libc_lock_try_acquire_recursive(_LOCK_RECURSIVE_T *lock);
++
++#define __lock_init(lock) \
++    __libc_lock_init(&(lock))
++#define __lock_init_recursive(lock) \
++    __libc_lock_init_recursive(&(lock))
++#define __lock_close(lock) \
++    __libc_lock_close(&(lock))
++#define __lock_close_recursive(lock) \
++    __libc_lock_close_recursive(&(lock))
++#define __lock_acquire(lock) \
++    __libc_lock_acquire(&(lock))
++#define __lock_acquire_recursive(lock) \
++    __libc_lock_acquire_recursive(&(lock))
++#define __lock_try_acquire(lock) \
++    __libc_lock_try_acquire(&(lock))
++#define __lock_try_acquire_recursive(lock) \
++    __libc_lock_try_acquire_recursive(&(lock))
++#define __lock_release(lock) \
++    __libc_lock_release(&(lock))
++#define __lock_release_recursive(lock) \
++    __libc_lock_release_recursive(&(lock))
+ 
+ #endif /* __SYS_LOCK_H__ */
+diff -rupN newlib_orig/newlib/libc/reent/lock.c newlib/newlib/libc/reent/lock.c
+--- newlib_orig/newlib/libc/reent/lock.c	1969-12-31 16:00:00.000000000 -0800
++++ newlib/newlib/libc/reent/lock.c	2016-04-26 13:41:06.000659000 -0700
+@@ -0,0 +1,53 @@
++#include <sys/lock.h>
++
++/* Empty stubs for sys/lock APIs */
++
++void __libc_lock_init(_LOCK_T *lock)
++{
++    return;
++}
++
++void __libc_lock_init_recursive(_LOCK_RECURSIVE_T *lock)
++{
++    return;
++}
++
++void __libc_lock_close(_LOCK_T *lock)
++{
++    return;
++}
++
++void __libc_lock_close_recursive(_LOCK_RECURSIVE_T *lock)
++{
++    return;
++}
++
++void __libc_lock_acquire(_LOCK_T *lock)
++{
++    return;
++}
++
++void __libc_lock_acquire_recursive(_LOCK_RECURSIVE_T *lock)
++{
++    return;
++}
++
++void __libc_lock_release(_LOCK_T *lock)
++{
++    return;
++}
++
++void __libc_lock_release_recursive(_LOCK_RECURSIVE_T *lock)\
++{
++    return;
++}
++
++int __libc_lock_try_acquire(_LOCK_T *lock)
++{
++    return -1;
++}
++
++int __libc_lock_try_acquire_recursive(_LOCK_RECURSIVE_T *lock)
++{
++    return -1;
++}
+diff -rupN newlib_orig/newlib/libc/reent/Makefile.am newlib/newlib/libc/reent/Makefile.am
+--- newlib_orig/newlib/libc/reent/Makefile.am	2012-08-21 01:21:44.000000000 -0700
++++ newlib/newlib/libc/reent/Makefile.am	2016-04-26 16:55:35.003820000 -0700
+@@ -41,6 +41,7 @@ GENERAL_SOURCES = \
+ 	gettimeofdayr.c \
+ 	isattyr.c \
+ 	linkr.c \
++	lock.c \
+ 	lseekr.c \
+ 	mkdirr.c \
+ 	openr.c \
+@@ -51,6 +52,7 @@ GENERAL_SOURCES = \
+ 	sbrkr.c \
+ 	statr.c \
+ 	timesr.c \
++	tirtos_validate.c \
+ 	unlinkr.c \
+ 	writer.c
+ 
+@@ -77,6 +79,7 @@ CHEWOUT_FILES = \
+ 	fstatr.def \
+ 	gettimeofdayr.def \
+ 	linkr.def \
++	lock.def \
+ 	lseekr.def \
+ 	mkdirr.def \
+ 	openr.def \
+@@ -86,6 +89,7 @@ CHEWOUT_FILES = \
+ 	sbrkr.def \
+ 	statr.def \
+ 	timesr.def \
++	tirtos_validate.def \
+ 	unlinkr.def \
+ 	$(STDIO64_DEFS) \
+ 	writer.def
+diff -rupN newlib_orig/newlib/libc/reent/Makefile.in newlib/newlib/libc/reent/Makefile.in
+--- newlib_orig/newlib/libc/reent/Makefile.in	2012-08-21 01:21:44.000000000 -0700
++++ newlib/newlib/libc/reent/Makefile.in	2016-04-26 16:59:03.000298000 -0700
+@@ -59,13 +59,14 @@ am__objects_1 = lib_a-closer.$(OBJEXT) l
+ 	lib_a-impure.$(OBJEXT) lib_a-fcntlr.$(OBJEXT) \
+ 	lib_a-fstatr.$(OBJEXT) lib_a-getreent.$(OBJEXT) \
+ 	lib_a-gettimeofdayr.$(OBJEXT) lib_a-isattyr.$(OBJEXT) \
+-	lib_a-linkr.$(OBJEXT) lib_a-lseekr.$(OBJEXT) \
+-	lib_a-mkdirr.$(OBJEXT) lib_a-openr.$(OBJEXT) \
+-	lib_a-readr.$(OBJEXT) lib_a-renamer.$(OBJEXT) \
+-	lib_a-signalr.$(OBJEXT) lib_a-signgam.$(OBJEXT) \
+-	lib_a-sbrkr.$(OBJEXT) lib_a-statr.$(OBJEXT) \
+-	lib_a-timesr.$(OBJEXT) lib_a-unlinkr.$(OBJEXT) \
+-	lib_a-writer.$(OBJEXT)
++	lib_a-linkr.$(OBJEXT) lib_a-lock.$(OBJEXT) \
++	lib_a-lseekr.$(OBJEXT) lib_a-mkdirr.$(OBJEXT) \
++	lib_a-openr.$(OBJEXT) lib_a-readr.$(OBJEXT) \
++	lib_a-renamer.$(OBJEXT) lib_a-signalr.$(OBJEXT) \
++	lib_a-signgam.$(OBJEXT) lib_a-sbrkr.$(OBJEXT) \
++	lib_a-statr.$(OBJEXT) lib_a-timesr.$(OBJEXT) \
++	lib_a-tirtos_validate.$(OBJEXT) \
++	lib_a-unlinkr.$(OBJEXT) lib_a-writer.$(OBJEXT)
+ @HAVE_STDIO64_DIR_TRUE@am__objects_2 = lib_a-fstat64r.$(OBJEXT) \
+ @HAVE_STDIO64_DIR_TRUE@	lib_a-lseek64r.$(OBJEXT) \
+ @HAVE_STDIO64_DIR_TRUE@	lib_a-stat64r.$(OBJEXT) \
+@@ -83,9 +84,9 @@ lib_a_OBJECTS = $(am_lib_a_OBJECTS)
+ LTLIBRARIES = $(noinst_LTLIBRARIES)
+ libreent_la_LIBADD =
+ am__objects_6 = closer.lo reent.lo impure.lo fcntlr.lo fstatr.lo \
+-	getreent.lo gettimeofdayr.lo isattyr.lo linkr.lo lseekr.lo \
++	getreent.lo gettimeofdayr.lo isattyr.lo linkr.lo lock.lo lseekr.lo \
+ 	mkdirr.lo openr.lo readr.lo renamer.lo signalr.lo signgam.lo \
+-	sbrkr.lo statr.lo timesr.lo unlinkr.lo writer.lo
++	sbrkr.lo statr.lo timesr.lo tirtos_validate.lo unlinkr.lo writer.lo
+ @HAVE_STDIO64_DIR_TRUE@am__objects_7 = fstat64r.lo lseek64r.lo \
+ @HAVE_STDIO64_DIR_TRUE@	stat64r.lo open64r.lo
+ am__objects_8 = $(am__objects_7)
+@@ -290,6 +291,7 @@ GENERAL_SOURCES = \
+ 	gettimeofdayr.c \
+ 	isattyr.c \
+ 	linkr.c \
++	lock.c \
+ 	lseekr.c \
+ 	mkdirr.c \
+ 	openr.c \
+@@ -300,6 +302,7 @@ GENERAL_SOURCES = \
+ 	sbrkr.c \
+ 	statr.c \
+ 	timesr.c \
++	tirtos_validate.c \
+ 	unlinkr.c \
+ 	writer.c
+ 
+@@ -319,6 +322,7 @@ CHEWOUT_FILES = \
+ 	fstatr.def \
+ 	gettimeofdayr.def \
+ 	linkr.def \
++	lock.def \
+ 	lseekr.def \
+ 	mkdirr.def \
+ 	openr.def \
+@@ -328,6 +332,7 @@ CHEWOUT_FILES = \
+ 	sbrkr.def \
+ 	statr.def \
+ 	timesr.def \
++	tirtos_validate.def \
+ 	unlinkr.def \
+ 	$(STDIO64_DEFS) \
+ 	writer.def
+@@ -458,6 +463,12 @@ lib_a-linkr.o: linkr.c
+ lib_a-linkr.obj: linkr.c
+ 	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-linkr.obj `if test -f 'linkr.c'; then $(CYGPATH_W) 'linkr.c'; else $(CYGPATH_W) '$(srcdir)/linkr.c'; fi`
+ 
++lib_a-lock.o: lock.c
++	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-lock.o `test -f 'lock.c' || echo '$(srcdir)/'`lock.c
++
++lib_a-lock.obj: lock.c
++	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-lock.obj `if test -f 'lock.c'; then $(CYGPATH_W) 'lock.c'; else $(CYGPATH_W) '$(srcdir)/lock.c'; fi`
++
+ lib_a-lseekr.o: lseekr.c
+ 	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-lseekr.o `test -f 'lseekr.c' || echo '$(srcdir)/'`lseekr.c
+ 
+@@ -518,6 +529,12 @@ lib_a-timesr.o: timesr.c
+ lib_a-timesr.obj: timesr.c
+ 	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-timesr.obj `if test -f 'timesr.c'; then $(CYGPATH_W) 'timesr.c'; else $(CYGPATH_W) '$(srcdir)/timesr.c'; fi`
+ 
++lib_a-tirtos_validate.o: tirtos_validate.c
++	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-tirtos_validate.o `test -f 'tirtos_validate.c' || echo '$(srcdir)/'`tirtos_validate.c
++
++lib_a-tirtos_validate.obj: tirtos_validate.c
++	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-tirtos_validate.obj `if test -f 'tirtos_validate.c'; then $(CYGPATH_W) 'tirtos_validate.c'; else $(CYGPATH_W) '$(srcdir)/tirtos_validate.c'; fi`
++
+ lib_a-unlinkr.o: unlinkr.c
+ 	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-unlinkr.o `test -f 'unlinkr.c' || echo '$(srcdir)/'`unlinkr.c
+ 
+diff -rupN newlib_orig/newlib/libc/reent/tirtos_validate.c newlib/newlib/libc/reent/tirtos_validate.c
+--- newlib_orig/newlib/libc/reent/tirtos_validate.c	1969-12-31 16:00:00.000000000 -0800
++++ newlib/newlib/libc/reent/tirtos_validate.c	2016-04-26 16:53:14.008144000 -0700
+@@ -0,0 +1,43 @@
++/*
++ * Copyright (c) 2016, Texas Instruments Incorporated
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ *
++ * *  Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ *
++ * *  Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ *
++ * *  Neither the name of Texas Instruments Incorporated nor the names of
++ *    its contributors may be used to endorse or promote products derived
++ *    from this software without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
++ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
++ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
++ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
++ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
++ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
++ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
++ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
++ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
++ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
++ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ */
++/*
++ *  ======== tirtos_validate.c ========
++ *  This source file adds a special function to the libc library that a TI-RTOS
++ *  application will attempt to link to. If the function is found, it indicates
++ *  that the application is being linked with the correct library. Otherwise,
++ *  the link will fail, thereby indicating to the user that the application
++ *  is attempting to link with the wrong library.
++ */
++
++void ti_sysbios_rts_gnu_ReentSupport_checkIfCorrectLibrary()
++{
++}
+diff -rupN newlib_orig/newlib/libc/stdio/findfp.c newlib/newlib/libc/stdio/findfp.c
+--- newlib_orig/newlib/libc/stdio/findfp.c	2012-08-21 01:21:44.000000000 -0700
++++ newlib/newlib/libc/stdio/findfp.c	2016-04-26 13:41:06.001313000 -0700
+@@ -150,6 +150,51 @@ found:
+   return fp;
+ }
+ 
++_VOID
++_DEFUN(_close_flock_r, (rptr, fp),
++       struct _reent *rptr _AND
++       register FILE * fp)
++{
++  if (fp == NULL)
++    return;    			/* on NULL */
++
++  __sfp_lock_acquire ();
++
++  _flockfile (fp);
++
++  if (fp->_flags == 0)		/* not open! */
++    {
++      _funlockfile (fp);
++      __sfp_lock_release ();
++      return;
++    }
++
++  /* Unconditionally flush to allow special handling for seekable read
++     files to reposition file to last byte processed as opposed to
++     last byte read ahead into the buffer.  */
++  _fflush_r (rptr, fp);
++  if (fp->_flags & __SMBF)
++    _free_r (rptr, (char *) fp->_bf._base);
++  if (HASUB (fp))
++    FREEUB (rptr, fp);
++  if (HASLB (fp))
++    FREELB (rptr, fp);
++  fp->_flags = 0;		/* release this FILE for reuse */
++  _funlockfile (fp);
++#ifndef __SINGLE_THREAD__
++  __lock_close_recursive (fp->_lock);
++#endif
++
++  __sfp_lock_release ();
++}
++
++_VOID
++_DEFUN(_cleanup_flocks_r, (ptr),
++       struct _reent *ptr)
++{
++  _CAST_VOID _fwalk_reent(ptr, _close_flock_r);
++}
++
+ /*
+  * exit() calls _cleanup() through *__cleanup, set whenever we
+  * open or buffer a file.  This chicanery is done so that programs
+@@ -191,7 +236,14 @@ _DEFUN(__sinit, (s),
+     }
+ 
+   /* make sure we clean up on exit */
+-  s->__cleanup = _cleanup_r;	/* conservative */
++  if (s == _GLOBAL_REENT)
++  {
++    s->__cleanup = _cleanup_r;	/* conservative */
++  }
++  else
++  {
++    s->__cleanup = _cleanup_flocks_r;
++  }
+   s->__sdidinit = 1;
+ 
+   s->__sglue._next = NULL;
+diff -rupN newlib_orig/newlib/libc/stdio/local.h newlib/newlib/libc/stdio/local.h
+--- newlib_orig/newlib/libc/stdio/local.h	2012-08-21 01:21:44.000000000 -0700
++++ newlib/newlib/libc/stdio/local.h	2016-04-26 13:41:06.001446000 -0700
+@@ -66,6 +66,7 @@ extern int    _EXFUN(__sclose,(struct _r
+ extern int    _EXFUN(__stextmode,(int));
+ extern _VOID   _EXFUN(__sinit,(struct _reent *));
+ extern _VOID   _EXFUN(_cleanup_r,(struct _reent *));
++extern _VOID   _EXFUN(_cleanup_flocks_r,(struct _reent *));
+ extern _VOID   _EXFUN(__smakebuf_r,(struct _reent *, FILE *));
+ extern int    _EXFUN(_fwalk,(struct _reent *, int (*)(FILE *)));
+ extern int    _EXFUN(_fwalk_reent,(struct _reent *, int (*)(struct _reent *, FILE *)));
+diff -rupN newlib_orig/newlib/libc/stdio/makebuf.c newlib/newlib/libc/stdio/makebuf.c
+--- newlib_orig/newlib/libc/stdio/makebuf.c	2012-08-21 01:21:44.000000000 -0700
++++ newlib/newlib/libc/stdio/makebuf.c	2016-04-26 13:41:06.001594000 -0700
+@@ -103,7 +103,14 @@ _DEFUN(__smakebuf_r, (ptr, fp),
+     }
+   else
+     {
+-      ptr->__cleanup = _cleanup_r;
++      if (ptr == _GLOBAL_REENT)
++      {
++        ptr->__cleanup = _cleanup_r;
++      }
++      else
++      {
++        ptr->__cleanup = _cleanup_flocks_r;
++      }
+       fp->_flags |= __SMBF;
+       fp->_bf._base = fp->_p = (unsigned char *) p;
+       fp->_bf._size = size;

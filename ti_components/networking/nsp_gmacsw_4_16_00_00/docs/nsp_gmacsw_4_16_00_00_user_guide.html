@@ -1,0 +1,353 @@
+<!--
+ *  Copyright (c) 2016, Texas Instruments Incorporated
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *
+ *  *  Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *
+ *  *  Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ *
+ *  *  Neither the name of Texas Instruments Incorporated nor the names of
+ *     its contributors may be used to endorse or promote products derived
+ *     from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ *  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ *  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ *  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ *  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ *  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ *  OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ *  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ *  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ *  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>NDK Support Package (NSP) for GMACSW User Guide</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  </head>
+  <body style="font-family: verdana">
+    <table width="100%">
+      <tbody>
+        <tr>
+          <td bgcolor="black" width="1">
+            <a href="http://www.ti.com/"><img style=
+            "border: 0px solid ; width: 222px; height: 54px;" alt=
+            "Texas Instruments" src="tilogo.gif"></a>
+          </td>
+          <td bgcolor="red">
+            <img style="width: 314px; height: 26px;" alt=
+            "Technology for Innovators(tm)" src="titagline.gif">
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h1 align="center">NSP for GMACSW User Guide</h1>
+    <h2 align="center"></h2>
+
+<p>
+    This is an NSP release for the 3-port Gigabit Ethernet Switch (GMACSW) on the
+    DRA7xx/TDA2xx (Vayu) device, the DRA62x (J5Eco) device, and the DRA65x/VisionMid (Centaurus)
+    device. On J5Eco and Centaurus devices, this release supports Ethernet control on the
+    ARM Cortex-M3 (Media Controller) and ARM Cortex-A8 (GPP or MPU). On the Vayu device,
+    this release supports use on the ARM Cortex-M4 (IPU) and ARM Cortex-A15 (MPU).
+    Network examples for SYS/BIOS 6.x are provided for the supported cores.
+</p>
+
+<p align="center">
+<a href="#Introduction">Introduction</a>,
+<a href="#Documentation">Documentation</a>,
+<a href="#Examples">Examples</a>,
+<a href="#Rebuilding_driver_libs">Rebuilding The Driver Library</a>,
+<a href="#Version">Version Information</a>,
+<a href="#Support">Technical Support</a>.
+</p>
+
+<hr>
+<h2><a name="Introduction">Introduction</a></h2>
+    <p>
+      This is an NSP release for the 3-port Gigabit Ethernet Switch (GMACSW) on the
+      DRA7xx/TDA2xx (Vayu) device, the DRA62x (J5Eco) device, and the DRA65x/VisionMid (Centaurus)
+      device. On J5Eco and Centaurus devices, this release supports Ethernet control on the
+      ARM Cortex-M3 (Media Controller) and ARM Cortex-A8 (GPP or MPU). On the Vayu device,
+      this release supports use on the ARM Cortex-M4 (IPU) and ARM Cortex-A15 (MPU).
+      Network examples for SYS/BIOS 6.x are provided for the supported cores.
+    </p>
+    <p>
+      The Network Development Kit Support Package (NSP) contains&nbsp;
+      ethernet driver code, libraries and network examples for the supported EVM platforms.
+      It is meant to be used in conjunction with the TI Network Development Kit
+      (NDK), which consists of the platform independent networking code and stacks.
+    </p>
+    <p>
+      The NSP product is comprised of the following main packages
+    </p>
+
+<hr>
+<h2><a name="Documentation">Documentation</a></h2>
+<p>
+    The following documents provide an overview of the NDK, the networking
+    programming API, and how to port the software to other platforms (The
+    following documents have not been updated to reflect changes in this
+    drop).
+</p>
+<ul>
+    <li>
+        <a href="http://www-s.ti.com/sc/techlit/spru523.pdf">NDK User's
+        Guide</a>: Documents the NDK basics, and describes how to develop or
+        port a network-enabled application. It also describes how to customize
+        the network environment to fit your embedded environment.
+    </li>
+    <li>
+        <a href="http://www-s.ti.com/sc/techlit/spru524.pdf">NDK Programmer's
+        Reference Guide</a>: Describes the NDK library API calls in detail.
+        It also includes a description of the stack's internal object based
+        API functions.
+    </li>
+    <li>
+        <a href="http://www-s.ti.com/sc/techlit/sprufp2.pdf">NDK Support
+        Package Ethernet Driver Design Guide</a>:
+        Describes the NIMU based architecture of the Ethernet Drivers
+        packaged in the NSPs.
+  </li>
+</ul>
+<p>
+    In addition, users are encouraged to monitor (and contribute to!) the
+    <a href="http://tiexpressdsp.com">TI Embedded Processors Wiki</a>.
+</p>
+<p>
+    Release notes from previous NDK releases are also available in the
+    <a href="http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/ndk/index.html">
+    release website.</a>
+</p>
+
+
+<hr>
+
+<h2><a name="Features Supported">Features Supported</a></h2>
+<ul>
+    <li>Raw ethernet support with Non-NIMU APIs</li>
+    <li>TCP/UDP/Raw Socket support with NIMU APIs</li>
+    <li>NSP builds available for accessing EMAC and PHY for Cortext M4</li>
+    <li>Both EMAC & PHY are enabled</li>
+    <li>Non-NIMU & NIMU example files are included in this package</li>
+    <li>CCSv7 example projects</li>
+    <li>Option for enabling internal loopback mode of the GMAC_SW peripheral.</li>
+    <li>Device selection via RTSC config file options. These are used as follows:
+    <ul>
+        <li><code>GMACSW.device = GMACSW.DEVICE_J5ECO;</code></li>
+        <li><code>GMACSW.device = GMACSW.DEVICE_CENTAURUS;</code></li>
+        <li><code>GMACSW.device = GMACSW.DEVICE_VAYU;</code></li>
+    </ul>
+    </li>
+    <li>Dual mac support in NSP</li>
+    <ul>
+        <li>Both the MAC ports can be used simultaneously in NSP</li>
+        <li>The dual mac functionality is enabled by a macro DUAL_MAC_ENABLED in packages/ti/nsp/drv/config.bld</li>
+        <li>The NSP package should be rebuilt after dual mac is enabled or disabled</li>
+        <li>Please refer to the "Enabling the Dual MAC feature" section for instructions on how to use Dual MAC</li>
+    </ul>
+</ul>
+
+<hr>
+
+<h2><a name="Examples">Examples</a></h2>
+<p>
+    NDK examples may be found in the "packages/ti/ndk/" directory. This contains
+    examples for all supported devices. For TDA2xx "packages/ti/ndk/vayu/examples_ipu1" and the "packages/ti/ndk/vayu/examples_mpu" directory has examples for IPU (Cortex M4) and A15 resp.
+    The examples are stored as CCSv7 project files
+    that are meant to be imported into CCSv7.
+</p>
+<h3>Importing The NDK Example Projects Into CCS 7</h3>
+<p>
+    Before following the steps in this section, please ensure that all
+    dependent software that is listed in the section Compatibility Information in the release notes has
+    been installed.
+</p>
+<ul>
+  <li>Open CCSv7 and create a new workspace.</li>
+  <br>
+  <li>From within the C/C++ View, select the menu option "Project -&gt; Import Existing CCS/CCE Eclipse Project"</li>
+  <br>
+  <li>In the window that appears, click "Select Archive File", then click the "browse" button.</li>
+  <br>
+  <li>Navigate to the location where you installed the nsp_gmacsw_4_16_00_00 package. &nbsp;If you installed the NSP into C:\ti, then navigate to:</li>
+  <br>
+  <ul>
+    <li style="font-family: Courier New;">C:\ti\<b>nsp_gmacsw_4_16_00_00\</b>packages\ti\ndk\vayu\examples</li>
+    <br>
+  </ul>
+  <li>Once in the examples directory, you will see the example directories for MPU & IPU1:</li><br>
+  <li>Choose the desired directory and click open</li><br>
+  <li>Under "Discovered Projects" you should see the examples listed.  Click "Finish" to import the examples.</li><br>
+  <li>You may now build the NDK examples within CCSv7</li>
+  <br>
+ <li><b>NOTE</b>: if a project with the
+same name as the NDK examples already exists in the workspace, then it
+will not be found in the above steps. Therefore, it is
+recommended that a new workspace is used for the above steps.</li>
+</ul>
+
+
+<hr>
+<h2><a name="Rebuilding_driver_libs">Rebuilding The Driver Library</a></h2>
+<p>
+    The NDK Support Package includes the EMAC driver source files and a
+    RTSC build files that allow you to modify the driver sources and rebuild
+    the EMAC library.  You can rebuild the EMAC driver sources in order to
+    modify, update or add functionality.  If you edit any of the driver source
+    code and/or RTSC build files, you must rebuild the EMAC library in order
+    to incorporate these changes into it.
+</p>
+<p>
+    The instructions on this page are intended for rebuilding the EMAC driver
+    library on Microsoft Windows in a DOS shell using the xdc command. However,
+    this library may also be re-built on Linux using the xdc command that comes
+    packaged with XDCtools. Linux users should substitute any Windows specific
+    copy, explorer, or DOS shell instructions or commands with the Linux equivalents
+    in the steps that follow.
+</p>
+<p>
+    <b>Warning:</b> This section provides details about rebuilding the EMAC driver
+    source code. We strongly recommend that you copy the NSP installation to a
+    directory with a different name and update and rebuild that copy, rather than
+    rebuilding the original installation.
+</p>
+
+<h3>Making A Backup Copy Of The NSP Installation</h3>
+
+  <ul>
+          <li>Create a new directory on your computer. You will use this directory to store a copy of the NSP installation. This directory will act as a container for your NSP modifications. The full path to this directory <b>cannot contain any spaces</b>.<br><br>
+
+          For example, we recommend creating a directory called "C:/MYNSPBUILDS" rather than using a location in the "My Documents" directory tree.
+          </li><br>
+          <li>Using Windows Explorer, copy the entire NSP installation to the directory you just created. For example, if you installed the NSP in the default installation location, then you should copy the C:\ti\nsp_gmacsw_4_16_00_00 folder and all of its contents to the C:\MYNSPBUILDS folder. After this step, the C:\MYNSPBUILDS folder should contain the nsp_gmacsw_4_16_00_00 folder, which is a copy of your NSP installation.</li><br>
+
+        <li>Rename the folder that contains the copy of the NSP installation. For example, rename the C:\MYNSPBUILDS\nsp_gmacsw_4_16_00_00 directory to C:\MYNSPBUILDS\CUSTOM_nsp_gmacsw_4_16_00_00 </li><br>
+  </ul>
+
+<h3>Updating The config.bld File</h3>
+    <ul>
+        <li>Using Windows Explorer, move to the C:\MYNSPBUILDS\CUSTOM_nsp_gmacsw_4_16_00_00/packages/ti/nsp/drv directory.  </li><br>
+        <li>Open the config.bld file for text editing. </li><br>
+        <li>Make sure that the paths to the NDK 2.24 installation, XDCtools, and Code Generation Tools are correct.
+        For example, if you have installed NDK 2.24 and CCSv7 into the default locations, then the default values
+        of the following variables in config.bld should be correct.  If you have installed these components into
+        different locations, then you must update these variables to point to the correct installation locations<br>
+        (Given below are default paths with compatible component versions): </li><br>
+        <ul>
+            <li><code>var toolsDir    = "C:/ti/"</code>(Directory where all the tools are located in your PC)</li>
+            <li><code>var compilerDir = toolsDir + "ccsv7/tools/compiler"</code>(Directory where all the compiler tools are located)</li>
+            <li><code>ndkRoot  = toolsDir + "ndk_2_24_02_31"</code></li>
+            <li><code>edmaRoot = toolsDir + "edma3_lld_02_12_00_21"</code></li>
+            <li><code>biosRoot = toolsDir + "bios_6_46_00_00"</code></li>
+            <li><code>tiArmRoot = compilerDir + "ti-cgt-arm_16.9.2.LTS"</code></li>
+            <li><code>gccRoot = compilerDir + "gcc-arm-none-eabi-4_9-2015q3"</code></li>
+            <li><code>tiDspRoot = compilerDir + "ti-cgt-c6000_8.2.4"</code></li>
+            <br>
+        </ul>
+        <li>Near the end of the file, look for the array called <code>Build.targets</code>. This array contains the list of targets for which the EMAC driver should be built. Make sure that the target for which you want the driver built is uncommented. To build for all targets, this array should look like the following: </li><br>
+        <code>
+                &nbsp;&nbsp;Build.targets = [<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;gccMPUTarget,<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;tiIPUTarget,<br>
+                &nbsp;&nbsp;];
+        </code><br><br>
+
+        <li>Save and exit the file.</li><br>
+  </ul>
+
+<h3>Re-building The NSP Driver</h3>
+<h4>Using xdc</h4>
+<ul>
+    <li>In a DOS shell, navigate to the location of the copy of the NSP installation:</li><br>
+        <code>&nbsp;&nbsp;&nbsp;&nbsp;cd C:\MYNSPBUILDS\CUSTOM_nsp_gmacsw_4_16_00_00\packages\ti\nsp\drv</code><br><br>
+    <li>Run the XDC command to rebuild the driver library, specify the path to the BIOS packages as the xdcpath</li><br>
+        <code>&nbsp;&nbsp;&nbsp;&nbsp;xdc all --xdcpath="$(BIOS ROOT)\packages"</code><br><br>
+    <li>Or, if your XDCtools installation location is not on your path, type:</li><br>
+        <code>&nbsp;&nbsp;&nbsp;&nbsp;"C:\ti\xdctools_3_32_01_22_core"\xdc all --xdcpath="$(BIOS_ROOT)\packages"</code><br><br>
+    <li>The driver rebuild should begin.</li><br>
+</ul>
+<h4>Using make</h4>
+Build using make(or gmake in windows) is also supported. Internally, it does use xdc.
+<ul>
+    <li>To use make to build, go to C:\MYNSPBUILDS\CUSTOM_nsp_gmacsw_4_16_00_00</li>
+    <li>There is a file Rules.mak, in which all the dependency paths are to be updated, <br>
+        just like the config.bld file
+    </li>
+    <li>Once the Rules.mak file is updated, open C:\MYNSPBUILDS\CUSTOM_nsp_gmacsw_4_16_00_00<br>
+        in a shell and run <code>make env.sh</code> (linux) or <code>gmake env.sh</code>(windows).<br>
+        A file env.sh will be generated. You can check the file to make sure all the dependency paths are <br>
+        imported correctly.
+    </li>
+    <li>Once the dependency paths are confirmed, just run <code>make all</code> or <code>gmake all</code></li>
+    <li>NSP rebuild should start now.</li>
+</ul>
+
+<h3>Enabling the Dual MAC feature</h3>
+The dual mac feature is disabled by default in NSP. To enable this, please follow these steps:
+<ul>
+    <li>To enable dual mac, the NSP driver library has to be rebuilt with the macro DUAL_MAC_MODE enabled</li>
+    <li>This can be enabled in /ti/nsp/drv/config.bld file by uncommenting lines 84-86</li>
+    <li>After this is done, NSP should be rebuilt. Follow the previous heading for steps for rebuilding NSP</li>
+    <li>The dual mac functionality can be tested by loading ti/ndk/j6eco/examples_ipu1/client_dual_mac in TDA2Ex<br>
+        or ti/ndk/j6p/examples_ipu1/client_dual_mac in TDA2Px and pinging to both the IP addresses displayed in CCS console
+    </li>
+    <li>Make sure both the interfaces are connected to different networks. Also, if one of the IPs used is static,<br>
+        please make sure while communicating with the other port, the host PC is also connected to the same subnet<br>
+        as the dynamic IP interface is connected.
+    </li>
+</ul>
+
+Note: One could run a DHCP server in a linux PC and use it as the second DHCP network for testing purposes in case of <br>
+both IPs being configured as dynamic.
+
+<h4>TFDTP memory pool</h4>
+<ul>
+    <li>A memory pool is required to store TFDTP Tx packets and the corresponding packet structures.</li>
+    <li>By default the pool is put in a named data section called ".far:TFDTP_MEMPOOL". </li>
+    <li>As this memory pool is used to store TFDTP Tx packet header which along with data is submitted to the CPDMA for transmit operation. In current implementation regardless of cacheability of this mem pool, cache invalidate is always done before submitting packets (function LOCAL_fillTxPacket() in tfdtp.c). If TFDTP_MEMPOOL is in non-cacheable memory, you can comment out Cache_wbInv() call for header in this function.</li>
+    <li>The default size is 8448 bytes. If desired (perhaps to reduce memory consumption if less peak bandwith needs to be supported) it can be changed in tfdtp.c (gTFDTPTxMemPool and gTFDTPTxPackets).</li>
+</ul>
+
+<hr>
+<h2><a name="Support">Technical Support</a></h2>
+<ul>
+    <li>
+        <a href="http://support.ti.com">Technical support resources</a>
+    </li>
+
+    <li>
+        Forum-based technical support is available through the TI E2E Community in
+        the <a href="http://e2e.ti.com/support/embedded/f/355.aspx">TI RTOS forum</a>
+    </li>
+
+    <li>
+        <a href="http://tiexpressdsp.com/wiki/index.php?title=Category:NDK">Wiki-based documentation</a>
+    </li>
+
+    <li>
+        <a href="http://focus.ti.com/general/docs/techdocsabstract.tsp?abstractName=spraax4">Getting
+        Started with the C6000 Network Developer's Kit (NDK)</a>
+    </li>
+</ul>
+<p>
+    Check the <a href="http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/ndk/index.html">NDK
+    website</a> for NDK updates.
+</p>
+
+<hr>
+
+</body>
+</html>

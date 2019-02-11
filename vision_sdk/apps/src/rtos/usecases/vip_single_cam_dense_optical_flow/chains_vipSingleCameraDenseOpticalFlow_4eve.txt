@@ -1,0 +1,19 @@
+/*
+   4 EVE's used, VPE used
+ */
+ 
+UseCase: chains_vipSingleCameraDenseOpticalFlow_4eve
+
+Capture -> Dup_capture
+
+Dup_capture -> Alg_DenseOptFlow_1 (EVE1) -> Merge_Dof (DSP1)
+Dup_capture -> Alg_DenseOptFlow_2 (EVE2) -> Merge_Dof
+Dup_capture -> Alg_DenseOptFlow_3 (EVE3) -> Merge_Dof
+Dup_capture -> Alg_DenseOptFlow_4 (EVE4) -> Merge_Dof
+
+Merge_Dof -> Alg_VectorToImage (DSP1) -> Display_VideoDof
+
+Dup_capture -> VPE_capture -> Display_VideoOriginal
+
+GrpxSrc -> Display_Grpx
+

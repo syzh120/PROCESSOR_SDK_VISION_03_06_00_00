@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<opencv_storage>
+<Settings>
+  <!-- Number of inner corners per a item row and column. (square, circle) -->
+  <BoardSize_Width> 8</BoardSize_Width>
+  <BoardSize_Height>6</BoardSize_Height>
+  
+  <!-- The size of a square in some user defined metric system (pixel, millimeter)-->
+  <Square_Size>0.030</Square_Size>
+  <Use_Hints>1</Use_Hints>
+  <FocalX_Hint>1150</FocalX_Hint>
+  <FocalY_Hint>1025</FocalY_Hint>
+  <CenterX_Hint>428</CenterX_Hint>
+  <CenterY_Hint>142</CenterY_Hint>
+  <!-- The reprojection error threshold allows to discard frames that have too high reprojection errors -->
+  <Reproj_Error_Thresh>0.2</Reproj_Error_Thresh>
+  
+  <!-- The type of input used for camera calibration. One of: CHESSBOARD CIRCLES_GRID ASYMMETRIC_CIRCLES_GRID -->
+  <Calibrate_Pattern>"CHESSBOARD"</Calibrate_Pattern>
+  
+  <!-- The left and right input to use for calibration. -->
+  <InputLeft>"left_%02d.pgm"</InputLeft>
+  <InputRight>"right_%02d.pgm"</InputRight>
+  <!--  If true (non-zero) we flip the input images around the horizontal axis.-->
+  <Input_FlipAroundHorizontalAxis>0</Input_FlipAroundHorizontalAxis>
+    
+  <!-- How many frames to use, for calibration. -->
+  <Calibrate_NrOfFrameToUse>100</Calibrate_NrOfFrameToUse>
+  <!-- Enable stereo calibration -->
+  <Calibrate_Stereo> 1 </Calibrate_Stereo>
+   <!-- Free scaling parameter, 0: rectified images are zoomed and shifted 
+   so that only valid pixels are visible (no black areas after rectification). 
+   alpha=1 means that the rectified image is decimated and shifted 
+   so that all the pixels from the original images from the cameras are retained 
+   in the rectified images (no source image pixels are lost). 
+   Obviously, any intermediate value yields an intermediate result between those two extreme cases. 
+   -->
+  <Stereo_alpha_factor>0</Stereo_alpha_factor>
+  <!-- Generate files recMapLeft_int_converted.c and rectMapRight_int_converted.c -->
+  <GenerateEveRemapFiles> 1 </GenerateEveRemapFiles>
+  <!-- Generate files recMapLeft_int_converted.c and rectMapRight_int_converted.c -->
+  <RemapBlockWidth> 128 </RemapBlockWidth>
+  <!-- Output block width of Remap function on EVE -->
+  <RemapBlockHeight> 16 </RemapBlockHeight>
+  <!-- Output block height of Remap function on EVE -->
+  <RemapColorFormat> 0 </RemapColorFormat>
+  <!-- Color format which will be processed by remap, 0: Unsigned 8-bits Gray, 1; Signed 8-bits Gray, 2: Unsigned 16-bits Gray, 
+   3: Signed 16-bit Gray, 4: YUYV, 5: UYVY, 6: YUV420 SP 
+   -->
+  <Write_leftOutputFileName>"out_left_camera_data.xml"</Write_leftOutputFileName>
+  <Write_rightOutputFileName>"out_right_camera_data.xml"</Write_rightOutputFileName>
+  <!-- Qshift factor to increase fractional precision. Qshift=2 means coordinates are multiplied by 4. -->
+  <OutputMap_qShift>2</OutputMap_qShift>
+  <Write_leftOutputMapFileName>"leftInputMap_int.bin"</Write_leftOutputMapFileName>
+  <Write_rightOutputMapFileName>"rightInputMap_int.bin"</Write_rightOutputMapFileName>
+  <!-- If true (non-zero) we write to the output file the feature points.-->
+  <Write_DetectedFeaturePoints>1</Write_DetectedFeaturePoints>
+  <!-- If true (non-zero) we write to the output file the extrinsic camera parameters.-->
+  <Write_extrinsicParameters>1</Write_extrinsicParameters>
+  <!-- If true (non-zero) we show after calibration the undistorted images.-->
+  <Show_UndistortedImage>1</Show_UndistortedImage>
+ 
+</Settings>
+</opencv_storage>

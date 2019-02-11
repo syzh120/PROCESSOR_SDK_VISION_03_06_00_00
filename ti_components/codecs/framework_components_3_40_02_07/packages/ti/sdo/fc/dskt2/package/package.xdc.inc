@@ -1,0 +1,14 @@
+package.xdc
+package.xs
+DSKT2.xdc
+DSKT2.xdt
+package/ti.sdo.fc.dskt2.sch
+package/.vers_g180
+package/.vers_r170
+package/.vers_b160
+package/.xdc-B06
+package/ti_sdo_fc_dskt2.java
+package/ti_sdo_fc_dskt2.class
+package/package_ti.sdo.fc.dskt2.c
+package/package.defs.h
+package/ti.sdo.fc.dskt2.ccs

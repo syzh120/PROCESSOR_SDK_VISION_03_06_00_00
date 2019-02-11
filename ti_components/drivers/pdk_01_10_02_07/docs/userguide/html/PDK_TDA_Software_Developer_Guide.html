@@ -1,0 +1,427 @@
+﻿<!DOCTYPE html>
+<html lang="en" dir="ltr" class="client-nojs">
+<head>
+<meta charset="UTF-8" />
+<title>PDK/PDK TDA Software Developer Guide - Texas Instruments Wiki</title>
+<meta name="generator" content="MediaWiki 1.25.1" />
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="search" type="application/opensearchdescription+xml" href="http://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)" />
+<link rel="EditURI" type="application/rsd+xml" href="http://processors.wiki.ti.com/api.php?action=rsd" />
+<link rel="alternate" hreflang="x-default" href="PDK_TDA_Software_Developer_Guide.html" />
+<link rel="copyright" href="http://creativecommons.org/licenses/by-sa/3.0/" />
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="http://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom" />
+<link rel="stylesheet" href="load.php@debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%252Cshared%257Cmediawiki.sectionAnchor%257Cmediawiki.skinning.interface%257Cmediawiki.ui.button%257Cskins.vector.styles&amp;only=styles&amp;skin=vector&amp;%252A.css" />
+<meta name="ResourceLoaderDynamicStyles" content="" />
+<link rel="stylesheet" href="load.php@debug=false&amp;lang=en&amp;modules=site&amp;only=styles&amp;skin=vector&amp;%252A.css" />
+<style>a:lang(ar),a:lang(kk-arab),a:lang(mzn),a:lang(ps),a:lang(ur){text-decoration:none}
+/* cache key: davincid_wikidb:resourceloader:filter:minify-css:7:70500b672b667d946e900b286b62c126 */</style>
+<script src="load.php@debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector&amp;%252A"></script>
+<script>if(window.mw){
+mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"PDK/PDK_TDA_Software_Developer_Guide","wgTitle":"PDK/PDK TDA Software Developer Guide","wgCurRevisionId":235362,"wgRevisionId":235362,"wgArticleId":45126,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Automotive Applications Processors"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"PDK/PDK_TDA_Software_Developer_Guide","wgRelevantArticleId":45126,"wgIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgWikiEditorEnabledModules":{"toolbar":true,"dialogs":true,"hidesig":true,"preview":true,"publish":false},"wgCategoryTreePageCategoryOptions":"{\"mode\":0,\"hideprefix\":20,\"showcount\":false,\"namespaces\":false}"});
+}</script><script>if(window.mw){
+mw.loader.implement("user.options",function($,jQuery){mw.user.options.set({"variant":"en"});});mw.loader.implement("user.tokens",function($,jQuery){mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\"});});
+/* cache key: davincid_wikidb:resourceloader:filter:minify-js:7:a5c52c063dc436c1ca7c9f456936a5e9 */
+}</script>
+<script>if(window.mw){
+mw.loader.load(["mediawiki.page.startup","mediawiki.legacy.wikibits","mediawiki.legacy.ajax","skins.vector.js"]);
+}</script>
+<!--[if lt IE 7]><style type="text/css">body{behavior:url("/skins/Vector/csshover.min.htc")}</style><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr ns-0 ns-subject page-PDK_PDK_TDA_Software_Developer_Guide skin-vector action-view vector-animateLayout">
+		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+
+							<div id="siteNotice"><div id="localNotice" lang="en" dir="ltr"><p><br />
+<span style="color:#ff0000"><b>Please note as of Wednesday, August 15th, 2018 this wiki has been set to read only. If you are a TI Employee and require Edit ability please contact x0211426 from the company directory.</b></span>
+</p></div></div>
+						<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" class="firstHeading" lang="en"><span dir="auto">PDK/PDK TDA Software Developer Guide</span></h1>
+						<div id="bodyContent" class="mw-body-content">
+									<div id="siteSub">From Texas Instruments Wiki</div>
+								<div id="contentSub"></div>
+												<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="PDK_TDA_Software_Developer_Guide.html#mw-head">navigation</a>, 					<a href="PDK_TDA_Software_Developer_Guide.html#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="hf-nsheader"><script language = "Javascript">
+var tiContentGroup;
+var tiwikicat = (typeof(mw.config.values.wgCategories[0]) === "undefined"? "":mw.config.values.wgCategories[0]);
+tiContentGroup = "/DSP/wiki/Ext/" +tiwikicat;
+var tiPageName;
+tiPageName = 'wiki/PDK/PDK_TDA_Software_Developer_Guide';
+</script></div><div class="hf-header"></div><div style="padding-bottom: 10px; background-color: rgb(238,29,35); padding-left: 10px; padding-right: 10px; padding-top: 10px">
+<p><a href="http://processors.wiki.ti.com/index.php/File:Ti_stk_1c_rev_rgb_png.png" class="image" title="Ti stk 1c rev rgb png.png"><img alt="Ti stk 1c rev rgb png.png" src="Ti_stk_1c_rev_rgb_png.png" width="200" height="47" /></a>
+</p>
+</div>
+<p><br />
+</p>
+<div id="toc" class="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="PDK_TDA_Software_Developer_Guide.html#Introduction"><span class="tocnumber">1</span> <span class="toctext">Introduction</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="PDK_TDA_Software_Developer_Guide.html#Scope"><span class="tocnumber">2</span> <span class="toctext">Scope</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="PDK_TDA_Software_Developer_Guide.html#Guides"><span class="tocnumber">3</span> <span class="toctext">Guides</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="PDK_TDA_Software_Developer_Guide.html#Acronyms_and_Definitions"><span class="tocnumber">4</span> <span class="toctext">Acronyms and Definitions</span></a></li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Introduction">Introduction</span></h1>
+<p>The Texas Instruments <b>Platform Development Kit (PDK)</b> is a single scalable software driver package that offers streamlined development across different <a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/processors/dsp/automotive_processors/tdax_adas_socs/overview.page">TDAx ADAS Processors</a>. The PDK package contains Device Abstraction Layer libraries and peripheral/board level sample/demo examples that demonstrate the capabilities of the peripherals on TDAx platform for development, deployment and execution of applications. 
+</p><p>TDA2xx, TDA2Px, TDA2Ex and TDA2Ex_17x17 are high-performance, automotive vision application devices. The architecture is designed for Advanced Driver Assistance applications, including Vision Analytics for Single/Dual Front Camera, LVDS/Ethernet Surround View, Night Vision, Blind Spot Detection, Sensor Fusion and LIDAR, among others, and best-in-class CPU performance, video, image, and graphics processing sufficient to support.
+</p><p>TDA3x complements the TDA2x ADAS device family by using a common architecture, enabling scalability from entry to high performance for a broad range of applications. The device family is targeted at ADAS applications including Front Camera, Intelligent Rear Camera, Radar and Mirror Replacement.
+</p><p>The PDK package includes the following, though not all features are applicable across all supported platforms:
+</p>
+<ul><li>Chip support libraries, drivers, and basic board-support utilities (CSL)</li>
+<li>Video Processing Subsystem drivers (VPS)</li>
+<li>Bootloaders and boot utilities (SBL)</li>
+<li>Power management drivers (PM)</li>
+<li>Inter-processor communication for communication across cores and devices (IPC-Lite)</li>
+<li>BSP Drivers: UART, I2C and McSPI GIO/IOM TI SYSBIOS drivers</li>
+<li>IP Diagnostics libraries</li>
+<li>Demonstrations and examples</li></ul>
+<p><br />
+</p>
+<h1><span class="mw-headline" id="Scope">Scope</span></h1>
+<p>The purpose of this guide is to quickly provide the information you need most while evaluating and developing applications on a TI embedded processor, specifically running embedded real-time operating system. It is not intended to be a thorough design document. As such, the focus is on application programming interfaces (API), build information, and examples to use as a template to start development. 
+</p>
+<h1><span class="mw-headline" id="Guides">Guides</span></h1>
+<table style="border-right-width: 5px; border-top-width: 5px; border-bottom-width: 5px; border-left-width: 5px" class="wikitable FCK&#95;_ShowTableBorders" cellspacing="0" cellpadding="0" width="100%">
+
+<tr>
+<td style="background-color: #a3bfb6" colspan="4"> <big><b>Getting Started Links</b></big>
+</td></tr>
+<tr>
+<td width="25%" colspan="2"> <a href="PDK_TDA_Release_Notes.html" title="PDK/PDK TDA Release Notes">Release Notes</a>
+</td>
+<td width="25%" colspan="2"> <a href="PDK_TDA_Datasheet.html" title="PDK/PDK TDA Datasheet">Datasheet</a>
+</td></tr>
+<tr>
+<td width="25%" colspan="2"> <a href="PDK_TDA_Directory_Structure.html" title="PDK/PDK TDA Directory Structure">Directory Structure Overview</a>
+</td>
+<td width="25%" colspan="2"> <a href="PDK_TDA_Building_The_Package.html" title="PDK/PDK TDA Building The Package">Building the PDK</a>
+</td></tr>
+<tr>
+<td width="25%" colspan="2"> <a href="http://processors.wiki.ti.com/index.php/PDK/BSP_STW_To_PDK_Migration_Guide" title="PDK/BSP STW To PDK Migration Guide">BSP/STW to PDK Migration Guide</a>
+</td></tr>
+<tr>
+<td style="background-color: #a3bfb6" colspan="4"> <big><b>Component User Guide</b></big>
+</td></tr>
+
+<tr>
+<td width="25%" colspan="2"> <a href="PDK_TDA_CSL_User_Guide.html" title="PDK/PDK TDA CSL User Guide">CSL</a>
+</td>
+<td width="25%" colspan="2"> <a href="PDK_TDA_VPS_User_Guide.html" title="PDK/PDK TDA VPS User Guide">VPS</a>
+</td></tr>
+<tr>
+<td width="25%" colspan="2"> <a rel="nofollow" class="external text" href="TDA_SBL_UserGuide.pdf">SBL</a>
+</td>
+<td width="25%" colspan="2"> <a href="PDK_TDA_PM_User_Guide.html" title="PDK/PDK TDA PM User Guide">PM</a>
+</td></tr>
+<tr>
+<td width="25%" colspan="2"> <a href="PDK_IPCLITE_User_Guide.html" title="PDK/PDK IPCLITE User Guide">IPCLITE</a>
+</td>
+<td width="25%" colspan="2"> <a href="PDK_TDA_BSPLLD_User_Guide.html" title="PDK/PDK TDA BSPLLD User Guide">BSP LLD</a>
+</td></tr>
+<tr>
+<td width="25%" colspan="2"> <a href="PDK_DIAGNOSTICS_User_Guide.html" title="PDK/PDK DIAGNOSTICS User Guide">DIAGLIB</a>
+</td></tr>
+<tr>
+<td style="background-color: #a3bfb6" colspan="4"> <big><b>Other Links</b></big>
+</td></tr>
+<tr>
+<td width="25%" colspan="2"> <a href="PDK_TDA_Application_notes.html" title="PDK/PDK TDA Application notes">Application Notes</a>
+</td>
+<td width="25%" colspan="2"> <a href="PDK_FAQ.html" title="PDK/PDK FAQ"> Frequently Asked Questions</a>
+</td></tr>
+<tr>
+<td width="25%" colspan="2"> <a href="Maitaining_Custom_Changes_Over_TI_Software_Release.html" title="PDK/Maitaining Custom Changes Over TI Software Release">Guide: To Apply Patches</a>
+</td>
+<td width="25%" colspan="2"> <a rel="nofollow" class="external text" href="http://processors.wiki.ti.com/images/8/8d/PDK_Getting_Started.pdf">PDK Getting started</a>
+</td></tr>
+<tr>
+<td width="25%" colspan="2"> <a href="http://processors.wiki.ti.com/index.php/PDK/PDK_Patches" title="PDK/PDK Patches">PDK Patches</a>
+</td>
+<td width="25%" colspan="2"> [<a rel="nofollow" class="external text" href="https://e2e.ti.com/support/arm/automotive_processors/f/1021">Technical Support</a>]
+</td>
+<td>
+</td></tr>
+</table>
+<p><br />
+</p>
+<h1><span class="mw-headline" id="Acronyms_and_Definitions">Acronyms and Definitions</span></h1>
+<p>The following acronyms are used throughout this document.
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Acronym </th>
+<th> Meaning
+</th></tr>
+<tr>
+<td> CCS </td>
+<td> Texas Instruments Code Composer Studio
+</td></tr>
+<tr>
+<td> CG Tools </td>
+<td> Code Generation Tools
+</td></tr>
+<tr>
+<td> CSL </td>
+<td> Chip Support Library
+</td></tr>
+<tr>
+<td> CSL-FL </td>
+<td> Chip Support Library - Functional Layer
+</td></tr>
+<tr>
+<td> CSL-RL </td>
+<td> Chip Support Library - Register Layer
+</td></tr>
+<tr>
+<td> DSP </td>
+<td> Digital Signal Processor
+</td></tr>
+<tr>
+<td> EVM </td>
+<td> Evaluation Module, hardware platform containing the Texas Instruments DSP
+</td></tr>
+<tr>
+<td> IPC </td>
+<td> Inter-Processor Communication
+</td></tr>
+<tr>
+<td> JTAG </td>
+<td> Joint Test Action Group
+</td></tr>
+<tr>
+<td> PDK </td>
+<td> Platform Development Kit
+</td></tr>
+<tr>
+<td> PM </td>
+<td> Power Management
+</td></tr>
+<tr>
+<td> TI </td>
+<td> Texas Instruments
+</td></tr>
+<tr>
+<td> VPS </td>
+<td> Video Processing Subsystem
+</td></tr>
+<tr>
+<td> SBL </td>
+<td> Secondary Boot Loader
+</td></tr></table>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.100 seconds
+Real time usage: 0.109 seconds
+Preprocessor visited node count: 16/1000000
+Preprocessor generated node count: 22/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- 
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 - -total
+-->
+
+<!-- Saved in parser cache with key davincid_wikidb:pcache:idhash:45126-0!*!0!!en!5!* and timestamp 20190103143818 and revision id 235362
+ -->
+<div class="hf-footer"></div><div class="hf-nsfooter"><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="http://processors.wiki.ti.com/index.php/File:E2e.jpg" class="image"><img alt="E2e.jpg" src="E2e.jpg" width="305" height="63" /></a>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external free" href="http://e2e.ti.com">http://e2e.ti.com</a>. Please post only comments about the article <b>PDK/PDK TDA Software Developer Guide</b> here.</i>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"> <a href="http://processors.wiki.ti.com/index.php/File:Hyperlink_blue.png" class="image"><img alt="Hyperlink blue.png" src="Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br />
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br />
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br />
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br />
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br />
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br />
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br />
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br />
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li> <a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li> <a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li> <a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li> <a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br />
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br />
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<p><!-- HitBox Sub accounts Code START -->
+<script language="JavaScript" src="http://focus.ti.com/js/shared/metrics/metrics-min.js?version=1" type="text/javascript"></script>
+<!-- HitBox Sub accounts Code END -->
+</p>
+<div id="tiPrivacy"></div>
+</div></div>									<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="http://processors.wiki.ti.com/index.php?title=PDK/PDK_TDA_Software_Developer_Guide&amp;oldid=235362">http://processors.wiki.ti.com/index.php?title=PDK/PDK_TDA_Software_Developer_Guide&amp;oldid=235362</a>"					</div>
+													<div id='catlinks' class='catlinks'><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="http://processors.wiki.ti.com/index.php/Special:Categories" title="Special:Categories">Category</a>: <ul><li><a href="http://processors.wiki.ti.com/index.php/Category:Automotive_Applications_Processors" title="Category:Automotive Applications Processors">Automotive Applications Processors</a></li></ul></div></div>												<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="http://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=PDK%2FPDK+TDA+Software+Developer+Guide" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="http://processors.wiki.ti.com/index.php/Special:RequestAccount" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+															<li  id="ca-nstab-main" class="selected"><span><a href="PDK_TDA_Software_Developer_Guide.html"  title="View the content page [c]" accesskey="c">Page</a></span></li>
+															<li  id="ca-talk" class="new"><span><a href="http://processors.wiki.ti.com/index.php?title=Talk:PDK/PDK_TDA_Software_Developer_Guide&amp;action=edit&amp;redlink=1"  title="Discussion about the content page [t]" accesskey="t">Discussion</a></span></li>
+													</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<h3 id="p-variants-label"><span>Variants</span><a href="PDK_TDA_Software_Developer_Guide.html#"></a></h3>
+
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+															<li id="ca-view" class="selected"><span><a href="PDK_TDA_Software_Developer_Guide.html" >Read</a></span></li>
+															<li id="ca-viewsource"><span><a href="http://processors.wiki.ti.com/index.php?title=PDK/PDK_TDA_Software_Developer_Guide&amp;action=edit"  title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li>
+															<li id="ca-history" class="collapsible"><span><a href="http://processors.wiki.ti.com/index.php?title=PDK/PDK_TDA_Software_Developer_Guide&amp;action=history"  title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>
+													</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<h3 id="p-cactions-label"><span>More</span><a href="PDK_TDA_Software_Developer_Guide.html#"></a></h3>
+
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+
+						<form action="http://processors.wiki.ti.com/index.php" id="searchform">
+														<div id="simpleSearch">
+															<input type="search" name="search" placeholder="Search" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput" /><input type="hidden" value="Special:Search" name="title" /><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton" /><input type="submit" name="go" value="Go" title="Go to a page with this exact name if exists" id="searchButton" class="searchButton" />								</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="http://processors.wiki.ti.com/index.php/Main_Page"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id='p-navigation' aria-labelledby='p-navigation-label'>
+			<h3 id='p-navigation-label'>Navigation</h3>
+
+			<div class="body">
+									<ul>
+													<li id="n-mainpage"><a href="http://processors.wiki.ti.com/index.php/Main_Page" title="Visit the main page [z]" accesskey="z">Main Page</a></li>
+													<li id="n-All-pages"><a href="http://processors.wiki.ti.com/index.php/Special:AllPages">All pages</a></li>
+													<li id="n-All-categories"><a href="http://processors.wiki.ti.com/index.php/Special:Categories">All categories</a></li>
+													<li id="n-recentchanges"><a href="http://processors.wiki.ti.com/index.php/Special:RecentChanges" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li>
+													<li id="n-randompage"><a href="http://processors.wiki.ti.com/index.php/Special:Random" title="Load a random page [x]" accesskey="x">Random page</a></li>
+													<li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>
+											</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id='p-coll-print_export' aria-labelledby='p-coll-print_export-label'>
+			<h3 id='p-coll-print_export-label'>Print/export</h3>
+
+			<div class="body">
+									<ul>
+													<li id="coll-create_a_book"><a href="http://processors.wiki.ti.com/index.php?title=Special:Book&amp;bookcmd=book_creator&amp;referer=PDK%2FPDK+TDA+Software+Developer+Guide">Create a book</a></li>
+													<li id="coll-download-as-rl"><a href="http://processors.wiki.ti.com/index.php?title=Special:Book&amp;bookcmd=render_article&amp;arttitle=PDK%2FPDK+TDA+Software+Developer+Guide&amp;oldid=235362&amp;writer=rl">Download as PDF</a></li>
+													<li id="t-print"><a href="http://processors.wiki.ti.com/index.php?title=PDK/PDK_TDA_Software_Developer_Guide&amp;printable=yes" title="Printable version of this page [p]" accesskey="p">Printable version</a></li>
+											</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id='p-tb' aria-labelledby='p-tb-label'>
+			<h3 id='p-tb-label'>Toolbox</h3>
+
+			<div class="body">
+									<ul>
+													<li id="t-whatlinkshere"><a href="http://processors.wiki.ti.com/index.php/Special:WhatLinksHere/PDK/PDK_TDA_Software_Developer_Guide" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li>
+													<li id="t-recentchangeslinked"><a href="http://processors.wiki.ti.com/index.php/Special:RecentChangesLinked/PDK/PDK_TDA_Software_Developer_Guide" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li>
+													<li id="t-specialpages"><a href="http://processors.wiki.ti.com/index.php/Special:SpecialPages" title="A list of all special pages [q]" accesskey="q">Special pages</a></li>
+													<li id="t-permalink"><a href="http://processors.wiki.ti.com/index.php?title=PDK/PDK_TDA_Software_Developer_Guide&amp;oldid=235362" title="Permanent link to this revision of the page">Permanent link</a></li>
+													<li id="t-info"><a href="http://processors.wiki.ti.com/index.php?title=PDK/PDK_TDA_Software_Developer_Guide&amp;action=info" title="More information about this page">Page information</a></li>
+											</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+		<div id="footer" role="contentinfo">
+							<ul id="footer-info">
+											<li id="footer-info-lastmod"> This page was last modified on 23 August 2018, at 03:23.</li>
+											<li id="footer-info-viewcount">This page has been accessed 5,913 times.</li>
+											<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+									</ul>
+							<ul id="footer-places">
+											<li id="footer-places-privacy"><a href="http://processors.wiki.ti.com/index.php/Project:Privacy_policy" title="Project:Privacy policy">Privacy policy</a></li>
+											<li id="footer-places-about"><a href="http://processors.wiki.ti.com/index.php/Project:About" title="Project:About">About Texas Instruments Wiki</a></li>
+											<li id="footer-places-disclaimer"><a href="http://processors.wiki.ti.com/index.php/Project:General_disclaimer" title="Project:General disclaimer">Disclaimers</a></li>
+											<li id="footer-places-termsofservice"><a href="http://processors.wiki.ti.com/index.php/Project:Terms_of_Service" title="Project:Terms of Service">Terms of Use</a></li>
+									</ul>
+										<ul id="footer-icons" class="noprint">
+											<li id="footer-copyrightico">
+															<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31" /></a>
+													</li>
+											<li id="footer-poweredbyico">
+															<a href="http://www.mediawiki.org/"><img src="poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31" /></a>
+													</li>
+									</ul>
+						<div style="clear:both"></div>
+		</div>
+		<script>if(window.jQuery)jQuery.ready();</script><script>if(window.mw){
+mw.loader.state({"site":"loading","user":"ready","user.groups":"ready"});
+}</script>
+<script>if(window.mw){
+mw.loader.load(["mediawiki.toc","mediawiki.action.view.postEdit","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.searchSuggest"],null,true);
+}</script>
+<script>if(window.mw){
+document.write("\u003Cscript src=\"http://processors.wiki.ti.com/load.php?debug=false\u0026amp;lang=en\u0026amp;modules=site\u0026amp;only=scripts\u0026amp;skin=vector\u0026amp;*\"\u003E\u003C/script\u003E");
+}</script>
+<script>if(window.mw){
+mw.config.set({"wgBackendResponseTime":857});
+}</script>
+	</body>
+</html>

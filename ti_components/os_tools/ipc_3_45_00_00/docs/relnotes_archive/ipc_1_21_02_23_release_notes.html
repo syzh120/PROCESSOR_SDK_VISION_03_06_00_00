@@ -1,0 +1,362 @@
+<!-- --COPYRIGHT--,BSD
+ *  Copyright (c) $(CPYYEAR), Texas Instruments Incorporated
+ *  All rights reserved.
+ * 
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ * 
+ *  *  Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ * 
+ *  *  Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ * 
+ *  *  Neither the name of Texas Instruments Incorporated nor the names of
+ *     its contributors may be used to endorse or promote products derived
+ *     from this software without specific prior written permission.
+ * 
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ *  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ *  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ *  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ *  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ *  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ *  OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ *  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ *  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ *  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * --/COPYRIGHT-- -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 14 February 2006), see www.w3.org">
+    <title>
+      IPC 1.21.02.23 Release Notes
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <!-- For now, we use the doxygen style sheet -->
+    <link href="release_notes_template_files/css.htm" type="text/css" rel=
+    "stylesheet">
+    <meta content="MSHTML 6.00.2900.3395" name="GENERATOR">
+  </head>
+  <body>
+    <table width="100%">
+      <tbody>
+        <tr>
+          <td bgcolor="black" width="1">
+            <a href="http://www.ti.com/"><img style=
+            "border: 0px solid ; width: 222px; height: 54px;" alt=
+            "Texas Instruments" src="docs/tilogo.gif"></a>
+          </td>
+          <td bgcolor="red">
+            <img style="width: 314px; height: 26px;" alt=
+            "Technology for Innovators(tm)" src="docs/titagline.gif">
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h1 style="text-align: left;">
+      IPC 1.21.02.23 Release Notes
+    </h1>This release note is divided into the following sections:<br>
+    <br>
+    <a href="#General_Info">Introduction</a>, <a href=
+    "#Documentation">Documentation</a>, <a href="#Whats_New">What's New</a>,
+    <a href="#Compatibility">Upgrade &amp; Compatibility Information</a>,
+    <a href="#Host_Support">Host Support</a>, <a href=
+    "#Dependencies">Dependencies</a>, <a href="#Device_Support">Device
+    Support</a>, <a href="#Validation">Validation Info</a>, <a href=
+    "#Known_Issues">Known Issues</a>, <a href="#Examples">Examples</a>,
+    <a href="#Version">Version Information</a>, <a href="#Support">Technical
+    Support</a>.
+    <hr>
+    <h2>
+      <a name="General_Info" id="General_Info">Introduction</a>
+    </h2>
+    <p>
+      This is a GA release of IPC 1.21.02
+    </p>
+    <p>
+      Interprocess communication mechanisms including message passing, streams,
+      and linked lists, which work transparently in both uniprocessor and
+      muiltiprocessor configurations.
+    </p>
+    <p>
+      The IPC product is comprised of the following main packages
+    </p>
+    <ul>
+      <li>
+        <span style="font-weight: bold;">ti.ipc</span>:   Contains common
+        interface files (e.g. MessageQ, ListMP, HeapMemMP, Notify, etc.)
+      </li>
+      <li>
+        <span style="font-weight: bold;">ti.sdo.io</span>:   Contains I/O
+        modules (e.g. Stream, IDriver interface, etc.)
+      </li>
+      <li>
+        <span style="font-weight: bold;">ti.sdo.utils</span>: Contains helper modules (e.g.
+        MultiProc, List and NameServer)
+      </li>
+      <li>
+        <span style="font-weight: bold;">ti.sdo.ipc.heaps</span>: Contains shared-memory
+	Heaps
+      </li>
+      <li>
+        <span style="font-weight: bold;">ti.sdo.</span><span style=
+        "font-weight: bold;">ipc</span>:  Contains multicore modules (e.g.
+        MessageQ, Notify, ListMP, etc.)
+      </li>
+    </ul>These packages are provided as source code and prebuilt libraries.<br>
+    <hr>
+    <h2>
+      <a name="Documentation" id="Documentation">Documentation</a>
+    </h2>
+    <p>
+      The following documentation is available:
+    </p>
+    <table border=1px>
+        <tr>
+            <td><a href="docs/IPC_Install_Guide.pdf">User Install Guide</a></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><a href="docs/IPC_Users_Guide.pdf">User Guide (SPRUGO6A)</a></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><a href="docs/doxygen/html/index.html">Doxygen API guide</a></td>
+            <td>Documents runtime-APIs, type definitions, error codes and constants</td>
+        </tr>
+        <tr>
+            <td><a href="docs/cdoc/index.html">Cdoc API guide</a></td>
+            <td>Documents config-time (RTSC) APIs, Asserts and Errors</td>
+        </tr>
+    </table>
+    <p>
+      Release notes from previous releases are also available in the <a href=
+      "docs/relnotes_archive">relnotes_archive</a> directory.
+    </p>
+    <hr>
+    <h2>
+      <a name="Whats_New" id="Whats_New">What's new</a>
+    </h2>
+    <p><b>Changes since IPC 1.21.01:</b></p>
+    <table border=1px>
+        <tr><td>SDOCM00073312</td><td>evm6474 example Platform.xdc has incorrect memory size for DDR2</td></tr>
+        <tr><td>SDOCM00073098</td><td>Ipc_readConfig logic defects.</td></tr>
+        <tr><td>SDOCM00069771</td><td>DM8168/DSS should be renamed to DM8168/VPSS </td></tr>
+        <tr><td>SDOCM00071733</td><td>ListMP: obj->attrs must be flushed from cache to help ROV (not a runtime problem, but a big ROV issue)</td></tr>
+        <tr><td>SDOCM00068467</td><td>Need Ipc_detach() to handshake with remote core </td></tr>
+        <tr><td>SDOCM00072080</td><td>add support for catalog/Netra part -- C6A8168</td></tr>
+        <tr><td>SDOCM00072213</td><td>MultiProc_getId should assert that name != NULL</td></tr>
+        <tr><td>SDOCM00072433</td><td>Notify_sendEvent: uninitialized 'status' variable is returned upon successfully executing loopback event</td></tr>
+        <tr><td>SDOCM00072646</td><td>MultiProc.setConfig should check for duplicate names in nameList</td></tr>
+        <tr><td>SDOCM00072649</td><td>change notify ids used internally by IPC to be 0, 1, .., n.   Use Notify system key when registering internally within IPC.</td></tr>
+        <tr><td>SDOCM00072082</td><td>GateMP should use a 'GateAll' gate instead of GateHwi</td></tr>
+        <tr><td>SDOCM00072942</td><td>GateAAMonitor_Instance_init hits assert when cacheLineSize = 0</td></tr>
+        <tr><td>SDOCM00071788</td><td>Notify_Module_startup should assert that MultiProc_self() != MultiProc_INVALIDID</td></tr>
+        <tr><td>SDOCM00071741</td><td>Tom/Far/Nyq/Shan should offer ability to set MultiProc ID automatically at startup time</td></tr>
+        <tr><td>SDOCM00071907</td><td>update C6x/ELF targets to use mid-July 7.2 "alpha-build3" codegen for ELF targets (not COFF)</td></tr>
+    </table>
+    <p>
+      For information on enhancements and defect fixes in earlier releases,
+      please refer to the release notes from previous releases that are
+      available in the <a href="docs/relnotes_archive">relnotes_archive</a>
+      directory.
+    </p>
+    <hr>
+    <h2>
+      <a name="Compatibility" id="Compatibility">Upgrade and Compatibility
+      Information</a>
+    </h2>
+    <p>
+      <span style="font-weight: bold;">Interface/API changes:</span>
+      <p>
+        All of the APIs in IPC 1.21.02 are compatible with IPC 1.20.  However,
+	code using IPC 1.20 will have to be recompiled for use with IPC 1.21.02.
+	You must recompile -- relink will not work.
+      </p>
+      <p>The following shared-memory interface changes have been made between IPC 1.21.01 and 1.21.02:
+	<ul>
+	<li>The Notify event IDs for MessageQ and NameServer have changed (SDOCM00072649)</li>
+	<li>Ipc_detach now synchronizes using shared memory (SDOCM00068467)</li>
+ 	As a result, of these two changes, binary code built against IPC 1.21.02 will not work with binary code built
+        against IPC 1.21.01. 
+	</ul>
+      <p>
+        ti.sdo.ipc.* and ti.sdo.utils.* APIs in the IPC 1.21.XX.XX
+        releases are not compatible with those in the IPC 1.00.0X.XX (GA) release.
+        These APIs have been updated to be consistent with the Linux APIs to share
+        common header files in ti/ipc/.  However, APIs in the ti.sdo.io package
+        have not changed since the 1.00 GA release.
+      </p>
+    </p>
+    <p>
+      <span style="font-weight: bold;">DM8168 MultiProc name changes</span>
+      <p>The valid MultiProc names for DM8168 have been changed in IPC 1.21.02 to match the official names. They are now as follows:
+        <ul><li>VIDEO-M3</li><li>VPSS-M3</li><li>DSP</li><li>HOST</li></ul>
+        If legacy/incorrect names are used in the MultiProc configuration, a RTSC
+        build error will be displayed.  However, runtime usage of any legacy or incorrect
+        MultiProc names cannot be caught until runtime.  
+      </p>
+      <span style="font-weight: bold;">DM8168 Example platform changes</span>
+      <p>'ti.sdo.ipc.examples.platforms.simDM8168.xxx' sample platforms in IPC have been renamed to 'ti.sdo.ipc.examples.platforms.<b>evmDM8168</b>.xxx'.
+	Applications should use 'evmDM8168' instead of 'simDM8168' if the applications are using the example platforms packaged with IPC.  Existing
+	platforms generated using the platform wizard are not affected by this change.
+      </p>
+    </p>
+    <hr>
+    <h2>
+      <a name="Host_Support" id="Host_Support">Host Support</a>
+    </h2>
+    <p>
+      This release supports the following hosts:
+    </p>
+    <p>
+      Windows XP SP2/SP3
+    </p>
+    <p>
+      Windows Vista
+    </p>
+    <p>
+      Linux (Redhat 4 and 5)
+    </p>
+    <p class="MsoPlainText" style="margin-left: 0.5in; text-indent: -0.25in;">
+    </p>
+    <hr>
+    <h2>
+      <a name="Dependencies" id="Dependencies">Dependencies</a>
+    </h2>
+    <p>
+      This release requires the following other software components and tools
+      versions to successfully function:
+    </p>
+    <ul>
+      <li>CCS 4.2.0.08024 (or later)
+      </li>
+      <li>SYS/BIOS 6.30.02.42 (or later)
+      </li>
+      <li>XDCTools 3.20.02.59 (or later)<br>
+      </li>
+    </ul>
+    <hr>
+    <h2><a name="Device_Support" id="Device_Support">Device Support</a></h2>
+        <ul>
+            <li><a href="http://focus.ti.com/docs/prod/folders/print/tms320c6472.html">TMS320C6472</a></li>
+            <li><a href="http://focus.ti.com/docs/prod/folders/print/tms320c6474.html">TMS320C6474</a></li>
+            <li><a href="http://focus.ti.com/apps/docs/gencontent.tsp?contentId=52385&appId=1">TMS320DA830</a></li>
+            <li><a href="http://focus.ti.com/docs/prod/folders/print/tms320dm6446.html">TMS320CDM6446</a></li>
+            <li><a href="http://focus.ti.com/docs/prod/folders/print/omap-l138.html">OMAPL138</a></li>
+            <li><a href="http://focus.ti.com/docs/prod/folders/print/omap3530.html">OMAP3530</a></li>
+            <li><a href="http://focus.ti.com/general/docs/wtbu/wtbuproductcontent.tsp?templateId=6123&navigationId=12843&contentId=53243">OMAP4430</a></li>
+            <li><a href="http://www.ti.com/ww/en/dsp/davinci-netra/index.shtml?DCMP=vs_dm8168_03182010&HQS=Other+OT+dm8168">TMS320DM8168</a></li>
+        </ul>
+    <hr>
+    <h2>
+      <a name="Validation" id="Validation">Validation Information</a>
+    </h2>This release was validated using the following components:
+    <ul>
+      <li>CCS 4.2.0.08024 
+      </li>
+      <li>SYS/BIOS 6.30.02.42
+      </li>
+      <li>XDCTools 3.20.02.59
+      </li>
+    </ul>
+    <hr>
+    <h2><a name="Known_Issues" id="Known_Issues">Known Issues</a></h2>
+    <table border=1px>
+        <tr><td>SDOCM00068256</td><td>The linker will product a warning about "placing code in a data section" 
+	when building c6x applications using the whole_program[_debug] build profile for some devices.  
+	It is safe to ignore this warning.</td></tr>
+    </table>
+    <br>
+    <hr>
+    <h2>
+      <a name="Examples" id="Examples">Examples</a>
+    </h2>The IPC product ships with several examples. The following is an
+    explaination of each one. Refer to the <a href=
+    "docs/User_install.pdf"></a><a href="docs/User_install.pdf">User
+    Install Guide</a> for details on building.<br>
+    <big><span style="font-weight: bold;">io\examples</span></big><br>
+    <div style="margin-left: 40px;">
+      - <span style="font-weight: bold;">stream</span>: This example shows the
+      use of ti.sysbios.io.Stream module to demonstrate IO streaming using a
+      driver.<br>
+      <br>
+    </div><big><span style="font-weight: bold;">utils\examples</span></big><br>
+    <div style="margin-left: 40px;">
+      - <span style="font-weight: bold;">list</span>:The list example shows
+      how to use the basical functionality of the ti.sdo.utils.List module<br>
+      - <span style="font-weight: bold;">multiProc</span>: The multiProc
+      example shows how to use the basic functionality of the
+      ti.sdo.utils.MultiProc module<br>
+      - <span style="font-weight: bold;">multiProcSingleImage</span>: The
+      multiProcSingleImage example shows how to configure an image to be able
+      to run on multiple cores.<br>
+      <br>
+    </div><big><span style="font-weight: bold;">ipc\examples\singlecore</span></big><br>
+    <div style="margin-left: 40px;">
+      - <span style="font-weight: bold;">notify_loopback</span>: This example
+      demonstrates the Notify module on a single core using loopback 
+      functionality.<br>
+      - <span style="font-weight: bold;">message</span>: This example
+      demonstrates the MessageQ module on a single core.<br>
+      <br>
+    </div><big style=
+    "font-weight: bold;">ipc\examples\multicore<br></big>Please refer to the
+    readme.txt in the multicore platform specific directories for details on
+    how to run.<big style="font-weight: bold;"><br></big>
+    <div style="margin-left: 40px;">
+      - <span style="font-weight: bold;">message</span>: This example shows
+      messageQ on a multiprocessor system.<br>
+      - <span style="font-weight: bold;">notify</span>: This example shows how
+      to run the Notify module only on a multiprocessor system.<br>
+    </div>
+    <h2>
+      <a name="Version" id="Version">Version Information</a>
+    </h2>
+    <p>
+      All releases have 4 digits (<b>M.mm.pp.bb</b>). This includes GA and
+      pre-releases (engineering, EA, beta, etc.). Pre-releases are denoted with
+      a suffix (e.g. 1.21.00.01_eng).
+    </p>
+    <p>
+      This product's version follows a version format, <b>M.mm.pp.bb</b>, where
+      <b>M</b> is a single digit Major number, <b>mm</b> is 2 digit minor
+      number, <b>pp</b> is a 2 digit patch number, and <b>b</b> is an
+      unrestricted set of digits used as an incrementing build counter.
+    </p>
+    <p>
+      To support multiple side-by-side installations of the product, the
+      product version is encoded in the top level directory, ex.
+      <b>ipc_1_21_00_01</b>.
+    </p>
+    <p>
+      Subsequent releases of patch upgrades will be identified by the patch
+      number, ex. IPC 1.21.00.01 with directory <b>ipc_1_21_00_01</b>.
+      Typically, these patches only include critical bug fixes.
+    </p>
+    <p>
+      Please note that version numbers and compatibility keys are NOT the same.
+      For an explanation of compatibility keys, please refer to the 'Upgrade
+      and Compatibility Information' section.
+    </p>
+    <hr>
+    <h2>
+      <a name="Support" id="Support">Technical Support</a>
+    </h2>
+    <p>
+      For technical support, use the community forum 
+      <a href="http://e2e.ti.com/">TI E2E Community</a>, or email 
+      softwaresupport@ti.com.
+    </p>
+    <hr>
+    <p>
+      Last updated: Aug 09, 2010
+    </p>
+  </body>
+</html>

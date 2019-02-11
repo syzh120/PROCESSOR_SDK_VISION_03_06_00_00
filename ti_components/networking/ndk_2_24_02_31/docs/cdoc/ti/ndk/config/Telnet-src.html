@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>module ti.ndk.config.Telnet</title>
+<meta name="googlebot" content="noindex,nofollow">
+<link rel="stylesheet" type="text/css" href="../../../src.css"/>
+</head>
+<body>
+<pre class=src>
+     1    <span class="comment">/*
+</span>     2    <span class="comment"> * Copyright (c) 2012, Texas Instruments Incorporated
+</span>     3    <span class="comment"> * All rights reserved.
+</span>     4    <span class="comment"> *
+</span>     5    <span class="comment"> * Redistribution and use in source and binary forms, with or without
+</span>     6    <span class="comment"> * modification, are permitted provided that the following conditions
+</span>     7    <span class="comment"> * are met:
+</span>     8    <span class="comment"> *
+</span>     9    <span class="comment"> * *  Redistributions of source code must retain the above copyright
+</span>    10    <span class="comment"> *    notice, this list of conditions and the following disclaimer.
+</span>    11    <span class="comment"> *
+</span>    12    <span class="comment"> * *  Redistributions in binary form must reproduce the above copyright
+</span>    13    <span class="comment"> *    notice, this list of conditions and the following disclaimer in the
+</span>    14    <span class="comment"> *    documentation and/or other materials provided with the distribution.
+</span>    15    <span class="comment"> *
+</span>    16    <span class="comment"> * *  Neither the name of Texas Instruments Incorporated nor the names of
+</span>    17    <span class="comment"> *    its contributors may be used to endorse or promote products derived
+</span>    18    <span class="comment"> *    from this software without specific prior written permission.
+</span>    19    <span class="comment"> *
+</span>    20    <span class="comment"> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+</span>    21    <span class="comment"> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+</span>    22    <span class="comment"> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+</span>    23    <span class="comment"> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+</span>    24    <span class="comment"> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+</span>    25    <span class="comment"> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+</span>    26    <span class="comment"> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+</span>    27    <span class="comment"> * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+</span>    28    <span class="comment"> * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+</span>    29    <span class="comment"> * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+</span>    30    <span class="comment"> * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+</span>    31    <span class="comment"> * */</span>
+    32    <span class="comment">/*
+</span>    33    <span class="comment"> *  ======== Telnet.xdc ========
+</span>    34    <span class="comment"> *
+</span>    35    <span class="comment"> *  Telnet module definition and initial values
+</span>    36    <span class="comment"> */</span>
+    37    
+    38    <span class="xdoc">/*!
+</span>    39    <span class="xdoc"> *  ======== Telnet ========
+</span>    40    <span class="xdoc"> *  NDK module used for creating and configuring a telnet server. 
+</span>    41    <span class="xdoc"> *  
+</span>    42    <span class="xdoc"> *  The Telnet module can be used to configure and create a telnet server in
+</span>    43    <span class="xdoc"> *  an NDK program.
+</span>    44    <span class="xdoc"> *  
+</span>    45    <span class="xdoc"> *  In order to configure a telnet server, users must create a Telnet module
+</span>    46    <span class="xdoc"> *  parameters structure, which contains all of the instance properties of a
+</span>    47    <span class="xdoc"> *  Telnet instance.  Once the parameter structure is created, it may be used
+</span>    48    <span class="xdoc"> *  to change the properties of the telnet server that's being created.
+</span>    49    <span class="xdoc"> *  
+</span>    50    <span class="xdoc"> *  Users are able to create multiple telnet servers by creating multiple
+</span>    51    <span class="xdoc"> *  Telnet instances, and configuring each one.  However, if multiple Telnet
+</span>    52    <span class="xdoc"> *  instances are created, one must be careful to ensure that they all
+</span>    53    <span class="xdoc"> *  have been configured to have unique and free port numbers.
+</span>    54    <span class="xdoc"> */</span>  
+    55    
+    56    @Template(<span class="string">"./Telnet.xdt"</span>)
+    57    
+    58    <span class=key>metaonly</span> <span class=key>module</span> Telnet {
+    59    
+    60        <span class="xdoc">/*! Function signature for CISARGS struct service reporting function */</span>
+    61        <span class=key>typedef</span> Void (*telnetServiceFxn)(Int, Int, Int, Void *);
+    62    
+    63        <span class="xdoc">/*! Function signature for NTPARAM_TELNET struct callback function */</span>
+    64        <span class=key>typedef</span> Int (*telnetCallbackFxn)(Void *);
+    65    
+    66        <span class="xdoc">/*! Type used to specify bits in mode */</span>
+    67        <span class=key>typedef</span> Bits16 CisFlags;
+    68    
+    69        <span class="xdoc">/*! Specifies if the IfIdx field is valid. */</span>
+    70        <span class=key>const</span> CisFlags CIS_FLG_IFIDXVALID        = 0x0001;
+    71    
+    72        <span class="xdoc">/*!
+</span>    73    <span class="xdoc">     *  Requests that IfIdx be resolved to an IP address before service
+</span>    74    <span class="xdoc">     *  execution is initiated.
+</span>    75    <span class="xdoc">     */</span>
+    76        <span class=key>const</span> CisFlags CIS_FLG_RESOLVEIP         = 0x0002;
+    77    
+    78        <span class="xdoc">/*! Specifies that the service should be invoked by IP address */</span>
+    79        <span class=key>const</span> CisFlags CIS_FLG_CALLBYIP          = 0x0004;
+    80    
+    81        <span class="xdoc">/*!
+</span>    82    <span class="xdoc">     *  A service that is dependent on a valid IP address (as determined by the
+</span>    83    <span class="xdoc">     *  RESOLVEIP flag) is shut down if the IP address becomes invalid.
+</span>    84    <span class="xdoc">     *
+</span>    85    <span class="xdoc">     *  When this flag is set, the service will be restarted when a new address
+</span>    86    <span class="xdoc">     *  becomes available. Otherwise; the service will not be restarted.
+</span>    87    <span class="xdoc">     */</span>
+    88        <span class=key>const</span> CisFlags CIS_FLG_RESTARTIPTERM     = 0x0008;
+    89    
+    90        <span class="xdoc">/*!
+</span>    91    <span class="xdoc">     *  ======== create ========
+</span>    92    <span class="xdoc">     *  Creates an Telnet instance.
+</span>    93    <span class="xdoc">     */</span>
+    94        create();
+    95    
+    96    <span class=key>instance</span>:
+    97        <span class="xdoc">/*! The maximum number of connections for the telnet server (1 - 24). */</span>
+    98        <span class=key>config</span> Int maxCon = 8;
+    99    
+   100        <span class="xdoc">/*! The port number which this telnet server will accept connections. */</span>
+   101        <span class=key>config</span> Int port = 23;
+   102    
+   103        <span class="xdoc">/*!
+</span>   104    <span class="xdoc">     *  Set of flags which represent the desired behavior of the telnet Server.
+</span>   105    <span class="xdoc">     *  
+</span>   106    <span class="xdoc">     *  The following flag values may be set either individually, or by or-ing
+</span>   107    <span class="xdoc">     *  flags together:
+</span>   108    <span class="xdoc">     * <b>@p(blist)</b>
+</span>   109    <span class="xdoc">     *    - CIS_FLG_IFIDXVALID - specifies if the IfIdx field is valid.
+</span>   110    <span class="xdoc">     *  
+</span>   111    <span class="xdoc">     *    - CIS_FLG_RESOLVEIP - Requests that IfIdx be resolved to an IP
+</span>   112    <span class="xdoc">     *      addressbefore service execution is initiated.
+</span>   113    <span class="xdoc">     *  
+</span>   114    <span class="xdoc">     *    - CIS_FLG_CALLBYIP - Specifies that the service should be invoked by
+</span>   115    <span class="xdoc">     *      IP address
+</span>   116    <span class="xdoc">     *  
+</span>   117    <span class="xdoc">     *    - CIS_FLG_RESTARTIPTERM - A service that is dependent on a valid IP
+</span>   118    <span class="xdoc">     *      address.
+</span>   119    <span class="xdoc">     * <b>@p</b>
+</span>   120    <span class="xdoc">     */</span>
+   121        <span class=key>config</span> Int mode = 0;
+   122    
+   123        <span class="xdoc">/*!
+</span>   124    <span class="xdoc">     *  The physical device index on which the telnet server shall be
+</span>   125    <span class="xdoc">     *  executed.  Must be greater than zero.
+</span>   126    <span class="xdoc">     */</span>
+   127        <span class=key>config</span> Int ifIdx = 1;
+   128    
+   129        <span class="xdoc">/*! 
+</span>   130    <span class="xdoc">     *  The IP address on which to initiate this service.
+</span>   131    <span class="xdoc">     *  
+</span>   132    <span class="xdoc">     *  To accept a connection from any IP, specify INADDR_ANY.
+</span>   133    <span class="xdoc">     */</span> 
+   134        <span class=key>config</span> String ipAddr = <span class="string">"INADDR_ANY"</span>;
+   135    
+   136        <span class="xdoc">/*! Telnet service reporting function. */</span>
+   137        <span class=key>config</span> telnetServiceFxn pCbSrv = <span class="string">'&amp;ti_ndk_config_Global_serviceReport'</span>;
+   138    
+   139        <span class="xdoc">/*!
+</span>   140    <span class="xdoc">     *  Telnet callback function.  This is a handle to the function which 
+</span>   141    <span class="xdoc">     *  contains the telnet server code.
+</span>   142    <span class="xdoc">     */</span>
+   143        <span class=key>config</span> telnetCallbackFxn callBackFxn = <span class=key>null</span>;
+   144    
+   145        <span class="xdoc">/*! <b>@_nodoc</b>
+</span>   146    <span class="xdoc">     *
+</span>   147    <span class="xdoc">     * internal use only.  Intermediate variables mapped to Grace checkboxes,
+</span>   148    <span class="xdoc">     * used to update 'mode' flags variable.
+</span>   149    <span class="xdoc">     */</span>
+   150        <span class=key>config</span> Bool IfIdXValid = <span class=key>false</span>;
+   151    
+   152        <span class="xdoc">/*! <b>@_nodoc</b>
+</span>   153    <span class="xdoc">     *
+</span>   154    <span class="xdoc">     * internal use only.  Intermediate variables mapped to Grace checkboxes,
+</span>   155    <span class="xdoc">     * used to update 'mode' flags variable.
+</span>   156    <span class="xdoc">     */</span>
+   157        <span class=key>config</span> Bool ResolveIP = <span class=key>false</span>;
+   158    
+   159        <span class="xdoc">/*! <b>@_nodoc</b>
+</span>   160    <span class="xdoc">     *
+</span>   161    <span class="xdoc">     * internal use only.  Intermediate variables mapped to Grace checkboxes,
+</span>   162    <span class="xdoc">     * used to update 'mode' flags variable.
+</span>   163    <span class="xdoc">     */</span>
+   164        <span class=key>config</span> Bool CallByIP = <span class=key>false</span>;
+   165    
+   166        <span class="xdoc">/*! <b>@_nodoc</b>
+</span>   167    <span class="xdoc">     *
+</span>   168    <span class="xdoc">     * internal use only.  Intermediate variables mapped to Grace checkboxes,
+</span>   169    <span class="xdoc">     * used to update 'mode' flags variable.
+</span>   170    <span class="xdoc">     */</span>
+   171        <span class=key>config</span> Bool RestartIPTerm = <span class=key>false</span>;
+   172    }
+</pre>
+</body></html>

@@ -1,0 +1,467 @@
+From c8988c9cec735a2689355bc6ba52cc2ef316284b Mon Sep 17 00:00:00 2001
+From: Karthik Ramanan <a0393906@ti.com>
+Date: Thu, 4 Oct 2018 17:29:37 +0530
+Subject: [PATCH 4/5] gst*-ducati: Enable multimedia with vDRM
+
+Signed-off-by: Karthik Ramanan <a0393906@ti.com>
+---
+ ...ucati-Enable-encode-decode-for-vDRM-setup.patch | 431 +++++++++++++++++++++
+ .../gstreamer1.0-plugins-ducati_git.bbappend       |   8 +-
+ 2 files changed, 438 insertions(+), 1 deletion(-)
+ create mode 100644 recipes-multimedia/gst-plugins-ti/0001-gstducati-Enable-encode-decode-for-vDRM-setup.patch
+
+diff --git a/recipes-multimedia/gst-plugins-ti/0001-gstducati-Enable-encode-decode-for-vDRM-setup.patch b/recipes-multimedia/gst-plugins-ti/0001-gstducati-Enable-encode-decode-for-vDRM-setup.patch
+new file mode 100644
+index 0000000..b324be8
+--- /dev/null
++++ b/recipes-multimedia/gst-plugins-ti/0001-gstducati-Enable-encode-decode-for-vDRM-setup.patch
+@@ -0,0 +1,431 @@
++From: Subhajit Paul <a0132170@ti.com>
++Date: Wed, 12 Sep 2018 15:32:11 +0530
++Subject: [PATCH 1/1] gstducati: Enable encode/decode for vDRM setup
++
++Signed-off-by: Subhajit Paul <a0132170@ti.com>
++---
++ configure.ac                    |   1 +
++ src/Makefile.am                 |   5 ++
++ src/gstducatiomapdrmallocator.c | 191 ++++++++++++++++++++++++++++++++++++++++
++ src/gstducatiomapdrmallocator.h |  80 +++++++++++++++++
++ src/gstducatividdec.c           |   2 +-
++ src/gstducatividdec.h           |   2 +-
++ src/gstducatividenc.c           |  12 +--
++ src/gstducatividenc.h           |   2 +-
++ 8 files changed, 282 insertions(+), 13 deletions(-)
++ create mode 100644 src/gstducatiomapdrmallocator.c
++ create mode 100644 src/gstducatiomapdrmallocator.h
++
++diff --git a/configure.ac b/configure.ac
++index 8a44019..164b3ae 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -75,6 +75,7 @@ AC_CHECK_PROG(HAVE_PKGCONFIG, pkg-config, [ ], [
++ 
++ dnl Check for required codec-engine library..
++ PKG_CHECK_MODULES(LIBDCE, [libdce >= 1.0.0])
+++PKG_CHECK_MODULES(LIBDRM_OMAP, [libdrm_omap])
++ 
++ dnl Check for the required version of GStreamer core (and gst-plugins-base)
++ dnl This will export GST_CFLAGS and GST_LIBS variables for use in Makefile.am
++diff --git a/src/Makefile.am b/src/Makefile.am
++index c33adbb..fac69dd 100644
++--- a/src/Makefile.am
+++++ b/src/Makefile.am
++@@ -13,6 +13,8 @@ noinst_HEADERS = \
++ 	gstducatijpegenc.h \
++ 	gstducatividenc.h \
++ 	gstducatibufferpriv.h \
+++	gstducatibufferpriv.h \
+++	gstducatiomapdrmallocator.h \
++ 	gstducati.h
++ 
++ # sources used to compile this plug-in
++@@ -28,6 +30,7 @@ libgstducati_la_SOURCES = \
++ 	gstducatijpegenc.c \
++ 	gstducatividenc.c \
++ 	gstducatibufferpriv.c \
+++	gstducatiomapdrmallocator.c \
++ 	gstducati.c \
++ 	$(noinst_HEADERS)
++ 
++@@ -36,12 +39,14 @@ libgstducati_la_SOURCES = \
++ libgstducati_la_CFLAGS = \
++ 	$(GST_CFLAGS) \
++ 	$(LIBDCE_CFLAGS) \
+++	$(LIBDRM_OMAP_CFLAGS) \
++         -Wno-unused-variable \
++ 	-DGST_USE_UNSTABLE_API
++ 
++ libgstducati_la_LIBADD = \
++ 	$(GST_LIBS) \
++ 	$(LIBDCE_LIBS) \
+++	$(LIBDRM_OMAP_LIBS) \
++ 	-lgstdrm-1.0 \
++ 	-lgstvideo-1.0
++ 
++diff --git a/src/gstducatiomapdrmallocator.c b/src/gstducatiomapdrmallocator.c
++new file mode 100644
++index 0000000..97022ec
++--- /dev/null
+++++ b/src/gstducatiomapdrmallocator.c
++@@ -0,0 +1,191 @@
+++/*
+++ * GStreamer
+++ *
+++ * Copyright (C) 2012 Texas Instruments
+++ *
+++ * Authors:
+++ *  Subhajit Paul <subhajit_paul@ti.com>
+++ *
+++ * This library is free software; you can redistribute it and/or
+++ * modify it under the terms of the GNU Lesser General Public
+++ * License as published by the Free Software Foundation
+++ * version 2.1 of the License.
+++ *
+++ * This library is distributed in the hope that it will be useful,
+++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+++ * Lesser General Public License for more details.
+++ *
+++ * You should have received a copy of the GNU Lesser General Public
+++ * License along with this library; if not, write to the Free Software
+++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+++ */
+++
+++/**
+++ * SECTION:GstDucatiOmapDRMAllocator
+++ * @short_description: GStreamer OmapDRM allocator support
+++ *
+++ * Since: 1.6.3
+++ */
+++
+++
+++#include "gstducatiomapdrmallocator.h"
+++#include <stdio.h>
+++#include <stdlib.h>
+++#include <string.h>
+++#include <errno.h>
+++#include <unistd.h>
+++#include <sys/mman.h>
+++#include <sys/types.h>
+++
+++#define INVALID_DRM_FD (-1)
+++
+++GST_DEBUG_CATEGORY (ducatiomapdrmallocator_debug);
+++#define GST_CAT_DEFAULT ducatiomapdrmallocator_debug
+++
+++#define gst_ducati_omap_drm_allocator_parent_class parent_class
+++G_DEFINE_TYPE (GstDucatiOmapDRMAllocator, gst_ducati_omap_drm_allocator, GST_TYPE_FD_ALLOCATOR);
+++
+++static GstMemory *
+++gst_ducati_omap_drm_allocator_alloc (GstAllocator * allocator, gsize size,
+++    GstAllocationParams * params)
+++{
+++  GstDucatiOmapDRMAllocator *self = GST_DUCATI_OMAP_DRM_ALLOCATOR (allocator);
+++  int fd = -1;
+++  int DrmDeviceFD = self->DrmDeviceFD;
+++  struct omap_device *omap_device = self->omap_device;
+++  struct omap_bo *bo;
+++  GstMemory *mem;
+++  /* Variable for DRM Dumb Buffers */
+++
+++  struct drm_prime_handle req;
+++  int ret ;
+++  
+++  GST_LOG_OBJECT (self, "Ducati Omap DRM Memory alloc");  
+++  
+++  bo = omap_bo_new(omap_device, size, OMAP_BO_SCANOUT | OMAP_BO_WC);
+++  if (bo == NULL) {
+++    GST_ERROR_OBJECT (self, "Create omap bo failed");
+++    return NULL;
+++  }
+++
+++  req.handle = omap_bo_handle(bo);
+++  req.flags = DRM_CLOEXEC;
+++
+++  ret = drmIoctl(self->DrmDeviceFD, DRM_IOCTL_PRIME_HANDLE_TO_FD, &req);
+++  if (ret) {
+++    GST_ERROR_OBJECT (self, "Create omap bo dmabuf fd failed");
+++    omap_bo_del(bo);
+++    return NULL;
+++  }
+++
+++  fd = req.fd;
+++
+++  /* Get a dmabuf gstmemory with the fd */
+++  mem = gst_fd_allocator_alloc (allocator, fd, size, 0);  
+++
+++  if (G_UNLIKELY (!mem)) {
+++    GST_ERROR_OBJECT (self, "GstDmaBufMemory allocation failed");
+++    close (fd);
+++    omap_bo_del(bo);
+++    return NULL;
+++  }
+++
+++  return mem;
+++
+++}
+++
+++static void
+++gst_ducati_omap_drm_allocator_free (GstAllocator * allocator, GstMemory * mem)
+++{
+++  GstDucatiOmapDRMAllocator *self = GST_DUCATI_OMAP_DRM_ALLOCATOR (allocator);
+++  int DrmDeviceFD = self->DrmDeviceFD;
+++  struct omap_device *omap_device = self->omap_device;
+++  struct omap_bo *bo = NULL;
+++  int fd = -1;
+++
+++  GST_LOG_OBJECT (self, "Ducati Omap DRM Memory free");
+++
+++  g_return_if_fail (GST_IS_ALLOCATOR (allocator));
+++  g_return_if_fail (mem != NULL);
+++
+++  fd = gst_fd_memory_get_fd (mem);
+++
+++  bo = omap_bo_from_dmabuf(omap_device, fd);    
+++  g_return_if_fail (bo != NULL);
+++
+++  omap_bo_del(bo);
+++
+++  close (fd);
+++  GST_ALLOCATOR_CLASS (parent_class)->free (allocator, mem);
+++}
+++
+++static void
+++gst_ducati_omap_drm_allocator_finalize (GObject * obj)
+++{
+++  GstDucatiOmapDRMAllocator *self = GST_DUCATI_OMAP_DRM_ALLOCATOR (obj);
+++  GST_LOG_OBJECT (obj, "Ducati Omap DRM Allocator finalize");
+++
+++  close (self->DrmDeviceFD);
+++  self->DrmDeviceFD = INVALID_DRM_FD;
+++
+++  G_OBJECT_CLASS (parent_class)->finalize (obj);
+++}
+++
+++static void
+++gst_ducati_omap_drm_allocator_class_init (GstDucatiOmapDRMAllocatorClass * klass)
+++{
+++  GstAllocatorClass *ducatiomapdrm_alloc = (GstAllocatorClass *) klass;
+++
+++  ducatiomapdrm_alloc->alloc = GST_DEBUG_FUNCPTR (gst_ducati_omap_drm_allocator_alloc);
+++  ducatiomapdrm_alloc->free = GST_DEBUG_FUNCPTR (gst_ducati_omap_drm_allocator_free);
+++  GST_DEBUG_CATEGORY_INIT (ducatiomapdrmallocator_debug, "ducatiomapdrmallocator", 0,
+++    "GstDucatiOmapDRMAllocator debug");
+++
+++}
+++
+++static void
+++gst_ducati_omap_drm_allocator_init (GstDucatiOmapDRMAllocator * self)
+++{
+++  GstAllocator *alloc = GST_ALLOCATOR_CAST (self);
+++  GObjectClass *object_class = G_OBJECT_CLASS (GST_DUCATI_OMAP_DRM_ALLOCATOR_GET_CLASS(self));
+++  
+++  if (self->DrmDeviceFD <= 0) {
+++    self->DrmDeviceFD = drmOpenWithType("omapdrm", NULL, DRM_NODE_RENDER);
+++    if (self->DrmDeviceFD < 0) {
+++      GST_ERROR_OBJECT (self, "Failed to open OmapDRM device");
+++    } else {
+++      drmDropMaster (self->DrmDeviceFD);
+++      self->omap_device = omap_device_new(self->DrmDeviceFD);
+++      if(self->omap_device == NULL) {
+++        GST_ERROR_OBJECT (self, "Failed to create omap device");
+++      }
+++    }
+++  }
+++
+++  alloc->mem_type = GST_ALLOCATOR_DMABUF;
+++
+++  object_class->finalize = gst_ducati_omap_drm_allocator_finalize;
+++
+++  GST_OBJECT_FLAG_UNSET (self, GST_ALLOCATOR_FLAG_CUSTOM_ALLOC);
+++}
+++
+++void
+++gst_ducati_omap_drm_allocator_register (void)
+++{
+++  gst_allocator_register (GST_ALLOCATOR_DUCATI_OMAP_DRM,
+++      g_object_new (GST_TYPE_DUCATI_OMAP_DRM_ALLOCATOR, NULL));
+++}
+++
+++GstAllocator *
+++gst_ducati_omap_drm_allocator_get (void)
+++{
+++  GstAllocator *alloc;
+++  alloc = gst_allocator_find (GST_ALLOCATOR_DUCATI_OMAP_DRM);
+++  if (!alloc) {
+++    gst_ducati_omap_drm_allocator_register();
+++    alloc = gst_allocator_find (GST_ALLOCATOR_DUCATI_OMAP_DRM);
+++  }
+++  return alloc; 
+++}
+++
++diff --git a/src/gstducatiomapdrmallocator.h b/src/gstducatiomapdrmallocator.h
++new file mode 100644
++index 0000000..ea77578
++--- /dev/null
+++++ b/src/gstducatiomapdrmallocator.h
++@@ -0,0 +1,80 @@
+++/*
+++ * GStreamer
+++ *
+++ * Copyright (C) 2012 Texas Instruments
+++ *
+++ * Authors:
+++ *  Subhajit Paul <subhajit_paul@ti.com>
+++ *
+++ * This library is free software; you can redistribute it and/or
+++ * modify it under the terms of the GNU Lesser General Public
+++ * License as published by the Free Software Foundation
+++ * version 2.1 of the License.
+++ *
+++ * This library is distributed in the hope that it will be useful,
+++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+++ * Lesser General Public License for more details.
+++ *
+++ * You should have received a copy of the GNU Lesser General Public
+++ * License along with this library; if not, write to the Free Software
+++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+++ */
+++
+++/**
+++ * SECTION:GstDucatiOmapDRMAllocator
+++ * @short_description: GStreamer OmapDRM allocator support
+++ *
+++ * Since: 1.6.3
+++ */
+++
+++#ifndef __GSTDUCATIOMAPDRMALLOCATOR_H__
+++#define __GSTDUCATIOMAPDRMALLOCATOR_H__
+++
+++#include <gst/gst.h>
+++#include <gst/video/video.h>
+++#include <gst/allocators/allocators.h>
+++#include <stdint.h>
+++
+++#include <xf86drm.h>
+++#include <xf86drmMode.h>
+++
+++#include <omap_drmif.h>
+++
+++#include <fcntl.h>
+++
+++G_BEGIN_DECLS
+++
+++#define GST_TYPE_DUCATI_OMAP_DRM_ALLOCATOR                  (gst_ducati_omap_drm_allocator_get_type ())
+++#define GST_DUCATI_OMAP_DRM_ALLOCATOR(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GST_TYPE_DUCATI_OMAP_DRM_ALLOCATOR, GstDucatiOmapDRMAllocator))
+++#define GST_IS_DUCATI_OMAP_DRM_ALLOCATOR(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GST_TYPE_DUCATI_OMAP_DRM_ALLOCATOR))
+++#define GST_DUCATI_OMAP_DRM_ALLOCATOR_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GST_TYPE_DUCATI_OMAP_DRM_ALLOCATOR, GstDucatiOmapDRMAllocatorClass))
+++#define GST_IS_DUCATI_OMAP_DRM_ALLOCATOR_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GST_TYPE_DUCATI_OMAP_DRM_ALLOCATOR))
+++#define GST_DUCATI_OMAP_DRM_ALLOCATOR_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GST_TYPE_DUCATI_OMAP_DRM_ALLOCATOR, GstDucatiOmapDRMAllocatorClass))
+++
+++#define GST_ALLOCATOR_DUCATI_OMAP_DRM "DucatiOmapDRM"
+++
+++typedef struct _GstDucatiOmapDRMAllocator GstDucatiOmapDRMAllocator;
+++typedef struct _GstDucatiOmapDRMAllocatorClass GstDucatiOmapDRMAllocatorClass;
+++
+++struct _GstDucatiOmapDRMAllocator
+++{
+++  GstFdAllocator parent;
+++  int DrmDeviceFD;
+++  struct omap_device *omap_device;
+++};
+++
+++struct _GstDucatiOmapDRMAllocatorClass
+++{
+++  GstFdAllocatorClass parent_class;
+++};
+++
+++void gst_ducati_omap_drm_allocator_register (void);
+++GstAllocator * gst_ducati_omap_drm_allocator_get (void);
+++
+++GType gst_ducati_omap_drm_allocator_get_type (void);
+++
+++G_END_DECLS
+++
+++#endif /* __GSTDUCATIOMAPDRMALLOCATOR_H__ */
+++
++diff --git a/src/gstducatividdec.c b/src/gstducatividdec.c
++index 0c80b47..b1f96f6 100644
++--- a/src/gstducatividdec.c
+++++ b/src/gstducatividdec.c
++@@ -281,7 +281,7 @@ codec_buffer_pool_get (GstDucatiVidDec * self, GstBuffer * buf)
++     GST_DEBUG_OBJECT (self, "%s\n",
++         gst_caps_to_string (gst_pad_get_current_caps (self->srcpad)));
++ 
++-    allocator = gst_drm_allocator_get ();
+++    allocator = gst_ducati_omap_drm_allocator_get ();
++ 
++     if (!allocator) {
++       GST_DEBUG_OBJECT (self,
++diff --git a/src/gstducatividdec.h b/src/gstducatividdec.h
++index 56c57c7..92c9236 100644
++--- a/src/gstducatividdec.h
+++++ b/src/gstducatividdec.h
++@@ -29,7 +29,7 @@
++ #include "gstducati.h"
++ #include "gstducatibufferpriv.h"
++ 
++-#include <gst/drm/gstdrmallocator.h>
+++#include "gstducatiomapdrmallocator.h"
++ #include <gst/video/video.h>
++ #include <gst/video/gstvideometa.h>
++ 
++diff --git a/src/gstducatividenc.c b/src/gstducatividenc.c
++index d939905..8ef6b38 100644
++--- a/src/gstducatividenc.c
+++++ b/src/gstducatividenc.c
++@@ -132,7 +132,7 @@ gst_drm_buffer_pool_new (GstCaps * caps, guint size)
++   GstStructure *conf;
++   GstBufferPool *ret_pool;
++ 
++-  allocator = gst_drm_allocator_get ();
+++  allocator = gst_ducati_omap_drm_allocator_get ();
++   if (!allocator) {
++     GST_DEBUG
++         ("Failed to get a DRM bufferpool. Proceeding with default allocator");
++@@ -182,7 +182,7 @@ gst_ducati_videnc_propose_allocation (GstVideoEncoder * encoder,
++ 
++   gst_query_add_allocation_pool (query, self->input_pool, size, min_bufs,
++       max_bufs);
++-  gst_query_add_allocation_param (query, gst_drm_allocator_get (), NULL);
+++  gst_query_add_allocation_param (query, gst_ducati_omap_drm_allocator_get (), NULL);
++   gst_structure_free (config);
++ 
++   return TRUE;
++@@ -697,10 +697,6 @@ gst_ducati_videnc_buffer_lock (GstDucatiVidEnc * self, GstBuffer * buf)
++   int fd;
++   GstMemory *mem;
++   mem = gst_buffer_peek_memory (buf, 0);
++-  if (!gst_is_drm_memory (mem)) {
++-    GST_LOG_OBJECT (self, "Not a dmabuf memory");
++-    return -1;
++-  }
++ 
++   fd = gst_fd_memory_get_fd (mem);
++   if (fd < 0) {
++@@ -717,10 +713,6 @@ gst_ducati_videnc_buffer_unlock (GstDucatiVidEnc * self, GstBuffer * buf)
++   int fd;
++   GstMemory *mem;
++   mem = gst_buffer_peek_memory (buf, 0);
++-  if (!gst_is_drm_memory (mem)) {
++-    GST_LOG_OBJECT (self, "Not a dmabuf memory");
++-    return;
++-  }
++   fd = gst_fd_memory_get_fd (mem);
++   if (fd < 0) {
++     GST_ERROR_OBJECT (self, "Invalid dma buf fd %d", fd);
++diff --git a/src/gstducatividenc.h b/src/gstducatividenc.h
++index 5d68016..816fab6 100644
++--- a/src/gstducatividenc.h
+++++ b/src/gstducatividenc.h
++@@ -24,7 +24,7 @@
++ #include <gst/video/video.h>
++ #include <gst/video/gstvideoencoder.h>
++ #include <gst/video/gstvideoutils.h>
++-#include <gst/drm/gstdrmallocator.h>
+++#include "gstducatiomapdrmallocator.h"
++ 
++ #include <ti/sdo/ce/video2/videnc2.h>
+diff --git a/recipes-multimedia/gst-plugins-ti/gstreamer1.0-plugins-ducati_git.bbappend b/recipes-multimedia/gst-plugins-ti/gstreamer1.0-plugins-ducati_git.bbappend
+index 69c787e..ebe2071 100644
+--- a/recipes-multimedia/gst-plugins-ti/gstreamer1.0-plugins-ducati_git.bbappend
++++ b/recipes-multimedia/gst-plugins-ti/gstreamer1.0-plugins-ducati_git.bbappend
+@@ -1,3 +1,9 @@
+-PR_append = "_psdkla"
++PR_append = "_psdkla_1"
+ 
+ SRCREV = "7f3326b81b838fb6c916acd1d6a3090fda12c772"
++
++FILESEXTRAPATHS_append := ":${THISDIR}"
++
++SRC_URI_append = " \
++                   file://0001-gstducati-Enable-encode-decode-for-vDRM-setup.patch \
++                 "
+-- 
+1.9.1
+

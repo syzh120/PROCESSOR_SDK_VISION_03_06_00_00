@@ -1,0 +1,618 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+  <meta content="text/html;charset=ISO-8859-1" http-equiv="Content-Type">
+  <meta http-equiv="Content-Type" content="text/html">
+  <title>EDMA3 LLD 02.12.00.21 Release Notes</title>
+  <style type="text/css">
+body
+{
+    color: #000 ;
+    background-color: #fff ;
+    margin : 5px 20px 5px 20px;
+    font-family: Tahoma, Arial, Helvetica, sans-serif;
+    font-size: 10pt ;
+}
+
+a,
+a:link,
+a:visited,
+
+{
+    color : #1a41a8 ;
+}
+
+a:hover
+{
+    color : #2a3798 ;
+}
+
+img
+{
+    text-decoration : none ;
+}
+
+p
+{
+    color: #000 ;
+}
+
+table.tagline
+{
+    width: 100%;
+}
+
+li
+{
+    color : black ;
+}
+
+.title
+{
+    text-align : center ;
+}
+
+th
+{
+    text-align : left ;
+}
+  </style>
+</head>
+<body>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tbody>
+    <tr>
+      <td
+ style="background: black none repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial;"
+ width="222"> <a href="http://www.ti.com/"><img id="_x0000_i1025"
+ src="docs/html/tilogo.gif" alt="Texas Instruments" border="0"
+ height="54" width="222"> </a></td>
+      <td
+ style="background: red none repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial;">
+      <img id="_x0000_i1026" src="docs/html/titagline.gif"
+ alt="Technology for Innovators(tm)" border="0" height="26" width="314">
+      </td>
+    </tr>
+  </tbody>
+</table>
+<h1 class="title">EDMA3 LLD 02.12.00.21 Release Notes</h1>
+<h2 class="title">November 23, 2018</h2>
+<p>
+This EDMA3 Low Level Driver Release is targeted to the users (device
+drivers
+and applications) for submitting and synchronizing with EDMA3 based DMA
+transfers.
+This release supports DA830,C6748,TCI6498,TI816X,C6472,TCI6486,TI814X,TI816X,TI811X,TCI6608,TCI6616,TCI6614,C6670,C6678,TCI6638K2K,TDA2xx,TDA3xx, DRA72x, platforms, on
+SYS/BIOS 6 side &amp; OMAPL138 on SYS/BIOS and ARM side. Porting
+instructions
+are also provided to use the package for different platforms and
+Operating
+Systems.
+</p>
+<p>
+<a href="#Introduction">Introduction</a>,
+<a href="#Documentation">Documentation</a>,
+<a href="#Whats_New">What's New</a>,
+<a href="#Upgrade_Info">Upgrade Info</a>,
+<a href="#Device_Support">Device Support</a>,
+<a href="#Compatibility">Compatibility Information</a>,
+<a href="#Validation">Validation Info</a>,
+<a href="#Known_Issues">Known Issues</a>,
+<a href="#Examples">Examples</a>,
+<a href="#Version">Version Information</a>,
+<a href="#Support">Technical Support</a>
+</p>
+<hr>
+<a name="Introduction"></a>
+<h2><a name="Introduction">Introduction</a></h2>
+<p>
+EDMA3 LLD is a single product package containing the following
+stand-alone
+software components:
+</p>
+<ul type="disc">
+  <a name="Introduction"> <li> <b>EDMA3 Resource Manager</b> - TI
+mandated library for all EDMA3 peripheral users to acquire and
+configure EDMA3 hardware resources (DMA/QDMA channels, PaRAM Sets, TCCs
+etc.) and DMA Interrupt Service Routines. </li>
+  <li> <b>EDMA3 Driver</b> - Functional library providing APIs for
+programming, scheduling and synchronizing with EDMA transfers and many
+more. </li>
+  </a>
+</ul>
+<p>
+EDMA3 Resource Manager can be used independently whereas the EDMA3
+Driver requires
+the Resource Manager services internally.
+</p>
+<p>
+EDMA3 LLD (both Resource Manager and the Driver) is a platform
+independent package.
+Hence it can be used across multiple platforms. Porting instructions
+are provided for both the components to do the same.
+</p>
+<p>
+It is also an OS-agnostic package and thus can be used across multiple
+operating
+systems. OS-adaptation layer needs to be provided by the user (in case
+it is needed)
+for OS customization. Instructions to do the same are also provided
+along with
+the package.
+</p>
+<p>
+The Low Level Driver has already been ported (SYS/BIOS Operating
+Systems)
+and tested on various platforms mentioned below. Sample initialization
+libraries,
+which configure the EDMA3 hardware and provide the necessary OS
+abstraction layer,
+are also a part of the package. These libraries are available both for
+the EDMA3
+Resource Manager and EDMA3 Driver. These could be used for proper
+initialization of the software component(s) along with the OS
+adaptation layer
+for the same.
+</p>
+<p>
+The Low Level Driver consists of the following packages:
+</p>
+<ul type="disc">
+  <a name="Introduction"> <li> <tt><b>ti.sdo.edma3.rm</b></tt> -
+EDMA3 Resource Manager. </li>
+  <li> <tt><b>ti.sdo.edma3.rm.sample</b></tt> - Sample initialization
+library / OS abstraction layer for the Resource Manager. </li>
+  <li> <tt><b>ti.sdo.edma3.drv</b></tt> - EDMA3 Driver. </li>
+  <li> <tt><b>ti.sdo.edma3.drv.sample</b></tt> - Sample initialization
+library / OS abstraction layer for the Driver. </li>
+  </a>
+</ul>
+<p><b>Note: </b>
+<ul type="disc">
+  <a name="Introduction"> <li> <b>Address translation is not done in EDMA3 LLD</b> </li>
+<br>If the memory map of the EDMA is different than the host processor programming it,
+EDMA3LLD being a low level driver the address translation is not done by this. It is expected that the application
+will provide the addresses, corresponding to EDMA memory map to configure in PARAM.
+</p>
+</a>
+  <a name="Introduction"> <li> <FONT COLOR ='RED'><b>All resources are allocated to all cores in default sample configuration files of EDMA3 LLD</b> </FONT></li>
+<br>The EDMA resources like Channels, PaRAMs and TCCs which are shared by multiple cores (Ex: in TI814X and TI816X), 
+The default configuration file allocates all the resources to every core since the resource split is application dependant. 
+The applications using EDMA3LLD should appropriately allocate the resources in the config files and build EDMA3LLD libraries.
+</p>
+</a>
+  <a name="Introduction"> <li> <b>Building EDMA3LLD libs and examples on windows 7</b> </li>
+<br>On windows 7 there is a permission issue while building the libs and examples.set the environment variable CYGWIN in the command window where you are building <br> examples:	$set CYGWIN=nontsec <br>You might have to manually delete the generated files before building.
+</p>
+</a>
+</ul>
+<a name="Documentation">
+</a>
+<h2><a name="Documentation">Documentation</a></h2>
+<p>The following documentation is available:
+</p>
+<ul type="disc">
+  <li><a href="docs/EDMA3_RM_Release_Notes.pdf">EDMA3 Resource Manager
+Release Notes</a></li>
+  <li> <a href="packages/ti/sdo/edma3/rm/docs/EDMA3_RM_User_Guide.pdf">EDMA3
+Resource Manager User's Guide</a> </li>
+  <li> <a href="docs/EDMA3_Driver_Release_Notes.pdf">EDMA3 Driver
+Release Notes</a> </li>
+  <li> <a
+ href="packages/ti/sdo/edma3/drv/docs/EDMA3_Driver_User_Guide.pdf">EDMA3
+Driver User's Guide</a> </li>
+  <li> EDMA3 Resource Manager Application Programming Interface (API)
+Reference Guide (<a href="packages/ti/sdo/edma3/rm/docs/html/index.html">HTML</a>
+| <a href="packages/ti/sdo/edma3/rm/docs/EDMA3_Resource_Manager.chm">CHM</a>)
+  </li>
+  <li> EDMA3 Driver Application Programming Interface Reference Guide (<a
+ href="packages/ti/sdo/edma3/drv/docs/html/index.html">HTML</a> | <a
+ href="packages/ti/sdo/edma3/drv/docs/EDMA3_Driver.chm">CHM</a>) </li>
+  <li> <a href="examples/CSL2_DAT_DEMO/docs/CSL_DAT_Adapter.ppt">CSL
+2.x DAT Reference Implementation on EDMA3 Hardware using EDMA3 LLD</a> </li>
+</ul>
+<hr>
+<a name="Whats_New"></a>
+<h2><a name="Whats_New">What's New</a></h2>
+
+<p>
+<a name="Whats_New">The following changes have been made since 02.12.00.20:
+</a></p>
+
+<p><a name="Whats_New">This release 02.12.00.21 : This is a minor release with the Misra issues reported due to tool upgradations are fixed
+</a></p>
+
+<br>
+<hr><a name="Upgrade_Info"></a>
+<h2><a name="Upgrade_Info">Upgrade Information</a></h2>
+<p>
+The EDMA3 LLD packages are available in the "packages/" subdirectory of
+the product.
+If you have a previous release of the EDMA3 LLD product, you can
+install this
+release next to it, and modify your application and/or server builds to
+use this
+newer release.
+</p>
+<hr>
+<a name="Device_Support"></a>
+<h2><a name="Device_Support">Device Support</a></h2>
+<p>
+This release supports and has been tested on the following devices:
+</p>
+<ul>
+  <a name="Device_Support"> <li>DA830 EVM:
+    <ul type="circle">
+      <li>C67x SYS/BIOS</li>
+    </ul>
+  </li>
+  <li>TCI6498 Simulator:</li>
+  </a>
+  <ul>
+    <li>C64X+ SYS/BIOS</li>
+  </ul>
+  <li>C6748 EVM:</li>
+  <li style="margin-left: 40px;" type="circle">C67x SYS/BIOS</li>
+  <li type="disc">OMAPL138 EVM:</li>
+  <li style="margin-left: 40px;" type="circle">C67x SYS/BIOS</li>
+  <li style="margin-left: 40px;" type="circle">ARM 9 SYSBIOS</li>
+    <li>TI816X EVM:</li>
+  </a>
+  <ul>
+    <li>C67X SYS/BIOS</li>
+	<li>A8 SYS/BIOS</li>
+    <li>M3 SYS/BIOS</li>
+  </ul>
+  <li>C6472 EVM:</li>
+  </a>
+  <ul>
+    <li>C64X+ SYS/BIOS</li>
+  </ul>
+    <li>TCI6486 EVM:</li>
+  </a>
+  <ul>
+    <li>C64X+ SYS/BIOS</li>
+  </ul>
+      <li>TI814X EVM:</li>
+  </a>
+  <ul>
+    <li>C67X SYS/BIOS</li>
+	<li>A8 SYS/BIOS</li>
+	<li>M3 SYS/BIOS</li>
+  </ul>
+    <li>TI811X EVM:</li>
+  </a>
+  <ul>
+    <li>C67X SYS/BIOS</li>
+	<li>A8 SYS/BIOS</li>
+    <li>M3 SYS/BIOS</li>
+  </ul>
+      <li>C6670 EVM:</li>
+  </a>
+  <ul>
+    <li>C66X SYS/BIOS</li>
+  </ul>      
+  <li>C6678 EVM:</li>
+  </a>
+  <ul>
+    <li>C66X SYS/BIOS</li>
+  </ul>      
+  <li>TCI6608 Simulator:</li>
+  </a>
+  <ul>
+    <li>C66X SYS/BIOS</li>
+  </ul>      
+  <li>TCI6616 Simulator:</li>
+  </a>
+  <ul>
+    <li>C66X SYS/BIOS</li>
+  </ul>
+  <li>TCI6614 EVM:</li>
+  </a>
+  <ul>
+    <li>C66X SYS/BIOS</li>
+  </ul>
+  <li>TCI6638K2K Simulator:</li>
+  </a>
+  <ul>
+    <li>C66X SYS/BIOS</li>
+  </ul>
+  <li>TCI6638K2K EVM:</li>
+  </a>
+  <ul>
+    <li>C66X SYS/BIOS</li>
+  </ul>
+  <li>TCI6636K2H EVM:</li>
+  </a>
+  <ul>
+    <li>C66X SYS/BIOS</li>
+	<li>A15 Arago</li>
+  </ul>
+  <li>TDA2XX EVM:</li>
+  </a>
+  <ul>
+    <li>M4 SYS/BIOS</li>
+    <li>a15 SYS/BIOS</li>
+    <li>c66x SYS/BIOS</li>
+    <li>EVE SYS/BIOS</li>
+  </ul>
+  <li>TDA3XX EVM:</li>
+  </a>
+  <ul>
+    <li>M4 SYS/BIOS</li>
+    <li>c66x SYS/BIOS</li>
+    <li>EVE SYS/BIOS</li>
+  </ul>
+  <li>DRA72X EVM:</li>
+  </a>
+  <ul>
+    <li>M4 SYS/BIOS</li>
+    <li>a15 SYS/BIOS</li>
+    <li>c66x SYS/BIOS</li>
+  </ul>
+    </ul>
+<hr>
+<a name="Compatibility"></a>
+<h2><a name="Compatibility">Compatibility Information</a></h2>
+<h3><a name="Compatibility">Compatibility Key Definitions</a></h3>
+<p>
+Compatibility keys are intentionally independent of Marketing product
+numbers
+and are intended to:
+</p>
+<ol start="1" type="1">
+  <a name="Compatibility"> <li> Enable tooling to identify
+incompatibilities between components, and </li>
+  <li> Convey a level of compatibility between different releases to
+set end user expectations. </li>
+  </a>
+</ol>
+<p>
+Compatibility keys are composed of 3 comma-delimited numbers - M, S, R
+- where:
+</p>
+<ul type="disc">
+  <a name="Compatibility"> <li> <b>M = Major</b>. A difference in M
+indicates a break in compatibility. </li>
+  <li> <b>S = Source</b>. A difference in S indicates source
+compatibility. That is, the user's source doesn't require change, but <i>does</i>
+require rebuilding. </li>
+  <li> <b>R = Radix</b>. A difference in R indicates an introduction
+of new features, but compatibility with previous interfaces has not
+broken. If libraries are provided by the package, an application must
+re-link with the new libraries, but not rebuild from source. </li>
+  </a>
+</ul>
+<hr>
+<a name="Validation"></a>
+<h2><a name="Validation">Validation</a></h2>
+<p>
+This release was built and validated against using the following
+components:
+</p>
+<ul type="disc">
+  <a name="Validation"> <li>CCS 5.5, CCS 6 or CCS 7</li>
+  <li>C6x Code Generation Tools version 7.4.2 </li>
+  <li>TMS470 Code Generation Tools (ELF Format) 16.9.2.LTS</li>
+  <li>TMS470 Code Generation Tools (Coff Format) 5.2.5</li>
+  <li>Arm GCC A15 Toolchain 6-2017-q1-update </li>
+  <li>ARP32 Code Generation Tools 1.0.7</li>
+  <li>SYS/BIOS 6.46.04.53</li>
+  <li>XDC Tools 3.32.01.22</li>
+  <li>TCI6498 Simulator 0.7.1</li>
+  </a>
+</ul>
+<p>
+This release was validated in the following configurations:
+</p>
+<ul>
+  <li> DA830 EVM:
+    <ul type="circle">
+      <li>C67x SYS/BIOS</li>
+    </ul>
+  </li>
+  <li> TCI6498 Simulator:
+    <ul type="circle">
+      <li>C64X+ SYS/BIOS</li>
+    </ul>
+  </li>
+  <li>C6748 EVM:</li>
+  <li style="margin-left: 40px;" type="circle">C67x SYS/BIOS</li>
+  <li>OMAPL138 EVM:</li>
+  <ul>
+    <li>C67x SYS/BIOS</li>
+    <li>ARM 9 SYSBIOS</li>
+  </ul>
+    <li>TI816X EVM:</li>
+  </a>
+  <ul>
+    <li>C67X SYS/BIOS</li>
+	<li>A8 SYS/BIOS</li>
+	<li>M3 SYS/BIOS</li>
+  </ul>
+  <li>C6472 EVM:</li>
+  </a>
+  <ul>
+    <li>C64X+ SYS/BIOS</li>
+  </ul>
+    <li>TCI6486 EVM:</li>
+  </a>
+  <ul>
+    <li>C64X+ SYS/BIOS</li>
+  </ul>
+    <li>TI814X EVM:</li>
+  </a>
+  <ul>
+    <li>C67X SYS/BIOS</li>
+	<li>A8 SYS/BIOS</li>
+	<li>M3 SYS/BIOS</li>
+  </ul>
+    <li>TI811X EVM:</li>
+  </a>
+  <ul>
+    <li>C67X SYS/BIOS</li>
+	<li>A8 SYS/BIOS</li>
+	<li>M3 SYS/BIOS</li>
+  </ul>
+      <li>C6670 EVM:</li>
+  </a>
+  <ul>
+    <li>C66X SYS/BIOS</li>
+  </ul>      
+  <li>C6678 EVM:</li>
+  </a>
+  <ul>
+    <li>C66X SYS/BIOS</li>
+  </ul>      
+  <li>TCI6608 Simulator:</li>
+  </a>
+  <ul>
+    <li>C66X SYS/BIOS</li>
+  </ul>      
+  <li>TCI6616 Simulator:</li>
+  </a>
+  <ul>
+    <li>C66X SYS/BIOS</li>
+  </ul>
+  <li>TCI6614 EVM:</li>
+  </a>
+  <ul>
+    <li>C66X SYS/BIOS</li>
+  </ul>
+  <li>TCI6638K2K Simulator:</li>
+  </a>
+  <ul>
+    <li>C66X SYS/BIOS</li>
+  </ul>
+  <li>TCI6638K2K EVM:</li>
+  </a>
+  <ul>
+    <li>C66X SYS/BIOS</li>
+  </ul>
+  <li>TCI6636K2H EVM:</li>
+  </a>
+  <ul>
+    <li>C66X SYS/BIOS</li>
+	<li>A15 Arago</li>
+  </ul>
+  <li>TDA2XX EVM:</li>
+  </a>
+  <ul>
+  <li>A15 SYS/BIOS</li>
+  <li>M4 SYS/BIOS</li>
+  <li>DSP SYS/BIOS</li>
+  <li>EVE SYS/BIOS</li>
+  </ul>
+  <li>TDA3XX SIM:</li>
+  </a>
+  <ul>
+  <li>M4 SYS/BIOS</li>
+  <li>DSP SYS/BIOS</li>
+  <li>EVE SYS/BIOS</li>
+  </ul>
+  <li>DRA72X SIM:</li>
+  </a>
+  <ul>
+  <li>A15 SYS/BIOS</li>
+  <li>M4 SYS/BIOS</li>
+  <li>DSP SYS/BIOS</li>
+  </ul>
+  </ul>
+<hr><a name="Known_Issues">
+</a>
+<h2><a name="Known_Issues">Known Issues</a></h2>
+<p>
+The following are known issues with the current EDMA3 LLD release:
+</p>
+<h4><a name="Known_Issues">Pre-built instrumented libraries for DA830
+not provided initially.</a></h4>
+<p>Pre-built instrumented EDMA3 libraries for DA830 will not be
+provided
+initially. XDC does not support the same and hence the limitation. See
+IR#
+SDOCM00036738 for more details.
+</p>
+<h4><a name="Known_Issues">EDMA3 hardware does not work properly in
+FIFO mode with all the controllers.</a></h4>
+<p>Very few peripherals support EDMA3 FIFO mode. EMIF controller
+doesn't support
+the same. So EDMA3 CANNOT be used in FIFO mode for doing a
+memory-to-memory data
+transfers, EDMA3 being configured in the FIFO mode. Applications trying
+to use
+EDMA3 in FIFO mode should first check their respective
+peripheral-controller
+document for this mode support.
+</p>
+<h4><a name="Known_Issues">PingPong Example Fails for certain EDMA
+instances for some DSP cores in Release mode only.</a></h4>
+<p>The PingPong example in the package fails for certain EDMA Instances
+for some DSP cores in Release mode only. It passes for Debug mode. See
+IR#
+SDOCM00064758 for more details.
+</p>
+<hr>
+<a name="Examples"></a>
+<h2><a name="Examples">Examples</a></h2>
+<p>
+EDMA3 LLD sample initialization libraries / OS abstraction layers (for
+different
+platforms) are located in:
+</p>
+<ul type="disc">
+  <a name="Examples"> <li> For Resource Manager: They could be located
+in <tt>edma3_lld_02_12_00_XX\packages\ti\sdo\edma3\rm\sample\lib</tt>
+folder. </li>
+  <li> For EDMA3 Driver: They could be located in <tt>edma3_lld_02_12_00_XX\packages\ti\sdo\edma3\drv\sample\lib</tt>
+folder. </li>
+  </a>
+</ul>
+<p>
+EDMA3 LLD stand-alone applications (for different platforms) are
+located in:
+</p>
+<ul type="disc">
+  <a name="Examples"> <li> EDMA3 Driver: They could be located in <tt>edma3_lld_02_12_00_XX\examples\edma3_driver\</tt>
+folder. </li>
+  </a>
+</ul>
+<ul type="disc">
+  <a name="Examples"> <li> CSL2.x DAT Reference Implementation: It
+could be located in <tt>edma3_lld_02_12_00_XX\examples\CSL2_DAT_DEMO\</tt>
+folder. </li>
+  </a>
+</ul>
+<hr>
+<a name="Version"></a>
+<h2><a name="Version">Version Information</a></h2>
+<p>
+This product's version follows a version format, <b>M.mm.pp.bb</b>,
+where
+<b>M</b> is a 2 digit major number,
+<b>mm</b> is 2 digit minor number,
+<b>pp</b> is a 2 digit patch number, and
+<b>b</b> is an unrestricted set of digits used as an incrementing build
+counter.
+</p>
+<p>
+To support multiple side-by-side installations of the product, the
+product
+version is encoded in the top level directory, ex. <b>edma3_lld_02_12_00_XX</b>.
+</p>
+<p>Subsequent releases of patch upgrades will be identified by the
+patch number,
+ex. EDMA3 LLD 02.11.14 with directory <b>edma3_lld_02_12_00_YY</b>.
+Typically, these
+patches only include critical bug fixes.
+</p>
+<hr>
+<a name="Support"></a>
+<h2><a name="Support">Technical Support</a></h2>
+<p>
+For technical support, Please post at TI E2E forum <a href="http://e2e.ti.com/support/embedded/f/355.aspx">http://e2e.ti.com/support/embedded/f/355.aspx</a>
+</p>
+<hr>
+<p>Last updated: November 23, 2018
+</p>
+</body>
+</html>

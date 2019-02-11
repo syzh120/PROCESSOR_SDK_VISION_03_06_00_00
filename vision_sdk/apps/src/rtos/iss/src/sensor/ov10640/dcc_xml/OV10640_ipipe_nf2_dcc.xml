@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<IPIPE_NF2_xml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!--this is comment-->
+  <dcc_name>ipipe_nf2</dcc_name>
+  <dcc_header>
+    <camera_module_id>     10640 </camera_module_id>
+      <dcc_descriptor_id>   6 </dcc_descriptor_id>
+      <algorithm_vendor_id>  1 </algorithm_vendor_id>
+      <tunning_tool_version> 0 </tunning_tool_version>
+  </dcc_header>
+  <!--=======================================================================-->
+    <typedef>
+                <iss_ipipe_nf2 type="struct">
+            <update type="uint8"> </update>
+                    <enable type="uint8"> </enable> <!-- enable/disable ipipe noise filter 1: 0,1 -->
+                    <down_shift_val type="uint8"> </down_shift_val> <!-- right shift before LUT: 0,1,2,3 -->
+                    <green_sample_type type="uint8"> </green_sample_type> <!-- select green pixel sample mode: 0,1 -->
+                    <spread_select type="uint8"> </spread_select> <!-- select source of spread: 0,1 -->
+                    <spread_reg_val type="uint8"> </spread_reg_val> <!-- nf spread register value: U5Q3 -->
+                        <radial_lsc_enable type="uint8"> </radial_lsc_enable> <!-- enable radial lsc gain: 0,1 -->
+                    <thr type="uint16[8]"> </thr> <!-- nf threshold LUT: U10 -->
+                    <str type="uint8[8]"> </str> <!-- nf strength LUT: U5 -->
+                    <spr type="uint8[8]"> </spr> <!-- nf spread LUT: U5Q3 -->
+                    <edge_min type="uint16"> </edge_min> <!-- nf edge min: U11 -->
+                    <edge_max type="uint16"> </edge_max> <!-- nf edge max: U11 -->
+        </iss_ipipe_nf2>
+    </typedef>
+  <!--=======================================================================-->
+        <use_case val="1023">    <!-- DCC_USE_CASE_PREVIEW_ALL -->
+        <n-space>
+            <region0 class="0">
+          <exposure val="1" min="10000" max="250000">  </exposure>
+          <gain val="0" min="0" max="9">  </gain> //1 - 2x
+            </region0>
+            <region1 class="1">
+          <exposure val="1" min="0" max="250000">  </exposure>
+          <gain val="0" min="10" max="15">  </gain> // 2-3x
+            </region1>
+            <region2 class="2">
+          <exposure val="1" min="0" max="250000">  </exposure>
+          <gain val="0" min="16" max="20">  </gain> // 3-4x
+            </region2>
+            <region3 class="3">
+          <exposure val="1" min="0" max="250000">  </exposure>
+          <gain val="0" min="21" max="24">  </gain> // 4x - 5x
+            </region3>
+            <region4 class="4">
+          <exposure val="1" min="0" max="250000">  </exposure>
+          <gain val="0" min="25" max="27">  </gain> // 5x - 6.5x
+            </region4>
+            <region5 class="5">
+          <exposure val="1" min="0" max="250000">  </exposure>
+          <gain val="0" min="28" max="30">  </gain> // 6.5x - 8x
+            </region5>
+            <region6 class="6">
+          <exposure val="1" min="0" max="250000">  </exposure>
+          <gain val="0" min="31" max="33">  </gain> // 8x -10x
+            </region6>
+            <region7 class="7">
+          <exposure val="1" min="0" max="250000">  </exposure>
+          <gain val="0" min="34" max="37">  </gain>// 10x - 13x
+            </region7>
+            <region8 class="8">
+          <exposure val="1" min="0" max="250000">  </exposure>
+          <gain val="0" min="38" max="100">  </gain> // 13x - inf
+            </region8>
+
+          <!-- outdoor -->
+          <region9 class="9">
+            <exposure val="1" min="0" max="9999">  </exposure>
+            <gain val="0" min="0" max="9">  </gain> // outdoor
+          </region9>
+        </n-space>
+        <parameter_package>
+<!--NF parameters for photospace class 0 -->
+            <ipipe_nf2_dcc type="iss_ipipe_nf2">
+              {
+                0, //update
+                0, // enable
+                2, // down_shift_val
+                0, // green_sample_type
+                0, // spread_select
+                3, // spread_reg_val
+                0, // radial_lsc_enable
+                //{10,17,24,32,39,47,54,61}, // thr
+                {26,38,50,62,74,86,98,110,}
+                {31,31,31,31,31,31,31,31}, // str
+                {3,3,3,3,3,3,3,3}, // spr
+                0, // edge_min
+                0  // edge_max
+            }
+            </ipipe_nf2_dcc>
+        </parameter_package>
+         <parameter_package>
+<!--NF parameters for photospace class 1 -->
+            <ipipe_nf2_dcc type="iss_ipipe_nf2">
+              {
+                0, //update
+                0, // enable
+                2, // down_shift_val
+                0, // green_sample_type
+                0, // spread_select
+                3, // spread_reg_val
+                0, // radial_lsc_enable
+                //{10,17,24,32,39,47,54,61}, // thr
+                {45,65,86,106,127,148,168,189,}
+                {31,31,31,31,31,31,31,31}, // str
+                {3,3,3,3,3,3,3,3}, // spr
+                0, // edge_min
+                0  // edge_max
+}
+</ipipe_nf2_dcc>
+</parameter_package>
+<parameter_package>
+<!--NF parameters for photospace class 2 -->
+<ipipe_nf2_dcc type="iss_ipipe_nf2">
+{
+0, //update
+0, // enable
+2, // down_shift_val
+0, // green_sample_type
+0, // spread_select
+3, // spread_reg_val
+0, // radial_lsc_enable
+//{10,17,24,32,39,47,54,61}, // thr
+{59,87,114,142,169,197,224,252,}
+{31,31,31,31,31,31,31,31}, // str
+{3, 3, 3, 3, 3, 3, 3, 3}, // spr
+0, // edge_min
+0  // edge_max
+}
+</ipipe_nf2_dcc>
+</parameter_package>
+<parameter_package>
+<!--NF parameters for photospace class 3 -->
+<ipipe_nf2_dcc type="iss_ipipe_nf2">
+{
+0, //update
+0, // enable
+2, // down_shift_val
+0, // green_sample_type
+0, // spread_select
+3, // spread_reg_val
+0, // radial_lsc_enable
+//{10,17,24,32,39,47,54,61}, // thr
+{74,109,143,177,212,246,281,315,}
+{31,31,31,31,31,31,31,31}, // str
+{3, 3, 3, 3, 3, 3, 3, 3}, // spr
+0, // edge_min
+0  // edge_max
+}
+</ipipe_nf2_dcc>
+</parameter_package>
+<parameter_package>
+<!--NF parameters for photospace class 4 -->
+<ipipe_nf2_dcc type="iss_ipipe_nf2">
+{
+0, //update
+0, // enable
+2, // down_shift_val
+0, // green_sample_type
+0, // spread_select
+3, // spread_reg_val
+0, // radial_lsc_enable
+//{10,17,24,32,39,47,54,61}, // thr
+{89,130,172,213,254,295,337,378,}
+{31,31,31,31,31,31,31,31}, // str
+{3, 3, 3, 3, 3, 3, 3, 3}, // spr
+0, // edge_min
+0  // edge_max
+}
+</ipipe_nf2_dcc>
+</parameter_package>
+<parameter_package>
+<!--NF parameters for photospace class 5 -->
+<ipipe_nf2_dcc type="iss_ipipe_nf2">
+{
+0, //update
+0, // enable
+2, // down_shift_val
+0, // green_sample_type
+0, // spread_select
+3, // spread_reg_val
+0, // radial_lsc_enable
+//{10,17,24,32,39,47,54,61}, // thr
+{104,152,200,248,297,345,393,441,}
+{31,31,31,31,31,31,31,31}, // str
+{3, 3, 3, 3, 3, 3, 3, 3}, // spr
+0, // edge_min
+0  // edge_max
+}
+</ipipe_nf2_dcc>
+</parameter_package>
+<parameter_package>
+<!--NF parameters for photospace class 6 -->
+<ipipe_nf2_dcc type="iss_ipipe_nf2">
+{
+0, //update
+0, // enable
+2, // down_shift_val
+0, // green_sample_type
+0, // spread_select
+3, // spread_reg_val
+0, // radial_lsc_enable
+//{10,17,24,32,39,47,54,61}, // thr
+{119,174,229,284,339,394,449,504,}
+{31,31,31,31,31,31,31,31}, // str
+{3, 3, 3, 3, 3, 3, 3, 3}, // spr
+0, // edge_min
+0  // edge_max
+}
+</ipipe_nf2_dcc>
+</parameter_package>
+<parameter_package>
+<!--NF parameters for photospace class 7 -->
+<ipipe_nf2_dcc type="iss_ipipe_nf2">
+{
+0, //update
+0, // enable
+2, // down_shift_val
+0, // green_sample_type
+0, // spread_select
+3, // spread_reg_val
+0, // radial_lsc_enable
+//{10,17,24,32,39,47,54,61}, // thr
+{134,196,257,319,381,443,505,567,}
+{31,31,31,31,31,31,31,31}, // str
+{3, 3, 3, 3, 3, 3, 3, 3}, // spr
+0, // edge_min
+0  // edge_max
+}
+</ipipe_nf2_dcc>
+</parameter_package>
+<parameter_package>
+<!--NF parameters for photospace class 8 -->
+<ipipe_nf2_dcc type="iss_ipipe_nf2">
+{
+0, //update
+0, // enable
+2, // down_shift_val
+0, // green_sample_type
+0, // spread_select
+3, // spread_reg_val
+0, // radial_lsc_enable
+//{10,17,24,32,39,47,54,61}, // thr
+{148,217,286,355,424,492,561,630,}
+{31,31,31,31,31,31,31,31}, // str
+{3, 3, 3, 3, 3, 3, 3, 3}, // spr
+0, // edge_min
+0  // edge_max
+}
+            </ipipe_nf2_dcc>
+        </parameter_package>
+
+        <parameter_package>
+<!--NF parameters for photospace class 0 -->
+            <ipipe_nf2_dcc type="iss_ipipe_nf2">
+              {
+                0, //update
+                0, // enable
+                2, // down_shift_val
+                0, // green_sample_type
+                0, // spread_select
+                3, // spread_reg_val
+                0, // radial_lsc_enable
+                {10,12,17,25,30,35,40,45}, // thr
+                { 7, 7, 5, 5, 3, 3, 1, 1}, // str
+                {3,3,3,3,3,3,3,3}, // spr
+                0, // edge_min
+                0  // edge_max
+            }
+            </ipipe_nf2_dcc>
+        </parameter_package>
+    </use_case>
+
+  <!--=====================================================================-->
+</IPIPE_NF2_xml>

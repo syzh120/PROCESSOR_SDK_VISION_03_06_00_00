@@ -1,0 +1,30 @@
+digraph chains_vipSingleRvcCamCrc_Display {
+
+       ColorScheme [shape=none, margin=0, label=<
+       <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+       <TR><TD bgcolor="lightblue">IPU1_0</TD></TR>
+       <TR><TD bgcolor="palegreen">DSP1</TD></TR>
+       </TABLE>>];
+
+       /************** LINKS ************************/
+       Capture [color=lightblue, style=filled]
+       Dup_capture [color=lightblue, style=filled]
+       IPCOut_IPU1_0_DSP1_0 [color=lightblue, style=filled]
+       IPCIn_DSP1_IPU1_0_0 [color=palegreen, style=filled]
+       Alg_SwCrc [color=palegreen, style=filled]
+       Alg_RvcDiagnostic [color=lightblue, style=filled]
+       VPE_dei [color=lightblue, style=filled]
+       Display_Video [color=lightblue, style=filled]
+       GrpxSrc [color=lightblue, style=filled]
+       Display_Grpx [color=lightblue, style=filled]
+
+       /************** CONNECTIONS ************************/
+       VPE_dei -> Display_Video
+       Alg_RvcDiagnostic -> VPE_dei
+       Dup_capture -> Alg_RvcDiagnostic[taillabel=Q0, minlen=2, labeldistance=3]
+       Dup_capture -> IPCOut_IPU1_0_DSP1_0[taillabel=Q1, minlen=2, labeldistance=3]
+       Capture -> Dup_capture
+       GrpxSrc -> Display_Grpx
+       IPCOut_IPU1_0_DSP1_0 -> IPCIn_DSP1_IPU1_0_0
+       IPCIn_DSP1_IPU1_0_0 -> Alg_SwCrc
+}

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<IPIPE_NF1_xml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!--this is comment-->
+  <dcc_name>ipipe_nf1</dcc_name>
+  <dcc_header>
+    <camera_module_id>     0140 </camera_module_id>
+      <dcc_descriptor_id>   5 </dcc_descriptor_id>
+      <algorithm_vendor_id>  1 </algorithm_vendor_id>
+      <tunning_tool_version> 0 </tunning_tool_version>
+  </dcc_header>
+  <!--=======================================================================-->
+    <typedef>
+                <iss_ipipe_nf1 type="struct">
+            <update type="uint8"> </update>
+                    <enable type="uint8"> </enable> <!-- enable/disable ipipe noise filter 1: 0,1 -->
+                    <down_shift_val type="uint8"> </down_shift_val> <!-- right shift before LUT: 0,1,2,3 -->
+                    <green_sample_type type="uint8"> </green_sample_type> <!-- select green pixel sample mode: 0,1 -->
+                    <spread_select type="uint8"> </spread_select> <!-- select source of spread: 0,1 -->
+                    <spread_reg_val type="uint8"> </spread_reg_val> <!-- nf spread register value: U5Q3 -->
+                        <radial_lsc_enable type="uint8"> </radial_lsc_enable> <!-- enable radial lsc gain: 0,1 -->
+                    <thr type="uint16[8]"> </thr> <!-- nf threshold LUT: U10 -->
+                    <str type="uint8[8]"> </str> <!-- nf strength LUT: U5 -->
+                    <spr type="uint8[8]"> </spr> <!-- nf spread LUT: U5Q3 -->
+                    <edge_min type="uint16"> </edge_min> <!-- nf edge min: U11 -->
+                    <edge_max type="uint16"> </edge_max> <!-- nf edge max: U11 -->
+        </iss_ipipe_nf1>
+    </typedef>
+  <!--=======================================================================-->
+    <use_case val="1023">    <!-- DCC_USE_CASE_PREVIEW_ALL -->
+        <n-space>
+            <region0 class="0">
+          <exposure val="1" min="0" max="250000">  </exposure>
+          <gain val="0" min="0" max="9">  </gain> //1 - 2x
+            </region0>
+            <region1 class="1">
+          <exposure val="1" min="0" max="250000">  </exposure>
+          <gain val="0" min="10" max="15">  </gain> // 2-3x
+            </region1>
+        </n-space>
+        <parameter_package>
+<!--NF parameters for photospace class 0 -->
+            <ipipe_nf1_dcc type="iss_ipipe_nf1">
+              {
+                0, //update
+                0, // enable
+                2, // down_shift_val
+                0, // green_sample_type
+                0, // spread_select
+                3, // spread_reg_val
+                0, // radial_lsc_enable
+                //{10,17,24,32,39,47,54,61}, // thr
+                {11,16,21,27,32,37,42,47,}
+                {31,31,31,31,31,31,31,31}, // str
+                {3, 3, 3, 3, 3, 3, 3, 3}, // spr
+                0, // edge_min
+                0  // edge_max
+              }
+</ipipe_nf1_dcc>
+        </parameter_package>
+        <parameter_package>
+        <!--NF parameters for photospace class 1 -->
+        <ipipe_nf1_dcc type="iss_ipipe_nf1">
+        {
+        0, //update
+        0, // enable
+        2, // down_shift_val
+        0, // green_sample_type
+        0, // spread_select
+        3, // spread_reg_val
+        0, // radial_lsc_enable
+        //{10,17,24,32,39,47,54,61}, // thr
+        {26,38,50,62,74,86,98,110,}
+        {31,31,31,31,31,31,31,31}, // str
+        {3, 3, 3, 3, 3, 3, 3, 3}, // spr
+        0, // edge_min
+        0  // edge_max
+        }
+        </ipipe_nf1_dcc>
+        </parameter_package>
+
+    </use_case>
+  <!--=====================================================================-->
+</IPIPE_NF1_xml>

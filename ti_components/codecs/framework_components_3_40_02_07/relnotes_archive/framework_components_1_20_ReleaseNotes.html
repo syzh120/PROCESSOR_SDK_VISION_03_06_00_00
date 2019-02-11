@@ -1,0 +1,511 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <title>Framework Components 1.20 Release Notes</title>
+    <!-- For now, we use the doxygen style sheet -->
+    <link type="text/css" rel="stylesheet" href="../docs/html/doxygen.css">
+</head>
+<body>
+<table width="100%">
+  <tbody>
+    <tr>
+      <td bgcolor="black" width="1">
+        <a href="http://www.ti.com">
+          <img border=0 src="../docs/html/tilogo.gif" alt="Texas Instruments">
+        </a>
+      </td>
+      <td bgcolor="red">
+        <img src="../docs/html/titagline.gif" alt="Technology for Innovators(tm)">
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h1>Framework Components 1.20 Release Notes</h1>
+
+<p align="center">
+<a href="#General_Info">General Info</a>,
+<a href="#Documentation">Documentation</a>,
+<a href="#Whats_New">What's New</a>,
+<a href="#Compatibility">Compatibility Information</a>,
+<a href="#Validation">Validation Info</a>,
+<a href="#Known_Issues">Known Issues</a>,
+<a href="#Device_Support">Device Support</a>,
+<a href="#Examples">Examples</a>,
+<a href="#Version">Version Information</a>,
+<a href="#Support">Technical Support</a>.
+</p>
+
+<hr>
+
+<h2><a name="General_Info">General Information</a></h2>
+
+<p>
+The Framework Components are a collection of framework-independent utility
+libraries which other software frameworks can build upon.
+</p>
+
+<p>
+This Framework Components release consists of the following packages:
+</p>
+
+<ul>
+    <li>
+        <b><tt>ti.sdo.fc.dskt2</tt></b> - xDAIS utility library for instantiating xDAIS
+        algorithms, and managing their memory resources.
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.dman3</tt></b> - DMA Manager library (Joule
+        specific). A library for managing DMA hardware resources for xDAIS
+        algorithms. This includes the IDMA3 interface (Joule specific),
+        which xDAIS algorithms must implement to enable DMAN3 to manage their
+        DMA resources.
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.acpy3</tt></b> - High-Performance Functional DMA Interface and
+        Common Library for EDMA3-based devices.
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.utils</tt></b> - Utilities which frameworks can built upon,
+        including Design By Contract (<tt>DBC</tt>) and Debug tracing tools
+        (<tt>DBG</tt>).
+    </li>
+</ul>
+
+<p>
+The Framework Components are provided as libraries, without sources.
+</p>
+
+<p>
+Additionally, some distributions of this release include an "fctools" directory
+containing xDAIS interface headers for convenience.  These headers are
+identical to the xDAIS 5.10 Release.
+</p>
+
+<hr>
+
+<h2><a name="Documentation">Documentation</a></h2>
+<p>
+The following documentation is available:
+</p>
+<ul>
+  <li>
+    Framework Components Reference Guide (HTML | CHM)
+  </li>
+  <li>
+    Configuration Reference Guide
+  </li>
+  <li>
+    Using DMA with Framework Components for 'C64x+ Application Note
+  </li>
+  <li>
+    DSKT2 User's Guide
+  </li>
+</ul>
+
+<p>
+Release notes from previous releases are also available in the <a
+href="../relnotes_archive">relnotes_archive</a> directory.
+</p>
+
+<hr>
+<h2><a name="Whats_New">What's New</a></h2>
+<p>The following significant changes have been made since 1.00</p>
+
+<div class="memitem">
+<h3>1.20 (This Release)</h3>
+<ul>
+  <li>C64+ libraries built with CG 6.0.8</li>
+  <li>Updated fctools to xDAIS 5.20 release</li>
+  <li>ACPY3_complete() inline support added.</li>
+  <li>fastcopy example cleanup</li>
+  <li>And the following MRs were resolved:
+
+<table width="100%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td>SDSCM00002823</td>
+      <td>Remove dependency on BIOS types</td>
+    </tr>
+    <tr>
+      <td>SDSCM00012024</td>
+      <td>DSKT2 User Guide documentation collateral should be provided for
+      Framework Components</td>
+    </tr>
+    <tr>
+      <td>SDSCM00013086</td>
+      <td>FC DMAN3 example builds have poor out of box experience</td>
+    </tr>
+    <tr>
+      <td>SDSCM00013781</td>
+      <td>Require instrumentation in ACPY3 library to support
+      DGT logging or any other kind of generic logging</td>
+    </tr>
+    <tr>
+      <td>SDSCM00014395</td>
+      <td>DSKT2 scratch memory allocation & sharing is not optimal when
+      alignment is required</td>
+    </tr>
+    <tr>
+      <td>SDSCM00014454</td>
+      <td>Hardlimit of DMAN3_MAXDMARECS to 32 not required in the dman3
+      library. Should be removed as a config option for DMAN3</td>
+    </tr>
+    <tr>
+      <td>SDSCM00014931</td>
+      <td>DMAN3_createChannels(), DMAN3_grantDMAChannels() memory overwrite
+      for non-ACPY3 channels</td>
+    </tr>
+  </tbody>
+</table>
+
+</li>
+</ul>
+</div>
+
+<br />
+
+<div class="memitem">
+<h3>1.10</h3>
+<ul>
+  <li>All libraries are built with CG 6.0.7</li>
+  <li>Updated fctools to xDAIS 5.10 release</li>
+  <li>And the following MRs were resolved:
+
+<table width="100%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td>SDSCM00013041</td>
+      <td>ACPY3 susceptible to SDSCM00012367 (Silicon Errata)</td>
+    </tr>
+    <tr>
+      <td>SDSCM00006288</td>
+      <td>Need to update the Joule DMA design guide</td>
+    </tr>
+    <tr>
+      <td>SDSCM00012532</td>
+      <td>Source code does not line up when stepping through
+       debug libraries</td>
+    </tr>
+    <tr>
+      <td>SDSCM00012770</td>
+      <td>ACPY3 specification changes are needed for
+       clarification and to match design and implementation changes</td>
+    </tr>
+    <tr>
+      <td>SDSCM00012773</td>
+      <td>DMAN3 RTSC Configuration requires custom non-public
+       initialization call to configure DMAN3 heaps</td>
+    </tr>
+  </tbody>
+</table>
+
+</li>
+</ul>
+</div>
+
+<br />
+
+<div class="memitem">
+<h3>1.03</h3>
+<ul>
+  <li>All libraries are built with CG6x 6.0.5</li>
+</ul>
+</div>
+
+<br />
+
+<div class="memitem">
+<h3>1.02</h3>
+<ul>
+  <li>OMAPS00082651 - Allow IDMA3 channel env to be allocated in DSKT2
+                       scratch memory
+    <ul>
+      <li>Also tracked as SDSCM00005723 - FC ACPY3 needs to support scratch
+          environment memory for IDMA3 channel objects</li>
+    </ul>
+  </li>
+  <li> SDSCM00010132 - ACPY3 Changes Needed for Interoperability with Codecs
+                       using QDMA Library </li>
+  <li> SDSCM00010205 - DMAN3 uses wrong QCHMAP offsets </li>
+</ul>
+</div>
+
+<br />
+
+<div class="memitem">
+<h3>1.01</h3>
+<ul>
+  <li>OMAPS00081737 - Race condition can happen in DSKT2_freeAlg
+    <ul>
+      <li>Also tracked as SDSCM00007366 - DSKT2_freeAlg and lazy
+      deactivate race condition</li>
+    </ul>
+  </li>
+
+  <li>OMAPS00079468 - ACPY3_activate causing DMA transfer when built
+  with -o3</li>
+  <li>OMAPS00078941 - ACPY3_wait() inline version not inlining</li>
+  <li>OMAPS00078784 - DSKT2 needs an API to deactivate all algs that have
+  been lazily deactivated
+    <ul>
+      <li>Also tracked as SDSCM00006538 - DSKT2's lazy deactivate can cause
+      problems when power management is introduced</li>
+      <li>This was satisfied with the introduction of
+      DSKT2_deactivateAll()</li>
+    </ul>
+  </li>
+  <li>OMAPS00079710 - DSKT2 should not try to deactivate an codec instance
+  that does not provide algDeactivate()</li>
+
+  <li>OMAPS00076836 - DSKT2 can introduce some cache coherence issues
+    <ul>
+      <li>Also tracked as SDSCM00005847 - DSKT2 doesn't BCACHE_flush
+      MEM_calloc initialized external, persistant data
+      </li>
+    </ul>
+  </li>
+  <li>OMAPS00074261 - Support Visual Studio builds of dman3 and acpy3
+  libraries</li>
+  <li>OMAPS00074262 - Fix CPU copy version of ACPY3 library</li>
+  <li>Added DSKT2 documentation to the configuration reference guide</li>
+</ul>
+</div>
+
+<hr>
+<h2><a name="Device_Support">Device Support</a></h2>
+
+<p>
+This release supports and has been tested on the following devices:
+<ul>
+  <li>
+    DaVinci EVM
+  </li>
+  <li>
+    OMAP2430 EVM
+  </li>
+  <li>
+    OMAP3430 EVM
+  </li>
+  <li>
+    Joule simulators
+  </li>
+</ul>
+DMAN3 and ACPY3 can be configured to run on other Joule devices,
+(e.g. Himalaya), by configuring DMAN3.qdmaPaRamBase via RTSC or
+at runtime by setting DMAN3_PARAMS.qdmaPaRamBase.
+Additionally, when DMAN3 is not configured as a RTSC package the
+application must set the _DMAN3_EDMA3BASE in the linker cmd file
+as shown in the DMAN3 fastcopytest example.
+</p>
+
+<p>
+Applications which use ACPY3 but don't consume DMAN3 as a RTSC package
+will need to define DMAN3_EDMA3BASE symbol in their application linker
+command file. For Davinci and 2430 this should be set as:
+_DMAN3_EDMA3BASE = 0x01C00000;
+
+An example of this usage is shown in
+ti/sdo/fc/dman3/examples/davincisim_bios/fastcopytest.cmd
+</p>
+
+
+
+<hr>
+<h2><a name="Compatibility">Compatibility Information</a></h2>
+<ul>
+    <li>
+        <b><tt>ti.sdo.fc.acpy2</tt></b> - This package is compatible with the
+        previous release.  (Compatibility key: <i>undefined</i> ->
+        <font color='red'><b>1,0,0,0</b></font>)
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.acpy3</tt></b> - This package is compatible with the
+        previous release.  (Compatibility key: 1,0,0</i> ->
+        1,0,<font color='red'><b>1,0</b></font>)
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.dman</tt></b> - This package is compatible with the
+        previous release.  (Compatibility key: <i>undefined</i> ->
+        <font color='red'><b>1,0,0,0</b></font>)
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.dman3</tt></b> - This package is compatible with the
+        previous release.  (Compatibility key: 1,0,1</i> ->
+        1,0,<font color='red'><b>2,0</b></font>)
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.dskt2</tt></b> - This package is compatible with the
+        previous release.  (Compatibility key: 1,0,1 ->
+        1,0,<font color='red'><b>2,0</b></font>)
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.utils</tt></b> - This package is compatible with the
+        previous release.  (Compatibility key: 1,0,0 ->
+        1,0,<font color='red'><b>1,0</b></font>)
+    </li>
+    <li>
+        Compatibility with previous releases is not currently managed in
+        the examples.
+    </li>
+</ul>
+
+<p>
+If migrating from a release prior to FC 1.10, consult previous
+releases available in the <a
+href="../relnotes_archive">relnotes_archive</a> directory.
+</p>
+
+<h3>Compatibility Key Definitions</h3>
+<p>
+Compatibility keys are intentionally independent of Marketing product
+numbers and are intended to:
+<ol>
+  <li>Enable tooling to identify incompatibilities between components,
+  and</li>
+  <li>Convey a level of compatibility between different releases to
+  set end user expectations.</li>
+</ol>
+</p>
+
+<p>
+Compatibility keys are composed of 4 comma-delimited numbers - M,S,R,P
+- where:
+<ul>
+  <li><b>M = Major</b>.  A difference in M indicates a break in
+  compatibility.</li>
+  <li><b>S = Source</b>.  A difference in S indicates source
+  compability.  That is, the user's source doesn't require change, but
+  <i>does</i> require rebuilding.</li>
+  <li><b>R = Radix</b>.  A difference in R indicates an introduction
+  of new features, but compatibility with previous interfaces has not
+  broken.  If libraries are provided by the package, an application
+  must re-link with the new libraries, but not rebuild from source.</li>
+  <li><b>P = Patch</b>.  A difference in P simply indicates a
+  different release of the package (larger is newer).  The package is
+  compatible.</li>
+</ul>
+</p>
+
+
+<hr>
+<h2><a name="Validation">Validation</a></h2>
+<p>
+This release was built and validated against using the following components:
+</p>
+<ul>
+    <li>
+        DSP/BIOS-5.31
+    </li>
+    <li>
+        C6x Code Generation Tools version 6.0.8.
+    </li>
+    <li>
+        C55 Code Generation Tools version 3.2.2.
+    </li>
+</ul>
+
+
+<h3>C64+</h3>
+
+<ul>
+    <li>
+        DaVinci EVM
+    </li>
+    <li>
+        OMAP2430 EVM
+    </li>
+    <li>
+        OMAP3430 EVM
+    </li>
+    <li>
+        Limited sanity testing using CCS C64+ Simulator
+    </li>
+</ul>
+
+<h3>C55</h3>
+
+<ul>
+    <li>
+        OMAPV1035
+    </li>
+</ul>
+
+<hr>
+<h2><a name="Known_Issues">Known Issues</a></h2>
+
+<h3>ACPY3</h3>
+<ul>
+    <li>
+        ACPY3 usage of IDMA0 does not provide any software workaround for
+        DaVinci silicon defect BTS_DAV_SIBUGS 75, titled:
+        "GEM IDMA can hang dependent on chip level implementation."
+        The defect only exists on Davinci Pg1.x silicon. (Fixed for
+        future Davinci Pg2.x, OMAP 2430 and 3430 silicon releases.)
+        There is no plan to address this issue in Framework Components.
+    </li>
+    <li>
+	3D DMA transfers using Joule CCNT > 1 (i.e. numFrames > 1) are
+        not supported.  There is no plan to address this limitation.
+    </li>
+</ul>
+
+<h3>DMAN3 Example</h3>
+<ul>
+    <li>
+        The DMAN3 example .pjt files support only the DaVinci DM644x platform.
+    </li>
+</ul>
+
+<hr>
+<h2><a name="Examples">Examples</a></h2>
+<p>xDAIS examples and instructions are located in the
+"examples" directory.
+</p>
+<ul>
+  <li>Example Build Instructions</li>
+</ul>
+
+<hr>
+<h2><a name="Version">Version Information</a></h2>
+<p>
+This product's version follows a version format, <b>M.mm.pp.bb</b>,
+where <b>M</b> is a single digit Major number, <b>mm</b> is 2 digit
+minor number, <b>pp</b> is a 2 digit patch number, and <b>b</b> is an
+unrestricted set of digits used as an incrementing build counter.
+</p>
+
+<p>
+To support multiple side-by-side installations of the product, the
+product version is encoded in the top level directory,
+ex. <b>framework_components_1_20</b>.
+</p>
+
+<p>
+Subsequent releases of patch upgrades will be identified by the patch
+number, ex. FC 1.20.01 with directory <b>framework_components_1_20_01</b>.
+Typically, these patches only include critical bug fixes.
+</p>
+
+<hr>
+<h2><a name="Support">Technical Support</a></h2>
+<p>For technical support, contact <a href="mailto:softwaresupport@ti.com">softwaresupport@ti.com</a></p>
+
+<p>
+Check the following web site for updates: <a href="https://www-a.ti.com/downloads/sds_support/targetcontent/FC/index.html">https://www-a.ti.com/downloads/sds_support/targetcontent/FC/index.html</a>
+</p>
+
+<hr>
+<p>
+Last updated: February 20, 2007
+</p>
+</body>
+</html>

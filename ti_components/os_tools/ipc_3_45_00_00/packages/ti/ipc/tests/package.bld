@@ -1,0 +1,672 @@
+/*
+ * Copyright (c) 2012-2015, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+/*
+ *  ======== package.bld ========
+ *
+ */
+
+var Build = xdc.useModule('xdc.bld.BuildEnvironment');
+var Pkg = xdc.useModule('xdc.bld.PackageContents');
+
+Pkg.otherFiles = [ "mmrpc_test.c" ];
+
+/* when constructing a release, release everything */
+Pkg.attrs.exportAll = true;
+
+/* Uncomment this to build the app with debug support */
+Pkg.attrs.profile = "debug";
+
+/* bin/ is a generated directory that 'xdc clean' should remove */
+Pkg.generatedFiles.$add("bin/");
+
+/* define the platform instances we support */
+/* OMAPL138 */
+var evmOMAPL138_ExtMemMap = {
+    DDR: {
+        name: "DDR",
+        base: 0xc3100000,
+        len:  0x00800000,
+        space: "code/data"
+    }
+};
+
+Build.platformTable["ti.platforms.evmOMAPL138:DSP"] = {
+    externalMemoryMap: [
+        [ "DDR", evmOMAPL138_ExtMemMap.DDR ]
+    ],
+    codeMemory: "DDR",
+    dataMemory: "DDR",
+    stackMemory: "DDR",
+    l2Mode: "32k"
+};
+
+/*  Memory Map for ti.platforms.sdp5430:IPU
+ *
+ *  --- External Memory ---
+ *  Virtual     Physical        Size            Comment
+ *  ------------------------------------------------------------------------
+ *  0000_4000   ???0_4000    5F_C000  (  ~6 MB) EXT_CODE
+ *  8000_0000   ???0_0000    60_0000  (   6 MB) EXT_DATA
+ *  8060_0000   ???0_0000   2A0_0000  (  42 MB) EXT_HEAP
+ *  9F00_0000   ???0_0000     6_0000  ( 384 kB) TRACE_BUF
+ *  9F06_0000   ???6_0000     1_0000  (  64 kB) EXC_DATA
+ *  9F07_0000   ???7_0000     2_0000  ( 128 kB) PM_DATA (Power mgmt)
+ */
+var sdp5430_ExtMemMapIpu = {
+    EXT_CODE: {
+        name: "EXT_CODE",
+        base: 0x00004000,
+        len:  0x005FC000,
+        space: "code",
+        access: "RWX"
+    },
+    EXT_DATA: {
+        name: "EXT_DATA",
+        base: 0x80000000,
+        len:  0x00600000,
+        space: "data",
+        access: "RW"
+    },
+    EXT_HEAP: {
+        name: "EXT_HEAP",
+        base: 0x80600000,
+        len:  0x02A00000,
+        space: "data",
+        access: "RW"
+    },
+    TRACE_BUF: {
+        name: "TRACE_BUF",
+        base: 0x9F000000,
+        len:  0x00060000,
+        space: "data",
+        access: "RW"
+    },
+    EXC_DATA: {
+        name: "EXC_DATA",
+        base: 0x9F060000,
+        len:  0x00010000,
+        space: "data",
+        access: "RW"
+    },
+    PM_DATA: {
+        name: "PM_DATA",
+        base: 0x9F070000,
+        len:  0x00020000,
+        space: "data",
+        access: "RWX"  /* should this have execute perm? */
+    }
+};
+
+Build.platformTable["ti.platforms.sdp5430:IPU"] = {
+    externalMemoryMap: [
+        [ "EXT_CODE", sdp5430_ExtMemMapIpu.EXT_CODE ],
+        [ "EXT_DATA", sdp5430_ExtMemMapIpu.EXT_DATA ],
+        [ "EXT_HEAP", sdp5430_ExtMemMapIpu.EXT_HEAP ],
+        [ "TRACE_BUF", sdp5430_ExtMemMapIpu.TRACE_BUF ],
+        [ "EXC_DATA", sdp5430_ExtMemMapIpu.EXC_DATA ],
+        [ "PM_DATA", sdp5430_ExtMemMapIpu.PM_DATA ]
+    ],
+    codeMemory: "EXT_CODE",
+    dataMemory: "EXT_DATA",
+    stackMemory: "EXT_DATA",
+};
+
+/*  Memory Map for ti.platforms.sdp5430:DSP
+ *
+ *  --- External Memory ---
+ *  Virtual     Physical        Size            Comment
+ *  ------------------------------------------------------------------------
+ *  2000_0000   ????_????    10_0000  (   1 MB) EXT_CODE
+ *  9000_0000   ????_????    10_0000  (   1 MB) EXT_DATA
+ *  9010_0000   ????_????    30_0000  (   3 MB) EXT_HEAP
+ *  9F00_0000   9F00_0000     6_0000  ( 384 kB) TRACE_BUF
+ *  9F06_0000   9F06_0000     1_0000  (  64 kB) EXC_DATA
+ *  9F07_0000   9F07_0000     2_0000  ( 128 kB) PM_DATA (Power mgmt)
+ */
+var sdp5430_ExtMemMapDsp = {
+    EXT_CODE: {
+        name: "EXT_CODE",
+        base: 0x20000000,
+        len:  0x00100000,
+        space: "code",
+        access: "RWX"
+    },
+    EXT_DATA: {
+        name: "EXT_DATA",
+        base: 0x90000000,
+        len:  0x00100000,
+        space: "data",
+        access: "RW"
+    },
+    EXT_HEAP: {
+        name: "EXT_HEAP",
+        base: 0x90100000,
+        len:  0x00300000,
+        space: "data",
+        access: "RW"
+    },
+    TRACE_BUF: {
+        name: "TRACE_BUF",
+        base: 0x9F000000,
+        len:  0x00060000,
+        space: "data",
+        access: "RW"
+    },
+    EXC_DATA: {
+        name: "EXC_DATA",
+        base: 0x9F060000,
+        len:  0x00010000,
+        space: "data",
+        access: "RW"
+    },
+    PM_DATA: {
+        name: "PM_DATA",
+        base: 0x9F070000,
+        len:  0x00020000,
+        space: "data",
+        access: "RWX"  /* should this have execute perm? */
+    }
+};
+
+Build.platformTable["ti.platforms.sdp5430:DSP"] = {
+    externalMemoryMap: [
+        [ "EXT_CODE", sdp5430_ExtMemMapDsp.EXT_CODE ],
+        [ "EXT_DATA", sdp5430_ExtMemMapDsp.EXT_DATA ],
+        [ "EXT_HEAP", sdp5430_ExtMemMapDsp.EXT_HEAP ],
+        [ "TRACE_BUF", sdp5430_ExtMemMapDsp.TRACE_BUF ],
+        [ "EXC_DATA", sdp5430_ExtMemMapDsp.EXC_DATA ],
+        [ "PM_DATA", sdp5430_ExtMemMapDsp.PM_DATA ]
+    ],
+    codeMemory: "EXT_CODE",
+    dataMemory: "EXT_DATA",
+    stackMemory: "EXT_DATA",
+};
+
+/* Shared region definition used in GateMP app */
+var evmDRA7XX_SR_0 = {
+        name: "SR_0", space: "data", access: "RWX",
+        base: 0xBFB00000, len: 0x100000,
+        comment: "SR#0 Memory (1 MB)"
+};
+
+/*  Memory Map for ti.platforms.evmDRA7XX:dsp1 and ti.platforms.evmDRA7XX:dsp2
+ *
+ *  --- External Memory ---
+ *  Virtual     Physical        Size            Comment
+ *  ------------------------------------------------------------------------
+ *  9500_0000   ???0_0000    10_0000  (  ~1 MB) EXT_CODE
+ *  9510_0000   ???0_0000    10_0000  (   1 MB) EXT_DATA
+ *  9520_0000   ???0_0000    30_0000  (   3 MB) EXT_HEAP
+ *  9F00_0000   ???0_0000     6_0000  ( 384 kB) TRACE_BUF
+ *  9F06_0000   ???6_0000     1_0000  (  64 kB) EXC_DATA
+ *  9F07_0000   ???7_0000     7_0000  ( 448 kB) PM_DATA (Power mgmt)
+ */
+var evmDRA7XX_ExtMemMapDsp = {
+    EXT_CODE: {
+        name: "EXT_CODE",
+        base: 0x95000000,
+        len:  0x00100000,
+        space: "code",
+        access: "RWX"
+    },
+    EXT_DATA: {
+        name: "EXT_DATA",
+        base: 0x95100000,
+        len:  0x00100000,
+        space: "data",
+        access: "RW"
+    },
+    EXT_HEAP: {
+        name: "EXT_HEAP",
+        base: 0x95200000,
+        len:  0x00300000,
+        space: "data",
+        access: "RW"
+    },
+    TRACE_BUF: {
+        name: "TRACE_BUF",
+        base: 0x9F000000,
+        len:  0x00060000,
+        space: "data",
+        access: "RW"
+    },
+    EXC_DATA: {
+        name: "EXC_DATA",
+        base: 0x9F060000,
+        len:  0x00010000,
+        space: "data",
+        access: "RW"
+    },
+    PM_DATA: {
+        name: "PM_DATA",
+        base: 0x9F070000,
+        len:  0x00070000,
+        space: "data",
+        access: "RWX"  /* should this have execute perm? */
+    },
+    SR_0: {
+        name: evmDRA7XX_SR_0.name,
+        base: evmDRA7XX_SR_0.base,
+        len:  evmDRA7XX_SR_0.len,
+        space: "data",
+        access: "RW"
+    }
+};
+
+Build.platformTable["ti.platforms.evmDRA7XX:dsp1"] = {
+    externalMemoryMap: [
+        [ "EXT_CODE", evmDRA7XX_ExtMemMapDsp.EXT_CODE ],
+        [ "EXT_DATA", evmDRA7XX_ExtMemMapDsp.EXT_DATA ],
+        [ "EXT_HEAP", evmDRA7XX_ExtMemMapDsp.EXT_HEAP ],
+        [ "TRACE_BUF", evmDRA7XX_ExtMemMapDsp.TRACE_BUF ],
+        [ "EXC_DATA", evmDRA7XX_ExtMemMapDsp.EXC_DATA ],
+        [ "PM_DATA", evmDRA7XX_ExtMemMapDsp.PM_DATA ],
+        [ evmDRA7XX_SR_0.name, evmDRA7XX_ExtMemMapDsp.SR_0 ],
+    ],
+    codeMemory: "EXT_CODE",
+    dataMemory: "EXT_DATA",
+    stackMemory: "EXT_DATA",
+};
+Build.platformTable["ti.platforms.evmDRA7XX:dsp2"] =
+	Build.platformTable["ti.platforms.evmDRA7XX:dsp1"];
+
+
+
+/*  Memory Map for ti.platforms.evmDRA7XX:ipu2
+ *
+ *  --- External Memory ---
+ *  Virtual     Physical        Size            Comment
+ *  ------------------------------------------------------------------------
+ *  0000_4000   ???0_4000    5F_C000  (  ~6 MB) EXT_CODE
+ *  8000_0000   ???0_0000    60_0000  (   6 MB) EXT_DATA
+ *  8060_0000   ???0_0000   2A0_0000  (  42 MB) EXT_HEAP
+ *  9F00_0000   ???0_0000     6_0000  ( 384 kB) TRACE_BUF
+ *  9F06_0000   ???6_0000     1_0000  (  64 kB) EXC_DATA
+ *  9F07_0000   ???7_0000     2_0000  ( 128 kB) PM_DATA (Power mgmt)
+ */
+var evmDRA7XX_ExtMemMapIpu2 = {
+    EXT_CODE: {
+        name: "EXT_CODE",
+        base: 0x00004000,
+        len:  0x005FC000,
+        space: "code",
+        access: "RWX"
+    },
+    EXT_DATA: {
+        name: "EXT_DATA",
+        base: 0x80000000,
+        len:  0x00600000,
+        space: "data",
+        access: "RW"
+    },
+    EXT_HEAP: {
+        name: "EXT_HEAP",
+        base: 0x80600000,
+        len:  0x02A00000,
+        space: "data",
+        access: "RW"
+    },
+    TRACE_BUF: {
+        name: "TRACE_BUF",
+        base: 0x9F000000,
+        len:  0x00060000,
+        space: "data",
+        access: "RW"
+    },
+    EXC_DATA: {
+        name: "EXC_DATA",
+        base: 0x9F060000,
+        len:  0x00010000,
+        space: "data",
+        access: "RW"
+    },
+    PM_DATA: {
+        name: "PM_DATA",
+        base: 0x9F070000,
+        len:  0x00020000,
+        space: "data",
+        access: "RWX"  /* should this have execute perm? */
+    }
+};
+
+Build.platformTable["ti.platforms.evmDRA7XX:ipu2"] = {
+    externalMemoryMap: [
+        [ "EXT_CODE", evmDRA7XX_ExtMemMapIpu2.EXT_CODE ],
+        [ "EXT_DATA", evmDRA7XX_ExtMemMapIpu2.EXT_DATA ],
+        [ "EXT_HEAP", evmDRA7XX_ExtMemMapIpu2.EXT_HEAP ],
+        [ "TRACE_BUF", evmDRA7XX_ExtMemMapIpu2.TRACE_BUF ],
+        [ "EXC_DATA", evmDRA7XX_ExtMemMapIpu2.EXC_DATA ],
+        [ "PM_DATA", evmDRA7XX_ExtMemMapIpu2.PM_DATA ]
+    ],
+    codeMemory: "EXT_CODE",
+    dataMemory: "EXT_DATA",
+    stackMemory: "EXT_DATA",
+};
+
+/*  Memory Map for ti.platforms.evmDRA7XX:ipu1
+ *
+ *  --- External Memory ---
+ *  Virtual     Physical        Size            Comment
+ *  ------------------------------------------------------------------------
+ *  0000_4000   ???0_4000     F_C000  (  ~1 MB) EXT_CODE
+ *  8000_0000   ???0_0000    20_0000  (   2 MB) EXT_DATA
+ *  8020_0000   ???0_0000    30_0000  (   3 MB) EXT_HEAP
+ *  9F00_0000   ???0_0000     6_0000  ( 384 kB) TRACE_BUF
+ *  9F06_0000   ???6_0000     1_0000  (  64 kB) EXC_DATA
+ *  9F07_0000   ???7_0000     2_0000  ( 128 kB) PM_DATA (Power mgmt)
+ */
+var evmDRA7XX_ExtMemMapIpu1 = {
+    EXT_CODE: {
+        name: "EXT_CODE",
+        base: 0x00004000,
+        len:  0x000FC000,
+        space: "code",
+        access: "RWX"
+    },
+    EXT_DATA: {
+        name: "EXT_DATA",
+        base: 0x80000000,
+        len:  0x00200000,
+        space: "data",
+        access: "RW"
+    },
+    EXT_HEAP: {
+        name: "EXT_HEAP",
+        base: 0x80200000,
+        len:  0x00300000,
+        space: "data",
+        access: "RW"
+    },
+    TRACE_BUF: {
+        name: "TRACE_BUF",
+        base: 0x9F000000,
+        len:  0x00060000,
+        space: "data",
+        access: "RW"
+    },
+    EXC_DATA: {
+        name: "EXC_DATA",
+        base: 0x9F060000,
+        len:  0x00010000,
+        space: "data",
+        access: "RW"
+    },
+    PM_DATA: {
+        name: "PM_DATA",
+        base: 0x9F070000,
+        len:  0x00020000,
+        space: "data",
+        access: "RWX"  /* should this have execute perm? */
+    }
+};
+
+Build.platformTable["ti.platforms.evmDRA7XX:ipu1"] = {
+    externalMemoryMap: [
+        [ "EXT_CODE", evmDRA7XX_ExtMemMapIpu1.EXT_CODE ],
+        [ "EXT_DATA", evmDRA7XX_ExtMemMapIpu1.EXT_DATA ],
+        [ "EXT_HEAP", evmDRA7XX_ExtMemMapIpu1.EXT_HEAP ],
+        [ "TRACE_BUF", evmDRA7XX_ExtMemMapIpu1.TRACE_BUF ],
+        [ "EXC_DATA", evmDRA7XX_ExtMemMapIpu1.EXC_DATA ],
+        [ "PM_DATA", evmDRA7XX_ExtMemMapIpu1.PM_DATA ]
+    ],
+    codeMemory: "EXT_CODE",
+    dataMemory: "EXT_DATA",
+    stackMemory: "EXT_DATA",
+};
+
+/*
+ * Create Keystone platform instances without any external memory.
+ * The main reason for this is to prevent SYS/BIOS from tagging
+ * any of the external memory address space as "cacheable" in MAR
+ * register settings.
+ *
+ * All the tests currently build just one Keystone DSP executable
+ * that is used for all cores.  One could create a separate platform
+ * instance for each core on a given Keystone part, and then use that
+ * particular core's platform instance when building for that core.
+ */
+Build.platformTable["ti.platforms.evmC66AK2E:core0"] = {
+    externalMemoryMap: [ ]
+};
+
+Build.platformTable["ti.platforms.evmTCI6630K2L:core0"] = {
+    externalMemoryMap: [ ]
+};
+
+Build.platformTable["ti.platforms.evmTCI6636K2H:core0"] = {
+    externalMemoryMap: [ ]
+};
+
+Build.platformTable["ti.platforms.evmTCI6638K2K:core0"] = {
+    externalMemoryMap: [ ]
+};
+
+Build.platformTable["ti.platforms.evmTCI66AK2G02:core0"] = {
+    externalMemoryMap: [ ]
+};
+
+for (var i = 0; i < Build.targets.length; i++) {
+    var targ = Build.targets[i];
+
+//    print("building for target " + targ.name + " ...");
+
+    /* currently only build for OMAPL138, Keystone II, OMAP5, and Vayu*/
+    if (!((targ.isa == "674") || (targ.isa == "66") ||
+          (targ.isa.match(/v7M(|4)/)) || (targ.isa == "64T"))) {
+        continue;
+    }
+
+    /* Platforms were added to targ.platforms[] in config.bld */
+    for (var j = 0; j < targ.platforms.length; j++) {
+        var platform = targ.platforms[j];
+
+        /* currently only build for OMAPL138, Keystone II, OMAP5, and Vayu*/
+        if (!((platform.match(/^ti\.platforms\.evm6614\:DSP/)) ||
+              (platform.match(/^ti\.platforms\.simKepler/)) ||
+              (platform.match(/^ti.platforms.evmC66AK2E/)) ||
+              (platform.match(/^ti.platforms.evmTCI66AK2G02/)) ||
+              (platform.match(/^ti.platforms.evmTCI6630K2L/)) ||
+              (platform.match(/^ti.platforms.evmTCI6638K2K/)) ||
+              (platform.match(/^ti.platforms.evmTCI6636K2H/)) ||
+              (platform.match(/^ti\.platform\.omap54xx/)) ||
+              (platform.match(/^ti\.platforms\.sdp5430/)) ||
+              (platform.match(/^ti\.platform\.vayu/)) ||
+              (platform.match(/^ti\.platforms\.evmDRA7XX/)) ||
+              (platform.match(/\.platforms\.evmOMAPL138/)))) {
+             continue;
+        }
+
+        print("  platform:  " + platform);
+        // name = bin/platform/name.x+suffix
+        var name = "bin/" +
+                // replace all ':' and '.' with '_' in platform name
+                platform.replace(/\:/g, "_").replace(/\./g, "_");
+
+        var extraDefs = "";
+
+        /* Vayu and OMAP5 require MmRpc and therefore use RPMSG_NS_2_0 */
+        if (platform.match(/^ti\.platform\.vayu/) ||
+                platform.match(/^ti\.platforms\.evmDRA7XX/) ||
+                platform.match(/^ti\.platforms\.sdp5430/)) {
+            extraDefs = " -DRPMSG_NS_2_0";
+        }
+
+        /* All Keystone platforms with 4.1/4.4 kernels also require RPMSG_NS_2_0 */
+        if (platform.match(/^ti.platforms.evmC66AK2E/) ||
+            platform.match(/^ti.platforms.evmTCI66AK2G02/) ||
+            platform.match(/^ti.platforms.evmTCI6630K2L/) ||
+            platform.match(/^ti.platforms.evmTCI6638K2K/) ||
+            platform.match(/^ti.platforms.evmTCI6636K2H/)) {
+            extraDefs = " -DRPMSG_NS_2_0";
+        }
+
+        /* fault */
+        Pkg.addExecutable(name + "/fault", targ, platform, {
+            cfgScript: "rpmsg_transport",
+            defs: extraDefs
+        }).addObjects(["fault.c"]);
+
+        /* ping_rpmsg */
+        Pkg.addExecutable(name + "/ping_rpmsg", targ, platform, {
+            cfgScript: "ping_rpmsg",
+            defs: extraDefs
+        }).addObjects(["ping_rpmsg.c"]);
+
+        /* ping_tasks */
+        Pkg.addExecutable(name + "/ping_tasks", targ, platform, {
+            cfgScript: "ping_rpmsg",
+            defs: extraDefs
+        }).addObjects(["ping_tasks.c", "ping_tasks_main.c"]);
+
+        /* gatempapp */
+        if (platform.match(/^ti\.platform\.vayu\.dsp1/) ||
+                platform.match(/^ti\.platforms\.evmDRA7XX:dsp1$/)) {
+            Pkg.addExecutable(name + "/gatempapp", targ, platform, {
+                cfgScript: "gatempapp",
+            }).addObjects(["gatempapp.c"]);
+        }
+
+        /* messageq_multicore - only for our homogeneous multicore platforms */
+        if (platform.match(/^ti\.platforms\.simKepler/) ||
+                (platform.match(/^ti.platforms.evmTCI6630K2L/)) ||
+                (platform.match(/^ti.platforms.evmTCI6638K2K/)) ||
+                (platform.match(/^ti.platforms.evmTCI6636K2H/)) ||
+                (platform.match(/^ti\.platforms\.evm6614\:DSP/))) {
+            Pkg.addExecutable(name + "/messageq_multicore", targ, platform, {
+                cfgScript: "messageq_multicore",
+                //defs: "-D TCI6614_v33"
+                //defs: "-D TCI6614"
+                defs: "-D TCI6638"
+            }).addObjects(["messageq_multicore.c"]);
+
+            Pkg.addExecutable(name + "/dual_transports", targ, platform, {
+                cfgScript: "dual_transports",
+            }).addObjects(["dual_transports.c"]);
+        }
+
+        /* messageq_multi */
+        Pkg.addExecutable(name + "/messageq_multi", targ, platform, {
+            cfgScript: "rpmsg_transport",
+            defs: "-D BENCHMARK" + extraDefs
+        }).addObjects(["messageq_multi.c"]);
+
+        /* messageq_multimulti */
+        Pkg.addExecutable(name + "/messageq_multimulti", targ, platform, {
+            cfgScript: "rpmsg_transport",
+            defs: "-D BENCHMARK" + extraDefs
+        }).addObjects(["messageq_multimulti.c"]);
+
+        /* messageq_single */
+        if (platform.match(/^ti\.platforms\.sdp5430/) &&
+                (targ.isa == "64T")) {
+		Pkg.addExecutable(name + "/messageq_single", targ, platform, {
+		    cfgScript: "rpmsg_transport",
+		    defs: "-D BENCHMARK -D DSP" + extraDefs
+		}).addObjects(["messageq_single.c"]);
+	} else if (platform.match(/^ti\.platforms\.sdp5430/) &&
+                (targ.isa == "M4")) {
+		Pkg.addExecutable(name + "/messageq_single", targ, platform, {
+		    cfgScript: "rpmsg_transport",
+		    defs: "-D BENCHMARK -D IPU" + extraDefs
+		}).addObjects(["messageq_single.c"]);
+	} else {
+		Pkg.addExecutable(name + "/messageq_single", targ, platform, {
+		    cfgScript: "rpmsg_transport",
+		    defs: "-D BENCHMARK " + extraDefs
+		}).addObjects(["messageq_single.c"]);
+	}
+
+        /* TODO: NameServerApp.xe66 too big for K2E's 512 KB L2SRAM */
+        if (!platform.match(/^ti.platforms.evmC66AK2E/)) {
+            /* NameServerApp */
+            Pkg.addExecutable(name + "/NameServerApp", targ, platform, {
+                cfgScript: "nameserverapp",
+            }).addObjects(["NameServerApp.c"]);
+        }
+
+        /* nano_test - demonstrates passing ptrs using CMEM */
+        if (platform.match(/^ti\.platforms\.evmOMAPL138\:DSP/)) {
+            Pkg.addExecutable(name + "/nano_test", targ, platform, {
+                cfgScript: "rpmsg_transport"
+            }).addObjects(["nano_test.c"]);
+        }
+
+        var test_omx_SRCS = ["test_omx.c","ping_tasks.c","rpc_task.c",
+                "MxServer.c"];
+
+        if (platform.match(/^ti\.platforms\.sdp5430/) &&
+                (targ.isa == "v7M4")) {
+            Pkg.addExecutable(name + "/test_omx_ipu_omap5", targ, platform, {
+                cfgScript: "test_omx_ipu_omap5",
+                defs: "-D IPU -D OMAP5xxx -DRPMSG_NS_2_0"
+            }).addObjects(test_omx_SRCS);
+        }
+
+        if (platform.match(/^ti\.platforms\.sdp5430/) &&
+                (targ.isa == "64T")) {
+            Pkg.addExecutable(name + "/test_omx_dsp_omap5", targ, platform, {
+                cfgScript: "test_omx_dsp_omap5",
+                defs: "-D DSP -D OMAP5xxx -DRPMSG_NS_2_0"
+            }).addObjects(test_omx_SRCS);
+        }
+
+        if (platform.match(/^ti\.platform\.vayu\.ipu1/) ||
+                platform.match(/^ti\.platforms\.evmDRA7XX:ipu1$/)) {
+            Pkg.addExecutable(name + "/test_omx_ipu1_vayu", targ, platform, {
+                cfgScript: "test_omx_ipu_vayu",
+                defs: "-D IPU -D VAYU -DRPMSG_NS_2_0"
+            }).addObjects(test_omx_SRCS);
+        }
+        if (platform.match(/^ti\.platform\.vayu\.ipu2/) ||
+                platform.match(/^ti\.platforms\.evmDRA7XX:ipu2$/)) {
+            Pkg.addExecutable(name + "/test_omx_ipu2_vayu", targ, platform, {
+                cfgScript: "test_omx_ipu_vayu",
+                defs: "-D IPU -D VAYU -DRPMSG_NS_2_0"
+            }).addObjects(test_omx_SRCS);
+        }
+
+        if (platform.match(/^ti\.platform\.vayu/) ||
+                platform.match(/^ti\.platforms\.evmDRA7XX:dsp1$/)) {
+            Pkg.addExecutable(name + "/test_omx_dsp1_vayu", targ, platform, {
+                cfgScript: "test_omx_dsp_vayu",
+                defs: "-D DSP_1 -D DSP -D VAYU -DRPMSG_NS_2_0"
+            }).addObjects(test_omx_SRCS);
+        }
+        if (platform.match(/^ti\.platform\.vayu/) ||
+                platform.match(/^ti\.platforms\.evmDRA7XX:dsp2$/)) {
+            Pkg.addExecutable(name + "/test_omx_dsp2_vayu", targ, platform, {
+                cfgScript: "test_omx_dsp_vayu",
+                defs: "-D DSP_2 -D DSP -D VAYU -DRPMSG_NS_2_0"
+            }).addObjects(test_omx_SRCS);
+        }
+    }
+}

@@ -1,0 +1,205 @@
+%%{
+/*
+ * Copyright (c) 2006-2012, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ */
+%%}
+/*
+ *  ======== config.bld ========
+ *  This script is run prior to all build scripts.  It initializes the
+ *  rootDir configuration parameter of all supported targets.
+ *
+ *  There are more details about config.bld here:
+ *  http://rtsc.eclipse.org/docs-tip/Glossary#config.bld
+ */
+
+var Build = xdc.useModule("xdc.bld.BuildEnvironment");
+var Pkg = xdc.useModule("xdc.bld.PackageContents");
+% var C64P = false;
+% var C674 = false;
+% var C66 = false;
+% var C67P = false;
+% var v5T = false;
+% var v6 = false;
+% var v7A = false;
+% var M3 = false;
+% for (var i = 0; i < this.targets.length; i++) {
+%     if (!C64P && this.targets[i].cgTools == 'C64P') {
+%         C64P = true;
+%     }
+%     else if (!C674 && this.targets[i].cgTools == 'C674') {
+%         C674 = true;
+%     }
+%     else if (!C66 && this.targets[i].cgTools == 'C66') {
+%         C66 = true;
+%     }
+%     else if (!C67P && this.targets[i].cgTools == 'C67P') {
+%         C67P = true;
+%     }
+%     else if (!v5T && this.targets[i].cgTools == 'v5T') {
+%         v5T = true;
+%     }
+%     else if (!v6 && this.targets[i].cgTools == 'v6') {
+%         v6 = true;
+%     }
+%     else if (!v7A && this.targets[i].cgTools == 'v7A') {
+%         v7A = true;
+%     }
+%     else if (!M3 && this.targets[i].cgTools == 'M3') {
+%         M3 = true;
+%     }
+% }
+% if (C64P) {
+var C64P_rootdir;
+% }
+% if (C674) {
+var C674_rootdir;
+% }
+% if (C66) {
+var C66_rootdir;
+% }
+% if (C67P) {
+var C67P_rootdir;
+% }
+% if (v5T) {
+var V5T_rootdir;
+var CC_V5T;
+% }
+% if (v6) {
+var V6_rootdir;
+var CC_V6;
+% }
+% if (v7A) {
+var V7A_rootdir;
+var CC_V7A;
+% }
+% if (M3) {
+var M3_rootdir;
+% }
+
+/* initialize local vars with those set in rules.mak (via XDCARGS) */
+for (x = 0; x < arguments.length; x++) {
+% if (C64P) {
+    if (arguments[x].match(/^CGTOOLS_C64P=/)) {
+        C64P_rootdir = arguments[x].split("=")[1];
+    }
+% }
+% if (C674) {
+    if (arguments[x].match(/^CGTOOLS_C674=/)) {
+        C674_rootdir = arguments[x].split("=")[1];
+    }
+% }
+% if (C66) {
+    if (arguments[x].match(/^CGTOOLS_C66=/)) {
+        C66_rootdir = arguments[x].split("=")[1];
+    }
+% }
+% if (C67P) {
+    if (arguments[x].match(/^CGTOOLS_C67P=/)) {
+        C67P_rootdir = arguments[x].split("=")[1];
+    }
+% }
+% if (v5T) {
+    if (arguments[x].match(/^CGTOOLS_V5T=/)) {
+        V5T_rootdir = arguments[x].split("=")[1];
+    }
+    else if (arguments[x].match(/^CC_V5T=/)) {
+        CC_V5T = arguments[x].split("=")[1];
+    }
+% }
+% if (v6) {
+    if (arguments[x].match(/^CGTOOLS_V6=/)) {
+        V6_rootdir = arguments[x].split("=")[1];
+    }
+    else if (arguments[x].match(/^CC_V6=/)) {
+        CC_V6 = arguments[x].split("=")[1];
+    }
+% }
+% if (v7A) {
+    if (arguments[x].match(/^CGTOOLS_V7A=/)) {
+        V7A_rootdir = arguments[x].split("=")[1];
+    }
+    else if (arguments[x].match(/^CC_V7A=/)) {
+        CC_V7A = arguments[x].split("=")[1];
+    }
+% }
+% if (M3) {
+    if (arguments[x].match(/^CGTOOLS_M3ELF=/)) {
+        M3_rootdir = arguments[x].split("=")[1];
+    }
+% }
+}
+
+/* should test here that cgRootDir is set! */
+% for (var i = 0; i < this.targets.length; i++) {
+var targ = xdc.useModule("`this.targets[i].target`");
+% if (this.targets[i].cgTools == 'C64P') {
+targ.rootDir = C64P_rootdir;
+% }
+% else if (this.targets[i].cgTools == 'C674') {
+targ.rootDir = C674_rootdir;
+% }
+% else if (this.targets[i].cgTools == 'C66') {
+targ.rootDir = C66_rootdir;
+% }
+% else if (this.targets[i].cgTools == 'C67P') {
+targ.rootDir = C67P_rootdir;
+% }
+% else if (this.targets[i].cgTools == 'v5T') {
+targ.rootDir = V5T_rootdir;
+targ.LONGNAME = CC_V5T;
+% }
+% else if (this.targets[i].cgTools == 'v6') {
+targ.rootDir = V6_rootdir;
+targ.LONGNAME = CC_V6;
+% }
+% else if (this.targets[i].cgTools == 'v7A') {
+targ.rootDir = V7A_rootdir;
+targ.LONGNAME = CC_V7A;
+% }
+% else if (this.targets[i].cgTools == 'M3') {
+targ.rootDir = M3_rootdir;
+% }
+% if (this.targets[i].ccOpts.length) {
+targ.ccOpts.suffix = "`this.targets[i].ccOpts` ";
+% }
+Build.targets.$add(targ);
+
+/* We remove a few profiles, just to cut down on build time */
+delete targ.profiles["coverage"];
+delete targ.profiles["profile"];
+delete targ.profiles["whole_program"];
+delete targ.profiles["whole_program_debug"];
+
+% }
+
+/* Create a .zip file for redistribution.  Remove this line if you prefer .tar */
+Pkg.attrs.archiver = 'zip';

@@ -1,0 +1,207 @@
+<html>
+<head>
+<title>module ti.sdo.fc.rman.RMAN</title>
+<meta name="description" content="Resource Manager for shared C64x+ resources">
+<link rel="stylesheet" type="text/css" href="../../../../xdoc.css" />
+</head>
+<body><div id="xdocWrapper"><div id="xdocContent">
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">module</span> <span class="xdoc-id">ti.sdo.fc.rman.</span><span class="xdoc-id">RMAN</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/rman/package.html" title="package ti.sdo.fc.rman"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/rman/RMAN.html">index URL</a></div>
+<p class="xdocHdrSummary">Resource Manager for shared C64x+ resources</p>
+<ul class="xdocToc">
+<li class="xdocToc"><a class="xdocToc" href="#meta-synop">Configuration settings</a></li>
+<li class="xdocToc2"><a class="xdocToc" href="#xdocMetaElems">Individual elements</a></li>
+</ul>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/fc/rman/RMAN-src.html"><span class="xdocLabelFile">ti/sdo/fc/rman/RMAN.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynM">
+<div class="xdocSynCode">
+<tt></tt><span class="xdoc-kw1">var</span> RMAN = <span class="xdoc-kw3">xdc.useModule</span>(<span class="xdoc-id">'ti.sdo.fc.rman.RMAN'</span>);
+</div>
+<div class='xdocSynHdr'>module-wide config parameters</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#max.Algs">RMAN.<span class="xdoc-id">maxAlgs</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Maximum number of algorithm instances that will be using the RMAN
+ module</span></span></a> = <i><span class="xdoc-kw2">UInt</span></i> 32;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#persistent.Alloc.Fxn">RMAN.<span class="xdoc-id">persistentAllocFxn</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Function for allocating persistent memory for RMAN's and other IRESMAN
+  implementation's internal objects</span></span></a> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#persistent.Free.Fxn">RMAN.<span class="xdoc-id">persistentFreeFxn</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Function for freeing persistent memory used by RMAN and other IRESMAN
+  implementation's internal objects</span></span></a> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#table.Size">RMAN.<span class="xdoc-id">tableSize</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Total number of individual resource manager (IRESMAN implementation)
+ entries that will be registered with RMAN (including both static and
+ dynamic)</span></span></a> = <i><span class="xdoc-kw2">UInt</span></i> 10;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#use.D.S.K.T2">RMAN.<span class="xdoc-id">useDSKT2</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Flag indicating if DSKT2 should be used for memory allocation and
+  for supporting algorithm yields</span></span></a> = <i><span class="xdoc-kw2">Bool</span></i> <span class="xdoc-kw2">true</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#yield.Same.Priority">RMAN.<span class="xdoc-id">yieldSamePriority</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Flag indicating if yields to same priority should happen or not</span></span></a> = <i><span class="xdoc-kw2">Bool</span></i> <span class="xdoc-kw2">false</span>;
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+</div>
+<div id="xdocSep">
+</div>
+<div id="xdocMetaElems">
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="max.Algs"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">RMAN.</span><span class="xdoc-id">maxAlgs</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/rman/RMAN.html" title="module RMAN"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/rman/RMAN.html#max.Algs">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Maximum number of algorithm instances that will be using the RMAN
+ module</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>RMAN.<span class="xdoc-id">maxAlgs</span> = <i><span class="xdoc-kw2">UInt</span></i> 32;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="persistent.Alloc.Fxn"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">RMAN.</span><span class="xdoc-id">persistentAllocFxn</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/rman/RMAN.html" title="module RMAN"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/rman/RMAN.html#persistent.Alloc.Fxn">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Function for allocating persistent memory for RMAN's and other IRESMAN
+  implementation's internal objects</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>RMAN.<span class="xdoc-id">persistentAllocFxn</span> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">The signature of the persistent alloc function is:
+      extern Bool persistentAllocFxn(IALG_MemRec * memTab, Int numRecs);</div>
+<div class="xdocText">This is required to be supplied ONLY if <a class="xdoc-link" href="RMAN.html#use.D.S.K.T2" title="useDSKT2">useDSKT2</a> is set to
+  <tt>false</tt>.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="persistent.Free.Fxn"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">RMAN.</span><span class="xdoc-id">persistentFreeFxn</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/rman/RMAN.html" title="module RMAN"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/rman/RMAN.html#persistent.Free.Fxn">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Function for freeing persistent memory used by RMAN and other IRESMAN
+  implementation's internal objects</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>RMAN.<span class="xdoc-id">persistentFreeFxn</span> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">The signature of hte persistentFreeFxn is:</div>
+<div class="xdocText">extern Void persistentFreeFxn(IALG_MemRec *memTab, Int numRecs);</div>
+<div class="xdocText">This is required to be supplied ONLY if <a class="xdoc-link" href="RMAN.html#use.D.S.K.T2" title="useDSKT2">useDSKT2</a> is set to
+  <tt>false</tt>.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="table.Size"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">RMAN.</span><span class="xdoc-id">tableSize</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/rman/RMAN.html" title="module RMAN"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/rman/RMAN.html#table.Size">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Total number of individual resource manager (IRESMAN implementation)
+ entries that will be registered with RMAN (including both static and
+ dynamic)</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>RMAN.<span class="xdoc-id">tableSize</span> = <i><span class="xdoc-kw2">UInt</span></i> 10;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="use.D.S.K.T2"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">RMAN.</span><span class="xdoc-id">useDSKT2</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/rman/RMAN.html" title="module RMAN"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/rman/RMAN.html#use.D.S.K.T2">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Flag indicating if DSKT2 should be used for memory allocation and
+  for supporting algorithm yields</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>RMAN.<span class="xdoc-id">useDSKT2</span> = <i><span class="xdoc-kw2">Bool</span></i> <span class="xdoc-kw2">true</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">Setting this flag to <tt>false</tt> will disable cooperative preemption support
+  for algorithms in RMAN.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="yield.Same.Priority"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">RMAN.</span><span class="xdoc-id">yieldSamePriority</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/rman/RMAN.html" title="module RMAN"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/rman/RMAN.html#yield.Same.Priority">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Flag indicating if yields to same priority should happen or not</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>RMAN.<span class="xdoc-id">yieldSamePriority</span> = <i><span class="xdoc-kw2">Bool</span></i> <span class="xdoc-kw2">false</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">This is required only if <a class="xdoc-link" href="RMAN.html#use.D.S.K.T2" title="useDSKT2">useDSKT2</a> is set to <tt>true</tt>.</div>
+</div>
+<div id="xdocDate">generated on Tue, 28 Jun 2016 21:14:31 GMT</div>
+</div></div></body>
+</html>

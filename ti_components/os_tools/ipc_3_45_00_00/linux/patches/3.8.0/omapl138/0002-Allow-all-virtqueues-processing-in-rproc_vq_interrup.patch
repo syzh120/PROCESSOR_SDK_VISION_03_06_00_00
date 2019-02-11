@@ -1,0 +1,77 @@
+From 39236bb3d4b19af05ee6cd7a60bdc8cf833e039f Mon Sep 17 00:00:00 2001
+From: Robert Tivy <rtivy@ti.com>
+Date: Fri, 8 Mar 2013 10:22:15 -0800
+Subject: [PATCH v8 2/7] Allow "all virtqueues" processing in
+ rproc_vq_interrupt()
+
+Add support to rproc_vq_interrupt() for a notifyid of -1 which will cause
+all valid virtqueues to be processed.
+
+Signed-off-by: Robert Tivy <rtivy@ti.com>
+---
+ drivers/remoteproc/remoteproc_virtio.c |   34 ++++++++++++++++++++++++++++----
+ 1 file changed, 30 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/remoteproc/remoteproc_virtio.c b/drivers/remoteproc/remoteproc_virtio.c
+index 9e198e5..07fa6cb 100644
+--- a/drivers/remoteproc/remoteproc_virtio.c
++++ b/drivers/remoteproc/remoteproc_virtio.c
+@@ -41,6 +41,21 @@ static void rproc_virtio_notify(struct virtqueue *vq)
+ 	rproc->ops->kick(rproc, notifyid);
+ }
+ 
++/* processing function when iterating all virtqueues */
++static int rproc_vring_interrupt(int id, void *p, void *data)
++{
++	struct rproc_vring *rvring = (struct rproc_vring *)p;
++	irqreturn_t *retp = (irqreturn_t *)data;
++
++	if (!rvring->vq)
++		return 0;
++
++	if (vring_interrupt(0, rvring->vq) == IRQ_HANDLED)
++		*retp = IRQ_HANDLED;
++
++	return 0;
++}
++
+ /**
+  * rproc_vq_interrupt() - tell remoteproc that a virtqueue is interrupted
+  * @rproc: handle to the remote processor
+@@ -52,18 +67,29 @@ static void rproc_virtio_notify(struct virtqueue *vq)
+  *
+  * Returns IRQ_NONE if no message was found in the @notifyid virtqueue,
+  * and otherwise returns IRQ_HANDLED.
++ *
++ * A @notifyid value of -1 can be passed in order to signal all available
++ * virtqueues for this @rproc.  In this case this function returns IRQ_HANDLED
++ * if any virtqueue contained a message, and IRQ_NONE if none of them did.
+  */
+ irqreturn_t rproc_vq_interrupt(struct rproc *rproc, int notifyid)
+ {
+ 	struct rproc_vring *rvring;
++	irqreturn_t ret = IRQ_NONE;
+ 
+ 	dev_dbg(&rproc->dev, "vq index %d is interrupted\n", notifyid);
+ 
+-	rvring = idr_find(&rproc->notifyids, notifyid);
+-	if (!rvring || !rvring->vq)
+-		return IRQ_NONE;
++	if (notifyid >= 0) {
++		rvring = idr_find(&rproc->notifyids, notifyid);
++		if (!rvring || !rvring->vq)
++			return IRQ_NONE;
+ 
+-	return vring_interrupt(0, rvring->vq);
++		return vring_interrupt(0, rvring->vq);
++	} else {
++		idr_for_each(&rproc->notifyids, rproc_vring_interrupt, &ret);
++	}
++
++	return ret;
+ }
+ EXPORT_SYMBOL(rproc_vq_interrupt);
+ 
+-- 
+1.7.9.4
+

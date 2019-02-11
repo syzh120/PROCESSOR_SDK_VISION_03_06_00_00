@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  This file conforms to the DTD xdc/bld/build.dtd -->
+<package name="ti.ndk.benchmarks.TMDXDOCKH52C1.noncopytcp.testee" version="" producerId="undefined">
+    <units>
+    </units>
+    <sources>
+        <srcFile name="package/cfg/release/testee_pem3.c"/>
+        <srcFile name="main.c"/>
+        <srcFile name="ndkStats.c"/>
+        <srcFile name="nonCopyTCPTestee.c"/>
+        <srcFile name="TMDXDOCKH52C1.c"/>
+    </sources>
+    <configscripts>
+        <srcFile name="nonCopyTCPTestee.cfg"/>
+    </configscripts>
+    <makefiles>
+        <srcFile name="package.mak" src="package.bld"/>
+        <srcFile name="package/package.xdc.dep" src="package.xdc"/>
+        <srcFile name="package/cfg/release/testee_pem3.mak" src="package.bld"/>
+        <srcFile name="package/cfg/release/testee_pem3.oem3.dep" src="package/cfg/release/testee_pem3.c"/>
+        <srcFile name="package/cfg/release/testee_pem3.dep" src="package/cfg/release/testee_pem3.cfg"/>
+        <srcFile name="package/cfg/release/testee.xem3.mak" src="package.bld"/>
+        <srcFile name="package/cfg/release/testee/main.oem3.dep" src="main.c"/>
+        <srcFile name="package/cfg/release/testee/ndkStats.oem3.dep" src="ndkStats.c"/>
+        <srcFile name="package/cfg/release/testee/nonCopyTCPTestee.oem3.dep" src="nonCopyTCPTestee.c"/>
+        <srcFile name="package/cfg/release/testee/TMDXDOCKH52C1.oem3.dep" src="TMDXDOCKH52C1.c"/>
+        <srcFile name="package/rel/ti_ndk_benchmarks_TMDXDOCKH52C1_noncopytcp_testee.tar.dep" src="package/rel/ti_ndk_benchmarks_TMDXDOCKH52C1_noncopytcp_testee.xdc.inc"/>
+    </makefiles>
+    <targets>
+        <target name="ti.targets.arm.elf.M3"
+            version="ti.targets.arm.elf.M3{1,0,5.2,2"
+            rawVersion="5.2.2"
+            platform="ti.platforms.concertoM3:F28M35H52C1"
+            isa="v7M"
+            suffix="em3"
+            rootDir="/db/vendors/ti/arm/5.2.2/Linux"
+            os="undefined"
+            rts="ti.targets.arm.rtsarm">
+            <model endian="little"
+                codeModel="thumb2"
+                dataModel="undefined"/>
+        </target>
+    </targets>
+    <libraries>
+    </libraries>
+    <configurations>
+    <configuration name="release/testee"
+        pname="release/testee.pem3"
+        target="ti.targets.arm.elf.M3"
+        platform="ti.platforms.concertoM3:F28M35H52C1"
+        profile="release"
+        isPartial="false"
+        xCfgScript="package/cfg/release/testee_pem3.cfg"
+        xCfgPrefix="package/cfg/release/testee_pem3"
+        cfgScript="nonCopyTCPTestee.cfg"
+        />
+    </configurations>
+    <executables>
+    <executable name="release/testee"
+        pname="release/testee.xem3"
+        target="ti.targets.arm.elf.M3"
+        platform="ti.platforms.concertoM3:F28M35H52C1"
+        profile="release"
+        xCfgScript="package/cfg/release/testee_pem3.cfg"
+        xCfgPrefix="package/cfg/release/testee_pem3"
+        cfgScript="nonCopyTCPTestee.cfg"
+        />
+    </executables>
+    <tests>
+    <test exeName="release/testee.xem3"
+        args=""
+        groupName="regress"
+        refOutput="golden/testee.k"
+        refExitCode="0"
+        execArgs="-t%2060"
+        />
+    <test exeName="release/testee.xem3"
+        args=""
+        groupName="release/testee.xem3"
+        refOutput="undefined"
+        refExitCode="0"
+        execArgs="-t%2060"
+        />
+    </tests>
+    <releases relDir="package/rel/">
+    <release name="ti_ndk_benchmarks_TMDXDOCKH52C1_noncopytcp_testee"
+        pname="../../../../../../../exports/ti_ndk_benchmarks_TMDXDOCKH52C1_noncopytcp_testee.tar"
+        label="default"
+        relScript="/db/toolsrc/library/toolsE57/packages/tisb/release/filters/copyright.rel">
+        <file name="package/package.bld.xml"/>
+        <file name="package/build.cfg"/>
+        <file name="package/package.xdc.inc"/>
+        <file name="results/2.24_M3_TMDXDOCKH52C1_NIMU_Benchmark.xls"/>
+        <file name="results/2.24_M3_TMDXDOCKH52C1_NIMU_Benchmark_IPv6_enabled.xls"/>
+    </release>
+    </releases>
+    <repositories>
+    </repositories>
+</package>

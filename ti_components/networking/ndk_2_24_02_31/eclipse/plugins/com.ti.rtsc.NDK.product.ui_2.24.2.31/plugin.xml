@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin
+    name="NDK IDE Support"
+    id="com.ti.rtsc.NDK.product.ui"
+    version="2.24.2.31"
+    provider-name="Texas Instruments">
+
+    <extension point="org.eclipse.help.toc">
+        <toc file="toc_top.xml" primary="true"/>
+        <toc file="ndk_eclipse_cdoc_toc.xml"/>                  
+    </extension>
+
+
+    <extension point="org.eclipse.help.contentProducer">
+        <contentProducer>
+            <producer class="org.eclipse.rtsc.xdctools.ui.help.HelpContentProducer"/>
+        </contentProducer>
+    </extension>
+
+    <extension
+         point="org.eclipse.core.variables.dynamicVariables">
+     <variable 
+        name="NDK_INSTALL_DIR"
+        resolver="org.eclipse.rtsc.xdctools.ui.macros.MacroResolver"
+        description="NDK installation directory">
+     </variable>
+   </extension>
+   
+
+
+</plugin>

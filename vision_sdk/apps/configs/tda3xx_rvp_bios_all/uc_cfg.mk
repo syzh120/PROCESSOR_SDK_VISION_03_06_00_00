@@ -1,0 +1,22 @@
+UC_iss_capture_isp_simcop_display=yes
+UC_iss_mult_capture_isp_2d_3d_sv_tda3x=yes
+UC_iss_mult_capture_isp_dewarp_3dsv_tda3xx=yes
+UC_iss_mult_capture_isp_dewarp_3dsv_rearview_tda3xx=yes
+UC_iss_mult_capture_isp_dewarp_stereo_tda3xx=yes
+UC_iss_mult_capture_isp_dewarp_stereoplus_tda3xx=yes
+UC_iss_mult_capture_isp_simcop_stereo_tda3xx=yes
+UC_iss_mult_capture_isp_stereo_autocalib_tda3xx=yes
+UC_iss_mult_capture_isp_simcop_sv_tda3xx=yes
+UC_srv_calibration=yes
+UC_saveDisFrame=yes
+UC_rear_view_panorama_tda3xx=no
+UC_vip_single_cam_view=yes
+
+#SRV to work, Disabling NW UC from default config
+UC_network_rx_tx=no
+UC_tfdtprx_display=no
+
+# TI Deep Learning Use Case
+UC_tidl=yes
+
+UC_radar_objectdetect_display=yes

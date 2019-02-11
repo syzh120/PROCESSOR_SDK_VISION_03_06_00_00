@@ -1,0 +1,2133 @@
+******************************************************************************
+                   ARP32 Linker PC v1.0.7                      
+******************************************************************************
+>> Linked Mon Jun 25 22:16:04 2018
+
+OUTPUT FILE NAME:   <.\elf_out\test_eveFFT.eve.out>
+ENTRY POINT SYMBOL: "_reset_handler"  address: 80000100
+
+
+MEMORY CONFIGURATION
+
+         name            origin    length      used     unused   attr    fill
+----------------------  --------  ---------  --------  --------  ----  --------
+PAGE 0:
+  VECMEM                80000000   00000100  00000028  000000d8  RWIX
+  CMDMEM                80000100   00001000  00000028  00000fd8  RWIX
+  EXTMEM                80001100   00050000  0002e794  0002186c  RWIX
+
+PAGE 1:
+  DATMEM                40020000   00008000  00006b5c  000014a4  RWIX
+  WMEM                  40040000   00007fe0  00007000  00000fe0  RWIX
+  IMEMLA                40050000   00004000  00004000  00000000  RWIX
+  IMEMHA                40054000   00004000  00004000  00000000  RWIX
+  IMEMLB                40070000   00004000  00004000  00000000  RWIX
+  IMEMHB                40074000   00004000  00004000  00000000  RWIX
+  L3MEM                 40300000   00100000  00000000  00100000  RWIX
+  GEM0_L2_MEM           40800000   00008000  00000000  00008000  RWIX
+  EXTDMEM               80051100   07900000  078048cb  000fb735  RWIX
+
+
+SECTION ALLOCATION MAP
+
+ output                                  attributes/
+section   page    origin      length       input sections
+--------  ----  ----------  ----------   ----------------
+.cinit     1    40020000    00000000     UNINITIALIZED
+
+.init_array 
+*          1    40020000    00000000     UNINITIALIZED
+
+.intvecs   0    80000000    00000028     
+                  80000000    00000028     boot_arp32.obj (.intvecs)
+
+.inthandler 
+*          0    80000100    00000028     
+                  80000100    00000028     boot_arp32.obj (.inthandler)
+
+.algo_text 
+*          0    80001100    00018b30     
+                  80001100    00001250     libevekernels.eve.lib : vcop_fft_npt_16ix16o_gen_twiddleFactor.obj (.text:generateTwiddleFactor_1024)
+                  80002350    00000bbc                           : vcop_fft_npt_16ix16o_gen_twiddleFactor.obj (.text:generateTwiddleFactor_128)
+                  80002f0c    000009bc                           : vcop_fft_npt_16ix16o_gen_twiddleFactor.obj (.text:generateTwiddleFactor_512)
+                  800038c8    000008c0                           : bam_fft_npt_16ix16o_exec_funcs.obj (.text:Bam_Fftnpt16ix16o_initFrame)
+                  80004188    000007c8                           : vcop_fft_npt_16ix16o_gen_twiddleFactor.obj (.text:generateTwiddleFactor_256)
+                  80004950    00000648                           : bam_dcoffset_windowing_exec_funcs.obj (.text:Bam_DcoffsetWindowing_initFrame)
+                  80004f98    0000063c                           : bam_fft_npt_16ix32o_exec_funcs.obj (.text:Bam_Fftnpt16ix32o_initFrame)
+                  800055d4    00000530                           : vcop_fft_npt_16ix16o_gen_twiddleFactor.obj (.text:generateTwiddleFactor_64)
+                  80005b04    000004c4                           : vcop_fft_1024_16ix16o_kernel_overflow.obj (.text:vcop_fft_1024_16ix16o_stage_3_overflow_init)
+                  80005fc8    00000400                           : vcop_fft_64_16ix16o_kernel_overflow.obj (.text:vcop_fft_64_16ix16o_stage_1_overflow_init)
+                  800063c8    000003e0                           : vcop_fft_256_16ix16o_kernel_overflow.obj (.text:vcop_fft_256_16ix16o_stage_2_overflow_init)
+                  800067a8    000003b8                           : vcop_fft_512_16ix16o_kernel_overflow.obj (.text:vcop_fft_512_16ix16o_stage_3_overflow_init)
+                  80006b60    000003b0                           : vcop_fft_128_16ix16o_kernel_overflow.obj (.text:vcop_fft_128_16ix16o_stage_2_overflow_init)
+                  80006f10    000003a4                           : vcop_fft_64_16ix16o_kernel_overflow.obj (.text:vcop_fft_64_16ix16o_stage_2_overflow_init)
+                  800072b4    00000390                           : vcop_fft_256_16ix16o_32inter_kernel.obj (.text:vcop_fft_256_32inter_stage_2_init)
+                  80007644    00000370                           : vcop_fft_512_16ix16o_32inter_kernel.obj (.text:vcop_fft_512_32inter_stage_3_init)
+                  800079b4    0000036c                           : vcop_fft_128_16ix16o_kernel_overflow.obj (.text:vcop_fft_128_16ix16o_stage_1_overflow_init)
+                  80007d20    0000036c                           : vcop_fft_128_16ix16o_32inter_kernel.obj (.text:vcop_fft_128_32inter_stage_3_init)
+                  8000808c    0000036c                           : vcop_fft_256_16ix16o_kernel_overflow.obj (.text:vcop_fft_256_16ix16o_stage_1_overflow_init)
+                  800083f8    0000036c                           : vcop_fft_256_16ix16o_32inter_kernel.obj (.text:vcop_fft_256_32inter_stage_3_init)
+                  80008764    0000036c                           : vcop_fft_512_16ix16o_kernel_overflow.obj (.text:vcop_fft_512_16ix16o_stage_1_overflow_init)
+                  80008ad0    0000036c                           : vcop_fft_512_16ix16o_32inter_kernel.obj (.text:vcop_fft_512_32inter_stage_4_init)
+                  80008e3c    00000368                           : vcop_fft_128_16ix16o_32inter_kernel.obj (.text:vcop_fft_128_32inter_stage_2_init)
+                  800091a4    00000368                           : vcop_fft_512_16ix16o_kernel_overflow.obj (.text:vcop_fft_512_16ix16o_stage_4_overflow_init)
+                  8000950c    00000360                           : vcop_fft_512_16ix16o_32inter_kernel.obj (.text:vcop_fft_512_32inter_stage_2_init)
+                  8000986c    00000360                           : vcop_fft_64_16ix16o_32inter_kernel.obj (.text:vcop_fft_64_32inter_stage_1_init)
+                  80009bcc    00000360                           : vcop_fft_64_16ix16o_32inter_kernel.obj (.text:vcop_fft_64_32inter_stage_2_init)
+                  80009f2c    0000035c                           : vcop_fft_256_16ix16o_kernel_overflow.obj (.text:vcop_fft_256_16ix16o_stage_3_overflow_init)
+                  8000a288    00000358                           : vcop_fft_128_16ix16o_kernel_overflow.obj (.text:vcop_fft_128_16ix16o_stage_3_overflow_init)
+                  8000a5e0    00000350                           : vcop_fft_1024_16ix16o_kernel_overflow.obj (.text:vcop_fft_1024_16ix16o_stage_4_overflow_init)
+                  8000a930    00000350                           : vcop_fft_512_16ix16o_kernel_overflow.obj (.text:vcop_fft_512_16ix16o_stage_2_overflow_init)
+                  8000ac80    0000033c                           : vcop_fft_1024_16ix16o_kernel_overflow.obj (.text:vcop_fft_1024_16ix16o_stage_1_overflow_init)
+                  8000afbc    00000334                           : vcop_fft_1024_16ix16o_kernel_overflow.obj (.text:vcop_fft_1024_16ix16o_stage_2_overflow_init)
+                  8000b2f0    00000314                           : vcop_fft_npt_16ix16o_wrapper.obj (.text:vcop_fft_1024_16i_16o_init)
+                  8000b604    00000314                           : vcop_fft_256_16ix32o_kernel.obj (.text:vcop_fft_256_16ix32o_stage_4_overflow_init)
+                  8000b918    00000310                           : vcop_fft_64_16ix32o_kernel.obj (.text:vcop_fft_64_16ix32o_stage_3_overflow_init)
+                  8000bc28    00000300                           : vcop_fft_npt_16ix16o_wrapper.obj (.text:vcop_fft_512_16i_16o_init)
+                  8000bf28    000002fc                           : vcop_fft_256_16ix16o_32inter_kernel.obj (.text:vcop_fft_256_16ix16o_32inter_stage_4_overflow_init)
+                  8000c224    000002f0                           : vcop_fft_64_16ix16o_32inter_kernel.obj (.text:vcop_fft_64_16ix16o_32inter_stage_3_overflow_init)
+                  8000c514    00000294                           : vcop_fft_256_16ix16o_32inter_kernel.obj (.text:vcop_fft_256_16ix16o_32inter_stage_4_init)
+                  8000c7a8    00000294                           : vcop_fft_256_16ix16o_kernel_overflow.obj (.text:vcop_fft_256_16ix16o_stage_4_overflow_init)
+                  8000ca3c    00000290                           : vcop_fft_64_16ix16o_kernel_overflow.obj (.text:vcop_fft_64_16ix16o_stage_3_overflow_init)
+                  8000cccc    0000028c                           : vcop_fft_128_16ix16o_32inter_kernel.obj (.text:vcop_fft_128_32inter_stage_1_init)
+                  8000cf58    0000028c                           : vcop_fft_256_16ix16o_32inter_kernel.obj (.text:vcop_fft_256_32inter_stage_1_init)
+                  8000d1e4    0000028c                           : vcop_fft_512_16ix16o_32inter_kernel.obj (.text:vcop_fft_512_32inter_stage_1_init)
+                  8000d470    00000288                           : vcop_fft_1024_16ix16o_kernel_overflow.obj (.text:vcop_fft_1024_16ix16o_stage_5_overflow_init)
+                  8000d6f8    00000268                           : vcop_fft_npt_16ix16o_wrapper.obj (.text:vcop_fft_128_16i_16o_init)
+                  8000d960    00000268                           : vcop_fft_npt_16ix16o_wrapper.obj (.text:vcop_fft_256_16i_16o_init)
+                  8000dbc8    00000264                           : vcop_fft_256_16ix32o_kernel.obj (.text:vcop_fft_256_16ix32o_stage_4_init)
+                  8000de2c    00000260                           : vcop_fft_64_16ix16o_kernel.obj (.text:vcop_fft_64_16ix16o_stage_1_init)
+                  8000e08c    00000244                           : vcop_fft_64_16ix16o_32inter_kernel.obj (.text:vcop_fft_64_16ix16o_32inter_stage_3_init)
+                  8000e2d0    00000234                           : vcop_fft_64_16ix16o_kernel.obj (.text:vcop_fft_64_16ix16o_stage_2_init)
+                  8000e504    00000230                           : vcop_fft_512_16ix32o_kernel.obj (.text:vcop_fft_512_16ix32o_radix2_stage_5_overflow_init)
+                  8000e734    0000022c                           : vcop_fft_npt_16ix16o_wrapper.obj (.text:vcop_fft_64_16i_16o_init)
+                  8000e960    00000224                           : vcop_fft_128_16ix32o_kernel.obj (.text:vcop_fft_128_16ix32o_radix2_stage_4_overflow_init)
+                  8000eb84    0000021c                           : vcop_fft_64_16ix32o_kernel.obj (.text:vcop_fft_64_16ix32o_stage_3_init)
+                  8000eda0    00000218                           : vcop_fft_npt_16ix16o_32inter_wrapper.obj (.text:vcop_fft_512_16i_16o_32inter_init)
+                  8000efb8    00000210                           : vcop_fft_1024_16ix16o_kernel.obj (.text:vcop_fft_1024_16ix16o_stage_3_init)
+                  8000f1c8    00000210                           : vcop_fft_512_16ix16o_32inter_kernel.obj (.text:vcop_fft_512_16ix16o_32inter_radix2_stage_5_overflow_init)
+                  8000f3d8    0000020c                           : vcop_fft_1024_16ix16o_kernel_overflow.obj (.text:vcop_fft_1024_16ix16o_stage_3_overflow_vloops)
+                  8000f5e4    0000020c                           : vcop_fft_256_16ix16o_kernel.obj (.text:vcop_fft_256_16ix16o_stage_2_init)
+                  8000f7f0    00000208                           : vcop_fft_512_16ix16o_kernel.obj (.text:vcop_fft_512_16ix16o_stage_3_init)
+                  8000f9f8    00000204                           : vcop_fft_128_16ix16o_32inter_kernel.obj (.text:vcop_fft_128_16ix16o_32inter_radix2_stage_4_overflow_init)
+                  8000fbfc    00000204                           : vcop_fft_128_16ix16o_kernel.obj (.text:vcop_fft_128_16ix16o_stage_2_init)
+                  8000fe00    000001fc                           : vcop_fft_npt_16ix32o_wrapper.obj (.text:vcop_fft_512_16i_32o_init)
+                  8000fffc    000001e4                           : vcop_fft_npt_16ix16o_32inter_wrapper.obj (.text:vcop_fft_64_16i_16o_32inter_init)
+                  800101e0    000001dc                           : vcop_fft_512_16ix16o_kernel_overflow.obj (.text:vcop_fft_512_16ix16o_radix2_stage_5_overflow_init)
+                  800103bc    000001d4                           : bam_fft_npt_16ix16o_helper_funcs.obj (.text:BAM_Fftnpt16ix16o_getMemRecFunc)
+                  80010590    000001d0                           : vcop_fft_npt_16ix32o_wrapper.obj (.text:vcop_fft_64_16i_32o_init)
+                  80010760    000001cc                           : vcop_fft_128_16ix16o_kernel_overflow.obj (.text:vcop_fft_128_16ix16o_radix2_stage_4_overflow_init)
+                  8001092c    000001c8                           : vcop_fft_npt_16ix16o_32inter_wrapper.obj (.text:vcop_fft_128_16i_16o_32inter_init)
+                  80010af4    000001c8                           : vcop_fft_npt_16ix16o_32inter_wrapper.obj (.text:vcop_fft_256_16i_16o_32inter_init)
+                  80010cbc    000001b0                           : vcop_fft_npt_16ix32o_wrapper.obj (.text:vcop_fft_128_16i_32o_init)
+                  80010e6c    000001b0                           : vcop_fft_128_16ix16o_kernel_overflow.obj (.text:vcop_fft_128_16ix16o_stage_2_overflow_vloops)
+                  8001101c    000001b0                           : vcop_fft_npt_16ix32o_wrapper.obj (.text:vcop_fft_256_16i_32o_init)
+                  800111cc    000001b0                           : vcop_fft_256_16ix16o_kernel_overflow.obj (.text:vcop_fft_256_16ix16o_stage_2_overflow_vloops)
+                  8001137c    000001b0                           : vcop_fft_512_16ix16o_kernel_overflow.obj (.text:vcop_fft_512_16ix16o_stage_3_overflow_vloops)
+                  8001152c    000001b0                           : vcop_fft_64_16ix16o_kernel_overflow.obj (.text:vcop_fft_64_16ix16o_stage_1_overflow_vloops)
+                  800116dc    000001b0                           : vcop_fft_64_16ix16o_kernel_overflow.obj (.text:vcop_fft_64_16ix16o_stage_2_overflow_vloops)
+                  8001188c    000001ac                           : vcop_fft_128_16ix16o_kernel_overflow.obj (.text:vcop_fft_128_16ix16o_stage_1_overflow_vloops)
+                  80011a38    000001ac                           : vcop_fft_256_16ix16o_kernel_overflow.obj (.text:vcop_fft_256_16ix16o_stage_1_overflow_vloops)
+                  80011be4    000001ac                           : vcop_fft_512_16ix16o_kernel_overflow.obj (.text:vcop_fft_512_16ix16o_stage_1_overflow_vloops)
+                  80011d90    000001a0                           : vcop_fft_128_16ix16o_kernel_overflow.obj (.text:vcop_fft_128_16ix16o_stage_3_overflow_vloops)
+                  80011f30    000001a0                           : vcop_fft_256_16ix16o_kernel_overflow.obj (.text:vcop_fft_256_16ix16o_stage_3_overflow_vloops)
+                  800120d0    000001a0                           : vcop_fft_512_16ix16o_kernel_overflow.obj (.text:vcop_fft_512_16ix16o_stage_2_overflow_vloops)
+                  80012270    000001a0                           : vcop_fft_512_16ix16o_kernel_overflow.obj (.text:vcop_fft_512_16ix16o_stage_4_overflow_vloops)
+                  80012410    0000019c                           : vcop_fft_1024_16ix16o_kernel_overflow.obj (.text:vcop_fft_1024_16ix16o_stage_1_overflow_vloops)
+                  800125ac    0000019c                           : vcop_fft_1024_16ix16o_kernel_overflow.obj (.text:vcop_fft_1024_16ix16o_stage_2_overflow_vloops)
+                  80012748    0000019c                           : vcop_fft_1024_16ix16o_kernel_overflow.obj (.text:vcop_fft_1024_16ix16o_stage_4_overflow_vloops)
+                  800128e4    00000190                           : vcop_fft_512_16ix16o_32inter_kernel.obj (.text:vcop_fft_512_16ix16o_32inter_radix2_stage_5_init)
+                  80012a74    00000188                           : vcop_fft_128_16ix16o_32inter_kernel.obj (.text:vcop_fft_128_16ix16o_32inter_radix2_stage_4_init)
+                  80012bfc    00000178                           : vcop_fft_64_16ix32o_kernel.obj (.text:vcop_fft_64_16ix32o_stage_3_overflow_vloops)
+                  80012d74    00000174                           : vcop_fft_256_16ix32o_kernel.obj (.text:vcop_fft_256_16ix32o_stage_4_overflow_vloops)
+                  80012ee8    00000170                           : vcop_fft_64_16ix16o_32inter_kernel.obj (.text:vcop_fft_64_16ix16o_32inter_stage_3_overflow_vloops)
+                  80013058    0000016c                           : vcop_fft_256_16ix16o_32inter_kernel.obj (.text:vcop_fft_256_16ix16o_32inter_stage_4_overflow_vloops)
+                  800131c4    00000168                           : vcop_fft_256_16ix16o_kernel_overflow.obj (.text:vcop_fft_256_16ix16o_stage_4_overflow_vloops)
+                  8001332c    00000168                           : vcop_fft_512_16ix32o_kernel.obj (.text:vcop_fft_512_16ix32o_radix2_stage_5_init)
+                  80013494    00000168                           : vcop_fft_64_16ix16o_kernel_overflow.obj (.text:vcop_fft_64_16ix16o_stage_3_overflow_vloops)
+                  800135fc    00000164                           : vcop_fft_1024_16ix16o_kernel_overflow.obj (.text:vcop_fft_1024_16ix16o_stage_5_overflow_vloops)
+                  80013760    00000160                           : vcop_fft_128_16ix32o_kernel.obj (.text:vcop_fft_128_16ix32o_radix2_stage_4_init)
+                  800138c0    0000015c                           : bam_fft_npt_16ix32o_helper_funcs.obj (.text:BAM_Fftnpt16ix32o_getMemRecFunc)
+                  80013a1c    00000138                           : vcop_fft_1024_16ix16o_kernel.obj (.text:vcop_fft_1024_16ix16o_stage_4_init)
+                  80013b54    00000138                           : vcop_fft_128_16ix16o_kernel.obj (.text:vcop_fft_128_16ix16o_stage_3_init)
+                  80013c8c    00000138                           : vcop_fft_256_16ix16o_kernel.obj (.text:vcop_fft_256_16ix16o_stage_3_init)
+                  80013dc4    00000138                           : vcop_fft_512_16ix16o_kernel.obj (.text:vcop_fft_512_16ix16o_stage_4_init)
+                  80013efc    00000134                           : vcop_fft_1024_16ix16o_kernel.obj (.text:vcop_fft_1024_16ix16o_stage_1_init)
+                  80014030    00000134                           : vcop_fft_1024_16ix16o_kernel.obj (.text:vcop_fft_1024_16ix16o_stage_2_init)
+                  80014164    00000134                           : vcop_fft_128_16ix16o_kernel.obj (.text:vcop_fft_128_16ix16o_stage_1_init)
+                  80014298    00000134                           : vcop_fft_256_16ix16o_kernel.obj (.text:vcop_fft_256_16ix16o_stage_1_init)
+                  800143cc    00000134                           : vcop_fft_512_16ix16o_kernel.obj (.text:vcop_fft_512_16ix16o_stage_1_init)
+                  80014500    00000134                           : vcop_fft_512_16ix16o_kernel.obj (.text:vcop_fft_512_16ix16o_stage_2_init)
+                  80014634    0000011c                           : vcop_fft_128_16ix32o_kernel.obj (.text:vcop_fft_128_16ix32o_radix2_stage_4_overflow_vloops)
+                  80014750    0000011c                           : vcop_fft_512_16ix32o_kernel.obj (.text:vcop_fft_512_16ix32o_radix2_stage_5_overflow_vloops)
+                  8001486c    00000114                           : vcop_dcoffset_windowing_kernel.obj (.text:vcop_dcoffset_kernel_init)
+                  80014980    00000114                           : vcop_fft_128_16ix16o_32inter_kernel.obj (.text:vcop_fft_128_16ix16o_32inter_radix2_stage_4_overflow_vloops)
+                  80014a94    00000114                           : vcop_fft_128_16ix16o_kernel_overflow.obj (.text:vcop_fft_128_16ix16o_radix2_stage_4_overflow_vloops)
+                  80014ba8    00000114                           : vcop_fft_512_16ix16o_32inter_kernel.obj (.text:vcop_fft_512_16ix16o_32inter_radix2_stage_5_overflow_vloops)
+                  80014cbc    00000114                           : vcop_fft_512_16ix16o_kernel_overflow.obj (.text:vcop_fft_512_16ix16o_radix2_stage_5_overflow_vloops)
+                  80014dd0    000000f0                           : vcop_fft_128_16ix16o_32inter_kernel.obj (.text:vcop_fft_128_32inter_stage_2_vloops)
+                  80014ec0    000000f0                           : vcop_fft_256_16ix16o_32inter_kernel.obj (.text:vcop_fft_256_32inter_stage_2_vloops)
+                  80014fb0    000000f0                           : vcop_fft_512_16ix16o_32inter_kernel.obj (.text:vcop_fft_512_32inter_stage_3_vloops)
+                  800150a0    000000f0                           : vcop_fft_64_16ix16o_32inter_kernel.obj (.text:vcop_fft_64_32inter_stage_2_vloops)
+                  80015190    000000ec                           : vcop_fft_1024_16ix16o_kernel.obj (.text:vcop_fft_1024_16ix16o_stage_5_init)
+                  8001527c    000000ec                           : vcop_fft_256_16ix16o_kernel.obj (.text:vcop_fft_256_16ix16o_stage_4_init)
+                  80015368    000000ec                           : vcop_fft_doppler_correction_32ix32o_kernel.obj (.text:vcop_fft_doppler_correction_32ix32o_kernel_init)
+                  80015454    000000e8                           : vcop_fft_128_16ix16o_32inter_kernel.obj (.text:vcop_fft_128_32inter_stage_3_vloops)
+                  8001553c    000000e8                           : vcop_fft_256_16ix16o_32inter_kernel.obj (.text:vcop_fft_256_32inter_stage_3_vloops)
+                  80015624    000000e8                           : vcop_fft_512_16ix16o_32inter_kernel.obj (.text:vcop_fft_512_32inter_stage_2_vloops)
+                  8001570c    000000e8                           : vcop_fft_512_16ix16o_32inter_kernel.obj (.text:vcop_fft_512_32inter_stage_4_vloops)
+                  800157f4    000000e0                           : vcop_fft_64_16ix16o_32inter_kernel.obj (.text:vcop_fft_64_32inter_stage_1_vloops)
+                  800158d4    000000dc                           : vcop_fft_64_16ix16o_kernel.obj (.text:vcop_fft_64_16ix16o_stage_3_init)
+                  800159b0    000000d8                           : vcop_fft_doppler_correction_kernel.obj (.text:vcop_fft_doppler_correction_kernel_init)
+                  80015a88    000000d4                           : vcop_dcoffset_windowing_kernel.obj (.text:vcop_windowing_with_transpose_kernel_init)
+                  80015b5c    000000d0                           : vcop_dcoffset_windowing_kernel.obj (.text:vcop_windowing_kernel_init)
+                  80015c2c    000000c8                           : vcop_fft_128_16ix16o_32inter_kernel.obj (.text:vcop_fft_128_32inter_stage_1_vloops)
+                  80015cf4    000000c8                           : vcop_fft_256_16ix16o_32inter_kernel.obj (.text:vcop_fft_256_32inter_stage_1_vloops)
+                  80015dbc    000000c8                           : vcop_fft_512_16ix16o_32inter_kernel.obj (.text:vcop_fft_512_32inter_stage_1_vloops)
+                  80015e84    000000c0                           : bam_dcoffset_windowing_helper_funcs.obj (.text:BAM_DcoffsetWindowing_getMemRecFunc)
+                  80015f44    000000ac                           : vcop_fft_1024_16ix16o_kernel.obj (.text:vcop_fft_1024_16ix16o_stage_3_vloops)
+                  80015ff0    000000ac                           : vcop_fft_128_16ix16o_kernel.obj (.text:vcop_fft_128_16ix16o_stage_2_vloops)
+                  8001609c    000000ac                           : vcop_fft_256_16ix16o_kernel.obj (.text:vcop_fft_256_16ix16o_stage_2_vloops)
+                  80016148    000000ac                           : vcop_fft_512_16ix16o_kernel.obj (.text:vcop_fft_512_16ix16o_stage_3_vloops)
+                  800161f4    000000ac                           : vcop_fft_64_16ix16o_kernel.obj (.text:vcop_fft_64_16ix16o_stage_1_vloops)
+                  800162a0    000000ac                           : vcop_fft_64_16ix16o_kernel.obj (.text:vcop_fft_64_16ix16o_stage_2_vloops)
+                  8001634c    000000a0                           : vcop_fft_doppler_correction_32ix32o_kernel.obj (.text:vcop_fft_doppler_correction_32ix32o_kernel_vloops)
+                  800163ec    0000009c                           : vcop_fft_256_16ix32o_kernel.obj (.text:vcop_fft_256_16ix32o_stage_4_vloops)
+                  80016488    0000009c                           : vcop_fft_64_16ix32o_kernel.obj (.text:vcop_fft_64_16ix32o_stage_3_vloops)
+                  80016524    00000098                           : vcop_fft_512_16ix16o_kernel.obj (.text:vcop_fft_512_16ix16o_radix2_stage_5_init)
+                  800165bc    00000094                           : vcop_fft_1024_16ix16o_kernel.obj (.text:vcop_fft_1024_16ix16o_stage_1_vloops)
+                  80016650    00000094                           : vcop_fft_1024_16ix16o_kernel.obj (.text:vcop_fft_1024_16ix16o_stage_2_vloops)
+                  800166e4    00000094                           : vcop_fft_1024_16ix16o_kernel.obj (.text:vcop_fft_1024_16ix16o_stage_4_vloops)
+                  80016778    00000094                           : vcop_fft_128_16ix16o_kernel.obj (.text:vcop_fft_128_16ix16o_stage_1_vloops)
+                  8001680c    00000094                           : vcop_fft_128_16ix16o_kernel.obj (.text:vcop_fft_128_16ix16o_stage_3_vloops)
+                  800168a0    00000094                           : vcop_fft_256_16ix16o_32inter_kernel.obj (.text:vcop_fft_256_16ix16o_32inter_stage_4_vloops)
+                  80016934    00000094                           : vcop_fft_256_16ix16o_kernel.obj (.text:vcop_fft_256_16ix16o_stage_1_vloops)
+                  800169c8    00000094                           : vcop_fft_256_16ix16o_kernel.obj (.text:vcop_fft_256_16ix16o_stage_3_vloops)
+                  80016a5c    00000094                           : vcop_fft_512_16ix16o_kernel.obj (.text:vcop_fft_512_16ix16o_stage_1_vloops)
+                  80016af0    00000094                           : vcop_fft_512_16ix16o_kernel.obj (.text:vcop_fft_512_16ix16o_stage_2_vloops)
+                  80016b84    00000094                           : vcop_fft_512_16ix16o_kernel.obj (.text:vcop_fft_512_16ix16o_stage_4_vloops)
+                  80016c18    00000094                           : vcop_fft_64_16ix16o_32inter_kernel.obj (.text:vcop_fft_64_16ix16o_32inter_stage_3_vloops)
+                  80016cac    00000090                           : vcop_fft_doppler_correction_32ix32o_kernel.obj (.text:vcop_fft_transpose_output_32ix32o_kernel_init)
+                  80016d3c    0000008c                           : vcop_fft_128_16ix16o_kernel.obj (.text:vcop_fft_128_16ix16o_radix2_stage_4_init)
+                  80016dc8    0000007c                           : vcop_dcoffset_windowing_kernel.obj (.text:vcop_interference_zero_out_kernel_init)
+                  80016e44    0000007c                           : vcop_dcoffset_windowing_kernel.obj (.text:vcop_sign_extension_kernel_init)
+                  80016ec0    00000074                           : vcop_fft_npt_16ix16o_wrapper.obj (.text:vcop_fft_1024_16i_16o_param_count)
+                  80016f34    00000074                           : vcop_fft_npt_16ix16o_32inter_wrapper.obj (.text:vcop_fft_512_16i_16o_32inter_param_count)
+                  80016fa8    00000074                           : vcop_fft_npt_16ix16o_wrapper.obj (.text:vcop_fft_512_16i_16o_param_count)
+                  8001701c    00000074                           : vcop_fft_npt_16ix32o_wrapper.obj (.text:vcop_fft_512_16i_32o_param_count)
+                  80017090    00000070                           : bam_fft_npt_16ix16o_exec_funcs.obj (.text:Bam_Fftnpt16ix16o_control)
+                  80017100    00000070                           : bam_fft_npt_16ix16o_exec_funcs.obj (.text:Bam_Fftnpt16ix16o_copyDopplerCorrectionCoefficients)
+                  80017170    00000070                           : bam_fft_npt_16ix32o_exec_funcs.obj (.text:Bam_Fftnpt16ix32o_copyDopplerCorrectionCoefficients)
+                  800171e0    00000068                           : bam_fft_npt_16ix32o_exec_funcs.obj (.text:Bam_Fftnpt16ix32o_control)
+                  80017248    00000068                           : vcop_fft_npt_16ix16o_gen_twiddleFactor.obj (.text:d2s)
+                  800172b0    00000064                           : vcop_fft_128_16ix32o_kernel.obj (.text:vcop_fft_128_16ix32o_radix2_stage_4_vloops)
+                  80017314    00000064                           : vcop_fft_512_16ix32o_kernel.obj (.text:vcop_fft_512_16ix32o_radix2_stage_5_vloops)
+                  80017378    00000060                           : vcop_dcoffset_windowing_kernel.obj (.text:vcop_dcoffset_kernel_vloops)
+                  800173d8    00000060                           : vcop_fft_1024_16ix16o_kernel.obj (.text:vcop_fft_1024_16ix16o_stage_5_vloops)
+                  80017438    00000060                           : vcop_fft_256_16ix16o_kernel.obj (.text:vcop_fft_256_16ix16o_stage_4_vloops)
+                  80017498    00000060                           : vcop_fft_64_16ix16o_kernel.obj (.text:vcop_fft_64_16ix16o_stage_3_vloops)
+                  800174f8    0000005c                           : vcop_fft_npt_16ix16o_32inter_wrapper.obj (.text:vcop_fft_128_16i_16o_32inter_param_count)
+                  80017554    0000005c                           : vcop_fft_npt_16ix16o_wrapper.obj (.text:vcop_fft_128_16i_16o_param_count)
+                  800175b0    0000005c                           : vcop_fft_npt_16ix32o_wrapper.obj (.text:vcop_fft_128_16i_32o_param_count)
+                  8001760c    0000005c                           : vcop_fft_128_16ix16o_32inter_kernel.obj (.text:vcop_fft_128_16ix16o_32inter_radix2_stage_4_vloops)
+                  80017668    0000005c                           : vcop_fft_npt_16ix16o_32inter_wrapper.obj (.text:vcop_fft_256_16i_16o_32inter_param_count)
+                  800176c4    0000005c                           : vcop_fft_npt_16ix16o_wrapper.obj (.text:vcop_fft_256_16i_16o_param_count)
+                  80017720    0000005c                           : vcop_fft_npt_16ix32o_wrapper.obj (.text:vcop_fft_256_16i_32o_param_count)
+                  8001777c    0000005c                           : vcop_fft_512_16ix16o_32inter_kernel.obj (.text:vcop_fft_512_16ix16o_32inter_radix2_stage_5_vloops)
+                  800177d8    00000050                           : vcop_fft_doppler_correction_32ix32o_kernel.obj (.text:vcop_fft_doppler_pitch_removal_32ix32o_init)
+                  80017828    00000050                           : vcop_fft_doppler_correction_kernel.obj (.text:vcop_fft_doppler_pitch_removal_init)
+                  80017878    00000048                           : vcop_fft_doppler_correction_32ix32o_kernel.obj (.text:vcop_copy_fft_32ix32o_kernel_init)
+                  800178c0    00000048                           : vcop_fft_utils.obj (.text:vcop_fft_zero_padding_kernel_init)
+                  80017908    00000040                           : vcop_fft_npt_16ix16o_32inter_wrapper.obj (.text:vcop_fft_64_16i_16o_32inter_param_count)
+                  80017948    00000040                           : vcop_fft_npt_16ix16o_wrapper.obj (.text:vcop_fft_64_16i_16o_param_count)
+                  80017988    00000040                           : vcop_fft_npt_16ix32o_wrapper.obj (.text:vcop_fft_64_16i_32o_param_count)
+                  800179c8    00000040                           : vcop_fft_doppler_correction_kernel.obj (.text:vcop_fft_doppler_correction_kernel_vloops)
+                  80017a08    00000040                           : vcop_dcoffset_windowing_kernel.obj (.text:vcop_windowing_kernel_vloops)
+                  80017a48    00000038                           : bam_fft_npt_16ix16o_exec_funcs.obj (.text:Bam_Fftnpt16ix16o_computeFrame)
+                  80017a80    00000038                           : bam_fft_npt_16ix32o_exec_funcs.obj (.text:Bam_Fftnpt16ix32o_computeFrame)
+                  80017ab8    00000038                           : vcop_fft_npt_16ix16o_wrapper.obj (.text:vcop_fft_1024_16i_16o_vloops)
+                  80017af0    00000038                           : vcop_fft_npt_16ix16o_32inter_wrapper.obj (.text:vcop_fft_512_16i_16o_32inter_vloops)
+                  80017b28    00000038                           : vcop_fft_npt_16ix16o_wrapper.obj (.text:vcop_fft_512_16i_16o_vloops)
+                  80017b60    00000038                           : vcop_fft_npt_16ix32o_wrapper.obj (.text:vcop_fft_512_16i_32o_vloops)
+                  80017b98    00000038                           : vcop_dcoffset_windowing_kernel.obj (.text:vcop_windowing_with_transpose_kernel_vloops)
+                  80017bd0    00000030                           : bam_dcoffset_windowing_exec_funcs.obj (.text:Bam_DcoffsetWindowing_computeFrame)
+                  80017c00    00000030                           : vcop_fft_doppler_correction_32ix32o_kernel.obj (.text:vcop_fft_transpose_output_32ix32o_kernel_vloops)
+                  80017c30    0000002c                           : vcop_fft_npt_16ix16o_32inter_wrapper.obj (.text:vcop_fft_128_16i_16o_32inter_vloops)
+                  80017c5c    0000002c                           : vcop_fft_npt_16ix16o_wrapper.obj (.text:vcop_fft_128_16i_16o_vloops)
+                  80017c88    0000002c                           : vcop_fft_npt_16ix32o_wrapper.obj (.text:vcop_fft_128_16i_32o_vloops)
+                  80017cb4    0000002c                           : vcop_fft_128_16ix16o_kernel.obj (.text:vcop_fft_128_16ix16o_radix2_stage_4_vloops)
+                  80017ce0    0000002c                           : vcop_fft_npt_16ix16o_32inter_wrapper.obj (.text:vcop_fft_256_16i_16o_32inter_vloops)
+                  80017d0c    0000002c                           : vcop_fft_npt_16ix16o_wrapper.obj (.text:vcop_fft_256_16i_16o_vloops)
+                  80017d38    0000002c                           : vcop_fft_npt_16ix32o_wrapper.obj (.text:vcop_fft_256_16i_32o_vloops)
+                  80017d64    0000002c                           : vcop_fft_512_16ix16o_kernel.obj (.text:vcop_fft_512_16ix16o_radix2_stage_5_vloops)
+                  80017d90    00000028                           : vcop_dcoffset_windowing_kernel.obj (.text:vcop_sign_extension_kernel_vloops)
+                  80017db8    00000024                           : bam_dcoffset_windowing_exec_funcs.obj (.text:Bam_DcoffsetWindowing_control)
+                  80017ddc    00000024                           : vcop_fft_npt_16ix16o_32inter_wrapper.obj (.text:vcop_fft_64_16i_16o_32inter_vloops)
+                  80017e00    00000024                           : vcop_fft_npt_16ix16o_wrapper.obj (.text:vcop_fft_64_16i_16o_vloops)
+                  80017e24    00000024                           : vcop_fft_npt_16ix32o_wrapper.obj (.text:vcop_fft_64_16i_32o_vloops)
+                  80017e48    0000001c                           : vcop_fft_doppler_correction_32ix32o_kernel.obj (.text:vcop_fft_doppler_pitch_removal_32ix32o_vloops)
+                  80017e64    0000001c                           : vcop_fft_doppler_correction_kernel.obj (.text:vcop_fft_doppler_pitch_removal_vloops)
+                  80017e80    0000001c                           : vcop_dcoffset_windowing_kernel.obj (.text:vcop_interference_zero_out_kernel_vloops)
+                  80017e9c    00000018                           : vcop_fft_doppler_correction_32ix32o_kernel.obj (.text:vcop_copy_fft_32ix32o_kernel_vloops)
+                  80017eb4    00000018                           : vcop_fft_utils.obj (.text:vcop_fft_zero_padding_kernel_vloops)
+                  80017ecc    00000008                           : vcop_fft_npt_16ix16o_gen_twiddleFactor.obj (.text:getSizeTwiddleFactor_1024)
+                  80017ed4    00000008                           : vcop_fft_npt_16ix16o_gen_twiddleFactor.obj (.text:getSizeTwiddleFactor_128)
+                  80017edc    00000008                           : vcop_fft_npt_16ix16o_gen_twiddleFactor.obj (.text:getSizeTwiddleFactor_256)
+                  80017ee4    00000008                           : vcop_fft_npt_16ix16o_gen_twiddleFactor.obj (.text:getSizeTwiddleFactor_512)
+                  80017eec    00000008                           : vcop_fft_npt_16ix16o_gen_twiddleFactor.obj (.text:getSizeTwiddleFactor_64)
+                  80017ef4    00000008                           : vcop_dcoffset_windowing_kernel.obj (.text:vcop_dcoffset_kernel_param_count)
+                  80017efc    00000008                           : vcop_fft_1024_16ix16o_kernel_overflow.obj (.text:vcop_fft_1024_16ix16o_stage_1_overflow_param_count)
+                  80017f04    00000008                           : vcop_fft_1024_16ix16o_kernel.obj (.text:vcop_fft_1024_16ix16o_stage_1_param_count)
+                  80017f0c    00000008                           : vcop_fft_1024_16ix16o_kernel_overflow.obj (.text:vcop_fft_1024_16ix16o_stage_2_overflow_param_count)
+                  80017f14    00000008                           : vcop_fft_1024_16ix16o_kernel.obj (.text:vcop_fft_1024_16ix16o_stage_2_param_count)
+                  80017f1c    00000008                           : vcop_fft_1024_16ix16o_kernel_overflow.obj (.text:vcop_fft_1024_16ix16o_stage_3_overflow_param_count)
+                  80017f24    00000008                           : vcop_fft_1024_16ix16o_kernel.obj (.text:vcop_fft_1024_16ix16o_stage_3_param_count)
+                  80017f2c    00000008                           : vcop_fft_1024_16ix16o_kernel_overflow.obj (.text:vcop_fft_1024_16ix16o_stage_4_overflow_param_count)
+                  80017f34    00000008                           : vcop_fft_1024_16ix16o_kernel.obj (.text:vcop_fft_1024_16ix16o_stage_4_param_count)
+                  80017f3c    00000008                           : vcop_fft_1024_16ix16o_kernel_overflow.obj (.text:vcop_fft_1024_16ix16o_stage_5_overflow_param_count)
+                  80017f44    00000008                           : vcop_fft_1024_16ix16o_kernel.obj (.text:vcop_fft_1024_16ix16o_stage_5_param_count)
+                  80017f4c    00000008                           : vcop_fft_128_16ix16o_32inter_kernel.obj (.text:vcop_fft_128_16ix16o_32inter_radix2_stage_4_overflow_param_count)
+                  80017f54    00000008                           : vcop_fft_128_16ix16o_32inter_kernel.obj (.text:vcop_fft_128_16ix16o_32inter_radix2_stage_4_param_count)
+                  80017f5c    00000008                           : vcop_fft_128_16ix16o_kernel_overflow.obj (.text:vcop_fft_128_16ix16o_radix2_stage_4_overflow_param_count)
+                  80017f64    00000008                           : vcop_fft_128_16ix16o_kernel_overflow.obj (.text:vcop_fft_128_16ix16o_stage_1_overflow_param_count)
+                  80017f6c    00000008                           : vcop_fft_128_16ix16o_kernel.obj (.text:vcop_fft_128_16ix16o_stage_1_param_count)
+                  80017f74    00000008                           : vcop_fft_128_16ix16o_kernel_overflow.obj (.text:vcop_fft_128_16ix16o_stage_2_overflow_param_count)
+                  80017f7c    00000008                           : vcop_fft_128_16ix16o_kernel.obj (.text:vcop_fft_128_16ix16o_stage_2_param_count)
+                  80017f84    00000008                           : vcop_fft_128_16ix16o_kernel_overflow.obj (.text:vcop_fft_128_16ix16o_stage_3_overflow_param_count)
+                  80017f8c    00000008                           : vcop_fft_128_16ix16o_kernel.obj (.text:vcop_fft_128_16ix16o_stage_3_param_count)
+                  80017f94    00000008                           : vcop_fft_128_16ix32o_kernel.obj (.text:vcop_fft_128_16ix32o_radix2_stage_4_overflow_param_count)
+                  80017f9c    00000008                           : vcop_fft_128_16ix32o_kernel.obj (.text:vcop_fft_128_16ix32o_radix2_stage_4_param_count)
+                  80017fa4    00000008                           : vcop_fft_128_16ix16o_32inter_kernel.obj (.text:vcop_fft_128_32inter_stage_1_param_count)
+                  80017fac    00000008                           : vcop_fft_128_16ix16o_32inter_kernel.obj (.text:vcop_fft_128_32inter_stage_2_param_count)
+                  80017fb4    00000008                           : vcop_fft_128_16ix16o_32inter_kernel.obj (.text:vcop_fft_128_32inter_stage_3_param_count)
+                  80017fbc    00000008                           : vcop_fft_256_16ix16o_32inter_kernel.obj (.text:vcop_fft_256_16ix16o_32inter_stage_4_overflow_param_count)
+                  80017fc4    00000008                           : vcop_fft_256_16ix16o_32inter_kernel.obj (.text:vcop_fft_256_16ix16o_32inter_stage_4_param_count)
+                  80017fcc    00000008                           : vcop_fft_256_16ix16o_kernel_overflow.obj (.text:vcop_fft_256_16ix16o_stage_1_overflow_param_count)
+                  80017fd4    00000008                           : vcop_fft_256_16ix16o_kernel.obj (.text:vcop_fft_256_16ix16o_stage_1_param_count)
+                  80017fdc    00000008                           : vcop_fft_256_16ix16o_kernel_overflow.obj (.text:vcop_fft_256_16ix16o_stage_2_overflow_param_count)
+                  80017fe4    00000008                           : vcop_fft_256_16ix16o_kernel.obj (.text:vcop_fft_256_16ix16o_stage_2_param_count)
+                  80017fec    00000008                           : vcop_fft_256_16ix16o_kernel_overflow.obj (.text:vcop_fft_256_16ix16o_stage_3_overflow_param_count)
+                  80017ff4    00000008                           : vcop_fft_256_16ix16o_kernel.obj (.text:vcop_fft_256_16ix16o_stage_3_param_count)
+                  80017ffc    00000008                           : vcop_fft_256_16ix16o_kernel_overflow.obj (.text:vcop_fft_256_16ix16o_stage_4_overflow_param_count)
+                  80018004    00000008                           : vcop_fft_256_16ix16o_kernel.obj (.text:vcop_fft_256_16ix16o_stage_4_param_count)
+                  8001800c    00000008                           : vcop_fft_256_16ix32o_kernel.obj (.text:vcop_fft_256_16ix32o_stage_4_overflow_param_count)
+                  80018014    00000008                           : vcop_fft_256_16ix32o_kernel.obj (.text:vcop_fft_256_16ix32o_stage_4_param_count)
+                  8001801c    00000008                           : vcop_fft_256_16ix16o_32inter_kernel.obj (.text:vcop_fft_256_32inter_stage_1_param_count)
+                  80018024    00000008                           : vcop_fft_256_16ix16o_32inter_kernel.obj (.text:vcop_fft_256_32inter_stage_2_param_count)
+                  8001802c    00000008                           : vcop_fft_256_16ix16o_32inter_kernel.obj (.text:vcop_fft_256_32inter_stage_3_param_count)
+                  80018034    00000008                           : vcop_fft_512_16ix16o_32inter_kernel.obj (.text:vcop_fft_512_16ix16o_32inter_radix2_stage_5_overflow_param_count)
+                  8001803c    00000008                           : vcop_fft_512_16ix16o_32inter_kernel.obj (.text:vcop_fft_512_16ix16o_32inter_radix2_stage_5_param_count)
+                  80018044    00000008                           : vcop_fft_512_16ix16o_kernel_overflow.obj (.text:vcop_fft_512_16ix16o_radix2_stage_5_overflow_param_count)
+                  8001804c    00000008                           : vcop_fft_512_16ix16o_kernel_overflow.obj (.text:vcop_fft_512_16ix16o_stage_1_overflow_param_count)
+                  80018054    00000008                           : vcop_fft_512_16ix16o_kernel.obj (.text:vcop_fft_512_16ix16o_stage_1_param_count)
+                  8001805c    00000008                           : vcop_fft_512_16ix16o_kernel_overflow.obj (.text:vcop_fft_512_16ix16o_stage_2_overflow_param_count)
+                  80018064    00000008                           : vcop_fft_512_16ix16o_kernel.obj (.text:vcop_fft_512_16ix16o_stage_2_param_count)
+                  8001806c    00000008                           : vcop_fft_512_16ix16o_kernel_overflow.obj (.text:vcop_fft_512_16ix16o_stage_3_overflow_param_count)
+                  80018074    00000008                           : vcop_fft_512_16ix16o_kernel.obj (.text:vcop_fft_512_16ix16o_stage_3_param_count)
+                  8001807c    00000008                           : vcop_fft_512_16ix16o_kernel_overflow.obj (.text:vcop_fft_512_16ix16o_stage_4_overflow_param_count)
+                  80018084    00000008                           : vcop_fft_512_16ix16o_kernel.obj (.text:vcop_fft_512_16ix16o_stage_4_param_count)
+                  8001808c    00000008                           : vcop_fft_512_16ix32o_kernel.obj (.text:vcop_fft_512_16ix32o_radix2_stage_5_overflow_param_count)
+                  80018094    00000008                           : vcop_fft_512_16ix32o_kernel.obj (.text:vcop_fft_512_16ix32o_radix2_stage_5_param_count)
+                  8001809c    00000008                           : vcop_fft_512_16ix16o_32inter_kernel.obj (.text:vcop_fft_512_32inter_stage_1_param_count)
+                  800180a4    00000008                           : vcop_fft_512_16ix16o_32inter_kernel.obj (.text:vcop_fft_512_32inter_stage_2_param_count)
+                  800180ac    00000008                           : vcop_fft_512_16ix16o_32inter_kernel.obj (.text:vcop_fft_512_32inter_stage_3_param_count)
+                  800180b4    00000008                           : vcop_fft_512_16ix16o_32inter_kernel.obj (.text:vcop_fft_512_32inter_stage_4_param_count)
+                  800180bc    00000008                           : vcop_fft_64_16ix16o_32inter_kernel.obj (.text:vcop_fft_64_16ix16o_32inter_stage_3_overflow_param_count)
+                  800180c4    00000008                           : vcop_fft_64_16ix16o_32inter_kernel.obj (.text:vcop_fft_64_16ix16o_32inter_stage_3_param_count)
+                  800180cc    00000008                           : vcop_fft_64_16ix16o_kernel_overflow.obj (.text:vcop_fft_64_16ix16o_stage_1_overflow_param_count)
+                  800180d4    00000008                           : vcop_fft_64_16ix16o_kernel.obj (.text:vcop_fft_64_16ix16o_stage_1_param_count)
+                  800180dc    00000008                           : vcop_fft_64_16ix16o_kernel_overflow.obj (.text:vcop_fft_64_16ix16o_stage_2_overflow_param_count)
+                  800180e4    00000008                           : vcop_fft_64_16ix16o_kernel.obj (.text:vcop_fft_64_16ix16o_stage_2_param_count)
+                  800180ec    00000008                           : vcop_fft_64_16ix16o_kernel_overflow.obj (.text:vcop_fft_64_16ix16o_stage_3_overflow_param_count)
+                  800180f4    00000008                           : vcop_fft_64_16ix32o_kernel.obj (.text:vcop_fft_64_16ix32o_stage_3_overflow_param_count)
+                  800180fc    00000008                           : vcop_fft_64_16ix32o_kernel.obj (.text:vcop_fft_64_16ix32o_stage_3_param_count)
+                  80018104    00000008                           : vcop_fft_64_16ix16o_32inter_kernel.obj (.text:vcop_fft_64_32inter_stage_1_param_count)
+                  8001810c    00000008                           : vcop_fft_64_16ix16o_32inter_kernel.obj (.text:vcop_fft_64_32inter_stage_2_param_count)
+                  80018114    00000004                           : vcop_fft_doppler_correction_32ix32o_kernel.obj (.text:vcop_copy_fft_32ix32o_kernel_param_count)
+                  80018118    00000004                           : vcop_fft_128_16ix16o_kernel.obj (.text:vcop_fft_128_16ix16o_radix2_stage_4_param_count)
+                  8001811c    00000004                           : vcop_fft_512_16ix16o_kernel.obj (.text:vcop_fft_512_16ix16o_radix2_stage_5_param_count)
+                  80018120    00000004                           : vcop_fft_64_16ix16o_kernel.obj (.text:vcop_fft_64_16ix16o_stage_3_param_count)
+                  80018124    00000004                           : vcop_fft_doppler_correction_32ix32o_kernel.obj (.text:vcop_fft_doppler_correction_32ix32o_kernel_param_count)
+                  80018128    00000004                           : vcop_fft_doppler_correction_kernel.obj (.text:vcop_fft_doppler_correction_kernel_param_count)
+                  8001812c    00000004                           : vcop_fft_doppler_correction_32ix32o_kernel.obj (.text:vcop_fft_doppler_pitch_removal_32ix32o_param_count)
+                  80018130    00000004                           : vcop_fft_doppler_correction_kernel.obj (.text:vcop_fft_doppler_pitch_removal_param_count)
+                  80018134    00000004                           : vcop_fft_utils.obj (.text:vcop_fft_zero_padding_kernel_param_count)
+                  80018138    00000004                           : vcop_dcoffset_windowing_kernel.obj (.text:vcop_interference_zero_out_kernel_param_count)
+                  8001813c    00000004                           : vcop_dcoffset_windowing_kernel.obj (.text:vcop_sign_extension_kernel_param_count)
+                  80018140    00000004                           : vcop_dcoffset_windowing_kernel.obj (.text:vcop_windowing_kernel_param_count)
+                  80018144    00000004                           : vcop_dcoffset_windowing_kernel.obj (.text:vcop_windowing_with_transpose_kernel_param_count)
+                  80018148    000006dc     libeveFFT.eve.lib : fft_alg.obj (.text:FFT_TI_process)
+                  80018824    000002b4                       : fft_graph_int.obj (.text:FFT_TI_kernelControl)
+                  80018ad8    00000258                       : fft_graph_int.obj (.text:FFT_TI_dmaControl)
+                  80018d30    000001ec                       : fft_alg.obj (.text:FFT_TI_control)
+                  80018f1c    000001a8                       : fft_graph_int.obj (.text:FFT32O_TI_kernelControl)
+                  800190c4    00000180                       : bam_dma_custom_fft_horz_node.obj (.text:BAM_DMA_CUSTOM_FFT_HORZ_OUT_frameInitChannel)
+                  80019244    00000154                       : fft_graph_int.obj (.text:FFT_TI_graphCreate)
+                  80019398    0000013c                       : bam_dma_custom_fft_vert_node.obj (.text:BAM_DMA_CUSTOM_FFT_VERT_OUT_frameInitChannel)
+                  800194d4    00000118                       : fft_alg.obj (.text:FFT_TI_init)
+                  800195ec    00000100                       : fft_alg.obj (.text:FFT_TI_alloc)
+                  800196ec    000000bc                       : fft_graph_int.obj (.text:FFT_TI_initKernelsArgs)
+                  800197a8    00000090                       : fft_alg.obj (.text:findNumLinesPerBlock)
+                  80019838    00000080                       : bam_dma_custom_fft_vert_node.obj (.text:BAM_DMA_CUSTOM_FFT_VERT_OUT_waitOutChannel)
+                  800198b8    00000064                       : fft_alg.obj (.text:FFT_TI_activate)
+                  8001991c    00000064                       : fft_alg.obj (.text:FFT_TI_deactivate)
+                  80019980    0000004c                       : bam_dma_custom_fft_vert_node.obj (.text:BAM_DMA_CUSTOM_FFT_VERT_OUT_triggerOutChannel)
+                  800199cc    00000048                       : bam_dma_custom_fft_horz_node.obj (.text:BAM_DMA_CUSTOM_FFT_HORZ_OUT_setMemRecFunc)
+                  80019a14    00000048                       : bam_dma_custom_fft_vert_node.obj (.text:BAM_DMA_CUSTOM_FFT_VERT_OUT_setMemRecFunc)
+                  80019a5c    00000048                       : bam_dma_custom_fft_vert_node.obj (.text:BAM_DMA_CUSTOM_FFT_VERT_OUT_updateOutDDRptr)
+                  80019aa4    00000044                       : bam_dma_custom_fft_horz_node.obj (.text:BAM_DMA_CUSTOM_FFT_HORZ_OUT_updateOutDDRptr)
+                  80019ae8    00000038                       : bam_dma_custom_fft_horz_node.obj (.text:BAM_DMA_CUSTOM_FFT_HORZ_OUT_getMemRecFunc)
+                  80019b20    00000038                       : bam_dma_custom_fft_vert_node.obj (.text:BAM_DMA_CUSTOM_FFT_VERT_OUT_getMemRecFunc)
+                  80019b58    0000002c                       : fft_graph_int.obj (.text:FFT32O_TI_getWBUFptr)
+                  80019b84    0000002c                       : fft_graph_int.obj (.text:FFT_TI_getWBUFptr)
+                  80019bb0    00000028                       : fft_alg.obj (.text:getBufferSplit)
+                  80019bd8    00000020                       : fft_graph_int.obj (.text:FFT_TI_execute)
+                  80019bf8    0000001c                       : fft_graph_int.obj (.text:FFT_TI_getGraphMemReq)
+                  80019c14    00000018                       : fft_alg.obj (.text:FFT_TI_free)
+                  80019c2c    00000004                       : fft_alg.obj (.text:FFT_TI_numAlloc)
+
+.text      0    80019c30    0000a58c     
+                  80019c30    00001154     fft_tb.obj (.text:fftTest)
+                  8001ad84    00000d8c     ti_stats_collector.obj (.text:statCollectorControl)
+                  8001bb10    00000d08     fft_tb.obj (.text:fft_cn)
+                  8001c818    00000cf4     fft32o_cn.obj (.text:fft32o_cn)
+                  8001d50c    000008d4     libevenatckernels.eve.lib : vcop_fft_npt_16ix16o_cn.obj (.text:radix4Butterfly)
+                  8001dde0    00000640     dmautils.lib : edma_utils_autoincrement.obj (.text:EDMA_UTILS_autoIncrement_configure)
+                  8001e420    000005c8     libevenatckernels.eve.lib : vcop_fft_npt_16ix16o_cn.obj (.text:radix4ButterflyLastStage)
+                  8001e9e8    000005c4                               : vcop_fft_npt_16ix16o_32inter_cn.obj (.text:radix4ButterflyLastStage)
+                  8001efac    00000528                               : vcop_fft_npt_16ix32o_cn.obj (.text:generateTwiddleFactor_ref2)
+                  8001f4d4    00000528                               : vcop_fft_npt_16ix16o_cn.obj (.text:generateTwiddleFactor_ref)
+                  8001f9fc    00000418                               : vcop_fft_npt_16ix32o_cn.obj (.text:vcop_fft_npt_32o_mixed_radix_cn)
+                  8001fe14    000003e8     configparser.obj (.text:ParseContent)
+                  800201fc    000003bc     libevenatckernels.eve.lib : vcop_fft_npt_16ix16o_32inter_cn.obj (.text:vcop_fft_npt_32inter_mixed_radix_cn)
+                  800205b8    00000350                               : vcop_fft_npt_16ix16o_cn.obj (.text:vcop_fft_npt_mixed_radix_cn)
+                  80020908    00000308     configparser.obj (.text:printparams)
+                  80020c10    00000304     fft_tb.obj (.text:main)
+                  80020f14    00000288     dmautils.lib : edma_utils_autoincrement.obj (.text:EDMA_UTILS_autoIncrement_update)
+                  8002119c    00000258     libevenatckernels.eve.lib : vcop_fft_npt_16ix32o_cn.obj (.text:radix4ButterflyLastStage)
+                  800213f4    00000234     eve_profile.obj (.text:profiler_end)
+                  80021628    0000021c     libevenatckernels.eve.lib : vcop_fft_npt_16ix16o_cn.obj (.text:radix2Butterfly)
+                  80021844    00000218                               : vcop_fft_npt_16ix16o_32inter_cn.obj (.text:radix4Butterfly)
+                  80021a5c    00000218                               : vcop_fft_npt_16ix32o_cn.obj (.text:radix4Butterfly)
+                  80021c74    00000218                               : vcop_fft_npt_16ix16o_32inter_cn.obj (.text:radix4ButterflyFirstStage)
+                  80021e8c    00000218                               : vcop_fft_npt_16ix32o_cn.obj (.text:radix4ButterflyFirstStage)
+                  800220a4    000001c4     dmautils.lib : dma_funcs.obj (.text:DMA_funcs_hardwareRegSetup)
+                  80022268    000001b8                  : edma_utils_autoincrement.obj (.text:EDMA_UTILS_autoIncrement_triggerOutChannel)
+                  80022420    00000198     libevenatckernels.eve.lib : vcop_fft_npt_16ix32o_cn.obj (.text:vcop_fft_doppler_correction_32ix32o_cn)
+                  800225b8    00000190     dmautils.lib : edma_utils_scatterGather.obj (.text:EDMA_UTILS_scattherGather_init)
+                  80022748    00000178                  : dma_resource_allocator.obj (.text:DMA_resourceAllocator_allocateResources)
+                  800228c0    00000164                  : edma_utils_autoincrement.obj (.text:EDMA_UTILS_autoIncrement_triggerInChannel)
+                  80022a24    00000154     report_utils.obj (.text:report_printAppletInfo)
+                  80022b78    0000010c     libevenatckernels.eve.lib : vcop_fft_npt_16ix16o_cn.obj (.text:vcop_fft_doppler_correction_cn)
+                  80022c84    00000104                               : vcop_dcoffset_windowing_cn.obj (.text:vcop_windowing_cn)
+                  80022d88    000000f4                               : vcop_fft_npt_16ix16o_32inter_cn.obj (.text:radix2Butterfly)
+                  80022e7c    000000f4                               : vcop_fft_npt_16ix32o_cn.obj (.text:radix2Butterfly)
+                  80022f70    000000f0                               : vcop_dcoffset_windowing_cn.obj (.text:vcop_windowing_with_transpose_cn)
+                  80023060    000000e8     dmautils.lib : edma_utils_autoincrement.obj (.text:EDMA_UTILS_autoIncrement_init)
+                  80023148    000000d8     configparser.obj (.text:readparamfile)
+                  80023220    000000d0     libevenatckernels.eve.lib : vcop_fft_npt_16ix32o_cn.obj (.text:digitReversal)
+                  800232f0    000000cc     dmautils.lib : edma_utils_state.obj (.text:DMA_utils_updateStateStruct)
+                  800233bc    000000c4     eve_profile.obj (.text:profiler_init)
+                  80023480    000000c0     libevenatckernels.eve.lib : vcop_fft_npt_16ix16o_32inter_cn.obj (.text:digitReversal)
+                  80023540    000000c0                               : vcop_fft_npt_16ix16o_cn.obj (.text:digitReversal)
+                  80023600    000000bc                               : vcop_fft_npt_16ix16o_32inter_cn.obj (.text:radix2ButterflyLastStage)
+                  800236bc    000000bc                               : vcop_fft_npt_16ix16o_cn.obj (.text:radix2ButterflyLastStage)
+                  80023778    000000b4                               : vcop_dcoffset_windowing_cn.obj (.text:vcop_interference_zero_out_cn)
+                  8002382c    000000a8                               : vcop_dcoffset_windowing_cn.obj (.text:vcop_sign_extension_cn)
+                  800238d4    00000098     dmautils.lib : edma_utils_memcpy.obj (.text:EDMA_UTILS_memcpy2D)
+                  8002396c    00000094     libevenatckernels.eve.lib : vcop_dcoffset_windowing_cn.obj (.text:vcop_dcoffset_cn)
+                  80023a00    00000090                               : vcop_fft_npt_16ix16o_32inter_cn.obj (.text:complexMul)
+                  80023a90    00000090                               : vcop_fft_npt_16ix32o_cn.obj (.text:complexMul)
+                  80023b20    00000074     dmautils.lib : dma_funcs.obj (.text:DMA_funcs_writeTransferParams)
+                  80023b94    00000070     ti_stats_collector.obj (.text:statCollectorInit)
+                  80023c04    0000006c     eve_profile.obj (.text:profiler_getStackDepth)
+                  80023c70    00000068     dmautils.lib : edma_utils_autoincrement.obj (.text:EDMA_UTILS_autoIncrement_waitOutChannel)
+                  80023cd8    00000060     libevenatckernels.eve.lib : vcop_fft_npt_16ix16o_cn.obj (.text:complexMul)
+                  80023d38    00000060                               : vcop_fft_npt_16ix32o_cn.obj (.text:radix2ButterflyLastStage)
+                  80023d98    00000058     ti_mem_manager.obj (.text:TI_GetMemoryChunk)
+                  80023df0    00000054     dmautils.lib : edma_utils_autoincrement.obj (.text:EDMA_UTILS_autoIncrement_waitInChannel)
+                  80023e44    00000050     eve_profile.obj (.text:profiler_testCaseInfo)
+                  80023e94    0000004c     dmautils.lib : edma_utils.obj (.text:EDMA_UTILS_globalReset)
+                  80023ee0    00000048     eve_profile.obj (.text:profiler_start)
+                  80023f28    00000044     dmautils.lib : edma_utils_memcpy.obj (.text:EDMA_UTILS_memcpy2D_init)
+                  80023f6c    00000040     fft32o_cn.obj (.text:memcpy2D)
+                  80023fac    00000040     fft_tb.obj (.text:memcpy2D)
+                  80023fec    00000038     dmautils.lib : edma_utils_scatterGather.obj (.text:EDMA_UTILS_scattherGather_updateDstNtrigger)
+                  80024024    00000038     eve_profile.obj (.text:profiler_printStatus)
+                  8002405c    00000030     eve_profile.obj (.text:profiler_initStack)
+                  8002408c    0000002c     dmautils.lib : dma_resource_allocator.obj (.text:DMA_resourceAllocator_initResources)
+                  800240b8    00000024     eve_profile.obj (.text:TEST_PRINTF)
+                  800240dc    00000024     libevenatckernels.eve.lib : vcop_fft_npt_16ix16o_cn.obj (.text:isPowerOfFour)
+                  80024100    00000020     dmautils.lib : edma_utils_state.obj (.text:DMA_utils_resetStateStruct)
+                  80024120    00000020                  : edma_utils_scatterGather.obj (.text:EDMA_UTILS_scattherGather_wait)
+                  80024140    0000001c     libevenatckernels.eve.lib : vcop_fft_npt_16ix16o_cn.obj (.text:digitReversalCustom)
+                  8002415c    00000018     eve_profile.obj (.text:profiler_getSP)
+                  80024174    00000010     dmautils.lib : edma_utils_scatterGather.obj (.text:EDMA_UTILS_scattherGather_configure)
+                  80024184    00000010     eve_profile.obj (.text:profiler_end_print)
+                  80024194    0000000c     dmautils.lib : dma_resource_allocator.obj (.text:DMA_resourceAllocator_setEdma3RmHandle)
+                  800241a0    0000000c                  : edma_utils.obj (.text:EDMA_UTILS_setEdma3RmHandle)
+                  800241ac    0000000c     ti_mem_manager.obj (.text:TI_CreateMemoryHandle)
+                  800241b8    00000004     dmautils.lib : edma3lld_support.obj (.text:EDMA3LLD_SUPPORT_requestResources)
+
+.rts_text 
+*          0    800241bc    00008058     
+                  800241bc    000004f8     rtsarp32_v200.lib : _scanfi.obj (.text:_scanfi)
+                  800246b4    000003a0                       : strtod.obj (.text:strtod)
+                  80024a54    0000039c                       : strtold.obj (.text:strtold)
+                  80024df0    0000038c                       : cos.obj (.text:cos)
+                  8002517c    00000364                       : divf.obj (.text:__arp32abi_divf)
+                  800254e0    0000032c                       : sin.obj (.text:sin)
+                  8002580c    000002d8                       : strtoll.obj (.text:strtoll)
+                  80025ae4    000002a0                       : _printfi.obj (.text:_setfield)
+                  80025d84    00000268                       : _scanfi.obj (.text:_sproc_int)
+                  80025fec    00000264                       : log.obj (.text:log)
+                  80026250    00000260                       : _scanfi.obj (.text:_sset_arg)
+                  800264b0    0000025c                       : _printfi.obj (.text:_pproc_fge)
+                  8002670c    0000025c                       : _printfi.obj (.text:ecvt)
+                  80026968    00000258                       : _printfi.obj (.text:fcvt)
+                  80026bc0    0000024c                       : strtoull.obj (.text:strtoull)
+                  80026e0c    0000022c                       : _printfi.obj (.text:_printfi)
+                  80027038    00000220                       : _printfi.obj (.text:_pconv_e)
+                  80027258    0000021c                       : fwrite.obj (.text:fwrite)
+                  80027474    00000208                       : _printfi.obj (.text:_getarg_diouxp)
+                  8002767c    00000200                       : frcdivd.obj (.text:_frcdivd)
+                  8002787c    000001e4                       : divd.obj (.text:__arp32abi_divd)
+                  80027a60    000001cc                       : imath64.obj (.text:__arp32abi_divull)
+                  80027c2c    000001cc                       : strtol.obj (.text:strtol)
+                  80027df8    000001c8                       : mpyd.obj (.text:__arp32abi_mpyd)
+                  80027fc0    000001c8                       : fgets.obj (.text:_dofgets)
+                  80028188    000001b8                       : addd.obj (.text:__arp32abi_addd)
+                  80028340    000001a0                       : strtoul.obj (.text:strtoul)
+                  800284e0    0000018c                       : _printfi.obj (.text:_pproc_diouxp)
+                  8002866c    00000170                       : fputs.obj (.text:fputs)
+                  800287dc    0000016c                       : frexp.obj (.text:frexp)
+                  80028948    00000164                       : mpyf.obj (.text:__arp32abi_mpyf)
+                  80028aac    00000160                       : frcaddd.obj (.text:_frcaddd)
+                  80028c0c    0000015c                       : _scanfi.obj (.text:_sproc_float)
+                  80028d68    00000158                       : llmpy.obj (.text:__arp32abi_mpyll)
+                  80028ec0    00000144                       : fread.obj (.text:fread)
+                  80029004    00000140                       : frcmpyd.obj (.text:_frcmpyd)
+                  80029144    00000140                       : _scanfi.obj (.text:_sget_conv)
+                  80029284    0000013c                       : _printfi.obj (.text:_pproc_fwp)
+                  800293c0    0000012c                       : fopen.obj (.text:_openfile)
+                  800294ec    00000118                       : setvbuf.obj (.text:setvbuf)
+                  80029604    00000114                       : _printfi.obj (.text:_pconv_g)
+                  80029718    000000f4                       : _printfi.obj (.text:_pproc_str)
+                  8002980c    000000ec                       : lowlev.obj (.text:open)
+                  800298f8    000000e8                       : fputc.obj (.text:fputc)
+                  800299e0    000000dc                       : memcpy.obj (.text:memcpy)
+                  80029abc    000000cc                       : cmpd.obj (.text:__arp32abi_cmpd)
+                  80029b88    000000cc                       : round.obj (.text:__arp32abi_nround)
+                  80029c54    000000c4                       : memory.obj (.text:mem_alloc)
+                  80029d18    000000bc                       : _printfi.obj (.text:_ltostr)
+                  80029dd4    000000bc                       : _scanfi.obj (.text:_sproc_str)
+                  80029e90    000000b4                       : trgdrv.obj (.text:HOSTlseek)
+                  80029f44    000000b4                       : _scanfi.obj (.text:_sproc_lb)
+                  80029ff8    000000b0                       : modf.obj (.text:modf)
+                  8002a0a8    000000ac                       : trgdrv.obj (.text:HOSTrename)
+                  8002a154    000000a8                       : fopen.obj (.text:_search_fp)
+                  8002a1fc    000000a8                       : memset.obj (.text:memset)
+                  8002a2a4    000000a0                       : lowlev.obj (.text:getdevice)
+                  8002a344    0000009c                       : _bufread.obj (.text:_buff_read)
+                  8002a3e0    0000009c                       : _printfi.obj (.text:_mcpy)
+                  8002a47c    00000098                       : trgdrv.obj (.text:HOSTopen)
+                  8002a514    00000094                       : sscanf.obj (.text:_chkmbc)
+                  8002a5a8    00000094                       : memory.obj (.text:mem_free)
+                  8002a63c    00000090                       : trgdrv.obj (.text:HOSTread)
+                  8002a6cc    00000090                       : cvtdf.obj (.text:__arp32abi_cvtdf)
+                  8002a75c    00000090                       : _printfi.obj (.text:_pproc_fflags)
+                  8002a7ec    00000090                       : _io_perm.obj (.text:_wrt_ok)
+                  8002a87c    00000090                       : fseek.obj (.text:fseek)
+                  8002a90c    00000090                       : ftell.obj (.text:ftell)
+                  8002a99c    0000008c                       : trgdrv.obj (.text:HOSTwrite)
+                  8002aa28    0000008c                       : fixdu.obj (.text:__arp32abi_fixdu)
+                  8002aab4    00000088                       : lowlev.obj (.text:close)
+                  8002ab3c    00000084                       : _printfi.obj (.text:_ecpy)
+                  8002abc0    00000080                       : cvtfd.obj (.text:__arp32abi_cvtfd)
+                  8002ac40    00000080                       : fltulld.obj (.text:__arp32abi_fltulld)
+                  8002acc0    00000080                       : _scanfi.obj (.text:_sget_scanset)
+                  8002ad40    00000080                       : printf.obj (.text:printf)
+                  8002adc0    0000007c                       : fixdi.obj (.text:__arp32abi_fixdi)
+                  8002ae3c    0000007c                       : fltullf.obj (.text:__arp32abi_fltullf)
+                  8002aeb8    0000007c                       : fclose.obj (.text:_closefile)
+                  8002af34    0000007c                       : atoi.obj (.text:atoi)
+                  8002afb0    0000007c                       : fflush.obj (.text:fflush)
+                  8002b02c    00000078                       : trgdrv.obj (.text:HOSTunlink)
+                  8002b0a4    00000078                       : _printfi.obj (.text:_div)
+                  8002b11c    00000078                       : _printfi.obj (.text:_pconv_f)
+                  8002b194    00000078                       : memory.obj (.text:minit)
+                  8002b20c    00000074                       : trgdrv.obj (.text:HOSTclose)
+                  8002b280    00000074                       : fprintf.obj (.text:fprintf)
+                  8002b2f4    00000070                       : autoinit.obj (.text:_auto_init)
+                  8002b364    00000070                       : vfprintf.obj (.text:vfprintf)
+                  8002b3d4    0000006c                       : frcmpyf.obj (.text:_frcmpyf)
+                  8002b440    0000006c                       : _io_perm.obj (.text:_rd_ok)
+                  8002b4ac    00000068                       : fltid.obj (.text:__arp32abi_fltid)
+                  8002b514    00000068                       : boot.obj (.text:_c_int00)
+                  8002b57c    00000068                       : lowlev.obj (.text:lseek)
+                  8002b5e4    00000068                       : lowlev.obj (.text:read)
+                  8002b64c    00000068                       : lowlev.obj (.text:write)
+                  8002b6b4    00000064                       : imath64.obj (.text:_subcull)
+                  8002b718    00000064                       : ltoa.obj (.text:ltoa)
+                  8002b77c    00000060                       : llshift.obj (.text:__arp32abi_llshl)
+                  8002b7dc    00000060                       : fflush.obj (.text:_doflush)
+                  8002b83c    0000005c                       : isinf.obj (.text:__arp32abi_isinf)
+                  8002b898    0000005c                       : lowlev.obj (.text:tabinit)
+                  8002b8f4    0000005c                       : vcop_memory.obj (.text:vcop_minit)
+                  8002b950    00000054                       : _printfi.obj (.text:_fcpy)
+                  8002b9a4    00000054                       : renormd.obj (.text:_renormd)
+                  8002b9f8    00000054                       : exit.obj (.text:exit)
+                  8002ba4c    00000050                       : fopen.obj (.text:_cleanup)
+                  8002ba9c    00000050                       : lowlev.obj (.text:finddevice)
+                  8002baec    00000050                       : rand.obj (.text:rand)
+                  8002bb3c    0000004c                       : fltud.obj (.text:__arp32abi_fltud)
+                  8002bb88    0000004c                       : memory.obj (.text:malloc)
+                  8002bbd4    00000048                       : frcmpyf_div.obj (.text:__arp32abi_frcmpyf_div)
+                  8002bc1c    00000048                       : trgmsg.obj (.text:readmsg)
+                  8002bc64    00000048                       : lowlev.obj (.text:unlink)
+                  8002bcac    00000048                       : trgmsg.obj (.text:writemsg)
+                  8002bcf4    00000040                       : args_main.obj (.text:_args_main)
+                  8002bd34    0000003c                       : fltuf.obj (.text:__arp32abi_fltuf)
+                  8002bd70    0000003c                       : _printfi.obj (.text:__arp32abi_isnan)
+                  8002bdac    0000003c                       : strasgi_c.obj (.text:__arp32abi_strasgi)
+                  8002bde8    0000003c                       : fopen.obj (.text:fopen)
+                  8002be24    0000003c                       : vsprintf.obj (.text:vsprintf)
+                  8002be60    00000038                       : assert.obj (.text:__arp32abi_abort_msg)
+                  8002be98    00000038                       : llshift.obj (.text:__arp32abi_llshr)
+                  8002bed0    00000038                       : imath64.obj (.text:__arp32abi_remull)
+                  8002bf08    00000038                       : sscanf.obj (.text:sscanf)
+                  8002bf40    00000034                       : llshift.obj (.text:__arp32abi_llshru)
+                  8002bf74    00000030                       : fclose.obj (.text:fclose)
+                  8002bfa4    00000030                       : rand.obj (.text:srand)
+                  8002bfd4    0000002c                       : subd.obj (.text:__arp32abi_subd)
+                  8002c000    00000028                       : negd.obj (.text:__arp32abi_negd)
+                  8002c028    00000028                       : mult.obj (.text:_mpyl)
+                  8002c050    00000024                       : absd.obj (.text:__arp32abi_absd)
+                  8002c074    00000024                       : llcmp.obj (.text:__arp32abi_cmplls)
+                  8002c098    00000024                       : llcmp.obj (.text:__arp32abi_cmpllu)
+                  8002c0bc    00000020                       : trunc.obj (.text:__arp32abi_trunc)
+                  8002c0dc    00000020                       : memccpy.obj (.text:memccpy)
+                  8002c0fc    0000001c                       : lladdsub.obj (.text:__arp32abi_addll)
+                  8002c118    0000001c                       : vsprintf.obj (.text:_outs)
+                  8002c134    00000018                       : fgets.obj (.text:fgets)
+                  8002c14c    00000014                       : lladdsub.obj (.text:__arp32abi_subll)
+                  8002c160    00000014                       : memory.obj (.text:free)
+                  8002c174    00000010                       : lladdsub.obj (.text:__arp32abi_negll)
+                  8002c184    00000010                       : sscanf.obj (.text:_inpchar)
+                  8002c194    00000010                       : vsprintf.obj (.text:_outc)
+                  8002c1a4    0000000c                       : fprintf.obj (.text:_outc)
+                  8002c1b0    0000000c                       : printf.obj (.text:_outc)
+                  8002c1bc    0000000c                       : vfprintf.obj (.text:_outc)
+                  8002c1c8    0000000c                       : fprintf.obj (.text:_outs)
+                  8002c1d4    0000000c                       : printf.obj (.text:_outs)
+                  8002c1e0    0000000c                       : vfprintf.obj (.text:_outs)
+                  8002c1ec    0000000c                       : sscanf.obj (.text:_uninpchar)
+                  8002c1f8    0000000c                       : remove.obj (.text:remove)
+                  8002c204    00000008                       : exit.obj (.text:abort)
+                  8002c20c    00000004                       : _lock.obj (.text:_nop)
+                  8002c210    00000004                       : pre_init.obj (.text:_system_pre_init)
+
+.bam_text 
+*          0    8002c214    00003570     
+                  8002c214    00000820     algframework.lib : bam_construct_int.obj (.text:BAM_initGraph)
+                  8002ca34    00000770                      : bam_construct_int.obj (.text:BAM_autoAllocMemRec)
+                  8002d1a4    00000574                      : bam_execute.obj (.text:BAM_execute)
+                  8002d718    0000047c                      : bam_construct_int.obj (.text:BAM_finaliseGraph)
+                  8002db94    00000414                      : bam_construct_int.obj (.text:BAM_optimizeGraph)
+                  8002dfa8    00000378                      : bam_construct_int.obj (.text:BAM_getMemRec)
+                  8002e320    000001cc                      : bam_construct.obj (.text:BAM_createGraph)
+                  8002e4ec    00000184                      : bam_memory.obj (.text:bam_mem_alloc)
+                  8002e670    00000158                      : bam_dma_autoincrement_node.obj (.text:BAM_DMA_AUTOINCREMENT_getMemRecFunc)
+                  8002e7c8    00000158                      : bam_construct_int.obj (.text:BAM_updateNodes)
+                  8002e920    00000138                      : bam_execute.obj (.text:BAM_process)
+                  8002ea58    00000138                      : bam_memory.obj (.text:bam_getMemPacket)
+                  8002eb90    00000120                      : bam_construct_int.obj (.text:BAM_setNodeMemRec)
+                  8002ecb0    0000011c                      : bam_dma_autoincrement_node.obj (.text:BAM_DMA_AUTOINCREMENT_setMemRecFunc)
+                  8002edcc    00000110                      : bam_construct_int.obj (.text:BAM_fillKernelInfo)
+                  8002eedc    0000010c                      : bam_construct_int.obj (.text:BAM_getGraphMemSize)
+                  8002efe8    000000cc                      : bam_memory.obj (.text:bam_mem_free)
+                  8002f0b4    000000ac                      : bam_construct_int.obj (.text:BAM_copyIntMemRec2ExtMem)
+                  8002f160    000000a0                      : bam_memory.obj (.text:bam_minit)
+                  8002f200    00000098                      : bam_execute.obj (.text:BAM_ARP32_computeWrapper)
+                  8002f298    00000090                      : bam_memory.obj (.text:bam_releaseMemPacket)
+                  8002f328    0000008c                      : bam_construct_int.obj (.text:BAM_copyNodeList)
+                  8002f3b4    00000074                      : bam_execute.obj (.text:BAM_initGraphInstance)
+                  8002f428    00000070                      : bam_dma_autoincrement_node.obj (.text:BAM_DMA_AUTOINCREMENT_updateDDRptrInChannel)
+                  8002f498    00000070                      : bam_dma_autoincrement_node.obj (.text:BAM_DMA_AUTOINCREMENT_updateDDRptrOutChannel)
+                  8002f508    00000068                      : bam_memory.obj (.text:bam_mcheck)
+                  8002f570    00000064                      : bam_execute.obj (.text:BAM_DSP_computeWrapper)
+                  8002f5d4    00000054                      : bam_execute.obj (.text:BAM_controlNode)
+                  8002f628    0000004c                      : bam_dma_autoincrement_node.obj (.text:BAM_DMA_AUTOINCREMENT_frameInitInChannel)
+                  8002f674    0000004c                      : bam_construct.obj (.text:BAM_initKernelDB)
+                  8002f6c0    00000044                      : bam_dma_autoincrement_node.obj (.text:BAM_DMA_AUTOINCREMENT_frameInitOutChannel)
+                  8002f704    00000038                      : bam_construct_int.obj (.text:BAM_getMemPacket)
+                  8002f73c    0000002c                      : bam_utils.obj (.text:BAM_printf)
+                  8002f768    00000018                      : bam_execute.obj (.text:VCOP_SET_MEM_VIEW)
+                  8002f780    00000004                      : bam_execute.obj (.text:BAM_dummyKernelFunc)
+
+.starterware_text 
+*          0    8002f784    00000110     
+                  8002f784    00000048     libevestarterware_eve.lib : sctm.obj (.text:EVE_SCTM_CounterConfig)
+                  8002f7cc    0000002c                               : sctm.obj (.text:EVE_SCTM_CounterTimerEnable)
+                  8002f7f8    0000002c                               : sctm.obj (.text:EVE_SCTM_InpEvtSelect)
+                  8002f824    0000002c                               : sctm.obj (.text:EVE_SCTM_SamplingSelect)
+                  8002f850    00000018                               : sctm.obj (.text:EVE_SCTM_CounterRead)
+                  8002f868    00000018                               : sctm.obj (.text:EVE_SCTM_OverflowCheck)
+                  8002f880    00000014                               : sctm.obj (.text:EVE_SCTM_Enable)
+
+.bam_neardata 
+*          1    40020000    00000000     UNINITIALIZED
+
+.starterware_neardata 
+*          1    40020000    00000000     UNINITIALIZED
+
+.dmemSect 
+*          1    40020000    00004000     UNINITIALIZED
+                  40020000    00004000     fft_tb.obj (.dmemSect)
+
+.stack     1    40024000    00002000     UNINITIALIZED
+                  40024000    00000004     rtsarp32_v200.lib : boot.obj (.stack)
+                  40024004    00001ffc     --HOLE--
+
+.algo_neardata 
+*          1    40026000    000005a8     
+                  40026000    00000008     libeveFFT.eve.lib : fft_graph_int.obj (.rodata)
+                  40026008    00000152                       : fft_graph_int.obj (.const:.string)
+                  4002615a    00000132                       : bam_dma_custom_fft_horz_node.obj (.const:.string)
+                  4002628c    00000132                       : bam_dma_custom_fft_vert_node.obj (.const:.string)
+                  400263be    00000002     --HOLE-- [fill = 0]
+                  400263c0    00000054                       : fft_alg.obj (.const)
+                  40026414    0000003c                       : fft_graph_int.obj (.const:$P$T0$1)
+                  40026450    00000010                       : fft_graph_int.obj (.const:$P$T1$2)
+                  40026460    00000004     libevekernels.eve.lib : bam_fft_npt_16ix16o_exec_funcs.obj (.rodata)
+                  40026464    00000004                           : bam_fft_npt_16ix32o_exec_funcs.obj (.rodata)
+                  40026468    00000040                           : bam_dcoffset_windowing_exec_funcs.obj (.const:.switchtab)
+                  400264a8    00000010                           : vcop_fft_npt_16ix16o_32inter_wrapper.obj (.const:$P$T0$1)
+                  400264b8    00000010                           : vcop_fft_npt_16ix16o_wrapper.obj (.const:$P$T0$1)
+                  400264c8    00000010                           : vcop_fft_npt_16ix32o_wrapper.obj (.const:$P$T0$1)
+                  400264d8    00000010                           : vcop_fft_npt_16ix16o_32inter_wrapper.obj (.const:$P$T2$3)
+                  400264e8    00000010                           : vcop_fft_npt_16ix16o_wrapper.obj (.const:$P$T2$3)
+                  400264f8    00000010                           : vcop_fft_npt_16ix32o_wrapper.obj (.const:$P$T2$3)
+                  40026508    00000010                           : vcop_fft_npt_16ix16o_32inter_wrapper.obj (.const:$P$T4$5)
+                  40026518    00000010                           : vcop_fft_npt_16ix16o_wrapper.obj (.const:$P$T4$5)
+                  40026528    00000010                           : vcop_fft_npt_16ix32o_wrapper.obj (.const:$P$T4$5)
+                  40026538    00000010                           : vcop_fft_npt_16ix16o_32inter_wrapper.obj (.const:$P$T6$7)
+                  40026548    00000010                           : vcop_fft_npt_16ix16o_wrapper.obj (.const:$P$T6$7)
+                  40026558    00000010                           : vcop_fft_npt_16ix32o_wrapper.obj (.const:$P$T6$7)
+                  40026568    00000010                           : vcop_fft_npt_16ix16o_32inter_wrapper.obj (.const:$P$T7$8)
+                  40026578    00000010                           : vcop_fft_npt_16ix32o_wrapper.obj (.const:$P$T7$8)
+                  40026588    00000010                           : vcop_fft_npt_16ix16o_wrapper.obj (.const:$P$T8$9)
+                  40026598    00000010                           : vcop_fft_npt_16ix16o_wrapper.obj (.const:$P$T9$10)
+
+.rts_neardata 
+*          1    400265a8    00000270     
+                  400265a8    00000101     rtsarp32_v200.lib : ctype.obj (.const:.string:_ctypes_)
+                  400266a9    00000001     --HOLE-- [fill = 0]
+                  400266aa    00000008                       : divf.obj (.const:.string:initial_approx$1)
+                  400266b2    00000023                       : _printfi.obj (.const:.string)
+                  400266d5    00000001     --HOLE-- [fill = 0]
+                  400266d6    00000007                       : _scanfi.obj (.const:.string:flit$1)
+                  400266dd    00000001     --HOLE-- [fill = 0]
+                  400266de    00000006                       : _scanfi.obj (.const:.string:barr$2)
+                  400266e4    00000003                       : assert.obj (.const:.string)
+                  400266e7    00000001     --HOLE-- [fill = 0]
+                  400266e8    00000050                       : strtod.obj (.const:digits)
+                  40026738    00000048                       : strtod.obj (.const:powerof10)
+                  40026780    00000050                       : strtold.obj (.const:digits)
+                  400267d0    00000048                       : strtold.obj (.const:powerof10)
+
+.bss       1    40026818    00000164     UNINITIALIZED
+                  40026818    000000a8     dmautils.lib : dma_resource_allocator.obj (.bss)
+                  400268c0    00000060                  : edma_utils_state.obj (.bss)
+                  40026920    00000048     eve_profile.obj (.bss)
+                  40026968    00000014     algframework.lib : bam_memory.obj (.bss)
+
+.data      1    4002697c    00000030     
+                  4002697c    00000020     boot_arp32.obj (.data)
+                  4002699c    00000005     algframework.lib : bam_memory.obj (.data)
+                  400269a1    00000003     --HOLE-- [fill = 0]
+                  400269a4    00000004     dmautils.lib : dma_resource_allocator.obj (.data)
+                  400269a8    00000004     eve_profile.obj (.data)
+
+.rodata    1    400269ac    0000008c     
+                  400269ac    00000028     ti_stats_collector.obj (.rodata)
+                  400269d4    00000010     fft32o_cn.obj (.rodata)
+                  400269e4    00000010     fft_tb.obj (.rodata)
+                  400269f4    0000000c     libevenatckernels.eve.lib : vcop_fft_npt_16ix16o_cn.obj (.rodata)
+                  40026a00    00000008     algframework.lib : bam_construct_int.obj (.rodata)
+                  40026a08    00000008     dmautils.lib : edma_utils_autoincrement.obj (.rodata)
+                  40026a10    00000008     eve_profile.obj (.rodata)
+                  40026a18    00000008     libevenatckernels.eve.lib : vcop_fft_npt_16ix16o_32inter_cn.obj (.rodata)
+                  40026a20    00000008                               : vcop_fft_npt_16ix32o_cn.obj (.rodata)
+                  40026a28    00000004     algframework.lib : bam_execute.obj (.rodata)
+                  40026a2c    00000004                      : bam_memory.obj (.rodata)
+                  40026a30    00000004     dmautils.lib : edma_utils_memcpy.obj (.rodata)
+                  40026a34    00000004                  : edma_utils_scatterGather.obj (.rodata)
+
+.cio       1    40026a38    00000120     UNINITIALIZED
+                  40026a38    00000120     rtsarp32_v200.lib : trgmsg.obj (.cio)
+
+.edma_utils_lib_fardata 
+*          1    40026b58    00000004     
+                  40026b58    00000004     dmautils.lib : edma_utils.obj (.const:edmaBase)
+
+.wmem      1    40040000    00007000     UNINITIALIZED
+                  40040000    00000008     rtsarp32_v200.lib : vcop_memory.obj (.wmem)
+                  40040008    00006ff8     --HOLE--
+
+.imemla    1    40050000    00004000     UNINITIALIZED
+                  40050000    00000008     rtsarp32_v200.lib : vcop_memory.obj (.imemla)
+                  40050008    00003ff8     --HOLE--
+
+.imemha    1    40054000    00004000     UNINITIALIZED
+                  40054000    00000008     rtsarp32_v200.lib : vcop_memory.obj (.imemha)
+                  40054008    00003ff8     --HOLE--
+
+.imemlb    1    40070000    00004000     UNINITIALIZED
+                  40070000    00000008     rtsarp32_v200.lib : vcop_memory.obj (.imemlb)
+                  40070008    00003ff8     --HOLE--
+
+.imemhb    1    40074000    00004000     UNINITIALIZED
+                  40074000    00000008     rtsarp32_v200.lib : vcop_memory.obj (.imemhb)
+                  40074008    00003ff8     --HOLE--
+
+.bam_fardata 
+*          1    80051100    00000000     UNINITIALIZED
+
+.sysmem    1    80051100    07800000     UNINITIALIZED
+                  80051100    00000008     rtsarp32_v200.lib : memory.obj (.sysmem)
+                  80051108    077ffff8     --HOLE--
+
+.fardata   1    87851100    000026cc     
+                  87851100    00001800     fft_config.obj (.fardata:gsTokenMap_fft)
+                  87852900    00000400     algframework.lib : bam_utils.obj (.fardata:gBAM_memPrintfArr)
+                  87852d00    00000400     libevenatckernels.eve.lib : vcop_fft_npt_16ix16o_cn.obj (.fardata:gInputOuputOrderIndex512pt)
+                  87853100    00000400                               : vcop_fft_npt_16ix32o_cn.obj (.fardata:gInputOuputOrderIndex512pt)
+                  87853500    00000100                               : vcop_fft_npt_16ix16o_cn.obj (.fardata:gInputOuputOrderIndex128pt)
+                  87853600    00000100                               : vcop_fft_npt_16ix32o_cn.obj (.fardata:gInputOuputOrderIndex128pt)
+                  87853700    00000068     algframework.lib : bam_dma_autoincrement_node.obj (.fardata)
+                  87853768    00000064                      : bam_memory.obj (.fardata:vcop_mem)
+
+.const     1    878537cc    0000124b     
+                  878537cc    000003d2     eve_profile.obj (.const:.string)
+                  87853b9e    00000309     fft_tb.obj (.const:.string)
+                  87853ea7    00000256     configparser.obj (.const:.string)
+                  878540fd    0000021c     fft_config.obj (.const:.string)
+                  87854319    000001f8     algframework.lib : bam_dma_autoincrement_node.obj (.const:.string)
+                  87854511    00000003     --HOLE-- [fill = 0]
+                  87854514    00000128     ti_stats_collector.obj (.const:.switchtab)
+                  8785463c    00000121     algframework.lib : bam_construct_int.obj (.const:.string)
+                  8785475d    000000fd     report_utils.obj (.const:.string)
+                  8785485a    00000090     algframework.lib : bam_execute.obj (.const:.string)
+                  878548ea    00000056     ti_mem_manager.obj (.const:.string)
+                  87854940    00000043     ti_stats_collector.obj (.const:.string)
+                  87854983    00000001     --HOLE-- [fill = 0]
+                  87854984    00000040     fft32o_cn.obj (.const:.switchtab)
+                  878549c4    00000040     fft_tb.obj (.const:.switchtab)
+                  87854a04    00000008     configparser.obj (.const:.string:$P$T0$1)
+                  87854a0c    00000008     fft_tb.obj (.const:.string:__FUNCTION__$1)
+                  87854a14    00000003     algframework.lib : bam_construct_int.obj (.const:.string:$P$T0$1)
+
+.far       1    87854a18    00000820     UNINITIALIZED
+                  87854a18    0000073c     fft_config.obj (.far)
+                  87855154    00000078     algframework.lib : bam_memory.obj (.far)
+                  878551cc    00000028     ti_stats_collector.obj (.far)
+                  878551f4    00000020     eve_profile.obj (.far)
+                  87855214    00000010     fft_tb.obj (.far)
+                  87855224    0000000c     algframework.lib : bam_execute.obj (.far)
+                  87855230    00000008                      : bam_construct.obj (.far)
+
+.rts_fardata 
+*          1    87855238    000003b0     
+                  87855238    000000a0     rtsarp32_v200.lib : defs.obj (.far) [fill = 0]
+                  878552d8    0000000c                       : memory.obj (.far) [fill = 0]
+                  878552e4    00000008                       : boot.obj (.far) [fill = 0]
+                  878552ec    00000008                       : trgdrv.obj (.far) [fill = 0]
+                  878552f4    000000f0                       : defs.obj (.fardata:_ftable)
+                  878553e4    00000078                       : lowlev.obj (.fardata:_device)
+                  8785545c    00000064                       : vcop_memory.obj (.fardata:vcop_mem)
+                  878554c0    00000050                       : lowlev.obj (.fardata:_stream)
+                  87855510    00000040                       : cos.obj (.fardata:R$1)
+                  87855550    00000040                       : sin.obj (.fardata:R$1)
+                  87855590    00000018                       : log.obj (.fardata:A$1)
+                  878555a8    00000018                       : log.obj (.fardata:B$2)
+                  878555c0    00000008                       : _lock.obj (.fardata)
+                  878555c8    00000005                       : vcop_memory.obj (.fardata)
+                  878555cd    00000003     --HOLE-- [fill = 0]
+                  878555d0    00000004                       : defs.obj (.fardata)
+                  878555d4    00000004                       : errno.obj (.fardata)
+                  878555d8    00000004                       : fopen.obj (.fardata)
+                  878555dc    00000004                       : lowlev.obj (.fardata)
+                  878555e0    00000004                       : memory.obj (.fardata)
+                  878555e4    00000004                       : rand.obj (.fardata)
+
+.starterware_fardata 
+*          1    878555e8    000001f4     
+                  878555e8    000001f4     libevestarterware_eve.lib : cred.obj (.fardata:CRED_instVirtAddr)
+
+.algo_fardata 
+*          1    878557dc    000001f0     
+                  878557dc    00000070     libeveFFT.eve.lib : fft_graph_int.obj (.fardata:bamFftKernelExecFuncDB)
+                  8785584c    00000070                       : fft_graph_int.obj (.fardata:bamFftKernelHostDB)
+                  878558bc    00000034                       : bam_dma_custom_fft_horz_node.obj (.fardata)
+                  878558f0    00000034                       : bam_dma_custom_fft_vert_node.obj (.fardata)
+                  87855924    0000000c                       : fft_graph_int.obj (.fardata)
+                  87855930    0000001c     libevekernels.eve.lib : bam_dcoffset_windowing_helper_funcs.obj (.fardata)
+                  8785594c    0000001c                           : bam_fft_npt_16ix16o_helper_funcs.obj (.fardata)
+                  87855968    0000001c                           : bam_fft_npt_16ix32o_helper_funcs.obj (.fardata)
+                  87855984    00000018                           : bam_dcoffset_windowing_exec_funcs.obj (.fardata)
+                  8785599c    00000018                           : bam_fft_npt_16ix16o_exec_funcs.obj (.fardata)
+                  878559b4    00000018                           : bam_fft_npt_16ix32o_exec_funcs.obj (.fardata)
+
+
+SEGMENT ATTRIBUTES
+
+    id tag      seg value
+    -- ---      --- -----
+     0 PHA_PAGE 3   1    
+     1 PHA_PAGE 4   1    
+     2 PHA_PAGE 5   1    
+     3 PHA_PAGE 6   1    
+     4 PHA_PAGE 7   1    
+     5 PHA_PAGE 8   1    
+     6 PHA_PAGE 9   1    
+     7 PHA_PAGE 10  1    
+     8 PHA_PAGE 11  1    
+     9 PHA_PAGE 12  1    
+    10 PHA_PAGE 13  1    
+    11 PHA_PAGE 14  1    
+    12 PHA_PAGE 15  1    
+    13 PHA_PAGE 16  1    
+    14 PHA_PAGE 17  1    
+
+
+GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name 
+
+address    name
+--------   ----
+8002f200   BAM_ARP32_computeWrapper
+8002f628   BAM_DMA_AUTOINCREMENT_frameInitInChannel
+8002f6c0   BAM_DMA_AUTOINCREMENT_frameInitOutChannel
+8002e670   BAM_DMA_AUTOINCREMENT_getMemRecFunc
+8002ecb0   BAM_DMA_AUTOINCREMENT_setMemRecFunc
+8002f428   BAM_DMA_AUTOINCREMENT_updateDDRptrInChannel
+8002f498   BAM_DMA_AUTOINCREMENT_updateDDRptrOutChannel
+80019980   BAM_DMA_CUSTOM_FFT_VERT_OUT_triggerOutChannel
+80019838   BAM_DMA_CUSTOM_FFT_VERT_OUT_waitOutChannel
+8002f5d4   BAM_controlNode
+8002f0b4   BAM_copyIntMemRec2ExtMem
+8002f328   BAM_copyNodeList
+8002e320   BAM_createGraph
+8002f780   BAM_dummyKernelFunc
+8002edcc   BAM_fillKernelInfo
+8002eedc   BAM_getGraphMemSize
+8002f704   BAM_getMemPacket
+8002c214   BAM_initGraph
+8002f3b4   BAM_initGraphInstance
+8002f674   BAM_initKernelDB
+8002db94   BAM_optimizeGraph
+8002f73c   BAM_printf
+8002e920   BAM_process
+8002e7c8   BAM_updateNodes
+8002c204   C$$EXIT
+8002bcec   C$$IO$$
+878555e8   CRED_instVirtAddr
+800220a4   DMA_funcs_hardwareRegSetup
+80023b20   DMA_funcs_writeTransferParams
+80022748   DMA_resourceAllocator_allocateResources
+8002408c   DMA_resourceAllocator_initResources
+80024194   DMA_resourceAllocator_setEdma3RmHandle
+80024100   DMA_utils_resetStateStruct
+800232f0   DMA_utils_updateStateStruct
+40020000   DMEM_SCRATCH
+800241b8   EDMA3LLD_SUPPORT_requestResources
+8001dde0   EDMA_UTILS_autoIncrement_configure
+80023060   EDMA_UTILS_autoIncrement_init
+800228c0   EDMA_UTILS_autoIncrement_triggerInChannel
+80022268   EDMA_UTILS_autoIncrement_triggerOutChannel
+80020f14   EDMA_UTILS_autoIncrement_update
+80023df0   EDMA_UTILS_autoIncrement_waitInChannel
+80023c70   EDMA_UTILS_autoIncrement_waitOutChannel
+80023e94   EDMA_UTILS_globalReset
+800238d4   EDMA_UTILS_memcpy2D
+80024174   EDMA_UTILS_scattherGather_configure
+800225b8   EDMA_UTILS_scattherGather_init
+80023fec   EDMA_UTILS_scattherGather_updateDstNtrigger
+80024120   EDMA_UTILS_scattherGather_wait
+800241a0   EDMA_UTILS_setEdma3RmHandle
+8002f784   EVE_SCTM_CounterConfig
+8002f850   EVE_SCTM_CounterRead
+8002f7cc   EVE_SCTM_CounterTimerEnable
+8002f880   EVE_SCTM_Enable
+8002f7f8   EVE_SCTM_InpEvtSelect
+8002f868   EVE_SCTM_OverflowCheck
+8002f824   EVE_SCTM_SamplingSelect
+80019b58   FFT32O_TI_getWBUFptr
+80018f1c   FFT32O_TI_kernelControl
+400263ec   FFT_TI_IRES
+400263c0   FFT_TI_VISION_FXNS
+800198b8   FFT_TI_activate
+800195ec   FFT_TI_alloc
+80018d30   FFT_TI_control
+8001991c   FFT_TI_deactivate
+80018ad8   FFT_TI_dmaControl
+80019bd8   FFT_TI_execute
+80019c14   FFT_TI_free
+80019bf8   FFT_TI_getGraphMemReq
+80019b84   FFT_TI_getWBUFptr
+80019244   FFT_TI_graphCreate
+800194d4   FFT_TI_init
+80018824   FFT_TI_kernelControl
+80019c2c   FFT_TI_numAlloc
+80018148   FFT_TI_process
+8002b20c   HOSTclose
+80029e90   HOSTlseek
+8002a47c   HOSTopen
+8002a63c   HOSTread
+8002a0a8   HOSTrename
+8002b02c   HOSTunlink
+8002a99c   HOSTwrite
+00004000   IMEMH_SIZE
+00004000   IMEML_SIZE
+800240b8   TEST_PRINTF
+800241ac   TI_CreateMemoryHandle
+80023d98   TI_GetMemoryChunk
+00007000   WMEM_SIZE
+40026a38   __CIOBUF_
+UNDEFED    __TI_CINIT_Base
+UNDEFED    __TI_CINIT_Limit
+UNDEFED    __TI_Handler_Table_Base
+UNDEFED    __TI_Handler_Table_Limit
+UNDEFED    __TI_INITARRAY_Base
+UNDEFED    __TI_INITARRAY_Limit
+40026000   __TI_STACK_END
+00002000   __TI_STACK_SIZE
+40026000   __TI_STATIC_BASE
+07800000   __TI_SYSMEM_SIZE
+00000001   __TI_args_main
+00000001   __TI_exit
+8002be60   __arp32abi_abort_msg
+8002c050   __arp32abi_absd
+80028188   __arp32abi_addd
+8002c0fc   __arp32abi_addll
+80029abc   __arp32abi_cmpd
+8002c074   __arp32abi_cmplls
+8002c098   __arp32abi_cmpllu
+8002a6cc   __arp32abi_cvtdf
+8002abc0   __arp32abi_cvtfd
+8002787c   __arp32abi_divd
+8002517c   __arp32abi_divf
+80027a60   __arp32abi_divull
+8002adc0   __arp32abi_fixdi
+8002aa28   __arp32abi_fixdu
+8002b4ac   __arp32abi_fltid
+8002bb3c   __arp32abi_fltud
+8002bd34   __arp32abi_fltuf
+8002ac40   __arp32abi_fltulld
+8002ae3c   __arp32abi_fltullf
+8002bbd4   __arp32abi_frcmpyf_div
+8002b83c   __arp32abi_isinf
+8002b77c   __arp32abi_llshl
+8002be98   __arp32abi_llshr
+8002bf40   __arp32abi_llshru
+80027df8   __arp32abi_mpyd
+80028948   __arp32abi_mpyf
+80028d68   __arp32abi_mpyll
+8002c000   __arp32abi_negd
+8002c174   __arp32abi_negll
+80029b88   __arp32abi_nround
+8002bed0   __arp32abi_remull
+8002bdac   __arp32abi_strasgi
+8002bfd4   __arp32abi_subd
+8002c14c   __arp32abi_subll
+8002c0bc   __arp32abi_trunc
+ffffffff   __binit__
+ffffffff   __c_args__
+000001f0   _algo_fardata_size
+000005a8   _algo_neardata_size
+00018b30   _algo_text_size
+8002bcf4   _args_main
+8002b2f4   _auto_init
+00000000   _bam_fardata_size
+00000000   _bam_neardata_size
+00003570   _bam_text_size
+8002a344   _buff_read
+8002b514   _c_int00
+8002ba4c   _cleanup
+878552e4   _cleanup_ptr
+8002aeb8   _closefile
+400265a8   _ctypes_
+8002b7dc   _doflush
+878552e8   _dtors_ptr
+80000120   _dummy_handler
+80028aac   _frcaddd
+8002767c   _frcdivd
+80029004   _frcmpyd
+8002b3d4   _frcmpyf
+878555d0   _ft_end
+878552f4   _ftable
+40054000   _imemha_memory
+40074000   _imemhb_memory
+40050000   _imemla_memory
+40070000   _imemlb_memory
+878555c0   _lock
+8002c028   _mpyl
+4002697c   _my_stack
+8002c20c   _nop
+80026e0c   _printfi
+8002b440   _rd_ok
+8002b9a4   _renormd
+80000100   _reset_handler
+000003b0   _rts_fardata_size
+00000270   _rts_neardata_size
+00008058   _rts_text_size
+800241bc   _scanfi
+40024000   _stack
+000001f4   _starterware_fardata_size
+00000000   _starterware_neardata_size
+00000110   _starterware_text_size
+80051100   _sys_memory
+8002c210   _system_pre_init
+0000a58c   _text_size
+87855238   _tmpnams
+878555c4   _unlock
+80000000   _vec_table
+40040000   _wmem_memory
+8002a7ec   _wrt_ok
+8002c204   abort
+8002af34   atoi
+8002ea58   bam_getMemPacket
+8002f508   bam_mcheck
+8002e4ec   bam_mem_alloc
+8002efe8   bam_mem_free
+8002f160   bam_minit
+8002f298   bam_releaseMemPacket
+40026970   bam_stat_num_packets
+ffffffff   binit
+8002aab4   close
+80024df0   cos
+80024140   digitReversalCustom
+40026b58   edmaBase
+878555d4   errno
+8002b9f8   exit
+8002bf74   fclose
+8002afb0   fflush
+8001c818   fft32o_cn
+80019c30   fftTest
+8001bb10   fft_cn
+8002c134   fgets
+8002bde8   fopen
+8002b280   fprintf
+800298f8   fputc
+8002866c   fputs
+80028ec0   fread
+8002c160   free
+800287dc   frexp
+8002a87c   fseek
+8002a90c   ftell
+80027258   fwrite
+8785599c   gBAM_TI_Fftnpt16ix16oExecFunc
+87855960   gBAM_TI_Fftnpt16ix16oHelperFunc
+8785594c   gBAM_TI_Fftnpt16ix16oKernel
+878559b4   gBAM_TI_Fftnpt16ix32oExecFunc
+8785597c   gBAM_TI_Fftnpt16ix32oHelperFunc
+87855968   gBAM_TI_Fftnpt16ix32oKernel
+87855984   gBAM_TI_dcoffsetWindowingExecFunc
+87855944   gBAM_TI_dcoffsetWindowingHelperFunc
+87855930   gBAM_TI_dcoffsetWindowingKernel
+87853700   gBAM_TI_dmaAutoIncrementReadKernel
+87853714   gBAM_TI_dmaAutoIncrementWriteKernel
+878558bc   gBAM_TI_dmaCustomFftHorzNodeWriteKernel
+878558d8   gBAM_TI_dmaCustomFftHorzNodeWriteKernelExecFunc
+878558d0   gBAM_TI_dmaCustomFftHorzNodeWriteKernelHelperFunc
+878558f0   gBAM_TI_dmaCustomFftVertNodeWriteKernel
+8785590c   gBAM_TI_dmaCustomFftVertNodeWriteKernelExecFunc
+87855904   gBAM_TI_dmaCustomFftVertNodeWriteKernelHelperFunc
+87853738   gBAM_TI_dmaReadAutoIncrementKernelExecFunc
+87853728   gBAM_TI_dmaReadAutoIncrementKernelHelperFunc
+87853750   gBAM_TI_dmaWriteAutoIncrementKernelExecFunc
+87853730   gBAM_TI_dmaWriteAutoIncrementKernelHelperFunc
+87852900   gBAM_memPrintfArr
+87854a18   gConfig_fft
+400268c0   gDmaUtilsStateStruct
+87855924   gFft_BAM_TI_kernelDBdef
+87853500   gInputOuputOrderIndex128pt
+87852d00   gInputOuputOrderIndex512pt
+87855204   gTest_TI_profileSctm
+4002694c   gTest_TI_profileTsc
+80001100   generateTwiddleFactor_1024
+80002350   generateTwiddleFactor_128
+80004188   generateTwiddleFactor_256
+80002f0c   generateTwiddleFactor_512
+800055d4   generateTwiddleFactor_64
+8001f4d4   generateTwiddleFactor_ref
+8001efac   generateTwiddleFactor_ref2
+80017ecc   getSizeTwiddleFactor_1024
+80017ed4   getSizeTwiddleFactor_128
+80017edc   getSizeTwiddleFactor_256
+80017ee4   getSizeTwiddleFactor_512
+80017eec   getSizeTwiddleFactor_64
+87851100   gsTokenMap_fft
+800240dc   isPowerOfFour
+80025fec   log
+8002b57c   lseek
+8002b718   ltoa
+80020c10   main
+8002bb88   malloc
+87855214   memObj_DMEM
+80029c54   mem_alloc
+8002a5a8   mem_free
+8002c0dc   memccpy
+800299e0   memcpy
+80023fac   memcpy2D
+8002a1fc   memset
+8002b194   minit
+80029ff8   modf
+8002980c   open
+8002ad40   printf
+80020908   printparams
+800213f4   profiler_end
+80024184   profiler_end_print
+8002415c   profiler_getSP
+80023c04   profiler_getStackDepth
+800233bc   profiler_init
+8002405c   profiler_initStack
+80024024   profiler_printStatus
+80023ee0   profiler_start
+80023e44   profiler_testCaseInfo
+8002baec   rand
+8002b5e4   read
+8002bc1c   readmsg
+80023148   readparamfile
+8002c1f8   remove
+80022a24   report_printAppletInfo
+800294ec   setvbuf
+800254e0   sin
+8002bfa4   srand
+8002bf08   sscanf
+8001ad84   statCollectorControl
+80023b94   statCollectorInit
+800246b4   strtod
+80027c2c   strtol
+80024a54   strtold
+8002580c   strtoll
+80028340   strtoul
+80026bc0   strtoull
+40026928   test_module_cyles
+8002bc64   unlink
+80017878   vcop_copy_fft_32ix32o_kernel_init
+80018114   vcop_copy_fft_32ix32o_kernel_param_count
+80017e9c   vcop_copy_fft_32ix32o_kernel_vloops
+8002396c   vcop_dcoffset_cn
+8001486c   vcop_dcoffset_kernel_init
+80017ef4   vcop_dcoffset_kernel_param_count
+80017378   vcop_dcoffset_kernel_vloops
+8000b2f0   vcop_fft_1024_16i_16o_init
+80016ec0   vcop_fft_1024_16i_16o_param_count
+80017ab8   vcop_fft_1024_16i_16o_vloops
+80013efc   vcop_fft_1024_16ix16o_stage_1_init
+8000ac80   vcop_fft_1024_16ix16o_stage_1_overflow_init
+80017efc   vcop_fft_1024_16ix16o_stage_1_overflow_param_count
+80012410   vcop_fft_1024_16ix16o_stage_1_overflow_vloops
+80017f04   vcop_fft_1024_16ix16o_stage_1_param_count
+800165bc   vcop_fft_1024_16ix16o_stage_1_vloops
+80014030   vcop_fft_1024_16ix16o_stage_2_init
+8000afbc   vcop_fft_1024_16ix16o_stage_2_overflow_init
+80017f0c   vcop_fft_1024_16ix16o_stage_2_overflow_param_count
+800125ac   vcop_fft_1024_16ix16o_stage_2_overflow_vloops
+80017f14   vcop_fft_1024_16ix16o_stage_2_param_count
+80016650   vcop_fft_1024_16ix16o_stage_2_vloops
+8000efb8   vcop_fft_1024_16ix16o_stage_3_init
+80005b04   vcop_fft_1024_16ix16o_stage_3_overflow_init
+80017f1c   vcop_fft_1024_16ix16o_stage_3_overflow_param_count
+8000f3d8   vcop_fft_1024_16ix16o_stage_3_overflow_vloops
+80017f24   vcop_fft_1024_16ix16o_stage_3_param_count
+80015f44   vcop_fft_1024_16ix16o_stage_3_vloops
+80013a1c   vcop_fft_1024_16ix16o_stage_4_init
+8000a5e0   vcop_fft_1024_16ix16o_stage_4_overflow_init
+80017f2c   vcop_fft_1024_16ix16o_stage_4_overflow_param_count
+80012748   vcop_fft_1024_16ix16o_stage_4_overflow_vloops
+80017f34   vcop_fft_1024_16ix16o_stage_4_param_count
+800166e4   vcop_fft_1024_16ix16o_stage_4_vloops
+80015190   vcop_fft_1024_16ix16o_stage_5_init
+8000d470   vcop_fft_1024_16ix16o_stage_5_overflow_init
+80017f3c   vcop_fft_1024_16ix16o_stage_5_overflow_param_count
+800135fc   vcop_fft_1024_16ix16o_stage_5_overflow_vloops
+80017f44   vcop_fft_1024_16ix16o_stage_5_param_count
+800173d8   vcop_fft_1024_16ix16o_stage_5_vloops
+8001092c   vcop_fft_128_16i_16o_32inter_init
+800174f8   vcop_fft_128_16i_16o_32inter_param_count
+80017c30   vcop_fft_128_16i_16o_32inter_vloops
+8000d6f8   vcop_fft_128_16i_16o_init
+80017554   vcop_fft_128_16i_16o_param_count
+80017c5c   vcop_fft_128_16i_16o_vloops
+80010cbc   vcop_fft_128_16i_32o_init
+800175b0   vcop_fft_128_16i_32o_param_count
+80017c88   vcop_fft_128_16i_32o_vloops
+80012a74   vcop_fft_128_16ix16o_32inter_radix2_stage_4_init
+8000f9f8   vcop_fft_128_16ix16o_32inter_radix2_stage_4_overflow_init
+80017f4c   vcop_fft_128_16ix16o_32inter_radix2_stage_4_overflow_param_count
+80014980   vcop_fft_128_16ix16o_32inter_radix2_stage_4_overflow_vloops
+80017f54   vcop_fft_128_16ix16o_32inter_radix2_stage_4_param_count
+8001760c   vcop_fft_128_16ix16o_32inter_radix2_stage_4_vloops
+80016d3c   vcop_fft_128_16ix16o_radix2_stage_4_init
+80010760   vcop_fft_128_16ix16o_radix2_stage_4_overflow_init
+80017f5c   vcop_fft_128_16ix16o_radix2_stage_4_overflow_param_count
+80014a94   vcop_fft_128_16ix16o_radix2_stage_4_overflow_vloops
+80018118   vcop_fft_128_16ix16o_radix2_stage_4_param_count
+80017cb4   vcop_fft_128_16ix16o_radix2_stage_4_vloops
+80014164   vcop_fft_128_16ix16o_stage_1_init
+800079b4   vcop_fft_128_16ix16o_stage_1_overflow_init
+80017f64   vcop_fft_128_16ix16o_stage_1_overflow_param_count
+8001188c   vcop_fft_128_16ix16o_stage_1_overflow_vloops
+80017f6c   vcop_fft_128_16ix16o_stage_1_param_count
+80016778   vcop_fft_128_16ix16o_stage_1_vloops
+8000fbfc   vcop_fft_128_16ix16o_stage_2_init
+80006b60   vcop_fft_128_16ix16o_stage_2_overflow_init
+80017f74   vcop_fft_128_16ix16o_stage_2_overflow_param_count
+80010e6c   vcop_fft_128_16ix16o_stage_2_overflow_vloops
+80017f7c   vcop_fft_128_16ix16o_stage_2_param_count
+80015ff0   vcop_fft_128_16ix16o_stage_2_vloops
+80013b54   vcop_fft_128_16ix16o_stage_3_init
+8000a288   vcop_fft_128_16ix16o_stage_3_overflow_init
+80017f84   vcop_fft_128_16ix16o_stage_3_overflow_param_count
+80011d90   vcop_fft_128_16ix16o_stage_3_overflow_vloops
+80017f8c   vcop_fft_128_16ix16o_stage_3_param_count
+8001680c   vcop_fft_128_16ix16o_stage_3_vloops
+80013760   vcop_fft_128_16ix32o_radix2_stage_4_init
+8000e960   vcop_fft_128_16ix32o_radix2_stage_4_overflow_init
+80017f94   vcop_fft_128_16ix32o_radix2_stage_4_overflow_param_count
+80014634   vcop_fft_128_16ix32o_radix2_stage_4_overflow_vloops
+80017f9c   vcop_fft_128_16ix32o_radix2_stage_4_param_count
+800172b0   vcop_fft_128_16ix32o_radix2_stage_4_vloops
+8000cccc   vcop_fft_128_32inter_stage_1_init
+80017fa4   vcop_fft_128_32inter_stage_1_param_count
+80015c2c   vcop_fft_128_32inter_stage_1_vloops
+80008e3c   vcop_fft_128_32inter_stage_2_init
+80017fac   vcop_fft_128_32inter_stage_2_param_count
+80014dd0   vcop_fft_128_32inter_stage_2_vloops
+80007d20   vcop_fft_128_32inter_stage_3_init
+80017fb4   vcop_fft_128_32inter_stage_3_param_count
+80015454   vcop_fft_128_32inter_stage_3_vloops
+80010af4   vcop_fft_256_16i_16o_32inter_init
+80017668   vcop_fft_256_16i_16o_32inter_param_count
+80017ce0   vcop_fft_256_16i_16o_32inter_vloops
+8000d960   vcop_fft_256_16i_16o_init
+800176c4   vcop_fft_256_16i_16o_param_count
+80017d0c   vcop_fft_256_16i_16o_vloops
+8001101c   vcop_fft_256_16i_32o_init
+80017720   vcop_fft_256_16i_32o_param_count
+80017d38   vcop_fft_256_16i_32o_vloops
+8000c514   vcop_fft_256_16ix16o_32inter_stage_4_init
+8000bf28   vcop_fft_256_16ix16o_32inter_stage_4_overflow_init
+80017fbc   vcop_fft_256_16ix16o_32inter_stage_4_overflow_param_count
+80013058   vcop_fft_256_16ix16o_32inter_stage_4_overflow_vloops
+80017fc4   vcop_fft_256_16ix16o_32inter_stage_4_param_count
+800168a0   vcop_fft_256_16ix16o_32inter_stage_4_vloops
+80014298   vcop_fft_256_16ix16o_stage_1_init
+8000808c   vcop_fft_256_16ix16o_stage_1_overflow_init
+80017fcc   vcop_fft_256_16ix16o_stage_1_overflow_param_count
+80011a38   vcop_fft_256_16ix16o_stage_1_overflow_vloops
+80017fd4   vcop_fft_256_16ix16o_stage_1_param_count
+80016934   vcop_fft_256_16ix16o_stage_1_vloops
+8000f5e4   vcop_fft_256_16ix16o_stage_2_init
+800063c8   vcop_fft_256_16ix16o_stage_2_overflow_init
+80017fdc   vcop_fft_256_16ix16o_stage_2_overflow_param_count
+800111cc   vcop_fft_256_16ix16o_stage_2_overflow_vloops
+80017fe4   vcop_fft_256_16ix16o_stage_2_param_count
+8001609c   vcop_fft_256_16ix16o_stage_2_vloops
+80013c8c   vcop_fft_256_16ix16o_stage_3_init
+80009f2c   vcop_fft_256_16ix16o_stage_3_overflow_init
+80017fec   vcop_fft_256_16ix16o_stage_3_overflow_param_count
+80011f30   vcop_fft_256_16ix16o_stage_3_overflow_vloops
+80017ff4   vcop_fft_256_16ix16o_stage_3_param_count
+800169c8   vcop_fft_256_16ix16o_stage_3_vloops
+8001527c   vcop_fft_256_16ix16o_stage_4_init
+8000c7a8   vcop_fft_256_16ix16o_stage_4_overflow_init
+80017ffc   vcop_fft_256_16ix16o_stage_4_overflow_param_count
+800131c4   vcop_fft_256_16ix16o_stage_4_overflow_vloops
+80018004   vcop_fft_256_16ix16o_stage_4_param_count
+80017438   vcop_fft_256_16ix16o_stage_4_vloops
+8000dbc8   vcop_fft_256_16ix32o_stage_4_init
+8000b604   vcop_fft_256_16ix32o_stage_4_overflow_init
+8001800c   vcop_fft_256_16ix32o_stage_4_overflow_param_count
+80012d74   vcop_fft_256_16ix32o_stage_4_overflow_vloops
+80018014   vcop_fft_256_16ix32o_stage_4_param_count
+800163ec   vcop_fft_256_16ix32o_stage_4_vloops
+8000cf58   vcop_fft_256_32inter_stage_1_init
+8001801c   vcop_fft_256_32inter_stage_1_param_count
+80015cf4   vcop_fft_256_32inter_stage_1_vloops
+800072b4   vcop_fft_256_32inter_stage_2_init
+80018024   vcop_fft_256_32inter_stage_2_param_count
+80014ec0   vcop_fft_256_32inter_stage_2_vloops
+800083f8   vcop_fft_256_32inter_stage_3_init
+8001802c   vcop_fft_256_32inter_stage_3_param_count
+8001553c   vcop_fft_256_32inter_stage_3_vloops
+8000eda0   vcop_fft_512_16i_16o_32inter_init
+80016f34   vcop_fft_512_16i_16o_32inter_param_count
+80017af0   vcop_fft_512_16i_16o_32inter_vloops
+8000bc28   vcop_fft_512_16i_16o_init
+80016fa8   vcop_fft_512_16i_16o_param_count
+80017b28   vcop_fft_512_16i_16o_vloops
+8000fe00   vcop_fft_512_16i_32o_init
+8001701c   vcop_fft_512_16i_32o_param_count
+80017b60   vcop_fft_512_16i_32o_vloops
+800128e4   vcop_fft_512_16ix16o_32inter_radix2_stage_5_init
+8000f1c8   vcop_fft_512_16ix16o_32inter_radix2_stage_5_overflow_init
+80018034   vcop_fft_512_16ix16o_32inter_radix2_stage_5_overflow_param_count
+80014ba8   vcop_fft_512_16ix16o_32inter_radix2_stage_5_overflow_vloops
+8001803c   vcop_fft_512_16ix16o_32inter_radix2_stage_5_param_count
+8001777c   vcop_fft_512_16ix16o_32inter_radix2_stage_5_vloops
+80016524   vcop_fft_512_16ix16o_radix2_stage_5_init
+800101e0   vcop_fft_512_16ix16o_radix2_stage_5_overflow_init
+80018044   vcop_fft_512_16ix16o_radix2_stage_5_overflow_param_count
+80014cbc   vcop_fft_512_16ix16o_radix2_stage_5_overflow_vloops
+8001811c   vcop_fft_512_16ix16o_radix2_stage_5_param_count
+80017d64   vcop_fft_512_16ix16o_radix2_stage_5_vloops
+800143cc   vcop_fft_512_16ix16o_stage_1_init
+80008764   vcop_fft_512_16ix16o_stage_1_overflow_init
+8001804c   vcop_fft_512_16ix16o_stage_1_overflow_param_count
+80011be4   vcop_fft_512_16ix16o_stage_1_overflow_vloops
+80018054   vcop_fft_512_16ix16o_stage_1_param_count
+80016a5c   vcop_fft_512_16ix16o_stage_1_vloops
+80014500   vcop_fft_512_16ix16o_stage_2_init
+8000a930   vcop_fft_512_16ix16o_stage_2_overflow_init
+8001805c   vcop_fft_512_16ix16o_stage_2_overflow_param_count
+800120d0   vcop_fft_512_16ix16o_stage_2_overflow_vloops
+80018064   vcop_fft_512_16ix16o_stage_2_param_count
+80016af0   vcop_fft_512_16ix16o_stage_2_vloops
+8000f7f0   vcop_fft_512_16ix16o_stage_3_init
+800067a8   vcop_fft_512_16ix16o_stage_3_overflow_init
+8001806c   vcop_fft_512_16ix16o_stage_3_overflow_param_count
+8001137c   vcop_fft_512_16ix16o_stage_3_overflow_vloops
+80018074   vcop_fft_512_16ix16o_stage_3_param_count
+80016148   vcop_fft_512_16ix16o_stage_3_vloops
+80013dc4   vcop_fft_512_16ix16o_stage_4_init
+800091a4   vcop_fft_512_16ix16o_stage_4_overflow_init
+8001807c   vcop_fft_512_16ix16o_stage_4_overflow_param_count
+80012270   vcop_fft_512_16ix16o_stage_4_overflow_vloops
+80018084   vcop_fft_512_16ix16o_stage_4_param_count
+80016b84   vcop_fft_512_16ix16o_stage_4_vloops
+8001332c   vcop_fft_512_16ix32o_radix2_stage_5_init
+8000e504   vcop_fft_512_16ix32o_radix2_stage_5_overflow_init
+8001808c   vcop_fft_512_16ix32o_radix2_stage_5_overflow_param_count
+80014750   vcop_fft_512_16ix32o_radix2_stage_5_overflow_vloops
+80018094   vcop_fft_512_16ix32o_radix2_stage_5_param_count
+80017314   vcop_fft_512_16ix32o_radix2_stage_5_vloops
+8000d1e4   vcop_fft_512_32inter_stage_1_init
+8001809c   vcop_fft_512_32inter_stage_1_param_count
+80015dbc   vcop_fft_512_32inter_stage_1_vloops
+8000950c   vcop_fft_512_32inter_stage_2_init
+800180a4   vcop_fft_512_32inter_stage_2_param_count
+80015624   vcop_fft_512_32inter_stage_2_vloops
+80007644   vcop_fft_512_32inter_stage_3_init
+800180ac   vcop_fft_512_32inter_stage_3_param_count
+80014fb0   vcop_fft_512_32inter_stage_3_vloops
+80008ad0   vcop_fft_512_32inter_stage_4_init
+800180b4   vcop_fft_512_32inter_stage_4_param_count
+8001570c   vcop_fft_512_32inter_stage_4_vloops
+8000fffc   vcop_fft_64_16i_16o_32inter_init
+80017908   vcop_fft_64_16i_16o_32inter_param_count
+80017ddc   vcop_fft_64_16i_16o_32inter_vloops
+8000e734   vcop_fft_64_16i_16o_init
+80017948   vcop_fft_64_16i_16o_param_count
+80017e00   vcop_fft_64_16i_16o_vloops
+80010590   vcop_fft_64_16i_32o_init
+80017988   vcop_fft_64_16i_32o_param_count
+80017e24   vcop_fft_64_16i_32o_vloops
+8000e08c   vcop_fft_64_16ix16o_32inter_stage_3_init
+8000c224   vcop_fft_64_16ix16o_32inter_stage_3_overflow_init
+800180bc   vcop_fft_64_16ix16o_32inter_stage_3_overflow_param_count
+80012ee8   vcop_fft_64_16ix16o_32inter_stage_3_overflow_vloops
+800180c4   vcop_fft_64_16ix16o_32inter_stage_3_param_count
+80016c18   vcop_fft_64_16ix16o_32inter_stage_3_vloops
+8000de2c   vcop_fft_64_16ix16o_stage_1_init
+80005fc8   vcop_fft_64_16ix16o_stage_1_overflow_init
+800180cc   vcop_fft_64_16ix16o_stage_1_overflow_param_count
+8001152c   vcop_fft_64_16ix16o_stage_1_overflow_vloops
+800180d4   vcop_fft_64_16ix16o_stage_1_param_count
+800161f4   vcop_fft_64_16ix16o_stage_1_vloops
+8000e2d0   vcop_fft_64_16ix16o_stage_2_init
+80006f10   vcop_fft_64_16ix16o_stage_2_overflow_init
+800180dc   vcop_fft_64_16ix16o_stage_2_overflow_param_count
+800116dc   vcop_fft_64_16ix16o_stage_2_overflow_vloops
+800180e4   vcop_fft_64_16ix16o_stage_2_param_count
+800162a0   vcop_fft_64_16ix16o_stage_2_vloops
+800158d4   vcop_fft_64_16ix16o_stage_3_init
+8000ca3c   vcop_fft_64_16ix16o_stage_3_overflow_init
+800180ec   vcop_fft_64_16ix16o_stage_3_overflow_param_count
+80013494   vcop_fft_64_16ix16o_stage_3_overflow_vloops
+80018120   vcop_fft_64_16ix16o_stage_3_param_count
+80017498   vcop_fft_64_16ix16o_stage_3_vloops
+8000eb84   vcop_fft_64_16ix32o_stage_3_init
+8000b918   vcop_fft_64_16ix32o_stage_3_overflow_init
+800180f4   vcop_fft_64_16ix32o_stage_3_overflow_param_count
+80012bfc   vcop_fft_64_16ix32o_stage_3_overflow_vloops
+800180fc   vcop_fft_64_16ix32o_stage_3_param_count
+80016488   vcop_fft_64_16ix32o_stage_3_vloops
+8000986c   vcop_fft_64_32inter_stage_1_init
+80018104   vcop_fft_64_32inter_stage_1_param_count
+800157f4   vcop_fft_64_32inter_stage_1_vloops
+80009bcc   vcop_fft_64_32inter_stage_2_init
+8001810c   vcop_fft_64_32inter_stage_2_param_count
+800150a0   vcop_fft_64_32inter_stage_2_vloops
+80022420   vcop_fft_doppler_correction_32ix32o_cn
+80015368   vcop_fft_doppler_correction_32ix32o_kernel_init
+80018124   vcop_fft_doppler_correction_32ix32o_kernel_param_count
+8001634c   vcop_fft_doppler_correction_32ix32o_kernel_vloops
+80022b78   vcop_fft_doppler_correction_cn
+800159b0   vcop_fft_doppler_correction_kernel_init
+80018128   vcop_fft_doppler_correction_kernel_param_count
+800179c8   vcop_fft_doppler_correction_kernel_vloops
+800177d8   vcop_fft_doppler_pitch_removal_32ix32o_init
+8001812c   vcop_fft_doppler_pitch_removal_32ix32o_param_count
+80017e48   vcop_fft_doppler_pitch_removal_32ix32o_vloops
+80017828   vcop_fft_doppler_pitch_removal_init
+80018130   vcop_fft_doppler_pitch_removal_param_count
+80017e64   vcop_fft_doppler_pitch_removal_vloops
+800201fc   vcop_fft_npt_32inter_mixed_radix_cn
+8001f9fc   vcop_fft_npt_32o_mixed_radix_cn
+800205b8   vcop_fft_npt_mixed_radix_cn
+80016cac   vcop_fft_transpose_output_32ix32o_kernel_init
+80017c00   vcop_fft_transpose_output_32ix32o_kernel_vloops
+800178c0   vcop_fft_zero_padding_kernel_init
+80018134   vcop_fft_zero_padding_kernel_param_count
+80017eb4   vcop_fft_zero_padding_kernel_vloops
+80023778   vcop_interference_zero_out_cn
+80016dc8   vcop_interference_zero_out_kernel_init
+80018138   vcop_interference_zero_out_kernel_param_count
+80017e80   vcop_interference_zero_out_kernel_vloops
+8002b8f4   vcop_minit
+8002382c   vcop_sign_extension_cn
+80016e44   vcop_sign_extension_kernel_init
+8001813c   vcop_sign_extension_kernel_param_count
+80017d90   vcop_sign_extension_kernel_vloops
+80022c84   vcop_windowing_cn
+80015b5c   vcop_windowing_kernel_init
+80018140   vcop_windowing_kernel_param_count
+80017a08   vcop_windowing_kernel_vloops
+80022f70   vcop_windowing_with_transpose_cn
+80015a88   vcop_windowing_with_transpose_kernel_init
+80018144   vcop_windowing_with_transpose_kernel_param_count
+80017b98   vcop_windowing_with_transpose_kernel_vloops
+8002b364   vfprintf
+8002be24   vsprintf
+8002b64c   write
+8002bcac   writemsg
+
+
+GLOBAL SYMBOLS: SORTED BY Symbol Address 
+
+address    name
+--------   ----
+00000000   _bam_fardata_size
+00000000   _bam_neardata_size
+00000000   _starterware_neardata_size
+00000001   __TI_args_main
+00000001   __TI_exit
+00000110   _starterware_text_size
+000001f0   _algo_fardata_size
+000001f4   _starterware_fardata_size
+00000270   _rts_neardata_size
+000003b0   _rts_fardata_size
+000005a8   _algo_neardata_size
+00002000   __TI_STACK_SIZE
+00003570   _bam_text_size
+00004000   IMEMH_SIZE
+00004000   IMEML_SIZE
+00007000   WMEM_SIZE
+00008058   _rts_text_size
+0000a58c   _text_size
+00018b30   _algo_text_size
+07800000   __TI_SYSMEM_SIZE
+40020000   DMEM_SCRATCH
+40024000   _stack
+40026000   __TI_STACK_END
+40026000   __TI_STATIC_BASE
+400263c0   FFT_TI_VISION_FXNS
+400263ec   FFT_TI_IRES
+400265a8   _ctypes_
+400268c0   gDmaUtilsStateStruct
+40026928   test_module_cyles
+4002694c   gTest_TI_profileTsc
+40026970   bam_stat_num_packets
+4002697c   _my_stack
+40026a38   __CIOBUF_
+40026b58   edmaBase
+40040000   _wmem_memory
+40050000   _imemla_memory
+40054000   _imemha_memory
+40070000   _imemlb_memory
+40074000   _imemhb_memory
+80000000   _vec_table
+80000100   _reset_handler
+80000120   _dummy_handler
+80001100   generateTwiddleFactor_1024
+80002350   generateTwiddleFactor_128
+80002f0c   generateTwiddleFactor_512
+80004188   generateTwiddleFactor_256
+800055d4   generateTwiddleFactor_64
+80005b04   vcop_fft_1024_16ix16o_stage_3_overflow_init
+80005fc8   vcop_fft_64_16ix16o_stage_1_overflow_init
+800063c8   vcop_fft_256_16ix16o_stage_2_overflow_init
+800067a8   vcop_fft_512_16ix16o_stage_3_overflow_init
+80006b60   vcop_fft_128_16ix16o_stage_2_overflow_init
+80006f10   vcop_fft_64_16ix16o_stage_2_overflow_init
+800072b4   vcop_fft_256_32inter_stage_2_init
+80007644   vcop_fft_512_32inter_stage_3_init
+800079b4   vcop_fft_128_16ix16o_stage_1_overflow_init
+80007d20   vcop_fft_128_32inter_stage_3_init
+8000808c   vcop_fft_256_16ix16o_stage_1_overflow_init
+800083f8   vcop_fft_256_32inter_stage_3_init
+80008764   vcop_fft_512_16ix16o_stage_1_overflow_init
+80008ad0   vcop_fft_512_32inter_stage_4_init
+80008e3c   vcop_fft_128_32inter_stage_2_init
+800091a4   vcop_fft_512_16ix16o_stage_4_overflow_init
+8000950c   vcop_fft_512_32inter_stage_2_init
+8000986c   vcop_fft_64_32inter_stage_1_init
+80009bcc   vcop_fft_64_32inter_stage_2_init
+80009f2c   vcop_fft_256_16ix16o_stage_3_overflow_init
+8000a288   vcop_fft_128_16ix16o_stage_3_overflow_init
+8000a5e0   vcop_fft_1024_16ix16o_stage_4_overflow_init
+8000a930   vcop_fft_512_16ix16o_stage_2_overflow_init
+8000ac80   vcop_fft_1024_16ix16o_stage_1_overflow_init
+8000afbc   vcop_fft_1024_16ix16o_stage_2_overflow_init
+8000b2f0   vcop_fft_1024_16i_16o_init
+8000b604   vcop_fft_256_16ix32o_stage_4_overflow_init
+8000b918   vcop_fft_64_16ix32o_stage_3_overflow_init
+8000bc28   vcop_fft_512_16i_16o_init
+8000bf28   vcop_fft_256_16ix16o_32inter_stage_4_overflow_init
+8000c224   vcop_fft_64_16ix16o_32inter_stage_3_overflow_init
+8000c514   vcop_fft_256_16ix16o_32inter_stage_4_init
+8000c7a8   vcop_fft_256_16ix16o_stage_4_overflow_init
+8000ca3c   vcop_fft_64_16ix16o_stage_3_overflow_init
+8000cccc   vcop_fft_128_32inter_stage_1_init
+8000cf58   vcop_fft_256_32inter_stage_1_init
+8000d1e4   vcop_fft_512_32inter_stage_1_init
+8000d470   vcop_fft_1024_16ix16o_stage_5_overflow_init
+8000d6f8   vcop_fft_128_16i_16o_init
+8000d960   vcop_fft_256_16i_16o_init
+8000dbc8   vcop_fft_256_16ix32o_stage_4_init
+8000de2c   vcop_fft_64_16ix16o_stage_1_init
+8000e08c   vcop_fft_64_16ix16o_32inter_stage_3_init
+8000e2d0   vcop_fft_64_16ix16o_stage_2_init
+8000e504   vcop_fft_512_16ix32o_radix2_stage_5_overflow_init
+8000e734   vcop_fft_64_16i_16o_init
+8000e960   vcop_fft_128_16ix32o_radix2_stage_4_overflow_init
+8000eb84   vcop_fft_64_16ix32o_stage_3_init
+8000eda0   vcop_fft_512_16i_16o_32inter_init
+8000efb8   vcop_fft_1024_16ix16o_stage_3_init
+8000f1c8   vcop_fft_512_16ix16o_32inter_radix2_stage_5_overflow_init
+8000f3d8   vcop_fft_1024_16ix16o_stage_3_overflow_vloops
+8000f5e4   vcop_fft_256_16ix16o_stage_2_init
+8000f7f0   vcop_fft_512_16ix16o_stage_3_init
+8000f9f8   vcop_fft_128_16ix16o_32inter_radix2_stage_4_overflow_init
+8000fbfc   vcop_fft_128_16ix16o_stage_2_init
+8000fe00   vcop_fft_512_16i_32o_init
+8000fffc   vcop_fft_64_16i_16o_32inter_init
+800101e0   vcop_fft_512_16ix16o_radix2_stage_5_overflow_init
+80010590   vcop_fft_64_16i_32o_init
+80010760   vcop_fft_128_16ix16o_radix2_stage_4_overflow_init
+8001092c   vcop_fft_128_16i_16o_32inter_init
+80010af4   vcop_fft_256_16i_16o_32inter_init
+80010cbc   vcop_fft_128_16i_32o_init
+80010e6c   vcop_fft_128_16ix16o_stage_2_overflow_vloops
+8001101c   vcop_fft_256_16i_32o_init
+800111cc   vcop_fft_256_16ix16o_stage_2_overflow_vloops
+8001137c   vcop_fft_512_16ix16o_stage_3_overflow_vloops
+8001152c   vcop_fft_64_16ix16o_stage_1_overflow_vloops
+800116dc   vcop_fft_64_16ix16o_stage_2_overflow_vloops
+8001188c   vcop_fft_128_16ix16o_stage_1_overflow_vloops
+80011a38   vcop_fft_256_16ix16o_stage_1_overflow_vloops
+80011be4   vcop_fft_512_16ix16o_stage_1_overflow_vloops
+80011d90   vcop_fft_128_16ix16o_stage_3_overflow_vloops
+80011f30   vcop_fft_256_16ix16o_stage_3_overflow_vloops
+800120d0   vcop_fft_512_16ix16o_stage_2_overflow_vloops
+80012270   vcop_fft_512_16ix16o_stage_4_overflow_vloops
+80012410   vcop_fft_1024_16ix16o_stage_1_overflow_vloops
+800125ac   vcop_fft_1024_16ix16o_stage_2_overflow_vloops
+80012748   vcop_fft_1024_16ix16o_stage_4_overflow_vloops
+800128e4   vcop_fft_512_16ix16o_32inter_radix2_stage_5_init
+80012a74   vcop_fft_128_16ix16o_32inter_radix2_stage_4_init
+80012bfc   vcop_fft_64_16ix32o_stage_3_overflow_vloops
+80012d74   vcop_fft_256_16ix32o_stage_4_overflow_vloops
+80012ee8   vcop_fft_64_16ix16o_32inter_stage_3_overflow_vloops
+80013058   vcop_fft_256_16ix16o_32inter_stage_4_overflow_vloops
+800131c4   vcop_fft_256_16ix16o_stage_4_overflow_vloops
+8001332c   vcop_fft_512_16ix32o_radix2_stage_5_init
+80013494   vcop_fft_64_16ix16o_stage_3_overflow_vloops
+800135fc   vcop_fft_1024_16ix16o_stage_5_overflow_vloops
+80013760   vcop_fft_128_16ix32o_radix2_stage_4_init
+80013a1c   vcop_fft_1024_16ix16o_stage_4_init
+80013b54   vcop_fft_128_16ix16o_stage_3_init
+80013c8c   vcop_fft_256_16ix16o_stage_3_init
+80013dc4   vcop_fft_512_16ix16o_stage_4_init
+80013efc   vcop_fft_1024_16ix16o_stage_1_init
+80014030   vcop_fft_1024_16ix16o_stage_2_init
+80014164   vcop_fft_128_16ix16o_stage_1_init
+80014298   vcop_fft_256_16ix16o_stage_1_init
+800143cc   vcop_fft_512_16ix16o_stage_1_init
+80014500   vcop_fft_512_16ix16o_stage_2_init
+80014634   vcop_fft_128_16ix32o_radix2_stage_4_overflow_vloops
+80014750   vcop_fft_512_16ix32o_radix2_stage_5_overflow_vloops
+8001486c   vcop_dcoffset_kernel_init
+80014980   vcop_fft_128_16ix16o_32inter_radix2_stage_4_overflow_vloops
+80014a94   vcop_fft_128_16ix16o_radix2_stage_4_overflow_vloops
+80014ba8   vcop_fft_512_16ix16o_32inter_radix2_stage_5_overflow_vloops
+80014cbc   vcop_fft_512_16ix16o_radix2_stage_5_overflow_vloops
+80014dd0   vcop_fft_128_32inter_stage_2_vloops
+80014ec0   vcop_fft_256_32inter_stage_2_vloops
+80014fb0   vcop_fft_512_32inter_stage_3_vloops
+800150a0   vcop_fft_64_32inter_stage_2_vloops
+80015190   vcop_fft_1024_16ix16o_stage_5_init
+8001527c   vcop_fft_256_16ix16o_stage_4_init
+80015368   vcop_fft_doppler_correction_32ix32o_kernel_init
+80015454   vcop_fft_128_32inter_stage_3_vloops
+8001553c   vcop_fft_256_32inter_stage_3_vloops
+80015624   vcop_fft_512_32inter_stage_2_vloops
+8001570c   vcop_fft_512_32inter_stage_4_vloops
+800157f4   vcop_fft_64_32inter_stage_1_vloops
+800158d4   vcop_fft_64_16ix16o_stage_3_init
+800159b0   vcop_fft_doppler_correction_kernel_init
+80015a88   vcop_windowing_with_transpose_kernel_init
+80015b5c   vcop_windowing_kernel_init
+80015c2c   vcop_fft_128_32inter_stage_1_vloops
+80015cf4   vcop_fft_256_32inter_stage_1_vloops
+80015dbc   vcop_fft_512_32inter_stage_1_vloops
+80015f44   vcop_fft_1024_16ix16o_stage_3_vloops
+80015ff0   vcop_fft_128_16ix16o_stage_2_vloops
+8001609c   vcop_fft_256_16ix16o_stage_2_vloops
+80016148   vcop_fft_512_16ix16o_stage_3_vloops
+800161f4   vcop_fft_64_16ix16o_stage_1_vloops
+800162a0   vcop_fft_64_16ix16o_stage_2_vloops
+8001634c   vcop_fft_doppler_correction_32ix32o_kernel_vloops
+800163ec   vcop_fft_256_16ix32o_stage_4_vloops
+80016488   vcop_fft_64_16ix32o_stage_3_vloops
+80016524   vcop_fft_512_16ix16o_radix2_stage_5_init
+800165bc   vcop_fft_1024_16ix16o_stage_1_vloops
+80016650   vcop_fft_1024_16ix16o_stage_2_vloops
+800166e4   vcop_fft_1024_16ix16o_stage_4_vloops
+80016778   vcop_fft_128_16ix16o_stage_1_vloops
+8001680c   vcop_fft_128_16ix16o_stage_3_vloops
+800168a0   vcop_fft_256_16ix16o_32inter_stage_4_vloops
+80016934   vcop_fft_256_16ix16o_stage_1_vloops
+800169c8   vcop_fft_256_16ix16o_stage_3_vloops
+80016a5c   vcop_fft_512_16ix16o_stage_1_vloops
+80016af0   vcop_fft_512_16ix16o_stage_2_vloops
+80016b84   vcop_fft_512_16ix16o_stage_4_vloops
+80016c18   vcop_fft_64_16ix16o_32inter_stage_3_vloops
+80016cac   vcop_fft_transpose_output_32ix32o_kernel_init
+80016d3c   vcop_fft_128_16ix16o_radix2_stage_4_init
+80016dc8   vcop_interference_zero_out_kernel_init
+80016e44   vcop_sign_extension_kernel_init
+80016ec0   vcop_fft_1024_16i_16o_param_count
+80016f34   vcop_fft_512_16i_16o_32inter_param_count
+80016fa8   vcop_fft_512_16i_16o_param_count
+8001701c   vcop_fft_512_16i_32o_param_count
+800172b0   vcop_fft_128_16ix32o_radix2_stage_4_vloops
+80017314   vcop_fft_512_16ix32o_radix2_stage_5_vloops
+80017378   vcop_dcoffset_kernel_vloops
+800173d8   vcop_fft_1024_16ix16o_stage_5_vloops
+80017438   vcop_fft_256_16ix16o_stage_4_vloops
+80017498   vcop_fft_64_16ix16o_stage_3_vloops
+800174f8   vcop_fft_128_16i_16o_32inter_param_count
+80017554   vcop_fft_128_16i_16o_param_count
+800175b0   vcop_fft_128_16i_32o_param_count
+8001760c   vcop_fft_128_16ix16o_32inter_radix2_stage_4_vloops
+80017668   vcop_fft_256_16i_16o_32inter_param_count
+800176c4   vcop_fft_256_16i_16o_param_count
+80017720   vcop_fft_256_16i_32o_param_count
+8001777c   vcop_fft_512_16ix16o_32inter_radix2_stage_5_vloops
+800177d8   vcop_fft_doppler_pitch_removal_32ix32o_init
+80017828   vcop_fft_doppler_pitch_removal_init
+80017878   vcop_copy_fft_32ix32o_kernel_init
+800178c0   vcop_fft_zero_padding_kernel_init
+80017908   vcop_fft_64_16i_16o_32inter_param_count
+80017948   vcop_fft_64_16i_16o_param_count
+80017988   vcop_fft_64_16i_32o_param_count
+800179c8   vcop_fft_doppler_correction_kernel_vloops
+80017a08   vcop_windowing_kernel_vloops
+80017ab8   vcop_fft_1024_16i_16o_vloops
+80017af0   vcop_fft_512_16i_16o_32inter_vloops
+80017b28   vcop_fft_512_16i_16o_vloops
+80017b60   vcop_fft_512_16i_32o_vloops
+80017b98   vcop_windowing_with_transpose_kernel_vloops
+80017c00   vcop_fft_transpose_output_32ix32o_kernel_vloops
+80017c30   vcop_fft_128_16i_16o_32inter_vloops
+80017c5c   vcop_fft_128_16i_16o_vloops
+80017c88   vcop_fft_128_16i_32o_vloops
+80017cb4   vcop_fft_128_16ix16o_radix2_stage_4_vloops
+80017ce0   vcop_fft_256_16i_16o_32inter_vloops
+80017d0c   vcop_fft_256_16i_16o_vloops
+80017d38   vcop_fft_256_16i_32o_vloops
+80017d64   vcop_fft_512_16ix16o_radix2_stage_5_vloops
+80017d90   vcop_sign_extension_kernel_vloops
+80017ddc   vcop_fft_64_16i_16o_32inter_vloops
+80017e00   vcop_fft_64_16i_16o_vloops
+80017e24   vcop_fft_64_16i_32o_vloops
+80017e48   vcop_fft_doppler_pitch_removal_32ix32o_vloops
+80017e64   vcop_fft_doppler_pitch_removal_vloops
+80017e80   vcop_interference_zero_out_kernel_vloops
+80017e9c   vcop_copy_fft_32ix32o_kernel_vloops
+80017eb4   vcop_fft_zero_padding_kernel_vloops
+80017ecc   getSizeTwiddleFactor_1024
+80017ed4   getSizeTwiddleFactor_128
+80017edc   getSizeTwiddleFactor_256
+80017ee4   getSizeTwiddleFactor_512
+80017eec   getSizeTwiddleFactor_64
+80017ef4   vcop_dcoffset_kernel_param_count
+80017efc   vcop_fft_1024_16ix16o_stage_1_overflow_param_count
+80017f04   vcop_fft_1024_16ix16o_stage_1_param_count
+80017f0c   vcop_fft_1024_16ix16o_stage_2_overflow_param_count
+80017f14   vcop_fft_1024_16ix16o_stage_2_param_count
+80017f1c   vcop_fft_1024_16ix16o_stage_3_overflow_param_count
+80017f24   vcop_fft_1024_16ix16o_stage_3_param_count
+80017f2c   vcop_fft_1024_16ix16o_stage_4_overflow_param_count
+80017f34   vcop_fft_1024_16ix16o_stage_4_param_count
+80017f3c   vcop_fft_1024_16ix16o_stage_5_overflow_param_count
+80017f44   vcop_fft_1024_16ix16o_stage_5_param_count
+80017f4c   vcop_fft_128_16ix16o_32inter_radix2_stage_4_overflow_param_count
+80017f54   vcop_fft_128_16ix16o_32inter_radix2_stage_4_param_count
+80017f5c   vcop_fft_128_16ix16o_radix2_stage_4_overflow_param_count
+80017f64   vcop_fft_128_16ix16o_stage_1_overflow_param_count
+80017f6c   vcop_fft_128_16ix16o_stage_1_param_count
+80017f74   vcop_fft_128_16ix16o_stage_2_overflow_param_count
+80017f7c   vcop_fft_128_16ix16o_stage_2_param_count
+80017f84   vcop_fft_128_16ix16o_stage_3_overflow_param_count
+80017f8c   vcop_fft_128_16ix16o_stage_3_param_count
+80017f94   vcop_fft_128_16ix32o_radix2_stage_4_overflow_param_count
+80017f9c   vcop_fft_128_16ix32o_radix2_stage_4_param_count
+80017fa4   vcop_fft_128_32inter_stage_1_param_count
+80017fac   vcop_fft_128_32inter_stage_2_param_count
+80017fb4   vcop_fft_128_32inter_stage_3_param_count
+80017fbc   vcop_fft_256_16ix16o_32inter_stage_4_overflow_param_count
+80017fc4   vcop_fft_256_16ix16o_32inter_stage_4_param_count
+80017fcc   vcop_fft_256_16ix16o_stage_1_overflow_param_count
+80017fd4   vcop_fft_256_16ix16o_stage_1_param_count
+80017fdc   vcop_fft_256_16ix16o_stage_2_overflow_param_count
+80017fe4   vcop_fft_256_16ix16o_stage_2_param_count
+80017fec   vcop_fft_256_16ix16o_stage_3_overflow_param_count
+80017ff4   vcop_fft_256_16ix16o_stage_3_param_count
+80017ffc   vcop_fft_256_16ix16o_stage_4_overflow_param_count
+80018004   vcop_fft_256_16ix16o_stage_4_param_count
+8001800c   vcop_fft_256_16ix32o_stage_4_overflow_param_count
+80018014   vcop_fft_256_16ix32o_stage_4_param_count
+8001801c   vcop_fft_256_32inter_stage_1_param_count
+80018024   vcop_fft_256_32inter_stage_2_param_count
+8001802c   vcop_fft_256_32inter_stage_3_param_count
+80018034   vcop_fft_512_16ix16o_32inter_radix2_stage_5_overflow_param_count
+8001803c   vcop_fft_512_16ix16o_32inter_radix2_stage_5_param_count
+80018044   vcop_fft_512_16ix16o_radix2_stage_5_overflow_param_count
+8001804c   vcop_fft_512_16ix16o_stage_1_overflow_param_count
+80018054   vcop_fft_512_16ix16o_stage_1_param_count
+8001805c   vcop_fft_512_16ix16o_stage_2_overflow_param_count
+80018064   vcop_fft_512_16ix16o_stage_2_param_count
+8001806c   vcop_fft_512_16ix16o_stage_3_overflow_param_count
+80018074   vcop_fft_512_16ix16o_stage_3_param_count
+8001807c   vcop_fft_512_16ix16o_stage_4_overflow_param_count
+80018084   vcop_fft_512_16ix16o_stage_4_param_count
+8001808c   vcop_fft_512_16ix32o_radix2_stage_5_overflow_param_count
+80018094   vcop_fft_512_16ix32o_radix2_stage_5_param_count
+8001809c   vcop_fft_512_32inter_stage_1_param_count
+800180a4   vcop_fft_512_32inter_stage_2_param_count
+800180ac   vcop_fft_512_32inter_stage_3_param_count
+800180b4   vcop_fft_512_32inter_stage_4_param_count
+800180bc   vcop_fft_64_16ix16o_32inter_stage_3_overflow_param_count
+800180c4   vcop_fft_64_16ix16o_32inter_stage_3_param_count
+800180cc   vcop_fft_64_16ix16o_stage_1_overflow_param_count
+800180d4   vcop_fft_64_16ix16o_stage_1_param_count
+800180dc   vcop_fft_64_16ix16o_stage_2_overflow_param_count
+800180e4   vcop_fft_64_16ix16o_stage_2_param_count
+800180ec   vcop_fft_64_16ix16o_stage_3_overflow_param_count
+800180f4   vcop_fft_64_16ix32o_stage_3_overflow_param_count
+800180fc   vcop_fft_64_16ix32o_stage_3_param_count
+80018104   vcop_fft_64_32inter_stage_1_param_count
+8001810c   vcop_fft_64_32inter_stage_2_param_count
+80018114   vcop_copy_fft_32ix32o_kernel_param_count
+80018118   vcop_fft_128_16ix16o_radix2_stage_4_param_count
+8001811c   vcop_fft_512_16ix16o_radix2_stage_5_param_count
+80018120   vcop_fft_64_16ix16o_stage_3_param_count
+80018124   vcop_fft_doppler_correction_32ix32o_kernel_param_count
+80018128   vcop_fft_doppler_correction_kernel_param_count
+8001812c   vcop_fft_doppler_pitch_removal_32ix32o_param_count
+80018130   vcop_fft_doppler_pitch_removal_param_count
+80018134   vcop_fft_zero_padding_kernel_param_count
+80018138   vcop_interference_zero_out_kernel_param_count
+8001813c   vcop_sign_extension_kernel_param_count
+80018140   vcop_windowing_kernel_param_count
+80018144   vcop_windowing_with_transpose_kernel_param_count
+80018148   FFT_TI_process
+80018824   FFT_TI_kernelControl
+80018ad8   FFT_TI_dmaControl
+80018d30   FFT_TI_control
+80018f1c   FFT32O_TI_kernelControl
+80019244   FFT_TI_graphCreate
+800194d4   FFT_TI_init
+800195ec   FFT_TI_alloc
+80019838   BAM_DMA_CUSTOM_FFT_VERT_OUT_waitOutChannel
+800198b8   FFT_TI_activate
+8001991c   FFT_TI_deactivate
+80019980   BAM_DMA_CUSTOM_FFT_VERT_OUT_triggerOutChannel
+80019b58   FFT32O_TI_getWBUFptr
+80019b84   FFT_TI_getWBUFptr
+80019bd8   FFT_TI_execute
+80019bf8   FFT_TI_getGraphMemReq
+80019c14   FFT_TI_free
+80019c2c   FFT_TI_numAlloc
+80019c30   fftTest
+8001ad84   statCollectorControl
+8001bb10   fft_cn
+8001c818   fft32o_cn
+8001dde0   EDMA_UTILS_autoIncrement_configure
+8001efac   generateTwiddleFactor_ref2
+8001f4d4   generateTwiddleFactor_ref
+8001f9fc   vcop_fft_npt_32o_mixed_radix_cn
+800201fc   vcop_fft_npt_32inter_mixed_radix_cn
+800205b8   vcop_fft_npt_mixed_radix_cn
+80020908   printparams
+80020c10   main
+80020f14   EDMA_UTILS_autoIncrement_update
+800213f4   profiler_end
+800220a4   DMA_funcs_hardwareRegSetup
+80022268   EDMA_UTILS_autoIncrement_triggerOutChannel
+80022420   vcop_fft_doppler_correction_32ix32o_cn
+800225b8   EDMA_UTILS_scattherGather_init
+80022748   DMA_resourceAllocator_allocateResources
+800228c0   EDMA_UTILS_autoIncrement_triggerInChannel
+80022a24   report_printAppletInfo
+80022b78   vcop_fft_doppler_correction_cn
+80022c84   vcop_windowing_cn
+80022f70   vcop_windowing_with_transpose_cn
+80023060   EDMA_UTILS_autoIncrement_init
+80023148   readparamfile
+800232f0   DMA_utils_updateStateStruct
+800233bc   profiler_init
+80023778   vcop_interference_zero_out_cn
+8002382c   vcop_sign_extension_cn
+800238d4   EDMA_UTILS_memcpy2D
+8002396c   vcop_dcoffset_cn
+80023b20   DMA_funcs_writeTransferParams
+80023b94   statCollectorInit
+80023c04   profiler_getStackDepth
+80023c70   EDMA_UTILS_autoIncrement_waitOutChannel
+80023d98   TI_GetMemoryChunk
+80023df0   EDMA_UTILS_autoIncrement_waitInChannel
+80023e44   profiler_testCaseInfo
+80023e94   EDMA_UTILS_globalReset
+80023ee0   profiler_start
+80023fac   memcpy2D
+80023fec   EDMA_UTILS_scattherGather_updateDstNtrigger
+80024024   profiler_printStatus
+8002405c   profiler_initStack
+8002408c   DMA_resourceAllocator_initResources
+800240b8   TEST_PRINTF
+800240dc   isPowerOfFour
+80024100   DMA_utils_resetStateStruct
+80024120   EDMA_UTILS_scattherGather_wait
+80024140   digitReversalCustom
+8002415c   profiler_getSP
+80024174   EDMA_UTILS_scattherGather_configure
+80024184   profiler_end_print
+80024194   DMA_resourceAllocator_setEdma3RmHandle
+800241a0   EDMA_UTILS_setEdma3RmHandle
+800241ac   TI_CreateMemoryHandle
+800241b8   EDMA3LLD_SUPPORT_requestResources
+800241bc   _scanfi
+800246b4   strtod
+80024a54   strtold
+80024df0   cos
+8002517c   __arp32abi_divf
+800254e0   sin
+8002580c   strtoll
+80025fec   log
+80026bc0   strtoull
+80026e0c   _printfi
+80027258   fwrite
+8002767c   _frcdivd
+8002787c   __arp32abi_divd
+80027a60   __arp32abi_divull
+80027c2c   strtol
+80027df8   __arp32abi_mpyd
+80028188   __arp32abi_addd
+80028340   strtoul
+8002866c   fputs
+800287dc   frexp
+80028948   __arp32abi_mpyf
+80028aac   _frcaddd
+80028d68   __arp32abi_mpyll
+80028ec0   fread
+80029004   _frcmpyd
+800294ec   setvbuf
+8002980c   open
+800298f8   fputc
+800299e0   memcpy
+80029abc   __arp32abi_cmpd
+80029b88   __arp32abi_nround
+80029c54   mem_alloc
+80029e90   HOSTlseek
+80029ff8   modf
+8002a0a8   HOSTrename
+8002a1fc   memset
+8002a344   _buff_read
+8002a47c   HOSTopen
+8002a5a8   mem_free
+8002a63c   HOSTread
+8002a6cc   __arp32abi_cvtdf
+8002a7ec   _wrt_ok
+8002a87c   fseek
+8002a90c   ftell
+8002a99c   HOSTwrite
+8002aa28   __arp32abi_fixdu
+8002aab4   close
+8002abc0   __arp32abi_cvtfd
+8002ac40   __arp32abi_fltulld
+8002ad40   printf
+8002adc0   __arp32abi_fixdi
+8002ae3c   __arp32abi_fltullf
+8002aeb8   _closefile
+8002af34   atoi
+8002afb0   fflush
+8002b02c   HOSTunlink
+8002b194   minit
+8002b20c   HOSTclose
+8002b280   fprintf
+8002b2f4   _auto_init
+8002b364   vfprintf
+8002b3d4   _frcmpyf
+8002b440   _rd_ok
+8002b4ac   __arp32abi_fltid
+8002b514   _c_int00
+8002b57c   lseek
+8002b5e4   read
+8002b64c   write
+8002b718   ltoa
+8002b77c   __arp32abi_llshl
+8002b7dc   _doflush
+8002b83c   __arp32abi_isinf
+8002b8f4   vcop_minit
+8002b9a4   _renormd
+8002b9f8   exit
+8002ba4c   _cleanup
+8002baec   rand
+8002bb3c   __arp32abi_fltud
+8002bb88   malloc
+8002bbd4   __arp32abi_frcmpyf_div
+8002bc1c   readmsg
+8002bc64   unlink
+8002bcac   writemsg
+8002bcec   C$$IO$$
+8002bcf4   _args_main
+8002bd34   __arp32abi_fltuf
+8002bdac   __arp32abi_strasgi
+8002bde8   fopen
+8002be24   vsprintf
+8002be60   __arp32abi_abort_msg
+8002be98   __arp32abi_llshr
+8002bed0   __arp32abi_remull
+8002bf08   sscanf
+8002bf40   __arp32abi_llshru
+8002bf74   fclose
+8002bfa4   srand
+8002bfd4   __arp32abi_subd
+8002c000   __arp32abi_negd
+8002c028   _mpyl
+8002c050   __arp32abi_absd
+8002c074   __arp32abi_cmplls
+8002c098   __arp32abi_cmpllu
+8002c0bc   __arp32abi_trunc
+8002c0dc   memccpy
+8002c0fc   __arp32abi_addll
+8002c134   fgets
+8002c14c   __arp32abi_subll
+8002c160   free
+8002c174   __arp32abi_negll
+8002c1f8   remove
+8002c204   C$$EXIT
+8002c204   abort
+8002c20c   _nop
+8002c210   _system_pre_init
+8002c214   BAM_initGraph
+8002db94   BAM_optimizeGraph
+8002e320   BAM_createGraph
+8002e4ec   bam_mem_alloc
+8002e670   BAM_DMA_AUTOINCREMENT_getMemRecFunc
+8002e7c8   BAM_updateNodes
+8002e920   BAM_process
+8002ea58   bam_getMemPacket
+8002ecb0   BAM_DMA_AUTOINCREMENT_setMemRecFunc
+8002edcc   BAM_fillKernelInfo
+8002eedc   BAM_getGraphMemSize
+8002efe8   bam_mem_free
+8002f0b4   BAM_copyIntMemRec2ExtMem
+8002f160   bam_minit
+8002f200   BAM_ARP32_computeWrapper
+8002f298   bam_releaseMemPacket
+8002f328   BAM_copyNodeList
+8002f3b4   BAM_initGraphInstance
+8002f428   BAM_DMA_AUTOINCREMENT_updateDDRptrInChannel
+8002f498   BAM_DMA_AUTOINCREMENT_updateDDRptrOutChannel
+8002f508   bam_mcheck
+8002f5d4   BAM_controlNode
+8002f628   BAM_DMA_AUTOINCREMENT_frameInitInChannel
+8002f674   BAM_initKernelDB
+8002f6c0   BAM_DMA_AUTOINCREMENT_frameInitOutChannel
+8002f704   BAM_getMemPacket
+8002f73c   BAM_printf
+8002f780   BAM_dummyKernelFunc
+8002f784   EVE_SCTM_CounterConfig
+8002f7cc   EVE_SCTM_CounterTimerEnable
+8002f7f8   EVE_SCTM_InpEvtSelect
+8002f824   EVE_SCTM_SamplingSelect
+8002f850   EVE_SCTM_CounterRead
+8002f868   EVE_SCTM_OverflowCheck
+8002f880   EVE_SCTM_Enable
+80051100   _sys_memory
+87851100   gsTokenMap_fft
+87852900   gBAM_memPrintfArr
+87852d00   gInputOuputOrderIndex512pt
+87853500   gInputOuputOrderIndex128pt
+87853700   gBAM_TI_dmaAutoIncrementReadKernel
+87853714   gBAM_TI_dmaAutoIncrementWriteKernel
+87853728   gBAM_TI_dmaReadAutoIncrementKernelHelperFunc
+87853730   gBAM_TI_dmaWriteAutoIncrementKernelHelperFunc
+87853738   gBAM_TI_dmaReadAutoIncrementKernelExecFunc
+87853750   gBAM_TI_dmaWriteAutoIncrementKernelExecFunc
+87854a18   gConfig_fft
+87855204   gTest_TI_profileSctm
+87855214   memObj_DMEM
+87855238   _tmpnams
+878552e4   _cleanup_ptr
+878552e8   _dtors_ptr
+878552f4   _ftable
+878555c0   _lock
+878555c4   _unlock
+878555d0   _ft_end
+878555d4   errno
+878555e8   CRED_instVirtAddr
+878558bc   gBAM_TI_dmaCustomFftHorzNodeWriteKernel
+878558d0   gBAM_TI_dmaCustomFftHorzNodeWriteKernelHelperFunc
+878558d8   gBAM_TI_dmaCustomFftHorzNodeWriteKernelExecFunc
+878558f0   gBAM_TI_dmaCustomFftVertNodeWriteKernel
+87855904   gBAM_TI_dmaCustomFftVertNodeWriteKernelHelperFunc
+8785590c   gBAM_TI_dmaCustomFftVertNodeWriteKernelExecFunc
+87855924   gFft_BAM_TI_kernelDBdef
+87855930   gBAM_TI_dcoffsetWindowingKernel
+87855944   gBAM_TI_dcoffsetWindowingHelperFunc
+8785594c   gBAM_TI_Fftnpt16ix16oKernel
+87855960   gBAM_TI_Fftnpt16ix16oHelperFunc
+87855968   gBAM_TI_Fftnpt16ix32oKernel
+8785597c   gBAM_TI_Fftnpt16ix32oHelperFunc
+87855984   gBAM_TI_dcoffsetWindowingExecFunc
+8785599c   gBAM_TI_Fftnpt16ix16oExecFunc
+878559b4   gBAM_TI_Fftnpt16ix32oExecFunc
+ffffffff   __binit__
+ffffffff   __c_args__
+ffffffff   binit
+UNDEFED    __TI_CINIT_Base
+UNDEFED    __TI_CINIT_Limit
+UNDEFED    __TI_Handler_Table_Base
+UNDEFED    __TI_Handler_Table_Limit
+UNDEFED    __TI_INITARRAY_Base
+UNDEFED    __TI_INITARRAY_Limit
+
+[609 symbols]

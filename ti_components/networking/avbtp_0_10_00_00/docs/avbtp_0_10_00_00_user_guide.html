@@ -1,0 +1,329 @@
+<!--
+ *  Copyright (c) 2013, Texas Instruments Incorporated
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *
+ *  *  Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *
+ *  *  Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ *
+ *  *  Neither the name of Texas Instruments Incorporated nor the names of
+ *     its contributors may be used to endorse or promote products derived
+ *     from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ *  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ *  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ *  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ *  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ *  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ *  OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ *  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ *  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ *  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>AVB Transport Protocol (AVBTP) for GMACSW User Guide</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  </head>
+  <body>
+    <table width="100%">
+      <tbody>
+        <tr>
+          <td bgcolor="black" width="1">
+            <a href="http://www.ti.com/"><img style=
+            "border: 0px solid ; width: 222px; height: 54px;" alt=
+            "Texas Instruments" src="tilogo.gif"></a>
+          </td>
+          <td bgcolor="red">
+            <img style="width: 314px; height: 26px;" alt=
+            "Technology for Innovators(tm)" src="titagline.gif">
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+<h1 align="center">AVBTP User Guide</h1>
+
+<p align="center">
+<a href="#Introduction">Introduction</a>,
+<a href="#Package">Package</a>,
+<a href="#Usage">API Usage</a>,
+<a href="#Demo">AVBTP Demo</a>,
+<a href="#Build_lib">Build</a>,
+<a href="#Build_config">Build Config</a>,
+<a href="#Instrumentation">Instrumentation</a>
+<a href="#Build_PC_tools">Build PC Tools</a>,
+<a href="#Running_examples">Running Examples</a>,
+
+</p>
+
+<hr/>
+
+<h2><a name="Introduction">Introduction</a></h2>
+
+<p>
+The AVBTP (Audio/Video Bridging Transport Protocol) library provides support to extract AVBTP Compressed Video Format (CVF) data (JPEG and H264) from an Ethernet stream conformant to the IEEE 1722 standard. Both Talker and Listener are supported. AVBTP talker forms AVBTP stream from the received data for transmission in the AVB network. Only CVF subtype is supported.
+</p>
+<p>
+The package includes parser(listener) code, talker code, a shim layer to the NSP raw data apis and example test applications that showcase the high efficiency and throughput possible on a Cortex M4 running SYS/BIOS 6.&nbsp;
+</p>
+<p>
+The AVBTP library provides only essential support packetization and depacketization - time synchronization, credit based scheduling, etc is out of the scope of this library.
+</p>
+<hr/>
+
+<h2><a name="Package">Package structure</a></h2>
+
+&lt;AVBTP_INSTALL_DIR&gt;<br/>
+&nbsp;&nbsp;&nbsp;&brvbar; --- <b>examples</b> - Contains example code that shows how to use the AVBTP library<br/>
+&nbsp;&nbsp;&nbsp;&brvbar; --- <b>packages</b> - The source and binaries for the AVBTP library reside here<br/>
+&nbsp;&nbsp;&nbsp;&brvbar; --- <b>docs</b>     - Contains this user guide and the AVBTP datasheet<br/>
+&nbsp;&nbsp;&nbsp;&brvbar; --- <b>eclipse</b>  - Contains the RTSC plugin information that is discoverable by CCS<br/>
+&nbsp;&nbsp;&nbsp;&brvbar; --- <b>utils</b>    - Contains the linux based AVB talker utility<br/>
+<hr />
+
+<h2><a name="Usage">API Usage</a></h2>
+
+<p>
+The following is the expected use of the AVBTP APIs
+</p>
+
+<h5>Obtaining a handle</h5>
+&nbsp;&nbsp;&nbsp;&nbsp;<code>avbtp_handle_t avh = avbtp_open();</code>
+
+
+<h5>Obtaining a listener handle</h5>
+A listener handle is neccessary for every AVB talker your client desires to bind to:<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<code>avbtp_listener_handle_t avl = avbtp_listener_open(avh, ...);</code>
+
+<h5>Submit the output buffers to AVB</h5>
+Submit the buffer queue details for every listener your client has opened up:<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<code>avbtp_submit_buffer(avl, buf_queue);</code>
+
+<h5>Start parsing</h5>
+
+&nbsp;&nbsp;&nbsp;&nbsp;<code>avbtp_start(avh);</code>
+
+<h5>To packetize and transmit</h5>
+A talker handle is necessary to packetize data to be received by a listener:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<code>avbtp_talker_open(avh,...);</code><br /><br />
+
+Enqueue buffers for transmission. Each of these buffers is bound to a talker of your choice.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<code>avbtp_talker_enqueue(avh, bufferArray, size);</code><br /><br />
+
+The callback registered during avbtp_talker_open is invoked when an enqueued buffer has been
+sent so the client can refill it again.
+
+<h5>Teardown</h5>
+This closes all active talker and listener handles. When no talker and listener is active it closes AVB stack <br />
+&nbsp;&nbsp;&nbsp;&nbsp;<code>avbtp_close(avh);</code>
+
+<hr/>
+
+<h2><a name="Demo">AVBTP example application</a></h2>
+<p>
+The example application provided in <a href="../utils/">utils</a> folder consists of the following:<br/>
+
+<ul>
+    <li>Creates and configures four AVBTP listeners, using six output buffers per listener</li>
+    <li>Creates a TCP/IP echo server</li>
+    <li>After receiving the callback from AVB, the buffer is immediately returned to the free list; no attempt is made to decode it</li>
+    <li>If the CCS debugger is attached to the platform, one can set a breakpoint at the callback and dump the output buffer to the host for spot checking</li>
+    <li>Frame counter and error statistics are recorded</li>
+    <li>The TCP/IP echo server demonstrates how TCP/IP untagged traffic can be handled along with VLAN tagged AVB prioritized traffic</li>
+</ul>
+
+<hr/>
+
+<h2><a name="Build_lib">Building the library</a></h2>
+<ul>
+    <li>Navigate to &lt;AVBTP_INSTALL_DIR&gt;/packages/ti/avbtp</li>
+    <li>Setup the path for all the required tools if the defaults in config.bld are not suitable by configuring the following environment variables:
+        <ul>
+        <li>NDK_ROOT=&lt;Absolute path to the root of the NDK package&gt;</li>
+        <li>NSP_ROOT=&lt;Absolute path to the root of the NSP package&gt;</li>
+        <li>EDMA3_ROOT=&lt;Absolute path to the root of the EDMA3 LLD package&gt;</li>
+        <li>BIOS_ROOT=&lt;Absolute path to the root of the SYS/BIOS package&gt;</li>
+        <li>TIARMCGT_ROOT=&lt;Absolute path to the TI ARM Code Generation Tools directory&gt;</li>
+        </ul>
+    </li>
+    <li>Execute &lt;XDCTools dir&gt;/xdc in the &lt;AVBTP_INSTALL_DIR&gt;/packages/ti/avbtp directory</li>
+</ul>
+<hr/>
+
+<h2><a name="Build_config">Build configuration options</a></h2>
+
+<h4>VLAN Tag</h4>
+<ul>
+    <li>By default, the AVBTP library expects avbtp packets to include the 802.1Q Vlan tag. This tag is used to prioritize traffic at the hardware
+    level as well as to support delivering non-avb packets to the NDK and AVB packets to the AVBTP library concurrently. It is not recommended to disable this support.
+    </li>
+    <li>The default VLAN ID group is set to 1024. To change it, define the environment variable AVBTP_VLAN_ID=&lt;desired Vlan id (1-4094)&gt; and recompile the library.
+    </li>
+    <li>The default VLAN priority used is set to 5. To change it, define the environment variable AVBTP_VLAN_PRIORITY=&lt;desired priority 0-7&gt; and recompile the library.</li>
+</ul>
+
+<h4>Maximum number of listeners</h4>
+<ul>
+    <li>The default is six. It is defined as AVBTP_MAX_LISTENERS in packages/ti/avbtp/avb2nsp.h</li>
+</ul>
+
+<h4>Ethertype</h4>
+<ul>
+    <li>The offical ethertype for AVB is 0x22F0 which is set for default build. To change it to experimental(0x88B5) which was used in older version of the AVB standard, define the environment variable AVBTP_USE_EXP_ETHTYPE=1 and recompile the library</li>
+</ul>
+
+<h4>AVB subtype</h4>
+<ul>
+    <li>There are various subtypes defined for AVB, including 61883 header (0x00), MMA_STREAM (0x01), AAF (0x2), CVF (0x3) etc. </li>
+    <li>Only CVF (0x03) with MJPEG and H264 format subtype is supported. </li>
+    <li>Parsing of 61883 and other payloads (subtype!=0x03) is not supported.</li>
+</ul>
+
+<h4>AVB memory pool</h4>
+<ul>
+    <li>A memory pool is required to store AVB packets and the corresponding packet structures.</li>
+    <li>By default the pool is put in a named data section called ".far:AVBTP_MEMPOOL". </li>
+    <li>The default size is 200192 bytes. If desired (perhaps to reduce memory consumption if less peak bandwith needs to be supported) it can be changed in avbtp.c (gAVBMemoryPool and gAVBPackets).</li>
+</ul>
+<hr/>
+
+<h2><a name="Statistics">Statistics</a></h2>
+
+<ul><li>Below is an example of how to query the AVB parser statistics:</li></ul>
+
+&nbsp;&nbsp;&nbsp;&nbsp;<code>struct avbtp_stats stats;</code><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<code>avbtp_get_statistics(avh, &stats);</code>
+<ul>
+<li>Various items are tracked by the AVB parser, including:</li>
+    <ul>
+    <li>Overall packet count</li>
+    <li>Overall parser error count</li>
+    <li>Number of control packets received</li>
+    <li>Overall number of JPEG RST markers encountered</li>
+    <li>Number of missing JPEG EOI markers</li>
+    <li>Number of times the parser detected an out of sequence packet</li>
+    <li>Number of times the parser could not find a free buffer to store data</li>
+    <li>Number of times the parser ran out of buffer space</li>
+    <li>Number of times the parser detected an invalid packet size</li>
+    <li>Number of times the parser detected an invalid subtype</li>
+    <li>And various other parser error conditions</li>
+    </ul>
+</ul>
+<hr/>
+
+<h2><a name="RSTHandling">JPEG Restart marker detection</a></h2>
+
+<ul>
+<li>Enabling JPEG restart marker detection is useful to lower the overall system latency as the decoding process can start as soon as the first slice is received</li>
+<li>When enabled, the AVBTP library will notify the client when a restart marker is encountered through the same callback registered when a listener handle was obtained</li>
+<li>The buffer pointer in the notification will point to where the restart marker resides in the current active buffer.</li>
+<li>The size field in the notification is the current filled buffer size - it is up to the application to compute the correct slice size.
+</ul>
+
+To configure the AVBTP library to detect JPEG Restart markers, the configBits field in the buffer queue should be changed:<br /><br />
+
+&nbsp;&nbsp;&nbsp;&nbsp;<code>buf_queue->configBits = BUFF_NOTIFY_RST_MJPEG;</code><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<code>avbtp_submit_buffer(avlh, buf_queue);</code>
+
+<hr />
+
+<h2><a name="Instrumentation">Instrumentation</a></h2>
+<ul>
+<li>Task loads and packet counts are recorded in a global structure named avb2NspStats.</li>
+<li>The default level of instrumentation logs the last 256 queries to measure the Task CPU loads in the field avb2NspStats->rxStats->taskLoad</li>
+<li>To enable full instrumentation, you can link against the instrumented library (ti.avbtp_instr_xxx.aemx).<br/>This is easily done with XDC by setting AVBTP.instrumentedBuild = true </li>
+<li>Full instrumentation logs how much time is spent processing a packet and other low level stats.</li>
+</ul>
+<hr/>
+
+<h2><a name="Running_examples">Running the example applications</a></h2>
+<ul>
+    <li>Start CCS. Select Project->Import Existing CCS Eclipse Project</li>
+    <li>Navigate to &lt;AVBTP_INSTALL_DIR&gt;/examples/avbtp_test/vayu</li>
+    <li>In the Discovered Projects: box, select avbtp_test_vayu and select Finish.</li>
+    <li>Select Project->Properties.</li>
+    <li>Select General. Click on the RTSC tab</li>
+    <li>Add the path to the NSP driver (&lt;NSP_INSTALL_DIR&gt;/packages; click OK.</li>
+    <li>Select Project->Build Configurations->Set Active->Release</li>
+    <li>Select Project->Build Project</li>
+    <li>Launch the DRA7xx/TDA2xx/TDA2Ex target configuration.</li>
+    <li>Connect to CortexA15_0. Select Scripts-> MULTICORE Initialization->IPU1SSClkEnable_API
+    <li>Connect to Cortex_M4_IPU_C0. Select Run->Load->Load Program->Browse Project. Select the release avbtp_test_vayu_ipu1.out program.</li>
+    <li>Select Run->Resume</li>
+    <li>The DRA7xx/TDA2xx/TDA2Ex evm is now ready to receive AVB and TCP traffic.</li>
+    <li>navigate to &lt;AVBTP_INSTALL_DIR&gt;/utils/avbtp_test/client</li>
+    <li>Run "sudo ./avbtp_test_client.sh [file1] [file2] [file3] [file4]"; sudo is needed as su privileges are needed to send raw traffic and configure traffic shapers</li>
+    <li>To use custom options avbtp_test_client can be used directly. Ex - sudo ./avbtp_test_client --core-name j6eco-ipu1 --src-mac-spoof 00:01:02:03:04:05 --dest-ip 172.24.145.82 --input ../../avbtp_talker/P1020351.MOV ../../avbtp_talker/P1020351.MOV ../../avbtp_talker/P1020351.MOV ../../avbtp_talker/P1020351.MOV | & tee avbtp_test_j6eco_mpu_client.txt </li>
+    <li> Options like core-name, dest-ip, run-validation-test, src-mac-spoof, vlan-id, priority etc can be configured through command line<\li>
+</ul>
+<hr/>
+
+<h2><a name="Build_PC_tools">Building the PC Talker and Listener</a></h2>
+<h3><a name="Build_talker">Building the linux AVB talker application</a></h2>
+<ul>
+    <li>G++ 4.6.3 or later, GNU make and libavformat are required to build</li>
+    <li>Install the following packages: "sudo apt-get install libavformat54 libavformat-dev"</li>
+    <li>Navigate to &lt;AVBTP_INSTALL_DIR&gt;/utils/avbtp_talker</li>
+    <li>Run make</li>
+</ul>
+<hr/>
+<h3><a name="Build_listener">Building the AVB Listener application</a></h2>
+<h4><a name="Build_listener">Building on Linux </a></h3>
+<ul>
+    <li>GCC 5.4.0 or later, GNU make and libpcap-dev are required to build</li>
+    <li>Install the following packages: "sudo apt-get install libpcap-dev"</li>
+    <li>Navigate to &lt;AVBTP_INSTALL_DIR&gt;/utils/avbtp_listener</li>
+    <li>Run make all </li>
+</ul>
+
+
+<h4><a name="Build_listener">Building on Windows</a></h3>
+<ul>
+    <li>G++ 4.6.3 or later, GNU make and libavformat are required to build</li>
+    <li>Install the WinPCAP from <a href="https://www.winpcap.org">WinPcap website. </a> Version 4_1_3 was used for testing. </li>
+    <li> Build WinPCAP library on Windows and copy library file libwpcap.a to &lt;AVBTP_INSTALL_DIR&gt;/utils/avbtp_listener/src/Lib or change path of libpcap in &lt;AVBTP_INSTALL_DIR&gt;/utils/avbtp_listener/makefile LIBS. </li>
+    <li>Navigate to &lt;AVBTP_INSTALL_DIR&gt;/utils/avbtp_listener</li>
+    <li>Run gmake all</li>
+</ul>
+<hr/>
+
+<h2><a name="Running_PC_Tools">Running Talker</a></h2>
+<ul>
+    <li>Run "sudo ./avbtp_talker.sh [file1] [file2] [file3] [file4]"; sudo is needed as su privileges are needed to send raw traffic and configure traffic shapers</li>
+
+    <li>The avbtp_talker utility will start straming the four input MJPEG or H264 videos concurrently with TCP/IP traffic</li>
+    <li>By default the avbtp_talker.sh configures a traffic shaper to limit AVB traffic rate to 280Mbps and TCP/IP rates to 5Mbps</li>
+<h3><a name="Running_PC_Tools">Running listener </a></h3>
+    <li>For running the listener navigate to &lt;AVBTP_INSTALL_DIR&gt;/utils/avbtp_listener</li>
+
+    <li>Run "sudo ./avbtp_listener.out --srcMac ab:cd:ef:ab:cd:ef"; sudo is needed to run ffplay with su privileges. The current implementation of AVBTP talker(from EVM) uses ab:cd:ef:ab:cd:ef as SRC MAC address. Next version will support using DRA2xx/TDA2xx MAC ID </li>
+    <li>Select Ethernet interface and max. dump file size </li>
+    <li>The listener implementation uses pcap/WinPCAP library to parse AVB traffic matching with source MAC address given by user and stores all received AVB packets to Received.h264/mjpeg
+    file. This file is read simultaneously by ffplay to display incoming stream. On Linux systems avbtp_listener will start ffplay internally which will display incoming AVB stream; on Windows ffplay needs to be launched externally by user.</li>
+    <li>ffplay from ffmpeg is needed for displaying incoming AVB stream.  </li>
+    <li>To Install the ffmpeg on Linux use "sudo apt-get install ffmpeg" and for Windows download binary package from <a href="https://ffmpeg.org/"> ffmpeg website. </a> Version 3.3.1 was used for testing. </li>
+    <li>Example - ffplay -framerate 33 -v quiet Received.h264 </li>
+    <h5>Build configuration for AVBTP listener</h5>
+    <ul>
+        <li>To enable MJPEG streaming set MJPEG_CODEC to 1 </li>
+        <li>To fix Ethernet interface and maximum size of received file, set INTERACTIVE to 0 and make changes in avbtp_listener_main.c to configure interface and max. file size </li>
+        <li>On Linux system to launch ffplay from listener set LAUNCH_FFPLAY to 1</li>
+    <li>As ffplay is launched from 'c' program, make sure you close ffplay window before closing the listener. Alternatively you can disable ffplay setting LAUNCH_FFPLAY to zero </li>
+</ul>
+<br />
+
+<hr />
+</body>
+</html>

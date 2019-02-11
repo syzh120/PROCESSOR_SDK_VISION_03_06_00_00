@@ -1,0 +1,859 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Compliance and Performance Test Report</TITLE></HEAD>
+<BODY>
+
+<STYLE TYPE="text/css">
+<!--
+.indented
+   {
+   padding-left: 25pt;
+   padding-right: 25pt;
+   }
+-->
+</STYLE>
+
+<a name="Top of Page"></a>
+
+<TABLE BORDER="1" WIDTH="100%">
+  <TR>
+    <TD COLSPAN="2">
+      <CENTER><FONT SIZE="+2"><B>TMS320 DSP Algorithm Interoperability Standard</B></FONT></CENTER><BR>
+      <CENTER><FONT SIZE="+1"><B>QualiTI <a href="#compliance">Compliance</a> and <a href="#performance">Performance</a> Testing</B></font></CENTER><BR>
+    </TD>
+  </TR>
+  <TR>
+    <TD><B>Date</B></TD><TD>Wed Mar 25 2015 20:45:14 GMT+0530 (IST)</TD>
+  </TR>
+
+  <TR>
+    <TD><B>Vendor</B></TD><TD>TI</TD>
+  </TR>
+
+  <TR>
+    <TD><B>Algorithm</B></TD><TD>H264VDEC</TD>
+  </TR>
+
+  <TR>
+    <TD><B>Architecture</B></TD><TD>470</TD>
+  </TR>
+
+  <TR>
+    <TD><B>TI Compiler</B></TD><TD>false</TD>
+  </TR>
+  
+  <TR>
+    <TD><B>Library Format</B></TD><TD>ELF</TD>
+  </TR>
+  
+  <TR>
+    <TD><B>Compiler Version</B></TD><TD>UNKNOWN</TD>
+  </TR>
+  <TR>
+    <TD><B>Test Execution Log</B></TD><TD><a href="#Compiler Info">Test execution log for compiler info</a></TD>
+  </TR>
+  <TR>
+    <TD COLSPAN="2">
+
+      <B>Algorithm Base Directory:</B><BR>
+
+      &nbsp;&nbsp;&nbsp;C:\ti\xdais_6_23\report<BR>
+
+<BR>
+      <B>Algorithm Archive(s):</B><BR>
+
+      &nbsp;&nbsp;&nbsp;h264vdec_ti.lib<BR>
+<BR>
+      <B>Header File(s):</B><BR>
+      &nbsp;&nbsp;&nbsp;.\ih264vdec.h<BR>
+      &nbsp;&nbsp;&nbsp;.\h264vdec_ti.h<BR>
+<BR>
+    </TD>
+
+  </TR>
+
+
+      <TR>
+        <TD COLSPAN="2">
+        <a name=compliance>
+          <FONT SIZE="+1"><BR><br><CENTER><B>Compliance Test Report</B></CENTER><BR><br></font>
+        </a>
+        </TD>
+      </TR>
+
+      <TR>
+        <TD><B>Test Results</B></TD>
+        <td>
+        <font color="#00A000">PASS: 3</font><br>
+        <font color="#FF0000"><B>FAIL: 0</b></font>
+        &nbsp;&nbsp;&nbsp; 
+        
+        <br>
+        Skipped: 0<br>
+        Not apply: 2<br>
+        <b>Total: 5</b><br>
+        </td>
+      </TR>
+      <TR>
+
+        <TD COLSPAN="2">
+            <B>Test Notes</B><BR>
+            &nbsp;&nbsp;&nbsp;This report has been generated with QualiTI Version 6.23 - the XDAIS compliance and performance test suite. <BR><BR>
+
+
+        </TD>
+      </TR>
+
+      <TR>
+        <TD COLSPAN="2">
+          <b><a name="XDAIS Rules 8, 9 and 10">XDAIS Rules 8, 9, 10: Namespace compliance</a></b><br><br>
+
+          <B>Report: </B> <font color="#008080"><B>Passed</B></font><BR><BR>
+
+          <B>Test Description: </B><P CLASS="indented">(Rule 8) All external definitions must be either API identifiers or API and vendor prefixed.<br><br>(Rule 9) All undefined references must refer either to the operations specified in Appendix B (a subset of C runtime support library functions and a subset of the DSP/BIOS HWI API functions), or TI's DSPLIB or IMGLIB functions or other XDAIS-compliant modules.<br><br>(Rule 10) All modules must follow the eXpressDSP naming conventions for those external declarations disclosed to the client.</p>
+          <B>Test Status Details: </B>
+          <P CLASS="indented">Test passed.<BR></p>
+          <B>Test Execution Log: </b><a href="#log XDAIS Rules 8, 9 and 10">XDAIS Rules 8, 9 and 10 execution log</a><br>
+        </TD>
+      <TR>
+        <TD COLSPAN="2">
+          <b><a name="XDAIS Rule 12">XDAIS Rule 12: IALG interface implementation</a></b><br><br>
+
+          <B>Report: </B> <font color="#008080"><B>Passed</B></font><BR><BR>
+
+          <B>Test Description: </B><P CLASS="indented">All algorithms must implement the IALG interface.</p>
+          <B>Test Status Details: </B>
+          <P CLASS="indented">Test passed.<BR></p>
+          <B>Test Execution Log: </b><a href="#log XDAIS Rule 12">XDAIS Rule 12 execution log</a><br>
+        </TD>
+      <TR>
+        <TD COLSPAN="2">
+          <b><a name="XDAIS Rule 13+">XDAIS Rule 13+: correct linker section names</a></b><br><br>
+
+          <B>Report: </B>Test does not apply</font><BR><BR>
+
+          <B>Test Description: </B><P CLASS="indented">Each of the IALG methods implemented by an algorithm must be independently relocatable.<br><br>Additional rule: there should be no non-standard linker sections. (Standard linker sections are: ".cinit", ".switch", ".far", ".text", ".const", ".bss", ".pinit".)</p>
+          <B>Test Status Details: </B>
+          <P CLASS="indented">Currently, this test cannot be run on non-TI compiled libraries.  This rule is not relevant for ARM libraries since sections should be placed properly.<br><BR></p>
+          <B>Test Execution Log: </b><a href="#log XDAIS Rule 13+">XDAIS Rule 13+ execution log</a><br>
+        </TD>
+      <TR>
+        <TD COLSPAN="2">
+          <b><a name="XDAIS Rule 25">XDAIS Rule 25: All C6x algorithms must be supplied in little-endian format</a></b><br><br>
+
+          <B>Report: </B> <font color="#008080"><B>Passed</B></font><BR><BR>
+
+          <B>Test Description: </B><P CLASS="indented">All C6x algorithms must be supplied in little-endian format.</p>
+          <B>Test Status Details: </B>
+          <P CLASS="indented">Test passed.<BR></p>
+          <B>Test Execution Log: </b><a href="#log XDAIS Rule 25">XDAIS Rule 25 execution log</a><br>
+        </TD>
+      <TR>
+        <TD COLSPAN="2">
+          <b><a name="XDAIS Rule 26">XDAIS Rule 26: All static/global data must be far on c6x</a></b><br><br>
+
+          <B>Report: </B>Test does not apply</font><BR><BR>
+
+          <B>Test Description: </B><P CLASS="indented">All C6x algorithms must access all static and global data as far data.</p>
+          <B>Test Status Details: </B>
+          <P CLASS="indented">This test does not apply since this is not a C6x architecture.<br><BR></p>
+          <B>Test Execution Log: </b><a href="#log XDAIS Rule 26">XDAIS Rule 26 execution log</a><br>
+        </TD>
+      </TR>
+      <TR>
+        <TD COLSPAN="2">
+        <a name=performance>
+          <FONT SIZE="+1"><BR><br><CENTER><B>Performance Test Report</B></CENTER><BR><br></font>
+        </a>
+        </TD>
+      </TR>
+
+      <TR>
+        <TD><B>Test Results</B></TD>
+        <td>
+        <font color="#00A000">PASS: 1</font><br>
+        <font color="#FF0000"><B>FAIL: 0</b></font>
+        &nbsp;&nbsp;&nbsp; 
+        
+        <br>
+        Skipped: 0<br>
+        Not apply: 1<br>
+        <b>Total: 2</b><br>
+        </td>
+      </TR>
+      <TR>
+
+        <TD COLSPAN="2">
+            <B>Test Notes</B><BR>
+            &nbsp;&nbsp;&nbsp;This report has been generated with QualiTI Version 6.23 - the XDAIS compliance and performance test suite. <BR><BR>
+
+
+        </TD>
+      </TR>
+
+      <TR>
+        <TD COLSPAN="2">
+          <b><a name="XDAIS Rule 20">XDAIS Rule 20: must declare worst-case stack requirements</a></b><br><br>
+
+          <B>Report: </B>Test does not apply</font><BR><BR>
+
+          <B>Test Description: </B><P CLASS="indented">All algorithms must characterize their worst-case stack space memory requirements (including alignment).</p>
+          <B>Test Status Details: </B>
+          <P CLASS="indented">Currently, this test cannot be run on non-TI compiled libraries.  The test requires DWARF information that was not detected in this library.  You will need to calculate the worst case stack size using other means and report this in the data sheet.<BR></p>
+          <B>Test Execution Log: </b><a href="#log XDAIS Rule 20">XDAIS Rule 20 execution log</a><br>
+        </TD>
+      <TR>
+        <TD COLSPAN="2">
+          <b><a name="XDAIS Rules 21, 22">XDAIS Rules 21, 22: must characterize static data & program memory requirements</a></b><br><br>
+
+          <B>Report: </B> <font color="#008080"><B>Passed</B></font><BR><BR>
+
+          <B>Test Description: </B><P CLASS="indented">All algorithms must characterize their static data & program memory requirements</p>
+          <B>Test Status Details: </B>
+          <P CLASS="indented">Performance test completed. CODE, DATA & UDATA sections characterized<BR></p>
+          <B>Test Execution Log: </b><a href="#log XDAIS Rules 21, 22">XDAIS Rules 21, 22 execution log</a><br>
+        </TD>
+      </TR>
+</TABLE>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<hr>
+<a name="Compiler Info">Test execution log for <b>Compiler Info:</b></a><br>
+<PRE>
+Determining compiler info.
+
+Chcking if this library was created with a TI compiler...
+ Running command:&gt; "C:\ti\xdais_6_23\packages\ti\xdais\qualiti\cgtools\bin\ofd6x.exe" -x --xml_indent=0 --obj_display=none "C:\ti\xdais_6_23\report\h264vdec_ti.lib" | "C:\ti\xdais_6_23\packages\ti\xdais\qualiti\bin\grep\grep.exe" "&lt;ti_coff&gt;"
+                   (from "C:\Users\anvesh\AppData\Local\Temp\qualiti_runcmd_656328140354961189.sh"
+This library was not  created with a TI compiler.
+
+Attempting to determine library format...
+ Running command:&gt; "C:\ti\xdais_6_23\packages\ti\xdais\qualiti\cgtools\bin\ofd6x.exe" -x --xml_indent=0 --obj_display=none "C:\ti\xdais_6_23\report\h264vdec_ti.lib" | "C:\ti\xdais_6_23\packages\ti\xdais\qualiti\bin\grep\grep.exe" -E "&lt;.*coff&gt;|&lt;.*elf&gt;"
+                   (from "C:\Users\anvesh\AppData\Local\Temp\qualiti_runcmd_2553026587087296227.sh"
+  &lt;elf&gt;
+  &lt;/elf&gt;
+  &lt;elf&gt;
+  &lt;/elf&gt;
+  &lt;elf&gt;
+  &lt;/elf&gt;
+  &lt;elf&gt;
+  &lt;/elf&gt;
+  &lt;elf&gt;
+  &lt;/elf&gt;
+  &lt;elf&gt;
+  &lt;/elf&gt;
+  &lt;elf&gt;
+  &lt;/elf&gt;
+  &lt;elf&gt;
+  &lt;/elf&gt;
+  &lt;elf&gt;
+  &lt;/elf&gt;
+  &lt;elf&gt;
+  &lt;/elf&gt;
+  &lt;elf&gt;
+  &lt;/elf&gt;
+The library is in ELF format.
+
+Attempting to determine the compiler version...
+ Running command:&gt; "find.exe" "GCC:" "C:\ti\xdais_6_23\report\h264vdec_ti.lib"|"C:\ti\xdais_6_23\packages\ti\xdais\qualiti\bin\grep\grep.exe" "GCC:"
+                   (from "C:\Users\anvesh\AppData\Local\Temp\qualiti_runcmd_8256539107004200117.sh"
+  FIND: Parameter format not correct
+The compiler is UNKNOWN.
+
+</PRE>
+<a href="#Top of Page">back</a><br>
+<hr>
+<a name="log XDAIS Rules 8, 9 and 10">Test execution log for <b>XDAIS Rules 8, 9 and 10:</b></a><br>
+<PRE>
+Running test 'XDAIS Rules 8, 9 and 10'
+Extracting names of global symbols defined by the algorithm...
+ Running command:&gt; "C:\ti\xdais_6_23\packages\ti\xdais\qualiti\cgtools\bin\nm6x.exe" -g "C:\ti\xdais_6_23\report\h264vdec_ti.lib" | "C:\ti\xdais_6_23\packages\ti\xdais\qualiti\bin\grep\grep.exe" " [TBCU] "
+                   (from "C:\Users\anvesh\AppData\Local\Temp\qualiti_runcmd_2869191805774204074.sh"
+  00000000 U H264VDEC_TI_ValidateSVCTargetLayerID
+  00000001 T H264VDEC_TI_calcMaxDispBufs
+  00000001 T H264VDEC_TI_control
+  00000000 U H264VDEC_TI_initContext
+  00000000 U IH264VDEC_TI_DYNAMICPARAMS
+  00000000 U h264vdec_ti_maxDpbMbs
+  00000000 U memcpy
+  00000001 T H264VDEC_TI_BootLoadIVAHD
+  00000000 U H264VDEC_TI_Configure_Mailbox
+  00000000 U H264VDEC_TI_getPhysicalAddr
+  00000000 U HDVICP20_TI_DM_Prepare_SL2_TCM
+  00000000 U HDVICP20_TI_DM_Trigger_SL2_TCM
+  00000000 U HDVICP20_TI_DM_WaitForData_SL2_TCM
+  00000000 U HDVICP20_TI_VDMA_Open_Extmem_SL2
+  00000000 U HDVICP20_TI_VDMA_Prepare_Extmem_SL2
+  00000000 U HDVICP20_TI_VDMA_Trigger_Extmem_SL2
+  00000000 U HDVICP20_TI_VDMA_WaitForData_Extmem_SL2
+  00000001 T H264VDEC_TI_AcquireAndConfigureHDVICP2
+  00000000 U H264VDEC_TI_BootLoadIVAHD
+  00000000 U H264VDEC_TI_CallBack_ISR
+  00000000 U H264VDEC_TI_CheckForIVAHDStandby
+  00000000 U H264VDEC_TI_DBGTRACE_InitializeDbgParam
+  00000000 U H264VDEC_TI_DBGTRACE_UpdateDbgParamsInDDR
+  00000000 U H264VDEC_TI_FillDecodedBuf
+  00000000 U H264VDEC_TI_addressInit
+  00000000 U H264VDEC_TI_addressMapping
+  00000001 T H264VDEC_TI_calculateTBA
+  00000000 U H264VDEC_TI_channelInfoSetup
+  00000000 U H264VDEC_TI_codecParsActivate
+  00000000 U H264VDEC_TI_codecParsDeActivate
+  00000001 T H264VDEC_TI_decode
+  00000001 T H264VDEC_TI_decodeEnd
+  00000001 T H264VDEC_TI_decodePostProcessing
+  00000001 T H264VDEC_TI_decodeStart
+  00000000 U H264VDEC_TI_displayPic
+  00000000 U H264VDEC_TI_errorMapping
+  00000000 U H264VDEC_TI_getPhysicalAddr
+  00000001 T H264VDEC_TI_multiChannelDecode
+  00000001 T H264VDEC_TI_processOutputDS
+  00000000 U H264VDEC_TI_putBuffer
+  00000000 U H264VDEC_TI_syncUpControlCallAccess
+  00000000 U H264VDEC_TI_syncUpDDRsansIVA
+  00000000 U H264VDEC_TI_syncUpSL2sansIVA
+  00000001 T H264VDEC_TI_turnOffClocks
+  00000001 T H264VDEC_TI_turnOnClocks
+  00000000 U H264VDEC_TI_updateInputDSParams
+  00000000 U H264VDEC_TI_updateSL2Pointers
+  00000001 T H264VDEC_TI_updateSVCECParams
+  00000000 U HDVICP20_TI_VDMA_Prepare_Extmem_SL2
+  00000000 U HDVICP20_TI_VDMA_Trigger_Extmem_SL2
+  00000000 U HDVICP20_TI_VDMA_WaitForData_Extmem_SL2
+  00000000 U memcpy
+  00000001 T H264VDEC_TI_CheckForIVAHDStandby
+  00000001 T H264VDEC_TI_Configure_Mailbox
+  00000001 T H264VDEC_TI_DBGTRACE_InitializeDbgParam
+  00000001 T H264VDEC_TI_DBGTRACE_UpdateDbgParamsInDDR
+  00000000 U H264VDEC_TI_ErrMappingLUT
+  00000001 T H264VDEC_TI_FillDecodedBuf
+  00000001 T H264VDEC_TI_H264RequestFrame
+  00000001 T H264VDEC_TI_WaitForIVAHDStandby
+  00000001 T H264VDEC_TI_addressInit
+  00000001 T H264VDEC_TI_addressMapping
+  00000000 U H264VDEC_TI_bump_displayFrame
+  00000001 T H264VDEC_TI_channelInfoSetup
+  00000001 T H264VDEC_TI_displayPic
+  00000001 T H264VDEC_TI_errorMapping
+  00000000 U H264VDEC_TI_findSmallestPocIdx
+  00000000 U H264VDEC_TI_getPhysicalAddr
+  00000000 U H264VDEC_TI_memcpyDoubleWord
+  00000000 U H264VDEC_TI_outputFrame
+  00000001 T H264VDEC_TI_putBuffer
+  00000000 U H264VDEC_TI_removeFrameFromList
+  00000001 T H264VDEC_TI_updateDDRpointers
+  00000001 T H264VDEC_TI_updateInputDSParams
+  00000001 T H264VDEC_TI_updateSL2Pointers
+  00000000 U memset
+  00000001 T H264VDEC_TI_FREEBUF_add
+  00000001 T H264VDEC_TI_bump_displayFrame
+  00000001 T H264VDEC_TI_findSmallestPocIdx
+  00000001 T H264VDEC_TI_initDisplayQueue
+  00000001 T H264VDEC_TI_initRefFrameBufMgmtFull
+  00000001 T H264VDEC_TI_outputFrame
+  00000001 T H264VDEC_TI_removeFrameFromList
+  00000000 U memcpy
+  00000001 T H264VDEC_TI_Activate
+  00000000 U H264VDEC_TI_ConstData
+  00000001 T H264VDEC_TI_Deactivate
+  00000001 T H264VDEC_TI_ValidateSVCTargetLayerID
+  00000001 T H264VDEC_TI_alloc
+  00000001 T H264VDEC_TI_free
+  00000000 U H264VDEC_TI_getPhysicalAddr
+  00000001 T H264VDEC_TI_initContext
+  00000001 T H264VDEC_TI_initDebugTraceHeader
+  00000001 T H264VDEC_TI_initObj
+  00000001 T H264VDEC_TI_numAlloc
+  00000000 U IH264VDEC_PARAMS
+  00000000 U h264vdec_ti_maxDpbMbs
+  00000000 U memset
+  00000001 T H264VDEC_TI_CallBack_ISR
+  00000001 T H264VDEC_TI_DeActivateHDVICP2
+  00000001 T H264VDEC_TI_activateAllResources
+  00000001 T H264VDEC_TI_activateResource
+  00000001 T H264VDEC_TI_codecParsActivate
+  00000001 T H264VDEC_TI_codecParsDeActivate
+  00000000 U H264VDEC_TI_control
+  00000001 T H264VDEC_TI_deactivateAllResources
+  00000001 T H264VDEC_TI_deactivateResource
+  00000001 T H264VDEC_TI_deinitResources
+  00000001 T H264VDEC_TI_getPhysicalAddr
+  00000001 T H264VDEC_TI_getResourceDescriptors
+  00000000 U H264VDEC_TI_initContext
+  00000000 U H264VDEC_TI_initDebugTraceHeader
+  00000001 T H264VDEC_TI_initResources
+  00000000 U H264VDEC_TI_memcpyDoubleWord
+  00000001 T H264VDEC_TI_numResourceDescriptors
+  00000001 T H264VDEC_TI_reinitResources
+  00000001 T H264VDEC_TI_syncUpControlCallAccess
+  00000001 T H264VDEC_TI_syncUpDDRsansIVA
+  00000001 T H264VDEC_TI_syncUpSL2sansIVA
+  00000000 U IH264VDEC_TI_DYNAMICPARAMS
+  00000000 U MEMUTILS_getPhysicalAddr
+  00000000 U h264vdec_ti_maxDpbMbs
+  00000001 T H264VDEC_TI_memcpyDoubleWord
+  00000001 T H264VDEC_TI_memsetDoubleWord
+  00000000 U H264VDEC_TI_Activate
+  00000000 U H264VDEC_TI_Deactivate
+  00000000 U H264VDEC_TI_alloc
+  00000000 U H264VDEC_TI_control
+  00000000 U H264VDEC_TI_decode
+  00000000 U H264VDEC_TI_free
+  00000000 U H264VDEC_TI_initObj
+  00000000 U H264VDEC_TI_multiChannelDecode
+  00000000 U H264VDEC_TI_numAlloc
+Verifying that all global symbols are named XXX_TI_xxx ...
+and that no blacklisted external references are made
+
+</PRE>
+<a href="#XDAIS Rules 8, 9 and 10">back</a>
+<hr>
+<a name="log XDAIS Rule 12">Test execution log for <b>XDAIS Rule 12:</b></a><br>
+<PRE>
+Running test 'XDAIS Rule 12'
+Extracting names of global BSS data symbols...
+ Running command:&gt; "C:\ti\xdais_6_23\packages\ti\xdais\qualiti\cgtools\bin\nm6x.exe" -g "C:\ti\xdais_6_23\report\h264vdec_ti.lib" | "C:\ti\xdais_6_23\packages\ti\xdais\qualiti\bin\grep\grep.exe" " [BD] "
+                   (from "C:\Users\anvesh\AppData\Local\Temp\qualiti_runcmd_4513718948738783566.sh"
+  00000000 D __TI_DW.debug_info.$base_types.a820b37d046d9c46ca2150debf190237
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\GenericComDataType.h.6d945134515cd408b490de59d2eafdb9
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\H264BPInterface.h.dd9dfc7d21ca8c5ca47b5ab7dc945911
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\calcFormat.h.e27f0a3749b086dce87f5bbb2db8c26e
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\errorconceal_ti_concealapi.h.b8bd05671dafa128e67147bcf4b0abff
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\h264dec_ti_priv.h.8a3f6500f46b9cf3a4731ed2b3962827
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\h264vdec_ti_struct.h.2836fd9f1976259dbd73ba6627ef4811
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\ilfFormat.h.1e20549ce31639c6347b8c3213921047
+  00000000 D __TI_DW.debug_info...\..\..\..\inc\ih264vdec.h.3540edee8650ac1769b2b7bf94a809dd
+  00000000 D __TI_DW.debug_info.C:\IVAHD_CSP\csl_soc\tistdtypes.h.8dbcd3e4bddab780ae1ba843022e1fff
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti/xdais/dm/ividdec3.h.c8544a2654a431543592ba0fdd4c736d
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti/xdais/ialg.h.1a75dab60cb3c9c54f4595c2df855fb1
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti/xdais/ires.h.b9bbf9ea3a96f9eb6b15dc75e819c385
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti/xdais/xdas.h.3ba73033b253433f515b60d6fc67945b
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti\xdais\dm\xdm.h.5ce24b77c0c56399eaf42b2993fa94db
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti\xdais\ires_common.h.3f4e319f8b8b0c788c501bb7192845e8
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\packages\ti/sdo/fc/ires/hdvicp/ires_hdvicp2.h.ce7940e01bb0ff16b0eb212769e431e8
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\packages\ti/sdo/fc/ires/tiledmemory/ires_tiledmemory.h.629819c5329f1298957c412d3b04d134
+  00000000 D __TI_DW.debug_info.E:\Installations\CG_TOOLS_5_0_3\include\stdio.h.24e8235027cb13249fd4bed565aa08b1
+  00000000 D H264VDEC_TI_ConstData
+  00000000 D __TI_DW.debug_info.$base_types.8f06ede3c16559be749d75f70e4749f6
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\GenericComDataType.h.b1f977efb94b6e61c87d7b864b684cd7
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\h264vdec_ti_datatransfer.h.824074598a9d85ebc29bf841f8260445
+  00000000 D __TI_DW.debug_info.$base_types.a820b37d046d9c46ca2150debf190237
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\GenericComDataType.h.aadbffede880f77ae3dbc69ab5a97b72
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\H264BPInterface.h.3fe538529ce8feca30ee0aee5ab2fd3f
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\calcFormat.h.717b14072f98632f08e7dda543076c23
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\dataFormat.h.5f7425e1da755deabc5ed0b4be30bd28
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\dataFormatH264.h.76ed3ad44c458c4b4008191b1f494d9e
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\errorconceal_ti_concealapi.h.2cfeac80c680f0c040500134d9e56782
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\h264dec_ti_priv.h.d030b4d1142e8decbb88eada4763d60f
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\h264vdec_ti_datatransfer.h.4f95066eead4142fa49e99a5629c3a1c
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\h264vdec_ti_debugtrace.h.ca369ff3be84a9c9796815dd8355a585
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\h264vdec_ti_sl2struct.h.171b37ee3e0ad2ddb707f3fa20f44d71
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\h264vdec_ti_struct.h.8ddf2a8490e1f858b1174a5c38c75d0a
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\ilfFormat.h.e35a50edcbd42c8e2cb4d1f66cb1a1dc
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\mcformat.h.a644b2dd70ecf71c87fc26dded3d59ea
+  00000000 D __TI_DW.debug_info...\..\..\..\inc\ih264vdec.h.7b8bc31d99ac00725a4d06a34756507c
+  00000000 D __TI_DW.debug_info.C:\IVAHD_CSP\csl_ivahd\cslr_mlb.h.15bed34d9346a76ae0744f54d887774e
+  00000000 D __TI_DW.debug_info.C:\IVAHD_CSP\csl_ivahd\cslr_sysctrl.h.b924c204c97d2d1557fcc879a9c9a425
+  00000000 D __TI_DW.debug_info.C:\IVAHD_CSP\csl_soc\tistdtypes.h.9edb9a0606e748d82abc38ab8c18376b
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti/xdais/dm/ividdec3.h.b75acd5f7ada08ccb5f867423e1f576a
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti/xdais/ialg.h.1a75dab60cb3c9c54f4595c2df855fb1
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti/xdais/ires.h.f467c4f5187741df7b6868a093761d94
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti/xdais/xdas.h.6dca8c61807f2db3b68194e520ca4657
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti\xdais\dm\xdm.h.483558cb1c85c2a7e8d08a0ac5af240d
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti\xdais\ires_common.h.6ff6b3ca1220ffc37770c462365c46ac
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\packages\ti/sdo/fc/ires/hdvicp/ires_hdvicp2.h.a4b0df9b1c089a76b61ccc779bd80868
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\packages\ti/sdo/fc/ires/tiledmemory/ires_tiledmemory.h.e0bc6940b600954f9b8290fb32a8f5f6
+  00000000 D __TI_DW.debug_info.C:\hdvicp20_22\inc\hdvicp20_ti_vdma.h.45a6f8cd89464398a212bca64fd9e0f3
+  00000000 D H264VDEC_TI_ErrMappingLUT
+  00000000 D __TI_DW.debug_info.$base_types.a820b37d046d9c46ca2150debf190237
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\GenericComDataType.h.aadbffede880f77ae3dbc69ab5a97b72
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\H264BPInterface.h.46f8cacde508a6de8754be0608c18011
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\calcFormat.h.717b14072f98632f08e7dda543076c23
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\dataFormat.h.5f7425e1da755deabc5ed0b4be30bd28
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\dataFormatH264.h.bff0819bc93164e2c592920111975f83
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\errorconceal_ti_concealapi.h.86bcdb82c8ad7d4ed2c90927bb09d312
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\h264dec_ti_priv.h.3532bb534d88c120ad9ec6602ed125ea
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\h264vdec_ti_debugtrace.h.f46970d33c32763c4a8531b0ed030eed
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\h264vdec_ti_sl2struct.h.8f76597b5067e42ac69d921d9b6f96a4
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\h264vdec_ti_struct.h.7f863bcc9afdcc19ee8b5549066efd1a
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\ilfFormat.h.1ec0275dd61ade732d60cb8e5c68463c
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\mcformat.h.a644b2dd70ecf71c87fc26dded3d59ea
+  00000000 D __TI_DW.debug_info...\..\..\..\inc\ih264vdec.h.09557b3e993b112575ff9434878d36a8
+  00000000 D __TI_DW.debug_info.C:\IVAHD_CSP\csl_ivahd\cslr_calc3_ipgw.h.39a0f249da2f52c75de00e9b038db7d1
+  00000000 D __TI_DW.debug_info.C:\IVAHD_CSP\csl_ivahd\cslr_ecd3_ipgw.h.5c95106eece0a26d97302f313f603f47
+  00000000 D __TI_DW.debug_info.C:\IVAHD_CSP\csl_ivahd\cslr_mc3_ipgw.h.f72412ab9e0f105a43afeb44b0f6fe52
+  00000000 D __TI_DW.debug_info.C:\IVAHD_CSP\csl_ivahd\cslr_mlb.h.6e6fa7b0779ed33fa3d11c16a0cfd9d2
+  00000000 D __TI_DW.debug_info.C:\IVAHD_CSP\csl_ivahd\cslr_sysctrl.h.6bf6fa29d913fb0533db30b4e3bd1f8c
+  00000000 D __TI_DW.debug_info.C:\IVAHD_CSP\csl_soc\tistdtypes.h.60fba6b08b340dbf5a06899c7af78947
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti/xdais/dm/ividdec3.h.7111ad72e97917768fb07b75a7c8e780
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti/xdais/ialg.h.1a75dab60cb3c9c54f4595c2df855fb1
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti/xdais/ires.h.f467c4f5187741df7b6868a093761d94
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti/xdais/xdas.h.f05c396a3e200a88a87a050aefe72575
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti\xdais\dm\ivideo.h.abc0fc0c17559acbba2497b0eaba6626
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti\xdais\dm\xdm.h.3edd4bce28a89820382705a03511cdca
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti\xdais\ires_common.h.6ff6b3ca1220ffc37770c462365c46ac
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\packages\ti/sdo/fc/ires/hdvicp/ires_hdvicp2.h.a4b0df9b1c089a76b61ccc779bd80868
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\packages\ti/sdo/fc/ires/tiledmemory/ires_tiledmemory.h.e0bc6940b600954f9b8290fb32a8f5f6
+  00000000 D __TI_DW.debug_info.C:\hdvicp20_22\inc\hdvicp20_ti_vdma.h.45a6f8cd89464398a212bca64fd9e0f3
+  00000000 D __TI_DW.debug_info.E:\Installations\CG_TOOLS_5_0_3\include\stdio.h.24e8235027cb13249fd4bed565aa08b1
+  00000000 D __TI_DW.debug_info.$base_types.a820b37d046d9c46ca2150debf190237
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\GenericComDataType.h.43aec64bb06cde984e941f2047bd7f09
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\H264BPInterface.h.ade81e55bff3029cac133fc404e635e1
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\calcFormat.h.368468e8fd7547988a4066926465dbde
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\dataFormat.h.c2f34178f6c2f5981cb40f43bf560679
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\dataFormatH264.h.ad9ac7ba8b9cb85faa9865dfe65186f0
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\errorconceal_ti_concealapi.h.86bcdb82c8ad7d4ed2c90927bb09d312
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\h264dec_ti_priv.h.088f7b85adcb4c4168e04602d55c0635
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\h264vdec_ti_datatransfer.h.304e59e80ffe97e4d735405314727e27
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\h264vdec_ti_debugtrace.h.d4c00dc836d520a2ffd6309064356aaf
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\h264vdec_ti_sl2struct.h.2a35f6debeec30ed9a0f65e851840b0d
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\h264vdec_ti_struct.h.27ffd46ca453cae6f6f2f44cfe38e969
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\ilfFormat.h.2e97f56981fbb964f3f63c41e7546ecb
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\mcformat.h.d946b1fbea278fb843849d48ed487b4c
+  00000000 D __TI_DW.debug_info...\..\..\..\inc\ih264vdec.h.ec5c68a3b7828c899cf51cff0759aa61
+  00000000 D __TI_DW.debug_info.C:\IVAHD_CSP\csl_ivahd\cslr_mlb.h.c5eceeed59643290d5a30c3e161ec198
+  00000000 D __TI_DW.debug_info.C:\IVAHD_CSP\csl_ivahd\cslr_sysctrl.h.db76032d49f35af787f8131b83764433
+  00000000 D __TI_DW.debug_info.C:\IVAHD_CSP\csl_soc\tistdtypes.h.0b950e08b87e3e20a3451d8b4fad1a3c
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti/xdais/dm/ividdec3.h.3f9bf947e2e0753a38491fedf7f432d1
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti/xdais/ialg.h.1a75dab60cb3c9c54f4595c2df855fb1
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti/xdais/ires.h.b9bbf9ea3a96f9eb6b15dc75e819c385
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti/xdais/xdas.h.f05c396a3e200a88a87a050aefe72575
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti\xdais\dm\ivideo.h.abc0fc0c17559acbba2497b0eaba6626
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti\xdais\dm\xdm.h.3edd4bce28a89820382705a03511cdca
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti\xdais\ires_common.h.3f4e319f8b8b0c788c501bb7192845e8
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\packages\ti/sdo/fc/ires/hdvicp/ires_hdvicp2.h.ce7940e01bb0ff16b0eb212769e431e8
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\packages\ti/sdo/fc/ires/tiledmemory/ires_tiledmemory.h.629819c5329f1298957c412d3b04d134
+  00000000 D __TI_DW.debug_info.C:\hdvicp20_22\inc\hdvicp20_ti_vdma.h.45a6f8cd89464398a212bca64fd9e0f3
+  00000000 D __TI_DW.debug_info.E:\Installations\CG_TOOLS_5_0_3\include\stdio.h.24e8235027cb13249fd4bed565aa08b1
+  00000000 D __TI_DW.debug_info.$base_types.a820b37d046d9c46ca2150debf190237
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\GenericComDataType.h.6d945134515cd408b490de59d2eafdb9
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\H264BPInterface.h.c3be98ce8d2b86bec4b03ca41f24741f
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\calcFormat.h.fd77390495560bfa740368eb55884be5
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\errorconceal_ti_concealapi.h.3ca746360d5cc8f619aa33d032fa89bd
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\h264vdec_ti_struct.h.8f66c24c5ed1bda9d66c2d5c375abe4d
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\ilfFormat.h.1e20549ce31639c6347b8c3213921047
+  00000000 D __TI_DW.debug_info...\..\..\..\inc\ih264vdec.h.02de26bb28feb5271b3b379efce798ac
+  00000000 D __TI_DW.debug_info.C:\IVAHD_CSP\csl_soc\tistdtypes.h.c7fd52dcf1b3a322b252040cf48cb47b
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti/xdais/ialg.h.80b3a85dd22f8349a0f2260ccbf82f48
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti/xdais/xdas.h.180dcf4027b31e3048a71ca282fc33af
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti\xdais\dm\xdm.h.483558cb1c85c2a7e8d08a0ac5af240d
+  00000000 D h264vdec_ti_maxDpbMbs
+  00000000 D __TI_DW.debug_info.$base_types.a820b37d046d9c46ca2150debf190237
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\GenericComDataType.h.43aec64bb06cde984e941f2047bd7f09
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\H264BPInterface.h.52086c66beb42f52bdb476ea33dfb9c3
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\calcFormat.h.dfe4b324d9071cf084d10367d5e3159c
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\dataFormat.h.3bc21f4d920877d4319da27b89728ff5
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\dataFormatH264.h.61020d8a9403aa117c10c2f72daac51a
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\errorconceal_ti_concealapi.h.fbec268b2dc1b2a799cae56e4d5cad16
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\h264dec_ti_priv.h.b53385dcd6883d86f9aa138b71d3f1d4
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\h264vdec_ti_datatransfer.h.5c4be7ceb093dd3e59537267a71d1bde
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\h264vdec_ti_debugtrace.h.a2ce6ad8b05b77606dd9ffe6f094ca19
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\h264vdec_ti_sl2struct.h.d8bd16e141124bad4e4a36962cec0251
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\h264vdec_ti_struct.h.1e57cc61726ce89a5934e93881a7b0be
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\ilfFormat.h.8b7943d444f44e9e432356b28d91f011
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\mcformat.h.c1513f2992bb93833bbbe7863a6133f3
+  00000000 D __TI_DW.debug_info...\..\..\..\inc\ih264vdec.h.9096353945df77970a72afebf9a06ffd
+  00000000 D __TI_DW.debug_info.C:\IVAHD_CSP\csl_soc\tistdtypes.h.93cc882b377f3596a071c0aca56709a8
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti/xdais/dm/ividdec3.h.6a1c86ecffee1fb371cf33e9c27e9ae2
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti/xdais/ialg.h.25e2bde601b54b1d33e55bb7d4f26444
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti/xdais/ires.h.a6375f8f4089868f74323734410ab2b9
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti/xdais/xdas.h.6dca8c61807f2db3b68194e520ca4657
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti\xdais\dm\xdm.h.483558cb1c85c2a7e8d08a0ac5af240d
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti\xdais\ires_common.h.3f4e319f8b8b0c788c501bb7192845e8
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\packages\ti/sdo/fc/ires/hdvicp/ires_hdvicp2.h.b4888c6c6e53839fed440ab09629c6f4
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\packages\ti/sdo/fc/ires/tiledmemory/ires_tiledmemory.h.629819c5329f1298957c412d3b04d134
+  00000000 D __TI_DW.debug_info.C:\hdvicp20_22\inc\hdvicp20_ti_vdma.h.1ecc6d8b2de4d2cae1f8597a3d3b0ff2
+  00000000 D __TI_DW.debug_info.E:\Installations\CG_TOOLS_5_0_3\include\stdio.h.24e8235027cb13249fd4bed565aa08b1
+  00000000 D H264VDEC_TI_IRES
+  00000000 D __TI_DW.debug_info.$base_types.a820b37d046d9c46ca2150debf190237
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\GenericComDataType.h.6d945134515cd408b490de59d2eafdb9
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\H264BPInterface.h.e6f8cfda8122b7949b8d6dc9d7126839
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\calcFormat.h.9c7faa019afdb30f8061332f99014b6d
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\errorconceal_ti_concealapi.h.86bcdb82c8ad7d4ed2c90927bb09d312
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\h264dec_ti_priv.h.fc3aa3705dbc034a9b42b6cbd1122c05
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\h264vdec_ti_debugtrace.h.b9ec6ff01eb705f4af035193769f8d0c
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\h264vdec_ti_struct.h.bb5f9a2a487231b9f83598f0f0cf4f34
+  00000000 D __TI_DW.debug_info...\..\..\..\algsrc\inc\ilfFormat.h.1e20549ce31639c6347b8c3213921047
+  00000000 D __TI_DW.debug_info...\..\..\..\inc\ih264vdec.h.76ae6c00462b8990ea597870718954cc
+  00000000 D __TI_DW.debug_info.C:\IVAHD_CSP\csl_ivahd\cslr_mlb.h.32b619cd7eab1877e318f8c8a8e615de
+  00000000 D __TI_DW.debug_info.C:\IVAHD_CSP\csl_soc\tistdtypes.h.9ac2094a2d92d3c4cfc2d58e85b7f020
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti/xdais/dm/ividdec3.h.002cf289eec031c28067a32e44d56bbd
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti/xdais/ires.h.9cbf1d3eae8109fcd5ea2eb1b5dbdd25
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti/xdais/xdas.h.3ba73033b253433f515b60d6fc67945b
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti\xdais\dm\xdm.h.e831b2972562a7653211e4ce5ced9fc5
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti\xdais\ialg.h.60c772afe5ee4903ee70b8d89c838e11
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti\xdais\ires_common.h.0b3e73592511fb93dc6ce1616227b704
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\packages\ti/sdo/fc/ires/hdvicp/ires_hdvicp2.h.a4b0df9b1c089a76b61ccc779bd80868
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\packages\ti/sdo/fc/ires/tiledmemory/ires_tiledmemory.h.e0bc6940b600954f9b8290fb32a8f5f6
+  00000000 D __TI_DW.debug_info.E:\Installations\CG_TOOLS_5_0_3\include\stdio.h.24e8235027cb13249fd4bed565aa08b1
+  00000000 D __TI_DW.debug_info.$base_types.7925b9f6c20ea1aa164c246eedcea707
+  00000000 D H264VDEC_TI_IALG
+  00000000 D H264VDEC_TI_IH264VDEC
+  00000000 D H264VDEC_TI_IH264VDEC_MULTI
+  00000000 D H264VDEC_TI_PARAMS
+  00000000 D __TI_DW.debug_info.$base_types.7925b9f6c20ea1aa164c246eedcea707
+  00000000 D __TI_DW.debug_info...\..\..\..\inc\ih264vdec.h.2458080968f482b73a22a0c6b840f456
+  00000000 D __TI_DW.debug_info.C:\IVAHD_CSP\csl_soc\tistdtypes.h.b660bb1eada63b05da1ac7f33f8f2f5c
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti/xdais/dm/ividdec3.h.2eba61caff10f78b8dbbed558d9de762
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti/xdais/ialg.h.0af7ce675c6a0b24cf45f60180ffff24
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti/xdais/xdas.h.c5f4d6fa7b367aa93afb877b0da9ea38
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti\xdais\dm\ivideo.h.602e19b452cebba642730c1d507006f6
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti\xdais\dm\xdm.h.7e6dd5a8a60033ad0fae93ad5e50058a
+  00000000 D IH264VDEC_PARAMS
+  00000000 D IH264VDEC_TI_DYNAMICPARAMS
+  00000000 D __TI_DW.debug_info.$base_types.7925b9f6c20ea1aa164c246eedcea707
+  00000000 D __TI_DW.debug_info...\..\..\..\inc\ih264vdec.h.e4a8cd9a9f7d5bcf137ca85c05fe014c
+  00000000 D __TI_DW.debug_info.C:\IVAHD_CSP\csl_soc\tistdtypes.h.f8cb8947a07f8c6bf1b03326263b9d86
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti/xdais/dm/ividdec3.h.78a601b4f099519d5b603df70faaeb37
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti/xdais/xdas.h.d052cbc0a9a8c012cefc2a53eaaab8ff
+  00000000 D __TI_DW.debug_info.C:\framework_components_3_20_00_22\fctools\packages\ti\xdais\dm\xdm.h.483558cb1c85c2a7e8d08a0ac5af240d
+Verifying that objects 'H264VDEC_TI_IALG' and 'H264VDEC_TI_IH264VDEC' are defined...
+Data object 'H264VDEC_TI_IALG' found.
+Data object 'H264VDEC_TI_IH264VDEC' found.
+
+</PRE>
+<a href="#XDAIS Rule 12">back</a>
+<hr>
+<a name="log XDAIS Rule 13+">Test execution log for <b>XDAIS Rule 13+:</b></a><br>
+<PRE>
+Currently, this test cannot be run on non-TI compiled libraries.
+
+</PRE>
+<a href="#XDAIS Rule 13+">back</a>
+<hr>
+<a name="log XDAIS Rule 20">Test execution log for <b>XDAIS Rule 20:</b></a><br>
+<PRE>
+Currently, this test cannot be run on non-TI compiled libraries.
+</PRE>
+<a href="#XDAIS Rule 20">back</a>
+<hr>
+<a name="log XDAIS Rules 21, 22">Test execution log for <b>XDAIS Rules 21, 22:</b></a><br>
+<PRE>
+Running test 'XDAIS Rules 21, 22'
+Using sectti on ofd output to find static data & program memory requirements...
+ Running command:&gt; "C:\ti\xdais_6_23\packages\ti\xdais\qualiti\cgtools\bin\ofd6x.exe" -x --xml_indent=0 --obj_display=none,sections,header "C:\ti\xdais_6_23\report\h264vdec_ti.lib" | "C:\ti\cg_xml_2.2\bin\sectti.exe"
+                   (from "C:\Users\anvesh\AppData\Local\Temp\qualiti_runcmd_1342980591676330546.sh"
+  Reading from stdin ...
+  ====================================================================
+  REPORT FOR LIBRARY: C:/ti/xdais_6_23/report/h264vdec_ti.lib
+  ====================================================================
+  
+  
+  ************************************************************
+  REPORT FOR FILE: h264vdec_ti_control.obj
+  ************************************************************
+                            Name : Size (dec)  Size (hex)  Type
+  ------------------------------ : ----------  ----------  ----
+          .const:.string:$P$T0$1 :         52  0x00000034  DATA 
+  .text:H264VDEC_TI_calcMaxDispBufs :         98  0x00000062  CODE 
+       .text:H264VDEC_TI_control :       1686  0x00000696  CODE 
+  
+  ************************************************************
+  REPORT FOR FILE: h264vdec_ti_constantmatrices.obj
+  ************************************************************
+                            Name : Size (dec)  Size (hex)  Type
+  ------------------------------ : ----------  ----------  ----
+       .const:H264VDEC_TI_dSect1 :     317712  0x0004d910  DATA 
+  
+  ************************************************************
+  REPORT FOR FILE: h264vdec_ti_datatransfer.obj
+  ************************************************************
+                            Name : Size (dec)  Size (hex)  Type
+  ------------------------------ : ----------  ----------  ----
+  .const:H264VDEC_TI_ICONT1_DataSect0 :        940  0x000003ac  DATA 
+  .const:H264VDEC_TI_ICONT2_DataSect0 :      31152  0x000079b0  DATA 
+  .const:H264VDEC_TI_ICONT1_HIGHRES_DataSect0 :        940  0x000003ac  DATA 
+  .const:H264VDEC_TI_ICONT2_HIGHRES_DataSect0 :      32136  0x00007d88  DATA 
+  .const:H264VDEC_TI_ICONT1_DataSect1 :      31664  0x00007bb0  DATA 
+  .const:H264VDEC_TI_ICONT1_HIGHRES_DataSect1 :      31724  0x00007bec  DATA 
+  .const:H264VDEC_TI_ICONT1_DataSect3 :      16832  0x000041c0  DATA 
+  .const:H264VDEC_TI_ICONT1_HIGHRES_DataSect3 :       7568  0x00001d90  DATA 
+  .const:H264VDEC_TI_ICONT1_HIGHRES_DataSect4 :      15196  0x00003b5c  DATA 
+  .const:H264VDEC_TI_ICONT1_DataSect4 :       3960  0x00000f78  DATA 
+  .const:H264VDEC_TI_ICONT1_HIGHRES_DataSect5 :       4044  0x00000fcc  DATA 
+  .const:H264VDEC_TI_ICONT1_DataSect5 :       7736  0x00001e38  DATA 
+  .const:H264VDEC_TI_ICONT1_HIGHRES_DataSect6 :       7696  0x00001e10  DATA 
+  .const:H264VDEC_TI_ICONT1_DataSect6 :        764  0x000002fc  DATA 
+  .const:H264VDEC_TI_ICONT1_HIGHRES_DataSect7 :        772  0x00000304  DATA 
+  .const:H264VDEC_TI_ICONT2_DataSect2 :        932  0x000003a4  DATA 
+  .const:H264VDEC_TI_ERRORCONCEAL_ICONT1_DataSect0 :      30752  0x00007820  DATA 
+  .text:H264VDEC_TI_BootLoadIVAHD :       1584  0x00000630  CODE 
+  
+  ************************************************************
+  REPORT FOR FILE: h264vdec_ti_decode.obj
+  ************************************************************
+                            Name : Size (dec)  Size (hex)  Type
+  ------------------------------ : ----------  ----------  ----
+                  .const:.string :         32  0x00000020  DATA 
+  .text:H264VDEC_TI_updateSVCECParams :        500  0x000001f4  CODE 
+  .text:H264VDEC_TI_turnOnClocks :        104  0x00000068  CODE 
+  .text:H264VDEC_TI_turnOffClocks :        244  0x000000f4  CODE 
+  .text:H264VDEC_TI_processOutputDS :         94  0x0000005e  CODE 
+  .text:H264VDEC_TI_calculateTBA :        264  0x00000108  CODE 
+  .text:H264VDEC_TI_AcquireAndConfigureHDVICP2 :        228  0x000000e4  CODE 
+   .text:H264VDEC_TI_decodeStart :       2630  0x00000a46  CODE 
+     .text:H264VDEC_TI_decodeEnd :        656  0x00000290  CODE 
+  .text:H264VDEC_TI_decodePostProcessing :        166  0x000000a6  CODE 
+  .text:H264VDEC_TI_multiChannelDecode :       2374  0x00000946  CODE 
+        .text:H264VDEC_TI_decode :         32  0x00000020  CODE 
+  
+  ************************************************************
+  REPORT FOR FILE: h264vdec_ti_decsupport.obj
+  ************************************************************
+                            Name : Size (dec)  Size (hex)  Type
+  ------------------------------ : ----------  ----------  ----
+  .text:H264VDEC_TI_updateSL2Pointers :         50  0x00000032  CODE 
+  .text:H264VDEC_TI_updateInputDSParams :        484  0x000001e4  CODE 
+  .text:H264VDEC_TI_updateDDRpointers :         14  0x0000000e  CODE 
+     .text:H264VDEC_TI_putBuffer :         92  0x0000005c  CODE 
+  .text:H264VDEC_TI_errorMapping :        594  0x00000252  CODE 
+  .text:H264VDEC_TI_H264RequestFrame :        284  0x0000011c  CODE 
+    .text:H264VDEC_TI_displayPic :       1268  0x000004f4  CODE 
+  .text:H264VDEC_TI_channelInfoSetup :        436  0x000001b4  CODE 
+  .text:H264VDEC_TI_addressMapping :        282  0x0000011a  CODE 
+   .text:H264VDEC_TI_addressInit :        760  0x000002f8  CODE 
+  .text:H264VDEC_TI_WaitForIVAHDStandby :         34  0x00000022  CODE 
+  .text:H264VDEC_TI_FillDecodedBuf :        872  0x00000368  CODE 
+  .text:H264VDEC_TI_DBGTRACE_UpdateDbgParamsInDDR :        202  0x000000ca  CODE 
+  .text:H264VDEC_TI_DBGTRACE_InitializeDbgParam :        108  0x0000006c  CODE 
+  .text:H264VDEC_TI_Configure_Mailbox :         34  0x00000022  CODE 
+  .text:H264VDEC_TI_CheckForIVAHDStandby :         88  0x00000058  CODE 
+  
+  ************************************************************
+  REPORT FOR FILE: h264vdec_ti_dpboutputframe.obj
+  ************************************************************
+                            Name : Size (dec)  Size (hex)  Type
+  ------------------------------ : ----------  ----------  ----
+    .const:h264vdec_ti_maxDpbMbs :         64  0x00000040  DATA 
+  .text:H264VDEC_TI_removeFrameFromList :         90  0x0000005a  CODE 
+   .text:H264VDEC_TI_outputFrame :        336  0x00000150  CODE 
+  .text:H264VDEC_TI_initRefFrameBufMgmtFull :        290  0x00000122  CODE 
+  .text:H264VDEC_TI_initDisplayQueue :        152  0x00000098  CODE 
+  .text:H264VDEC_TI_findSmallestPocIdx :        134  0x00000086  CODE 
+   .text:H264VDEC_TI_FREEBUF_add :         94  0x0000005e  CODE 
+  .text:H264VDEC_TI_bump_displayFrame :        244  0x000000f4  CODE 
+  
+  ************************************************************
+  REPORT FOR FILE: h264vdec_ti_ialg.obj
+  ************************************************************
+                            Name : Size (dec)  Size (hex)  Type
+  ------------------------------ : ----------  ----------  ----
+      .text:H264VDEC_TI_numAlloc :          4  0x00000004  CODE 
+  .text:H264VDEC_TI_ValidateSVCTargetLayerID :         80  0x00000050  CODE 
+       .text:H264VDEC_TI_initObj :       1350  0x00000546  CODE 
+  .text:H264VDEC_TI_initDebugTraceHeader :         94  0x0000005e  CODE 
+   .text:H264VDEC_TI_initContext :        276  0x00000114  CODE 
+          .text:H264VDEC_TI_free :         46  0x0000002e  CODE 
+         .text:H264VDEC_TI_alloc :         34  0x00000022  CODE 
+    .text:H264VDEC_TI_Deactivate :          2  0x00000002  CODE 
+      .text:H264VDEC_TI_Activate :          2  0x00000002  CODE 
+  
+  ************************************************************
+  REPORT FOR FILE: h264vdec_ti_ires.obj
+  ************************************************************
+                            Name : Size (dec)  Size (hex)  Type
+  ------------------------------ : ----------  ----------  ----
+         .const:H264VDEC_TI_IRES :         40  0x00000028  DATA 
+                           .data :         24  0x00000018  DATA 
+  .text:H264VDEC_TI_syncUpSL2sansIVA :         16  0x00000010  CODE 
+  .text:H264VDEC_TI_syncUpDDRsansIVA :         14  0x0000000e  CODE 
+  .text:H264VDEC_TI_syncUpControlCallAccess :         22  0x00000016  CODE 
+  .text:H264VDEC_TI_reinitResources :          4  0x00000004  CODE 
+  .text:H264VDEC_TI_numResourceDescriptors :         42  0x0000002a  CODE 
+  .text:H264VDEC_TI_getPhysicalAddr :          8  0x00000008  CODE 
+  .text:H264VDEC_TI_initResources :        450  0x000001c2  CODE 
+  .text:H264VDEC_TI_getResourceDescriptors :        519  0x00000207  CODE 
+  .text:H264VDEC_TI_deinitResources :          4  0x00000004  CODE 
+  .text:H264VDEC_TI_deactivateResource :        238  0x000000ee  CODE 
+  .text:H264VDEC_TI_deactivateAllResources :        286  0x0000011e  CODE 
+  .text:H264VDEC_TI_codecParsDeActivate :         42  0x0000002a  CODE 
+  .text:H264VDEC_TI_codecParsActivate :         50  0x00000032  CODE 
+  .text:H264VDEC_TI_activateResource :        242  0x000000f2  CODE 
+  .text:H264VDEC_TI_activateAllResources :        280  0x00000118  CODE 
+  .text:H264VDEC_TI_DeActivateHDVICP2 :          2  0x00000002  CODE 
+  .text:H264VDEC_TI_CallBack_ISR :        122  0x0000007a  CODE 
+  
+  ************************************************************
+  REPORT FOR FILE: h264vdec_ti_memcpy.obj
+  ************************************************************
+                            Name : Size (dec)  Size (hex)  Type
+  ------------------------------ : ----------  ----------  ----
+  .text:H264VDEC_TI_memsetDoubleWord :         72  0x00000048  CODE 
+  .text:H264VDEC_TI_memcpyDoubleWord :         58  0x0000003a  CODE 
+  
+  ************************************************************
+  REPORT FOR FILE: h264vdec_ti_vt.obj
+  ************************************************************
+                            Name : Size (dec)  Size (hex)  Type
+  ------------------------------ : ----------  ----------  ----
+     .data:H264VDEC_TI_IH264VDEC :         44  0x0000002c  DATA 
+  .data:H264VDEC_TI_IH264VDEC_MULTI :         48  0x00000030  DATA 
+       .const:H264VDEC_TI_PARAMS :         72  0x00000048  DATA 
+          .data:H264VDEC_TI_IALG :         36  0x00000024  DATA 
+  
+  ************************************************************
+  REPORT FOR FILE: ih264vdec.obj
+  ************************************************************
+                            Name : Size (dec)  Size (hex)  Type
+  ------------------------------ : ----------  ----------  ----
+         .const:IH264VDEC_PARAMS :        148  0x00000094  DATA 
+  .const:IH264VDEC_TI_DYNAMICPARAMS :         80  0x00000050  DATA 
+  
+  ------------------------------------------------------------
+  Totals by section type
+  ------------------------------------------------------------
+      Initialized Data :     543160  0x000849b8
+                  Code :      21961  0x000055c9
+
+</PRE>
+<a href="#XDAIS Rules 21, 22">back</a>
+<hr>
+<a name="log XDAIS Rule 25">Test execution log for <b>XDAIS Rule 25:</b></a><br>
+<PRE>
+Running test 'XDAIS Rule 25'
+Using ofd output to parse for endianness attribute...
+ Running command:&gt; "C:\ti\xdais_6_23\packages\ti\xdais\qualiti\cgtools\bin\ofd6x.exe" -x --xml_indent=0 --obj_display=none,header "C:\ti\xdais_6_23\report\h264vdec_ti.lib" | "C:\ti\xdais_6_23\packages\ti\xdais\qualiti\bin\grep\grep.exe" "&lt;ei_data&gt;"
+                   (from "C:\Users\anvesh\AppData\Local\Temp\qualiti_runcmd_1438959457823185481.sh"
+  &lt;ei_data&gt;ELFDATA2LSB&lt;/ei_data&gt;
+  &lt;ei_data&gt;ELFDATA2LSB&lt;/ei_data&gt;
+  &lt;ei_data&gt;ELFDATA2LSB&lt;/ei_data&gt;
+  &lt;ei_data&gt;ELFDATA2LSB&lt;/ei_data&gt;
+  &lt;ei_data&gt;ELFDATA2LSB&lt;/ei_data&gt;
+  &lt;ei_data&gt;ELFDATA2LSB&lt;/ei_data&gt;
+  &lt;ei_data&gt;ELFDATA2LSB&lt;/ei_data&gt;
+  &lt;ei_data&gt;ELFDATA2LSB&lt;/ei_data&gt;
+  &lt;ei_data&gt;ELFDATA2LSB&lt;/ei_data&gt;
+  &lt;ei_data&gt;ELFDATA2LSB&lt;/ei_data&gt;
+  &lt;ei_data&gt;ELFDATA2LSB&lt;/ei_data&gt;
+
+</PRE>
+<a href="#XDAIS Rule 25">back</a>
+<hr>
+<a name="log XDAIS Rule 26">Test execution log for <b>XDAIS Rule 26:</b></a><br>
+<PRE>
+This test does not apply since this is not a C6x architecture.
+
+</PRE>
+<a href="#XDAIS Rule 26">back</a>
+<hr>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+</BODY>
+</HTML>
+
+
+
+

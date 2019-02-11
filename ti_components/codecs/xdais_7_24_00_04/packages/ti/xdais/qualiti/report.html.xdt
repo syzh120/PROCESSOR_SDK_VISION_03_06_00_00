@@ -1,0 +1,341 @@
+%%{
+/*
+ * Copyright (c) 2006-2012, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+%%}
+%%{
+    var alg          = this.algorithm;
+    var tests        = this.tests;
+    var ITest        = this.ITest;
+    var testSettings = this.testSettings;
+    var diffFriendly = this.diffFriendly;
+
+    var thisPkgDir   = xdc.getPackageBase( "ti.xdais.qualiti" );
+
+
+    var perf = false; // true when reporting performance
+
+    function isReportable( test )
+    {
+        if (perf) {
+            if (test.isPerformanceTest != true) {
+              return false;
+            }
+        } else {
+            if (test.isPerformanceTest == true) {
+              return false;
+            }
+        }
+        return true;
+    }
+
+    var os = java.lang.System.getProperty("os.name") + "";
+    var isWin = (os.match(/^Windows/i) != null);
+    function fileName( name ) {
+        name += "";
+        if (diffFriendly) {
+            return name.replace( /\\/g, "/" );
+        }
+        if (isWin) {
+            return name.replace( /\//g, "\\" );
+        }
+        return name;
+    }
+
+    var numPass = 0;
+    var numFail = 0;
+    var numSkipped = 0;
+    var numRunErrors = 0;
+    var numNA = 0;
+    var numTotal = 0;
+    var lstFail = [];
+
+    function calcStatistics() {
+        numPass = 0;
+        numFail = 0;
+        numSkipped = 0;
+        numRunErrors = 0;
+        numNA = 0;
+        numTotal = 0;
+        lstFail = [];
+
+        for (var i = 0; i < tests.length; i++) {
+            var test = tests[i];
+            if (!isReportable( test )) {
+                continue;
+            }
+            switch (test.status) {
+                case ITest.TEST_NOTRUN:
+                    numSkipped++;
+                    break;
+                case ITest.TEST_FAIL:
+                case ITest.TEST_RUNERROR:
+                    numFail++;
+                    lstFail[ lstFail.length ] = test;
+                    break;
+                case ITest.TEST_PASS:
+                    numPass++;
+                    break;
+                case ITest.TEST_NOTAPPLY:
+                    numNA++;
+                    break;
+                default: break;
+            }
+            numTotal++;
+        }
+    }
+    function escapeHTML( text ) {
+        return text.replace( "<", "&lt;", "g" ).replace( ">", "&gt;", "g" );
+    }
+%%}
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Compliance and Performance Test Report</TITLE></HEAD>
+<BODY>
+
+<STYLE TYPE="text/css">
+<!--
+.indented
+   {
+   padding-left: 25pt;
+   padding-right: 25pt;
+   }
+-->
+</STYLE>
+
+<a name="Top of Page"></a>
+
+<TABLE BORDER="1" WIDTH="100%">
+  <TR>
+    <TD COLSPAN="2">
+      <CENTER><FONT SIZE="+2"><B>TMS320 DSP Algorithm Interoperability Standard</B></FONT></CENTER><BR>
+      <CENTER><FONT SIZE="+1"><B>QualiTI <a href="#compliance">Compliance</a> and <a href="#performance">Performance</a> Testing</B></font></CENTER><BR>
+    </TD>
+  </TR>
+  <TR>
+    <TD><B>Date</B></TD><TD>`diffFriendly? "Today" : Date()`</TD>
+  </TR>
+
+  <TR>
+    <TD><B>Vendor</B></TD><TD>`alg.vendor`</TD>
+  </TR>
+
+  <TR>
+    <TD><B>Algorithm</B></TD><TD>`alg.moduleName`</TD>
+  </TR>
+
+  <TR>
+    <TD><B>Architecture</B></TD><TD>`alg.architecture`</TD>
+  </TR>
+
+  <TR>
+    <TD><B>TI Compiler</B></TD><TD>`alg.compilerParams.isTICompiler`</TD>
+  </TR>
+
+  <TR>
+    <TD><B>Library Format</B></TD><TD>`alg.compilerParams.libFormat`</TD>
+  </TR>
+
+  <TR>
+    <TD><B>Compiler Version</B></TD><TD>`alg.compilerParams.version`</TD>
+  </TR>
+  <TR>
+    <TD><B>Test Execution Log</B></TD><TD><a href="#Compiler Info">Test execution log for compiler info</a></TD>
+  </TR>
+%%{
+/*
+  <TR>
+    <TD><B>Generic Interface</B></TD><TD>None</TD>
+  </TR>
+
+  <TR>
+    <TD><B>Version</B></TD><TD>None</TD>
+  </TR>
+
+  <TR>
+    <TD><B>Serial Number</B></TD><TD>356420</TD>
+  </TR>
+*/
+%%}
+  <TR>
+    <TD COLSPAN="2">
+
+      <B>Algorithm Base Directory:</B><BR>
+
+      &nbsp;&nbsp;&nbsp;`diffFriendly? "[algbasedir]" : fileName( alg.baseDir )`<BR>
+
+% //      <B>Documentation:</B><BR>
+% //      &nbsp;&nbsp;&nbsp;vftdiscr_spcorp.doc<BR><BR>
+<BR>
+      <B>Algorithm Archive(s):</B><BR>
+
+      &nbsp;&nbsp;&nbsp;`fileName( alg.library )`<BR>
+% // fixme: add base dir
+<BR>
+      <B>Header File(s):</B><BR>
+% for (var i = 0; i < alg.headers.length; i++) {
+      &nbsp;&nbsp;&nbsp;`fileName( alg.headers[i] )`<BR>
+% }
+<BR>
+% //      <B>Linker Command File:</B><BR>
+% // fixme      &nbsp;&nbsp;&nbsp;None<BR><BR>
+% //      <B>Source File Defining IMOD_PARAMS:</B><BR>
+% // fixme      &nbsp;&nbsp;&nbsp;ivftdiscr.c<BR><BR>
+    </TD>
+
+  </TR>
+
+
+% for (var mode = 0; mode < 2; mode++) {
+%     perf = (mode == 1);
+%     calcStatistics();
+      <TR>
+        <TD COLSPAN="2">
+        <a name=`!perf ? "compliance" : "performance"`>
+          <FONT SIZE="+1"><BR><br><CENTER><B>`!perf ? "Compliance" : "Performance"` Test Report</B></CENTER><BR><br></font>
+        </a>
+        </TD>
+      </TR>
+
+      <TR>
+        <TD><B>Test Results</B></TD>
+        <td>
+        <font color="#00A000">PASS: `numPass`</font><br>
+        <font color="#FF0000"><B>FAIL: `numFail`</b></font>
+        &nbsp;&nbsp;&nbsp; `lstFail.length > 0 ? "[" : ""`
+%     for (var i = 0; i < lstFail.length; i++) {
+        <a href="#`lstFail[i].id`">`lstFail[i].id`<a>&nbsp;&nbsp;
+%     }
+        `lstFail.length > 0 ? "]" : ""`
+        <br>
+        Skipped: `numSkipped`<br>
+        Not apply: `numNA`<br>
+        <b>Total: `numTotal`</b><br>
+        </td>
+%     //    <TD><font color="#FF0000"><B>Fail    : </B></font> <a href="#23">23</a>  <a href="#24">24</a> <BR></TD>
+      </TR>
+      <TR>
+
+        <TD COLSPAN="2">
+            <B>Test Notes</B><BR>
+            &nbsp;&nbsp;&nbsp;This report has been generated with QualiTI Version `!diffFriendly ? this.version : "[current version]"` - the XDAIS compliance and performance test suite. <BR><BR>
+
+
+        </TD>
+      </TR>
+
+%      for (var i = 0; i < tests.length; i++) {
+%          var test = tests[i];
+%          if (!isReportable( test )) {
+%              continue;
+%          }
+      <TR>
+        <TD COLSPAN="2">
+          <b><a name="`test.id`">`test.title`</a></b><br><br>
+
+%          if (test.status == ITest.TEST_PASS) {
+          <B>Report: </B> <font color="#008080"><B>Passed</B></font><BR><BR>
+%          }
+%          else if (test.status == ITest.TEST_FAIL) {
+          <B>Report: </B> <font color="#FF0000"><B>Failed</B></font><BR><BR>
+%          }
+%          else if (test.status == ITest.TEST_RUNERROR) {
+          <B>Report: </B> <font color="#FF0000"><B>Failed to execute</B></font><BR><BR>
+%          }
+%          else if (test.status == ITest.TEST_NOTAPPLY) {
+          <B>Report: </B>Test does not apply</font><BR><BR>
+%          }
+%          else if (test.status == ITest.TEST_NOTRUN) {
+          <B>Report: </B><b>Test skipped by the user</b></font><BR><BR>
+%          }
+
+          <B>Test Description: </B><P CLASS="indented">`test.description.replace( /\n/g, "<br>" )`</p>
+          <B>Test Status Details: </B>
+%         if (test.status == ITest.TEST_FAIL) {
+          <font color="#FF0000">
+%         }
+          <P CLASS="indented">`test.statusDetails.replace( /\n/g, "<br>" )`<BR></p>
+%         if (test.status == ITest.TEST_FAIL) {
+          </font>
+%         }
+          <B>Test Execution Log: </b><a href="#log `test.id`">`test.id` execution log</a><br>
+        </TD>
+%      }
+      </TR>
+% } // end comp / perf loop
+</TABLE>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<hr>
+<a name="Compiler Info">Test execution log for <b>Compiler Info:</b></a><br>
+<PRE>
+% var log = escapeHTML( alg.compilerParams.log ) + "";
+%// `talg.compilerParams.log.replace("\\","/","g").replace(alg.baseDir.replace("\\","/","g"),"[algBaseDir]/","g").replace(testSettings.cgToolsDir.replace("\\","/","g"),"[cgToolsDir]/","g").replace(testSettings.cgxmlDir.replace("\\","/","g"),"[cgxmlDir]/","g").replace(thisPkgDir.replace("\\","/","g"),"[qualiti6]/","g")`
+`!diffFriendly ? log : log.replace("\\","/","g").replace((alg.baseDir+"").replace("\\","/","g"),"[algBaseDir]","g").replace((testSettings.cgtoolsDir+"").replace("\\","/","g"),"[cgtoolsDir]","g").replace((testSettings.cgxmlDir+"").replace("\\","/","g"),"[cgxmlDir]","g").replace(thisPkgDir.replace("\\","/","g")+"bin/grep/","","g").replace(".exe","","g").replace(/.*qualiti_runcmd.*/g,"")`
+</PRE>
+<a href="#Top of Page">back</a><br>
+<hr>
+%  for (var i = 0; i < tests.length; i++) {
+%      var test = tests[i];
+<a name="log `test.id`">Test execution log for <b>`test.id`:</b></a><br>
+<PRE>
+% log = escapeHTML( test.log ) + "";
+%// `test.log.replace("\\","/","g").replace(alg.baseDir.replace("\\","/","g"),"[algBaseDir]/","g").replace(testSettings.cgToolsDir.replace("\\","/","g"),"[cgToolsDir]/","g").replace(testSettings.cgxmlDir.replace("\\","/","g"),"[cgxmlDir]/","g").replace(thisPkgDir.replace("\\","/","g"),"[qualiti6]/","g")`
+`!diffFriendly ? log : log.replace("\\","/","g").replace((alg.baseDir+"").replace("\\","/","g"),"[algBaseDir]","g").replace((testSettings.cgtoolsDir+"").replace("\\","/","g"),"[cgtoolsDir]","g").replace((testSettings.cgxmlDir+"").replace("\\","/","g"),"[cgxmlDir]","g").replace(thisPkgDir.replace("\\","/","g")+"bin/grep/","","g").replace(".exe","","g").replace(/.*qualiti_runcmd.*/g,"")`
+</PRE>
+<a href="#`test.id`">back</a>
+<hr>
+%  }
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+</BODY>
+</HTML>
+
+% //        &nbsp;&nbsp;&nbsp;All references to Rules and Guidelines are from  the literature numbered SPRU352E, October 2002. <BR><BR>
+
+% //        &nbsp;&nbsp;&nbsp;The Rules 17, 18, 25, 26, 27, 31, 32, 33, 34, 35, DMA 1, DMA 2, DMA 3, DMA 4, DMA 5, DMA 6, DMA 7, DMA 8, DMA 9, DMA 10, DMA 11 are not applicable and hence were not tested.<BR><BR>
+
+% //        &nbsp;&nbsp;&nbsp;If instance creation parameter that leads  to the worst case heap memory usage is not provided separately in a C file then QualiTI tests rule 19 with default instance creation parameter.<BR><BR>
+
+% //        &nbsp;&nbsp;&nbsp;If you have any questions or comments about the test results below, please send an email to: <a href="mailto:algtesters@list.ti.com?Subject=QualiTI Version 3.3.5 - Report">algtesters@list.ti.com</a><BR><BR>

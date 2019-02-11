@@ -1,0 +1,53 @@
+%/******************************************************************************
+% * FILE PURPOSE: Generates MakeDocs.mk
+% ******************************************************************************
+% * FILE NAME: MakeDocs.mk.xdt
+% *
+% *****************************************************************************/
+%%{
+  /* Generate manifest based on OBJ/SRC and TARGET specification */
+  if (this.delivery_type == "src") {
+    var manifest_xml = "./docs/manifest/manifest_comm.xml";
+  }
+  else {
+    var manifest_xml = "./docs/manifest/manifest_tspa.xml";
+  }
+%%}
+
+# ==============================================================================
+# File            : Makedocs.mk
+# Description     : 
+#
+#   GNU makefile to generate release notes using Doxygen
+#
+# ==============================================================================
+
+# The target for generating release Notes using doxygen is releasenotes
+
+RELEASE_DOC=./docs/doxygen/release.chm
+
+releasenotes : $(RELEASE_DOC)
+
+$(RELEASE_DOC): ./docs/doxygen/release.h
+	-@echo generating Release Notes ...
+	if test ! -d ./docs/doxygen/html; then mkdir ./docs/doxygen/html; fi
+	cp $(TI_DOXYGEN_TEMPLATES)/*.* ./docs/doxygen/html
+	doxygen ../mas/swtools/docs/doxygen/releaseDoxyfile
+	@xs -f ../mas/swtools/release.js
+
+VLIB_DOC      =./docs/doxygen/VLIB_Function_Reference.chm
+VLIB_MANIFEST =./docs/manifest/Software_Manifest.html
+
+release: $(VLIB_MANIFEST) $(VLIB_DOC)
+
+gendocs $(VLIB_DOC): ./docs/doxygen/doxygen.h Makedocs.mk
+	-@echo generating VLIB documentation ...
+	if test ! -d ./docs/doxygen/html; then mkdir ./docs/doxygen/html; fi
+	cp $(TI_DOXYGEN_TEMPLATES)/*.* ./docs/doxygen/html
+	doxygen ./docs/doxygen/Doxyfile
+
+genmanifest $(VLIB_MANIFEST): `manifest_xml`
+	-@echo generating VLIB Software Manifest ...
+	@php ../mas/swtools/mangen.php $(VLIB_MANIFEST) $?
+
+# End of Makedocs.mk

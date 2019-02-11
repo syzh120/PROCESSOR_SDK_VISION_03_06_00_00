@@ -1,0 +1,3382 @@
+ARP32 C/C++ CODE GENERATION TOOLS
+1.0.7 January 2015
+Defect History
+
+-------------------------------------------------------------------------------
+Table of Contents
+-------------------------------------------------------------------------------
+1. Defects fixed in ARP32 Code Generation Tools release 1.0.7
+2. Defects fixed in ARP32 Code Generation Tools release 1.0.6
+3. Defects fixed in ARP32 Code Generation Tools release 1.0.5
+4. Defects fixed in ARP32 Code Generation Tools release 1.0.4
+5. Defects fixed in ARP32 Code Generation Tools release 1.0.3
+6. Defects fixed in ARP32 Code Generation Tools release 1.0.2
+7. Defects fixed in ARP32 Code Generation Tools release 1.0.1
+8. Defects fixed in ARP32 Code Generation Tools release 1.0.0
+9. Defects fixed in ARP32 Code Generation Tools release 1.0.0B6
+10. Defects fixed in ARP32 Code Generation Tools release 1.0.0B5
+11. Defects fixed in ARP32 Code Generation Tools release 1.0.0B4
+12. Defects fixed in ARP32 Code Generation Tools release 1.0.0B3
+13. Defects fixed in ARP32 Code Generation Tools release 1.0.0B2
+14. Defects fixed in ARP32 Code Generation Tools release 1.0.0B1
+15. Current Known Issues
+
+
+===============================================================================
+1. Defects fixed in ARP32 Code Generation Tools release 1.0.7
+===============================================================================
+
+The following 3 defects were fixed in ARP32 Code Generation Tools release
+1.0.7, released January 2015.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00050603
+-------------------------------------------------------------------------------
+
+Summary            : Variable write not happening in inlined CPP function
+
+Fixed in           : 1.0.7
+Severity           : S2 - Major
+Affected Component : Optimizer
+Duplicate Defects  : SDSCM00050941
+
+Release Notes:
+  In circumstances that are not well understood, structure fields may not
+  be written correctly in the presence of complicated conditional code.
+
+Workaround:
+  Compile at -o1 or -o0.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00050764
+-------------------------------------------------------------------------------
+
+Summary            : Bound function has incorrect address in DWARF debug info
+
+Fixed in           : 1.0.7
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+Duplicate Defects  : SDSCM00049433
+
+Release Notes:
+  The TI compiler allows a function to be bound to a specific address,
+  usually with "#pragma location". There was a bug in the way the TI
+  assembler recorded the DWARF debugging information for a bound
+  function that corrupted the DWARF debugging information. This would
+  cause CCS to report "no source available" when stepping attempting to
+  step into such a function.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.6
+
+Workaround:
+  Set a breakpoint at the bound function and run to it, rather than
+  attempting to step into it.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00050960
+-------------------------------------------------------------------------------
+
+Summary            : Array memory allocated by new is not initialized to 0
+
+Fixed in           : 1.0.7
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  Corrected bug where some calls to new[] did not properly initialize memory.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.6
+
+Workaround:
+  Manually initialize memory.
+
+
+===============================================================================
+2. Defects fixed in ARP32 Code Generation Tools release 1.0.6
+===============================================================================
+
+The following defect was fixed in ARP32 Code Generation Tools release 1.0.6,
+released September 2014.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00050811
+-------------------------------------------------------------------------------
+
+Summary            : Linker fails with INTERNAL ERROR: lnk2000 experienced an
+                     unhandled exception
+
+Fixed in           : 1.0.6
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+Duplicate Defects  : SDSCM00050957, SDSCM00050799
+
+Release Notes:
+  This bug occurs in the C preprocessor used for reading linker command
+  files, and results in an unhandled exception from the linker. If no C
+  preprocessor directives are used, the bug should not occur. The
+  --disable_pp option can be used to turn off the preprocessor if no
+  directives are present.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.4 - 1.0.5
+
+Workaround:
+  Remove C preprocessor directives from linker command files.
+
+
+===============================================================================
+3. Defects fixed in ARP32 Code Generation Tools release 1.0.5
+===============================================================================
+
+The following 0 defects were fixed in ARP32 Code Generation Tools release
+1.0.5, released August 2014.
+
+
+===============================================================================
+4. Defects fixed in ARP32 Code Generation Tools release 1.0.4
+===============================================================================
+
+The following 10 defects were fixed in ARP32 Code Generation Tools release
+1.0.4, released August 2014.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00048498
+-------------------------------------------------------------------------------
+
+Summary            : MISRA-C rule 12.8 incorrectly reported for an expression
+                     like ((uint32_t)2U << 8U);
+
+Fixed in           : 1.0.4
+Severity           : S2 - Major
+Affected Component : Parser
+
+Release Notes:
+  A violation warning for the MISRA 12.8 rule was reported for the
+  expression: ((uint32_t)2U << 8U);
+  
+  The MISRA 12.8 rule states that "The right-hand operand of a shift
+  operator shall lie between zero and one less than the width in bits of
+  the underlying type of the left-hand operand". The underlying type is
+  determined by section 6.10 of the MISRA Guidelines. For a literal it is
+  defined as being the smallest type of the same sign that can represent
+  the literal, so for 2U the type is unsigned char. In that case the
+  diagnostic is correct. However, the cast to uint32_t should make the
+  underlying type unsigned int, making the operation legal.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.3
+
+Workaround:
+  None.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00049229
+-------------------------------------------------------------------------------
+
+Summary            : Symbols are missing in .debug_pubnames part of the Dwarf
+                     information
+
+Fixed in           : 1.0.4
+Severity           : S1 - Critical / PS
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  This bug happens all the time. It causes the missing of .debug_pubnames
+  section. If the users rely on the .debug_pubnames to search the global
+  variable or function's debug information entry, he will see this bug and
+  will have no .debug_pubnames sections.
+  
+  This bug should only affect debug capability. Not the execution results.
+
+Workaround:
+  There is no work around for this bug.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00049509
+-------------------------------------------------------------------------------
+
+Summary            : SET_DATA_SECTION does not work if issued from within a
+                     _Pragma operator
+
+Fixed in           : 1.0.4
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  The test case attached has these lines ...
+  
+     #define PRAGMA(x) _Pragma(#x)
+     PRAGMA(SET_DATA_SECTION("dsname"))
+  
+  This code compiles fine with several other TI compilers. However, for the
+  C6000 compiler, this results in ...
+  
+  "file.c", line 5: error: this pragma cannot be used in a _Pragma operator (a
+  #pragma directive must be used)
+  "file.c", line 5: error: expected a "("
+  "file.c", line 5: error: expected a ")"
+
+Workaround:
+  None.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00049997
+-------------------------------------------------------------------------------
+
+Summary            : Loop with volatile loop control expression removed
+
+Fixed in           : 1.0.4
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  In some cases, the optimizer can remove apparently-empty loops that have
+  a loop test which compares the loop control variable with a volatile
+  value. This is not legal; the volatile value could change, so the loop
+  must be left in the code.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.3
+
+Workaround:
+  Declare the loop counter variable as volatile
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00050014
+-------------------------------------------------------------------------------
+
+Summary            : Missing copyright notice on mklib.c source
+
+Fixed in           : 1.0.4
+Severity           : S2 - Major
+Affected Component : Runtime Support Libraries (RTS)
+
+Release Notes:
+  The source code for mklib (mklib.c) is part of the product but lacks a
+  proper copyright statement. This file should have the same copyright
+  as the other TI-generated source files in the RTS library source code.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.3
+
+Workaround:
+  Not applicable
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00050023
+-------------------------------------------------------------------------------
+
+Summary            : SIGSEGV when using pragma on a template function
+
+Fixed in           : 1.0.4
+Severity           : S2 - Major
+Affected Component : Parser
+
+Release Notes:
+  The compiler may emit an internal error (SIGSEGV) when the user attempts
+  to apply a pragma to a template class function.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.3
+
+Workaround:
+  Do not apply any pragma to a template function. Move the function
+  outside the template class.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00050243
+-------------------------------------------------------------------------------
+
+Summary            : Scary but harmless warning:  FAILURE in
+                     mark_use_of_function_local_static()
+
+Fixed in           : 1.0.4
+Severity           : S2 - Major
+Affected Component : Optimizer
+
+Release Notes:
+  Compiling for C++ and using -pm or -o4 may produce a warning like
+  
+  FAILURE in mark_use_of_function_local_static()
+  fname1: __sti
+  fname2: __sti_
+  symbol: _$P$T62$2$1
+  
+  This warning, despite its dramatic wording, is harmless. The compiler
+  will build the program just as it should, and the warning does not
+  indicate any change in behavior. It's a debugging message that should
+  not have been visible outside the development team.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.3
+
+Workaround:
+  Avoid -pm or -o4. But the warning doesn't indicate any change of the
+  compiler's behavior, so you might as well ignore it.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00050512
+-------------------------------------------------------------------------------
+
+Summary            : Compiler does not handle control-C signal as expected
+
+Fixed in           : 1.0.4
+Severity           : S3 - Minor
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  Added signal catchers for SIGINT and SIGBREAK on non-Unix hosts, so the tool
+  exits cleanly instead of falling into the segfault report mechanism.
+
+Workaround:
+  Later compiler releases (7.6.x and above) do not suffer from this problem.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00050520
+-------------------------------------------------------------------------------
+
+Summary            : strip crashes on files with more than 64k sections
+
+Fixed in           : 1.0.4
+Severity           : S2 - Major
+Affected Component : Strip Utility
+
+Release Notes:
+  The strip utility will abnormally terminate if its input is an ELF
+  file with more than 64k sections (actually exactly 0xff00), and its
+  output would be less than 64k sections.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.3
+
+Workaround:
+  Don't strip the file
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00050721
+-------------------------------------------------------------------------------
+
+Summary            : Compiler truncates 64-bit case labels
+
+Fixed in           : 1.0.4
+Severity           : S2 - Major
+Affected Component : Code Generator
+
+Release Notes:
+  In some cases, the compiler optimizes switch case label comparisons by
+  computing the difference between two adjacent case labels. The bug is
+  that the compiler may truncate this difference to a 32-bit value.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.3
+
+Workaround:
+  Do not use a switch involving case labels with value larger than 32 bits;
+  use nested if/else statements instead.
+
+
+===============================================================================
+5. Defects fixed in ARP32 Code Generation Tools release 1.0.3
+===============================================================================
+
+The following 10 defects were fixed in ARP32 Code Generation Tools release
+1.0.3, released March 2014.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00045417
+-------------------------------------------------------------------------------
+
+Summary            : bool and _Bool are not defined correctly in strict ANSI
+                     C mode
+
+Fixed in           : 1.0.3
+Severity           : S3 - Minor
+Affected Component : C/C++ Compiler (cl)
+Duplicate Defects  : SDSCM00048227, SDSCM00048226
+
+Release Notes:
+  The size and type of "bool" and "_Bool" must be the same in all modes
+  so that declarations of the same object in different modules are
+  compatible. However, in strict ANSI C89 mode, stdbool.h defines _Bool
+  as "unsigned int," which means a C++ module using bool and a C module
+  including stdbool.h and using bool are using incompatible types.
+  
+  _Bool and stdbool.h are C99 features, so a strictly-conforming C89
+  program does not use them, but the TI compiler provides them as an
+  extension. This would cause a problem when attempting to mix C++
+  files and C files which both declare
+  
+  The ARM EABI Procedure Call Standard for the ARM Architecture (ARM IHI
+  0042D) section 7.1.1 ("Arithmetic Types") requires that both C++ bool
+  and C99 _Bool be unsigned byte types. However, the TI toolset does
+  not conform to that requirement.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.2
+
+Workaround:
+  The compiler and library now agree on a single definition of bool and
+  _Bool in all modes; its format is equivalent to "unsigned char."
+  Unfortunately, this represents a backward incompatibility with older
+  object files which match all of these conditions:
+  
+  - C source code
+  - includes stdbool.h
+  - compiled in strict C89 mode (the default in older compilers)
+  - module interface uses type _Bool or bool (i.e. a global variable,
+    function argument, or function return value of type derived from
+    bool, or struct containing a type derived from bool.)
+  
+  To work around the problem, either recompile with the latest version
+  of the compiler, or ensure that you aren"t using any _Bool or bool
+  objects in the module interface.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00047666
+-------------------------------------------------------------------------------
+
+Summary            : Definition of SIZE_MAX is wrong
+
+Fixed in           : 1.0.3
+Severity           : S3 - Minor
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  The definition of SIZE_MAX was incorrectly specified as the largest
+  signed integer value. It is now defined as the largest unsigned integer
+  value.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.2
+
+Workaround:
+  None.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00048289
+-------------------------------------------------------------------------------
+
+Summary            : Errors of the linker due to the difference in version of
+                     CGT
+
+Fixed in           : 1.0.3
+Severity           : S2 - Major
+Affected Component : Linker
+Duplicate Defects  : SDSCM00048621
+
+Release Notes:
+  The fix for SDSCM00044393 was intended to allow the following linker
+  command file syntax:
+  SECTIONS
+  {
+     OUTSECT_NAME  MEMORY_RANGE_NAME
+  }
+  
+  The Assembly Language Tools User Guide erroneously stated that this
+  syntax was accepted. However, allowing the above syntax introduces
+  ambiguity in the linker command file grammar, which caused previously
+  accepted command files to produce errors, resulting in this bug
+  (SDSCM00048289).
+  
+  This change removes the fix applied for SDSCM00044393. The above syntax
+  will no longer be accepted. The linker will now issue a warning if an
+  output section is specified but no placement information is found for
+  it. The documentation will be updated to specify that load allocation
+  may be specified with the syntax "load = allocation" or "> allocation".
+  
+  The above syntax will result in a warning that no placement was specified
+  for OUTSECT_NAME and a default placement will be applied. Valid linker
+  command files that were rejected due to the ambiguity will now be accepted.
+
+Workaround:
+  The problem can be avoided by using memory range names that are different from
+  section names. For example, this linker command file may cause the error
+  because "RAM" is both a memory range name and a section name:
+  
+  MEMORY {
+      RAM :
+  }
+  
+  SECTIONS {
+      <other section directives>
+     RAM  : > RAM
+  }
+  
+  But this one would not cause the error:
+  
+  MEMORY {
+      RAM_MEM :
+  }
+  
+  SECTIONS {
+      <other section directives>
+     RAM  : > RAM_MEM
+  }
+  
+  Also okay:
+  
+  MEMORY {
+      RAM :
+  }
+  
+  SECTIONS {
+      <other section directives>
+     RAM_SECT  : > RAM
+  }
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00048440
+-------------------------------------------------------------------------------
+
+Summary            : SIGSEGV when using MISRA checks on code with an
+                     anonymous struct
+
+Fixed in           : 1.0.3
+Severity           : S2 - Major
+Affected Component : Parser
+Duplicate Defects  : SDSCM00050700
+
+Release Notes:
+  When using MISRA checking on code that contains an anonymous struct, the
+  parser will crash with a SIGSEGV. Note that anonymous structs are not
+  legal in strict ANSI mode, and MISRA emits a warning if strict ANSI mode
+  is not used.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.2
+
+Workaround:
+  Do not use anonymous structs or unions when using MISRA
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00048686
+-------------------------------------------------------------------------------
+
+Summary            : Omitting npt but putting () is causing crash of VCOP
+                     kernel-C parser
+
+Fixed in           : 1.0.3
+Severity           : S2 - Major
+Affected Component : VCOP-C Kernel Compiler (vcc)
+
+Release Notes:
+  The issue resolves around undefined syntax in VCOP-C. This error will
+  instead result in a syntax error being emitted by the compiler rather
+  than an internal error.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.2
+
+Workaround:
+  None available, except for avoiding the syntax error.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00048712
+-------------------------------------------------------------------------------
+
+Summary            : ARM assembler seg faults on certain input
+
+Fixed in           : 1.0.3
+Severity           : S3 - Minor
+Affected Component : Assembler
+Duplicate Defects  : SDSCM00049517
+
+Release Notes:
+  The problem is that the assembly instruction LDR r0,0x40004000 is not legal.
+  The assembler believes 0x40004000 is a symbol because the user did not put a
+  '#' in front of it. Adding the '#' produces the correct error: "Invalid
+  addressing mode". This is still a defect because the assembler sshould not seg
+  fault on a bad instruction.
+
+Workaround:
+  Add the '#' in front of the 0x40004000 to produce the correct "Invalid
+  addressing mode" error.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00048747
+-------------------------------------------------------------------------------
+
+Summary            : Using END(sym_name) or SIZE(sym_name) on .cinit can
+                     cause link to fail
+
+Fixed in           : 1.0.3
+Severity           : S2 - Major
+Affected Component : ELF Linker
+
+Release Notes:
+  When the compression is performed, the size of the parent collection needs to
+  be updated.
+
+Workaround:
+  Avoid the use of the END() or SIZE() operators for .cinit or other
+  compressed sections.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00049035
+-------------------------------------------------------------------------------
+
+Summary            : Value of "weak" global incorrectly propagated into
+                     function
+
+Fixed in           : 1.0.3
+Severity           : S2 - Major
+Affected Component : Optimizer
+
+Release Notes:
+  When using a weak symbol def with an initializer, the weak symbol could
+  be pre-empted with a strong symbol from another compilation unit. The
+  optimizer is not entitled to assume that weak definition is actually
+  used, and thus cannot assume its initializer is the actual value it has
+  at runtime. However, the optimizer mistakenly copied the value of the
+  initializer into the function where the variable was used, which led to
+  an error when the symbol was pre-empted by a strong symbol with a
+  different value.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.2
+
+Workaround:
+  Do not use an explicit initializer with weak symbol definitions, or use
+  optimization level -o2 or lower.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00049271
+-------------------------------------------------------------------------------
+
+Summary            : INTERNAL ERROR results when building code that uses
+                     features from C++ testing framework
+
+Fixed in           : 1.0.3
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+Duplicate Defects  : SDSCM00050480
+
+Release Notes:
+  The compiler correctly handles const variables that are referenced in a
+  program using templates.
+
+Workaround:
+  declare VAR as "extern const int VAR = 1;"
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00049407
+-------------------------------------------------------------------------------
+
+Summary            : FAILURE in optimizer on local static variables with
+                     --opt_level=4
+
+Fixed in           : 1.0.3
+Severity           : S2 - Major
+Affected Component : Optimizer
+Duplicate Defects  : SDSCM00049409
+
+Release Notes:
+  In rare cases, the optimizer may emit a spurious diagnostic message
+  which says "FAILURE in mark_use_of_function_local_static." This
+  message includes some symbol names, the first of which will be
+  partially garbled. This message does not affect the generated code,
+  so it may be ignored.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.2
+
+Workaround:
+  Ignore the message "FAILURE in mark_use_of_function_local_static."
+
+
+===============================================================================
+6. Defects fixed in ARP32 Code Generation Tools release 1.0.2
+===============================================================================
+
+The following 9 defects were fixed in ARP32 Code Generation Tools release
+1.0.2, released September 2013.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00013456
+-------------------------------------------------------------------------------
+
+Summary            : fgets in _IONBF mode does not respect size limit
+
+Fixed in           : 1.0.2
+Severity           : S2 - Major
+Affected Component : Runtime Support Libraries (RTS)
+
+Release Notes:
+  The second argument to fgets() is the maximum number of chars to read.
+  In _IONBF mode, fgets() reads until end-of-line, potentially
+  overrunning the input buffer. For example:
+  
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+  #include <assert.h>
+  
+  main()
+  {
+      FILE *f = fopen("tst.txt", "r");
+      char buffer[100];
+      int counter = 0;
+  
+      setvbuf(f, NULL, _IONBF, 0);
+  
+      while (fgets(buffer, 5, f) != NULL)
+      {
+          printf("[%s]\n", buffer);
+          switch (counter++)
+          {
+              case 0: assert(!strcmp(buffer, "aaaa")); break;
+              case 1: assert(!strcmp(buffer, "bbbb")); break;
+              case 2: assert(!strcmp(buffer, "cccc")); break;
+          }
+      }
+  
+      assert(feof(f));
+  
+      puts("PASS");
+  }
+  
+  With tst.txt having (with no trailing newline):
+  
+  aaaabbbbcccc
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.1
+
+Workaround:
+  Do not use _IONBF mode
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00037672
+-------------------------------------------------------------------------------
+
+Summary            : GCC cast-to-union wrongly rejected in initialization
+                     constant
+
+Fixed in           : 1.0.2
+Severity           : S2 - Major
+Affected Component : Parser
+
+Release Notes:
+    union u { int i; int *p; };
+    struct s { int n; union u a; } v = {1, (union u) 2 };
+  
+  Initialization will be flagged with "cast to type "union u" is not allowed".
+  
+  In GCC compatibility mode the cast should be allowed.
+
+Workaround:
+  None.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00042344
+-------------------------------------------------------------------------------
+
+Summary            : Compiler generates internal error: illegal
+                     initialization or segmentation fault
+
+Fixed in           : 1.0.2
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  Compiler sometimes generates internal error: illegal initialization or
+  segmentation fault when using gcc extension nested designed initializers.
+
+Workaround:
+  The seg fault can be worked around if the nested designated initializer
+  is removed:
+  
+  static struct cfg   config[] =
+  {
+      // the first definition makes the segmentation fault. Comment it and everything is fine.
+      { .module_id    = MODULE_1,
+        .param_length = sizeof(struct module_1_params),
+        .param        = (struct module_1_params []){{1}} /* remove this designated initializer */
+      },
+  
+      { .module_id    = MODULE_2,
+        .param_length = 5,
+        .param        = (int[]){0,1,2,3,4}
+      },
+  
+      { .module_id    = MODULE_3,
+        .param_length = 2,
+        .param        = (int[]){0,1}
+      }
+  
+  };
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00043860
+-------------------------------------------------------------------------------
+
+Summary            : Printf format %#06x prints zeros in the wrong place
+
+Fixed in           : 1.0.2
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+Duplicate Defects  : SDSCM00008251
+
+Release Notes:
+  When the # and 0 flags are both used with the x conversion specifier, any
+  extra 0 characters added to fill up the precision should be added after
+  the 0x prefix, but the TI library added them before the 0x prefix.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.1
+
+Workaround:
+  Avoid using both # and 0 flags when using the x conversion specifier.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00044121
+-------------------------------------------------------------------------------
+
+Summary            : Linker option --retain is not displayed in CCS GUI or
+                     when typing cl430 --help
+
+Fixed in           : 1.0.2
+Severity           : S2 - Major
+Affected Component : ELF Linker
+
+Release Notes:
+  Linker option --retain is not displayed in the CCS GUI or when typing
+  cl430 --help
+
+Workaround:
+  The --retain option is supported even though it does not appear as an
+  option in CCS or with --help. It can be specified on the command line or in
+  the CCS dialogue.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00047464
+-------------------------------------------------------------------------------
+
+Summary            : VCOP Host Emulation: VCMPGE_EXPR functions not inline
+
+Fixed in           : 1.0.2
+Severity           : S2 - Major
+Affected Component : VCOP-C Kernel Compiler (vcc)
+
+Release Notes:
+  No Information Available; please see defect details.
+
+Workaround:
+  In vcop.h, find the VCMPGE_EXPR class, and change the following declarations:
+  
+  element_t compare(int i);
+  void load(VECTOR &dst);
+  
+  To the following:
+  inline element_t compare(int i);
+  inline void load(VECTOR &dst);
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00047502
+-------------------------------------------------------------------------------
+
+Summary            : linker fails with internal error if .cinit and .data are
+                     in the same GROUP
+
+Fixed in           : 1.0.2
+Severity           : S2 - Major
+Affected Component : Linker
+
+Release Notes:
+  The internal error was caused by attempting to place .cinit in a GROUP
+  with .data in an ELF file. This is not a recommended practice. The fix
+  will allow .cinit and .data in a GROUP only if .data preceeds .cinit. In
+  that case, compression of cinit records can not be performed. If .cinit
+  is placed before .data in a GROUP, a user level error is reported.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.1
+
+Workaround:
+  Move .cinit so that it is not in any GROUP
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00047630
+-------------------------------------------------------------------------------
+
+Summary            : VCOP Host Emulation: Assertion failure in MSVC++
+
+Fixed in           : 1.0.2
+Severity           : S2 - Major
+Affected Component : Runtime Support Libraries (RTS)
+
+Release Notes:
+  This was a memory management bug that only manifested itself on Windows
+  for VCOP_HOST_EMULATION mode. The code causing the bug was entirely contained
+  in the vcop.h header file.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.1
+
+Workaround:
+  Get an updated vcop.h header file.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00047883
+-------------------------------------------------------------------------------
+
+Summary            : bsearch failure when using -pr relaxed ANSI mode or
+                     --gcc mode from C++
+
+Fixed in           : 1.0.2
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+Duplicate Defects  : SDSCM00047268
+
+Release Notes:
+  In relaxed mode calling bsearch from C++ results in an infinite loop.
+
+Workaround:
+  A workaround is to use --strict_ansi.
+
+
+===============================================================================
+7. Defects fixed in ARP32 Code Generation Tools release 1.0.1
+===============================================================================
+
+The following 21 defects were fixed in ARP32 Code Generation Tools release
+1.0.1, released June 2013.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00042332
+-------------------------------------------------------------------------------
+
+Summary            : Don't generate typeinfo when not used
+
+Fixed in           : 1.0.1
+Severity           : S3 - Minor
+Affected Component : Code Generator
+
+Release Notes:
+  The C++ type info is generated under EABI whenever the virtual function table
+  is created as per the IA64 C++ ABI requirement. However, the typeinfo is not
+  used if RTTI or C++ exceptions are not used. Hence it is a good candidate to
+  place in slow external memory. However, they are presently generated under
+  .const section and hence it is difficult to selectively group and place them.
+  The proposal is to place the typeinfo under the .const:.typeinfo subsection to
+  enable easier placement.
+  
+  For all targets except C2000's large data mode, typeinfo will now be placed in
+  .const:.typeinfo, whereas C2000's large data mode will place it into
+  .econst:.typeinfo. This behavior will be default in all future releases, but
+  branch patches must provide the --typeinfo_subsections option in the shell to
+  activate this placement change. This is because cache behavior could
+  potentially be affected by changing the placement of the type information.
+  
+  To take advantage of this feature, the linker command file must detail the
+  placement for the typeinfo subsection, most often times placing it into slow
+  external memory to make room for more important data in faster memory.
+
+Workaround:
+  None
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00042417
+-------------------------------------------------------------------------------
+
+Summary            : #pragma WEAK; 'if (f)' gets eliminated even if 'f' is a
+                     weak function
+
+Fixed in           : 1.0.1
+Severity           : S3 - Minor
+Affected Component : C/C++ Compiler (cl)
+Duplicate Defects  : SDSCM00044527
+
+Release Notes:
+  EABI mode allows weak symbol references. If the symbol is weak and
+  not defined, its address is zero. The compiler incorrectly assumes
+  that the address of a weak symbol is non-zero and simplfies
+  comparisons of &symbol to true, but it should not. In other words, if
+  the user writes "if (&symbol) symbol_is_defined();", symbol_is_defined
+  will be called even if symbol is weak and not defined.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.0
+
+Workaround:
+  Create a volatile pointer to hold the weak pointer value before using it
+  in any comparisons, including the test in an if statement.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00042444
+-------------------------------------------------------------------------------
+
+Summary            : Expression that multiplies two constants incorrectly
+                     triggers MISRA rule 10.1 about implicit conversion
+
+Fixed in           : 1.0.1
+Severity           : S3 - Minor
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  The expression ...
+  
+    var_int16 = 4 * 256;
+  
+  contains no implicit conversions. However, MISRA rule 10.1 about no implicit
+  conversions is still emitted for that expression.
+
+Workaround:
+  None.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00042581
+-------------------------------------------------------------------------------
+
+Summary            : Linker fails with internal error: lnk6x failed to
+                     allocate memory
+
+Fixed in           : 1.0.1
+Severity           : S2 - Major
+Affected Component : Linker
+
+Release Notes:
+  The linker could report an internal error due to a memory allocation
+  failure in certain cases. This bug involves the linker options
+  --make_static, --localize, or --hide. If any of these options is used in
+  a partial link, then the final link may produce the internal error. The
+  linker was localizing comdat symbols during the partial link, which is
+  incorrect behavior. The result was that the comdat symbols could not be
+  resolved in the final link, but this was not detected properly, causing
+  the memory allocation failure. One example of a comdat symbol is a
+  static data member of a template class. The static data member must be
+  resolved to a single instance, so it can not be localized during the
+  partial link. This bug fix ensures that --make_static, --localize, and
+  --hide do not affect comdat symbols during the partial link, and lists
+  these symbols in the mapfile if requested. Also, if a similar symbol
+  resolution error is encounted due to some other cause, the linker will
+  now detect and report the error instead of encountering a memory
+  allocation error later in the linking process.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.0
+
+Workaround:
+  This bug can only be triggered if a partial link is performed using the
+  --make_static, --localize or --hide option (the memory allocation
+  failure will occur during the final link, however). Removing that option
+  is one way to avoid this bug. Alternatively, the partial link step may
+  be removed from the build process, if possible.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00042600
+-------------------------------------------------------------------------------
+
+Summary            : Ill advised enum scalar usage gets MISRA diagnostic, but
+                     similar usage of enum array does not
+
+Fixed in           : 1.0.1
+Severity           : S3 - Minor
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  The test case given assigned a integer to an enum scalar variable. MISRA
+  checking correctly flags this with a diagnostic. The test case goes on to do
+  the same thing with an enum array expression. It should get the same MISRA
+  diagnostic, but does not. For example:
+  
+  typedef unsigned int uint16_t;
+  
+  uint16_t Func(void);
+  
+  typedef enum Error
+  {
+      OK,
+      NO_DATA,
+      BUFFER_FULL
+  } Error_t;
+  
+  const Error_t errors[2] = {OK, OK};
+  
+  uint16_t Func(void)
+  {
+      uint16_t myError;
+  
+      myError = OK; /* correctly flags as error (MISRA 10.1) */
+  
+      myError = errors[0]; /* does not find error */
+  
+      return myError;
+  }
+
+Workaround:
+  None.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00045173
+-------------------------------------------------------------------------------
+
+Summary            : Missing qsort and bsearch implementations for comparison
+                     functions with C++ linkage
+
+Fixed in           : 1.0.1
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  The C++ standard requires two distinct prototypes for qsort, one for
+  comparison functions with C linkage, and one for comparison functions
+  with C++ linkage. The C++ linkage implementation was missing, which
+  would lead to an incompatible parameter error when trying to use qsort in
+  C++ with a comparison function that has C++ linkage.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.0
+
+Workaround:
+  Declare the comparison function extern "C"
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00045211
+-------------------------------------------------------------------------------
+
+Summary            : Linker GROUP directive fails to allow NOINIT output
+                     sections and regular output sections to be together in
+                     the group
+
+Fixed in           : 1.0.1
+Severity           : S2 - Major
+Affected Component : Linker
+
+Release Notes:
+  An output section that includes NOINIT sections and regular sections is
+  not allowed. The code to detect this error did not properly account for
+  GROUPS, which can contain a mix of section types. However, this bug
+  would only occur if a GROUP was declared to be type NOINIT in the linker
+  command file. The type keyword should not be applied to GROUPs, as
+  documented in SDSCM00032000, and this syntax will be disallowed when
+  SDSCM00032000 is fixed.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.0
+
+Workaround:
+  None. However, the type keyword should not be applied to GROUPs.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00045373
+-------------------------------------------------------------------------------
+
+Summary            : EXIDX section for alias function leads to INTERNAL ERROR
+                     unhandled exception
+
+Fixed in           : 1.0.1
+Severity           : S2 - Major
+Affected Component : Linker
+
+Release Notes:
+  If all of --exceptions, --unused_section_elimination=off, and
+  --retain=.ARM.EXIDX are used, and the compiler turns a C++ function into
+  an alias (this is a TI-specific optimization), it is possible for the
+  linker to retain the EXIDX section for the alias function but not the
+  alias function itself, which leads to an internal error.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.0
+
+Workaround:
+  Do not use either --unused_section_elimination=off or
+  --retain=.ARM.EXIDX. Neither one should be necessary in a
+  properly-functioning linker, and both make the target footprint larger.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00045550
+-------------------------------------------------------------------------------
+
+Summary            : Truncated pointer created by cast from integer constant
+
+Fixed in           : 1.0.1
+Severity           : S2 - Major
+Affected Component : Optimizer
+
+Release Notes:
+  For an expression of the form ((t *)c1+c2), where t is an arbitrary
+  type and c1 and c2 are integer constants small enough to fit in a type
+  smaller than int, the optimizer could mistakenly truncate the sum of
+  c1 and c2 to the smaller type. It is possible for other optimizations
+  to create this expression through simplification of other expressions.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.0
+
+Workaround:
+  Don't use the optimizer at all for source files which contain pointer
+  math of the form shown in the release notes.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00045894
+-------------------------------------------------------------------------------
+
+Summary            : Use of option -pdse195 causes an incorrect error to be
+                     generated
+
+Fixed in           : 1.0.1
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  An issue where diagnostics resulting from the evaluation of unused
+  preprocessor tokens has been fixed. This issue only arose when error #195
+  was escalated to warning or error. For example, when compiling the
+  following code with the option -pdse195:
+  
+     #define MY_CONCAT_DEFINE 1
+     #define MY_CONCAT_MACRO(a, b) a##b
+     #if (MY_CONCAT_MACRO(MY_,CONCAT_DEFINE) == 0)
+     #error ("Define is zero")
+     #endif
+     int x;
+  
+  The compiler generates the following incorrect error message:
+  
+   "test.c", line 5: error: zero used for undefined preprocessing identifier
+   #if (MY_CONCAT_MACRO(MY_,CONCAT_DEFINE) == 0)
+   ^
+   "test.c", line 5: error: zero used for undefined preprocessing identifier
+   #if (MY_CONCAT_MACRO(MY_,CONCAT_DEFINE) == 0)
+   ^
+   2 errors detected in the compilation of "test.c".
+   >> Compilation failure
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.0
+
+Workaround:
+  Compiling without -pdse195 will remove the errors caused by this issue.
+  Alternatively, consider -pdsw195 if the diagnostic should be seen but not
+  bar the program from compiling.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00046084
+-------------------------------------------------------------------------------
+
+Summary            : Hex utility incorrectly picks empty section over a
+                     non-empty section with duplicate name
+
+Fixed in           : 1.0.1
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  There can be duplicate section names in an object file. When
+  converting such a file, the hex converter will emit a warning and fail
+  to convert the section. For this test case, it is sufficient to have
+  the hex converter ignore zero-length sections. Handling duplicate
+  section names, neither of which are empty, will require some redesign,
+  and will be pursued as a separate effort. This defect report has been
+  re-purposed as the more targeted fix of ignoring zero-length sections.
+  See SDSCM00046936 for the ongoing work to handle duplicate section
+  names for non-empty sections.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.0
+
+Workaround:
+  Use a different output section for the duplicate .text section
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00046135
+-------------------------------------------------------------------------------
+
+Summary            : ARP32: C++ macros defines in VCOP kernels
+
+Fixed in           : 1.0.1
+Severity           : S3 - Minor
+Affected Component : VCOP-C Kernel Compiler (vcc)
+
+Release Notes:
+  Fixed an issue where macros such as __cplusplus were considered defined
+  during VCOP kernel compilation.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0
+
+Workaround:
+  Remove all code within blocks guarded by __cplusplus
+  
+  Extern "C" is not a valid VCOP construct and will cause an error if
+  included within a kernel.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00046177
+-------------------------------------------------------------------------------
+
+Summary            : ELF section header table not guaranteed to be aligned
+
+Fixed in           : 1.0.1
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  I conclude that the linker is generating something wrong when creating
+  relocatable output that gets corrected when it later generates executable
+  output. A further observation: after linking the relocatable linker
+  output to form an executable, I note that the section headers are
+  misaligned (at offset 0xaca from the start of the file).
+  This appears to break the alignment rule from:
+  http://www.sco.com/developers/gabi/2003-12-17/ch4.intro.html#file_format
+  
+  "All data structures that the object file format defines follow the
+  ``natural'' size and alignment guidelines for the relevant class. If
+  necessary, data structures contain explicit padding to ensure 8-byte
+  alignment for 8-byte objects, 4-byte alignment for 4-byte objects, to
+  force structure sizes to a multiple of 4 or 8, and so forth. Data also
+  have suitable alignment from the beginning of the file. Thus, for
+  example, a structure containing an Elf32_Addr member will be aligned on a
+  4-byte boundary within the file. " Section headers contain Elf32_Addr
+  members, and so should be aligned on a 4-byte boundary (which 0xaca
+  isn't). It appears that the compiler is failing to pad the size of the
+  string table to ensure the alignment of the following areas. You can see
+  that the alignment of the section headers depends on the size of the
+  string table by changing the function name to 'main2'. This generates an
+  output file where the section header offset is 534. The misaligned
+  section headers lead to a CCS crash (SDSCM00046176).
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.0
+
+Workaround:
+  None.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00046231
+-------------------------------------------------------------------------------
+
+Summary            : DATA_ALIGN should not be able to reduce alignment below
+                     default array alignment
+
+Fixed in           : 1.0.1
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  With the following program:
+  
+  #pragma DATA_SECTION(array, 4)
+  int array[100];
+  
+  Observe that the alignment of array is 32, should be 64.
+  
+  The DATA_ALIGN pragma should not cause an array to have an
+  alignment that is less than the default array alignment. The DATA_ALIGN
+  pragma is ignored if it attempts to do so.
+
+Workaround:
+  Use the DATA_ALIGN pragma with an array alignment value of at least 8 for
+  C64x+
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00046400
+-------------------------------------------------------------------------------
+
+Summary            : op-assign of float expression to bit-field results in
+                     corrupted code
+
+Fixed in           : 1.0.1
+Severity           : S2 - Major
+Affected Component : Code Generator
+
+Release Notes:
+  A bit-field may be assigned to with an op-assign (e.g. +=) operator.
+  If the left hand side of the operator is a bit-field and right hand
+  side is an expression with floating-point type, the compiler will in
+  some cases write a corrupted value to the bit-field.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.0
+
+Workaround:
+  Assign the value of the floating-point expression into a local integer
+  variable and assign the local variable to the bit-field.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00046758
+-------------------------------------------------------------------------------
+
+Summary            : VCOP: vcop.h left shift doesn't mask result
+
+Fixed in           : 1.0.1
+Severity           : S2 - Major
+Affected Component : VCOP-C Kernel Compiler (vcc)
+
+Release Notes:
+  In host emulation mode, a left shift resulting in a 1 in the 40th bit of
+  a vector register will now properly be considered a negative value.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0
+
+Workaround:
+  Modify vcop.h as follows:
+  
+  Add a line at the end of the for loop in the function 'static inline VECTOR
+  operator<<' that contains the following code:
+  
+  dst[i] = _bit_mask40s(dst[i]);
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00046812
+-------------------------------------------------------------------------------
+
+Summary            : Instructions are placed in the wrong order
+
+Fixed in           : 1.0.1
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  In rare cases, incorrect analysis by the compiler may indicate that two
+  memory or stack accesses are unrelated when they actually refer to the
+  same object. If this occurs, the compiler may schedule an access
+  incorrectly.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.0
+
+Workaround:
+  No definite workaround exists. However, changing the optimization level
+  may avoid the problem by changing the stack or memory layout.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00046816
+-------------------------------------------------------------------------------
+
+Summary            : Excessive compile time - Optimizer hangs
+
+Fixed in           : 1.0.1
+Severity           : S2 - Major
+Classification     : Performance
+Affected Component : Optimizer
+
+Release Notes:
+  A program containing large structs containing many fields, especially if
+  those fields are of type char, may require excessive time to compile.
+  The compiler must check all those fields for potential aliases, and does
+  so inefficiently.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.0
+
+Workaround:
+  None known.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00046848
+-------------------------------------------------------------------------------
+
+Summary            : NOINIT keyword may be ignored
+
+Fixed in           : 1.0.1
+Severity           : S2 - Major
+Affected Component : ELF Linker
+Duplicate Defects  : SDSCM00047211
+
+Release Notes:
+  The linker command file keyword type(NOINIT) will be ignored in the ARM
+  v5.0.4 and MSP430 v4.1.5 compilers. The changes made to fix
+  SDSCM00045211 were incorrect, causing sections marked NOINIT in the
+  linker command file to be initialized via the cinit mechanism for EABI.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.1 - 1.0.0
+
+Workaround:
+  None.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00046849
+-------------------------------------------------------------------------------
+
+Summary            : stdin stdout stderr macros need to be usable without
+                     using namespace std for _ftable
+
+Fixed in           : 1.0.1
+Severity           : S2 - Major
+Affected Component : Runtime Support Libraries (RTS)
+Duplicate Defects  : SDSCM00045792, SDSCM00043348
+
+Release Notes:
+  stdin, stdout, and stderr are macros involving the identifier
+  std::_ftable. As a macro, the namespace is not specified as you would
+  for a type or variable (std::size_t). When cstdio is included, these
+  macros are defined and should be usable without a using declaration
+  putting std::_ftable in the global namespace.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.0
+
+Workaround:
+  Include stdio.h instead of cstdio
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00046910
+-------------------------------------------------------------------------------
+
+Summary            : Using an invalid option with valid hex command file
+                     causes SIGSEGV
+
+Fixed in           : 1.0.1
+Severity           : S2 - Major
+Affected Component : Hex Converter (hex)
+
+Release Notes:
+  Using an invalid option with valid hex command file causes a
+  segmentation fault.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.0
+
+Workaround:
+  Fix or eliminate the invalid option.
+
+
+===============================================================================
+8. Defects fixed in ARP32 Code Generation Tools release 1.0.0
+===============================================================================
+
+The following 3 defects were fixed in ARP32 Code Generation Tools release
+1.0.0, released December 2012.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00044285
+-------------------------------------------------------------------------------
+
+Summary            : scanf %[^ mistakenly writes EOF to output
+
+Fixed in           : 1.0.0
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  When using ^ to negate the scan set [ sscanf(in, "%[^abc]", out) ], scanf
+  would incorrectly copy EOF to the output string. It should instead stop
+  reading input and return as normal.
+
+Workaround:
+  Negate the scan set manually; don't use the negation operator.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00044393
+-------------------------------------------------------------------------------
+
+Summary            : Linker silently ignores an output section placement spec
+                     with missing ">" in the SECTIONS directive
+
+Fixed in           : 1.0.0
+Severity           : S3 - Minor
+Affected Component : Linker
+
+Release Notes:
+  When previously parsing linker command files, the linker required the ">" to
+  specify memory addresses for sections (i.e. sec1 > MEM1). The ">" operator is
+  now optional as the documentation states it should be.
+
+Workaround:
+  Don't omit the ">" in the linker command file.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00045660
+-------------------------------------------------------------------------------
+
+Summary            : Different code generated on Linux and PC under the same
+                     option for the same source code
+
+Fixed in           : 1.0.0
+Severity           : S2 - Major
+Affected Component : Optimizer
+
+Release Notes:
+  In some cases, the same code compiled with the same version of the
+  compiler may produce different asm on Windows than on Linux. The reason
+  is some unstable sorting of equivalent internal rules and inlineable call
+  sites. The two systems will sort differently in these cases and the
+  resulting asm will vary; in some cases, performance will also be
+  different.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.0B6
+
+Workaround:
+  None.
+
+
+===============================================================================
+9. Defects fixed in ARP32 Code Generation Tools release 1.0.0B6
+===============================================================================
+
+The following 2 defects were fixed in ARP32 Code Generation Tools release
+1.0.0B6, released August 2012.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00043174
+-------------------------------------------------------------------------------
+
+Summary            : Linker fails to honor specific placement for function
+                     from RTS library
+
+Fixed in           : 1.0.0B6
+Severity           : S2 - Major
+Affected Component : COFF Linker
+
+Release Notes:
+  Linker now honors section placement specification.
+
+Workaround:
+  Do not include libc.a option.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00045105
+-------------------------------------------------------------------------------
+
+Summary            : Empty struct as field of parent struct may cause
+                     optimizer abort
+
+Fixed in           : 1.0.0B6
+Severity           : S2 - Major
+Affected Component : Optimizer
+
+Release Notes:
+  If a struct contains another struct, and the inner struct has no fields,
+  and the parent struct is copied whole through an assignment of
+  struct-type variables, the optimizer may abort.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.0B5
+
+Workaround:
+  Add a dummy field to the empty struct.
+
+
+===============================================================================
+10. Defects fixed in ARP32 Code Generation Tools release 1.0.0B5
+===============================================================================
+
+The following 0 defects were fixed in ARP32 Code Generation Tools release
+1.0.0B5, released August 2012.
+
+
+===============================================================================
+11. Defects fixed in ARP32 Code Generation Tools release 1.0.0B4
+===============================================================================
+
+The following 0 defects were fixed in ARP32 Code Generation Tools release
+1.0.0B4, released July 2012.
+
+
+===============================================================================
+12. Defects fixed in ARP32 Code Generation Tools release 1.0.0B3
+===============================================================================
+
+The following 10 defects were fixed in ARP32 Code Generation Tools release
+1.0.0B3, released July 2012.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00037422
+-------------------------------------------------------------------------------
+
+Summary            : Incorrect layout in .cdecls struct
+
+Fixed in           : 1.0.0B3
+Severity           : S3 - Minor
+Affected Component : Assembler
+
+Release Notes:
+  The attached test case defines a structure which contains a union. The last
+  field in the structure is assigned the offset 9 by the compiler. The
+  assembler, via .cdecls, assigns that same field the offset 10.
+
+Workaround:
+  None
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00041434
+-------------------------------------------------------------------------------
+
+Summary            : Compiler optimizes away certain calls to assert()
+
+Fixed in           : 1.0.0B3
+Severity           : S3 - Minor
+Affected Component : Absolute Lister
+
+Release Notes:
+  Certain assert() statements, most notably "assert(x&1)" and the
+  equivalent "assert(x%2==0)", may be removed by the compiler and thus will
+  not do the run-time condition check that is desired.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.0B2
+
+Workaround:
+  Instead of "assert(p)", use "if (!p) assert(0)", which will still abort
+  at the same place under the same conditions, but will have a different
+  error message. More elaborately, implement a function equivalent to
+  assert() but with a different name, that the compiler will not recognise
+  as a system function.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00042292
+-------------------------------------------------------------------------------
+
+Summary            : In EABI mode string literals used in member functions
+                     result in static members of the class and not placed in
+                     .const:.string
+
+Fixed in           : 1.0.0B3
+Severity           : S2 - Major
+Classification     : Performance
+Affected Component : Parser
+
+Release Notes:
+  In EABI mode, the compiler was incorrectly creating static class member char
+  arrays for string literals used in member functions instead of putting them in
+  .const:.string.
+
+Workaround:
+  None
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00043223
+-------------------------------------------------------------------------------
+
+Summary            : Compiler may miss alias given struct-of-array-of-structs
+
+Fixed in           : 1.0.0B3
+Severity           : S1 - Critical / PS
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  In a particular situation involving a struct containing an array of
+  structs, the compiler may miss an alias between a read and write of a
+  scalar field in the nested struct.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.0B2
+
+Workaround:
+  In this case, save pointer-written-to-struct in a temp and dereference
+  from the temp instead of re-reading from struct. In general, compile at
+  -o1 or -o0.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00043326
+-------------------------------------------------------------------------------
+
+Summary            : Extremely long (templated) type names may overflow
+                     buffer, causing crash
+
+Fixed in           : 1.0.0B3
+Severity           : S2 - Major
+Affected Component : Optimizer
+
+Release Notes:
+  The optimizer may crash when it encounters an extremely long type name --
+  for example, a deep nested templated C++ class name -- while creating a
+  printed representation. The crash is most likely, and perhaps only
+  occurs, with -o2 or -o3.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.0B2
+
+Workaround:
+  None.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00043713
+-------------------------------------------------------------------------------
+
+Summary            : Linker fails with internal error
+
+Fixed in           : 1.0.0B3
+Severity           : S2 - Major
+Affected Component : Linker
+Duplicate Defects  : SDSCM00043752
+
+Release Notes:
+  Linker sometimes fails with internal error: lnk<target>.exe experienced an
+  unhandled exception
+  
+  The linker no longer makes the assumption that the decompression routine's
+  section can be automatically removed when the linker determines the
+  decompression routine is not needed.
+
+Workaround:
+  No workaround
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00043868
+-------------------------------------------------------------------------------
+
+Summary            : Linker cannot find include file specified with relative
+                     path
+
+Fixed in           : 1.0.0B3
+Severity           : S2 - Major
+Affected Component : Linker
+
+Release Notes:
+  The linker properly resets the source path after processing an #include.
+
+Workaround:
+  This bug occurs because the linker does not properly reset the source path
+  after processing an #include, causing a second #include to be relative to the
+  wrong path. Any intervening token between the two #include directive will
+  overcome this, as will any macro expansion (even if empty). For example:
+  
+  #define SPACE
+  #include "../first.cmd"
+  SPACE
+  #include "../second.cmd"
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00043948
+-------------------------------------------------------------------------------
+
+Summary            : IF predicate with negative integer factor simplifies
+                     incorrectly
+
+Fixed in           : 1.0.0B3
+Severity           : S2 - Major
+Affected Component : Optimizer
+
+Release Notes:
+  An IF predicate with a negative integer factor -- eg, "if (x*(-3) == -9)"
+  -- may be simplified incorrectly, for instance to "if (x == -3)" instead
+  of the correct "if (x == 3)".
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.0B2
+
+Workaround:
+  None. Avoid the situation.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00044048
+-------------------------------------------------------------------------------
+
+Summary            : Enabling vectorization produces incorrect code
+
+Fixed in           : 1.0.0B3
+Severity           : S2 - Major
+Affected Component : Optimizer
+Duplicate Defects  : SDSCM00045426
+
+Release Notes:
+  In certain cases, enabling vectorization could result in incorrect code
+  being generated.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1 - 1.0.0B2
+
+Workaround:
+  Disable vectorization or optimization.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00044066
+-------------------------------------------------------------------------------
+
+Summary            : opt470 experienced a segmentation fault
+
+Fixed in           : 1.0.0B3
+Severity           : S2 - Major
+Affected Component : Optimizer
+
+Release Notes:
+  Corrected false assumption made while performing an optimization.
+
+Workaround:
+  No workaround.
+
+
+===============================================================================
+13. Defects fixed in ARP32 Code Generation Tools release 1.0.0B2
+===============================================================================
+
+The following defect was fixed in ARP32 Code Generation Tools release
+1.0.0B2, released February 2012.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00041971
+-------------------------------------------------------------------------------
+
+Summary            : Spurious remark generated from __STDC_VERSION__ ref in
+                     stddef.h in C++ mode
+
+Fixed in           : 1.0.0B2
+Severity           : S3 - Minor
+Affected Component : Runtime Support Libraries (RTS)
+
+Release Notes:
+  #include <stddef.h>
+  
+  int main(void)
+  {
+      return 2;
+  }
+  
+  Then compile with the following flags:
+  
+  cl6x a.cpp -pdv -pdr
+  
+  include/stddef.h", line 87: remark #195-D: zero
+  used for undefined preprocessing identifier
+  (__STDC_VERSION__ >= 199901L || !__TI_STRICT_ANSI_MODE__)
+  
+  This happens because __STDC_VERSION__ is not defined in C++ mode
+
+Workaround:
+  Use the -pds=195 switch to avoid the remark.
+
+
+===============================================================================
+14. Defects fixed in ARP32 Code Generation Tools release 1.0.0B1
+===============================================================================
+
+The following 49 defects were fixed in ARP32 Code Generation Tools release
+1.0.0B1, released January 2012.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00037878
+-------------------------------------------------------------------------------
+
+Summary            : Linker generates relocation errors for symbols already
+                     in bss
+
+Fixed in           : 1.0.0B1
+Severity           : S3 - Minor
+Affected Component : Linker
+
+Release Notes:
+  If a partially linked out file does not include any bss variables the linker
+  will still create a "$bss" symbol with a value of 0. This ensures that if this
+  code is linked with boot code the DP is set to some known value. However, if
+  this partially llinked file is later linked with code that includes bss
+  variables, the linker may set $bss to an incorrect value. This will lead to
+  relocation errors during the final link.
+  
+  NOTE: Use of several .bss output sections is not support by the current
+        linkers. The following will generate relocation errors:
+  
+              .bss:subsect1
+              {
+                   f1.out (.bss:subsect1)
+                      }
+  
+              .bss:subsect2
+              {
+                f2.out (.bss:subsect2)
+                   }
+  
+          .bss
+          {
+          . += 0x2100;
+            *(.bss)
+            }
+  
+  The global symbol $bss needs to be defined to the start of the .bss section to
+  perform the relocations. The above would have to be written as:
+  
+  bss
+          {
+          . += 0x2100;
+        f1.out (.bss:subsect1)
+       f2.out (.bss:subsect2)
+          *(.bss)
+          }
+
+Workaround:
+  None available.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00038449
+-------------------------------------------------------------------------------
+
+Summary            : Handling of MISRA rule 14.3 incorrect when empty macro
+                     is used
+
+Fixed in           : 1.0.0B1
+Severity           : S3 - Minor
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  
+  This code ...
+  
+  #define NULL_MACRO
+  NULL_MACRO;
+  
+  is not a violation of MISRA rule 14.3. However, the compiler issues a
+  diagnostic which says it is a violation.
+
+Workaround:
+  None.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00038504
+-------------------------------------------------------------------------------
+
+Summary            : Compiler issues unwarranted warning for violation of
+                     Misra 9.2
+
+Fixed in           : 1.0.0B1
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  Compiler issues unwarranted Misra 9.2 warning for zero initialization of
+  unsigned int array such as;
+  unsigned int arraya2[5] = { 0U };
+
+Workaround:
+  None.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00038580
+-------------------------------------------------------------------------------
+
+Summary            : Incorrect violation of rule MISRA-C rule 6.1 is reported
+                     by the compiler
+
+Fixed in           : 1.0.0B1
+Severity           : S3 - Minor
+Affected Component : Parser
+
+Release Notes:
+  The problem here appears to be with assignments to an enumeration variable,
+  where the enumeration is packed.
+
+Workaround:
+  Use the CHECK_MISRA and RESET_MISRA pragmas to suppress the diagnostic
+  as follows:
+  
+  #pragma CHECK_MISRA("-6.1")
+  myEnum = enum1;
+  #pragma RESET_MISRA("6.1")
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00038592
+-------------------------------------------------------------------------------
+
+Summary            : Misreported MISRA-C violation of rule 6.2
+
+Fixed in           : 1.0.0B1
+Severity           : S3 - Minor
+Affected Component : Parser
+
+Release Notes:
+  This bug is caused by using a packed enumeration that is small enough to be
+  represented as a char in an expression. For instance:
+  
+  if (enum1 == Variable1) {
+  
+      }
+
+Workaround:
+  Use the CHECK_MISRA and RESET_MISRA pragmas to disable the checking of rule
+  6.2.
+  
+  #pragma CHECK_MISRA("-6.2")
+  if (enum1 == Variable1) {
+  
+      }
+      #pragma RESET_MISRA("6.2")
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00039013
+-------------------------------------------------------------------------------
+
+Summary            : Optimizer incorrectly optimizes ((x<<n)|y)&k
+
+Fixed in           : 1.0.0B1
+Severity           : S2 - Major
+Affected Component : Optimizer
+
+Release Notes:
+  In an expression like ((uc1<<8)|uc2)&0x200, where uc1 and uc2 are 8-bit
+  variables, the compiler can tell that uc2 is irrelevant to the result --
+  all its bits are ANDed with 0. Unfortunately, in simplifying the
+  expression, it interprets 0x200 with the type of uc2 and truncates it to
+  , producing incorrect code.
+  
+  The problem is limited to (A|B)&C or (A&B)|C expressions, where B's type
+  is narrower than C's. In this particular test case, (A|B) was an
+  argument to an inlined function and the AND was in the body, but other
+  kinds of propagation can bring the sub-expressions together.
+  
+  A sample test case that demonstrates this bug follows:
+  
+  #include <stdio.h>
+  
+  typedef unsigned char U8;
+  typedef unsigned short U16;
+  typedef unsigned int U32;
+  
+  U16 parameter_mask;
+  U32 mask;
+  
+  U8 parameters[6] = { 1, 1, 1, 1, 2, 0 };
+  
+  main()
+  {
+      parameter_mask = (parameters[5] | (parameters[4] << 8U));
+  
+      mask = 0;
+      mask |= ( 0x00000001U );
+  
+      if ((parameter_mask & 0x0200) == 0x0200)
+      {
+          mask |= 4;
+      }
+  
+      printf("simple mask = 0x%d (should be 0x5)\n", mask);
+  }
+
+Workaround:
+  Avoid constructing the (A|B)&C form when it fits the conditions. In this
+  test case, controlling inlining (as with -o2) is enough. Using a global
+  variable instead of a local variable for the OR subexpression also
+  inhibits the necessary propagation.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00039176
+-------------------------------------------------------------------------------
+
+Summary            : Linking fails if extra space is added to linker options
+
+Fixed in           : 1.0.0B1
+Severity           : S3 - Minor
+Affected Component : ELF Linker
+
+Release Notes:
+  Empty arguments that are processed as a result of adding extra space to linker
+  options are now discarded.
+
+Workaround:
+  None
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00039244
+-------------------------------------------------------------------------------
+
+Summary            : Compiler generates internal error "TP>> internal error:
+                     Bad kind:  TYPE::type_pointed_to"
+
+Fixed in           : 1.0.0B1
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  An expression like *(x ? (T*)0xc0000000 : (T*)0xc0404000) -- a
+  dereference of a pointer that is selected by a quest/colon, for which
+  one or both alternatives is a literal integer cast to a pointer type --
+  may cause the compiler to crash.
+  
+  During other manipulations of the expression, the compiler inadvertently
+  discards the pointer casts and creates an invalid situation.
+  
+  The requirements are a pointer-cast of a literal integer and a
+  quest/colon that is used as the pointer part of a memory reference.
+  
+  They don't need to be written directly that way:
+   - The original test case used an if-then-else to choose between two
+     pointer-cast integers; the compiler converted it to quest/colon.
+   - The original test case used const variables that were initialised to
+     the integers; the compiler propagated the constant values into the body
+     of the function that used the variables.
+   - The original test case used a combination of struct and array
+     references -- p->x[i].f -- but it was reducible to a memory access based
+     on p, which was the pointer quest/colon.
+
+Workaround:
+  In this case, since the pointer-cast integers are defined as const
+  global variables, the workaround is to remove the const qualifier. That
+  will prevent the insertion of the integer values into the body of the
+  function. (Since const globals cannot be modified, their values may be
+  freely introduced in place of the variables.)
+  
+  In a case that does not depend on such insertion, create one or two
+  globals to hold the integers, to break up the expression.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00039569
+-------------------------------------------------------------------------------
+
+Summary            : Optimizer removes compare in single iteration do-while
+                     loop
+
+Fixed in           : 1.0.0B1
+Severity           : S2 - Major
+Affected Component : Optimizer
+
+Release Notes:
+  In the following code:
+  
+      var1 = 1;
+  
+      do
+      {
+        var1--;
+        if (((var1 < 1U))==0) {(foo(((unsigned char) 0x02)));};
+      }
+      while (var1 != 0);
+  
+  the optimizer removes the compare and unconditionally calls the routine "foo".
+  
+  The conditions for this bug to occur would be:
+  
+  1. The loop must be a single iteration.
+  2. The loop induction variable must be initialized to 1.
+  3. The first reference to the induction variable must be an expression that
+     decrements the loop counter to 0.
+  4. The loop is a single iteration loop because the loop must break when the
+     induction variable is equal to 0.
+  5. The next reference to the loop counter must be in a compare expression that
+     can be reduced at compile time to (1 == 0).
+  
+  Under these conditions the optimizer could remove the compare expression
+  causing code within the if block to execute.
+
+Workaround:
+  Possible workarounds:
+  
+  1. Mark the induction variable volatile.
+  2. Change the loop induction range from 0 to 1 to any other integer range.
+  3. Change the compare expression to any other expression not equal to one.
+     i.e. (1 == 2).
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00040151
+-------------------------------------------------------------------------------
+
+Summary            : Getting compile time generated symbol re-definition
+                     error during linking C674x ELF target
+
+Fixed in           : 1.0.0B1
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  The linker may generate "duplicate symbol" errors for symbols named like
+  _TI_DW_.debug_info.<checksum> when linking object files. Using ofd, it
+  can be seen that these symbols are signatures for COMDAT groups. This is
+  an error in COMDAT generation in the assembler and linker.
+
+Workaround:
+  No workaround exists.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00040365
+-------------------------------------------------------------------------------
+
+Summary            : Mixing direct and indirect accesses to same variable may
+                     give wrong answer
+
+Fixed in           : 1.0.0B1
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  Fix is currently scheduled for 7.2.5 update planned 7/29/11 and 6.1.20 update
+  planned for 8/5/11.
+  
+  Referring to the same variable both directly and indirectly -- eg, given
+  p[0]=&a, using both *p[0] and a in the same function -- may produce the wrong
+  answer when the alias between the two references is missed.
+
+Workaround:
+  Compile at -o1 or -o0, or avoid referring to same variable both directly
+  or indirectly.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00040369
+-------------------------------------------------------------------------------
+
+Summary            : Assignment to local struct variable with recurrence may
+                     assign some fields incorrectly
+
+Fixed in           : 1.0.0B1
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  Given a struct type that contains a pointer to the same type, as in
+  
+    struct st {
+        struct st *next;
+        int    val;
+    }
+  
+  and a local variable X of that type, and an assignment to that variable like
+  
+    X = *(X.next);
+  
+  some fields of X may not be written correctly. (Because X.next is written
+  before
+  the read of *(X.next) has completed.)
+  
+  Fix is currently scheduled for 7.2.5 update planned 7/29/11 and 6.1.20 update
+  planned for 8/5/11.
+
+Workaround:
+  Change the local variable to a global, or declare it volatile, or make sure
+  the pointer field
+  ("next" in this example) is the last one listed in the type definition.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00040377
+-------------------------------------------------------------------------------
+
+Summary            : Error with va_end() as left operand of void expression
+
+Fixed in           : 1.0.0B1
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  The macro va_end should be legal in a void expression context such as the
+  left hand operand of the comma operator. This means the macro needs to
+  expand to a void expression rather than be an empty macro.
+
+Workaround:
+  Rewrite the code so that calls to va_end are by themselves, not as part
+  of a larger expression.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00040400
+-------------------------------------------------------------------------------
+
+Summary            : Bitfield alias may be missed when struct is smaller than
+                     field type
+
+Fixed in           : 1.0.0B1
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  An alias may be missed, and incorrect answers result, when a struct
+  contains a bitfield and the struct's total size is smaller than the size
+  of the bitfield's type. Eg, a field like "int x:6" -- the bitfield is 6
+  bits but int is 16 or 32. Making both direct and indirect accesses to
+  the same field may be an additional requirement to exhibit this problem.
+
+Workaround:
+  Compile at -o1 or -o0, or add a dummy field to the struct to make its
+  total size larger than that of the bitfield's type, or change the
+  bitfield to a regular field, or avoid using both direct and indirect
+  accesses to the same field.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00040459
+-------------------------------------------------------------------------------
+
+Summary            : Division or modulo by most-negative-value of type may
+                     produce incorrect answer
+
+Fixed in           : 1.0.0B1
+Severity           : S2 - Major
+Affected Component : Optimizer
+Duplicate Defects  : SDSCM00040790, SDSCM00040538
+
+Release Notes:
+  Division or modulo when the divisor is the most-negative-value of a
+  signed type (eg, -128 for signed-char for C6x) may produce the wrong
+  answer.
+
+Workaround:
+  Using a wider type, for example int, should help. Compiling at -o0 may
+  help. Negating the numerator instead of the denominator will avoid the
+  problem.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00040497
+-------------------------------------------------------------------------------
+
+Summary            : DSECT failure
+
+Fixed in           : 1.0.0B1
+Severity           : S2 - Major
+Affected Component : Linker
+
+Release Notes:
+  In some cases, code allocated to a DSECT type output section may be
+  included in the output file. This is known to occur if the code in the
+  DSECT references a function that is not allocated to a DSECT.
+
+Workaround:
+  In some cases, a NOLOAD section may be used instead of a DSECT.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00040622
+-------------------------------------------------------------------------------
+
+Summary            : Compiler may miss alias of struct returned from call if
+                     contains bitfield and fits in int
+
+Fixed in           : 1.0.0B1
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  The compiler may convert local struct variables of struct type into simple
+  ints, if the struct is small enough and all fields are bitfields. If
+  such a converted struct is also returned from a function call, the
+  compiler may miss an alias between the returned-value struct and the
+  local struct.
+
+Workaround:
+  Compile at -o1 or -o0, or add a dummy field to make the struct larger
+  than int, or use regular fields instead of bitfields.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00040623
+-------------------------------------------------------------------------------
+
+Summary            : Mixing direct and indirect accesses to same variable may
+                     give wrong answer
+
+Fixed in           : 1.0.0B1
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+Duplicate Defects  : SDSCM00040794
+
+Release Notes:
+  Referring to the same variable both directly and indirectly -- eg, given
+  p=&a, using both *p and a in the same function -- may produce the wrong
+  answer when the alias between the two references is missed.
+
+Workaround:
+  Compile at -o1 or -o0, or avoid referring to same variable both directly
+  or indirectly.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00040650
+-------------------------------------------------------------------------------
+
+Summary            : Error when specifying 400 or more to precision of output
+                     format specifier
+
+Fixed in           : 1.0.0B1
+Severity           : S3 - Minor
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  The minimum max conversion (precision) printf size to be C89 compliant is 509.
+  The conversion size is now C89 compliant.
+
+Workaround:
+  Specify a printf precision of less than 400
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00040651
+-------------------------------------------------------------------------------
+
+Summary            : Return statement with embedded assignment from a
+                     post-increment or -decrement may return wrong value
+
+Fixed in           : 1.0.0B1
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  A statement like "return j = i++" may return the value of i after it has
+  been incremented, when it should return the value before the increment.
+  It's possible that other cases exist, but all will involve an assignment
+  of a post-increment or post-decrement embedded in another statement.
+
+Workaround:
+  Do the assignment outside the return, as in "j = i; return i++;" or "j =
+  i++; return j;"
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00040658
+-------------------------------------------------------------------------------
+
+Summary            : Taking the address of a static local variable may lead
+                     to a missed alias
+
+Fixed in           : 1.0.0B1
+Severity           : S2 - Major
+Affected Component : Optimizer
+Duplicate Defects  : SDSCM00040663
+
+Release Notes:
+  Accessing a static local variable both directly and indirectly, by taking
+  its address, may miss an alias and produce incorrect behavior.
+
+Workaround:
+  Compiling at -o0 should work, and compiling at -o1 may work. If the
+  variable whose address is taken is not static, there is no problem.
+  Sometimes it helps if the variable *holding* the address is not static.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00040659
+-------------------------------------------------------------------------------
+
+Summary            : Mixing direct and indirect accesses to same variable may
+                     give wrong answer
+
+Fixed in           : 1.0.0B1
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  Referring to the same variable both directly and indirectly -- eg, given
+  p=&a, using both *p and a in the same function -- may produce the wrong
+  answer when the alias between the two references is missed.
+
+Workaround:
+  Compile at -o1 or -o0, or avoid referring to same variable both directly
+  or indirectly.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00040665
+-------------------------------------------------------------------------------
+
+Summary            : Anonymous function call that can resolve to direct pure
+                     call may cause compiler crash
+
+Fixed in           : 1.0.0B1
+Severity           : S2 - Major
+Affected Component : Optimizer
+
+Release Notes:
+  If an anonymous function call -- a call using a pointer-to-function
+  variable rather than a direct function name -- can be resolved to a
+  direct call to a known function with no side effects, in some cases the
+  compiler may crash.
+
+Workaround:
+  Compile at -o0 or -o1, or avoid anonymous function calls.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00040793
+-------------------------------------------------------------------------------
+
+Summary            : Accessing the same variable both directly and via
+                     pointer-to-void may miss the alias
+
+Fixed in           : 1.0.0B1
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  If the same variable is referred to both directly and via a
+  pointer-to-void parameter, the compiler may not detect that both accesses
+  are to the same variable.
+
+Workaround:
+  Compile at -o0 or -o1, or avoid creating an alias via pointer-to-void.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00040908
+-------------------------------------------------------------------------------
+
+Summary            : Hex converter crashes with segmentation fault
+
+Fixed in           : 1.0.0B1
+Severity           : S2 - Major
+Affected Component : Hex Converter (hex)
+
+Release Notes:
+  Hex converter crashes with segmentation fault if more than 15 --exclude
+  options are used.
+
+Workaround:
+  Use arm version 4.9.0 or later.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00041308
+-------------------------------------------------------------------------------
+
+Summary            : Demangler does not expose the --abi=eabi option through
+                     the help or compiler documentation
+
+Fixed in           : 1.0.0B1
+Severity           : S3 - Minor
+Affected Component : Demangler (dem)
+Duplicate Defects  : SDSCM00041780
+
+Release Notes:
+  The dem470 tool supports a --abi=eabi option that is needed to demangle C++
+  names when compiling for EABI. The option is not documented.
+
+Workaround:
+  Use --abi=eabi when demangling name produced from and EABI project.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00041395
+-------------------------------------------------------------------------------
+
+Summary            : scanf %1f should stop after one character
+
+Fixed in           : 1.0.0B1
+Severity           : S3 - Minor
+Affected Component : Runtime Support Libraries (RTS)
+
+Release Notes:
+  The scanf format %1f should stop after one character of input, but it
+  ignores the field width and keeps parsing as long as the input looks like
+  a floating-point number.
+
+Workaround:
+  No workaround
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00041396
+-------------------------------------------------------------------------------
+
+Summary            : sscanf(" ", "%s", arg) should not modify arg
+
+Fixed in           : 1.0.0B1
+Severity           : S3 - Minor
+Affected Component : Runtime Support Libraries (RTS)
+
+Release Notes:
+  When the scanf format %s is used, if there are no non-whitespace
+  characters in the input, the conversion should fail and should not modify
+  the argument.
+
+Workaround:
+  Use a temporary variable as the destination of the format conversion, and
+  only assign it to the desired location if sscanf does not fail.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00041397
+-------------------------------------------------------------------------------
+
+Summary            : scanf %4[..] consumes 5 characters
+
+Fixed in           : 1.0.0B1
+Severity           : S3 - Minor
+Affected Component : Runtime Support Libraries (RTS)
+
+Release Notes:
+  With a format string containing a %[ conversion specifier with field width,
+  and input containing a sequence of characters that matches the scanset and
+  has more characters than the field width, a call to vfscanf shall assign the
+  number of characters equal to the field width to the corresponding pointer
+  to character array leaving characters after the input item unread.
+  7.19.6.9;2a (161)
+  
+  The bug here is that, while _scanfi assigns the correct number of
+  characters, it fails to unget the following character, which belongs to the
+  next conversion.
+
+Workaround:
+  No workaround
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00041398
+-------------------------------------------------------------------------------
+
+Summary            : scanf %[..] matching failure should return immediately
+
+Fixed in           : 1.0.0B1
+Severity           : S3 - Minor
+Affected Component : Runtime Support Libraries (RTS)
+
+Release Notes:
+  When a conversion fails, scanf should return immediately. In these test
+  cases, scanf erroneously keeps going. scanf eventually reports a return
+  value that is too large.
+
+Workaround:
+  No workaround
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00041442
+-------------------------------------------------------------------------------
+
+Summary            : printf("%#.4o",345) adds too many zeros
+
+Fixed in           : 1.0.0B1
+Severity           : S3 - Minor
+Affected Component : Runtime Support Libraries (RTS)
+
+Release Notes:
+  When using the # printf format flag, printf should only add an extra "0"
+  at the beginning of the number if it isn't already "0".
+
+Workaround:
+  No workaround.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00041447
+-------------------------------------------------------------------------------
+
+Summary            : printf("%#.0o",0) fails to write "0"
+
+Fixed in           : 1.0.0B1
+Severity           : S3 - Minor
+Affected Component : Runtime Support Libraries (RTS)
+
+Release Notes:
+  For *printf functions, the C standard requires that if the value is 0,
+  the precision is 0, and the # flag is used, a single "0" will be
+  printed.
+
+Workaround:
+  No workaround
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00041550
+-------------------------------------------------------------------------------
+
+Summary            : sscanf %% failure not handled correctly
+
+Fixed in           : 1.0.0B1
+Severity           : S3 - Minor
+Affected Component : Runtime Support Libraries (RTS)
+
+Release Notes:
+  scanf fails in these ways when the %% conversion specifier fails:
+  
+  When any sort of error occurs with %%, scanf immediately returns EOF. It
+  should instead return EOF only if there were 0 previous successful conversions
+  and there was an input failure. If the failure was either a matching failure,
+  or there were any previous successful conversions, it should return the number
+  of previous successful conversions.
+  
+  When the failure is a matching failure, scanf should unget the character
+  that didn't match. It fails to do so.
+
+Workaround:
+  No workaround
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00041551
+-------------------------------------------------------------------------------
+
+Summary            : scanf %d and %f should immediately return upon input
+                     failure, even if ordinary characters were matched
+
+Fixed in           : 1.0.0B1
+Severity           : S3 - Minor
+Affected Component : Runtime Support Libraries (RTS)
+
+Release Notes:
+  scanf should immediately return when an input failure occurs, even if
+  ordinary characters in the format were already successfully matched.
+  This bug affects all of the integer and float conversions.
+
+Workaround:
+  No workaround
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00041552
+-------------------------------------------------------------------------------
+
+Summary            : sscanf.c _chkmbc should return EOF on input failure
+
+Fixed in           : 1.0.0B1
+Severity           : S3 - Minor
+Affected Component : Runtime Support Libraries (RTS)
+
+Release Notes:
+  It should be possible for sscanf to return EOF on a string if an input
+  error occurs (the end of the input string is reached before the format
+  string is exhausted), but it does not return EOF as appropriate.
+
+Workaround:
+  No workaround
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00041553
+-------------------------------------------------------------------------------
+
+Summary            : scanf input failure when looking for ordinary characters
+                     always returns EOF
+
+Fixed in           : 1.0.0B1
+Severity           : S3 - Minor
+Affected Component : Runtime Support Libraries (RTS)
+
+Release Notes:
+  When matching ordinary characters in the format string, if there is an
+  input failure, scanf should return EOF only if there were no previous
+  successful conversions. If there were any, it should return the
+  number of previous successful conversions.
+
+Workaround:
+  No workaround
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00041554
+-------------------------------------------------------------------------------
+
+Summary            : scanf %e and %[ should not return EOF on matching
+                     failure
+
+Fixed in           : 1.0.0B1
+Severity           : S3 - Minor
+Affected Component : Runtime Support Libraries (RTS)
+
+Release Notes:
+  When using %f (or other floating-point conversion specifier) or %[, if
+  a matching failure occurs before even one character is matched, scanf
+  will return EOF instead of 0 as the standard requires.
+
+Workaround:
+  No workaround
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00041569
+-------------------------------------------------------------------------------
+
+Summary            : Optimizer removes weak object pointer check
+
+Fixed in           : 1.0.0B1
+Severity           : S3 - Minor
+Affected Component : Optimizer
+
+Release Notes:
+  The optimiser believed that UAND-of-NAME was always non-NULL. That's not
+  true for weak symbols.
+
+Workaround:
+  None.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00041776
+-------------------------------------------------------------------------------
+
+Summary            : Optimizer substitutes packed bitfield reference without
+                     masking value at -o1
+
+Fixed in           : 1.0.0B1
+Severity           : S2 - Major
+Affected Component : Optimizer
+
+Release Notes:
+  Under certain specific circumstances, the compiler may replace an assignment
+  to a bitfield with a temporary variable whose value has not been properly
+  truncated as the original assignment did. To cause the bug, several passes
+  that do the right thing must be inhibited; one known way is to use -o1 and a
+  packed struct.
+
+Workaround:
+  Compile at -o0 or -o2, or avoid packed bitfields.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00041828
+-------------------------------------------------------------------------------
+
+Summary            : Internal error when compiling c++ code
+
+Fixed in           : 1.0.0B1
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  Use of an anonymous namespace in eabi mode causes a parser crash:
+  
+  namespace {
+     class X : public Y {
+        public:
+           X () : Y("Test") { }
+     };
+  }
+  
+  cl470.exe -mv7M3 -g -me --abi=eabi t.cpp
+  
+  INTERNAL ERROR: acpia470 experienced a segmentation fault while
+  processing
+
+Workaround:
+  Give a name to the namespace:
+  
+  namespace ABC {
+     class X : public Y {
+        public:
+           X () : Y("Test") { }
+     };
+  }
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00041909
+-------------------------------------------------------------------------------
+
+Summary            : strtoimax definition does not match prototype
+
+Fixed in           : 1.0.0B1
+Severity           : S3 - Minor
+Affected Component : Runtime Support Libraries (RTS)
+
+Release Notes:
+  The definition of strtoimax in strtoimax.c, and strtoumax in
+  strtoumax.c, lack the restrict qualifiers found in the prototypes in
+  inttypes.h
+
+Workaround:
+  no workaround
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00042053
+-------------------------------------------------------------------------------
+
+Summary            : Near a software pipelined loop that comes from an
+                     include file, the .dwpsn directives have the wrong file
+                     name
+
+Fixed in           : 1.0.0B1
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  Fixed a bug where debug information near an inlined loop could contain
+  the incorrect file name.
+
+Workaround:
+  None
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00042061
+-------------------------------------------------------------------------------
+
+Summary            : Library building fails when TEMP is moderately long (50+
+                     characters)
+
+Fixed in           : 1.0.0B1
+Severity           : S1 - Critical / PS
+Affected Component : Runtime Support Libraries (RTS)
+
+Release Notes:
+  The ar470 command line is over 32k characters, which runs afoul of the
+  insurmountable upper limit of the Win32 API CreateProcess. When this
+  happens, the user will see a mysterious error which looks something
+  like this:
+  
+      process_begin:
+      CreateProcess(c:\progra~1\texasi~1\tms470~2.1\bin\ar470.exe,
+      c:/progra~1/texasi~1/tms470~2.1/bin/ar470 -qa
+      d:/docume~1/user.name/locals~1/temp/ti5b2e~1/rtsv7a8_a_le_eabi.lib
+      e:/docume~1/user.name/locals~1/temp/ti5b2e~1/obj/decode.obj
+        <over 500 object files listed here were deleted for clarity>
+      f:/docume~1/user.name/locals~1/temp/ti5b2e~1/obj/xatexit.obj, ...)
+        failed.
+        make (e=87): The parameter is incorrect.
+
+Workaround:
+  1) Set TEMP to a shorter path before running CCS, or
+  
+  2) Run mklib manually from the command line
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00042103
+-------------------------------------------------------------------------------
+
+Summary            : Dynamic linking options should be hidden for non-C6000
+                     targets
+
+Fixed in           : 1.0.0B1
+Severity           : S3 - Minor
+Affected Component : Linker
+
+Release Notes:
+  Dynamic linking is not supported for any target but C6000, but the
+  dynamic linking options were exposed in the shell and linker option
+  help summary output. Ignore them.
+
+Workaround:
+  Ignore the dynamic linking options
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00042146
+-------------------------------------------------------------------------------
+
+Summary            : Quotes in PATH, TEMP, etc on Windows breaks mklib
+
+Fixed in           : 1.0.0B1
+Severity           : S2 - Major
+Affected Component : Runtime Support Libraries (RTS)
+
+Release Notes:
+  If the PATH environment variable has quotes in it, mklib will crash
+  with a mysterious error like "CreateProcess(NULL, cl470 atexit.c ...)
+  failed. The system cannot find the file specified." It is not legal
+  to have literal quotes in PATH, but as an enhancement, mklib will
+  attempt to remove quotes from PATH and try again.
+
+Workaround:
+  Do not use literal quotes in PATH or TEMP
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00042340
+-------------------------------------------------------------------------------
+
+Summary            : Compiler mistakenly issues diagnostic about destructor
+                     for base class is not virtual
+
+Fixed in           : 1.0.0B1
+Severity           : S3 - Minor
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  The no virtual base class destructor diagnostic will no longer be emitted when
+  the base class has a virtual destructor.
+
+Workaround:
+  Do not use the -pdr option.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00042368
+-------------------------------------------------------------------------------
+
+Summary            : Parser generates segmentation fault
+
+Fixed in           : 1.0.0B1
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  Parser generates segmentation fault when compiling the following source file:
+  
+  static const int a[1];
+  
+  int main(void)
+  {
+      (void)a[0];
+  
+      return 0;
+  }
+  
+  static const int a[1] = { 0 };
+
+Workaround:
+  Move the second static const int declaration above the reference.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00042563
+-------------------------------------------------------------------------------
+
+Summary            : Optimiser crashes on certain loop cases
+
+Fixed in           : 1.0.0B1
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  Certain loop structures, which we are not able to describe concisely, can
+  cause the optimiser to crash when compiling at -o2 or higher. The one known
+  example involves C++ code and a lot of inlining; adjusting the inlining avoids
+  the problem.
+
+Workaround:
+  Compile at -o1. In this particular example, removing an "inline" keyword from
+  a function avoids the problem, because it changes the complexity of the
+  function causing the crash.
+
+-------------------------------------------------------------------------------
+FIXED SDSCM00042811
+-------------------------------------------------------------------------------
+
+Summary            : printf("%d") with negative values incorrect for
+                     printf_support=minimal
+
+Fixed in           : 1.0.0B1
+Severity           : S2 - Major
+Affected Component : C/C++ Compiler (cl)
+
+Release Notes:
+  printf("%d") is treated as printf("%u") for --printf_support=minimal,
+  which means negative values will be printed incorrectly.
+  
+  Defect occurs in ARP32 Compiler versions: 1.0.0B1
+
+Workaround:
+  Use printf_support=nofloat
+
+
+===============================================================================
+15. Current Known Issues
+===============================================================================
+
+The following 13 known issues exist for ARP32 Code Generation Tools release
+1.0.7 as of January 2015.
+
+-------------------------------------------------------------------------------
+KNOWN ISSUE SDSCM00008465
+-------------------------------------------------------------------------------
+
+Summary            : Language Conformance: crash because of void pointer
+                     dereference
+Affected Component : Parser
+
+Description:
+  Compiler generates multiple INTERNAL ERRORs when code like the following
+  is compiled:
+  
+    void dr106_1(void *pv, int i)
+    {
+        *pv;
+        i ? *pv : *pv;
+        *pv, *pv;
+    }
+
+-------------------------------------------------------------------------------
+KNOWN ISSUE SDSCM00008543
+-------------------------------------------------------------------------------
+
+Summary            : Forward reference in .space generates an internal error
+Affected Component : Assembler
+
+Description:
+  If you attempt to assemble:
+  
+     .space 0+a
+   b
+   a .set 1
+  
+  the assembler will generate an internal error.
+  
+  This happens with v3.83 and v4.1.0B1 on Solaris.
+  
+  If you change the code to:
+  
+     .space a
+   b
+   b .set 1
+  
+  the correct error message is generated, 'Absolute, well-defined integer value
+  expected'.
+
+-------------------------------------------------------------------------------
+KNOWN ISSUE SDSCM00014430
+-------------------------------------------------------------------------------
+
+Summary            : calloc doesn't check arguments to make sure the
+                     requested size is reasonable
+Affected Component : Runtime Support Libraries (RTS)
+
+Description:
+  The function calloc() is required to return a pointer to memory representing
+  "nelem" copies of "size" bytes, or NULL if the request cannot be satisfied.
+  However, for some values of "nelem" and "size" (specifically when the result
+  of nelem*size wraps around), calloc can return a pointer to an object that is
+  not large enough, rather than NULL.
+  
+  For example, on a 32-bit target, if the user calls calloc(0x00010001,
+  0x00010001), even though each argument by itself is reasonable, the request
+  cannot be satisfied because the product is 0x000100020001, which exceeds
+  size_t. (Note that we cannot check for overflow by checking if the product is
+  less than either argument, which is commonly done for unsigned addition.)
+  Arguably, we can try to claim that it is undefined behavior to make a call to
+  calloc where the product would exceed size_t, but there doesn't seem to be
+  anything in the standard which says so.
+  
+  The problem is worse on 16-bit targets, where calloc(0x0101, 0x0101) is enough
+  to overflow size_t. It may not be obvious to the user that this overflows.
+  
+  Another concern is that it is hard to figure out whether a multiplication will
+  overflow without having a double-width multiply available.
+
+-------------------------------------------------------------------------------
+KNOWN ISSUE SDSCM00039054
+-------------------------------------------------------------------------------
+
+Summary            : Compiler reports a violation of Misra rule 12.8 for a
+                     structure variable
+Affected Component : C/C++ Compiler (cl)
+
+Description:
+  MISRA warning (MISRA-C:2004 12.8/R) The right-hand operand of a shift operator
+  shall lie between zero and one less than the width in bits of the underlying
+  type of the left-hand operand
+  
+  In the following code I get MISRA 12.8 warning on myVar = myStruct.aVar >> 16
+  shift. Note that shift of unstructured variable myVar = myVar >> 16 is okay.
+  
+      typedef struct
+      {
+          unsigned long aVar;
+      } myStruct_T;
+  
+      myStruct_T myStruct = {0xFFFFFFFFUL};
+      unsigned long myVar;
+  
+      myVar = myStruct.aVar >> 16;
+      myVar = myVar >> 16;
+  
+  
+  
+
+-------------------------------------------------------------------------------
+KNOWN ISSUE SDSCM00039236
+-------------------------------------------------------------------------------
+
+Summary            : Sometimes MISRA rule 19.15 is incorrectly emitted.  The
+                     rule is about failing to use an inclusion guard in a
+                     header file.
+Affected Component : Parser
+
+Description:
+  In the attached test case rule 19.15 gets emitted even though the files
+  mentioned do have proper inclusion guards.
+
+-------------------------------------------------------------------------------
+KNOWN ISSUE SDSCM00040934
+-------------------------------------------------------------------------------
+
+Summary            : Structure is not initialized correctly when using -o2 or
+                     -o3 optimization
+Affected Component : Optimizer
+
+Description:
+  There is a problem with the initialization of a structure using symbols
+  generated in the linker command file. We use symbols generated in the linker
+  cmd file using the dot operator. These symbols are used as an initial value
+  for a class/struct with a constructor. In our case we want the difference of
+  two addresses that the linker generates.
+  
+  When using optimization -o2 or -o3, the compiler generates .cinit entries
+  instead of the constructor call. In those .init-entries it doesn't use the
+  difference of the addresses; instead it uses the first symbol.
+  
+  When turning off optimization or using lower level of opt than -o2, the
+  constructor calls are generated and the struct is initialized correctly.
+
+-------------------------------------------------------------------------------
+KNOWN ISSUE SDSCM00042435
+-------------------------------------------------------------------------------
+
+Summary            : Compiler misreports Misra warning 10.1
+Affected Component : C/C++ Compiler (cl)
+
+Description:
+  Compiler misreports Misra warning 10.1 with the following code:
+  
+  typedef unsigned int uint16_t;
+  typedef unsigned int bool_t;
+  #define FALSE ((bool_t)0U)
+  #define TRUE ((bool_t)1U)
+  
+  typedef struct mystructtag
+  {
+    uint16_t u16_hw_rev1;
+    bool_t bl_hardware_supported:1;       /* this violates rule 6.4 */ 
+  } st_software_info_t ;
+  
+  
+  void main(void)
+  {
+  
+  uint16_t u16_rev1_min, u16_tmp;
+  st_software_info_t sts_sw_info;
+  u16_rev1_min = 900U;
+  
+  sts_sw_info.bl_hardware_supported = FALSE;
+  
+  if (sts_sw_info.bl_hardware_supported == FALSE)     /* this violates rule 10.1 */
+  {
+    /* do something... */
+  }
+  
+  if (sts_sw_info.u16_hw_rev1 >= u16_rev1_min)       /* this violates rule 10.1 */
+  {
+    /* do something... */
+  }
+  
+  u16_tmp = sts_sw_info.u16_hw_rev1;
+  if (u16_tmp >= u16_rev1_min)       /* this does not violates rule 10.1 */
+  {
+    /* do something... */
+  }
+  
+  The warning is:
+  
+  "misra_test.c", line 22: warning: (MISRA-C:2004 10.1/R) The value of an
+  expression of integer type shall not be implicitly converted to a different
+  underlying type if it is not a conversion to a wider integer type of the same
+  signedness
+  "misra_test.c", line 27: warning: (MISRA-C:2004 10.1/R) The value of an
+  expression of integer type shall not be implicitly converted to a different
+  underlying type if it is not a conversion to a wider integer type of the same
+  signedness
+  
+  
+  Related forum thread:http://e2e.ti.com/support/development_tools/compiler/f/3-
+  43/t/147639.aspx
+  
+  Related Misra threads that say this is not a Misra violation:
+  http://www.misra-
+  c.com/forum/viewtopic.php?f=62&t=1167&sid=6fd53ec7591d33a4fa1b38e975c580bc
+  http://www.misra-
+  c.com/forum/viewtopic.php?f=66&t=1168&sid=6fd53ec7591d33a4fa1b38e975c580bc
+
+-------------------------------------------------------------------------------
+KNOWN ISSUE SDSCM00043043
+-------------------------------------------------------------------------------
+
+Summary            : Array that is correctly initialized erroneously gets a
+                     MISRA diagnostic about size not being specified
+Affected Component : C/C++ Compiler (cl)
+
+Description:
+  For this input ...
+  
+      int16_t y[]={1,5,8};
+  
+  The compiler incorrectly issues this diagnostic ...
+  
+  "try1.c", line 2: warning: (MISRA-C:2004 8.12/R) When an array is declared
+  with external linkage, its size shall be stated explicitly or
+  defined implicitly by initialisation
+
+-------------------------------------------------------------------------------
+KNOWN ISSUE SDSCM00044125
+-------------------------------------------------------------------------------
+
+Summary            : Link-time problem for ARP32:ICONT5 when generic RTS
+                     library included first on link.
+Affected Component : Linker
+
+Description:
+  Updated: June 1, 2012:
+  
+  This error was due to files build specifically for ICONT5 being included last
+  during the link-step; this resulted in the linked executable taking the
+  version number of the generic, ARP32 RTS library rather than ICONT5. Because
+  the disassembler (and simulator) rely on this version number to execute, these
+  tools interpreted an ICONT5 specific instruction (_WFE) as an invalid
+  instruction for generic ARP32. The linker therefore needs to be made more
+  robust. The details of this CQ have been changed to reflect that.
+
+-------------------------------------------------------------------------------
+KNOWN ISSUE SDSCM00045473
+-------------------------------------------------------------------------------
+
+Summary            : Compiler misreports violation of Misra 9.2 for zero
+                     initialization of structures
+Affected Component : C/C++ Compiler (cl)
+
+Description:
+  Compiler misreports violation of Misra 9.2 for zero initialization of
+  structures.
+  
+  (MISRA-C:2004 9.2/R) Braces shall be used to indicate and match the structure
+  in the non-zero initialisation of arrays and structures
+  
+  
+  typedef struct
+  {
+  unsigned char nModuleId;
+  unsigned char nInstanceId;
+  unsigned char nApiId;
+  unsigned char nErrorId;
+  } DetLog_T;
+  
+  DetLog_T sctDetLog_M[0x100] = { 0U };
+
+-------------------------------------------------------------------------------
+KNOWN ISSUE SDSCM00046690
+-------------------------------------------------------------------------------
+
+Summary            : pow(min, max) and pow(max, max) incorrect
+Affected Component : Runtime Support Libraries (RTS)
+
+Description:
+  pow(DBL_MIN, DBL_MAX) should be 0, but RTS routine returns ???
+  pow(DBL_MAX, DBL_MAX) should be +Inf, but RTS routine returns ???
+
+-------------------------------------------------------------------------------
+KNOWN ISSUE SDSCM00050131
+-------------------------------------------------------------------------------
+
+Summary            : Local struct with non-constant initializer treated as
+                     static scope variable
+Affected Component : Parser
+
+Description:
+  We've discovered a problem where the C++ compiler places a local structure
+  variable not on the stack but in the data segment, as if it was a static
+  structure. The problem is especially insidious because the issue will only
+  have an impact on re-entrance.
+  
+  The problem seems to occur only for C++ files, and only if the structure
+  initializer list contains a variable. Constant initializer lists do not
+  trigger the issue.
+  
+  The structure in the first function will be allocated on the stack, but the
+  structure in the second will be compiled as if it was declared static.
+
+-------------------------------------------------------------------------------
+KNOWN ISSUE SDSCM00050950
+-------------------------------------------------------------------------------
+
+Summary            : C file generated by VCOP Kernel-C compiler produces
+                     compiler warning
+Affected Component : VCOP-C Kernel Compiler (vcc)
+
+Description:
+  A warning is produced when a C file that was generated by the VCOP Kernel-C
+  compiler is compiled:
+  
+  "evdet_min_kernel.c", line 38: warning #69-D: integer conversion resulted in a
+  change of sign
+  
+  The warning appears to be benign with respect to the correctness of the
+  generated code, however the VCOP Kernel-C compiler should not generate code
+  that produces warnings or errors when compiled. More details in notes.
+

@@ -1,0 +1,32 @@
+UseCase: chains_semSeg
+
+NullSource -> Decode -> Dup
+
+Dup -> Merge (A15)
+
+Dup -> Alg_tidlpreproc (A15)
+
+Alg_tidlpreproc (A15) -> Alg_tidl_Eve1 (EVE1)
+Alg_tidlpreproc (A15) -> Alg_tidl_Eve2 (EVE2)
+Alg_tidlpreproc (A15) -> Alg_tidl_Eve3 (EVE3)
+Alg_tidlpreproc (A15) -> Alg_tidl_Eve4 (EVE4)
+
+Alg_tidl_Eve1 (EVE1) -> Alg_tidlpostproc (A15)
+Alg_tidl_Eve2 (EVE2) -> Alg_tidlpostproc (A15)
+Alg_tidl_Eve3 (EVE3) -> Alg_tidlpostproc (A15)
+Alg_tidl_Eve4 (EVE4) -> Alg_tidlpostproc (A15)
+
+Alg_tidlpostproc (A15) -> Merge (A15)
+
+Merge (A15) -> Sync (A15) -> Alg_tidlpostproc_cpy (A15)
+
+Alg_tidlpostproc_cpy (A15) -> Display
+
+GrpxSrc -> Display_Grpx
+
+
+
+
+
+
+

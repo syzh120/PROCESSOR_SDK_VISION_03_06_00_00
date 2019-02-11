@@ -1,0 +1,340 @@
+%%{
+/*
+ * Copyright (c) 2012, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ */
+%%}
+
+%%{
+    /*
+     *  ======== Settings.xdt ========
+     * Generates array of Initialization configuration that will be used
+     * to generate Resource Manager handles for the scratch groups etc.
+     * Will also be used to generate a system level Resource Manager handle.
+     */
+
+    var globalConfig;
+    var regionConfig;
+
+    /* undefined implies BIOS, which implies DSP */
+    var isBios = (Program.build.target.os == undefined);
+
+    function su(segName) { /* "strip underscore" */
+        return (segName.charAt(0) == "_") ? segName.substr( 1 ) : segName;
+    }
+
+    function aa(segName) { /* "add ampersand" */
+        var ampersand = "&";
+        return (segName.charAt(0) != "&") ? ampersand.concat(segName) : segName;
+    }
+
+    function edma3lldDeviceMatch(deviceName) {
+        var returnDef = null;
+        //The 816X device is supported by EDMA3LLD, but we still override
+        //configuration, because the provide the L3 memory map base address
+        //which doesn't work with IDMA, and is possibly lower performance
+        //than the DSP memory map base address, we override that here.
+        if (deviceName.match(/816X/)) {
+            returnDef = "TI816X";
+        }
+        if (deviceName.match(/3530/)) {
+            returnDef = "OMAP35xx";
+        }
+        else if (deviceName.match(/C6455/)) {
+            returnDef = "C6455";
+        }
+        else if (deviceName.match(/6488/)) {
+            returnDef = "TCI6488";
+        }
+        else if (deviceName.match(/6474/)) {
+            returnDef = "C6474";
+        }
+        else if (deviceName.match(/TCI6608/)) {
+            returnDef = "TCI6608";
+        }
+        else if (deviceName.match(/TCI6616/)) {
+            returnDef = "TCI6616";
+        }
+        return (returnDef);
+    }
+
+%%}
+
+/* C code contribution from ti/sdo/fc/edma3/Settings.xdt */
+
+__FAR__ Uns ti_sdo_fc_edma3_EDMA3_physicalId = `this.controllerId`;
+
+__FAR__ Uns ti_sdo_fc_edma3_Settings_defaultQ = `this.defaultQ`;
+
+% if (isBios) {
+
+#include <xdc/std.h>
+
+#include <ti/sdo/fc/rman/rman.h>
+#include <ti/sdo/edma3/rm/edma3_rm.h>
+#include <ti/sdo/fc/edma3/edma3_config.h>
+
+    % /* Obtain the maximum array length */
+    % if (this.maxTccs.length > this.maxPaRams.length) {
+    %   var maxval = this.maxTccs.length;
+    % }
+    % else {
+    %   var maxval = this.maxPaRams.length;
+    % }
+    % if (maxval < this.maxQdmaChannels.length) {
+    %   maxval = this.maxQdmaChannels.length;
+    % }
+
+    % globalConfig = this.globalConfig;
+    % regionConfig = this.regionConfig;
+
+    % if ((globalConfig == null) || (regionConfig == null)) {
+
+/* Find a good match per the deviceName from the edma3lld_cfg.h file */
+        % var edma3lldDefine = edma3lldDeviceMatch(Program.cpu.deviceName);
+
+        % if (null != edma3lldDefine) {
+
+#define `edma3lldDefine`
+#include <ti/sdo/fc/edma3/edma3lld_cfg.h>
+            % if (null == globalConfig) {
+
+                % globalConfig = "NULL";
+
+/* Configuration defined in edma3lld_cfg.h */
+extern __FAR__ EDMA3_GblConfigParams
+        ti_sdo_fc_edma3_lld_globalConfigParams[GLOBAL_EDMA3_INSTANCES];
+
+/* Set globalConfig to array declared above */
+EDMA3_GblConfigParams * ti_sdo_fc_edma3_Settings_globalConfig =
+        (Void *)&ti_sdo_fc_edma3_lld_globalConfigParams;
+
+            % }
+            % else {
+
+extern __FAR__ EDMA3_GblConfigParams `globalConfig`;
+
+                % globalConfig == aa(globalConfig);
+
+EDMA3_GblConfigParams * ti_sdo_fc_edma3_Settings_globalConfig = NULL;
+            % }
+
+            % if (null == regionConfig) {
+
+/* Configuration defined in edma3lld_cfg.h */
+extern __FAR__ EDMA3_InstanceInitConfig
+        ti_sdo_fc_edma3_lld_instInitConfig[GLOBAL_EDMA3_INSTANCES][NUM_REGION];
+
+/* Set regionConfig to array declared above */
+__FAR__ EDMA3_InstanceInitConfig * ti_sdo_fc_edma3_Settings_regionConfig =
+        &ti_sdo_fc_edma3_lld_instInitConfig[0][0];
+
+                % regionConfig = "NULL";
+            % }
+            % else {
+
+__FAR__ EDMA3_InstanceInitConfig * ti_sdo_fc_edma3_Settings_regionConfig = NULL;
+extern __FAR__ EDMA3_InstanceInitConfig `regionConfig`;
+                % regionConfig = aa(regionConfig);
+            % }
+        % }
+        % else {
+EDMA3_GblConfigParams * ti_sdo_fc_edma3_Settings_globalConfig = NULL;
+__FAR__ EDMA3_InstanceInitConfig * ti_sdo_fc_edma3_Settings_regionConfig = NULL;
+            % if (null != globalConfig) {
+extern __FAR__ EDMA3_GblConfigParams `globalConfig`;
+                % globalConfig == aa(globalConfig);
+            % }
+            % else {
+                % globalConfig = "NULL";
+            % }
+            % if (null != regionConfig) {
+extern __FAR__ EDMA3_InstanceInitConfig `regionConfig`;
+                % regionConfig = aa(regionConfig);
+            % }
+            % else {
+            % regionConfig = "NULL";
+            % }
+        % }
+    % }
+    % else {
+EDMA3_GblConfigParams * ti_sdo_fc_edma3_Settings_globalConfig = NULL;
+__FAR__ EDMA3_InstanceInitConfig * ti_sdo_fc_edma3_Settings_regionConfig = NULL;
+/* Global configuration initialization information for the EDMA3 Low level
+        Resource Manager */
+extern __FAR__ EDMA3_GblConfigParams `globalConfig`;
+        % globalConfig = aa(globalConfig);
+/* Region configuration initialization information for the EDMA3 Low level
+        Resource Manager */
+extern __FAR__ EDMA3_InstanceInitConfig `regionConfig`;
+        % regionConfig = aa(regionConfig);
+    % }
+
+    % var value = undefined;
+/* Array of maximum scratch paRam requirements of all groups */
+__FAR__ Uns EDMA3_paRamScratchSizes[EDMA3_MAXGROUPS] = {
+    % for (var i = 0; i < this.maxPaRams.length; i++) {
+        % value = ((this.maxPaRams[i] == undefined) ? 0: this.maxPaRams[i]);
+        `value``i < this.maxPaRams.length-1?",":""`
+        % this.maxPaRams[i] = value;
+    % }
+};
+
+/* Array of maximum scratch edma channel requirements of all groups */
+__FAR__ Uns EDMA3_edmaChanScratchSizes[EDMA3_MAXGROUPS] = {
+    % for (var i = 0; i < this.maxEdmaChannels.length; i++) {
+        % value = (this.maxEdmaChannels[i]==undefined)?0:this.maxEdmaChannels[i];
+        `value``i < this.maxEdmaChannels.length-1?",":""`
+        % this.maxEdmaChannels[i] = value;
+    % }
+};
+
+/* Array of maximum scratch qdma channel requirements of all groups */
+__FAR__ Uns EDMA3_qdmaChanScratchSizes[EDMA3_MAXGROUPS] = {
+    % for (var i = 0; i < this.maxQdmaChannels.length; i++) {
+        % value = (this.maxQdmaChannels[i]==undefined)?0:this.maxQdmaChannels[i];
+        `value``i < this.maxQdmaChannels.length-1?",":""`
+        % this.maxQdmaChannels[i] = value;
+    % }
+};
+
+/* Array of maximum scratch tcc requirements of all groups */
+__FAR__ Uns EDMA3_tccScratchSizes[EDMA3_MAXGROUPS] = {
+    % for (var i = 0; i < this.maxTccs.length; i++) {
+        % value = (this.maxTccs[i]==undefined) ? 0 : this.maxTccs[i];
+        `value``i < this.maxTccs.length-1?",":""`
+        % this.maxTccs[i] = value;
+    % }
+};
+
+/*
+ * Array of EDMA3 LLD RM configuration structure for all the scratch groups
+ */
+__FAR__ EDMA3_InstanceInitConfig EDMA3_scratchResourceConfig[EDMA3_MAXGROUPS];
+
+/*
+ * Declare alloc/Free functions before using them
+ */
+extern Bool `this.persistentAllocFxn`(IALG_MemRec *memTab, Int numRecs);
+extern Void `this.persistentFreeFxn`(IALG_MemRec *memTab, Int numRecs);
+
+/*
+ *  ======== EDMA3_PARAMS ========
+ *  EDMA3_PARAMS structure is created using the configured values
+ */
+__FAR__ EDMA3_Params EDMA3_PARAMS = {
+   `this.region`,
+   `this.globalInit == true ? 1 : 0`,
+   `this.persistentAllocFxn`,
+   `this.persistentFreeFxn`,
+   `globalConfig`,
+   `regionConfig`,
+   `maxval`,
+   `this.contiguousPaRams == true ? 1 : 0`,
+};
+
+/*
+ * TC and Queue setup data structures
+ */
+__FAR__ Bool ti_sdo_fc_edma3_Settings_eventQueueSetup = `this.eventQueueSetup == true ? "TRUE" : "FALSE"`;
+
+__FAR__ Int ti_sdo_fc_edma3_Settings_queueTCMap[EDMA3_MAX_TC] = {
+    % for (var i = 0; i < this.EDMA3_MAXTCS; i++) {
+        % value = this.queueTCMap[i];
+        `value``i < (this.EDMA3_MAXTCS -1)?",":""`
+    % }
+};
+
+__FAR__ Int ti_sdo_fc_edma3_Settings_queuePriority[EDMA3_MAX_TC] = {
+    % for (var i = 0; i < this.EDMA3_MAXTCS; i++) {
+        % value = this.queuePriority[i];
+        `value``i < (this.EDMA3_MAXTCS -1)?",":""`
+    % }
+};
+
+__FAR__ Int ti_sdo_fc_edma3_Settings_memTypeTCMap[8] = {
+    % value = this.intMemoryQ0;
+    `value`,
+    % value = this.intMemoryQ1;
+    `value`,
+    % value = this.intMemoryQ2;
+    `value`,
+    % value = this.extMemoryQ0;
+    `value`,
+    % value = this.extMemoryQ1;
+    `value`,
+    % value = this.extMemoryQ2
+    `value`,
+    % value = this.otherQ0;
+    `value`,
+    % value = this.otherQ1;
+    `value`
+};
+
+% }
+% else {
+
+#include <xdc/std.h>
+#include <ti/sdo/fc/rman/rman.h>
+#include <ti/sdo/fc/edma3/edma3_config.h>
+
+/*
+ * Declare alloc/Free functions before using them
+ */
+extern Bool `su(this.persistentAllocFxn)`(IALG_MemRec *memTab, Int numRecs);
+extern Void `su(this.persistentFreeFxn)`(IALG_MemRec *memTab, Int numRecs);
+
+/*
+ *  ======== EDMA3_PARAMS ========
+ *  EDMA3_PARAMS structure is created using the configured values
+ */
+__FAR__ EDMA3_Params EDMA3_PARAMS = {
+   `this.region`,
+    0,
+   `su(this.persistentAllocFxn)`,
+   `su(this.persistentFreeFxn)`,
+    NULL,
+    NULL,
+    0,
+   `this.contiguousPaRams == true ? 1 : 0`,
+};
+
+/* Base key value for DMAN3 Linux IPC objects */
+    % if (Program.build.target.os == "Linux") {
+__FAR__ UInt32 _EDMA3_ipcKeyBase = `utils.toHex(this.ipcKeyBase)`;
+    % }
+
+/*
+ * Maximum size of resource table used to store requests for each scratch grp.
+ */
+__FAR__ Int ti_sdo_fc_edma3_EDMA3_MAXEDMAREQUESTS = `this.maxRequests`;
+
+% }

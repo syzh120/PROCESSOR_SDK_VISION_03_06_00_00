@@ -1,0 +1,751 @@
+%%{
+/*
+ * Copyright (c) 2012-2015, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * */
+/*
+ *  ======== Ip.xdt ========
+ *  Template to generate C code for the Ip module.
+ */
+
+// get handles to needed modules
+var Global = xdc.module('ti.ndk.config.Global');
+var Ip = xdc.module('ti.ndk.config.Ip');
+%%}
+%
+% if (Ip.$used > 0 && Global.enableCodeGeneration) {
+%
+#include <ti/ndk/inc/netmain.h>
+#include <ti/ndk/config/prototypes.h>
+
+Void ti_ndk_config_ip_init(HANDLE hCfg)
+{
+% // Add the host name to the configuration
+    /* Add our global hostname to hCfg (to be claimed in all connected domains) */
+    CfgAddEntry(hCfg, CFGTAG_SYSINFO, CFGITEM_DHCP_HOSTNAME, 0,
+                 strlen(ti_ndk_config_Global_HostName), 
+                 (UINT8 *)ti_ndk_config_Global_HostName, 0);
+
+%
+%     // DHCP Configuration
+%     if (Ip.address == null || Ip.address == "") {
+    /* Use DHCP to obtain IP address on interface `Ip.ifIdx` */
+    {
+        CI_SERVICE_DHCPC dhcpc;
+%
+%         // specify the DHCP request options.  The first entry, 
+%         // DHCPOPT_SUBNET_MASK, is always enabled by default.  This redundant
+%         // option is needed so that this assignment doesn't cause a compile 
+%         // error in the case that the user does not specify any options.
+%         var dhcpOptLen = 1;
+        UINT8 DHCP_OPTIONS[] =
+                {
+                DHCPOPT_SUBNET_MASK,
+%         if (this.DHCPOPT_TIME_OFFSET) {
+                DHCPOPT_TIME_OFFSET,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_TIME_SERVER) {
+                DHCPOPT_TIME_SERVER,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_NAME_SERVERS) {
+                DHCPOPT_NAME_SERVERS,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_LOG_SERVER) {
+                DHCPOPT_LOG_SERVER,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_COOKIE_SERVER) {
+                DHCPOPT_COOKIE_SERVER,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_LPR_SERVER) {
+                DHCPOPT_LPR_SERVER,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_IMPRESS_SERVER) {
+                DHCPOPT_IMPRESS_SERVER,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_RESOURCE_LOCATION_SERVER) {
+                DHCPOPT_RESOURCE_LOCATION_SERVER,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_BOOT_FILE_SIZE) {
+                DHCPOPT_BOOT_FILE_SIZE,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_MERIT_DUMP_FILE) {
+                DHCPOPT_MERIT_DUMP_FILE,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_SWAP_SERVER) {
+                DHCPOPT_SWAP_SERVER,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_ROOT_PATH) {
+                DHCPOPT_ROOT_PATH,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_EXTENTIONS_PATH) {
+                DHCPOPT_EXTENTIONS_PATH,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_IP_FORWARDING) {
+                DHCPOPT_IP_FORWARDING,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_NONLOCAL_SOURCE_ROUTING) {
+                DHCPOPT_NONLOCAL_SOURCE_ROUTING,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_POLICTY_FILTER) {
+                DHCPOPT_POLICTY_FILTER,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_MAXIMUM_DATAGRAM_REASSEMBLY_SIZE) {
+                DHCPOPT_MAXIMUM_DATAGRAM_REASSEMBLY_SIZE,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_DEFAULT_IP_TTL) {
+                DHCPOPT_DEFAULT_IP_TTL,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_PATH_MTU_AGING_TIMEOUT) {
+                DHCPOPT_PATH_MTU_AGING_TIMEOUT,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_PATH_MTU_PLATEAU_TIMEOUT) {
+                DHCPOPT_PATH_MTU_PLATEAU_TIMEOUT,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_INTERFACE_MTU) {
+                DHCPOPT_INTERFACE_MTU,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_ALL_SUBNETS_LOCAL) {
+                DHCPOPT_ALL_SUBNETS_LOCAL,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_BROADCAST_ADDRESS) {
+                DHCPOPT_BROADCAST_ADDRESS,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_PERFORM_MASK_DISCOVERY) {
+                DHCPOPT_PERFORM_MASK_DISCOVERY,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_MASK_SUPPLIER) {
+                DHCPOPT_MASK_SUPPLIER,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_PERFORM_ROUTER_DISCOVERY) {
+                DHCPOPT_PERFORM_ROUTER_DISCOVERY,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_ROUTER_SOLICITATION_ADDRESS) {
+                DHCPOPT_ROUTER_SOLICITATION_ADDRESS,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_STATIC_ROUTE) {
+                DHCPOPT_STATIC_ROUTE,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_TRAILER_ENCAPSULATION) {
+                DHCPOPT_TRAILER_ENCAPSULATION,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_ARP_CACHE_TIMEOUT) {
+                DHCPOPT_ARP_CACHE_TIMEOUT,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_ETHERNET_ENCAPSULATION) {
+                DHCPOPT_ETHERNET_ENCAPSULATION,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_TCP_DEFUALT_TTL) {
+                DHCPOPT_TCP_DEFUALT_TTL,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_TCP_KEEPALIVE_INTERVAL) {
+                DHCPOPT_TCP_KEEPALIVE_INTERVAL,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_TCP_KEEPALIVE_GARBAGE) {
+                DHCPOPT_TCP_KEEPALIVE_GARBAGE,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_NIS_DOMAIN) {
+                DHCPOPT_NIS_DOMAIN,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_NIS_SERVERS) {
+                DHCPOPT_NIS_SERVERS,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_NIS_TIME_PROTOCOL_SERVERS) {
+                DHCPOPT_NIS_TIME_PROTOCOL_SERVERS,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_VENDOR_SPECIFIC_INFORMATION) {
+                DHCPOPT_VENDOR_SPECIFIC_INFORMATION,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_NETBIOS_DATAGRAM_DISTRIBUTION_SERVER) {
+                DHCPOPT_NETBIOS_DATAGRAM_DISTRIBUTION_SERVER,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_XWINDOWS_FONT_SERVER) {
+                DHCPOPT_XWINDOWS_FONT_SERVER,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_XWINDOWS_DISPLAY_MANAGER) {
+                DHCPOPT_XWINDOWS_DISPLAY_MANAGER,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_REQUESTED_IP_ADDRESS) {
+                DHCPOPT_REQUESTED_IP_ADDRESS,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_IP_ADDRESS_LEASE_TIME) {
+                DHCPOPT_IP_ADDRESS_LEASE_TIME,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_OPTION_OVERLOAD) {
+                DHCPOPT_OPTION_OVERLOAD,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_DHCP_MESSAGE_TYPE) {
+                DHCPOPT_DHCP_MESSAGE_TYPE,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_SERVER_IDENTIFIER) {
+                DHCPOPT_SERVER_IDENTIFIER,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_PARAMETER_REQUEST_LIST) {
+                DHCPOPT_PARAMETER_REQUEST_LIST,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_MESSAGE) {
+                DHCPOPT_MESSAGE,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_MAXIMUM_DHCP_MESSAGE_SIZE) {
+                DHCPOPT_MAXIMUM_DHCP_MESSAGE_SIZE,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_RENEWAL_T1_TIME_VALUE) {
+                DHCPOPT_RENEWAL_T1_TIME_VALUE,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_RENEWAL_T2_TIME_VALUE) {
+                DHCPOPT_RENEWAL_T2_TIME_VALUE,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_VENDOR_CLASS_IDENTIFIER) {
+                DHCPOPT_VENDOR_CLASS_IDENTIFIER,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_CLIENT_IDENTIFIER) {
+                DHCPOPT_CLIENT_IDENTIFIER,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_NISPLUS_DOMAIN) {
+                DHCPOPT_NISPLUS_DOMAIN,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_NISPLUS_SERVERS) {
+                DHCPOPT_NISPLUS_SERVERS,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_TFTP_SERVER_NAME) {
+                DHCPOPT_TFTP_SERVER_NAME,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_BOOTFILE_NAME) {
+                DHCPOPT_BOOTFILE_NAME,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_MOBILE_IP_HOME_AGENT) {
+                DHCPOPT_MOBILE_IP_HOME_AGENT,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_SMTP_SERVER) {
+                DHCPOPT_SMTP_SERVER,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_POP3_SERVER) {
+                DHCPOPT_POP3_SERVER,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_NNTP_SERVER) {
+                DHCPOPT_NNTP_SERVER,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_DEFAULT_WWW_SERVER) {
+                DHCPOPT_DEFAULT_WWW_SERVER,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_DEFAULT_FINGER_SERVER) {
+                DHCPOPT_DEFAULT_FINGER_SERVER,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_DEFAULT_IRC_SERVER) {
+                DHCPOPT_DEFAULT_IRC_SERVER,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_STREETTALK_SERVER) {
+                DHCPOPT_STREETTALK_SERVER,
+%
+%             dhcpOptLen++;
+%         }
+%         if (this.DHCPOPT_STREETALK_DISCOVERY_ASSISTANCE_SERVER) {
+                DHCPOPT_STREETALK_DISCOVERY_ASSISTANCE_SERVER,
+%
+%             dhcpOptLen++;
+%         }
+                };
+
+        /* Specify DHCP Service on IF specified by "IfIdx" */
+        bzero(&dhcpc, sizeof(dhcpc));
+        dhcpc.cisargs.Mode   = `Ip.dhcpClientMode`;
+        dhcpc.cisargs.IfIdx  = `Ip.ifIdx`;
+        dhcpc.cisargs.pCbSrv = `Ip.dhcpClientPcbServer`;
+        dhcpc.param.pOptions = DHCP_OPTIONS;
+        dhcpc.param.len = `dhcpOptLen`;
+        CfgAddEntry(hCfg, CFGTAG_SERVICE, CFGITEM_SERVICE_DHCPCLIENT, 0,
+                sizeof(dhcpc), (UINT8 *)&dhcpc, 0);
+    }
+%     } // end "if (Ip.address == null ..."
+%     // setting Ip.address == none results in NO address configuration
+%     else if (Ip.address.toLowerCase() == "none") {
+%
+    /* Do not configure an IP address */
+%
+%     } // end else if (no IP configured) ...
+%     else { // static IP specified
+    /* Configure IP address manually on interface `Ip.ifIdx` */
+    {
+        CI_IPNET NA;
+        CI_ROUTE RT;
+%
+% /*
+%  * Use global variables LocalIPAddr, LocalIPMask and DomainName which are
+%  * generated by Global.xdt instead of config values 'Ip.address', 'Ip.mask'
+%  * and 'Ip.domainName'.  This provides better user flexibility (i.e. ability
+%  * to override default config values) here. Fix for SDOCM00096773.
+%  */
+%
+        /* Setup manual IP address */
+        bzero(&NA, sizeof(NA));
+        NA.IPAddr  = inet_addr(LocalIPAddr);
+        NA.IPMask  = inet_addr(LocalIPMask);
+        strcpy(NA.Domain, DomainName);
+        NA.NetType = `Ip.NetType`;
+
+        CfgAddEntry(hCfg, CFGTAG_IPNET, `Ip.ifIdx`, 0,
+                sizeof(CI_IPNET), (UINT8 *)&NA, 0);
+
+        /*
+         *  Add the default gateway. Since it is the default, the
+         *  destination address and mask are both zero (we go ahead
+         *  and show the assignment for clarity).
+         */
+        bzero(&RT, sizeof(RT));
+        RT.IPDestAddr = 0;
+        RT.IPDestMask = 0;
+%
+% /*
+%  * Use global variables GatewayIP which is generated by Global.xdt, instead
+%  * of config value 'Ip.gatewayIpAddr'.
+%  * This provides better user flexibility (i.e. ability to override default
+%  * config values) here. Fix for SDOCM00096773.
+%  */
+%
+        RT.IPGateAddr = inet_addr(GatewayIP);
+
+        CfgAddEntry(hCfg, CFGTAG_ROUTE, 0, 0,
+                sizeof(CI_ROUTE), (UINT8 *)&RT, 0);
+    }
+%     } // end "else static IP addr ..."
+%
+% /* only update the configuration if the user changed the Tcp config params */
+%
+%
+%     if (Ip.indexStart != Ip.defaultStartIndex) {
+
+    {
+        Int rc = `Ip.indexStart`;
+        CfgAddEntry(hCfg, CFGTAG_IP, CFGITEM_IP_IPINDEXSTART,
+                CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0);
+    }
+%     } // end "if (Ip.indexStart ..."
+%
+%
+%     if (Ip.enableForwarding != Ip.defaultPortForwarding) {
+    {
+%         if (Ip.enableForwarding == true) {
+        Int rc = 1;
+%         }
+%         else {
+        Int rc = 0;
+%         }
+        CfgAddEntry(hCfg, CFGTAG_IP, CFGITEM_IP_IPFORWARDING,
+                CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0);
+    }
+%     } // end "if (Ip.enableForwarding ..."
+%
+%     if (Ip.enableFiltering != Ip.defaultPortFiltering) {
+    {
+%         if (Ip.enableFiltering == true) {
+        Int rc = 1;
+%         }
+%         else {
+        Int rc = 0;
+%         }
+        CfgAddEntry(hCfg, CFGTAG_IP, CFGITEM_IP_IPFILTERENABLE,
+                CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0);
+    }
+%     } // end "if (Ip.enableFiltering ..."
+%
+%     if (Ip.maxReassemblyTime != Ip.defaultMaxReasmTime) {
+    {
+        Int rc = `Ip.maxReassemblyTime`;
+        CfgAddEntry(hCfg, CFGTAG_IP, CFGITEM_IP_IPREASMMAXTIME,
+                CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0);
+    }
+%     } // end "if (Ip.maxReassemblyTime ..."
+%
+%     if (Ip.maxReassemblySize != Ip.defaultMaxReasmSize) {
+    {
+        Int rc = `Ip.maxReassemblySize`;
+        CfgAddEntry(hCfg, CFGTAG_IP, CFGITEM_IP_IPREASMMAXSIZE,
+                CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0);
+    }
+%     } // end "if (Ip.maxReassemblySize ..."
+%
+%     if (Ip.icmpDoRedirect != Ip.defaultIcmpDoRedir) {
+    {
+%         if (Ip.icmpDoRedirect == true) {
+        Int rc = 1;
+%         }
+%         else {
+        Int rc = 0;
+%         }
+        CfgAddEntry(hCfg, CFGTAG_IP, CFGITEM_IP_ICMPDOREDIRECT,
+                CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0);
+    }
+%     } // end "if (Ip.defaultIcmpDoRedir ..."
+%     if (Ip.icmpTimeToLive != Ip.defaultIcmpTTL) {
+    {
+        Int rc = `Ip.icmpTimeToLive`;
+        CfgAddEntry(hCfg, CFGTAG_IP, CFGITEM_IP_ICMPTTL,
+                CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0);
+    }
+%     } // end "if (Ip.icmpTimeToLive ..."
+%     if (Ip.icmpTimeToLiveEcho != Ip.defaultIcmpTTLecho) {
+    {
+        Int rc = `Ip.icmpTimeToLiveEcho`;
+        CfgAddEntry(hCfg, CFGTAG_IP, CFGITEM_IP_ICMPTTLECHO,
+                CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0);
+    }
+%     } // end "if (Ip.icmpTimeToLiveEcho ..."
+%
+%     if (Ip.icmpDontReplyToBcast != Ip.defaultIcmpBcastReply) {
+    {
+%         if (Ip.icmpDontReplyToBcast == true) {
+        Int rc = 1;
+%         }
+%         else {
+        Int rc = 0;
+%         }
+        CfgAddEntry(hCfg, CFGTAG_IP, CFGITEM_IP_ICMPDONTREPLYBCAST,
+                CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0);
+    }
+%     } // end "if (Ip.icmpDontReplyToBcast ..."
+%
+%     if (Ip.icmpDontReplyToMcast != Ip.defaultIcmpMcastReply) {
+    {
+%         if (Ip.icmpDontReplyToMcast == true) {
+        Int rc = 1;
+%         }
+%         else {
+        Int rc = 0;
+%         }
+        CfgAddEntry(hCfg, CFGTAG_IP, CFGITEM_IP_ICMPDONTREPLYMCAST,
+                CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0);
+    }
+%     } // end "if (Ip.icmpDontReplyToMcast ..."
+%
+%     if (Ip.enableDirectedBroadcast != Ip.defaultDirBcast) {
+%
+    {
+%         if (Ip.enableDirectedBroadcast == true) {
+%
+        Int rc = 1;
+%
+%         }
+%         else {
+%
+        Int rc = 0;
+%
+%         }
+%
+        CfgAddEntry(hCfg, CFGTAG_IP, CFGITEM_IP_DIRECTEDBCAST,
+                CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0);
+    }
+%     } // end "if (Ip.enableDirectedBroadcast ..."
+%
+%     if (Ip.routeDownTime != Ip.defaultRteDownTime) {
+    {
+        Int rc = `Ip.routeDownTime`;
+        CfgAddEntry(hCfg, CFGTAG_IP, CFGITEM_IP_RTARPDOWNTIME,
+                CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0);
+    }
+%     } // end "if (Ip.routeDownTime ..."
+%
+%     if (Ip.routeKeepAliveTime != Ip.defaultRteKpAliveTime) {
+    {
+        Int rc = `Ip.routeKeepAliveTime`;
+        CfgAddEntry(hCfg, CFGTAG_IP, CFGITEM_IP_RTKEEPALIVETIME,
+                CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0);
+    }
+%     } // end "if (Ip.routeKeepAliveTime ..."
+%
+%     if (Ip.routeCloneTimeout != Ip.defaultRteCloneTimeout) {
+    {
+        Int rc = `Ip.routeCloneTimeout`;
+        CfgAddEntry(hCfg, CFGTAG_IP, CFGITEM_IP_RTCLONETIMEOUT,
+                CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0);
+    }
+%     } // end "if (Ip.routeCloneTimeout ..."
+%
+%     if (Ip.routeDefaultMtu != Ip.defaultRteMtu) {
+    {
+        Int rc = `Ip.routeDefaultMtu`;
+        CfgAddEntry(hCfg, CFGTAG_IP, CFGITEM_IP_RTDEFAULTMTU,
+                CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0);
+    }
+%     } // end "if (Ip.routeDefaultMtu ..."
+%
+%     if (Ip.routeCtrlEnableDebug != Ip.defaultRteCtrlDbg) {
+    {
+%         if (Ip.routeCtrlEnableDebug == true) {
+        Int rc = 1;
+%         }
+%         else {
+        Int rc = 0;
+%         }
+        CfgAddEntry(hCfg, CFGTAG_IP, CFGITEM_IP_RTCENABLEDEBUG,
+                CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0);
+    }
+%     } // end "if (Ip.routeCtrlEnableDebug ..."
+%
+%     if (Ip.routeAdvertisePeriod != Ip.defaultRteAdverPer) {
+    {
+        Int rc = `Ip.routeAdvertisePeriod`;
+        CfgAddEntry(hCfg, CFGTAG_IP, CFGITEM_IP_RTCADVTIME,
+                CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0);
+    }
+%     } // end "if (Ip.routeAdvertisePeriod ..."
+%
+%     if (Ip.routeAdvertiseLifetime != Ip.defaultRteAdverLife) {
+    {
+        Int rc = `Ip.routeAdvertiseLifetime`;
+        CfgAddEntry(hCfg, CFGTAG_IP, CFGITEM_IP_RTCADVLIFE,
+                CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0);
+    }
+%     } // end "if (Ip.routeAdvertiseLifetime ..."
+%
+%     if (Ip.routeAdvertisePrefLvl != Ip.defaultRteAdverLvl) {
+    {
+        Int rc = `Ip.routeAdvertisePrefLvl`;
+        CfgAddEntry(hCfg, CFGTAG_IP, CFGITEM_IP_RTCADVPREF,
+                CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0);
+    }
+%     } // end "if (Ip.routeAdvertisePrefLvl ..."
+%
+%     if (Ip.socketTimeToLive != Ip.defaultSockTTL) {
+    {
+        Int rc = `Ip.socketTimeToLive`;
+        CfgAddEntry(hCfg, CFGTAG_IP, CFGITEM_IP_SOCKTTLDEFAULT,
+                CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0);
+    }
+%     } // end "if (Ip.socketTimeToLive ..."
+%
+%     if (Ip.socketTos != Ip.defaultSockTos) {
+    {
+        Int rc = `Ip.socketTos`;
+        CfgAddEntry(hCfg, CFGTAG_IP, CFGITEM_IP_SOCKTOSDEFAULT,
+                CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0);
+    }
+%     } // end "if (Ip.socketTos ..."
+%
+%     if (Ip.socketMaxConnections != Ip.defaultSockMaxConn) {
+    {
+        Int rc = `Ip.socketMaxConnections`;
+        CfgAddEntry(hCfg, CFGTAG_IP, CFGITEM_IP_SOCKMAXCONNECT,
+                CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0);
+    }
+%     } // end "if (Ip.socketMaxConnections ..."
+%
+%     if (Ip.socketConnectTimeout != Ip.defaultSockConnTimeout) {
+    {
+        Int rc = `Ip.socketConnectTimeout`;
+        CfgAddEntry(hCfg, CFGTAG_IP, CFGITEM_IP_SOCKTIMECONNECT,
+                CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0);
+    }
+%     } // end "if (Ip.socketConnectTimeout ..."
+%
+%     if (Ip.socketIoTimeout != Ip.defaultSockIoTimeout) {
+    {
+        Int rc = `Ip.socketIoTimeout`;
+        CfgAddEntry(hCfg, CFGTAG_IP, CFGITEM_IP_SOCKTIMEIO,
+                CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0);
+    }
+%     } // end "if (Ip.socketIoTimeout ..."
+%
+%     if (Ip.socketBufMinTxSize != Ip.defaultSockBufTxSz) {
+    {
+        Int rc = `Ip.socketBufMinTxSize`;
+        CfgAddEntry(hCfg, CFGTAG_IP, CFGITEM_IP_SOCKMINTX,
+                CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0);
+    }
+%     } // end "if (Ip.socketBufMinTxSize ..."
+%
+%     if (Ip.socketBufMinRxSize != Ip.defaultSockBufRxSz) {
+    {
+        Int rc = `Ip.socketBufMinRxSize`;
+        CfgAddEntry(hCfg, CFGTAG_IP, CFGITEM_IP_SOCKMINRX,
+                CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0);
+    }
+%     } // end "if (Ip.socketBufMinRxSize ..."
+%
+%     if (Ip.pipeIoTimeout != Ip.defaultPipIoTimeout) {
+    {
+        Int rc = `Ip.pipeIoTimeout`;
+        CfgAddEntry(hCfg, CFGTAG_IP, CFGITEM_IP_PIPETIMEIO,
+                CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0);
+    }
+%     } // end "if (Ip.pipeIoTimeout ..."
+%
+%     if (Ip.pipeMaxBufSize != Ip.defaultPipMaxBufSz) {
+    {
+        Int rc = `Ip.pipeMaxBufSize`;
+        CfgAddEntry(hCfg, CFGTAG_IP, CFGITEM_IP_PIPEBUFMAX,
+                CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0);
+    }
+%     } // end "if (Ip.pipeMaxBufSize ..."
+%
+%     if (Ip.pipeBufMinTxSize != Ip.defaultPipBufTxSz) {
+    {
+        Int rc = `Ip.pipeBufMinTxSize`;
+        CfgAddEntry(hCfg, CFGTAG_IP, CFGITEM_IP_PIPEMINTX,
+                CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0);
+    }
+%     } // end "if (Ip.pipeBufMinTxSize ..."
+%
+%     if (Ip.pipeBufMinRxSize != Ip.defaultPipBufRxSz) {
+    {
+        Int rc = `Ip.pipeBufMinRxSize`;
+        CfgAddEntry(hCfg, CFGTAG_IP, CFGITEM_IP_PIPEMINRX,
+                CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0);
+    }
+%     } // end "if (Ip.pipeBufMinRxSize ..."
+%  //below '}' closes ...ip_init() fxn
+}
+% } // end "if (Ip.$used ..."

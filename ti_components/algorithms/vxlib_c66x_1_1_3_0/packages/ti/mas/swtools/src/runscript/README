@@ -1,0 +1,39 @@
+How to use the run scripts supplied with the OMP product
+
+1) Edit 'DEBUGSERVER' in common_variables.bat to point to your CCS installation
+
+2) Create a new platforms\[MYCONFIG].xs file using an existing one
+   (i.e. evm6678_xds560.xs) as a template.
+
+    a) Place your .ccxml file in a place where the scripts can access them
+       (i.e. OMP_INSTALL_DIR\packages\regression\common\ccxml).  Point your
+       platforms\[MYCONFIG].xs file to that .ccxml file using the following
+       syntax:
+
+       Main.ccxmlConfigFile = "regression/common/ccxml/evm6678_xds560.ccxml";
+
+
+    b) Make sure that the platform name in the first argument to 'Main.addCpu'
+       matches your platform name.  
+
+       
+3) Run the script as follows (the -n flag should be used to specify the number
+   of cores that the tests runs on)
+
+V:\omp_1_00_00_xx_eng\packages\runscript>run.bat platforms\evm6678_xds560.xs 
+    v:\ti\omp\tests\whole_program_debug\omp_hello.xe66 -n 4
+
+Connected to cores #0-3
+[CORE0]
+    Hello World from thread = 0
+    Number of threads = 4
+[CORE1]
+    Hello World from thread = 1
+[CORE2]
+    Hello World from thread = 2
+[CORE3]
+    Hello World from thread = 3
+
+V:\shreyasp\omp\exports\omp_1_00_00_xx_eng\packages\runscript>
+
+

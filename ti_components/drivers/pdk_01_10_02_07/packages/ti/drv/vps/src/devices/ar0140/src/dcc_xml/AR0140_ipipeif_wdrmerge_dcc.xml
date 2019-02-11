@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<IPIPEIF_WDRMERGE_xml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!--this is comment-->
+  <dcc_name>ipipeif_wdrmerge</dcc_name>
+  <dcc_header>
+    <camera_module_id>     0140 </camera_module_id>
+      <dcc_descriptor_id>   48 </dcc_descriptor_id>
+      <algorithm_vendor_id>  1 </algorithm_vendor_id>
+      <tunning_tool_version> 0 </tunning_tool_version>
+  </dcc_header>
+  <!--=======================================================================-->
+    <typedef>
+        <iss_ipipeif_wdrmerge type="struct">
+              <update type="uint8"> </update>
+                  <CFG4_WDR_EN type="uint8"> </CFG4_WDR_EN> <!-- enable/disable ipipe VP decompander: 0,1 -->
+                  <WDRLBK1_LBK00 type="uint16"> </WDRLBK1_LBK00> <!-- Long Black Offset for WDR Merge: u12 -->
+                  <WDRLBK1_LBK01 type="uint16"> </WDRLBK1_LBK01> <!-- Long Black Offset for WDR Merge: u12 -->
+                  <WDRLBK2_LBK10 type="uint16"> </WDRLBK2_LBK10> <!-- Long Black Offset for WDR Merge: u12 -->
+                  <WDRLBK2_LBK11 type="uint16"> </WDRLBK2_LBK11> <!-- Long Black Offset for WDR Merge: u12 -->
+                  <WDRSBK1_SBK00 type="uint16"> </WDRSBK1_SBK00> <!-- Short Black Offset for WDR Merge: u12 -->
+                  <WDRSBK1_SBK01 type="uint16"> </WDRSBK1_SBK01> <!-- Short Black Offset for WDR Merge: u12 -->
+                  <WDRSBK2_SBK10 type="uint16"> </WDRSBK2_SBK10> <!-- Short Black Offset for WDR Merge: u12 -->
+                  <WDRSBK2_SBK11 type="uint16"> </WDRSBK2_SBK11> <!-- Short Black Offset for WDR Merge: u12 -->
+                  <WDRGAIN_GLONG type="uint16"> </WDRGAIN_GLONG> <!-- Long Gain for WDR Merge: u16. GSHORT hard coded to 32768 in template file! -->
+                  <CFG4_LBIT type="uint8"> </CFG4_LBIT>          <!-- Shift up value for Long so that Gain/15-shift brings to u20 : u4 -->
+                  <CFG4_SBIT type="uint8"> </CFG4_SBIT>          <!-- Shift up value for Short so that Gain/15-shift brings to u20 : u4 -->
+                  <WDRTHR_THR type="uint16"> </WDRTHR_THR>        <!-- Threshold value (hardcoded on short in template file) above which output is generated from short only: u16 -->
+                  <AF_M type="int16"> </AF_M>                    <!-- AF_M parameter for transition from long to short: s16 -->
+                  <AF_E type="uint8"> </AF_E>                    <!-- AF_E parameter for transition from long to short: u5 -->
+                  <BF type="int16"> </BF>                        <!-- BF parameter for transition from long to short: s16 Q0.15 -->
+                  <WDRMA_MAD type="uint16"> </WDRMA_MAD>          <!-- WDR motion adaptive Threshold: u16 -->
+                  <WDRMA_MAS type="uint16"> </WDRMA_MAS>          <!-- WDR motion adaptive Slope: u16, Q16.0 -->
+                  <CFG4_DST type="uint16"> </CFG4_DST>           <!-- Downshift after merge u5 -->
+                  <WDR_X_THR_1 type="uint32"> </WDR_X_THR_1> <!-- WDR Decompander PWL X Threshold 1: u20 -->
+                  <WDR_X_THR_2 type="uint32"> </WDR_X_THR_2> <!-- WDR Decompander PWL X Threshold 2: u20 -->
+                  <WDR_X_THR_3 type="uint32"> </WDR_X_THR_3> <!-- WDR Decompander PWL X Threshold 3: u20 -->
+                  <WDR_Y_THR_1 type="uint16"> </WDR_Y_THR_1> <!-- WDR Decompander PWL X Threshold 1: u16 -->
+                  <WDR_Y_THR_2 type="uint16"> </WDR_Y_THR_2> <!-- WDR Decompander PWL X Threshold 2: u16 -->
+                  <WDR_Y_THR_3 type="uint16"> </WDR_Y_THR_3> <!-- WDR Decompander PWL X Threshold 3: u16 -->
+                  <WDR_SLOPE_1 type="uint16"> </WDR_SLOPE_1> <!-- WDR Decompander PWL Slope 1: u16 -->
+                  <WDR_SLOPE_2 type="uint16"> </WDR_SLOPE_2> <!-- WDR Decompander PWL Slope 2: u16 -->
+                  <WDR_SLOPE_3 type="uint16"> </WDR_SLOPE_3> <!-- WDR Decompander PWL Slope 3: u16 -->
+                  <WDR_SLOPE_4 type="uint16"> </WDR_SLOPE_4> <!-- WDR Decompander PWL Slope 4: u16 -->
+                  <WDR_SHIFT type="uint8">    </WDR_SHIFT> <!-- WDR Decompander PWL Slope Shift parameter (Q point for above slopes): u5 -->
+                  <WDR_LUT_BITSEL type="uint8"> </WDR_LUT_BITSEL> <!-- WDR Decompander bitshift before input to decomp LUT : u4 -->
+                  <WDR_LUT_SET type="uint8"> </WDR_LUT_SET> <!-- WDR Decompander PWL vs LUT for decompanding: 0: PWL, 1: LUT -->
+          <WDR_CMP_EN type="uint8"> </WDR_CMP_EN> <!-- WDR Decompander enable -->
+          <WDR_DECOMP_LUT type="uint32[513]"> </WDR_DECOMP_LUT> <!-- WDR Decompander LUT : 513 element table, each entry is u20 -->
+        </iss_ipipeif_wdrmerge>
+    </typedef>
+  <!--=======================================================================-->
+
+    <use_case val="1023"> <!-- DCC_USE_CASE_ALL -->
+    <n-space>
+
+           <region0 class="0">
+            <gain val="0" min="0" max="100000">  </gain>
+        </region0>
+    </n-space>
+    <parameter_package>
+        <iss_ipipeif_wdrmerge_dcc type="iss_ipipeif_wdrmerge">
+        {
+            1, //update
+            1, // WDR Merge enable
+      0, // LBK00 u12
+      0, // LBK01 u12
+      0, // LBK10 u12
+      0, // LBK11 u12
+      0, // SBK00 u12
+      0, // SBK01 u12
+      0, // SBK10 u12
+      0, // SBK11 u12
+      2048, // WDRGAIN_GLONG u16 - could be over-ridden in SW/simulator
+      10, // CFG4_LBIT u4 - could be over-ridden in SW/simulator
+      10, // CFG4_SBIT u4 - could be over-ridden in SW/simulator
+      65535, //  WDRTHR_THR (on short) u16
+      0, // AF_M s16
+      0, // AF_E u5
+      0, // BF s16 Q0.15
+      65535, // WDRMA_MAD u16
+      0, // WDRMA_MAS u16Q0
+      15, // CFG_DST u5 - could be over-ridden in SW/simulator
+      1048575, // WDR Decompanding PWL XTHR1 u20
+      1048575, // WDR Decompanding PWL XTHR2 u20
+      1048575, // WDR Decompanding PWL XTHR3 u20
+      65535, // WDR Decompanding PWL YTHR1 u16
+      65535, // WDR Decompanding PWL YTHR2 u16
+      65535, // WDR Decompanding PWL YTHR3 u16
+      256, // WDR Decompanding PWL Slope 1 u16
+      0, // WDR Decompanding PWL Slope 2 u16
+      0, // WDR Decompanding PWL Slope 3 u16
+      0, // WDR Decompanding PWL Slope 4 u16
+      0, // WDR Decompanding WDR_SHIFT (Q point for PWL slopes) u5
+      11, // WDR Decompanding LUT BITSEL (shift for entry to Decomp LUT) u4
+      1, // WDR Decompanding LUT SEL 0:PWL 1:LUT
+      1, // WDR Companding enable - could be over-ridden by SW/Simulator
+            { // WDR_DECOMP_LUT
+                #include <WDR_lut_x_pow_0.7_dec.txt>
+            },
+        }
+        </iss_ipipeif_wdrmerge_dcc>
+    </parameter_package>
+
+
+
+    </use_case>
+
+  <!--=====================================================================-->
+</IPIPEIF_WDRMERGE_xml>

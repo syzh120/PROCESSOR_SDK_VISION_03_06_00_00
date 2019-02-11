@@ -1,0 +1,740 @@
+******************************************************************************
+                   ARP32 Linker PC v1.0.7                      
+******************************************************************************
+>> Linked Mon Jun 25 22:15:04 2018
+
+OUTPUT FILE NAME:   <.\elf_out/evelib_harris_corner_detection_test.eve.out>
+ENTRY POINT SYMBOL: "_reset_handler"  address: 80000100
+
+
+MEMORY CONFIGURATION
+
+         name            origin    length      used     unused   attr    fill
+----------------------  --------  ---------  --------  --------  ----  --------
+PAGE 0:
+  VECMEM                80000000   00000100  00000028  000000d8  RWIX
+  CMDMEM                80000100   00001000  00000028  00000fd8  RWIX
+  EXTMEM                80001100   00020000  0000717c  00018e84  RWIX
+
+PAGE 1:
+  DATMEM                40020000   00008000  0000268d  00005973  RWIX
+  WMEM                  40040000   00007fe0  00005ee0  00002100  RWIX
+  IMEMLA                40050000   00004000  00004000  00000000  RWIX
+  IMEMHA                40054000   00004000  00004000  00000000  RWIX
+  IMEMLB                40070000   00004000  00004000  00000000  RWIX
+  IMEMHB                40074000   00004000  00004000  00000000  RWIX
+  L3MEM                 40300000   00100000  00000000  00100000  RWIX
+  GEM0_L2_MEM           40800000   00008000  00000000  00008000  RWIX
+  EXTDMEM               80030000   02000000  0061174e  019ee8b2  RWIX
+
+
+SECTION ALLOCATION MAP
+
+ output                                  attributes/
+section   page    origin      length       input sections
+--------  ----  ----------  ----------   ----------------
+.cinit     1    40020000    00000000     UNINITIALIZED
+
+.init_array 
+*          1    40020000    00000000     UNINITIALIZED
+
+.intvecs   0    80000000    00000028     
+                  80000000    00000028     boot_arp32.obj (.intvecs)
+
+.inthandler 
+*          0    80000100    00000028     
+                  80000100    00000028     boot_arp32.obj (.inthandler)
+
+.bam_text 
+*          0    80001100    00000000     UNINITIALIZED
+
+.rts_text 
+*          0    80001100    0000421c     
+                  80001100    000002a0     rtsarp32_v200.lib : _printfi.obj (.text:_setfield)
+                  800013a0    0000025c                       : _printfi.obj (.text:_pproc_fge)
+                  800015fc    0000025c                       : _printfi.obj (.text:ecvt)
+                  80001858    00000258                       : _printfi.obj (.text:fcvt)
+                  80001ab0    0000022c                       : _printfi.obj (.text:_printfi)
+                  80001cdc    00000220                       : _printfi.obj (.text:_pconv_e)
+                  80001efc    00000208                       : _printfi.obj (.text:_getarg_diouxp)
+                  80002104    00000200                       : frcdivd.obj (.text:_frcdivd)
+                  80002304    000001e4                       : divd.obj (.text:__arp32abi_divd)
+                  800024e8    000001cc                       : imath64.obj (.text:__arp32abi_divull)
+                  800026b4    000001c8                       : mpyd.obj (.text:__arp32abi_mpyd)
+                  8000287c    000001b8                       : addd.obj (.text:__arp32abi_addd)
+                  80002a34    0000018c                       : _printfi.obj (.text:_pproc_diouxp)
+                  80002bc0    00000170                       : fputs.obj (.text:fputs)
+                  80002d30    00000168                       : vcop_memory.obj (.text:vcop_memalign)
+                  80002e98    00000160                       : frcaddd.obj (.text:_frcaddd)
+                  80002ff8    00000158                       : llmpy.obj (.text:__arp32abi_mpyll)
+                  80003150    00000140                       : frcmpyd.obj (.text:_frcmpyd)
+                  80003290    0000013c                       : _printfi.obj (.text:_pproc_fwp)
+                  800033cc    00000118                       : setvbuf.obj (.text:setvbuf)
+                  800034e4    00000114                       : _printfi.obj (.text:_pconv_g)
+                  800035f8    000000f4                       : _printfi.obj (.text:_pproc_str)
+                  800036ec    000000e8                       : fputc.obj (.text:fputc)
+                  800037d4    000000dc                       : memcpy.obj (.text:memcpy)
+                  800038b0    000000cc                       : cmpd.obj (.text:__arp32abi_cmpd)
+                  8000397c    000000c4                       : memory.obj (.text:mem_alloc)
+                  80003a40    000000bc                       : _printfi.obj (.text:_ltostr)
+                  80003afc    000000b4                       : trgdrv.obj (.text:HOSTlseek)
+                  80003bb0    000000ac                       : trgdrv.obj (.text:HOSTrename)
+                  80003c5c    000000a8                       : memset.obj (.text:memset)
+                  80003d04    000000a0                       : lowlev.obj (.text:getdevice)
+                  80003da4    0000009c                       : _printfi.obj (.text:_mcpy)
+                  80003e40    00000098                       : trgdrv.obj (.text:HOSTopen)
+                  80003ed8    00000098                       : vcop_memory.obj (.text:vcop_free)
+                  80003f70    00000094                       : memory.obj (.text:mem_free)
+                  80004004    00000090                       : trgdrv.obj (.text:HOSTread)
+                  80004094    00000090                       : _printfi.obj (.text:_pproc_fflags)
+                  80004124    00000090                       : _io_perm.obj (.text:_wrt_ok)
+                  800041b4    00000090                       : fseek.obj (.text:fseek)
+                  80004244    0000008c                       : trgdrv.obj (.text:HOSTwrite)
+                  800042d0    00000088                       : lowlev.obj (.text:close)
+                  80004358    00000084                       : _printfi.obj (.text:_ecpy)
+                  800043dc    00000080                       : printf.obj (.text:printf)
+                  8000445c    0000007c                       : fixdi.obj (.text:__arp32abi_fixdi)
+                  800044d8    0000007c                       : fclose.obj (.text:_closefile)
+                  80004554    0000007c                       : atoi.obj (.text:atoi)
+                  800045d0    0000007c                       : fflush.obj (.text:fflush)
+                  8000464c    00000078                       : trgdrv.obj (.text:HOSTunlink)
+                  800046c4    00000078                       : _printfi.obj (.text:_div)
+                  8000473c    00000078                       : _printfi.obj (.text:_pconv_f)
+                  800047b4    00000078                       : memory.obj (.text:minit)
+                  8000482c    00000074                       : trgdrv.obj (.text:HOSTclose)
+                  800048a0    00000070                       : autoinit.obj (.text:_auto_init)
+                  80004910    00000070                       : vfprintf.obj (.text:vfprintf)
+                  80004980    00000068                       : fltid.obj (.text:__arp32abi_fltid)
+                  800049e8    00000068                       : boot.obj (.text:_c_int00)
+                  80004a50    00000068                       : lowlev.obj (.text:lseek)
+                  80004ab8    00000068                       : lowlev.obj (.text:write)
+                  80004b20    00000064                       : imath64.obj (.text:_subcull)
+                  80004b84    00000064                       : ltoa.obj (.text:ltoa)
+                  80004be8    00000060                       : llshift.obj (.text:__arp32abi_llshl)
+                  80004c48    00000060                       : fflush.obj (.text:_doflush)
+                  80004ca8    0000005c                       : isinf.obj (.text:__arp32abi_isinf)
+                  80004d04    0000005c                       : vcop_memory.obj (.text:vcop_minit)
+                  80004d60    00000054                       : _printfi.obj (.text:_fcpy)
+                  80004db4    00000054                       : renormd.obj (.text:_renormd)
+                  80004e08    00000054                       : exit.obj (.text:exit)
+                  80004e5c    00000050                       : fopen.obj (.text:_cleanup)
+                  80004eac    00000050                       : lowlev.obj (.text:finddevice)
+                  80004efc    00000050                       : rand.obj (.text:rand)
+                  80004f4c    0000004c                       : memory.obj (.text:malloc)
+                  80004f98    00000048                       : trgmsg.obj (.text:readmsg)
+                  80004fe0    00000048                       : lowlev.obj (.text:unlink)
+                  80005028    00000048                       : trgmsg.obj (.text:writemsg)
+                  80005070    00000040                       : args_main.obj (.text:_args_main)
+                  800050b0    0000003c                       : _printfi.obj (.text:__arp32abi_isnan)
+                  800050ec    00000038                       : llshift.obj (.text:__arp32abi_llshr)
+                  80005124    00000034                       : llshift.obj (.text:__arp32abi_llshru)
+                  80005158    00000030                       : rand.obj (.text:srand)
+                  80005188    0000002c                       : subd.obj (.text:__arp32abi_subd)
+                  800051b4    00000028                       : negd.obj (.text:__arp32abi_negd)
+                  800051dc    00000028                       : mult.obj (.text:_mpyl)
+                  80005204    00000024                       : llcmp.obj (.text:__arp32abi_cmplls)
+                  80005228    00000024                       : llcmp.obj (.text:__arp32abi_cmpllu)
+                  8000524c    00000020                       : memccpy.obj (.text:memccpy)
+                  8000526c    0000001c                       : lladdsub.obj (.text:__arp32abi_addll)
+                  80005288    00000014                       : lladdsub.obj (.text:__arp32abi_subll)
+                  8000529c    00000014                       : memory.obj (.text:free)
+                  800052b0    00000010                       : lladdsub.obj (.text:__arp32abi_negll)
+                  800052c0    00000010                       : vcop_memory.obj (.text:vcop_malloc)
+                  800052d0    0000000c                       : printf.obj (.text:_outc)
+                  800052dc    0000000c                       : vfprintf.obj (.text:_outc)
+                  800052e8    0000000c                       : printf.obj (.text:_outs)
+                  800052f4    0000000c                       : vfprintf.obj (.text:_outs)
+                  80005300    0000000c                       : remove.obj (.text:remove)
+                  8000530c    00000008                       : exit.obj (.text:abort)
+                  80005314    00000004                       : _lock.obj (.text:_nop)
+                  80005318    00000004                       : pre_init.obj (.text:_system_pre_init)
+
+.text      0    8000531c    00001b0c     
+                  8000531c    000006d4     evelib_harris_corner_detection_test.obj (.text:main)
+                  800059f0    00000640     dmautils.lib : edma_utils_autoincrement.obj (.text:EDMA_UTILS_autoIncrement_configure)
+                  80006030    000001c4                  : dma_funcs.obj (.text:DMA_funcs_hardwareRegSetup)
+                  800061f4    000001b8                  : edma_utils_autoincrement.obj (.text:EDMA_UTILS_autoIncrement_triggerOutChannel)
+                  800063ac    00000190     libeveprivnatckernels.eve.lib : vcop_harrisScore_7x7_cn.obj (.text:vcop_harrisScore_7x7_cn)
+                  8000653c    00000178     dmautils.lib : dma_resource_allocator.obj (.text:DMA_resourceAllocator_allocateResources)
+                  800066b4    00000164                  : edma_utils_autoincrement.obj (.text:EDMA_UTILS_autoIncrement_triggerInChannel)
+                  80006818    00000144     libevenatckernels.eve.lib : vcop_nonMaxSuppress_mxn_16s_c.obj (.text:vcop_nonMaxSuppress_mxn_16s_cn)
+                  8000695c    000000e8     dmautils.lib : edma_utils_autoincrement.obj (.text:EDMA_UTILS_autoIncrement_init)
+                  80006a44    000000cc                  : edma_utils_state.obj (.text:DMA_utils_updateStateStruct)
+                  80006b10    000000a8     libevenatckernels.eve.lib : vcop_vec_gradients_xy_and_magnitude_c.obj (.text:vcop_vec_gradients_xy_and_magnitude_cn)
+                  80006bb8    00000074     dmautils.lib : dma_funcs.obj (.text:DMA_funcs_writeTransferParams)
+                  80006c2c    00000074     libeveprivnatckernels.eve.lib : vcop_harrisScore_7x7_cn.obj (.text:leftmostbit)
+                  80006ca0    00000068     dmautils.lib : edma_utils_autoincrement.obj (.text:EDMA_UTILS_autoIncrement_waitOutChannel)
+                  80006d08    00000054                  : edma_utils_autoincrement.obj (.text:EDMA_UTILS_autoIncrement_waitInChannel)
+                  80006d5c    0000004c                  : edma_utils.obj (.text:EDMA_UTILS_globalReset)
+                  80006da8    0000002c                  : dma_resource_allocator.obj (.text:DMA_resourceAllocator_initResources)
+                  80006dd4    00000024     eve_profile.obj (.text:TEST_PRINTF)
+                  80006df8    00000020     dmautils.lib : edma_utils_state.obj (.text:DMA_utils_resetStateStruct)
+                  80006e18    0000000c                  : dma_resource_allocator.obj (.text:DMA_resourceAllocator_setEdma3RmHandle)
+                  80006e24    00000004                  : edma3lld_support.obj (.text:EDMA3LLD_SUPPORT_requestResources)
+
+.algo_text 
+*          0    80006e28    00001344     
+                  80006e28    000002fc     libevekernels.eve.lib : vcop_nonMaxSuppress_mxn_16s_kernel.obj (.text:vcop_nonMaxSuppress_mxn_16s_init)
+                  80007124    000002d4                           : vcop_harrisScore_7x7_kernel.obj (.text:vcop_harrisScore_7x7_1_init)
+                  800073f8    00000220                           : vcop_harrisScore_7x7_kernel.obj (.text:vcop_harrisScore_7x7_2_init)
+                  80007618    000001d8                           : vcop_harrisScore_7x7_kernel.obj (.text:vcop_harrisScore_7x7_2_vloops)
+                  800077f0    000000d4                           : vcop_harrisScore_7x7_kernel.obj (.text:vcop_harrisScore_7x7_1_vloops)
+                  800078c4    000000c4                           : vcop_vec_gradients_xy_and_magnitude_kernel.obj (.text:vcop_vec_gradients_xy_and_magnitude_init)
+                  80007988    000000b4                           : vcop_nonMaxSuppress_mxn_16s_kernel.obj (.text:vcop_nonMaxSuppress_mxn_16s_vloops)
+                  80007a3c    00000058                           : vcop_vec_gradients_xy_and_magnitude_kernel.obj (.text:vcop_vec_gradients_xy_and_magnitude_vloops)
+                  80007a94    00000184     libeveapps.eve.lib : evelib_harris_corner_detection.obj (.text:EVELIB_harrisCornerDetection)
+                  80007c18    0000017c                        : eve_algo_dma_auto_incr.obj (.text:EVELIB_algoDMAAutoIncrInit)
+                  80007d94    000000e4                        : evelib_harris_corner_detection.obj (.text:vcop_harrisCornerDetection_init)
+                  80007e78    000000d8                        : eve_algo_dma_auto_incr.obj (.text:EVELIB_algoDMAAutoIncrProcess)
+                  80007f50    000000c4                        : eve_algo_dma_auto_incr.obj (.text:EVELIB_algoDMAAutoIncrConcurrent)
+                  80008014    0000009c                        : eve_algo_dma_auto_incr.obj (.text:EVELIB_algoDMAAutoIncrSequential)
+                  800080b0    00000098                        : evelib_harris_corner_detection.obj (.text:vcop_harrisScore_7x7_init)
+                  80008148    00000018                        : eve_algo_dma_auto_incr.obj (.text:VCOP_SET_MEM_VIEW)
+                  80008160    0000000c                        : eve_algo_dma_auto_incr.obj (.text:EVELIB_algoDMAAutoIncrDeInit)
+
+.starterware_text 
+*          0    8000816c    00000110     
+                  8000816c    00000048     libevestarterware_eve.lib : sctm.obj (.text:EVE_SCTM_CounterConfig)
+                  800081b4    0000002c                               : sctm.obj (.text:EVE_SCTM_CounterTimerEnable)
+                  800081e0    0000002c                               : sctm.obj (.text:EVE_SCTM_InpEvtSelect)
+                  8000820c    0000002c                               : sctm.obj (.text:EVE_SCTM_SamplingSelect)
+                  80008238    00000018                               : sctm.obj (.text:EVE_SCTM_CounterRead)
+                  80008250    00000018                               : sctm.obj (.text:EVE_SCTM_OverflowCheck)
+                  80008268    00000014                               : sctm.obj (.text:EVE_SCTM_Enable)
+
+.bam_neardata 
+*          1    40020000    00000000     UNINITIALIZED
+
+.starterware_neardata 
+*          1    40020000    00000000     UNINITIALIZED
+
+.stack     1    40020000    00002000     UNINITIALIZED
+                  40020000    00000004     rtsarp32_v200.lib : boot.obj (.stack)
+                  40020004    00001ffc     --HOLE--
+
+.edmaUtilsMem 
+*          1    40022000    000002e4     UNINITIALIZED
+                  40022000    000002e4     libeveapps.eve.lib : eve_algo_dma_auto_incr.obj (.edmaUtilsMem)
+
+.bss       1    400222e4    00000108     UNINITIALIZED
+                  400222e4    000000a8     dmautils.lib : dma_resource_allocator.obj (.bss)
+                  4002238c    00000060                  : edma_utils_state.obj (.bss)
+
+.data      1    400223ec    00000024     
+                  400223ec    00000020     boot_arp32.obj (.data)
+                  4002240c    00000004     dmautils.lib : dma_resource_allocator.obj (.data)
+
+.rodata    1    40022410    00000010     
+                  40022410    00000008     dmautils.lib : edma_utils_autoincrement.obj (.rodata)
+                  40022418    00000008     evelib_harris_corner_detection_test.obj (.rodata)
+
+.rts_neardata 
+*          1    40022420    00000125     
+                  40022420    00000023     rtsarp32_v200.lib : _printfi.obj (.const:.string)
+                  40022443    00000001     --HOLE-- [fill = 0]
+                  40022444    00000101                       : ctype.obj (.const:.string:_ctypes_)
+
+.cio       1    40022548    00000120     UNINITIALIZED
+                  40022548    00000120     rtsarp32_v200.lib : trgmsg.obj (.cio)
+
+.algo_neardata 
+*          1    40022668    00000024     
+                  40022668    00000004     libeveapps.eve.lib : eve_algo_dma_auto_incr.obj (.rodata)
+                  4002266c    00000010                        : evelib_harris_corner_detection.obj (.const:$P$T0$1)
+                  4002267c    00000010                        : evelib_harris_corner_detection.obj (.const:$P$T1$2)
+
+.edma_utils_lib_fardata 
+*          1    4002268c    00000004     
+                  4002268c    00000004     dmautils.lib : edma_utils.obj (.const:edmaBase)
+
+.wmem      1    40040000    00005b00     UNINITIALIZED
+                  40040000    00000008     rtsarp32_v200.lib : vcop_memory.obj (.wmem)
+                  40040008    00005af8     --HOLE--
+
+.vcop_parameter_block 
+*          1    40045b00    000003e0     UNINITIALIZED
+                  40045b00    0000018c     libevekernels.eve.lib : vcop_vec_gradients_xy_and_magnitude_kernel.obj (.vcop_parameter_block)
+                  40045c8c    00000130                           : vcop_harrisScore_7x7_kernel.obj (.vcop_parameter_block)
+                  40045dbc    00000124                           : vcop_nonMaxSuppress_mxn_16s_kernel.obj (.vcop_parameter_block)
+
+.imemla    1    40050000    00004000     UNINITIALIZED
+                  40050000    00000008     rtsarp32_v200.lib : vcop_memory.obj (.imemla)
+                  40050008    00003ff8     --HOLE--
+
+.imemha    1    40054000    00004000     UNINITIALIZED
+                  40054000    00000008     rtsarp32_v200.lib : vcop_memory.obj (.imemha)
+                  40054008    00003ff8     --HOLE--
+
+.imemlb    1    40070000    00004000     UNINITIALIZED
+                  40070000    00000008     rtsarp32_v200.lib : vcop_memory.obj (.imemlb)
+                  40070008    00003ff8     --HOLE--
+
+.imemhb    1    40074000    00004000     UNINITIALIZED
+                  40074000    00000008     rtsarp32_v200.lib : vcop_memory.obj (.imemhb)
+                  40074008    00003ff8     --HOLE--
+
+.algo_fardata 
+*          1    80030000    00000000     UNINITIALIZED
+
+.bam_fardata 
+*          1    80030000    00000000     UNINITIALIZED
+
+.far       1    80030000    00339000     UNINITIALIZED
+                  80030000    00339000     evelib_harris_corner_detection_test.obj (.far)
+
+.fardata   1    80369000    00258000     
+                  80369000    00096000     evelib_harris_corner_detection_test.obj (.fardata:X)
+                  803ff000    00096000     evelib_harris_corner_detection_test.obj (.fardata:Y)
+                  80495000    00096000     evelib_harris_corner_detection_test.obj (.fardata:refX)
+                  8052b000    00096000     evelib_harris_corner_detection_test.obj (.fardata:refY)
+
+.sysmem    1    805c1000    00080000     UNINITIALIZED
+                  805c1000    00000008     rtsarp32_v200.lib : memory.obj (.sysmem)
+                  805c1008    0007fff8     --HOLE--
+
+.rts_fardata 
+*          1    80641000    000002f4     
+                  80641000    000000a0     rtsarp32_v200.lib : defs.obj (.far) [fill = 0]
+                  806410a0    0000000c                       : memory.obj (.far) [fill = 0]
+                  806410ac    00000008                       : boot.obj (.far) [fill = 0]
+                  806410b4    00000008                       : trgdrv.obj (.far) [fill = 0]
+                  806410bc    000000f0                       : defs.obj (.fardata:_ftable)
+                  806411ac    00000078                       : lowlev.obj (.fardata:_device)
+                  80641224    00000064                       : vcop_memory.obj (.fardata:vcop_mem)
+                  80641288    00000050                       : lowlev.obj (.fardata:_stream)
+                  806412d8    00000008                       : _lock.obj (.fardata)
+                  806412e0    00000005                       : vcop_memory.obj (.fardata)
+                  806412e5    00000003     --HOLE-- [fill = 0]
+                  806412e8    00000004                       : defs.obj (.fardata)
+                  806412ec    00000004                       : memory.obj (.fardata)
+                  806412f0    00000004                       : rand.obj (.fardata)
+
+.const     1    806412f4    00000266     
+                  806412f4    00000266     evelib_harris_corner_detection_test.obj (.const:.string)
+
+.starterware_fardata 
+*          1    8064155c    000001f4     
+                  8064155c    000001f4     libevestarterware_eve.lib : cred.obj (.fardata:CRED_instVirtAddr)
+
+
+SEGMENT ATTRIBUTES
+
+    id tag      seg value
+    -- ---      --- -----
+     0 PHA_PAGE 3   1    
+     1 PHA_PAGE 4   1    
+     2 PHA_PAGE 5   1    
+     3 PHA_PAGE 6   1    
+     4 PHA_PAGE 7   1    
+     5 PHA_PAGE 8   1    
+     6 PHA_PAGE 9   1    
+     7 PHA_PAGE 10  1    
+     8 PHA_PAGE 11  1    
+     9 PHA_PAGE 12  1    
+    10 PHA_PAGE 13  1    
+    11 PHA_PAGE 14  1    
+    12 PHA_PAGE 15  1    
+
+
+GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name 
+
+address    name
+--------   ----
+8000530c   C$$EXIT
+80005068   C$$IO$$
+8064155c   CRED_instVirtAddr
+80006030   DMA_funcs_hardwareRegSetup
+80006bb8   DMA_funcs_writeTransferParams
+8000653c   DMA_resourceAllocator_allocateResources
+80006da8   DMA_resourceAllocator_initResources
+80006e18   DMA_resourceAllocator_setEdma3RmHandle
+80006df8   DMA_utils_resetStateStruct
+80006a44   DMA_utils_updateStateStruct
+80006e24   EDMA3LLD_SUPPORT_requestResources
+800059f0   EDMA_UTILS_autoIncrement_configure
+8000695c   EDMA_UTILS_autoIncrement_init
+800066b4   EDMA_UTILS_autoIncrement_triggerInChannel
+800061f4   EDMA_UTILS_autoIncrement_triggerOutChannel
+80006d08   EDMA_UTILS_autoIncrement_waitInChannel
+80006ca0   EDMA_UTILS_autoIncrement_waitOutChannel
+80006d5c   EDMA_UTILS_globalReset
+80007f50   EVELIB_algoDMAAutoIncrConcurrent
+80008160   EVELIB_algoDMAAutoIncrDeInit
+80007c18   EVELIB_algoDMAAutoIncrInit
+80007e78   EVELIB_algoDMAAutoIncrProcess
+80008014   EVELIB_algoDMAAutoIncrSequential
+80007a94   EVELIB_harrisCornerDetection
+8000816c   EVE_SCTM_CounterConfig
+80008238   EVE_SCTM_CounterRead
+800081b4   EVE_SCTM_CounterTimerEnable
+80008268   EVE_SCTM_Enable
+800081e0   EVE_SCTM_InpEvtSelect
+80008250   EVE_SCTM_OverflowCheck
+8000820c   EVE_SCTM_SamplingSelect
+8000482c   HOSTclose
+80003afc   HOSTlseek
+80003e40   HOSTopen
+80004004   HOSTread
+80003bb0   HOSTrename
+8000464c   HOSTunlink
+80004244   HOSTwrite
+00004000   IMEMH_SIZE
+00004000   IMEML_SIZE
+80006dd4   TEST_PRINTF
+00005b00   WMEM_SIZE
+80369000   X
+803ff000   Y
+40022548   __CIOBUF_
+UNDEFED    __TI_CINIT_Base
+UNDEFED    __TI_CINIT_Limit
+UNDEFED    __TI_Handler_Table_Base
+UNDEFED    __TI_Handler_Table_Limit
+UNDEFED    __TI_INITARRAY_Base
+UNDEFED    __TI_INITARRAY_Limit
+40022000   __TI_STACK_END
+00002000   __TI_STACK_SIZE
+400223ec   __TI_STATIC_BASE
+00080000   __TI_SYSMEM_SIZE
+00000001   __TI_args_main
+00000001   __TI_exit
+8000287c   __arp32abi_addd
+8000526c   __arp32abi_addll
+800038b0   __arp32abi_cmpd
+80005204   __arp32abi_cmplls
+80005228   __arp32abi_cmpllu
+80002304   __arp32abi_divd
+800024e8   __arp32abi_divull
+8000445c   __arp32abi_fixdi
+80004980   __arp32abi_fltid
+80004ca8   __arp32abi_isinf
+80004be8   __arp32abi_llshl
+800050ec   __arp32abi_llshr
+80005124   __arp32abi_llshru
+800026b4   __arp32abi_mpyd
+80002ff8   __arp32abi_mpyll
+800051b4   __arp32abi_negd
+800052b0   __arp32abi_negll
+80005188   __arp32abi_subd
+80005288   __arp32abi_subll
+ffffffff   __binit__
+ffffffff   __c_args__
+40045b68   __pblock_vcop_gradients_xy_list
+40045bc4   __pblock_vcop_gradients_xy_mag_lut_index_calulcation
+40045c24   __pblock_vcop_gradients_xy_unit_vecs
+40045c54   __pblock_vcop_gradients_xy_update_param_block
+40045c8c   __pblock_vcop_harrisScore_7x7_1
+40045d20   __pblock_vcop_harrisScore_7x7_2
+40045dbc   __pblock_vcop_nonMaxSuppress_mxn_16s
+40045ec4   __pblock_vcop_nonMaxSuppress_mxn_16sUpdateDstPtr
+40045e48   __pblock_vcop_nonMaxSuppress_mxn_16sbitPack
+40045c0c   __pblock_vcop_reciprocal_sqrt_lookup
+40045b38   __pblock_vcop_vec_gradients_xy_and_magnitude
+40045b00   __pblock_vcop_vec_gradients_xy_magnitudeu8
+00000000   _algo_fardata_size
+00000024   _algo_neardata_size
+00001344   _algo_text_size
+80005070   _args_main
+800048a0   _auto_init
+00000000   _bam_fardata_size
+00000000   _bam_neardata_size
+00000000   _bam_text_size
+800049e8   _c_int00
+80004e5c   _cleanup
+806410ac   _cleanup_ptr
+800044d8   _closefile
+40022444   _ctypes_
+80004c48   _doflush
+806410b0   _dtors_ptr
+80000120   _dummy_handler
+80002e98   _frcaddd
+80002104   _frcdivd
+80003150   _frcmpyd
+806412e8   _ft_end
+806410bc   _ftable
+40054000   _imemha_memory
+40074000   _imemhb_memory
+40050000   _imemla_memory
+40070000   _imemlb_memory
+806412d8   _lock
+800051dc   _mpyl
+400223ec   _my_stack
+80005314   _nop
+80001ab0   _printfi
+80004db4   _renormd
+80000100   _reset_handler
+000002f4   _rts_fardata_size
+00000125   _rts_neardata_size
+0000421c   _rts_text_size
+40020000   _stack
+000001f4   _starterware_fardata_size
+00000000   _starterware_neardata_size
+00000110   _starterware_text_size
+805c1000   _sys_memory
+80005318   _system_pre_init
+00001b0c   _text_size
+80641000   _tmpnams
+806412dc   _unlock
+80000000   _vec_table
+40040000   _wmem_memory
+80004124   _wrt_ok
+8000530c   abort
+80004554   atoi
+ffffffff   binit
+800042d0   close
+4002268c   edmaBase
+80004e08   exit
+800045d0   fflush
+800036ec   fputc
+80002bc0   fputs
+8000529c   free
+800041b4   fseek
+40022000   gAutoIncrementContext
+4002238c   gDmaUtilsStateStruct
+80030000   input
+80004a50   lseek
+80004b84   ltoa
+8000531c   main
+80004f4c   malloc
+8000397c   mem_alloc
+80003f70   mem_free
+8000524c   memccpy
+800037d4   memcpy
+80003c5c   memset
+800047b4   minit
+8007b000   output
+800043dc   printf
+80004efc   rand
+80004f98   readmsg
+800c6000   refGradX
+8015c000   refGradY
+80288000   refHarrisScore
+801f2000   refMag
+8031e000   refOutput
+80495000   refX
+8052b000   refY
+80005300   remove
+800033cc   setvbuf
+80005158   srand
+80004fe0   unlink
+80003ed8   vcop_free
+80007124   vcop_harrisScore_7x7_1_init
+800077f0   vcop_harrisScore_7x7_1_vloops
+800073f8   vcop_harrisScore_7x7_2_init
+80007618   vcop_harrisScore_7x7_2_vloops
+800063ac   vcop_harrisScore_7x7_cn
+800080b0   vcop_harrisScore_7x7_init
+800052c0   vcop_malloc
+80002d30   vcop_memalign
+80004d04   vcop_minit
+80006818   vcop_nonMaxSuppress_mxn_16s_cn
+80006e28   vcop_nonMaxSuppress_mxn_16s_init
+80007988   vcop_nonMaxSuppress_mxn_16s_vloops
+80006b10   vcop_vec_gradients_xy_and_magnitude_cn
+800078c4   vcop_vec_gradients_xy_and_magnitude_init
+80007a3c   vcop_vec_gradients_xy_and_magnitude_vloops
+80004910   vfprintf
+80004ab8   write
+80005028   writemsg
+
+
+GLOBAL SYMBOLS: SORTED BY Symbol Address 
+
+address    name
+--------   ----
+00000000   _algo_fardata_size
+00000000   _bam_fardata_size
+00000000   _bam_neardata_size
+00000000   _bam_text_size
+00000000   _starterware_neardata_size
+00000001   __TI_args_main
+00000001   __TI_exit
+00000024   _algo_neardata_size
+00000110   _starterware_text_size
+00000125   _rts_neardata_size
+000001f4   _starterware_fardata_size
+000002f4   _rts_fardata_size
+00001344   _algo_text_size
+00001b0c   _text_size
+00002000   __TI_STACK_SIZE
+00004000   IMEMH_SIZE
+00004000   IMEML_SIZE
+0000421c   _rts_text_size
+00005b00   WMEM_SIZE
+00080000   __TI_SYSMEM_SIZE
+40020000   _stack
+40022000   __TI_STACK_END
+40022000   gAutoIncrementContext
+4002238c   gDmaUtilsStateStruct
+400223ec   __TI_STATIC_BASE
+400223ec   _my_stack
+40022444   _ctypes_
+40022548   __CIOBUF_
+4002268c   edmaBase
+40040000   _wmem_memory
+40045b00   __pblock_vcop_vec_gradients_xy_magnitudeu8
+40045b38   __pblock_vcop_vec_gradients_xy_and_magnitude
+40045b68   __pblock_vcop_gradients_xy_list
+40045bc4   __pblock_vcop_gradients_xy_mag_lut_index_calulcation
+40045c0c   __pblock_vcop_reciprocal_sqrt_lookup
+40045c24   __pblock_vcop_gradients_xy_unit_vecs
+40045c54   __pblock_vcop_gradients_xy_update_param_block
+40045c8c   __pblock_vcop_harrisScore_7x7_1
+40045d20   __pblock_vcop_harrisScore_7x7_2
+40045dbc   __pblock_vcop_nonMaxSuppress_mxn_16s
+40045e48   __pblock_vcop_nonMaxSuppress_mxn_16sbitPack
+40045ec4   __pblock_vcop_nonMaxSuppress_mxn_16sUpdateDstPtr
+40050000   _imemla_memory
+40054000   _imemha_memory
+40070000   _imemlb_memory
+40074000   _imemhb_memory
+80000000   _vec_table
+80000100   _reset_handler
+80000120   _dummy_handler
+80001ab0   _printfi
+80002104   _frcdivd
+80002304   __arp32abi_divd
+800024e8   __arp32abi_divull
+800026b4   __arp32abi_mpyd
+8000287c   __arp32abi_addd
+80002bc0   fputs
+80002d30   vcop_memalign
+80002e98   _frcaddd
+80002ff8   __arp32abi_mpyll
+80003150   _frcmpyd
+800033cc   setvbuf
+800036ec   fputc
+800037d4   memcpy
+800038b0   __arp32abi_cmpd
+8000397c   mem_alloc
+80003afc   HOSTlseek
+80003bb0   HOSTrename
+80003c5c   memset
+80003e40   HOSTopen
+80003ed8   vcop_free
+80003f70   mem_free
+80004004   HOSTread
+80004124   _wrt_ok
+800041b4   fseek
+80004244   HOSTwrite
+800042d0   close
+800043dc   printf
+8000445c   __arp32abi_fixdi
+800044d8   _closefile
+80004554   atoi
+800045d0   fflush
+8000464c   HOSTunlink
+800047b4   minit
+8000482c   HOSTclose
+800048a0   _auto_init
+80004910   vfprintf
+80004980   __arp32abi_fltid
+800049e8   _c_int00
+80004a50   lseek
+80004ab8   write
+80004b84   ltoa
+80004be8   __arp32abi_llshl
+80004c48   _doflush
+80004ca8   __arp32abi_isinf
+80004d04   vcop_minit
+80004db4   _renormd
+80004e08   exit
+80004e5c   _cleanup
+80004efc   rand
+80004f4c   malloc
+80004f98   readmsg
+80004fe0   unlink
+80005028   writemsg
+80005068   C$$IO$$
+80005070   _args_main
+800050ec   __arp32abi_llshr
+80005124   __arp32abi_llshru
+80005158   srand
+80005188   __arp32abi_subd
+800051b4   __arp32abi_negd
+800051dc   _mpyl
+80005204   __arp32abi_cmplls
+80005228   __arp32abi_cmpllu
+8000524c   memccpy
+8000526c   __arp32abi_addll
+80005288   __arp32abi_subll
+8000529c   free
+800052b0   __arp32abi_negll
+800052c0   vcop_malloc
+80005300   remove
+8000530c   C$$EXIT
+8000530c   abort
+80005314   _nop
+80005318   _system_pre_init
+8000531c   main
+800059f0   EDMA_UTILS_autoIncrement_configure
+80006030   DMA_funcs_hardwareRegSetup
+800061f4   EDMA_UTILS_autoIncrement_triggerOutChannel
+800063ac   vcop_harrisScore_7x7_cn
+8000653c   DMA_resourceAllocator_allocateResources
+800066b4   EDMA_UTILS_autoIncrement_triggerInChannel
+80006818   vcop_nonMaxSuppress_mxn_16s_cn
+8000695c   EDMA_UTILS_autoIncrement_init
+80006a44   DMA_utils_updateStateStruct
+80006b10   vcop_vec_gradients_xy_and_magnitude_cn
+80006bb8   DMA_funcs_writeTransferParams
+80006ca0   EDMA_UTILS_autoIncrement_waitOutChannel
+80006d08   EDMA_UTILS_autoIncrement_waitInChannel
+80006d5c   EDMA_UTILS_globalReset
+80006da8   DMA_resourceAllocator_initResources
+80006dd4   TEST_PRINTF
+80006df8   DMA_utils_resetStateStruct
+80006e18   DMA_resourceAllocator_setEdma3RmHandle
+80006e24   EDMA3LLD_SUPPORT_requestResources
+80006e28   vcop_nonMaxSuppress_mxn_16s_init
+80007124   vcop_harrisScore_7x7_1_init
+800073f8   vcop_harrisScore_7x7_2_init
+80007618   vcop_harrisScore_7x7_2_vloops
+800077f0   vcop_harrisScore_7x7_1_vloops
+800078c4   vcop_vec_gradients_xy_and_magnitude_init
+80007988   vcop_nonMaxSuppress_mxn_16s_vloops
+80007a3c   vcop_vec_gradients_xy_and_magnitude_vloops
+80007a94   EVELIB_harrisCornerDetection
+80007c18   EVELIB_algoDMAAutoIncrInit
+80007e78   EVELIB_algoDMAAutoIncrProcess
+80007f50   EVELIB_algoDMAAutoIncrConcurrent
+80008014   EVELIB_algoDMAAutoIncrSequential
+800080b0   vcop_harrisScore_7x7_init
+80008160   EVELIB_algoDMAAutoIncrDeInit
+8000816c   EVE_SCTM_CounterConfig
+800081b4   EVE_SCTM_CounterTimerEnable
+800081e0   EVE_SCTM_InpEvtSelect
+8000820c   EVE_SCTM_SamplingSelect
+80008238   EVE_SCTM_CounterRead
+80008250   EVE_SCTM_OverflowCheck
+80008268   EVE_SCTM_Enable
+80030000   input
+8007b000   output
+800c6000   refGradX
+8015c000   refGradY
+801f2000   refMag
+80288000   refHarrisScore
+8031e000   refOutput
+80369000   X
+803ff000   Y
+80495000   refX
+8052b000   refY
+805c1000   _sys_memory
+80641000   _tmpnams
+806410ac   _cleanup_ptr
+806410b0   _dtors_ptr
+806410bc   _ftable
+806412d8   _lock
+806412dc   _unlock
+806412e8   _ft_end
+8064155c   CRED_instVirtAddr
+ffffffff   __binit__
+ffffffff   __c_args__
+ffffffff   binit
+UNDEFED    __TI_CINIT_Base
+UNDEFED    __TI_CINIT_Limit
+UNDEFED    __TI_Handler_Table_Base
+UNDEFED    __TI_Handler_Table_Limit
+UNDEFED    __TI_INITARRAY_Base
+UNDEFED    __TI_INITARRAY_Limit
+
+[195 symbols]

@@ -1,0 +1,13 @@
+package.xdc
+Platform.xdc
+Platform.xs
+package/platform.simTCI6614_custom.sch
+package/.vers_g180
+package/.vers_r170
+package/.vers_b150
+package/.xdc-x20
+package/platform_simTCI6614_custom.java
+package/platform_simTCI6614_custom.class
+package/package_platform.simTCI6614_custom.c
+package/package.defs.h
+package/platform.simTCI6614_custom.ccs

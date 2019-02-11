@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<IPIPEIF_SPLIT_xml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!--this is comment-->
+  <dcc_name>ipipeif_split</dcc_name>
+  <dcc_header>
+    <camera_module_id>     10640 </camera_module_id>
+      <dcc_descriptor_id>   47 </dcc_descriptor_id>
+      <algorithm_vendor_id>  1 </algorithm_vendor_id>
+      <tunning_tool_version> 0 </tunning_tool_version>
+  </dcc_header>
+  <!--=======================================================================-->
+    <typedef>
+        <iss_ipipeif_split type="struct">
+                  <update type="uint8"> </update>
+                  <VP_DECMP_EN type="uint8"> </VP_DECMP_EN> <!-- enable/disable ipipe VP decompander: 0,1 -->
+                  <VP_X_THR_1 type="uint16"> </VP_X_THR_1> <!-- VP Decompander PWL X Threshold 1: u16 -->
+                  <VP_X_THR_2 type="uint16"> </VP_X_THR_2> <!-- VP Decompander PWL X Threshold 2: u16 -->
+                  <VP_X_THR_3 type="uint16"> </VP_X_THR_3> <!-- VP Decompander PWL X Threshold 3: u16 -->
+                  <VP_Y_THR_1 type="uint32"> </VP_Y_THR_1> <!-- VP Decompander PWL X Threshold 1: u20 -->
+                  <VP_Y_THR_2 type="uint32"> </VP_Y_THR_2> <!-- VP Decompander PWL X Threshold 2: u20 -->
+                  <VP_Y_THR_3 type="uint32"> </VP_Y_THR_3> <!-- VP Decompander PWL X Threshold 3: u20 -->
+                  <VP_SLOPE_1 type="uint16"> </VP_SLOPE_1> <!-- VP Decompander PWL Slope 1: u16 -->
+                  <VP_SLOPE_2 type="uint16"> </VP_SLOPE_2> <!-- VP Decompander PWL Slope 2: u16 -->
+                  <VP_SLOPE_3 type="uint16"> </VP_SLOPE_3> <!-- VP Decompander PWL Slope 3: u16 -->
+                  <VP_SLOPE_4 type="uint16"> </VP_SLOPE_4> <!-- VP Decompander PWL Slope 4: u16 -->
+                  <VP_SHIFT type="uint8">    </VP_SHIFT> <!-- VP Decompander PWL Slope Shift parameter (Q point for above slopes): u5 -->
+                  <VP_LUT_BITSEL type="uint8"> </VP_LUT_BITSEL> <!-- VP Decompander bitshift before input to decomp LUT : u4 -->
+                  <VP_LUT_SET type="uint8"> </VP_LUT_SET> <!-- VP Decompander PWL vs LUT for decompanding: 0: PWL, 1: LUT -->
+                  <VP_DCCLMP type="uint8"> </VP_DCCLMP> <!-- Residual DC Clamp value used to cover for dcclamp error when shifting for short -->
+                  <VP_DECOMP_LUT type="uint32[513]"> </VP_DECOMP_LUT> <!-- VP Decompander LUT : 513 element table, each entry is u20 -->
+        </iss_ipipeif_split>
+    </typedef>
+  <!--=======================================================================-->
+
+    <use_case val="1023"> <!-- DCC_USE_CASE_ALL -->
+    <n-space>
+
+           <region0 class="0">
+            <gain val="0" min="0" max="100000">  </gain>
+        </region0>
+    </n-space>
+    <parameter_package>
+        <iss_ipipeif_split_dcc type="iss_ipipeif_split">
+        {
+            1, //update
+            1, // VP Decompanding enable
+            0, // VP Decompanding PWL XTHR1 u16
+            0, // VP Decompanding PWL XTHR2 u16
+            0, // VP Decompanding PWL XTHR3 u16
+            0, // VP Decompanding PWL YTHR1 u20
+            0, // VP Decompanding PWL YTHR2 u20
+            0, // VP Decompanding PWL YTHR3 u20
+            0, // VP Decompanding PWL Slope 1 u16
+            0, // VP Decompanding PWL Slope 2 u16
+            0, // VP Decompanding PWL Slope 3 u16
+            0, // VP Decompanding PWL Slope 4 u16
+            0, // VP Decompanding VP_SHIFT (Q point for PWL slopes) u5
+            3, // VP Decompanding LUT BITSEL (shift for entry to Decomp LUT) u4
+            1, // VP Decompanding LUT SEL 0:PWL 1:LUT
+            0, // VP Decompanding DCCLMP (residual DC clamp) u8
+            { // VP_DECOMP_LUT
+                #include <..\WDR_lut_OV10640_0.7_DC127.txt>
+            },
+        }
+        </iss_ipipeif_split_dcc>
+    </parameter_package>
+
+
+
+    </use_case>
+
+  <!--=====================================================================-->
+</IPIPEIF_SPLIT_xml>

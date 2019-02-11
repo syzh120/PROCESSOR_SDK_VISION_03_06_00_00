@@ -1,0 +1,495 @@
+<!--
+Texas Instruments Manifest Format 2.0
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<!-- @Start Style -->
+<!-- Default style in case someone doesnt have Internet Access -->
+<style type="text/css" id="internalStyle">
+	body, div, p {
+		font-family: Lucida Grande, Verdana, Geneva, Arial, sans-serif;
+		font-size: 13px;
+		line-height: 1.3;
+	}
+	body {
+		margin: 20px;	
+	}
+	h1 {
+		font-size: 150%;
+	}
+	h2 {
+		font-size: 120%;
+	}
+	h3 {
+		font-size: 100%;
+	}
+	img {
+		border: 0px;
+		vertical-align: middle;
+	}
+	table, th, td, tr {
+		border: 1px solid black;	
+		font-family: Lucida Grande, Verdana, Geneva, Arial, sans-serif;
+		font-size: 13px;
+		line-height: 1.3;
+		empty-cells: show;  
+		padding: 5px;
+	}
+	table {
+		border-collapse: collapse; 
+		width: 100%;
+	}
+	tr {
+		page-break-inside: avoid;
+	}
+	#TIlogoLeft {
+		background-color: black; 
+		padding: 0;
+		width: 20%;
+	}
+	#TIlogoRight {
+		background-color: red; 
+		padding: 0;
+	}
+	#ProductName {
+		text-align: center;
+	}
+	#ReleaseDate {
+		text-align: center;
+	}
+	.LogoSection {
+		margin: 0;
+		padding: 0;
+	}
+	.HeaderSection {
+		margin: 25px 0 25px 0;
+		padding: 0;
+	}
+	.LegendSection {
+		margin: 25px 0 25px 0;
+	}
+	.ExportSection {
+		margin: 25px 0 25px 0;
+	}
+	.DisclaimerSection {
+		margin: 25px 0 25px 0;	
+	}
+	.CreditSection {
+		margin: 25px 0 25px 0;	
+	}
+	.LicenseSection {
+		margin: 25px 0 25px 0;	
+	}
+	.ManifestTable {
+		margin: 25px 0 25px 0;	
+	}
+</style> 
+<!-- Override style from TI if they have Internet Access -->
+<link type="text/css" rel="stylesheet" href="timanifeststyle.css">
+<!-- @End Style -->
+<title>Texas Instruments Manifest</title>
+</head>
+
+<body><!-- Logo display, will need to fix up the URLs, this is just for testing.. Image alternate display not wporking well yet -->
+<div class="LogoSection">
+<table>
+  <tbody>
+    <tr>
+      <td id="TIlogoLeft">
+        <a href="http://www.ti.com/">
+          <!-- img src="tilogo.gif" alt="Texas Instruments Incorporated" -->
+		  <img alt="" src="data:image/gif;base64,R0lGODlh3gA2AKIAAAAAAP///7u7u29vbz8/PwYGBujo6BgYGCH5BAAAAAAALAAAAADeADYAAAP/CLrc/jDKSau9OOvNu/9gKI5kaZ5oqq5s675wLM90bd94ru987//AoHBILBqPyKRyyWw6n9CodHorDALYLIHKJVqz2q44eAUHtoDB4DBu48rgLQErcNtnX7NhMDcICIB3gix5ZmtqAAZZew8EAo+QkQIDNVZqiIM1cHGKZ4YPAmaiAWw0c1gFmZqjB3SbZ6kNe6WhsAeOlDV0qjSFAXUAp7lwuREFtVsFgMvLB7fNAM+BCs+lDLd8BNYOuxfV22PL0RiWlwO1u3kDqejAEsjR6GB86FsHoYwA6gxWnVgGEegUuIelWJk6jswAGlXQ36J1xBSoQwfulIEDr/6l+VeK/+AehrAGOHRnAWRBbbWegckXAV6wk4AeRQtDQBEaBYsYlMl2hUCsBt0iKgilT9EfAlfO7SmzdKkrkQUT/fqZSECqLCSlntH375IAA1tqGUilLIBSNVnU+NmJNBRVChlF1QwAdlRWBy5P3QymwCLBYhs73cTHYBq3X33nDQ2wcWuBgef0FRD4GK3jU3VCZZUJAIw1OGg0P+4bFiubOWoOsEP1+KvZn3wurDbZ6lfcuw3yYkFjRSeYzRe7ARAbW0K3PmGIMi0OFDG1Mmha+RnufAHn3xL9ha6uTZ/rXagZ1GKAtTsHeWb+FEQvHILuX4+mLzj2j2r4TrFesTwMbE5Cuv8JzbTSGuRV1xgfUJFC3WbA0JWFalcItpgf8YU2yT/qATaedent5cBb8zk0DzIitgfKbonRFV9Wp2xl3UXq5Ccibp05598BnRigiAIJmrZAexkJQIuBwzX4CB3SQbeYQkPVAUco63DI2HzsAdYAiAvEZdYlaVQ5wXs3+bQAjovEUoBRR9LVAFLaPXCcY/KMqVRasQB5kiJgLcYgTkJiuCWKC2ZpIY/z/LRhYefkBAGW1HTyRy2UjObLHxSAOZ948EUVGCSC3SLZbB7iZKOLc2GRRgMH/VhdHnJwFCgD8iEGx0VKvpqbO+hoaCppEg3UiTES1CTkhNaQ+Qs4LQGql07/lET4mIQ6SvTSVGZ9Bmhz/bkYzK+PFKtpje6wumRm1wrLZzSdQASoZvyswdmSuk7p616HfkjBTxZBQucFgqXCFKdn1NpiUlQJhs8kteBWG0AbATbXS2tBlaeoVkmJRova4KkGPmhMFdiSYmq8cbTRYhrlkiHaNufJ9mIgVqEXnAOJM5JE4sgjudQ8bF82x+cKBP4Iiedecyjgx2/WtMNjjhcL9h+S4xq9RYJgsbeeUbmdrPTSQbPccsyijEXOfI8xyuinVJH1wdkS/MQ2Bc5Iq08DyHYwGglvPyCilbz0fa8GLV7r9+Btb7CJ14Qnzg8HpdKoOOF5Py752JNXvrblNphzEHnmnF/a+ecTbA465qKPXnnppkuOeuqKr8465K+z7nrsfc9Ouyq23z5I7rrfwXvvbhSQAAA7" />
+        </a>
+      </td>
+      <td id="TILogoRight">
+        <!-- img src="titagline.gif" alt="Technology for Innovators(tm)"-->
+		<img alt="" src="data:image/gif;base64,R0lGODlhOgEaALMAAP8AAP////92dv+3t/+Njf/W1v/t7f8hIf/19f+jo//Hx/8/P/9cXP/j4//6+v/+/iH5BAAAAAAALAAAAAA6ARoAAAT/EMhJq7046827/2AojmRpnmiqrmzrvnAsz3Rt33iu73zv/8CgcEgsGo/IpHLJbDqft0NDMCBQodis1jcADBKE7nYcCpjPgU5AQBKkVYOHAeRudqtXsh60/vRHdSoBBCGBNAkLe4o4f2psgG8pjR6GM5OLmDB/DA0GBoQADAgICRIBBQUOYgwGCg2kEgudBgUHAIGcBg0MsZ0NCnMGYgsBtqEGAbCynrW3AQONgcIFBgiErK6wAAfUtLbCscWiowoAyLDczLZu0AIJCAYOoJn0G38ObAwPEvLEts/O1vUhsA8AAjGonEmA9W6hGAVpEjiQoKBAhT8HJSRkVyEQQAAJ//a5YeMPQIFyACqCnJjSIgFCB4oB+HOSokWOAB6wIWCxnk8MfYh5QsYg5sVHfQLVMSqhztJIxWIaC6QzJy8KfZgqrNT0zR+nUNl8fSMvZ6IDwJCJRfoI7IR4Cub9nDsha6RwR02xUZpGq1utUWUq9FKgYV6/abgOHjt45tquEgY0SDDHoJg+fxhXolKNrmfH/EoR5EdAKmjQfB1qvPmGIQIJ3g4gC2egVF7LqxtP8Ng2cViTKFUCIGbNFKEEmB/VbDlYdqLRn+du8oTg6jjbmfe+CbTM2+BcuySgbQVtQoOCt7s3U8wbsqGs3ZppZLnylwFe8Uql825ogANPckUnYDoOCogxQGXADajggjcw4AA8DSSyTQASMmjhhTQscBWGHHbo4YcghijiiCSWaOKJKKao4oostugiFBEAADs=" />
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div><div class="HeaderSection">
+<h1 id="ProductName">
+<!-- @Start Product -->
+Camera auto-calibration tool Manifest
+<!-- @End Product -->
+</h1>
+
+<h2 id="ReleaseDate">
+<!-- @Start Date -->
+05-07-2015
+<!-- @End Date -->
+</h2>
+</div><div class="LegendSection">
+<h2>Legend</h2>
+<p>(explanation of the fields in the Manifest Table below)</p>
+<table>
+<tbody>
+<tr>
+<td>
+<b>Software Name </b>
+</td>
+<td>
+The name of the application or file
+</td>
+</tr>
+<tr>
+<td>
+<b>Version</b>
+</td>
+<td>
+Version of the application or file
+</td>
+</tr>
+<tr>
+<td>
+<b>License Type</b>
+</td>
+<td>
+Type of license(s) under which TI will be providing
+software to the licensee (e.g. BSD-3-Clause, GPL-2.0, TI TSPA License, TI
+Commercial License). The license could be under Commercial terms or Open Source. See Open Source Reference License Disclaimer in
+the Disclaimers Section. Whenever possible, TI will use an <a href="http://spdx.org/licenses/"> SPDX Short Identifier </a> for an Open Source
+License. TI Commercial license terms are not usually included in the manifest and are conveyed through a variety 
+of means such as a clickwrap license upon install, 
+a signed license agreement and so forth.
+</td>
+</tr>
+<tr>
+<td>
+<b>Location</b>
+</td>
+<td>
+The directory name and path on the media or a specific file where the Software is located. Typically fully qualified path names 
+are not used and instead the relevant top level directory of the application is given. 
+A notation often used in the manifests is [as installed]/directory/*. Note that the asterisk implies that all
+files under that directory are licensed as the License Type field denotes. Any exceptions to this will 
+generally be denoted as [as installed]/directory/* except as noted below which means as shown in subsequent rows of 
+the manifest.
+</td>
+</tr>
+<tr>
+<td>
+<b>Delivered As</b>
+</td>
+<td>
+This field will either be &#8220;Source&#8221;, &#8220;Binary&#8221; or &#8220;Source
+and Binary&#8221; and is the primary form the content of the Software is delivered
+in. If the Software is delivered in an archive format, this field
+applies to the contents of the archive. If the word Limited is used
+with Source, as in &#8220;Limited Source&#8221; or &#8220;Limited Source and Binary&#8221; then
+only portions of the Source for the application are provided.
+</td>
+</tr>
+<tr>
+<td>
+<b>Modified by TI</b>
+</td>
+<td>
+This field will either be &#8220;Yes&#8221; or &#8220;No&#8221;. A &#8220;Yes&#8221; means
+TI has made changes to the Software. A &#8220;No&#8221; means TI has not made any
+changes. Note: This field is not applicable for Software &#8220;Obtained
+from&#8221; TI.
+</td>
+</tr>
+<tr>
+<td>
+<b>Obtained from</b>
+</td>
+<td>
+This field specifies from where or from whom TI obtained
+the Software. It may be a URL to an Open Source site, a 3<sup>rd</sup>
+party licensor, or TI. See Links Disclaimer in the Disclaimers
+Section.
+</td>
+</tr>
+</tbody>
+</table>
+</div><div class="DisclaimerSection">
+<h2>Disclaimers</h2>
+<h3>Export Control Classification Number (ECCN)</h3>
+<p>Any use of ECCNs listed in the Manifest is at the user&#8217;s risk
+and without recourse to TI. Your
+company, as the exporter of record, is responsible for determining the
+correct classification of any item at
+the time of export. Any export classification by TI of Software is for
+TI&#8217;s internal use only and shall not be construed as a representation
+or warranty
+regarding the proper export classification for such Software or whether
+an export
+license or other documentation is required for exporting such Software</p>
+<h3>Links in the Manifest</h3>
+<p>Any
+links appearing on this Manifest
+(for example in the &#8220;Obtained from&#8221; field) were verified at the time
+the Manifest was created. TI makes no guarantee that any listed links
+will
+remain active in the future.</p>
+<h3>Open Source License References</h3>
+<p>Your company is responsible for confirming the
+applicable license terms for any open source Software
+listed in this Manifest that was not &#8220;Obtained from&#8221; TI. Any open
+source license
+specified in this Manifest for Software that was
+not &#8220;Obtained from&#8221; TI is for TI&#8217;s internal use only and shall not be
+construed as a representation or warranty regarding the proper open
+source license terms
+for such Software.</p>
+</div><div class="ExportSection">
+<h2>Export Information</h2>
+<p>ECCN for Software included in this release:</p>
+EAR99 (No Other ECCN Applies)
+</div><div class="ManifestTable">
+<!-- h2>Manifest Table</h2 -->
+ 
+ <table> 
+ <tbody> 
+ 
+ <h2> 
+  Camera auto-calibration tool Manifest Table 
+ </h2> 
+ 
+  
+ <p> 
+ 
+ See the Legend above for a description of these columns. 
+ 
+ </p> 
+  
+ <table id="targetpackages" name="targetpackages"> 
+ <thead>  
+ 	<tr> 
+ 		<td><b>Software Name</b></td> 
+ 		<td><b>Version</b></td> 
+ 		<td><b>License Type</b></td> 
+ 		<td><b>Delivered As</b></td> 
+ 		<td><b>Modified by TI</b></td> 
+ 		<td></td> 
+ 		<td></td> 
+ 	</tr> 
+ </thead>  
+ 
+ 
+ <tbody> 
+ 	<tr> 
+ 		<td id="name" name="name" rowspan="2"> 
+ Camera auto-calibration tool 
+ </td> 
+ 		<td id="version" name="version" rowspan="2"> 
+ 1.0 
+ </td> 
+ 		<td id="license" name="license" rowspan="2"> 
+ BSD-3-Clause and others 
+ </td> 
+ 		<td id="delivered" name="delivered" rowspan="2"> 
+ Binary PC Executable and Source 
+ </td> 
+ 		<td id="modified" name="modified" rowspan="2"> 
+ Not Applicable 
+ </td> 
+ 		<td><b>Location</b></td> 
+ 		<td id="location" name="location"> 
+ [installed_path]/bin/camAutoCalib.exe & [installed_path]/src/camAutoCalib.cpp
+ </td> 
+ 	</tr> 
+ 	<tr> 
+ 		<td><b>Obtained from</b></td> 
+ 		<td id="obtained" name="obtained"> 
+ TI 
+ </td> 
+ 	</tr> 
+ 
+ <tbody> 
+ 	<tr> 
+ 		<td id="name" name="name" rowspan="2"> 
+ Camera auto-calibration tool source - OpenCV 
+ </td> 
+ 		<td id="version" name="version" rowspan="2"> 
+ 2.4.11 
+ </td> 
+ 		<td id="license" name="license" rowspan="2"> 
+ BSD-3-Clause and others 
+ </td> 
+ 		<td id="delivered" name="delivered" rowspan="2"> 
+ Binary PC Executable and Source 
+ </td> 
+ 		<td id="modified" name="modified" rowspan="2"> 
+ Not Applicable 
+ </td> 
+ 		<td><b>Location</b></td> 
+ 		<td id="location" name="location"> 
+ http://sourceforge.net/projects/opencvlibrary/files/opencv-win/2.4.11/ 
+ </td> 
+ 	</tr> 
+ 	<tr> 
+ 		<td><b>Obtained from</b></td> 
+ 		<td id="obtained" name="obtained"> 
+ OpenCV 
+ </td> 
+ 	</tr> 
+ 
+ <tbody> 
+ 	<tr> 
+ 		<td id="name" name="name" rowspan="2"> 
+ Camera auto-calibration parameter file 
+ </td> 
+ 		<td id="version" name="version" rowspan="2"> 
+ 1.0 
+ </td> 
+ 		<td id="license" name="license" rowspan="2"> 
+ TI Commercial 
+ </td> 
+ 		<td id="delivered" name="delivered" rowspan="2"> 
+ xml file 
+ </td> 
+ 		<td id="modified" name="modified" rowspan="2"> 
+ Not Applicable 
+ </td> 
+ 		<td><b>Location</b></td> 
+ 		<td id="location" name="location"> 
+ [installed_path]/bin/calib.xml 
+ </td> 
+ 	</tr> 
+ 	<tr> 
+ 		<td><b>Obtained from</b></td> 
+ 		<td id="obtained" name="obtained"> 
+ TI 
+ </td> 
+ 	</tr> 
+ 
+ <tbody> 
+ 	<tr> 
+ 		<td id="name" name="name" rowspan="2"> 
+ Remap convert table 
+ </td> 
+ 		<td id="version" name="version" rowspan="2"> 
+ 1.0 
+ </td> 
+ 		<td id="license" name="license" rowspan="2"> 
+ TI Commercial 
+ </td> 
+ 		<td id="delivered" name="delivered" rowspan="2"> 
+ Binary PC Executable 
+ </td> 
+ 		<td id="modified" name="modified" rowspan="2"> 
+ Not Applicable 
+ </td> 
+ 		<td><b>Location</b></td> 
+ 		<td id="location" name="location"> 
+ [installed_path]/bin/remapConvertTable.eve.out.exe 
+ </td> 
+ 	</tr> 
+ 	<tr> 
+ 		<td><b>Obtained from</b></td> 
+ 		<td id="obtained" name="obtained"> 
+ TI 
+ </td> 
+ 	</tr> 
+ 
+ <tbody> 
+ 	<tr> 
+ 		<td id="name" name="name" rowspan="2"> 
+ Remap execute 
+ </td> 
+ 		<td id="version" name="version" rowspan="2"> 
+ 1.0 
+ </td> 
+ 		<td id="license" name="license" rowspan="2"> 
+ TI Commercial 
+ </td> 
+ 		<td id="delivered" name="delivered" rowspan="2"> 
+ Binary PC Executable 
+ </td> 
+ 		<td id="modified" name="modified" rowspan="2"> 
+ Not Applicable 
+ </td> 
+ 		<td><b>Location</b></td> 
+ 		<td id="location" name="location"> 
+ [installed_path]/bin/remapExecute.eve.out.exe 
+ </td> 
+ 	</tr> 
+ 	<tr> 
+ 		<td><b>Obtained from</b></td> 
+ 		<td id="obtained" name="obtained"> 
+ TI 
+ </td> 
+ 	</tr> 
+ 
+ <tbody> 
+ 	<tr> 
+ 		<td id="name" name="name" rowspan="2"> 
+ Calibration Guide 
+ </td> 
+ 		<td id="version" name="version" rowspan="2"> 
+ 1.0 
+ </td> 
+ 		<td id="license" name="license" rowspan="2"> 
+ TI Commercial 
+ </td> 
+ 		<td id="delivered" name="delivered" rowspan="2"> 
+ PDF document 
+ </td> 
+ 		<td id="modified" name="modified" rowspan="2"> 
+ Not Applicable 
+ </td> 
+ 		<td><b>Location</b></td> 
+ 		<td id="location" name="location"> 
+ [installed_path]/docs/VisionSDK_MultiSensorFusionStereoCalibrationGuide.pdf 
+ </td> 
+ 	</tr> 
+ 	<tr> 
+ 		<td><b>Obtained from</b></td> 
+ 		<td id="obtained" name="obtained"> 
+ TI 
+ </td> 
+ 	</tr> 
+ 
+ <tbody> 
+ 	<tr> 
+ 		<td id="name" name="name" rowspan="2"> 
+ Readme 
+ </td> 
+ 		<td id="version" name="version" rowspan="2"> 
+ 1.0 
+ </td> 
+ 		<td id="license" name="license" rowspan="2"> 
+ TI Commercial 
+ </td> 
+ 		<td id="delivered" name="delivered" rowspan="2"> 
+ Text file 
+ </td> 
+ 		<td id="modified" name="modified" rowspan="2"> 
+ Not Applicable 
+ </td> 
+ 		<td><b>Location</b></td> 
+ 		<td id="location" name="location"> 
+ [installed_path]/readme.txt 
+ </td> 
+ 	</tr> 
+ 	<tr> 
+ 		<td><b>Obtained from</b></td> 
+ 		<td id="obtained" name="obtained"> 
+ TI 
+ </td> 
+ 	</tr> 
+ 
+ </tbody> 
+ </table> 
+  
+ </p> 
+ </p> 
+ <p> 
+
+</div><div class="CreditSection">
+<h2>Credits</h2>
+<BR> <BR><BR><BR><BR>
+</div><div class="LicenseSection">
+<h2>Licenses</h2>
+<BR><h3><b> Camera auto-calibration tool Licenses </b></h3><BR> <BR><BR>This section has all the licenses used that are included as part of OpenCV from the manifest table above.  The licenses listed under each of these two packages refer to their 3rd party licenses.  This section is divided as follows:<BR><BR>1. OpenCV 2.4.11<BR>   a. OpenEXR (IlmImf)<BR>   b. JasPer<BR>   c. libjpeg<BR>   d. libpng<BR>   e. libtiff<BR>   f. zlib<BR><BR><BR>****************************************************************************<BR>1. OpenCV 2.4.11 License<BR><BR>// Copyright (C) 2000-2008, Intel Corporation, all rights reserved.<BR>// Copyright (C) 2009-2011, Willow Garage Inc., all rights reserved.<BR>// Third party copyrights are property of their respective owners.<BR>//<BR>// Redistribution and use in source and binary forms, with or without modification,<BR>// are permitted provided that the following conditions are met:<BR>//<BR>//   * Redistribution's of source code must retain the above copyright notice,<BR>//     this list of conditions and the following disclaimer.<BR>//<BR>//   * Redistribution's in binary form must reproduce the above copyright notice,<BR>//     this list of conditions and the following disclaimer in the documentation<BR>//     and/or other materials provided with the distribution.<BR>//<BR>//   * The name of Intel Corporation may not be used to endorse or promote products<BR>//     derived from this software without specific prior written permission.<BR>//<BR>// This software is provided by the copyright holders and contributors "as is" and<BR>// any express or implied warranties, including, but not limited to, the implied<BR>// warranties of merchantability and fitness for a particular purpose are disclaimed.<BR>// In no event shall the Intel Corporation or contributors be liable for any direct,<BR>// indirect, incidental, special, exemplary, or consequential damages<BR>// (including, but not limited to, procurement of substitute goods or services;<BR>// loss of use, data, or profits; or business interruption) however caused<BR>// and on any theory of liability, whether in contract, strict liability,<BR>// or tort (including negligence or otherwise) arising in any way out of<BR>// the use of this software, even if advised of the possibility of such damage.<BR><BR><BR>****************************************************************************<BR>1.a. OpenEXR (IlmImf) License<BR><BR>Copyright (c) 2006, Industrial Light & Magic, a division of Lucasfilm<BR>Entertainment Company Ltd.  Portions contributed and copyright held by<BR>others as indicated.  All rights reserved.<BR><BR>Redistribution and use in source and binary forms, with or without<BR>modification, are permitted provided that the following conditions are<BR>met:<BR><BR>    * Redistributions of source code must retain the above<BR>      copyright notice, this list of conditions and the following<BR>      disclaimer.<BR><BR>    * Redistributions in binary form must reproduce the above<BR>      copyright notice, this list of conditions and the following<BR>      disclaimer in the documentation and/or other materials provided with<BR>      the distribution.<BR><BR>    * Neither the name of Industrial Light & Magic nor the names of<BR>      any other contributors to this software may be used to endorse or<BR>      promote products derived from this software without specific prior<BR>      written permission.<BR><BR>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS<BR>IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,<BR>THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR<BR>PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR<BR>CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,<BR>EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,<BR>PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR<BR>PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF<BR>LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING<BR>NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS<BR>SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.<BR><BR><BR>****************************************************************************<BR>1.b. JasPer License Version 2.0<BR><BR>Copyright (c) 2001-2006 Michael David Adams<BR>Copyright (c) 1999-2000 Image Power, Inc.<BR>Copyright (c) 1999-2000 The University of British Columbia<BR><BR>All rights reserved.<BR><BR>Permission is hereby granted, free of charge, to any person (the<BR>"User") obtaining a copy of this software and associated documentation<BR>files (the "Software"), to deal in the Software without restriction,<BR>including without limitation the rights to use, copy, modify, merge,<BR>publish, distribute, and/or sell copies of the Software, and to permit<BR>persons to whom the Software is furnished to do so, subject to the<BR>following conditions:<BR><BR>1.  The above copyright notices and this permission notice (which<BR>includes the disclaimer below) shall be included in all copies or<BR>substantial portions of the Software.<BR><BR>2.  The name of a copyright holder shall not be used to endorse or<BR>promote products derived from the Software without specific prior<BR>written permission.<BR><BR>THIS DISCLAIMER OF WARRANTY CONSTITUTES AN ESSENTIAL PART OF THIS<BR>LICENSE.  NO USE OF THE SOFTWARE IS AUTHORIZED HEREUNDER EXCEPT UNDER<BR>THIS DISCLAIMER.  THE SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS<BR>"AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING<BR>BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A<BR>PARTICULAR PURPOSE AND NONINFRINGEMENT OF THIRD PARTY RIGHTS.  IN NO<BR>EVENT SHALL THE COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, OR ANY SPECIAL<BR>INDIRECT OR CONSEQUENTIAL DAMAGES, OR ANY DAMAGES WHATSOEVER RESULTING<BR>FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,<BR>NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION<BR>WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.  NO ASSURANCES ARE<BR>PROVIDED BY THE COPYRIGHT HOLDERS THAT THE SOFTWARE DOES NOT INFRINGE<BR>THE PATENT OR OTHER INTELLECTUAL PROPERTY RIGHTS OF ANY OTHER ENTITY.<BR>EACH COPYRIGHT HOLDER DISCLAIMS ANY LIABILITY TO THE USER FOR CLAIMS<BR>BROUGHT BY ANY OTHER ENTITY BASED ON INFRINGEMENT OF INTELLECTUAL<BR>PROPERTY RIGHTS OR OTHERWISE.  AS A CONDITION TO EXERCISING THE RIGHTS<BR>GRANTED HEREUNDER, EACH USER HEREBY ASSUMES SOLE RESPONSIBILITY TO SECURE<BR>ANY OTHER INTELLECTUAL PROPERTY RIGHTS NEEDED, IF ANY.  THE SOFTWARE<BR>IS NOT FAULT-TOLERANT AND IS NOT INTENDED FOR USE IN MISSION-CRITICAL<BR>SYSTEMS, SUCH AS THOSE USED IN THE OPERATION OF NUCLEAR FACILITIES,<BR>AIRCRAFT NAVIGATION OR COMMUNICATION SYSTEMS, AIR TRAFFIC CONTROL<BR>SYSTEMS, DIRECT LIFE SUPPORT MACHINES, OR WEAPONS SYSTEMS, IN WHICH<BR>THE FAILURE OF THE SOFTWARE OR SYSTEM COULD LEAD DIRECTLY TO DEATH,<BR>PERSONAL INJURY, OR SEVERE PHYSICAL OR ENVIRONMENTAL DAMAGE ("HIGH<BR>RISK ACTIVITIES").  THE COPYRIGHT HOLDERS SPECIFICALLY DISCLAIM ANY<BR>EXPRESS OR IMPLIED WARRANTY OF FITNESS FOR HIGH RISK ACTIVITIES.<BR><BR><BR>****************************************************************************<BR>1.c. libjpeg license:<BR><BR><BR>In plain English:<BR><BR>1. We don't promise that this software works.  (But if you find any bugs,<BR>   please let us know!)<BR>2. You can use this software for whatever you want.  You don't have to pay us.<BR>3. You may not pretend that you wrote this software.  If you use it in a<BR>   program, you must acknowledge somewhere in your documentation that<BR>   you've used the IJG code.<BR><BR>In legalese:<BR><BR>The authors make NO WARRANTY or representation, either express or implied,<BR>with respect to this software, its quality, accuracy, merchantability, or<BR>fitness for a particular purpose.  This software is provided "AS IS", and you,<BR>its user, assume the entire risk as to its quality and accuracy.<BR><BR>This software is copyright (C) 1991-1998, Thomas G. Lane.<BR>All Rights Reserved except as specified below.<BR><BR>Permission is hereby granted to use, copy, modify, and distribute this<BR>software (or portions thereof) for any purpose, without fee, subject to these<BR>conditions:<BR>(1) If any part of the source code for this software is distributed, then this<BR>README file must be included, with this copyright and no-warranty notice<BR>unaltered; and any additions, deletions, or changes to the original files<BR>must be clearly indicated in accompanying documentation.<BR>(2) If only executable code is distributed, then the accompanying<BR>documentation must state that "this software is based in part on the work of<BR>the Independent JPEG Group".<BR>(3) Permission for use of this software is granted only if the user accepts<BR>full responsibility for any undesirable consequences; the authors accept<BR>NO LIABILITY for damages of any kind.<BR><BR>These conditions apply to any software derived from or based on the IJG code,<BR>not just to the unmodified library.  If you use our work, you ought to<BR>acknowledge us.<BR><BR>Permission is NOT granted for the use of any IJG author's name or company name<BR>in advertising or publicity relating to this software or products derived from<BR>it.  This software may be referred to only as "the Independent JPEG Group's<BR>software".<BR><BR>We specifically permit and encourage the use of this software as the basis of<BR>commercial products, provided that all warranty or liability claims are<BR>assumed by the product vendor.<BR><BR><BR>ansi2knr.c is included in this distribution by permission of L. Peter Deutsch,<BR>sole proprietor of its copyright holder, Aladdin Enterprises of Menlo Park, CA.<BR>ansi2knr.c is NOT covered by the above copyright and conditions, but instead<BR>by the usual distribution terms of the Free Software Foundation; principally,<BR>that you must include source code if you redistribute it.  (See the file<BR>ansi2knr.c for full details.)  However, since ansi2knr.c is not needed as part<BR>of any program generated from the IJG code, this does not limit you more than<BR>the foregoing paragraphs do.<BR><BR>The Unix configuration script "configure" was produced with GNU Autoconf.<BR>It is copyright by the Free Software Foundation but is freely distributable.<BR>The same holds for its supporting scripts (config.guess, config.sub,<BR>ltconfig, ltmain.sh).  Another support script, install-sh, is copyright<BR>by M.I.T. but is also freely distributable.<BR><BR>It appears that the arithmetic coding option of the JPEG spec is covered by<BR>patents owned by IBM, AT&T, and Mitsubishi.  Hence arithmetic coding cannot<BR>legally be used without obtaining one or more licenses.  For this reason,<BR>support for arithmetic coding has been removed from the free JPEG software.<BR>(Since arithmetic coding provides only a marginal gain over the unpatented<BR>Huffman mode, it is unlikely that very many implementations will support it.)<BR>So far as we are aware, there are no patent restrictions on the remaining<BR>code.<BR><BR>The IJG distribution formerly included code to read and write GIF files.<BR>To avoid entanglement with the Unisys LZW patent, GIF reading support has<BR>been removed altogether, and the GIF writer has been simplified to produce<BR>"uncompressed GIFs".  This technique does not use the LZW algorithm; the<BR>resulting GIF files are larger than usual, but are readable by all standard<BR>GIF decoders.<BR><BR>We are required to state that<BR>    "The Graphics Interchange Format(c) is the Copyright property of<BR>    CompuServe Incorporated.  GIF(sm) is a Service Mark property of<BR>    CompuServe Incorporated."<BR><BR>    <BR>****************************************************************************<BR>1.d. libpng license:<BR><BR>This copy of the libpng notices is provided for your convenience.  In case of<BR>any discrepancy between this copy and the notices in the file png.h that is<BR>included in the libpng distribution, the latter shall prevail.<BR><BR>COPYRIGHT NOTICE, DISCLAIMER, and LICENSE:<BR><BR>If you modify libpng you may insert additional notices immediately following<BR>this sentence.<BR><BR>This code is released under the libpng license.<BR><BR>libpng versions 1.2.6, August 15, 2004, through 1.5.12, July 11, 2012, are<BR>Copyright (c) 2004, 2006-2012 Glenn Randers-Pehrson, and are<BR>distributed according to the same disclaimer and license as libpng-1.2.5<BR>with the following individual added to the list of Contributing Authors<BR><BR>   Cosmin Truta<BR><BR>libpng versions 1.0.7, July 1, 2000, through 1.2.5 - October 3, 2002, are<BR>Copyright (c) 2000-2002 Glenn Randers-Pehrson, and are<BR>distributed according to the same disclaimer and license as libpng-1.0.6<BR>with the following individuals added to the list of Contributing Authors<BR><BR>   Simon-Pierre Cadieux<BR>   Eric S. Raymond<BR>   Gilles Vollant<BR><BR>and with the following additions to the disclaimer:<BR><BR>   There is no warranty against interference with your enjoyment of the<BR>   library or against infringement.  There is no warranty that our<BR>   efforts or the library will fulfill any of your particular purposes<BR>   or needs.  This library is provided with all faults, and the entire<BR>   risk of satisfactory quality, performance, accuracy, and effort is with<BR>   the user.<BR><BR>libpng versions 0.97, January 1998, through 1.0.6, March 20, 2000, are<BR>Copyright (c) 1998, 1999 Glenn Randers-Pehrson, and are<BR>distributed according to the same disclaimer and license as libpng-0.96,<BR>with the following individuals added to the list of Contributing Authors:<BR><BR>   Tom Lane<BR>   Glenn Randers-Pehrson<BR>   Willem van Schaik<BR><BR>libpng versions 0.89, June 1996, through 0.96, May 1997, are<BR>Copyright (c) 1996, 1997 Andreas Dilger<BR>Distributed according to the same disclaimer and license as libpng-0.88,<BR>with the following individuals added to the list of Contributing Authors:<BR><BR>   John Bowler<BR>   Kevin Bracey<BR>   Sam Bushell<BR>   Magnus Holmgren<BR>   Greg Roelofs<BR>   Tom Tanner<BR><BR>libpng versions 0.5, May 1995, through 0.88, January 1996, are<BR>Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.<BR><BR>For the purposes of this copyright and license, "Contributing Authors"<BR>is defined as the following set of individuals:<BR><BR>   Andreas Dilger<BR>   Dave Martindale<BR>   Guy Eric Schalnat<BR>   Paul Schmidt<BR>   Tim Wegner<BR><BR>The PNG Reference Library is supplied "AS IS".  The Contributing Authors<BR>and Group 42, Inc. disclaim all warranties, expressed or implied,<BR>including, without limitation, the warranties of merchantability and of<BR>fitness for any purpose.  The Contributing Authors and Group 42, Inc.<BR>assume no liability for direct, indirect, incidental, special, exemplary,<BR>or consequential damages, which may result from the use of the PNG<BR>Reference Library, even if advised of the possibility of such damage.<BR><BR>Permission is hereby granted to use, copy, modify, and distribute this<BR>source code, or portions hereof, for any purpose, without fee, subject<BR>to the following restrictions:<BR><BR>1. The origin of this source code must not be misrepresented.<BR><BR>2. Altered versions must be plainly marked as such and must not<BR>   be misrepresented as being the original source.<BR><BR>3. This Copyright notice may not be removed or altered from any<BR>   source or altered source distribution.<BR><BR>The Contributing Authors and Group 42, Inc. specifically permit, without<BR>fee, and encourage the use of this source code as a component to<BR>supporting the PNG file format in commercial products.  If you use this<BR>source code in a product, acknowledgment is not required but would be<BR>appreciated.<BR><BR><BR>A "png_get_copyright" function is available, for convenient use in "about"<BR>boxes and the like:<BR><BR>   printf("%s",png_get_copyright(NULL));<BR><BR>Also, the PNG logo (in PNG format, of course) is supplied in the<BR>files "pngbar.png" and "pngbar.jpg (88x31) and "pngnow.png" (98x31).<BR><BR>Libpng is OSI Certified Open Source Software.  OSI Certified Open Source is a<BR>certification mark of the Open Source Initiative.<BR><BR>Glenn Randers-Pehrson<BR>glennrp at users.sourceforge.net<BR>July 11, 2012<BR><BR><BR>****************************************************************************<BR>1.e. libtiff license:<BR><BR>Copyright (c) 1988-1997 Sam Leffler<BR>Copyright (c) 1991-1997 Silicon Graphics, Inc.<BR><BR>Permission to use, copy, modify, distribute, and sell this software and <BR>its documentation for any purpose is hereby granted without fee, provided<BR>that (i) the above copyright notices and this permission notice appear in<BR>all copies of the software and related documentation, and (ii) the names of<BR>Sam Leffler and Silicon Graphics may not be used in any advertising or<BR>publicity relating to the software without the specific, prior written<BR>permission of Sam Leffler and Silicon Graphics.<BR><BR>THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, <BR>EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY <BR>WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  <BR><BR>IN NO EVENT SHALL SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR<BR>ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,<BR>OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,<BR>WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF <BR>LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE <BR>OF THIS SOFTWARE.<BR><BR><BR>****************************************************************************<BR>1.f. zlib license:<BR><BR> (C) 1995-2012 Jean-loup Gailly and Mark Adler<BR><BR>  This software is provided 'as-is', without any express or implied<BR>  warranty.  In no event will the authors be held liable for any damages<BR>  arising from the use of this software.<BR><BR>  Permission is granted to anyone to use this software for any purpose,<BR>  including commercial applications, and to alter it and redistribute it<BR>  freely, subject to the following restrictions:<BR><BR>  1. The origin of this software must not be misrepresented; you must not<BR>     claim that you wrote the original software. If you use this software<BR>     in a product, an acknowledgment in the product documentation would be<BR>     appreciated but is not required.<BR>  2. Altered source versions must be plainly marked as such, and must not be<BR>     misrepresented as being the original software.<BR>  3. This notice may not be removed or altered from any source distribution.<BR><BR>  Jean-loup Gailly        Mark Adler<BR>  jloup@gzip.org          madler@alumni.caltech.edu<BR><BR><BR><BR><BR>
+</div>
+
+</body></html>

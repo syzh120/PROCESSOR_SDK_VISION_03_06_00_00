@@ -1,0 +1,333 @@
+<html>
+<head>
+<title>interface ti.sdo.ipc.notifyDrivers.IInterrupt</title>
+<meta name="description" content="Interface for the inter-processor interrupts">
+<link rel="stylesheet" type="text/css" href="../../../../xdoc.css" />
+</head>
+<body><div id="xdocWrapper"><div id="xdocContent">
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">interface</span> <span class="xdoc-id">ti.sdo.ipc.notifyDrivers.</span><span class="xdoc-id">IInterrupt</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/notifyDrivers/package.html" title="package ti.sdo.ipc.notifyDrivers"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/notifyDrivers/NotifyDriverCirc.html" title="module NotifyDriverCirc"><img class="xdocHdrArrow" src="../../../../Arrow_right.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/ipc/notifyDrivers/IInterrupt.html">index URL</a></div>
+<p class="xdocHdrSummary">Interface for the inter-processor interrupts</p>
+<ul class="xdocToc">
+</ul>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id">XDCspec</span></tt> summary</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/notifyDrivers/IInterrupt-src.html"><span class="xdocLabelFile">ti/sdo/ipc/notifyDrivers/IInterrupt.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynX">
+<div class="xdocSynCode">
+<tt></tt><span class="xdoc-kw1">interface</span> <span class="xdoc-id">IInterrupt</span> {<b>&nbsp;&nbsp;...</b>
+</div>
+<div class='xdocSynSum'><tt></tt>//&nbsp;inherits <a class="xdoc-link" href="../../../../xdc/runtime/IModule.html" title="xdc.runtime.IModule">xdc.runtime.IModule</a></div>
+</div>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/notifyDrivers/IInterrupt-src.html"><span class="xdocLabelFile">ti/sdo/ipc/notifyDrivers/IInterrupt.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynX">
+<div class="xdocSynCode">
+<tt></tt><span class="xdoc-kw1">package</span> <a class="xdoc-link" href="../../../../ti/sdo/ipc/notifyDrivers/package.html" title="ti.sdo.ipc.notifyDrivers">ti.sdo.ipc.notifyDrivers</a>;
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt></tt><span class="xdoc-kw1">interface</span> <span class="xdoc-id">IInterrupt</span> {
+</div>
+<div class='xdocSynHdr'>module-wide constants & types</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">struct</span> <a class="xdocSynGo" href="#.Int.Info"><span class="xdoc-id">IntInfo</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> {
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">UInt</span>&nbsp;<a class="xdocSynGo" href="#.Int.Info" title="ti.sdo.ipc.notifyDrivers.IInterrupt.IntInfo"><span class="xdoc-id">localIntId</span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">UInt</span>&nbsp;<a class="xdocSynGo" href="#.Int.Info" title="ti.sdo.ipc.notifyDrivers.IInterrupt.IntInfo"><span class="xdoc-id">remoteIntId</span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">UInt</span>&nbsp;<a class="xdocSynGo" href="#.Int.Info" title="ti.sdo.ipc.notifyDrivers.IInterrupt.IntInfo"><span class="xdoc-id">intVectorId</span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt>};
+</div>
+<div class='xdocSynHdr'>module-wide config parameters</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">config</span> <a class="xdoc-link" href="../../../../xdc/runtime/Types.html#.Common$" title="xdc.runtime.Types.Common$">Types.Common$</a>&nbsp;<a class="xdocSynGo" href="#common$"><span class="xdoc-id">common$</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Common module configuration parameters</span></span></a>;
+</div>
+<div class='xdocSynHdr'>module-wide functions</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw2">UInt</span>&nbsp;<a class="xdocSynGo" href="#int.Clear"><span class="xdoc-id">intClear</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Clear interrupt</span></span></a>(<span class="xdoc-kw2">UInt16</span>&nbsp;<span class="xdoc-id">remoteProcId</span>, <a class="xdoc-link" href="../../../../ti/sdo/ipc/notifyDrivers/IInterrupt.html#.Int.Info" title="ti.sdo.ipc.notifyDrivers.IInterrupt.IntInfo">IInterrupt.IntInfo</a>&nbsp;*<span class="xdoc-id">intInfo</span>);
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw2">Void</span>&nbsp;<a class="xdocSynGo" href="#int.Disable"><span class="xdoc-id">intDisable</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Disables the interrupt corresponding to intId</span></span></a>(<span class="xdoc-kw2">UInt16</span>&nbsp;<span class="xdoc-id">remoteProcId</span>, <a class="xdoc-link" href="../../../../ti/sdo/ipc/notifyDrivers/IInterrupt.html#.Int.Info" title="ti.sdo.ipc.notifyDrivers.IInterrupt.IntInfo">IInterrupt.IntInfo</a>&nbsp;*<span class="xdoc-id">intInfo</span>);
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw2">Void</span>&nbsp;<a class="xdocSynGo" href="#int.Enable"><span class="xdoc-id">intEnable</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Enables the interrupt corresponding to intId</span></span></a>(<span class="xdoc-kw2">UInt16</span>&nbsp;<span class="xdoc-id">remoteProcId</span>, <a class="xdoc-link" href="../../../../ti/sdo/ipc/notifyDrivers/IInterrupt.html#.Int.Info" title="ti.sdo.ipc.notifyDrivers.IInterrupt.IntInfo">IInterrupt.IntInfo</a>&nbsp;*<span class="xdoc-id">intInfo</span>);
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw2">Void</span>&nbsp;<a class="xdocSynGo" href="#int.Register"><span class="xdoc-id">intRegister</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Register an interrupt line to a remote processor</span></span></a>(<span class="xdoc-kw2">UInt16</span>&nbsp;<span class="xdoc-id">remoteProcId</span>, <a class="xdoc-link" href="../../../../ti/sdo/ipc/notifyDrivers/IInterrupt.html#.Int.Info" title="ti.sdo.ipc.notifyDrivers.IInterrupt.IntInfo">IInterrupt.IntInfo</a>&nbsp;*<span class="xdoc-id">intInfo</span>, <span class="xdoc-kw2">Fxn</span>&nbsp;<span class="xdoc-id">func</span>, <span class="xdoc-kw2">UArg</span>&nbsp;<span class="xdoc-id">arg</span>);
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw2">Void</span>&nbsp;<a class="xdocSynGo" href="#int.Send"><span class="xdoc-id">intSend</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Send interrupt to the remote processor</span></span></a>(<span class="xdoc-kw2">UInt16</span>&nbsp;<span class="xdoc-id">remoteProcId</span>, <a class="xdoc-link" href="../../../../ti/sdo/ipc/notifyDrivers/IInterrupt.html#.Int.Info" title="ti.sdo.ipc.notifyDrivers.IInterrupt.IntInfo">IInterrupt.IntInfo</a>&nbsp;*<span class="xdoc-id">intInfo</span>, <span class="xdoc-kw2">UArg</span>&nbsp;<span class="xdoc-id">arg</span>);
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw2">Void</span>&nbsp;<a class="xdocSynGo" href="#int.Unregister"><span class="xdoc-id">intUnregister</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Unregister an interrupt line to a remote processor</span></span></a>(<span class="xdoc-kw2">UInt16</span>&nbsp;<span class="xdoc-id">remoteProcId</span>, <a class="xdoc-link" href="../../../../ti/sdo/ipc/notifyDrivers/IInterrupt.html#.Int.Info" title="ti.sdo.ipc.notifyDrivers.IInterrupt.IntInfo">IInterrupt.IntInfo</a>&nbsp;*<span class="xdoc-id">intInfo</span>);
+</div>
+<div class="xdocSynCode">
+<tt></tt>}
+</div>
+</div>
+<div id="xdocSep">
+</div>
+<div id="xdocElems">
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".Int.Info"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">struct</span> <span class="xdoc-id">IInterrupt.</span><span class="xdoc-id">IntInfo</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/notifyDrivers/IInterrupt.html" title="interface IInterrupt"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/ipc/notifyDrivers/IInterrupt.html#.Int.Info">index URL</a></div>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/notifyDrivers/IInterrupt-src.html"><span class="xdocLabelFile">ti/sdo/ipc/notifyDrivers/IInterrupt.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">struct</span> <span class="xdoc-id">IntInfo</span> {
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">UInt</span>&nbsp;<span class="xdoc-id">localIntId</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">UInt</span>&nbsp;<span class="xdoc-id">remoteIntId</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">UInt</span>&nbsp;<span class="xdoc-id">intVectorId</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt>};
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="common$"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">config</span> <span class="xdoc-id">IInterrupt.</span><span class="xdoc-id">common$</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/notifyDrivers/IInterrupt.html" title="interface IInterrupt"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/ipc/notifyDrivers/IInterrupt.html#common$">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Common module configuration parameters</p>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/notifyDrivers/IInterrupt-src.html"><span class="xdocLabelFile">ti/sdo/ipc/notifyDrivers/IInterrupt.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">config</span> <a class="xdoc-link" href="../../../../xdc/runtime/Types.html#.Common$" title="xdc.runtime.Types.Common$">Types.Common$</a>&nbsp;<span class="xdoc-id">common$</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">All modules have this configuration parameter.  Its name
+  contains the '$' character to ensure it does not conflict with
+  configuration parameters declared by the module.  This allows
+  new configuration parameters to be added in the future without
+  any chance of breaking existing modules.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="int.Clear"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-id">IInterrupt.</span><span class="xdoc-id">intClear</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/notifyDrivers/IInterrupt.html" title="interface IInterrupt"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/ipc/notifyDrivers/IInterrupt.html#int.Clear">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Clear interrupt</p>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/notifyDrivers/IInterrupt-src.html"><span class="xdocLabelFile">ti/sdo/ipc/notifyDrivers/IInterrupt.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw2">UInt</span>&nbsp;<span class="xdoc-id">intClear</span>(<span class="xdoc-kw2">UInt16</span>&nbsp;<span class="xdoc-id">remoteProcId</span>, <a class="xdoc-link" href="../../../../ti/sdo/ipc/notifyDrivers/IInterrupt.html#.Int.Info" title="ti.sdo.ipc.notifyDrivers.IInterrupt.IntInfo">IInterrupt.IntInfo</a>&nbsp;*<span class="xdoc-id">intInfo</span>);
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">ARGUMENTS</div>
+<div class="xdocChild"><span class="xdocChildId">remoteProcId</span>
+<span class="xdocChildSum">&#151;&nbsp;Remote MultiProc Id</span>
+</div>
+<div class="xdocChild"><span class="xdocChildId">intInfo</span>
+<span class="xdocChildSum">&#151;&nbsp;Information needed to configure interrupt line</span>
+</div>
+<span id="xdoc-sect-2"></span>
+<div class="xdocSect">RETURNS</div>
+<div class="xdocText">Value (if any) of the interrupt before
+                        it was cleared</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="int.Disable"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-id">IInterrupt.</span><span class="xdoc-id">intDisable</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/notifyDrivers/IInterrupt.html" title="interface IInterrupt"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/ipc/notifyDrivers/IInterrupt.html#int.Disable">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Disables the interrupt corresponding to intId</p>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/notifyDrivers/IInterrupt-src.html"><span class="xdocLabelFile">ti/sdo/ipc/notifyDrivers/IInterrupt.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw2">Void</span>&nbsp;<span class="xdoc-id">intDisable</span>(<span class="xdoc-kw2">UInt16</span>&nbsp;<span class="xdoc-id">remoteProcId</span>, <a class="xdoc-link" href="../../../../ti/sdo/ipc/notifyDrivers/IInterrupt.html#.Int.Info" title="ti.sdo.ipc.notifyDrivers.IInterrupt.IntInfo">IInterrupt.IntInfo</a>&nbsp;*<span class="xdoc-id">intInfo</span>);
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">ARGUMENTS</div>
+<div class="xdocChild"><span class="xdocChildId">remoteProcId</span>
+<span class="xdocChildSum">&#151;&nbsp;Remote MultiProc Id</span>
+</div>
+<div class="xdocChild"><span class="xdocChildId">intInfo</span>
+<span class="xdocChildSum">&#151;&nbsp;Information needed to configure interrupt line</span>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="int.Enable"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-id">IInterrupt.</span><span class="xdoc-id">intEnable</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/notifyDrivers/IInterrupt.html" title="interface IInterrupt"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/ipc/notifyDrivers/IInterrupt.html#int.Enable">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Enables the interrupt corresponding to intId</p>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/notifyDrivers/IInterrupt-src.html"><span class="xdocLabelFile">ti/sdo/ipc/notifyDrivers/IInterrupt.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw2">Void</span>&nbsp;<span class="xdoc-id">intEnable</span>(<span class="xdoc-kw2">UInt16</span>&nbsp;<span class="xdoc-id">remoteProcId</span>, <a class="xdoc-link" href="../../../../ti/sdo/ipc/notifyDrivers/IInterrupt.html#.Int.Info" title="ti.sdo.ipc.notifyDrivers.IInterrupt.IntInfo">IInterrupt.IntInfo</a>&nbsp;*<span class="xdoc-id">intInfo</span>);
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">ARGUMENTS</div>
+<div class="xdocChild"><span class="xdocChildId">remoteProcId</span>
+<span class="xdocChildSum">&#151;&nbsp;Remote MultiProc Id</span>
+</div>
+<div class="xdocChild"><span class="xdocChildId">intInfo</span>
+<span class="xdocChildSum">&#151;&nbsp;Information needed to configure interrupt line</span>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="int.Register"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-id">IInterrupt.</span><span class="xdoc-id">intRegister</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/notifyDrivers/IInterrupt.html" title="interface IInterrupt"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/ipc/notifyDrivers/IInterrupt.html#int.Register">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Register an interrupt line to a remote processor</p>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/notifyDrivers/IInterrupt-src.html"><span class="xdocLabelFile">ti/sdo/ipc/notifyDrivers/IInterrupt.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw2">Void</span>&nbsp;<span class="xdoc-id">intRegister</span>(<span class="xdoc-kw2">UInt16</span>&nbsp;<span class="xdoc-id">remoteProcId</span>, <a class="xdoc-link" href="../../../../ti/sdo/ipc/notifyDrivers/IInterrupt.html#.Int.Info" title="ti.sdo.ipc.notifyDrivers.IInterrupt.IntInfo">IInterrupt.IntInfo</a>&nbsp;*<span class="xdoc-id">intInfo</span>, <span class="xdoc-kw2">Fxn</span>&nbsp;<span class="xdoc-id">func</span>, <span class="xdoc-kw2">UArg</span>&nbsp;<span class="xdoc-id">arg</span>);
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">ARGUMENTS</div>
+<div class="xdocChild"><span class="xdocChildId">remoteProcId</span>
+<span class="xdocChildSum">&#151;&nbsp;Remote MultiProc Id</span>
+</div>
+<div class="xdocChild"><span class="xdocChildId">intInfo</span>
+<span class="xdocChildSum">&#151;&nbsp;Information needed to configure interrupt line</span>
+</div>
+<div class="xdocChild"><span class="xdocChildId">func</span>
+<span class="xdocChildSum">&#151;&nbsp;Function to register.</span>
+</div>
+<div class="xdocChild"><span class="xdocChildId">arg</span>
+<span class="xdocChildSum">&#151;&nbsp;Argument that will be passed to func</span>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="int.Send"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-id">IInterrupt.</span><span class="xdoc-id">intSend</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/notifyDrivers/IInterrupt.html" title="interface IInterrupt"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/ipc/notifyDrivers/IInterrupt.html#int.Send">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Send interrupt to the remote processor</p>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/notifyDrivers/IInterrupt-src.html"><span class="xdocLabelFile">ti/sdo/ipc/notifyDrivers/IInterrupt.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw2">Void</span>&nbsp;<span class="xdoc-id">intSend</span>(<span class="xdoc-kw2">UInt16</span>&nbsp;<span class="xdoc-id">remoteProcId</span>, <a class="xdoc-link" href="../../../../ti/sdo/ipc/notifyDrivers/IInterrupt.html#.Int.Info" title="ti.sdo.ipc.notifyDrivers.IInterrupt.IntInfo">IInterrupt.IntInfo</a>&nbsp;*<span class="xdoc-id">intInfo</span>, <span class="xdoc-kw2">UArg</span>&nbsp;<span class="xdoc-id">arg</span>);
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">ARGUMENTS</div>
+<div class="xdocChild"><span class="xdocChildId">remoteProcId</span>
+<span class="xdocChildSum">&#151;&nbsp;Remote MultiProc Id</span>
+</div>
+<div class="xdocChild"><span class="xdocChildId">intInfo</span>
+<span class="xdocChildSum">&#151;&nbsp;Information needed to configure interrupt line</span>
+</div>
+<div class="xdocChild"><span class="xdocChildId">arg</span>
+<span class="xdocChildSum">&#151;&nbsp;Argument for sending interrupt.</span>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="int.Unregister"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-id">IInterrupt.</span><span class="xdoc-id">intUnregister</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/ipc/notifyDrivers/IInterrupt.html" title="interface IInterrupt"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/ipc/notifyDrivers/IInterrupt.html#int.Unregister">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Unregister an interrupt line to a remote processor</p>
+<span id='spec-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-iddcl">XDCspec</span></tt> declarations</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/ipc/notifyDrivers/IInterrupt-src.html"><span class="xdocLabelFile">ti/sdo/ipc/notifyDrivers/IInterrupt.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynXdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw2">Void</span>&nbsp;<span class="xdoc-id">intUnregister</span>(<span class="xdoc-kw2">UInt16</span>&nbsp;<span class="xdoc-id">remoteProcId</span>, <a class="xdoc-link" href="../../../../ti/sdo/ipc/notifyDrivers/IInterrupt.html#.Int.Info" title="ti.sdo.ipc.notifyDrivers.IInterrupt.IntInfo">IInterrupt.IntInfo</a>&nbsp;*<span class="xdoc-id">intInfo</span>);
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">ARGUMENTS</div>
+<div class="xdocChild"><span class="xdocChildId">remoteProcId</span>
+<span class="xdocChildSum">&#151;&nbsp;Remote MultiProc Id</span>
+</div>
+<div class="xdocChild"><span class="xdocChildId">intInfo</span>
+<span class="xdocChildSum">&#151;&nbsp;Information needed to configure interrupt line</span>
+</div>
+</div>
+<div id="xdocDate">generated on Wed, 15 Feb 2017 14:20:11 GMT</div>
+</div></div></body>
+</html>

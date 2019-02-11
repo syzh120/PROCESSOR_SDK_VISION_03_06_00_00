@@ -1,0 +1,566 @@
+/*
+ *  Do not modify this file; it is automatically 
+ *  generated and any modifications will be overwritten.
+ *
+ * @(#) xdc-A71
+ */
+
+/*
+ * ======== GENERATED SECTIONS ========
+ *     
+ *     PROLOGUE
+ *     INCLUDES
+ *     
+ *     INTERNAL DEFINITIONS
+ *     MODULE-WIDE CONFIGS
+ *     FUNCTION DECLARATIONS
+ *     SYSTEM FUNCTIONS
+ *     
+ *     EPILOGUE
+ *     STATE STRUCTURES
+ *     PREFIX ALIASES
+ */
+
+
+/*
+ * ======== PROLOGUE ========
+ */
+
+#ifndef ti_sysbios_family_arm_a15_tci66xx_CpIntc__include
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc__include
+
+#ifndef __nested__
+#define __nested__
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc__top__
+#endif
+
+#ifdef __cplusplus
+#define __extern extern "C"
+#else
+#define __extern extern
+#endif
+
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc___VERS 160
+
+
+/*
+ * ======== INCLUDES ========
+ */
+
+#include <xdc/std.h>
+
+#include <xdc/runtime/xdc.h>
+#include <xdc/runtime/Types.h>
+#include <ti/sysbios/family/arm/a15/tci66xx/package/package.defs.h>
+
+#include <xdc/runtime/Assert.h>
+#include <xdc/runtime/Error.h>
+#include <xdc/runtime/IModule.h>
+
+
+/*
+ * ======== AUXILIARY DEFINITIONS ========
+ */
+
+/* FuncPtr */
+typedef xdc_Void (*ti_sysbios_family_arm_a15_tci66xx_CpIntc_FuncPtr)(xdc_UArg);
+
+/* RegisterMap */
+typedef xdc_UInt32 __T1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__RES_5C;
+typedef xdc_UInt32 __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__RES_5C[9];
+typedef __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__RES_5C __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__RES_5C;
+typedef xdc_UInt32 __T1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__RES_98;
+typedef xdc_UInt32 __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__RES_98[26];
+typedef __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__RES_98 __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__RES_98;
+typedef xdc_UInt32 __T1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__PPMR;
+typedef xdc_UInt32 __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__PPMR[64];
+typedef __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__PPMR __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__PPMR;
+typedef xdc_UInt32 __T1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__SRSR;
+typedef xdc_UInt32 __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__SRSR[32];
+typedef __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__SRSR __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__SRSR;
+typedef xdc_UInt32 __T1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__SECR;
+typedef xdc_UInt32 __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__SECR[32];
+typedef __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__SECR __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__SECR;
+typedef xdc_UInt32 __T1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__ESR;
+typedef xdc_UInt32 __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__ESR[32];
+typedef __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__ESR __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__ESR;
+typedef xdc_UInt32 __T1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__ECR;
+typedef xdc_UInt32 __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__ECR[32];
+typedef __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__ECR __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__ECR;
+typedef xdc_UInt8 __T1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__CMR;
+typedef xdc_UInt8 __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__CMR[1024];
+typedef __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__CMR __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__CMR;
+typedef xdc_UInt8 __T1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__HIMR;
+typedef xdc_UInt8 __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__HIMR[256];
+typedef __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__HIMR __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__HIMR;
+typedef xdc_UInt32 __T1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__HIPIR;
+typedef xdc_UInt32 __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__HIPIR[256];
+typedef __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__HIPIR __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__HIPIR;
+typedef xdc_UInt32 __T1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__PR;
+typedef xdc_UInt32 __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__PR[32];
+typedef __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__PR __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__PR;
+typedef xdc_UInt32 __T1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__TR;
+typedef xdc_UInt32 __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__TR[32];
+typedef __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__TR __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__TR;
+typedef xdc_UInt32 __T1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__WER;
+typedef xdc_UInt32 __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__WER[64];
+typedef __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__WER __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__WER;
+typedef xdc_UInt32 __T1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__DSR;
+typedef xdc_UInt32 __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__DSR[64];
+typedef __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__DSR __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__DSR;
+typedef xdc_UInt32 __T1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__SER;
+typedef xdc_UInt32 __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__SER[32];
+typedef __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__SER __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__SER;
+typedef xdc_UInt32 __T1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__SDR;
+typedef xdc_UInt32 __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__SDR[32];
+typedef __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__SDR __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__SDR;
+typedef xdc_UInt32 __T1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__HINLR;
+typedef xdc_UInt32 __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__HINLR[256];
+typedef __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__HINLR __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__HINLR;
+typedef xdc_UInt32 __T1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__HIER;
+typedef xdc_UInt32 __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__HIER[8];
+typedef __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__HIER __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__HIER;
+typedef xdc_UInt32 __T1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__RES1520;
+typedef xdc_UInt32 __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__RES1520[56];
+typedef __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__RES1520 __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__RES1520;
+typedef xdc_Ptr *__T1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__HIPVR;
+typedef xdc_Ptr *__ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__HIPVR[256];
+typedef __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__HIPVR __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__HIPVR;
+typedef xdc_UInt32 __T1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__RES1A00;
+typedef xdc_UInt32 __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__RES1A00[384];
+typedef __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__RES1A00 __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__RES1A00;
+struct ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap {
+    xdc_UInt32 REV;
+    xdc_UInt32 CR;
+    xdc_UInt32 RES_08;
+    xdc_UInt32 HCR;
+    xdc_UInt32 GER;
+    xdc_UInt32 RES_14;
+    xdc_UInt32 RES_18;
+    xdc_UInt32 GNLR;
+    xdc_UInt32 SISR;
+    xdc_UInt32 SICR;
+    xdc_UInt32 EISR;
+    xdc_UInt32 EICR;
+    xdc_UInt32 GWER;
+    xdc_UInt32 HIEISR;
+    xdc_UInt32 HIDISR;
+    xdc_UInt32 RES_3C;
+    xdc_UInt32 PPR;
+    xdc_UInt32 RES_44;
+    xdc_UInt32 RES_48;
+    xdc_UInt32 RES_4C;
+    xdc_Ptr *VBR;
+    xdc_UInt32 VSR;
+    xdc_Ptr VNR;
+    __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__RES_5C RES_5C;
+    xdc_Int32 GPIR;
+    xdc_Ptr *GPVR;
+    xdc_UInt32 RES_88;
+    xdc_UInt32 RES_8C;
+    xdc_UInt32 GSIER;
+    xdc_UInt32 SPIR;
+    __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__RES_98 RES_98;
+    __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__PPMR PPMR;
+    __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__SRSR SRSR;
+    __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__SECR SECR;
+    __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__ESR ESR;
+    __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__ECR ECR;
+    __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__CMR CMR;
+    __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__HIMR HIMR;
+    __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__HIPIR HIPIR;
+    __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__PR PR;
+    __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__TR TR;
+    __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__WER WER;
+    __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__DSR DSR;
+    __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__SER SER;
+    __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__SDR SDR;
+    __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__HINLR HINLR;
+    __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__HIER HIER;
+    __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__RES1520 RES1520;
+    __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__HIPVR HIPVR;
+    __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap__RES1A00 RES1A00;
+};
+
+
+/*
+ * ======== INTERNAL DEFINITIONS ========
+ */
+
+/* HostIntObj */
+struct ti_sysbios_family_arm_a15_tci66xx_CpIntc_HostIntObj {
+    xdc_UInt16 hostInt;
+    xdc_UInt16 sysInt;
+};
+
+/* DispatchTabElem */
+struct ti_sysbios_family_arm_a15_tci66xx_CpIntc_DispatchTabElem {
+    ti_sysbios_family_arm_a15_tci66xx_CpIntc_FuncPtr fxn;
+    xdc_UArg arg;
+};
+
+/* Module_State */
+typedef xdc_Bits32 __T1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_State__initSIER;
+typedef xdc_Bits32 *__ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_State__initSIER;
+typedef __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_State__initSIER __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_State__initSIER;
+typedef ti_sysbios_family_arm_a15_tci66xx_CpIntc_HostIntObj __T1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_State__hostIntToSysInt;
+typedef ti_sysbios_family_arm_a15_tci66xx_CpIntc_HostIntObj *__ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_State__hostIntToSysInt;
+typedef __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_State__hostIntToSysInt __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_State__hostIntToSysInt;
+typedef ti_sysbios_family_arm_a15_tci66xx_CpIntc_DispatchTabElem __T1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_State__dispatchTab;
+typedef ti_sysbios_family_arm_a15_tci66xx_CpIntc_DispatchTabElem *__ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_State__dispatchTab;
+typedef __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_State__dispatchTab __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_State__dispatchTab;
+
+
+/*
+ * ======== MODULE-WIDE CONFIGS ========
+ */
+
+/* Module__diagsEnabled */
+typedef xdc_Bits32 CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__diagsEnabled;
+__extern __FAR__ const CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__diagsEnabled ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__diagsEnabled__C;
+
+/* Module__diagsIncluded */
+typedef xdc_Bits32 CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__diagsIncluded;
+__extern __FAR__ const CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__diagsIncluded ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__diagsIncluded__C;
+
+/* Module__diagsMask */
+typedef xdc_Bits16 *CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__diagsMask;
+__extern __FAR__ const CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__diagsMask ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__diagsMask__C;
+
+/* Module__gateObj */
+typedef xdc_Ptr CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__gateObj;
+__extern __FAR__ const CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__gateObj ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__gateObj__C;
+
+/* Module__gatePrms */
+typedef xdc_Ptr CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__gatePrms;
+__extern __FAR__ const CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__gatePrms ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__gatePrms__C;
+
+/* Module__id */
+typedef xdc_runtime_Types_ModuleId CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__id;
+__extern __FAR__ const CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__id ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__id__C;
+
+/* Module__loggerDefined */
+typedef xdc_Bool CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__loggerDefined;
+__extern __FAR__ const CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__loggerDefined ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__loggerDefined__C;
+
+/* Module__loggerObj */
+typedef xdc_Ptr CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__loggerObj;
+__extern __FAR__ const CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__loggerObj ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__loggerObj__C;
+
+/* Module__loggerFxn0 */
+typedef xdc_runtime_Types_LoggerFxn0 CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__loggerFxn0;
+__extern __FAR__ const CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__loggerFxn0 ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__loggerFxn0__C;
+
+/* Module__loggerFxn1 */
+typedef xdc_runtime_Types_LoggerFxn1 CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__loggerFxn1;
+__extern __FAR__ const CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__loggerFxn1 ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__loggerFxn1__C;
+
+/* Module__loggerFxn2 */
+typedef xdc_runtime_Types_LoggerFxn2 CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__loggerFxn2;
+__extern __FAR__ const CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__loggerFxn2 ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__loggerFxn2__C;
+
+/* Module__loggerFxn4 */
+typedef xdc_runtime_Types_LoggerFxn4 CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__loggerFxn4;
+__extern __FAR__ const CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__loggerFxn4 ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__loggerFxn4__C;
+
+/* Module__loggerFxn8 */
+typedef xdc_runtime_Types_LoggerFxn8 CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__loggerFxn8;
+__extern __FAR__ const CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__loggerFxn8 ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__loggerFxn8__C;
+
+/* Module__startupDoneFxn */
+typedef xdc_Bool (*CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__startupDoneFxn)(void);
+__extern __FAR__ const CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__startupDoneFxn ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__startupDoneFxn__C;
+
+/* Object__count */
+typedef xdc_Int CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Object__count;
+__extern __FAR__ const CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Object__count ti_sysbios_family_arm_a15_tci66xx_CpIntc_Object__count__C;
+
+/* Object__heap */
+typedef xdc_runtime_IHeap_Handle CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Object__heap;
+__extern __FAR__ const CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Object__heap ti_sysbios_family_arm_a15_tci66xx_CpIntc_Object__heap__C;
+
+/* Object__sizeof */
+typedef xdc_SizeT CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Object__sizeof;
+__extern __FAR__ const CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Object__sizeof ti_sysbios_family_arm_a15_tci66xx_CpIntc_Object__sizeof__C;
+
+/* Object__table */
+typedef xdc_Ptr CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Object__table;
+__extern __FAR__ const CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Object__table ti_sysbios_family_arm_a15_tci66xx_CpIntc_Object__table__C;
+
+/* A_sysIntOutOfRange */
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc_A_sysIntOutOfRange (ti_sysbios_family_arm_a15_tci66xx_CpIntc_A_sysIntOutOfRange__C)
+typedef xdc_runtime_Assert_Id CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_A_sysIntOutOfRange;
+__extern __FAR__ const CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_A_sysIntOutOfRange ti_sysbios_family_arm_a15_tci66xx_CpIntc_A_sysIntOutOfRange__C;
+
+/* E_unpluggedSysInt */
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc_E_unpluggedSysInt (ti_sysbios_family_arm_a15_tci66xx_CpIntc_E_unpluggedSysInt__C)
+typedef xdc_runtime_Error_Id CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_E_unpluggedSysInt;
+__extern __FAR__ const CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_E_unpluggedSysInt ti_sysbios_family_arm_a15_tci66xx_CpIntc_E_unpluggedSysInt__C;
+
+/* numSysInts */
+#ifdef ti_sysbios_family_arm_a15_tci66xx_CpIntc_numSysInts__D
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc_numSysInts (ti_sysbios_family_arm_a15_tci66xx_CpIntc_numSysInts__D)
+#else
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc_numSysInts (ti_sysbios_family_arm_a15_tci66xx_CpIntc_numSysInts__C)
+typedef xdc_UInt32 CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_numSysInts;
+__extern __FAR__ const CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_numSysInts ti_sysbios_family_arm_a15_tci66xx_CpIntc_numSysInts__C;
+#endif
+
+/* numArmInts */
+#ifdef ti_sysbios_family_arm_a15_tci66xx_CpIntc_numArmInts__D
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc_numArmInts (ti_sysbios_family_arm_a15_tci66xx_CpIntc_numArmInts__D)
+#else
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc_numArmInts (ti_sysbios_family_arm_a15_tci66xx_CpIntc_numArmInts__C)
+typedef xdc_UInt32 CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_numArmInts;
+__extern __FAR__ const CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_numArmInts ti_sysbios_family_arm_a15_tci66xx_CpIntc_numArmInts__C;
+#endif
+
+/* numStatusRegs */
+#ifdef ti_sysbios_family_arm_a15_tci66xx_CpIntc_numStatusRegs__D
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc_numStatusRegs (ti_sysbios_family_arm_a15_tci66xx_CpIntc_numStatusRegs__D)
+#else
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc_numStatusRegs (ti_sysbios_family_arm_a15_tci66xx_CpIntc_numStatusRegs__C)
+typedef xdc_Int CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_numStatusRegs;
+__extern __FAR__ const CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_numStatusRegs ti_sysbios_family_arm_a15_tci66xx_CpIntc_numStatusRegs__C;
+#endif
+
+/* sysIntToHostInt */
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc_sysIntToHostInt (ti_sysbios_family_arm_a15_tci66xx_CpIntc_sysIntToHostInt__C)
+typedef xdc_UInt16 __T1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_sysIntToHostInt;
+typedef xdc_UInt16 *__ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_sysIntToHostInt;
+typedef __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_sysIntToHostInt __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_sysIntToHostInt;
+typedef __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_sysIntToHostInt CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_sysIntToHostInt;
+__extern __FAR__ const CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_sysIntToHostInt ti_sysbios_family_arm_a15_tci66xx_CpIntc_sysIntToHostInt__C;
+
+/* hostIntToArmIntNum */
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc_hostIntToArmIntNum (ti_sysbios_family_arm_a15_tci66xx_CpIntc_hostIntToArmIntNum__C)
+typedef xdc_UInt16 __T1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_hostIntToArmIntNum;
+typedef xdc_UInt16 *__ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_hostIntToArmIntNum;
+typedef __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_hostIntToArmIntNum __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_hostIntToArmIntNum;
+typedef __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_hostIntToArmIntNum CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_hostIntToArmIntNum;
+__extern __FAR__ const CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_hostIntToArmIntNum ti_sysbios_family_arm_a15_tci66xx_CpIntc_hostIntToArmIntNum__C;
+
+/* intNum */
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc_intNum (ti_sysbios_family_arm_a15_tci66xx_CpIntc_intNum__C)
+typedef xdc_UInt16 __T1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_intNum;
+typedef xdc_UInt16 *__ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_intNum;
+typedef __ARRAY1_ti_sysbios_family_arm_a15_tci66xx_CpIntc_intNum __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_intNum;
+typedef __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_intNum CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_intNum;
+__extern __FAR__ const CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_intNum ti_sysbios_family_arm_a15_tci66xx_CpIntc_intNum__C;
+
+
+/*
+ * ======== FUNCTION DECLARATIONS ========
+ */
+
+/* Module_startup */
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_startup ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_startup__E
+xdc__CODESECT(ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_startup__E, "ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_startup")
+__extern xdc_Int ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_startup__E( xdc_Int state );
+xdc__CODESECT(ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_startup__F, "ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_startup")
+__extern xdc_Int ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_startup__F( xdc_Int state );
+
+/* Module__startupDone__S */
+xdc__CODESECT(ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__startupDone__S, "ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__startupDone__S")
+__extern xdc_Bool ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__startupDone__S( void );
+
+/* clearSysInt__E */
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc_clearSysInt ti_sysbios_family_arm_a15_tci66xx_CpIntc_clearSysInt__E
+xdc__CODESECT(ti_sysbios_family_arm_a15_tci66xx_CpIntc_clearSysInt__E, "ti_sysbios_family_arm_a15_tci66xx_CpIntc_clearSysInt")
+__extern xdc_Void ti_sysbios_family_arm_a15_tci66xx_CpIntc_clearSysInt__E( xdc_UInt sysInt );
+
+/* disableAllHostInts__E */
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc_disableAllHostInts ti_sysbios_family_arm_a15_tci66xx_CpIntc_disableAllHostInts__E
+xdc__CODESECT(ti_sysbios_family_arm_a15_tci66xx_CpIntc_disableAllHostInts__E, "ti_sysbios_family_arm_a15_tci66xx_CpIntc_disableAllHostInts")
+__extern xdc_Void ti_sysbios_family_arm_a15_tci66xx_CpIntc_disableAllHostInts__E( void );
+
+/* disableHostInt__E */
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc_disableHostInt ti_sysbios_family_arm_a15_tci66xx_CpIntc_disableHostInt__E
+xdc__CODESECT(ti_sysbios_family_arm_a15_tci66xx_CpIntc_disableHostInt__E, "ti_sysbios_family_arm_a15_tci66xx_CpIntc_disableHostInt")
+__extern xdc_Void ti_sysbios_family_arm_a15_tci66xx_CpIntc_disableHostInt__E( xdc_UInt hostInt );
+
+/* disableSysInt__E */
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc_disableSysInt ti_sysbios_family_arm_a15_tci66xx_CpIntc_disableSysInt__E
+xdc__CODESECT(ti_sysbios_family_arm_a15_tci66xx_CpIntc_disableSysInt__E, "ti_sysbios_family_arm_a15_tci66xx_CpIntc_disableSysInt")
+__extern xdc_Void ti_sysbios_family_arm_a15_tci66xx_CpIntc_disableSysInt__E( xdc_UInt sysInt );
+
+/* dispatch__E */
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc_dispatch ti_sysbios_family_arm_a15_tci66xx_CpIntc_dispatch__E
+xdc__CODESECT(ti_sysbios_family_arm_a15_tci66xx_CpIntc_dispatch__E, "ti_sysbios_family_arm_a15_tci66xx_CpIntc_dispatch")
+__extern xdc_Void ti_sysbios_family_arm_a15_tci66xx_CpIntc_dispatch__E( xdc_UArg hostInt );
+
+/* dispatchPlug__E */
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc_dispatchPlug ti_sysbios_family_arm_a15_tci66xx_CpIntc_dispatchPlug__E
+xdc__CODESECT(ti_sysbios_family_arm_a15_tci66xx_CpIntc_dispatchPlug__E, "ti_sysbios_family_arm_a15_tci66xx_CpIntc_dispatchPlug")
+__extern xdc_Void ti_sysbios_family_arm_a15_tci66xx_CpIntc_dispatchPlug__E( xdc_UInt sysInt, ti_sysbios_family_arm_a15_tci66xx_CpIntc_FuncPtr fxn, xdc_UArg arg, xdc_Bool unmask );
+
+/* enableAllHostInts__E */
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc_enableAllHostInts ti_sysbios_family_arm_a15_tci66xx_CpIntc_enableAllHostInts__E
+xdc__CODESECT(ti_sysbios_family_arm_a15_tci66xx_CpIntc_enableAllHostInts__E, "ti_sysbios_family_arm_a15_tci66xx_CpIntc_enableAllHostInts")
+__extern xdc_Void ti_sysbios_family_arm_a15_tci66xx_CpIntc_enableAllHostInts__E( void );
+
+/* enableHostInt__E */
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc_enableHostInt ti_sysbios_family_arm_a15_tci66xx_CpIntc_enableHostInt__E
+xdc__CODESECT(ti_sysbios_family_arm_a15_tci66xx_CpIntc_enableHostInt__E, "ti_sysbios_family_arm_a15_tci66xx_CpIntc_enableHostInt")
+__extern xdc_Void ti_sysbios_family_arm_a15_tci66xx_CpIntc_enableHostInt__E( xdc_UInt hostInt );
+
+/* enableSysInt__E */
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc_enableSysInt ti_sysbios_family_arm_a15_tci66xx_CpIntc_enableSysInt__E
+xdc__CODESECT(ti_sysbios_family_arm_a15_tci66xx_CpIntc_enableSysInt__E, "ti_sysbios_family_arm_a15_tci66xx_CpIntc_enableSysInt")
+__extern xdc_Void ti_sysbios_family_arm_a15_tci66xx_CpIntc_enableSysInt__E( xdc_UInt sysInt );
+
+/* getIntNum__E */
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc_getIntNum ti_sysbios_family_arm_a15_tci66xx_CpIntc_getIntNum__E
+xdc__CODESECT(ti_sysbios_family_arm_a15_tci66xx_CpIntc_getIntNum__E, "ti_sysbios_family_arm_a15_tci66xx_CpIntc_getIntNum")
+__extern xdc_Int ti_sysbios_family_arm_a15_tci66xx_CpIntc_getIntNum__E( xdc_UInt hostInt );
+
+/* getHostInt__E */
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc_getHostInt ti_sysbios_family_arm_a15_tci66xx_CpIntc_getHostInt__E
+xdc__CODESECT(ti_sysbios_family_arm_a15_tci66xx_CpIntc_getHostInt__E, "ti_sysbios_family_arm_a15_tci66xx_CpIntc_getHostInt")
+__extern xdc_Int ti_sysbios_family_arm_a15_tci66xx_CpIntc_getHostInt__E( xdc_UInt intNum );
+
+/* getHostIntKey__E */
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc_getHostIntKey ti_sysbios_family_arm_a15_tci66xx_CpIntc_getHostIntKey__E
+xdc__CODESECT(ti_sysbios_family_arm_a15_tci66xx_CpIntc_getHostIntKey__E, "ti_sysbios_family_arm_a15_tci66xx_CpIntc_getHostIntKey")
+__extern xdc_Int ti_sysbios_family_arm_a15_tci66xx_CpIntc_getHostIntKey__E( xdc_UInt hostInt );
+
+/* mapSysIntToHostInt__E */
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc_mapSysIntToHostInt ti_sysbios_family_arm_a15_tci66xx_CpIntc_mapSysIntToHostInt__E
+xdc__CODESECT(ti_sysbios_family_arm_a15_tci66xx_CpIntc_mapSysIntToHostInt__E, "ti_sysbios_family_arm_a15_tci66xx_CpIntc_mapSysIntToHostInt")
+__extern xdc_Void ti_sysbios_family_arm_a15_tci66xx_CpIntc_mapSysIntToHostInt__E( xdc_UInt sysInt, xdc_UInt hostInt );
+
+/* postSysInt__E */
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc_postSysInt ti_sysbios_family_arm_a15_tci66xx_CpIntc_postSysInt__E
+xdc__CODESECT(ti_sysbios_family_arm_a15_tci66xx_CpIntc_postSysInt__E, "ti_sysbios_family_arm_a15_tci66xx_CpIntc_postSysInt")
+__extern xdc_Void ti_sysbios_family_arm_a15_tci66xx_CpIntc_postSysInt__E( xdc_UInt sysInt );
+
+/* unused__E */
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc_unused ti_sysbios_family_arm_a15_tci66xx_CpIntc_unused__E
+xdc__CODESECT(ti_sysbios_family_arm_a15_tci66xx_CpIntc_unused__E, "ti_sysbios_family_arm_a15_tci66xx_CpIntc_unused")
+__extern xdc_Void ti_sysbios_family_arm_a15_tci66xx_CpIntc_unused__E( xdc_UArg arg );
+
+
+/*
+ * ======== SYSTEM FUNCTIONS ========
+ */
+
+/* Module_startupDone */
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_startupDone() ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__startupDone__S()
+
+/* Object_heap */
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc_Object_heap() ti_sysbios_family_arm_a15_tci66xx_CpIntc_Object__heap__C
+
+/* Module_heap */
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_heap() ti_sysbios_family_arm_a15_tci66xx_CpIntc_Object__heap__C
+
+/* Module_id */
+static inline CT__ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__id ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_id( void ) 
+{
+    return ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__id__C;
+}
+
+/* Module_hasMask */
+static inline xdc_Bool ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_hasMask( void ) 
+{
+    return ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__diagsMask__C != NULL;
+}
+
+/* Module_getMask */
+static inline xdc_Bits16 ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_getMask( void ) 
+{
+    return ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__diagsMask__C != NULL ? *ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__diagsMask__C : 0;
+}
+
+/* Module_setMask */
+static inline xdc_Void ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_setMask( xdc_Bits16 mask ) 
+{
+    if (ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__diagsMask__C != NULL) *ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__diagsMask__C = mask;
+}
+
+
+/*
+ * ======== EPILOGUE ========
+ */
+
+#ifdef ti_sysbios_family_arm_a15_tci66xx_CpIntc__top__
+#undef __nested__
+#endif
+
+#endif /* ti_sysbios_family_arm_a15_tci66xx_CpIntc__include */
+
+
+/*
+ * ======== STATE STRUCTURES ========
+ */
+
+#if defined(__config__) || (!defined(__nested__) && defined(ti_sysbios_family_arm_a15_tci66xx_CpIntc__internalaccess))
+
+#ifndef ti_sysbios_family_arm_a15_tci66xx_CpIntc__include_state
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc__include_state
+
+/* Module_State */
+struct ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_State {
+    volatile ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap *controller;
+    __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_State__initSIER initSIER;
+    __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_State__hostIntToSysInt hostIntToSysInt;
+    __TA_ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_State__dispatchTab dispatchTab;
+};
+
+/* Module__state__V */
+extern struct ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_State__ ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module__state__V;
+
+#endif /* ti_sysbios_family_arm_a15_tci66xx_CpIntc__include_state */
+
+#endif
+
+
+/*
+ * ======== PREFIX ALIASES ========
+ */
+
+#if !defined(__nested__) && !defined(ti_sysbios_family_arm_a15_tci66xx_CpIntc__nolocalnames)
+
+#ifndef ti_sysbios_family_arm_a15_tci66xx_CpIntc__localnames__done
+#define ti_sysbios_family_arm_a15_tci66xx_CpIntc__localnames__done
+
+/* module prefix */
+#define CpIntc_FuncPtr ti_sysbios_family_arm_a15_tci66xx_CpIntc_FuncPtr
+#define CpIntc_RegisterMap ti_sysbios_family_arm_a15_tci66xx_CpIntc_RegisterMap
+#define CpIntc_HostIntObj ti_sysbios_family_arm_a15_tci66xx_CpIntc_HostIntObj
+#define CpIntc_DispatchTabElem ti_sysbios_family_arm_a15_tci66xx_CpIntc_DispatchTabElem
+#define CpIntc_Module_State ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_State
+#define CpIntc_A_sysIntOutOfRange ti_sysbios_family_arm_a15_tci66xx_CpIntc_A_sysIntOutOfRange
+#define CpIntc_E_unpluggedSysInt ti_sysbios_family_arm_a15_tci66xx_CpIntc_E_unpluggedSysInt
+#define CpIntc_numSysInts ti_sysbios_family_arm_a15_tci66xx_CpIntc_numSysInts
+#define CpIntc_numArmInts ti_sysbios_family_arm_a15_tci66xx_CpIntc_numArmInts
+#define CpIntc_numStatusRegs ti_sysbios_family_arm_a15_tci66xx_CpIntc_numStatusRegs
+#define CpIntc_sysIntToHostInt ti_sysbios_family_arm_a15_tci66xx_CpIntc_sysIntToHostInt
+#define CpIntc_hostIntToArmIntNum ti_sysbios_family_arm_a15_tci66xx_CpIntc_hostIntToArmIntNum
+#define CpIntc_intNum ti_sysbios_family_arm_a15_tci66xx_CpIntc_intNum
+#define CpIntc_clearSysInt ti_sysbios_family_arm_a15_tci66xx_CpIntc_clearSysInt
+#define CpIntc_disableAllHostInts ti_sysbios_family_arm_a15_tci66xx_CpIntc_disableAllHostInts
+#define CpIntc_disableHostInt ti_sysbios_family_arm_a15_tci66xx_CpIntc_disableHostInt
+#define CpIntc_disableSysInt ti_sysbios_family_arm_a15_tci66xx_CpIntc_disableSysInt
+#define CpIntc_dispatch ti_sysbios_family_arm_a15_tci66xx_CpIntc_dispatch
+#define CpIntc_dispatchPlug ti_sysbios_family_arm_a15_tci66xx_CpIntc_dispatchPlug
+#define CpIntc_enableAllHostInts ti_sysbios_family_arm_a15_tci66xx_CpIntc_enableAllHostInts
+#define CpIntc_enableHostInt ti_sysbios_family_arm_a15_tci66xx_CpIntc_enableHostInt
+#define CpIntc_enableSysInt ti_sysbios_family_arm_a15_tci66xx_CpIntc_enableSysInt
+#define CpIntc_getIntNum ti_sysbios_family_arm_a15_tci66xx_CpIntc_getIntNum
+#define CpIntc_getHostInt ti_sysbios_family_arm_a15_tci66xx_CpIntc_getHostInt
+#define CpIntc_getHostIntKey ti_sysbios_family_arm_a15_tci66xx_CpIntc_getHostIntKey
+#define CpIntc_mapSysIntToHostInt ti_sysbios_family_arm_a15_tci66xx_CpIntc_mapSysIntToHostInt
+#define CpIntc_postSysInt ti_sysbios_family_arm_a15_tci66xx_CpIntc_postSysInt
+#define CpIntc_unused ti_sysbios_family_arm_a15_tci66xx_CpIntc_unused
+#define CpIntc_Module_name ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_name
+#define CpIntc_Module_id ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_id
+#define CpIntc_Module_startup ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_startup
+#define CpIntc_Module_startupDone ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_startupDone
+#define CpIntc_Module_hasMask ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_hasMask
+#define CpIntc_Module_getMask ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_getMask
+#define CpIntc_Module_setMask ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_setMask
+#define CpIntc_Object_heap ti_sysbios_family_arm_a15_tci66xx_CpIntc_Object_heap
+#define CpIntc_Module_heap ti_sysbios_family_arm_a15_tci66xx_CpIntc_Module_heap
+
+#endif /* ti_sysbios_family_arm_a15_tci66xx_CpIntc__localnames__done */
+#endif

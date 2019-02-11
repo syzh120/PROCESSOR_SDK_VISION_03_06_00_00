@@ -1,0 +1,15 @@
+#******************************************************************************
+#*      Copyright (C) 2009-2012 Texas Instruments Incorporated.               *
+#*                      All Rights Reserved                                   *
+#******************************************************************************
+
+# Given inorder to ensure mergefile target is hit.
+# if CFILES is empty, then OUTFILE will be set to NULL
+# Any existing file can be given here.
+CFILES=common/vcop_host.h
+
+OUTFILE = lib/$(TARGET_BUILD)/libevekernels.eve.lib
+
+include $(EVE_SW_ROOT)/makerules/makerules_eve.mk
+
+$(OUTFILE) : mergefile

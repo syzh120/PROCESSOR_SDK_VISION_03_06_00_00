@@ -1,0 +1,507 @@
+ /* Setting up directions to the appropriate compiler directory */
+ /* Set up direction to the tools directory */
+  var xdcCGroot = java.lang.System.getenv("XDCCGROOT"); //This variable is set by CYGWINXDC.BAT
+  
+  var covRun = 0;
+
+ for (var k = 0; k < arguments.length; k++) {
+  if (arguments[k] == "covRun") {
+   covRun = 1;
+  }
+ }
+  
+ if (covRun == 1) {
+  var coverityInstallPath = java.lang.System.getenv("COVPATH");
+  var cfgBase = xdc.getPackageBase("tisb.coverity.filters") + "cfg";   
+
+  var coverityFilter = [
+      {
+          moduleName: "tisb.coverity.filters.Coverity",
+          params: {
+              cfgDir: cfgBase,                // the Coverity configuration file directory
+              rootDir: coverityInstallPath,   // install directory of Prevent
+              outDir: xdc.csd() + "cov_out",  // the cov-emit and cov-analyze output directory
+              analyzeLibs: true,               // run cov-analyze on all libraries
+              analyzeExes: true
+          }
+      },
+  ];
+  }
+  var listTargs= new Array();
+  
+  var c54ToolsDir   = java.lang.System.getenv("C54CODEGENTOOL"); //This variable is set by CYGWINXDC.BAT
+ /* Set path to the c54 tools directory */
+  if(c54ToolsDir != undefined)
+  {
+   var C54             = xdc.useModule('ti.targets.C54');
+   C54.rootDir       = c54ToolsDir;
+   C54.extensions[".s"] = { suf: ".s", typ: "asm" }; 
+   C54.ccOpts.prefix = "";
+   C54.profiles["release"].compileOpts.copts = "";
+   
+   C54.$unseal("cc");
+   C54.cc.$unseal("cmd");
+   C54.cc.cmd = "cl500 -c";
+   listTargs.push(C54);
+
+   var C54_far      = xdc.useModule('ti.targets.C54_far');
+   C54_far.rootDir       = c54ToolsDir;
+   C54_far.extensions[".s"] = { suf: ".s", typ: "asm" }; 
+   C54_far.ccOpts.prefix = "";
+   C54_far.profiles["release"].compileOpts.copts = "";
+   
+   C54_far.$unseal("cc");
+   C54_far.cc.$unseal("cmd");
+   C54_far.cc.cmd = "cl500 -c";
+   listTargs.push(C54_far);  
+   if(covRun == 1)
+   {
+    C54_far.profiles["release"].filters = coverityFilter;
+    C54.profiles["release"].filters = coverityFilter;
+   }
+  }
+  else
+  {
+   var C54_far = "C54_far";  
+   var C54 = "C54";  
+  }
+
+  
+
+  var c55ToolsDir   = java.lang.System.getenv("C55CODEGENTOOL"); //This variable is set by CYGWINXDC.BAT      
+ /* Set path to the c55 tools directory */
+  if(c55ToolsDir != undefined)
+  {
+  var C55             = xdc.useModule('ti.targets.C55');
+  C55.rootDir       = c55ToolsDir;
+  C55.extensions[".s"] = { suf: ".s", typ: "asm" }; 
+  C55.ccOpts.prefix = "";
+  C55.profiles["release"].compileOpts.copts = "";
+  
+  C55.$unseal("cc");
+  C55.cc.$unseal("cmd");
+  C55.cc.cmd = "cl55 -c";
+  listTargs.push(C55);
+
+ /* Set path to the c55_large tools directory */
+  var C55_large             = xdc.useModule('ti.targets.C55_large');
+  C55_large.rootDir       = c55ToolsDir;
+  C55_large.extensions[".s"] = { suf: ".s", typ: "asm" }; 
+  C55_large.ccOpts.prefix = "";
+  C55_large.profiles["release"].compileOpts.copts = "";
+  
+  C55_large.$unseal("cc");
+  C55_large.cc.$unseal("cmd");
+  C55_large.cc.cmd = "cl55 -c";
+  listTargs.push(C55_large);
+  
+  if(covRun == 1)
+  {
+    C55.profiles["release"].filters = coverityFilter;
+    C55_large.profiles["release"].filters = coverityFilter;
+  }
+ }
+ else
+ {
+   var C55 = "C55";  
+   var C55_large = "C55_large";  
+  }
+
+  var c674ToolsDir   = java.lang.System.getenv("C674CODEGENTOOL"); //This variable is set by CYGWINXDC.BAT        
+ if(c674ToolsDir != undefined)
+ {
+ /* Set path to the c64 tools directory */
+  var C674             = xdc.useModule('ti.targets.C674');
+  C674.rootDir       = c674ToolsDir;
+  C674.extensions[".s"] = {suf: ".s", typ: "asm"};
+  C674.extensions[".sa"] = {suf: ".sa", typ: "asm:-fl"};
+  C674.ccOpts.prefix = "";
+  C674.profiles["release"].compileOpts.copts = "";
+  C674.$unseal("cc");
+  C674.cc.$unseal("cmd");
+  C674.cc.cmd = "cl6x -c";
+  listTargs.push(C674);
+
+ /* Set path to the c64 big endian tools directory */
+  var C674_big_endian             = xdc.useModule('ti.targets.C674_big_endian');
+  C674_big_endian.rootDir       = c674ToolsDir;
+  C674_big_endian.extensions[".s"] = {suf: ".s", typ: "asm"};
+  C674_big_endian.extensions[".sa"] = {suf: ".sa", typ: "asm:-fl"};
+  C674_big_endian.ccOpts.prefix = "";
+  C674_big_endian.profiles["release"].compileOpts.copts = "";
+  C674_big_endian.$unseal("cc");
+  C674_big_endian.cc.$unseal("cmd");
+  C674_big_endian.cc.cmd = "cl6x -c";
+  listTargs.push(C674_big_endian);
+
+  var C674_elf             = xdc.useModule('ti.targets.elf.C674');
+  C674_elf.rootDir       = c674ToolsDir;
+  C674_elf.extensions[".s"] = {suf: ".s", typ: "asm"};
+  C674_elf.extensions[".sa"] = {suf: ".sa", typ: "asm:-fl"};
+  C674_elf.ccOpts.prefix = "";
+  C674_elf.profiles["release"].compileOpts.copts = "";
+  C674_elf.$unseal("cc");
+  C674_elf.cc.$unseal("cmd");
+  C674_elf.cc.cmd = "cl6x -c";
+  listTargs.push(C674_elf);
+
+ /* Set path to the c64 big endian tools directory */
+  var C674_big_endian_elf             = xdc.useModule('ti.targets.elf.C674_big_endian');
+  C674_big_endian_elf.rootDir       = c674ToolsDir;
+  C674_big_endian_elf.extensions[".s"] = {suf: ".s", typ: "asm"};
+  C674_big_endian_elf.extensions[".sa"] = {suf: ".sa", typ: "asm:-fl"};
+  C674_big_endian_elf.ccOpts.prefix = "";
+  C674_big_endian_elf.profiles["release"].compileOpts.copts = "";
+  C674_big_endian_elf.$unseal("cc");
+  C674_big_endian_elf.cc.$unseal("cmd");
+  C674_big_endian_elf.cc.cmd = "cl6x -c";
+  listTargs.push(C674_big_endian_elf);
+  
+  
+  if(covRun == 1)
+   {
+     C674.profiles["release"].filters = coverityFilter;
+     C674_big_endian.profiles["release"].filters = coverityFilter;
+   }
+  }
+  else
+  {
+
+     var C674_big_endian = "C674_big_endian";  
+     var C674 = "C674";  
+     var C674_big_endian_elf = "C674_big_endian_elf";  
+     var C674_elf = "C674_elf";  
+  }
+  
+ var c66ToolsDir   = java.lang.System.getenv("C66CODEGENTOOL"); //This variable is set by CYGWINXDC.BAT        
+ if(c66ToolsDir != undefined)
+ {
+ /* Set path to the c66 tools directory */
+  var C66             = xdc.useModule('ti.targets.C66');
+  C66.rootDir       = c66ToolsDir;
+  C66.extensions[".s"] = {suf: ".s", typ: "asm"};
+  C66.extensions[".sa"] = {suf: ".sa", typ: "asm:-fl"};
+  C66.ccOpts.prefix = "";
+  C66.profiles["release"].compileOpts.copts = "";
+  C66.$unseal("cc");
+  C66.cc.$unseal("cmd");
+  C66.cc.cmd = "cl6x -c";
+  listTargs.push(C66);
+
+  var C66_elf             = xdc.useModule('ti.targets.elf.C66');
+  C66_elf.rootDir       = c66ToolsDir;
+  C66_elf.extensions[".s"] = {suf: ".s", typ: "asm"};
+  C66_elf.extensions[".sa"] = {suf: ".sa", typ: "asm:-fl"};
+  C66_elf.ccOpts.prefix = "";
+  C66_elf.profiles["release"].compileOpts.copts = "";
+  C66_elf.$unseal("cc");
+  C66_elf.cc.$unseal("cmd");
+  C66_elf.cc.cmd = "cl6x -c";
+  listTargs.push(C66_elf);
+
+
+ /* Set path to the c64 big endian tools directory */
+  var C66_big_endian             = xdc.useModule('ti.targets.C66_big_endian');
+  C66_big_endian.rootDir       = c66ToolsDir;
+  C66_big_endian.extensions[".s"] = {suf: ".s", typ: "asm"};
+  C66_big_endian.extensions[".sa"] = {suf: ".sa", typ: "asm:-fl"};
+  C66_big_endian.ccOpts.prefix = "";
+  C66_big_endian.profiles["release"].compileOpts.copts = "";
+  C66_big_endian.$unseal("cc");
+  C66_big_endian.cc.$unseal("cmd");
+  C66_big_endian.cc.cmd = "cl6x -c";
+  listTargs.push(C66_big_endian);
+  
+  
+  var C66_big_endian_elf             = xdc.useModule('ti.targets.elf.C66_big_endian');
+  C66_big_endian_elf.rootDir       = c66ToolsDir;
+  C66_big_endian_elf.extensions[".s"] = {suf: ".s", typ: "asm"};
+  C66_big_endian_elf.extensions[".sa"] = {suf: ".sa", typ: "asm:-fl"};
+  C66_big_endian_elf.ccOpts.prefix = "";
+  C66_big_endian_elf.profiles["release"].compileOpts.copts = "";
+  C66_big_endian_elf.$unseal("cc");
+  C66_big_endian_elf.cc.$unseal("cmd");
+  C66_big_endian_elf.cc.cmd = "cl6x -c";
+ 
+  listTargs.push(C66_big_endian_elf);
+  
+  
+  if(covRun == 1)
+   {
+     C66.profiles["release"].filters = coverityFilter;
+     C66_big_endian.profiles["release"].filters = coverityFilter;
+     C66_elf.profiles["release"].filters = coverityFilter;
+     C66_big_endian_elf.profiles["release"].filters = coverityFilter;
+     
+   }
+  }
+  else
+  {
+     var C66_big_endian = "C66_big_endian";  
+     var C66 = "C66";  
+     var C66_big_endian_elf = "C66_big_endian_elf";  
+     var C66_elf = "C66_elf";  
+     
+     
+  }
+  
+ var c64ToolsDir   = java.lang.System.getenv("C64CODEGENTOOL"); //This variable is set by CYGWINXDC.BAT        
+ if(c64ToolsDir != undefined)
+ {
+ /* Set path to the c64 tools directory */
+  var C64             = xdc.useModule('ti.targets.C64');
+  C64.rootDir       = c64ToolsDir;
+  C64.extensions[".s"] = {suf: ".s", typ: "asm"};
+  C64.extensions[".sa"] = {suf: ".sa", typ: "asm:-fl"};
+  C64.ccOpts.prefix = "";
+  C64.profiles["release"].compileOpts.copts = "";
+
+  C64.$unseal("cc");
+  C64.cc.$unseal("cmd");
+  C64.cc.cmd = "cl6x -c";
+  listTargs.push(C64);
+
+ /* Set path to the c64 big endian tools directory */
+  var C64_big_endian             = xdc.useModule('ti.targets.C64_big_endian');
+  C64_big_endian.rootDir       = c64ToolsDir;
+  C64_big_endian.extensions[".s"] = {suf: ".s", typ: "asm"};
+  C64_big_endian.extensions[".sa"] = {suf: ".sa", typ: "asm:-fl"};
+  C64_big_endian.ccOpts.prefix = "";
+  C64_big_endian.profiles["release"].compileOpts.copts = "";
+  C64_big_endian.$unseal("cc");
+  C64_big_endian.cc.$unseal("cmd");
+  C64_big_endian.cc.cmd = "cl6x -c";
+  listTargs.push(C64_big_endian);
+  
+ /* Set path to the c64Plus tools directory */
+  var C64P             = xdc.useModule('ti.targets.C64P');
+  C64P.rootDir       = c64ToolsDir;
+  C64P.extensions[".s"] = {suf: ".s", typ: "asm"};
+  C64P.extensions[".sa"] = {suf: ".sa", typ: "asm:-fl"};
+  C64P.ccOpts.prefix = "";
+  C64P.profiles["release"].compileOpts.copts = "";
+  C64P.$unseal("cc");
+  C64P.cc.$unseal("cmd");
+  C64P.cc.cmd = "cl6x -c";
+  listTargs.push(C64P);
+
+ /* Set path to the c64Plus big endian tools directory */
+  var C64P_big_endian             = xdc.useModule('ti.targets.C64P_big_endian');
+  C64P_big_endian.rootDir       = c64ToolsDir;
+  C64P_big_endian.extensions[".s"] = {suf: ".s", typ: "asm"};
+  C64P_big_endian.extensions[".sa"] = {suf: ".sa", typ: "asm:-fl"};
+  C64P_big_endian.ccOpts.prefix = "";
+  C64P_big_endian.profiles["release"].compileOpts.copts = "";
+  C64P_big_endian.$unseal("cc");
+  C64P_big_endian.cc.$unseal("cmd");
+  C64P_big_endian.cc.cmd = "cl6x -c";   
+  listTargs.push(C64P_big_endian);
+ 
+ /* Set path to the c64Plus tools directory */
+  var C64P_elf             = xdc.useModule('ti.targets.elf.C64P');
+  C64P_elf.rootDir       = c64ToolsDir;
+  C64P_elf.extensions[".s"] = {suf: ".s", typ: "asm"};
+  C64P_elf.extensions[".sa"] = {suf: ".sa", typ: "asm:-fl"};
+  C64P_elf.ccOpts.prefix = "";
+  C64P_elf.profiles["release"].compileOpts.copts = "";
+  C64P_elf.$unseal("cc");
+  C64P_elf.cc.$unseal("cmd");
+  C64P_elf.cc.cmd = "cl6x -c";
+  listTargs.push(C64P_elf);
+
+ /* Set path to the c64Plus big endian tools directory */
+  var C64P_big_endian_elf             = xdc.useModule('ti.targets.elf.C64P_big_endian');
+  C64P_big_endian_elf.rootDir       = c64ToolsDir;
+  C64P_big_endian_elf.extensions[".s"] = {suf: ".s", typ: "asm"};
+  C64P_big_endian_elf.extensions[".sa"] = {suf: ".sa", typ: "asm:-fl"};
+  C64P_big_endian_elf.ccOpts.prefix = "";
+  C64P_big_endian_elf.profiles["release"].compileOpts.copts = "";
+  C64P_big_endian_elf.$unseal("cc");
+  C64P_big_endian_elf.cc.$unseal("cmd");
+  C64P_big_endian_elf.cc.cmd = "cl6x -c";   
+  listTargs.push(C64P_big_endian_elf);
+ 
+  if(covRun == 1)
+   {
+     C64.profiles["release"].filters = coverityFilter;
+     C64_big_endian.profiles["release"].filters = coverityFilter;
+
+    C64P.profiles["release"].filters = coverityFilter;
+    C64P_big_endian.profiles["release"].filters = coverityFilter;
+    C64P_elf.profiles["release"].filters = coverityFilter;
+    C64P_big_endian_elf.profiles["release"].filters = coverityFilter;    
+   }
+  }
+  else
+  {
+     var C64P_big_endian = "C64P_big_endian";  
+     var C64P = "C64P";  
+     var C64P_big_endian_elf = "C64P_big_endian_elf";  
+     var C64P_elf = "C64P_elf";  
+     var C64_big_endian = "C64_big_endian";  
+     var C64 = "C64";  
+  }
+  
+  var mvarm9ToolsDir   = java.lang.System.getenv("MVARM9CGTOOL"); //This variable is set by CYGWINXDC.BAT
+ /* Set path to the ARM tools directory */
+  if(mvarm9ToolsDir != undefined)
+  {
+    var MVArm9            = xdc.useModule('gnu.targets.MVArm9');
+    MVArm9.rootDir       = mvarm9ToolsDir;  
+    /* Check if the Long name is set for ARM9*/
+    var arm9longname=java.lang.System.getenv("MVARM9LONGNAME");
+    if(arm9longname != undefined)
+    {
+       MVArm9.LONGNAME       = armv6longname;
+    }    
+    listTargs.push(MVArm9); 
+    if(covRun == 1)
+   {
+     MVArm9.profiles["release"].filters = coverityFilter;
+   }
+    
+  }
+  else
+  {
+   var MVArm9 = "MVArm9";  
+  }
+  
+  var gcarmv6ToolsDir   = java.lang.System.getenv("GCARMV6CGTOOL"); //This variable is set by CYGWINXDC.BAT
+ /* Set path to the ARM tools directory */
+  if(gcarmv6ToolsDir != undefined)
+  {
+    var GCArmv6            = xdc.useModule('gnu.targets.arm.GCArmv6');
+    GCArmv6.rootDir       = gcarmv6ToolsDir; 
+    /* Check if the Long name is set for ARMV6 */
+    var armv6longname=java.lang.System.getenv("GCARMV6LONGNAME");
+    if(armv6longname == undefined)
+    {
+      GCArmv6.LONGNAME       = "bin/arm_v6_le-gcc";
+    }
+    else
+    {
+      GCArmv6.LONGNAME       = armv6longname;
+    }
+    listTargs.push(GCArmv6); 
+    if(covRun == 1)
+   {
+     GCArmv6.profiles["release"].filters = coverityFilter;
+   }
+    
+  }
+  else
+  {
+   var GCArmv6 = "GCArmv6";  
+  }
+
+  var gcarmv7aToolsDir   = java.lang.System.getenv("GCARMV7ACGTOOL"); //This variable is set by CYGWINXDC.BAT
+ /* Set path to the ARM tools directory */
+  if(gcarmv7aToolsDir != undefined)
+  {
+    var GCArmv7A            = xdc.useModule('gnu.targets.arm.GCArmv7A');
+    GCArmv7A.rootDir       = gcarmv7aToolsDir; 
+
+    /* Check if the Long name is set for ARMV7A */    
+    var armv7alongname=java.lang.System.getenv("GCARMV7ALONGNAME");
+    if(armv7alongname == undefined)
+    {
+      GCArmv7A.LONGNAME       = "/bin/arm-none-linux-gnueabi-gcc";
+    }
+    else
+    {
+      GCArmv7A.LONGNAME       = armv7alongname;
+    }
+    
+    listTargs.push(GCArmv7A); 
+    if(covRun == 1)
+   {
+     GCArmv7A.profiles["release"].filters = coverityFilter;
+   }
+    
+  }
+  else
+  {
+   var GCArmv7A = "GCArmv7A";  
+  }
+  
+  var winceToolsDir   = java.lang.System.getenv("WINCECGTOOL"); //This variable is set by CYGWINXDC.BAT
+  if(winceToolsDir != undefined) 
+  { 
+  /* Set path to the ARM tools directory */
+  var WinCE            = xdc.useModule('microsoft.targets.arm.WinCE');
+  WinCE.rootDir       = winceToolsDir;   
+  var winceProjectRoot= java.lang.System.getenv("WINCEPROJROOT"); //This variable is set by CYGWINXDC.BAT
+  WinCE.projectRoot   = winceProjectRoot;
+  listTargs.push(WinCE); 
+  if(covRun == 1)
+   {
+     WinCE.profiles["release"].filters = coverityFilter;
+   }
+  }
+  else
+  {
+    var WinCE = "WinCE";  
+  }
+  
+  var msvcToolsDir   = java.lang.System.getenv("VC98TOOL"); //This variable is set by CYGWINXDC.BAT
+
+  if(msvcToolsDir != undefined) 
+  { 
+  /* Set path to the MSVC tools directory */
+  var VC98            = xdc.useModule('microsoft.targets.VC98');
+  VC98.rootDir        = msvcToolsDir;   
+  listTargs.push(VC98); 
+
+  var VC98_64         = xdc.useModule('local.targets.VC98_64');
+  VC98_64.rootDir        = msvcToolsDir;
+  listTargs.push(VC98_64);
+
+
+  obj = new VC98.DebugGen;
+  obj.execTemplate= "ti/mas/swtools/vctipjt_exec.xdt";
+  obj.execPattern="$(cfgName).vcproj";
+  if(covRun == 1)
+   {
+     VC98.profiles["release"].filters = coverityFilter;
+   }
+  
+  }
+  else
+  {
+    var VC98 = "VC98";
+    var VC98_64 = "VC98_64";
+  }
+  
+  var Arm11TIToolsDir   = java.lang.System.getenv("Arm11TITool"); //This variable is set by CYGWINXDC.BAT
+  if(Arm11TIToolsDir != undefined) 
+  { 
+  /* Set path to the ARM11 tools directory */
+  var TIArmv6le            = xdc.useModule('ti.targets.arm.Arm11');
+  TIArmv6le.rootDir        = Arm11TIToolsDir;   
+  
+  /* Set path to the ARM11 tools directory */
+  var TIArmv6be            = xdc.useModule('ti.targets.arm.Arm11_big_endian');
+  TIArmv6be.rootDir        = Arm11TIToolsDir;   
+  
+  listTargs.push(TIArmv6le); 
+  listTargs.push(TIArmv6be); 
+ 
+  if(covRun == 1)
+   {
+     TIArmv6le.profiles["release"].filters = coverityFilter;
+     TIArmv6be.profiles["release"].filters = coverityFilter;
+   }
+  
+  }
+  else
+  {
+    var TIArmv6le = "TIArmv6le";  
+    var TIArmv6be = "TIArmv6be";  
+  }
+
+  Build.targets = listTargs;
+  
+
+
+
+

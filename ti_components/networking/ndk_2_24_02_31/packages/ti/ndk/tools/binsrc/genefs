@@ -1,0 +1,90 @@
+#!/bin/bash
+#
+#  ======== genefs ========
+#  Generate a C source code file for the NDK EFS (Embedded Filesystem) from
+#  a directory of files.
+#
+#  In addition to converting all regular files into C char strings, files with
+#  a .cgi suffix are treated specially. On the target device, a CGI "script"
+#  is actually mapped to a C function. So, this script takes the base name of
+#  a file ending with .cgi and generates a CGI entry with a function name
+#  matching the basename:
+#
+#  demo/sampleData.cgi ->
+#        efs_createfile("demo/sampleData.cgi", 0, (UINT8 *)sampleData);
+#
+#  Obviously, there must be an actual C function with that name in the
+#  application code or the linker will fail.
+#
+#  The actual contents of the .cgi file are ignored. This makes it possible
+#  to serve the directory structure via a host webserver during development,
+#  and then just run genefs when ready to use on the target.
+#
+
+if test $# != 2
+then
+    echo "Usage: $0 input-directory output-file"
+    exit 1
+fi    
+
+in=$1
+out=$2
+
+if ! test -d $in
+then
+    echo "$0: input $in is not a directory"
+    exit 2
+fi
+
+rm -f $out
+if ! touch $out || ! test -f $out 
+then
+    echo "$0: cannot write to output file $out"
+    exit 3
+fi    
+
+tmp=efs$$.c
+
+# change a /-delimited pathname to use _ separators for use as C identifier
+function mapname
+{
+    base=${1//\//_}
+    echo ${base//./_}
+}
+
+echo '#include <netmain.h>' > $tmp
+echo '#include <_stack.h>' >> $tmp
+echo "" >> $tmp
+
+echo "void initEfsData()" > $out
+echo "{" >> $out
+
+for file in $(find $in -type f)
+do
+    suffix=${file##*.}
+    base=${file##$in/}
+
+    if [ $suffix = "cgi" ]
+    then
+	f=$(basename $file)
+	id=${f%%.*}
+	echo "    "extern int $id\(SOCKET s, int length\)\; >> $out
+        echo "    "efs_createfile\(\"$base\", 0, \(UINT8 \*\)$id\)\; >> $out
+    else
+	id=$(mapname $base)
+	#echo $id
+
+	./binsrc $file tmp$$.c $id
+	cat tmp$$.c >> $tmp
+	echo "" >> $tmp
+	rm tmp$$.c
+
+	echo "    "efs_createfile\(\"$base\", ${id}_SIZE, $id\)\; >> $out
+    fi
+done
+
+echo "}" >> $out
+
+cat $tmp $out > tmp$$
+mv tmp$$ $out
+rm $tmp

@@ -1,0 +1,92 @@
+clean::
+	$(RM) package/ti.ndk.config.sch
+	$(RM) package/.vers_g180
+	$(RM) package/.vers_r170
+	$(RM) package/.vers_b160
+	$(RM) package/.xdc-B06
+	$(RM) package/ti_ndk_config.java
+	$(RM) package/ti_ndk_config.class
+	$(RM) package/package_ti.ndk.config.c
+	$(RM) package/package.defs.h
+	$(RM) package/ti.ndk.config.ccs
+
+.interfaces: package/ti.ndk.config.sch package/.vers_g180 package/.vers_r170 package/.vers_b160 package/.xdc-B06 package/ti_ndk_config.java package/package_ti.ndk.config.c package/package.defs.h package/ti.ndk.config.ccs 
+package/package.xdc.inc: package/.vers_g180
+package/.vers_g180:
+package/package.xdc.inc: package/.vers_r170
+package/.vers_r170:
+package/package.xdc.inc: package/.vers_b160
+package/.vers_b160:
+
+.interfaces: Global.xdc Http.xdc Telnet.xdc DhcpClient.xdc DhcpServer.xdc Dns.xdc Nat.xdc Tcp.xdc Ip.xdc Route.xdc Icmp.xdc Udp.xdc Emac.xdc Ppp.xdc Pppoe.xdc 
+
+# schema include file dependencies
+package.xs:
+package/package.xdc.inc: package.xs
+Global.xs:
+package/package.xdc.inc: Global.xs
+Http.xs:
+package/package.xdc.inc: Http.xs
+Telnet.xs:
+package/package.xdc.inc: Telnet.xs
+DhcpClient.xs:
+package/package.xdc.inc: DhcpClient.xs
+DhcpServer.xs:
+package/package.xdc.inc: DhcpServer.xs
+Dns.xs:
+package/package.xdc.inc: Dns.xs
+Nat.xs:
+package/package.xdc.inc: Nat.xs
+Tcp.xs:
+package/package.xdc.inc: Tcp.xs
+Ip.xs:
+package/package.xdc.inc: Ip.xs
+Route.xs:
+package/package.xdc.inc: Route.xs
+Icmp.xs:
+package/package.xdc.inc: Icmp.xs
+Udp.xs:
+package/package.xdc.inc: Udp.xs
+
+# schema update dependencies
+package/package.xdc.inc: Global.xdc
+package/package.xdc.inc: Http.xdc
+package/package.xdc.inc: Telnet.xdc
+package/package.xdc.inc: DhcpClient.xdc
+package/package.xdc.inc: DhcpServer.xdc
+package/package.xdc.inc: Dns.xdc
+package/package.xdc.inc: Nat.xdc
+package/package.xdc.inc: Tcp.xdc
+package/package.xdc.inc: Ip.xdc
+package/package.xdc.inc: Route.xdc
+package/package.xdc.inc: Icmp.xdc
+package/package.xdc.inc: Udp.xdc
+package/package.xdc.inc: Emac.xdc
+package/package.xdc.inc: Ppp.xdc
+package/package.xdc.inc: Pppoe.xdc
+package/package.xdc.inc: xdc/IPackage.xdc
+xdc/IPackage.xdc:
+vpath xdc/IPackage.xdc $(XPKGVPATH)
+
+ifneq (clean,$(MAKECMDGOALS))
+/datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/services/intern/gen/java/package.jar:
+package/package.xdc.inc: /datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/services/intern/gen/java/package.jar
+/datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/shelf/java/tar.jar:
+package/package.xdc.inc: /datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/shelf/java/tar.jar
+/datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/shelf/java/antlr.jar:
+package/package.xdc.inc: /datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/shelf/java/antlr.jar
+/datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/services/spec/java/package.jar:
+package/package.xdc.inc: /datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/services/spec/java/package.jar
+/datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/shelf/java/ecj.jar:
+package/package.xdc.inc: /datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/shelf/java/ecj.jar
+/datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/services/intern/cmd/java/package.jar:
+package/package.xdc.inc: /datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/services/intern/cmd/java/package.jar
+/datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/services/global/java/package.jar:
+package/package.xdc.inc: /datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/services/global/java/package.jar
+/datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/shelf/java/js.jar:
+package/package.xdc.inc: /datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/shelf/java/js.jar
+/datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/services/intern/xsr/java/package.jar:
+package/package.xdc.inc: /datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/services/intern/xsr/java/package.jar
+endif
+# goals for files generated during schema generation but unspecified by schema's pattern rule
+

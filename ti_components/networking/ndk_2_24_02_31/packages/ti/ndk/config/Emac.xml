@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<gep name="Emac" title="EMAC Settings" version="1">
+
+<page name="Module" title="General Settings">
+<html><body><table>
+  <tr>
+    <td>
+      <form>
+        <p>The NDK EMAC module allows you select the EMAC driver corresponding to your device.</p>
+        <p></p> <!-- create some white space -->
+      </form>
+    </td>
+  </tr>
+
+  <tr><td colspan="2">
+    <control type="checkbox" label="Add the EMAC module to my configuration" value="value:this.$used" bold="true"/></td>
+  </tr>
+
+  <tr></tr> <!-- create some white space -->
+  <tr>
+    <td>
+      <h1>General EMAC Settings</h1>
+      <table>
+        <tr>
+          <td><control type="label" label="Device selection"/></td>
+          <td><control type="droplist"
+               enabled="value:this.$used"
+               value="value:ti.ndk.config.Emac.device"
+               tooltip="Select your device here to load the appropriate EMAC driver library"/></td>
+        </tr>
+      </table>
+      <form><p>Select the device you are building for and the Emac module will attempt to load the Ethernet driver for that device.  If the device you are working on is not in the list, you should choose "NONE" for this field.  In this case, you must link in your device's Ethernet driver yourself.</p>
+      </form>
+    </td>
+  </tr>
+
+</table></body></html>
+</page>
+
+<properties name="Advanced" title="All Options" enabled="true" visible="true" link="this"/>
+</gep>
+

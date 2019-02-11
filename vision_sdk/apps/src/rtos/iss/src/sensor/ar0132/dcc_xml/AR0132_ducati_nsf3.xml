@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<NSF3_CFG_xml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<!--this is comment-->
+	<dcc_name>nsf3_cfg_dcc</dcc_name>
+	<dcc_header>
+		<camera_module_id>   132 </camera_module_id>
+		<dcc_descriptor_id>   50 </dcc_descriptor_id>
+		<algorithm_vendor_id>  1 </algorithm_vendor_id>
+		<tunning_tool_version> 0 </tunning_tool_version>
+	</dcc_header>
+	<!--=======================================================================-->
+	<typedef>
+		<nsf3_pass_prms_t type="struct">
+			<!--Lens focal length in micrometers.-->
+			<sft_thr_en type="uint8"> </sft_thr_en> <!-- enable/disable noise filter soft-thresholding : 0,1. NOT USED FOR NEF3V!! -->
+			<ee_en type="uint8"> </ee_en> <!-- disable/enable edge enhancement: 0,1 -->
+			<thr_scale_tn1_tn2 type="uint8"> </thr_scale_tn1_tn2> <!-- Tn1/Tn2 scaling factor, 8Q5 -->
+			<thr_scale_tn3_tn2 type="uint8"> </thr_scale_tn3_tn2> <!-- Tn3/Tn2 scaling factor, 8Q5 -->
+			<thr_val type="int16[4][12]"> </thr_val> <!-- Noise threshold paramters config - X - Y - Slope-->
+			<knee_u type="uint8[3]"> </knee_u> <!-- Knee points for U[3], 8Q6 -->
+			<supprs_val type="uint8[4][6]"> </supprs_val> <!-- suppression config -->
+			<edge_val type="int16[4][6]"> </edge_val> <!-- edge enhancement config -->
+		</nsf3_pass_prms_t>
+		<nsf3_cfg_dcc_descriptor_t type="struct">
+			<update type="uint8"> </update>
+			<enable type="uint8"> </enable> <!-- disable/enable NSF3: 0,1 -->
+			<iterations type="uint8"> </iterations> <!-- n-pass filter default is 1. CAUTION! FOR VIDEO UCS ITERATIONS MUST BE 1!! -->
+			<!-- Parameters needed each pass calculations.-->
+			<nsf3_pass_prms		 type="nsf3_pass_prms_t[]">  </nsf3_pass_prms>
+		</nsf3_cfg_dcc_descriptor_t>
+	</typedef>
+	<!--=======================================================================-->
+	<use_case val="1023">
+		<!-- DCC_USE_CASE_ALL -->
+		<n-space>
+			<region0 class="0">
+				<colortemperature val="2" min="0" max="20000">  </colortemperature>
+				<exposure val="1" min="0" max="10000000">  </exposure>
+				<gain val="0" min="0" max="1024">  </gain>
+			</region0>
+		</n-space>
+		<parameter_package>
+			<!--NSF3 parameters class 0 --> 
+			<nsf3_cfg_dcc type="nsf3_cfg_dcc_descriptor_t">
+				{
+					0, // update
+					1, // enable
+					1, // no of iterations. Caution in setting it >1-- video UCs may not support it!
+					{
+						{ // nsf3_pass_prms_t nsf3_pass_prms; // Parameters for object distance
+							1,  // sft_thr_en
+							0,  // ee_en
+							64, // thr_scale_tn1_tn2
+							16, // thr_scale_tn3_tn2
+							{
+								// Noise threshold parameters
+								// Color 0:
+								{0,2,64,64,4,42,256,8,21,1024,16,10,},
+								// Color 1:
+								{0,2,64,64,4,42,256,8,21,1024,16,10,},
+								// Color 2:
+								{0,2,64,64,4,42,256,8,21,1024,16,10,},
+								// Color 3:
+								{0,2,64,64,4,42,256,8,21,1024,16,10,},
+							},
+							{32,64,80}, // knee points
+							{
+								// Suppression config
+								// Color 0:
+								{128,128,128,128,128,128,},
+								// Color 1:
+								{128,128,128,128,128,128,},
+								// Color 2:
+								{128,128,128,128,128,128,},
+								// Color 3:
+								{128,128,128,128,128,128,},
+							},
+							{
+								// Edge enhancement config
+								// Color 0:
+								{42,42,28,28,12,12,},
+								// Color 1:
+								{42,42,28,28,12,12,},
+								// Color 2:
+								{42,42,28,28,12,12,},
+								// Color 3:
+								{42,42,28,28,12,12,},
+							},
+						},
+					},
+				}
+			</nsf3_cfg_dcc>
+		</parameter_package>
+	</use_case>
+<!--=====================================================================-->
+</NSF3_CFG_xml>

@@ -1,0 +1,89 @@
+%%{
+/*
+ * RM.xdt
+ *
+ * Template file for the Resource Manager for generating internal data 
+ * structures.
+ *
+ * Copyright (C) 2009 Texas Instruments Incorporated - http://www.ti.com/
+ *
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *
+ *    Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ *    Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the
+ *    distribution.
+ *
+ *    Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ *  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ *  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ *  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ *  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ *  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+*/
+
+   var makeFar = (((Program.build.target.isa.match(/66/)) || (Program.build.target.isa.match(/64t/)) || (Program.build.target.isa.match(/64p/)) || (Program.build.target.isa.match(/674/))) ? true : false);
+
+%%}
+
+/* Resource Manager Internal Header Files */
+#include <ti/sdo/edma3/rm/src/edma3resmgr.h>
+
+/**
+ * Maximum Resource Manager Instances supported by the EDMA3 Package.
+ * USE THE SAME VALUE FOR BOTH THE #DEFINE AND CONST UNSIGNED INT BELOW.
+ */
+% var max_rm_instances = this.edma3_max_rm_instances;
+
+/**
+ * Maximum Resource Manager Instances supported by the EDMA3 Package.
+ * This #define is needed for array declarations.
+ */
+#define MAX_EDMA3_RM_INSTANCES `max_rm_instances`
+
+/* This const is required to access this constant in other header files */
+const unsigned int EDMA3_MAX_RM_INSTANCES = `max_rm_instances`;
+
+/*
+% print("********** GUNP Program.build.target.isa " + Program.build.target.isa);
+*/
+EDMA3_RM_InstanceInitConfig userInstInitConfigArray[EDMA3_MAX_EDMA3_INSTANCES][MAX_EDMA3_RM_INSTANCES];
+EDMA3_RM_Instance resMgrInstanceArray[EDMA3_MAX_EDMA3_INSTANCES][MAX_EDMA3_RM_INSTANCES];
+
+
+% if (makeFar) {
+/* These pointers will be used to refer the above mentioned arrays. */
+far EDMA3_RM_Instance *resMgrInstance = (EDMA3_RM_Instance *)resMgrInstanceArray;
+far EDMA3_RM_InstanceInitConfig *userInitConfig = (EDMA3_RM_InstanceInitConfig *)userInstInitConfigArray;
+
+/* Pointer to the above mentioned 2-D arrays, used for address calculation purpose */
+far EDMA3_RM_Instance *ptrRMIArray = (EDMA3_RM_Instance *)resMgrInstanceArray;
+far EDMA3_RM_InstanceInitConfig *ptrInitCfgArray = (EDMA3_RM_InstanceInitConfig *)userInstInitConfigArray;
+
+% }
+% else {
+/* These pointers will be used to refer the above mentioned arrays. */
+EDMA3_RM_Instance *resMgrInstance = (EDMA3_RM_Instance *)resMgrInstanceArray;
+EDMA3_RM_InstanceInitConfig *userInitConfig = (EDMA3_RM_InstanceInitConfig *)userInstInitConfigArray;
+
+/* Pointer to the above mentioned 2-D arrays, used for address calculation purpose */
+EDMA3_RM_Instance *ptrRMIArray = (EDMA3_RM_Instance *)resMgrInstanceArray;
+EDMA3_RM_InstanceInitConfig *ptrInitCfgArray = (EDMA3_RM_InstanceInitConfig *)userInstInitConfigArray;
+
+% }

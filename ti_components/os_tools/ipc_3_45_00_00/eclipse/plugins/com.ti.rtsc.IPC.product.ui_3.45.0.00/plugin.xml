@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin
+    name="IPC IDE Support"
+    id="com.ti.rtsc.IPC.product.ui"
+    version="3.45.0.00"
+    provider-name="Texas Instruments Incorporated">
+
+    <extension point="org.eclipse.help.toc">
+      <toc file="toc_top.xml" primary="true"/>
+      <toc file="eclipse_cdoc_toc.xml"/>
+    </extension>
+
+    <extension point="org.eclipse.help.contentProducer">
+        <contentProducer>
+            <producer class="org.eclipse.rtsc.xdctools.ui.help.HelpContentProducer"/>
+        </contentProducer>
+    </extension>
+
+    <extension
+         point="org.eclipse.core.variables.dynamicVariables">
+     <variable 
+        name="IPC_CG_ROOT"
+        resolver="org.eclipse.rtsc.xdctools.ui.macros.MacroResolver"
+        description="Returns the absolute path to the location of the version of IPC selected in Window->Preferences->CCS->RTSC preference page. If no IPC version is selected, the location of the highest available version is returned.">
+     </variable>
+   </extension>
+
+
+
+</plugin>

@@ -1,0 +1,13 @@
+clear;
+W=1280;
+H=720;
+fid=fopen('../testvecs/input/input.raw');
+I=fread(fid,[W, H],'uint16')';
+fclose(fid);
+Ifloat= I./max(max(I));
+I=uint16(I);
+J=demosaic(I,'bggr');
+Jfloat=double(J);
+Jfloat=Jfloat./max(max(Jfloat));
+imshow(Ifloat);
+figure; imshow(Jfloat);

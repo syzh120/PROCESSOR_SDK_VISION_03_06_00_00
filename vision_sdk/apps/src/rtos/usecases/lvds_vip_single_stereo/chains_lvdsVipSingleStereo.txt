@@ -1,0 +1,11 @@
+UseCase: chains_lvdsVipSingleStereo
+
+Capture -> VPE_capture -> Alg_RemapMerge (EVE2) -> Dup_RemapOut
+
+Dup_RemapOut -> VPE_orgdisp -> Sync_org -> Alg_DmaSwMs -> Display_org
+
+Dup_RemapOut -> Sync_disp -> Dup_CensusIn -> Alg_Census (EVE2) -> Alg_DisparityHamDist (EVE3) -> Merge -> Alg_StereoPostProcess (DSP1) -> VPE_disparity ->Display_disparity
+
+Dup_CensusIn -> Merge
+
+GrpxSrc -> Display_Grpx

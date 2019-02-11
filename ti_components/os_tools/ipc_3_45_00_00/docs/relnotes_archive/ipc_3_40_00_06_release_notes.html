@@ -1,0 +1,1797 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!--
+ *  Copyright (c) 2012-2015, Texas Instruments Incorporated
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *
+ *  *  Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *
+ *  *  Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ *
+ *  *  Neither the name of Texas Instruments Incorporated nor the names of
+ *     its contributors may be used to endorse or promote products derived
+ *     from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ *  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ *  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ *  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ *  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ *  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ *  OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ *  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ *  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ *  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<html>
+<head>
+    <title>IPC 3.40.00.06 Release Notes </title>
+    <!-- For now, we use the doxygen style sheet -->
+    <link type="text/css" rel="stylesheet" href="../../docs/doxygen/html/doxygen.css">
+    <!-- doxygen's css .memproto's all have tables for a little extra pad...
+         don't like tables, so give 'em a little extra left pad ourselves
+    --->
+    <style type="text/css">
+    body {
+        margin: 20px;
+    }
+    .memproto {
+        padding-left: 6px;
+    }
+    </style>
+</head>
+<body>
+<table width="100%">
+  <tbody>
+    <tr>
+      <td bgcolor="black" width="1">
+        <a href="http://www.ti.com">
+          <img border=0 src="../../docs/tilogo.gif" alt="Texas Instruments">
+        </a>
+      </td>
+      <td bgcolor="red">
+        <img src="../../docs/titagline.gif" alt="Technology for Innovators(tm)">
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h1 align="center">IPC 3.40.00.06 Release Notes </h1>
+<h2 align="center">August 2015</h2>
+
+<p>
+This IPC Release is targeted to SYS/BIOS 6-based platforms.
+</p>
+<p align="center">
+<a href="#Introduction">Introduction</a>,
+<a href="#Documentation">Documentation</a>,
+<a href="#Whats_New">What's New</a>,
+<a href="#Upgrade_Info">Upgrade Info</a>,
+<a href="#Compatibility">Compatibility Information</a>,
+<a href="#Device_Support">Device Support</a>,
+<a href="#Validation">Validation Info</a>,
+<a href="#Known_Issues">Known Issues</a>,
+<a href="#Examples">Examples</a>,
+<a href="#Version">Version Information</a>,
+<a href="#Support">Technical Support</a>.
+</p>
+
+<hr>
+
+<h2><a name="Introduction">Introduction</a></h2>
+
+<p>
+The IPC product provides software connectivity between multiple
+processors. Each processor may run either an HLOS (e.g. Linux, QNX)
+or an RTOS (e.g. SYS/BIOS).  <!-- In addition, a
+processor may also be designated as the master for another slave processor,
+and may be responsible for controlling the slave processor's execution
+(including boot-loading the slave).-->
+</p>
+<p>
+The IPC product is comprised of the following</p>
+    <ul>
+      <li>
+        <b>packages/ti.ipc</b>:  IPC interface definitions (e.g. MessageQ,
+        ListMP, HeapMemMP, Notify, etc.)
+      </li>
+      <li>
+        <b>packages/ti.sdo.ipc</b>:  BIOS implementations of
+        higher-level IPC modules (e.g. MessageQ, Notify, heaps, etc.)
+      </li>
+      <li>
+        <b>packages/ti.sdo.utils</b>: BIOS implementations of IPC
+        utility modules (e.g. MultiProc, List, NameServer, etc.)
+      </li>
+      <li>
+        <b>qnx</b>:  Contains QNX implementations of ti.ipc
+      </li>
+      <li>
+        <b>linux</b>:  Contains Linux implementations of ti.ipc
+      </li>
+    </ul>
+
+<p>These components are provided as source code and prebuilt libraries.</p>
+
+
+<hr>
+
+<h2><a name="Documentation">Documentation</a></h2>
+<p>
+The following documentation is available:
+</p>
+<ul>
+  <li>
+    Install Guide (BIOS) - (<a href="../../docs/IPC_Install_Guide_BIOS.pdf">local</a> |
+      <a href="http://processors.wiki.ti.com/index.php/IPC_Install_Guide_BIOS">latest</a>)
+  </li>
+  <li>
+    Install Guide (QNX) - (<a href="../../docs/IPC_Install_Guide_QNX.pdf">local</a> |
+      <a href="http://processors.wiki.ti.com/index.php/IPC_Install_Guide_QNX">latest</a>)
+  </li>
+  <li>
+    Install Guide (Linux) - (<a href="../../docs/IPC_Install_Guide_Linux.pdf">local</a> |
+      <a href="http://processors.wiki.ti.com/index.php/IPC_Install_Guide_Linux">latest</a>)
+  </li>
+  <li>
+    Install Guide (Android) - (<a href="http://processors.wiki.ti.com/index.php/IPC_Install_Guide_Android">latest</a>)
+  </li>
+  <li>
+    User's Guide - (<!-- <a href="../../docs/IPC_Install_Guide_Linux.pdf">local</a> | -->
+      <a href="http://processors.wiki.ti.com/index.php/IPC_User%27s_Guide">latest</a>)
+  </li>
+  <li>IPC Application Programming Interface (API) Reference
+  Guide (<a href="../../docs/doxygen/html/index.html">HTML</a>)</li>
+  <li>
+    <a href="docs/cdoc/index.html">Package Reference Guide (cdoc)</a> - includes
+    configuration details
+  </li>
+  <li>
+    <a href="ipc_3_40_00_06_reports.html">Static Analysis Reports</a>
+  </li>
+  <li>
+    <a href="ipc_3_40_00_06_manifest.html">IPC Software Manifest and License</a>
+  </li>
+</ul>
+
+<p>
+In addition, users are encouraged to monitor (and contribute to!) the
+<a href="http://processors.wiki.ti.com">TI Wiki</a>.
+</p>
+
+<p>
+Release notes from previous releases are also available in the <a
+href="../../docs/relnotes_archive">relnotes_archive</a> directory.
+</p>
+
+<hr>
+<h2><a name="Whats_New">What's New</a></h2>
+<p>The following significant changes have been made since 1.25.00</p>
+
+<div class="memitem">
+<div class="memproto">3.40.00.06 </div>
+
+<div class="memdoc">
+<ul>
+  <li>The following defects were resolved:
+<table width="100%">
+  <colgroup width="20%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00117013">SDOCM00117013</a></td>
+      <td>SharedRegion-related asserts are incorrect
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00117958">SDOCM00117958</a></td>
+      <td>LAD crashes w/ segfault when NameServer_create() is called after NameServer() delete
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00117156">SDOCM00117156</a></td>
+      <td>Resource entries that are not aligned to 1MB boundary needs to be handled correctly
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00104833">SDOCM00104833</a></td>
+      <td>MessageQMulti application does not support numThreads > 10
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00114069">SDOCM00114069</a></td>
+      <td>IPC custom build does not include file from ti/ipc
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00118440">SDOCM00118440</a></td>
+      <td>Remove DRA7XX references from example ex46_graph config.bld
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00118433">SDOCM00118433</a></td>
+      <td>Examples use incorrect link command
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+  <br />
+
+  <li>The following enhancements were resolved:
+<table width="100%">
+  <colgroup width="20%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115404">SDOCM00115404</a></td>
+      <td>IPC user-mode errors (Linux) should not go to STDOUT
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00116391">SDOCM00116391</a></td>
+      <td>Increase default poll rate of the default gate in GateMP_setup in QNX
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00118017">SDOCM00118017</a></td>
+      <td>RPMessage (Linux) has large data footprint, make it configurable
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00117361">SDOCM00117361</a></td>
+      <td>Need to update BIOS version to support Power module for C66 on DRA7xx
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115093">SDOCM00115093</a></td>
+      <td>Multiple heap support for MessageQ (Linux)
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00117446">SDOCM00117446</a></td>
+      <td>Power Management for DRA7xx DSP on Linux
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+
+</ul>
+</div>
+</div>
+
+<br />
+
+<div class="memitem">
+<div class="memproto">3.36.00.07 </div>
+
+<div class="memdoc">
+<ul>
+  <li>The following defects were resolved:
+<table width="100%">
+  <colgroup width="20%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115129">SDOCM00115129</a></td>
+      <td>DSP aborts when patched with large cluster base ID
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115127">SDOCM00115127</a></td>
+      <td>GateMP_open crashes on Keystone 2
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00114083">SDOCM00114083</a></td>
+      <td>Upon failure from DLOAD_get_section_offset(), QNX IPC generates multiple assertions as opposed to exiting cleanly
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00114783">SDOCM00114783</a></td>
+      <td>pthread_mutex_destroy is not called in IPC
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115434">SDOCM00115434</a></td>
+      <td>NameServer_delete in LAD daemon leaks memory
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115067">SDOCM00115067</a></td>
+      <td>Parallel build support in IPC examples
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115428">SDOCM00115428</a></td>
+      <td>Incorrect return status from NameServer_delete (Linux)
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115143">SDOCM00115143</a></td>
+      <td>Improper timeout handling in MessageQ_get (Linux)
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115768">SDOCM00115768</a></td>
+      <td>Incorrect check for invalid pointer in Ipc_detach
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115958">SDOCM00115958</a></td>
+      <td>'make install' for QNX is not exporting transport interface header files
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00114745">SDOCM00114745</a></td>
+      <td>Ipc_transportConfig has race window where factory is overwritten
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115098">SDOCM00115098</a></td>
+      <td>New MultiProc cdoc links for "See Also" are garbled
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115373">SDOCM00115373</a></td>
+      <td>NameServer local get methods are missing on Linux
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115294">SDOCM00115294</a></td>
+      <td>NameServer_create and NameServer_add sometimes fail in QNX
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+  <br />
+
+  <li>The following enhancements were resolved:
+<table width="100%">
+  <colgroup width="20%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115106">SDOCM00115106</a></td>
+      <td>Expose functions in TiIpcFxns.h as public API
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00114946">SDOCM00114946</a></td>
+      <td>IPC Watchdog module should allow user-configurable timer assignments
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115108">SDOCM00115108</a></td>
+      <td>The default value ProcMgr_MAX_MEMORY_REGIONS should be increased in QNX
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00116094">SDOCM00116094</a></td>
+      <td>Command Line Options for LAD to override config params
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00114951">SDOCM00114951</a></td>
+      <td>Host-only IPC communication (Linux, no DSP support)
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00100361">SDOCM00100361</a></td>
+      <td>Error Recovery: When slave crashes, apps using the slave should be able to recover
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00114663">SDOCM00114663</a></td>
+      <td>Add DRA7XX DSP2 support to QNX
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+
+</ul>
+</div>
+</div>
+
+<br />
+
+<div class="memitem">
+<div class="memitem">
+<div class="memproto">3.35.00.05 </div>
+
+<div class="memdoc">
+<ul>
+  <li>The following defects were resolved:
+<table width="100%">
+  <colgroup width="20%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00103540">SDOCM00103540</a></td>
+      <td>Incorrect number of hardware spin locks on DRA7XX
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115028">SDOCM00115028</a></td>
+      <td>"struct fw_rsc_intmem" mismatch between QNX and IPC 3.30
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00108142">SDOCM00108142</a></td>
+      <td>QNX code in qnx/src/ipc3x_dev needs cleanup
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115035">SDOCM00115035</a></td>
+      <td>Watchdog module device validation & configuration should be in module$use method, not module$meta$init
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115038">SDOCM00115038</a></td>
+      <td>Notify mailbox driver is clearing wrong fifo during init phase
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115050">SDOCM00115050</a></td>
+      <td>Race condition in QNX when IPU2 is exchanging messages with host while DSP1 or IPU1 is doing the same
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115024">SDOCM00115024</a></td>
+      <td>IPC ping rpmsg unit-test hangs when run on K2L
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115043">SDOCM00115043</a></td>
+      <td>Recovery is not working in QNX on 'late-attached' cores
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00113501">SDOCM00113501</a></td>
+      <td>Clean up QNX build output
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00114478">SDOCM00114478</a></td>
+      <td>Incorrect thread safety in MessageQ_setup (Linux)
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115026">SDOCM00115026</a></td>
+      <td>ex13_notifypeer example needs ping message from DSP to EVE
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115042">SDOCM00115042</a></td>
+      <td>NotifyDriverMbx on Vayu should not use Ipc module
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115034">SDOCM00115034</a></td>
+      <td>"struct fw_rsc_intmem" mismatch between Linux 3.14 and IPC 3.30.0.9
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00114110">SDOCM00114110</a></td>
+      <td>IPC custom build failure with XDCtools core product
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00114409">SDOCM00114409</a></td>
+      <td>vring initialization in QNX is not clearing the correct area
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115030">SDOCM00115030</a></td>
+      <td>Ipc family Settings.xs needs to add F28377D
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115031">SDOCM00115031</a></td>
+      <td>libipc and libutils are not built for dynamic linking in QNX IPC
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115036">SDOCM00115036</a></td>
+      <td>MessageQMulti unit-test gets an out of heap memory error when run on K2E or K2L
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115039">SDOCM00115039</a></td>
+      <td>Ipc_attach() race on multiple cores corrupts Ipc_Reserved structs in SR0
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00114518">SDOCM00114518</a></td>
+      <td>MessageQ_setMsgPri overwrites entire flags field
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00113915">SDOCM00113915</a></td>
+      <td>GateMPApp's output should be made less verbose
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115049">SDOCM00115049</a></td>
+      <td>Incorrect Assert_isTrue in RPMessage_recv
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115051">SDOCM00115051</a></td>
+      <td>IPC custom build failure with XDCtools core product
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00106179">SDOCM00106179</a></td>
+      <td>Remove/circumvent error messages from MessageQCopy_send at startup in QNX resource manager
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00114392">SDOCM00114392</a></td>
+      <td>Interrupt module on tci6638 does not support clusters
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00114390">SDOCM00114390</a></td>
+      <td>Incorrect procId in NameServer_get used by lad daemon
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115053">SDOCM00115053</a></td>
+      <td>LAD's GateMP fails to start when built for Android's Lollipop
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115047">SDOCM00115047</a></td>
+      <td>Optimization using VRING_USED_F_NO_NOTIFY is broken on QNX, and interrupts are not sent when race occurs
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+  <br />
+
+  <li>The following enhancements were resolved:
+<table width="100%">
+  <colgroup width="20%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00113149">SDOCM00113149</a></td>
+      <td>GateMP host-support should work when SharedRegion 0 has a physical address that is different from its virtual address
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00114393">SDOCM00114393</a></td>
+      <td>ex44_compute, new example for Keystone II
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00114391">SDOCM00114391</a></td>
+      <td>IPC cluster support is missing on Linux implementation
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00114908">SDOCM00114908</a></td>
+      <td>Add reserved queue support to QNX
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00114354">SDOCM00114354</a></td>
+      <td>IPC Manager needs a public header file
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00114730">SDOCM00114730</a></td>
+      <td>Add support for reserved message queues on Linux/Keystone II
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00113638">SDOCM00113638</a></td>
+      <td>Rename paths to ipc-trace to not require a priori knowledge of MultiProc ids in QNX
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00114696">SDOCM00114696</a></td>
+      <td>Add method to return address of shared region entry
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00115022">SDOCM00115022</a></td>
+      <td>Loading/unloading individual cores while keeping other cores running in QNX IPC
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00114964">SDOCM00114964</a></td>
+      <td>Processor data array size should match cluster size
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00113609">SDOCM00113609</a></td>
+      <td>Add version support for MessageQ_Params structure
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00114926">SDOCM00114926</a></td>
+      <td>Modify examples on Linux to use installed IPC product
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00114985">SDOCM00114985</a></td>
+      <td>MessageQ macro for extracting destination address from message header
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00108403">SDOCM00108403</a></td>
+      <td>Enable pluggable MessageQ transports on Linux
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00108118">SDOCM00108118</a></td>
+      <td>Need an IPC example to show how to send shmemallocator buffers using MessageQ
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00111686">SDOCM00111686</a></td>
+      <td>NameServer max name length needs to be made more easily configurable
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+
+</ul>
+</div>
+</div>
+
+<br />
+
+<div class="memitem">
+<div class="memproto">3.30.00.09 </div>
+
+<div class="memdoc">
+<ul>
+  <li>The following defects were resolved:
+<table width="100%">
+  <colgroup width="20%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00107419">SDOCM00107419</a></td>
+      <td>IPC build warning in RPMessage.c
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00112918">SDOCM00112918</a></td>
+      <td>MessageQ_open() from multiple threads can get stuck
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00108130">SDOCM00108130</a></td>
+      <td>IPC custom library build creates empty folder
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00112680">SDOCM00112680</a></td>
+      <td>IPC for Concerto has incorrect NotifyDriverCirc_enable()/enableEvent()
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+  <br />
+
+  <li>The following enhancements were resolved:
+<table width="100%">
+  <colgroup width="20%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00113036">SDOCM00113036</a></td>
+      <td>Add ex02_messageq example for DRA7xx, all-BIOS
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00113039">SDOCM00113039</a></td>
+      <td>Add ex13_notifypeer example for DRA7xx, all-BIOS
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00113034">SDOCM00113034</a></td>
+      <td>TDA3xx device support
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00106423">SDOCM00106423</a></td>
+      <td>Update to CCSv6-compatible BIOS and XDC versions
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00113035">SDOCM00113035</a></td>
+      <td>Add ex01_hello example for DRA7xx, all-BIOS
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00112254">SDOCM00112254</a></td>
+      <td>Add IPC support for Soprano
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00112956">SDOCM00112956</a></td>
+      <td>Remove OMAP5 Linux and QNX support
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+
+</ul>
+</div>
+</div>
+
+<br />
+
+<div class="memitem">
+<div class="memproto">3.23.00.01 </div>
+
+<div class="memdoc">
+<ul>
+  <li>The following defects were resolved:
+<table width="100%">
+  <colgroup width="20%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00112106">SDOCM00112106</a></td>
+      <td>Timed-out NameServer requests from host causes subsequent requests to receive out-of-sequence responses
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00108594">SDOCM00108594</a></td>
+      <td>MultiProc_self() returns bogus value on QNX
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00108585">SDOCM00108585</a></td>
+      <td>IpcPower has incorrect interrupts
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00112581">SDOCM00112581</a></td>
+      <td>GateMP_create on Linux sets resourceId incorrectly
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+  <br />
+
+  <li>The following enhancements were resolved:
+<table width="100%">
+  <colgroup width="20%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00108584">SDOCM00108584</a></td>
+      <td>Support QNX 6.6
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00108582">SDOCM00108582</a></td>
+      <td>QNX Late Attach support for DRA7XX
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+
+</ul>
+</div>
+</div>
+
+<br />
+
+<div class="memitem">
+<div class="memproto">3.22.02.11 </div>
+
+<div class="memdoc">
+<ul>
+  <li>The following defects were resolved:
+<table width="100%">
+  <colgroup width="20%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00112064">SDOCM00112064</a></td>
+      <td>Reduce memory usage for K2E tests (including update to XDC 3.25.06.96)
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+  <br />
+
+  <li>The following enhancements were resolved:
+<table width="100%">
+  <colgroup width="20%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00108138">SDOCM00108138</a></td>
+      <td>Improved MmRpc/MmService error handling when app dies
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+
+</ul>
+</div>
+</div>
+
+<br />
+
+<div class="memitem">
+<div class="memproto">3.22.01.08 </div>
+
+<div class="memdoc">
+<ul>
+  <li>The following defects were resolved:
+<table width="100%">
+  <colgroup width="20%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00108167">SDOCM00108167</a></td>
+      <td>Uninitialized variable in notify driver template file
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00108149">SDOCM00108149</a></td>
+      <td>Incorrect mailbox index computation in NotifySetup for v7M and v7A
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00108114">SDOCM00108114</a></td>
+      <td>Link error when building with DCE on IPU/Vayu
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+  <br />
+
+  <li>The following enhancements were resolved:
+<table width="100%">
+  <colgroup width="20%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00108135">SDOCM00108135</a></td>
+      <td>Allow users to disable QNX watchdog
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+
+</ul>
+</div>
+</div>
+
+<br />
+
+
+<div class="memitem">
+<div class="memproto">3.22.00.05 </div>
+
+<div class="memdoc">
+<ul>
+  <li>The following defects were resolved:
+<table width="100%">
+  <colgroup width="20%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00106580">SDOCM00106580</a></td>
+      <td>Fix KS2 tests to ensure Linux-owned memory (including vrings and vring buffers) are non-cached
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00107256">SDOCM00107256</a></td>
+      <td>QNX: Need to update the help text in ipc_trace_daemon for -t option
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00107743">SDOCM00107743</a></td>
+      <td>Build.getDefaultCustomCCOpts() does not remove optimization flags for debug builds
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00106156">SDOCM00106156</a></td>
+      <td>Race conditions in QNX VirtQueue-based MessageQ
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00104834">SDOCM00104834</a></td>
+      <td>MessageQ_create cannot create more than 52 MessageQ's
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00106949">SDOCM00106949</a></td>
+      <td>IPC interrupt preempts itself on ARP32 (EVE)
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00106336">SDOCM00106336</a></td>
+      <td>NameServerMessageQ copy of name is not copying null terminated character
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+  <br />
+
+  <li>The following enhancements were resolved:
+<table width="100%">
+  <colgroup width="20%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00107470">SDOCM00107470</a></td>
+      <td>Detect slave-side internal exceptions and restart slaves (OMAP5 IPU, DRA7XX IPU2)
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00106182">SDOCM00106182</a></td>
+      <td>Introduce IPC_DEBUG env var to simplify enabling trace
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00107471">SDOCM00107471</a></td>
+      <td>Add watchdog to detect slave crashes and restart (OMAP5 IPU, DRA7XX IPU2)
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00106428">SDOCM00106428</a></td>
+      <td>Add notify mailbox driver support on DRA7xx (DSP, EVE)
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00106644">SDOCM00106644</a></td>
+      <td>Move examples/archives/* to examples/*
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00107765">SDOCM00107765</a></td>
+      <td>Need a way to disable recovery mechanism in QNX IPC resource manager
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00107904">SDOCM00107904</a></td>
+      <td>Add option to set permissions on LAD's working directory
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00106584">SDOCM00106584</a></td>
+      <td>Add notify mailbox driver support on DRA7xx (IPU, HOST)
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00093822">SDOCM00093822</a></td>
+      <td>DRA7XX: Optimize Interrupt Handler for EVEs, DSPs and IPUs
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00107479">SDOCM00107479</a></td>
+      <td>Introduce internal memory resource type
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00105667">SDOCM00105667</a></td>
+      <td>Eliminate need to specify carveoutAddr, carveoutSize and mmuEnable in Syslink_Override_Params on QNX
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+
+</ul>
+</div>
+</div>
+
+<br />
+
+<div class="memitem">
+<div class="memproto">3.21.00.07 </div>
+
+<div class="memdoc">
+<ul>
+  <li>The following defects were resolved:
+<table width="100%">
+  <colgroup width="20%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00106267">SDOCM00106267</a></td>
+      <td>OMAP5 and DRA7XX Linux examples should use TOOLCHAIN_PREFIX
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00106019">SDOCM00106019</a></td>
+      <td>IPC makefile template does not honor Build.customCCOpts
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00105512">SDOCM00105512</a></td>
+      <td>MessageQ_create() fails on Linux if unnamed
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00106318">SDOCM00106318</a></td>
+      <td>LAD must remove existing PID response files before restarting
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00106117">SDOCM00106117</a></td>
+      <td>ti_sdo_ipc_GateMP_getSharedAddr needs to be reverted to its original implementation
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00106278">SDOCM00106278</a></td>
+      <td>QNX DRA7XX: prevent race condition when HOST cannot handle mailbox interrupts quickly enough
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00106271">SDOCM00106271</a></td>
+      <td>CCS variable name for IPC (IPC_CG_ROOT) is broken
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00106643">SDOCM00106643</a></td>
+      <td>Example makefile should use PLATFORM not DEVICE
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00106093">SDOCM00106093</a></td>
+      <td>ex02_messageq slaves all create same named queue
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00106450">SDOCM00106450</a></td>
+      <td>HeapMemMP_free fails to cache invalidate freed memory region containing stale data for old free list header
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+  <br />
+
+  <li>The following enhancements were resolved:
+<table width="100%">
+  <colgroup width="20%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00103659">SDOCM00103659</a></td>
+      <td>Add pkg-config support on Linux side builds
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00105164">SDOCM00105164</a></td>
+      <td>Provide MessageQ example on DRA7XX Linux and QNX showing multiple transports
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00105868">SDOCM00105868</a></td>
+      <td>Update to BIOS 6.37 stream
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00105590">SDOCM00105590</a></td>
+      <td>Add DRA7XX IPU1 support (running SMP BIOS) to QNX
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00106044">SDOCM00106044</a></td>
+      <td>Add support for 66AK2E and TCI6630K2L
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00103676">SDOCM00103676</a></td>
+      <td>Introduce GateMP on Linux
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00106228">SDOCM00106228</a></td>
+      <td>Update OMAP5 and DRA7XX memory maps to match SDKs
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00106383">SDOCM00106383</a></td>
+      <td>Remove C6x COFF support
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00106314">SDOCM00106314</a></td>
+      <td>Change LADs working directory to /data on Android
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+
+</ul>
+</div>
+</div>
+
+<br />
+
+<div class="memitem">
+<div class="memproto">3.20.00.06 </div>
+
+<div class="memdoc">
+<ul>
+  <li>The following defects were resolved:
+<table width="100%">
+  <colgroup width="20%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00104759">SDOCM00104759</a></td>
+      <td>TransportCirc should allow Swi priority to be configurable
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00102085">SDOCM00102085</a></td>
+      <td>IPC Examples would not build when extracted in the examples directory
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00104913">SDOCM00104913</a></td>
+      <td>Linux tests issue compiler warning when DRM_PREFIX isn't set
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00103636">SDOCM00103636</a></td>
+      <td>packages/ti/ipc/tests/package.bld doesn't -DRPMSG_NS_2_0 for OMAP5 which currently breaks only ping_rpmsg
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00104907">SDOCM00104907</a></td>
+      <td>QNX loader fails to load code/data into slave's internal memory
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00102068">SDOCM00102068</a></td>
+      <td>Crash recovery failing for QNX OMAP5 DSP
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00103679">SDOCM00103679</a></td>
+      <td>Linux MessageQ_get() can discard msgs when a msg is available from more than one remote core
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00104304">SDOCM00104304</a></td>
+      <td>Resolve Concerto IPC stress test failures
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00104725">SDOCM00104725</a></td>
+      <td>Fix ti/ipc/rpmsg/virtio_ring.h compile warning
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00104761">SDOCM00104761</a></td>
+      <td>VirtQueue notification on OMAP-L138 and TCI663X has a race condition
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00103727">SDOCM00103727</a></td>
+      <td>QNX 'make install' is missing MessageQ and related headers/libs
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00103112">SDOCM00103112</a></td>
+      <td>OMAP5 does not have a default Notify proxy delegate set in Settings.xs
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00104719">SDOCM00104719</a></td>
+      <td>RPMessage crash after 64k messages
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00104300">SDOCM00104300</a></td>
+      <td>Remove static allocation of IPU_MEM_IOBUFS memory in OMAP5 QNX
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00103794">SDOCM00103794</a></td>
+      <td>Ducati trace thread steals early slave-side trace and terminates afterwards
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00102268">SDOCM00102268</a></td>
+      <td>ipc resource manager process in QNX does not terminate correctly after MessageQ is used
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00104100">SDOCM00104100</a></td>
+      <td>ROV for TransportCirc/NotifyDriverCirc does not work with different baseIdOfCluster
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00104726">SDOCM00104726</a></td>
+      <td>Fix RcmServer.c compile warning
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00104049">SDOCM00104049</a></td>
+      <td>MessageQ_open() returns not found when given queue actually exists
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+  <br />
+
+  <li>The following enhancements were resolved:
+<table width="100%">
+  <colgroup width="20%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00099002">SDOCM00099002</a></td>
+      <td>Make "LibType_Debug" build profile be similar to LibType_Custom but with no optimizations. Stop exporting package lib
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00103725">SDOCM00103725</a></td>
+      <td>Enable builds without SMP libraries
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00103723">SDOCM00103723</a></td>
+      <td>Introduce Android support for DRA7XX
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00103415">SDOCM00103415</a></td>
+      <td>Align build variables/names across OS's in products.mak
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00104241">SDOCM00104241</a></td>
+      <td>NameServer_create/delete needs to support reference counting
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00104525">SDOCM00104525</a></td>
+      <td>Add support for Linux 3.9+ kernels which need newer AF_RPMSG definition
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00104716">SDOCM00104716</a></td>
+      <td>Add ex11_ping example for C6678
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+
+</ul>
+</div>
+</div>
+
+<br />
+
+<div class="memitem">
+<div class="memproto">3.10.00.08 </div>
+
+<div class="memdoc">
+<ul>
+  <li>The following defects were resolved:
+<table width="100%">
+  <colgroup width="20%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00102067">SDOCM00102067</a></td>
+      <td>QNX multiprocess MessageQ stress tests are failing
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00102137">SDOCM00102137</a></td>
+      <td>QNX makefiles shouldn't 'install' when only building libs
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00102328">SDOCM00102328</a></td>
+      <td>Setting KERNEL_INSTALL_DIR for Keystone fails during MmRpc build
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00102258">SDOCM00102258</a></td>
+      <td>MultiProc names for TCI6636 should match TCI6638
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00102060">SDOCM00102060</a></td>
+      <td>Remove unused procIds in vayu/NotifySetup module
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00102548">SDOCM00102548</a></td>
+      <td>When only Mmrpc is used on the IPU and MessageQ is used on the DSP, MessageQ_open would not succeed
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+  <br />
+
+  <li>The following enhancements were resolved:
+<table width="100%">
+  <colgroup width="20%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00099787">SDOCM00099787</a></td>
+      <td>MessageQ_free needs a hook function
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00099785">SDOCM00099785</a></td>
+      <td>MessageQ_create should allow a queueId to be specified instead of finding free slot
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00102317">SDOCM00102317</a></td>
+      <td>Add support for TCI6636
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00103402">SDOCM00103402</a></td>
+      <td>Introduce GateMP on QNX
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00102149">SDOCM00102149</a></td>
+      <td>Update Linux toolchain to recent SDK-compatible Linaro versions
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00101419">SDOCM00101419</a></td>
+      <td>Enable ipc-bios.mak to build a subset of platforms for a given target
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00103504">SDOCM00103504</a></td>
+      <td>Introduce MmRpc_use()/release() enabling apps to declare when data buffers are in use across calls
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00100158">SDOCM00100158</a></td>
+      <td>Introduce Linux support for OMAP5
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00102417">SDOCM00102417</a></td>
+      <td>Remove unsupported example simVayu platforms
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+
+</ul>
+</div>
+</div>
+
+<br />
+
+<div class="memitem">
+<div class="memproto">3.00.00.20 </div>
+
+<div class="memdoc">
+<ul>
+  <li>The following defects were resolved:
+<table width="100%">
+  <colgroup width="20%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00098436">SDOCM00098436</a></td>
+      <td>"ti_sdo_ipc_init" section needs to be padded to cacheline size
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00098440">SDOCM00098440</a></td>
+      <td>ipc.mak is broken in Windows cmd shell
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00098522">SDOCM00098522</a></td>
+      <td>The IPC mailbox drivers for M3 on TI81XX and C6A8149 does not work for SMP BIOS
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+  <br />
+
+  <li>The following enhancements were resolved:
+<table width="100%">
+  <colgroup width="20%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00097544">SDOCM00097544</a></td>
+      <td>Add support for polling for occurrence of interrupts on OMAPL138
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00097853">SDOCM00097853</a></td>
+      <td>Remove ti.sdo.io* content (no longer supported)
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00097181">SDOCM00097181</a></td>
+      <td>IPC should provide makefile-based examples
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00098543">SDOCM00098543</a></td>
+      <td>Introduce Linux support for TCI6638
+</td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00098458">SDOCM00098458</a></td>
+      <td>Add rproc resource table accessor methods for vring addrs (BIOS-side)
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+
+</ul>
+</div>
+</div>
+
+<br />
+
+<hr>
+<h2><a name="Upgrade_Info">Upgrade Information</a></h2>
+<p>
+The IPC packages are available in the "packages/"
+subdirectory of the product.  If you have a previous release of the
+IPC product, you can install this release next to it, and
+modify your build scripts/makefiles to use this newer release.</p>
+<h2><a name="Compatibility"><font color="red">Compatibility Breaks!</font></a></h2>
+<ul>
+  <li>IPC 3.40.00.06 requires system integrators to update
+  the following dependencies:
+    <ul>
+      <li>XDC Tools <b>3.31.02.38.core</b> (or compatible)</li>
+      <li>SYS/BIOS <b>6.42.02.29</b> (or compatible)</li>
+    </ul>
+  </li>
+</ul>
+
+<p>
+Note, if you're upgrading from a release earlier than IPC 3.00, be
+sure to review the <b>Upgrade</b> section for each of the releases between
+your current release and this one.  Previous release notes are
+available in the <a href="../../docs/relnotes_archive">relnotes_archive</a> directory.
+</p>
+
+
+<hr>
+<h2><a name="Device_Support">Device Support</a></h2>
+
+<p>
+This release supports the following devices (though examples are not provided for all):
+  <ul>
+    <li><a href="http://focus.ti.com/docs/prod/folders/print/tms320c6472.html">TMS320C6472</a></li>
+    <li><a href="http://focus.ti.com/docs/prod/folders/print/tms320c6474.html">TMS320C6474</a></li>
+    <li><a href="http://focus.ti.com/docs/prod/folders/print/tms320c6670.html">TMS320C6670</a></li>
+    <li><a href="http://focus.ti.com/docs/prod/folders/print/tms320c6678.html">TMS320C6678</a></li>
+    <li><a href="http://focus.ti.com/docs/prod/folders/print/omap-l138.html">OMAPL138</a></li>
+<!--
+    <li><a href="http://focus.ti.com/apps/docs/gencontent.tsp?contentId=52385&appId=1">TMS320DA830</a></li>
+    <li><a href="http://focus.ti.com/docs/prod/folders/print/tms320dm6446.html">TMS320CDM6446</a></li>
+    <li><a href="http://focus.ti.com/apps/docs/gencontent.tsp?contentId=52385&appId=1">OMAPL137</a></li>
+    <li><a href="http://focus.ti.com/docs/prod/folders/print/omap3530.html">OMAP3530</a></li>
+    <li><a href="http://focus.ti.com/general/docs/wtbu/wtbuproductcontent.tsp?templateId=6123&navigationId=12843&contentId=53243">OMAP4430</a></li>
+    <li><a href="http://focus.ti.com/docs/prod/folders/print/tms320dm8168.html">TMS320TI816X</a></li>
+    <li><a href="http://focus.ti.com/docs/prod/folders/print/tms320dm8148.html">TMS320TI814X</a></li>
+    <li><a href="http://www.ti.com/product/f28m35h52c">F28M35X (Concerto)</a></li>
+    <li><a href="http://www.ti.com/product/tms320c6654">TMS320C6654/55/57</a></li>
+    <li>TMS320TI813X</li>
+    <li>TMS320TI811X</li>
+    <li>TMS320C6A8149</li>
+-->
+    <li>TCI6638K2K (Keystone II) - Linux on HOST, SYS/BIOS on C66 DSPs</li>
+    <li>TCI6636K2H (Keystone II) - Linux on HOST, SYS/BIOS on C66 DSPs</li>
+    <li>TCI6630K2L (Keystone II) - Linux on HOST, SYS/BIOS on C66 DSPs</li>
+    <li>66AK2E (Keystone II) - Linux on HOST, SYS/BIOS on C66 DSP</li>
+    <li>DRA7XX (Vayu)
+      <ul>
+        <li>SYS/BIOS on HOST, DSP(s), EVE(s), SMP-BIOS on IPU(s)</li>
+        <li>SYS/BIOS on HOST, DSP(s), EVE(s), IPU1-0, IPU1-1, SMP-BIOS on IPU2
+        </li>
+        <li>QNX on HOST, SYS/BIOS on DSP1, SMP-BIOS on IPU(s)</li>
+        <li>Linux on HOST, SYS/BIOS on DSP1 and DSP2, SMP-BIOS on IPU1
+        and IPU2</li>
+      </ul>
+    </li>
+    <li>OMAP-L138 - Linux on HOST, SYS/BIOS on DSP</li>
+  </ul>
+</p>
+
+
+<hr>
+<h2><a name="Validation">Validation</a></h2>
+<p>
+This release was built and validated against using the following software
+components.  Please use the versions below, or compatible:
+</p>
+
+<ul>
+<!-- Note, these versions are autogenerated -->
+  <li>XDCtools <b>3.31.02.38.core</b></li>
+  <li>SYS/BIOS <b>6.42.02.29</b></li>
+  <li>Pre-built binaries were built with the following toolchains:
+    <ul>
+<!-- autogenerated list -->
+      <li>ti.targets.arm.elf.A8Fnv - <b>5.2.4</b></li>
+      <li>ti.targets.arm.elf.A8F - <b>5.2.4</b></li>
+      <li>ti.targets.arm.elf.M3 - <b>5.2.4</b></li>
+      <li>ti.targets.arm.elf.M4F - <b>5.2.4</b></li>
+      <li>ti.targets.arm.elf.M4 - <b>5.2.4</b></li>
+      <li>ti.targets.arp32.elf.ARP32_far - <b>1.0.0</b></li>
+      <li>ti.targets.arp32.elf.ARP32 - <b>1.0.0</b></li>
+      <li>ti.targets.elf.C66_big_endian - <b>7.4.4</b></li>
+      <li>ti.targets.elf.C66 - <b>7.4.4</b></li>
+      <li>ti.targets.elf.C674 - <b>7.2.0</b></li>
+<!-- TODO - add Linux kernel version details- per device -->
+      <li>Linux GCC toolchain - <b>Linaro gnueabihf-4.7-2013.03-20130313</b></li>
+      <li>QNX <b>6.6.0 (with additional patches applied depending on the version of the QNX BSP. Refer to the BSP's documentation for more details.)</b></li>
+      <li>QNX BSP for DRA74x: <b>M10</b></li>
+      <li>QNX BSP for DRA72x: <b>M4</b></li>
+    </ul>
+  </li>
+</ul>
+
+<p>
+This release was validated using the following hardware platforms
+(though others are supported):
+  <ul>
+    <li>TCI6638K2K (Keystone II) - Linux on HOST, SYS/BIOS on C66 DSPs</li>
+    <li>DRA7XX (Vayu)
+      <ul>
+        <li>SYS/BIOS on HOST, DSP(s), EVE(s), SMP-BIOS on IPU(s)</li>
+        <li>SYS/BIOS on HOST, DSP(s), EVE(s), IPU1-0, IPU1-1, SMP-BIOS on IPU2
+        </li>
+        <li>QNX on HOST, SYS/BIOS on DSP1, SMP-BIOS on IPU(s)</li>
+        <li>Linux on HOST, SYS/BIOS on DSP1 and DSP2, SMP-BIOS on IPU1
+        and IPU2</li>
+        <li>Android on HOST, SYS/BIOS on DSP1 and DSP2, SMP-BIOS on IPU1
+        and IPU2</li>
+      </ul>
+    </li>
+    <li>OMAP-L138 - Linux on HOST, SYS/BIOS on DSP</li>
+    <li>C6472 - SYS/BIOS on all cores</li>
+  </ul>
+</p>
+
+<hr>
+<h2><a name="Known_Issues">Known Issues</a></h2>
+<ul>
+</td>
+  <li>The following defect in IPC 3.30.01 is a known issue for IPU using
+  SYS/BIOS SMP-mode:
+<table width="100%">
+  <colgroup width="20%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00113942">SDOCM00113942</a></td>
+      <td>IPU logger is using null timestamp provider
+    </tr>
+  </tbody>
+</table>
+</li>
+  <li>If your application needs to
+  <code>#include &lt;ti/ipc/transports/TransportRpmsg.h&gt;</code>
+  then you must ensure that your compiler -I options are in the following
+  correct order:
+  <code>-I &lt;ipc&gt;/linux/include -I &lt;ipc&gt;/packages</code>.
+  This is needed since the product erroneously contains a
+  <code>ti/ipc/transports/TransportRpmsg.h</code>
+  file in both locations, which will be fixed in an upcoming release.
+  </li>
+  <li>Examples are not yet provided for many devices.  If applicable,
+  please refer to the SDK redistributing IPC for examples appropriate
+  for your device.
+  </li>
+  <li>The HLOS-allocated vrings (in rpmsg-based environments) must
+  currently be configured as non-cached from the slave side.  This is
+  done in the typical, processor-specific way (e.g. MAR bits for C6x,
+  AMMU for IPUs, etc.).  An enhancement is being considered to enable
+  these vrings to be cached from the slave side.  That work is being
+  tracked as SDOCM00106580.
+  </li>
+  <li>The MmRpc API on Linux currently requires out of mainline kernel
+  support.  They are, therefore, not available for all devices.  TI
+  will be working with the community to push these features
+  mainline.  Until that is available, TI may provide kernels for
+  select devices with support for MmRpc.
+  </li>
+  <li>The Linux MmRpc libraries are not pre-built (as they're not
+  supported on all kernels) - users of those APIs are required to
+  rebuild the IPC libraries as described in the IPC Install
+  Guide.
+  </li>
+  <li>The IPC product build performs some industry-standard checks on
+  the integrity of the source code.  Currently there are some issues
+  that are flagged by these checks which we believe are benign.  We
+  will be addressing these issues in a future release so as to get a
+  clean "bill of health" from these source code checks.
+  </li>
+</ul>
+<!--<p>
+Consult the <a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&queryID=34483205&entityDefName=IncidentReport&username=readonly&password=readonly">SDOWP database</a> for open issues.
+</p>
+-->
+
+<hr>
+<h2><a name="Version">Version Information</a></h2>
+<p>
+This product's version follows a version format, <b>M.mm.pp.bb</b>,
+where <b>M</b> is a single digit Major number, <b>mm</b> is 2 digit
+minor number, <b>pp</b> is a 2 digit patch number, and <b>b</b> is an
+unrestricted set of digits used as an incrementing build counter.
+</p>
+
+<p>
+To support multiple side-by-side installations of the product, the
+product version is encoded in the top level directory,
+ex. <b>ipc_3_40_00_06</b>.
+</p>
+
+<p>
+Subsequent releases of patch upgrades will be identified by the patch
+number, e.g. IPC 3.22.01.XX with directory <b>ipc_3_22_01_XX</b>.
+Typically, these patches only include critical bug fixes.
+</p>
+
+<hr>
+<h2><a name="Support">Technical Support</a></h2>
+<p>
+For technical support, use the community forum
+<a href="http://e2e.ti.com/">TI E2E Community</a>, or email
+softwaresupport@ti.com.
+</p>
+
+<p>
+Check the following web site for updates: <a href="http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/ipc/index.html">http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/ipc/index.html</a>
+</p>
+
+<hr>
+<p>
+Last updated: August 21, 2015
+</p>
+</body>
+</html>

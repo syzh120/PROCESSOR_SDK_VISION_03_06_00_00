@@ -1,0 +1,44 @@
+/*******************************************************************************
+ *                                                                             *
+ * Copyright (c) 2014 Texas Instruments Incorporated - http://www.ti.com/      *
+ *                        ALL RIGHTS RESERVED                                  *
+ *                                                                             *
+ ******************************************************************************/
+
+/*
+ *  ======== config_tda2ex_a15.bld ========
+ */
+var MemSegDefine = xdc.loadCapsule("mem_segment_definition_1024mb_bios.xs");
+
+var CurrentCore     = java.lang.System.getenv("CORE");
+var CurrentPlatform = java.lang.System.getenv("BOARD");
+xdc.print("# !!!  Current build platform is [" + CurrentPlatform + "] !!!" );
+
+var Build   = xdc.useModule('xdc.bld.BuildEnvironment');
+var A15     = xdc.useModule('gnu.targets.arm.A15F');
+var buildReleaseConfig = true;
+
+/*add bspLib to support SemiHosting to enable system_printf on A15*/
+/* GCC bare metal targets */
+var gccArmTargets = xdc.loadPackage('gnu.targets.arm');
+gccArmTargets.A15F.bspLib = "rdimon";
+
+A15.rootDir        = java.lang.System.getenv("CGTOOLS_A15");
+A15.ccOpts.suffix  +=
+A15.lnkOpts.suffix +=
+//set default platform and list of all interested platforms for A15
+A15.platforms = ["ti.platforms.evmDRA7XX:Cortex_A15",
+                ];
+A15.platform = A15.platforms[0];
+
+Build.targets     = [
+                    A15,
+                    ];
+
+Build.platformTable["ti.platforms.evmDRA7XX:Cortex_A15"] =
+{
+    externalMemoryMap: MemSegDefine.getMemSegmentDefinition_external(CurrentCore),
+    codeMemory:"A15_0_DATA_MEM",
+    dataMemory:"A15_0_DATA_MEM",
+    stackMemory:"A15_0_DATA_MEM"
+};

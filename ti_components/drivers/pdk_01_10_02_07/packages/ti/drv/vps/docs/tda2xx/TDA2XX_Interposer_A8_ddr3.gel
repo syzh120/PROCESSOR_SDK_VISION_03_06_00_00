@@ -1,0 +1,3657 @@
+/* ------------------------------------------------------------------------ *
+ *                                                                          *
+ *  vayuevm_interposer.gel                                                  *
+ *  Version 0.84                                                            *
+ *                                                                          *
+ *  This GEL file is designed to be used in conjunction with                *
+ *  CCStudio 4.2+ and the Vayu EVM operating with J5 silicon                *
+ *  through an interposer.                                                  *
+ *                                                                          *
+ *  Version History                                                         *
+ *  0.80 Initial Release                                                    *
+ *  0.81 Added GPIO clock release and definitions                           *
+ *  0.82 Added pinmuxing for ENET and LCD tests                             *
+ *  0.83 Changed VIDEO_1 clkdiv to get 74MHz LCD pixel clock, tests pass    *
+ *       without calling hotmenu functions, general cleanup                 *
+ *  0.84 Added EMAC1 support (preliminary)                                  *
+ * ------------------------------------------------------------------------ */
+#define    EVMTYPE_J5     0  // J5 EVM
+#define    EVMTYPE_VAYU   1  // Vayu EVM with J5 Interposer
+
+#define    EVMTYPE        EVMTYPE_VAYU   // Use this to select platform
+
+#define    BOOTMODE           *(unsigned int*)(0x48140040)
+
+OnTargetConnect()
+{
+    GEL_TextOut("Initializing Vayu EVM....\n");
+    GEL_Reset();
+
+    /* Get Boot mode */
+    GEL_TextOut("    The value of the Bootmode register is  = %x \n",,,,,BOOTMODE);
+
+    Setup_PLL();                // Setup all required PLLs
+    Pin_Config();               // Setup Pin Multiplexing
+    DDR3_EMIF0_EMIF1_Config();  // Configure DDR3
+
+    /* Configure Peripherals */
+    SATA_PLL_Config();
+    SATA_PHY_SEQUENCE_20Mhz();
+
+    EMACClkEnable();
+    EMAC_init();
+    DucatiClkEnable();
+    GPIOClkEnable();
+    UARTClkEnable();
+    I2CClkEnable();
+    SPIClkEnable();
+    MCASP2ClkEnable();
+    J5CPU_cfgForUSB0_1();
+
+    /* Vayu EVM Configuration */
+    VayuEVM_LCD_Setup();
+    VayuEVM_QSPI_Setup();
+
+    // Vision Application Board
+    SetVisionAppplicationBoardMux();  // Pin muxing for vision board mux selects
+
+    GEL_TextOut("Vayu EVM Intialization done.\n");
+}
+
+
+
+/* ------------------------------------------------------------------------ *
+ *                                                                          *
+ *  StartUp( )                                                              *
+ *      Setup Memory Map                                                    *
+ *                                                                          *
+ * ------------------------------------------------------------------------ */
+StartUp( )
+{
+    Setup_Memory_Map( );
+}
+
+/* ------------------------------------------------------------------------ *
+ *                                                                          *
+ *  OnPreFileLoaded( )                                                      *
+ *      This function is called automatically when the 'Load Program'       *
+ *      Menu item is selected.                                              *
+ *                                                                          *
+ * ------------------------------------------------------------------------ */
+OnPreFileLoaded( )
+{
+    /*
+     *  GEL_Reset() is used to deal with the worst case senario of
+     *  unknown target state.  If for some reason a reset is not desired
+     *  upon target connection, GEL_Reset() may be removed and replaced
+     *  with something "less brutal" like a cache initialization
+     *  function.
+     */
+    GEL_Reset( );
+    GEL_TextOut( "GEL Reset\n" );
+}
+
+/* ------------------------------------------------------------------------ *
+ *                                                                          *
+ *  OnRestart( )                                                            *
+ *      This function is called by CCS when you do Debug->Restart.          *
+ *                                                                          *
+ * ------------------------------------------------------------------------ */
+OnRestart( int nErrorCode )
+{
+}
+
+menuitem "Memory Map";
+/* ------------------------------------------------------------------------ *
+ *                                                                          *
+ *  Setup_Memory_Map( )                                                     *
+ *      Setup the Memory Map for the Cortex A8                              *
+ *                                                                          *
+ * ------------------------------------------------------------------------ */
+hotmenu
+Setup_Memory_Map( )
+{
+    GEL_MapOn( );
+    GEL_MapReset( );
+
+    /* Device Memory Map */
+
+    /* L3 Memory Map */
+    GEL_MapAddStr( 0x00000000, 0, 0x20000000, "R|W|AS4", 0 );  // GPMC
+    GEL_MapAddStr( 0x20000000, 0, 0x10000000, "R|W|AS4", 0 );  // PCIe Slave Port
+    GEL_MapAddStr( 0x40000000, 0, 0x0002C000, "R|W|AS4", 0 );  // Boot ROM internal
+    GEL_MapAddStr( 0x402F0000, 0, 0x00010000, "R|W|AS4", 0 );  // SRAM internal
+    GEL_MapAddStr( 0x40300000, 0, 0x00020000, "R|W|AS4", 0 );  // L3 OCMC SRAM
+    GEL_MapAddStr( 0x40800000, 0, 0x00040000, "R|W|AS4", 0 );  // C674x L2 RAM
+    GEL_MapAddStr( 0x40E00000, 0, 0x00008000, "R|W|AS4", 0 );  // C674x L1P Cache/RAM
+    GEL_MapAddStr( 0x40F00000, 0, 0x00008000, "R|W|AS4", 0 );  // C674x L1D Cache/RAM
+    GEL_MapAddStr( 0x44000000, 0, 0x00400000, "R|W|AS4", 0 );  // L3Fast configuration registers
+    GEL_MapAddStr( 0x44400000, 0, 0x00400000, "R|W|AS4", 0 );  // L3Mid configuration registers
+    GEL_MapAddStr( 0x44800000, 0, 0x00400000, "R|W|AS4", 0 );  // L3Slow configuration registers
+    GEL_MapAddStr( 0x46000000, 0, 0x00400000, "R|W|AS4", 0 );  // McASP0
+    GEL_MapAddStr( 0x46400000, 0, 0x00400000, "R|W|AS4", 0 );  // McASP1
+    GEL_MapAddStr( 0x46800000, 0, 0x00400000, "R|W|AS4", 0 );  // McASP2
+    GEL_MapAddStr( 0x47000000, 0, 0x00400000, "R|W|AS4", 0 );  // McBSP
+    GEL_MapAddStr( 0x47400000, 0, 0x00400000, "R|W|AS4", 0 );  // USB
+    GEL_MapAddStr( 0x47810000, 0, 0x00002000, "R|W|AS4", 0 );  // MMC/SD/SDIO2 Peripheral Registers
+    GEL_MapAddStr( 0x47C0C400, 0, 0x00000400, "R|W|AS4", 0 );  // DDR PHY0
+    GEL_MapAddStr( 0x47C0C800, 0, 0x00000400, "R|W|AS4", 0 );  // DDR PHY1
+    GEL_MapAddStr( 0x49000000, 0, 0x00100000, "R|W|AS4", 0 );  // EDMA TPCC Registers
+    GEL_MapAddStr( 0x49800000, 0, 0x00100000, "R|W|AS4", 0 );  // EDMA TPTC0 Registers
+    GEL_MapAddStr( 0x49900000, 0, 0x00100000, "R|W|AS4", 0 );  // EDMA TPTC1 Registers
+    GEL_MapAddStr( 0x49A00000, 0, 0x00100000, "R|W|AS4", 0 );  // EDMA TPTC2 Registers
+    GEL_MapAddStr( 0x49B00000, 0, 0x00100000, "R|W|AS4", 0 );  // EDMA TPTC3 Registers
+    GEL_MapAddStr( 0x4B000000, 0, 0x01000000, "R|W|AS4", 0 );  // EMU Subsystem region
+    GEL_MapAddStr( 0x4C000000, 0, 0x01000000, "R|W|AS4", 0 );  // EMIF0 Registers
+    GEL_MapAddStr( 0x4D000000, 0, 0x01000000, "R|W|AS4", 0 );  // EMIF1 Registers
+    GEL_MapAddStr( 0x4E000000, 0, 0x02000000, "R|W|AS4", 0 );  // DMM Registers
+    GEL_MapAddStr( 0x50000000, 0, 0x01000000, "R|W|AS4", 0 );  // GPMC Configuration registers
+    GEL_MapAddStr( 0x51000000, 0, 0x01000000, "R|W|AS4", 0 );  // PCIE  registers
+    GEL_MapAddStr( 0x52400000, 0, 0x00400000, "R|W|AS4", 0 );  // Bitblt
+    GEL_MapAddStr( 0x52800000, 0, 0x00010000, "R|W|AS4", 0 );  // OCMC ROM0
+    GEL_MapAddStr( 0x54C00000, 0, 0x00400000, "R|W|AS4", 0 );  // ADC_TSC DMA Port
+    GEL_MapAddStr( 0x55000000, 0, 0x01000000, "R|W|AS4", 0 );  // Ducati Slave Port
+    GEL_MapAddStr( 0x56000000, 0, 0x01000000, "R|W|AS4", 0 );  // SGX530 Slave Por
+
+    /* DDR Data */
+    GEL_MapAddStr( 0x80000000, 0, 0x40000000, "R|W|AS4", 0 );  // DDR EMIF0
+    GEL_MapAddStr( 0xC0000000, 0, 0x40000000, "R|W|AS4", 0 );  // DDR EMIF1
+
+    /* L4 Memory Map */
+    // L4 Standard Peripheral
+    GEL_MapAddStr( 0x48000000, 0, 0x00000800, "R|W|AS4", 0 );  // L4_Standard Configuration-Address/Protection (AP)
+    GEL_MapAddStr( 0x48000800, 0, 0x00000800, "R|W|AS4", 0 );  // L4_Standard Configuration-Link Agent (LA)
+    GEL_MapAddStr( 0x48001000, 0, 0x00000400, "R|W|AS4", 0 );  // L4_Standard Configuration-Initiator Port (IP0)
+    GEL_MapAddStr( 0x48001400, 0, 0x00000400, "R|W|AS4", 0 );  // L4_Standard Configuration-Initiator Port (IP1)
+    GEL_MapAddStr( 0x48010000, 0, 0x00001000, "R|W|AS4", 0 );  // System MMU Peripheral Registers
+    GEL_MapAddStr( 0x48011000, 0, 0x00001000, "R|W|AS4", 0 );  // System MMU Support Registers
+    GEL_MapAddStr( 0x48014000, 0, 0x00001000, "R|W|AS4", 0 );  // 2DBitBlt MMU
+    GEL_MapAddStr( 0x48020000, 0, 0x00001000, "R|W|AS4", 0 );  // UART0 Peripheral Registers
+    GEL_MapAddStr( 0x48021000, 0, 0x00001000, "R|W|AS4", 0 );  // UART0 Support Registers
+    GEL_MapAddStr( 0x48022000, 0, 0x00001000, "R|W|AS4", 0 );  // UART1 Peripheral Registers
+    GEL_MapAddStr( 0x48023000, 0, 0x00001000, "R|W|AS4", 0 );  // UART1 Support Registers
+    GEL_MapAddStr( 0x48024000, 0, 0x00001000, "R|W|AS4", 0 );  // UART2 Peripheral Registers
+    GEL_MapAddStr( 0x48025000, 0, 0x00001000, "R|W|AS4", 0 );  // UART2 Support Registers
+    GEL_MapAddStr( 0x48028000, 0, 0x00001000, "R|W|AS4", 0 );  // I2C0 Peripheral Registers
+    GEL_MapAddStr( 0x48029000, 0, 0x00001000, "R|W|AS4", 0 );  // I2C0 Support Registers
+    GEL_MapAddStr( 0x4802A000, 0, 0x00001000, "R|W|AS4", 0 );  // I2C1 Peripheral Registers
+    GEL_MapAddStr( 0x4802B000, 0, 0x00001000, "R|W|AS4", 0 );  // I2C1 Support Registers
+    GEL_MapAddStr( 0x4802E000, 0, 0x00001000, "R|W|AS4", 0 );  // TIMER1 Peripheral Registers
+    GEL_MapAddStr( 0x4802F000, 0, 0x00001000, "R|W|AS4", 0 );  // TIMER1 Support Registers
+    GEL_MapAddStr( 0x48030000, 0, 0x00001000, "R|W|AS4", 0 );  // SPIO Peripheral Registers
+    GEL_MapAddStr( 0x48031000, 0, 0x00001000, "R|W|AS4", 0 );  // SPIO Support Registers
+    GEL_MapAddStr( 0x48032000, 0, 0x00001000, "R|W|AS4", 0 );  // GPIO0 Peripheral Registers
+    GEL_MapAddStr( 0x48033000, 0, 0x00001000, "R|W|AS4", 0 );  // GPIO0 Support Registers
+    GEL_MapAddStr( 0x48038000, 0, 0x00002000, "R|W|AS4", 0 );  // McASP0 CFG Peripheral Registers
+    GEL_MapAddStr( 0x4803A000, 0, 0x00001000, "R|W|AS4", 0 );  // McASP0 CFG Support Registers
+    GEL_MapAddStr( 0x4803C000, 0, 0x00002000, "R|W|AS4", 0 );  // McASP1 CFG Peripheral Registers
+    GEL_MapAddStr( 0x4803E000, 0, 0x00001000, "R|W|AS4", 0 );  // McASP1 CFG Support Registers
+    GEL_MapAddStr( 0x48040000, 0, 0x00001000, "R|W|AS4", 0 );  // TIMER2 Peripheral Registers
+    GEL_MapAddStr( 0x48041000, 0, 0x00001000, "R|W|AS4", 0 );  // TIMER2 Support Registers
+    GEL_MapAddStr( 0x48042000, 0, 0x00001000, "R|W|AS4", 0 );  // TIMER3 Peripheral Registers
+    GEL_MapAddStr( 0x48043000, 0, 0x00001000, "R|W|AS4", 0 );  // TIMER3 Support Registers
+    GEL_MapAddStr( 0x48044000, 0, 0x00001000, "R|W|AS4", 0 );  // TIMER4 Peripheral Registers
+    GEL_MapAddStr( 0x48045000, 0, 0x00001000, "R|W|AS4", 0 );  // TIMER4 Support Registers
+    GEL_MapAddStr( 0x48046000, 0, 0x00001000, "R|W|AS4", 0 );  // TIMER5 Peripheral Registers
+    GEL_MapAddStr( 0x48047000, 0, 0x00001000, "R|W|AS4", 0 );  // TIMER5 Support Registers
+    GEL_MapAddStr( 0x48048000, 0, 0x00001000, "R|W|AS4", 0 );  // TIMER6 Peripheral Registers
+    GEL_MapAddStr( 0x48049000, 0, 0x00001000, "R|W|AS4", 0 );  // TIMER6 Support Registers
+    GEL_MapAddStr( 0x4804A000, 0, 0x00001000, "R|W|AS4", 0 );  // TIMER7 Peripheral Registers
+    GEL_MapAddStr( 0x4804B000, 0, 0x00001000, "R|W|AS4", 0 );  // TIMER7 Support Registers
+    GEL_MapAddStr( 0x4804C000, 0, 0x00001000, "R|W|AS4", 0 );  // GPIO1 Peripheral Registers
+    GEL_MapAddStr( 0x4804D000, 0, 0x00001000, "R|W|AS4", 0 );  // GPIO1 Support Registers
+    GEL_MapAddStr( 0x48050000, 0, 0x00002000, "R|W|AS4", 0 );  // McASP2 CFG Peripheral Registers
+    GEL_MapAddStr( 0x48052000, 0, 0x00001000, "R|W|AS4", 0 );  // McASP2 CFG Support Registers
+    GEL_MapAddStr( 0x48060000, 0, 0x00010000, "R|W|AS4", 0 );  // MMC/SD/SDIO0 Peripheral Registers
+    GEL_MapAddStr( 0x48070000, 0, 0x00001000, "R|W|AS4", 0 );  // MMC/SD/SDIO0 Support Registers
+    GEL_MapAddStr( 0x48080000, 0, 0x00010000, "R|W|AS4", 0 );  // ELM Peripheral Registers
+    GEL_MapAddStr( 0x48090000, 0, 0x00001000, "R|W|AS4", 0 );  // ELM Support Registers
+    GEL_MapAddStr( 0x480C0000, 0, 0x00001000, "R|W|AS4", 0 );  // RTC Peripheral Registers
+    GEL_MapAddStr( 0x480C1000, 0, 0x00001000, "R|W|AS4", 0 );  // RTC Support Registers
+    GEL_MapAddStr( 0x480C8000, 0, 0x00001000, "R|W|AS4", 0 );  // Mailbox Peripheral Registers
+    GEL_MapAddStr( 0x480C9000, 0, 0x00001000, "R|W|AS4", 0 );  // Mailbox Support Registers
+    GEL_MapAddStr( 0x480CA000, 0, 0x00001000, "R|W|AS4", 0 );  // Spinlock Peripheral Registers
+    GEL_MapAddStr( 0x480CB000, 0, 0x00001000, "R|W|AS4", 0 );  // Spinlock Support Registers
+    GEL_MapAddStr( 0x48100000, 0, 0x00020000, "R|W|AS4", 0 );  // HDVPSS Peripheral Registers
+    GEL_MapAddStr( 0x48120000, 0, 0x00001000, "R|W|AS4", 0 );  // HDVPSS Support Registers
+    GEL_MapAddStr( 0x48140000, 0, 0x00020000, "R|W|AS4", 0 );  // Control Module Peripheral Registers
+    GEL_MapAddStr( 0x48160000, 0, 0x00001000, "R|W|AS4", 0 );  // Control Module Support Registers
+    GEL_MapAddStr( 0x48180000, 0, 0x00003000, "R|W|AS4", 0 );  // PRCM Peripheral Registers
+    GEL_MapAddStr( 0x48183000, 0, 0x00001000, "R|W|AS4", 0 );  // PRCM Support Registers
+    GEL_MapAddStr( 0x48188000, 0, 0x00001000, "R|W|AS4", 0 );  // SmartReflex0 Peripheral Registers
+    GEL_MapAddStr( 0x48189000, 0, 0x00001000, "R|W|AS4", 0 );  // SmartReflex0 Support Registers
+    GEL_MapAddStr( 0x4818A000, 0, 0x00001000, "R|W|AS4", 0 );  // SmartReflex1 Peripheral Registers
+    GEL_MapAddStr( 0x4818B000, 0, 0x00001000, "R|W|AS4", 0 );  // SmartReflex1 Support Registers
+    GEL_MapAddStr( 0x4818C000, 0, 0x00001000, "R|W|AS4", 0 );  // OCP Watchpoint Peripheral Registers
+    GEL_MapAddStr( 0x4818D000, 0, 0x00001000, "R|W|AS4", 0 );  // OCP Watchpoint Support Registers
+    GEL_MapAddStr( 0x48190000, 0, 0x00001000, "R|W|AS4", 0 );  // SmartReflex2 Peripheral Registers
+    GEL_MapAddStr( 0x48191000, 0, 0x00001000, "R|W|AS4", 0 );  // SmartReflex2 Support Registers
+    GEL_MapAddStr( 0x48193000, 0, 0x00001000, "R|W|AS4", 0 );  // SmartReflex3 Support Registers
+    GEL_MapAddStr( 0x4819C000, 0, 0x00001000, "R|W|AS4", 0 );  // I2C2 Peripheral Registers
+    GEL_MapAddStr( 0x4819D000, 0, 0x00001000, "R|W|AS4", 0 );  // I2C2 Support Registers
+    GEL_MapAddStr( 0x4819E000, 0, 0x00001000, "R|W|AS4", 0 );  // I2C3 Peripheral Registers
+    GEL_MapAddStr( 0x4819F000, 0, 0x00001000, "R|W|AS4", 0 );  // I2C3 Support Registers
+    GEL_MapAddStr( 0x481A0000, 0, 0x00001000, "R|W|AS4", 0 );  // SPI1 Peripheral Registers
+    GEL_MapAddStr( 0x481A1000, 0, 0x00001000, "R|W|AS4", 0 );  // SPI1 Support Registers
+    GEL_MapAddStr( 0x481A2000, 0, 0x00001000, "R|W|AS4", 0 );  // SPI2 Peripheral Registers
+    GEL_MapAddStr( 0x481A3000, 0, 0x00001000, "R|W|AS4", 0 );  // SPI2 Support Registers
+    GEL_MapAddStr( 0x481A4000, 0, 0x00001000, "R|W|AS4", 0 );  // SPI3 Peripheral Registers
+    GEL_MapAddStr( 0x481A5000, 0, 0x00001000, "R|W|AS4", 0 );  // SPI3 Support Registers
+    GEL_MapAddStr( 0x481A6000, 0, 0x00001000, "R|W|AS4", 0 );  // UART3 Peripheral Registers
+    GEL_MapAddStr( 0x481A7000, 0, 0x00001000, "R|W|AS4", 0 );  // UART3 Support Registers
+    GEL_MapAddStr( 0x481A8000, 0, 0x00001000, "R|W|AS4", 0 );  // UART4 Peripheral Registers
+    GEL_MapAddStr( 0x481A9000, 0, 0x00001000, "R|W|AS4", 0 );  // UART4 Support Registers
+    GEL_MapAddStr( 0x481AA000, 0, 0x00001000, "R|W|AS4", 0 );  // UART5 Peripheral Registers
+    GEL_MapAddStr( 0x481AB000, 0, 0x00001000, "R|W|AS4", 0 );  // UART5 Support Registers
+    GEL_MapAddStr( 0x481AC000, 0, 0x00001000, "R|W|AS4", 0 );  // GPIO2 Peripheral Registers
+    GEL_MapAddStr( 0x481AD000, 0, 0x00001000, "R|W|AS4", 0 );  // GPIO2 Support Registers
+    GEL_MapAddStr( 0x481AE000, 0, 0x00001000, "R|W|AS4", 0 );  // GPIO3 Peripheral Registers
+    GEL_MapAddStr( 0x481AF000, 0, 0x00001000, "R|W|AS4", 0 );  // GPIO3 Support Registers
+    GEL_MapAddStr( 0x481C1000, 0, 0x00001000, "R|W|AS4", 0 );  // TIMER8 Peripheral Registers
+    GEL_MapAddStr( 0x481C2000, 0, 0x00001000, "R|W|AS4", 0 );  // TIMER8 Support Registers
+    GEL_MapAddStr( 0x481C3000, 0, 0x00001000, "R|W|AS4", 0 );  // SYNCTIMER32K Peripheral Registers
+    GEL_MapAddStr( 0x481C4000, 0, 0x00001000, "R|W|AS4", 0 );  // SYNCTIMER32K Support Registers
+    GEL_MapAddStr( 0x481C5000, 0, 0x00001000, "R|W|AS4", 0 );  // PLLSS Peripheral Registers
+    GEL_MapAddStr( 0x481C6000, 0, 0x00001000, "R|W|AS4", 0 );  // PLLSS
+    GEL_MapAddStr( 0x481C7000, 0, 0x00001000, "R|W|AS4", 0 );  // WDT0 Peripheral Registers
+    GEL_MapAddStr( 0x481C8000, 0, 0x00001000, "R|W|AS4", 0 );  // WDT0 Support Registers
+    GEL_MapAddStr( 0x481CC000, 0, 0x00002000, "R|W|AS4", 0 );  // DCAN0 Peripheral Registers
+    GEL_MapAddStr( 0x481CE000, 0, 0x00002000, "R|W|AS4", 0 );  // DCAN0 Support Registers
+    GEL_MapAddStr( 0x481D0000, 0, 0x00002000, "R|W|AS4", 0 );  // DCAN1 Peripheral Registers
+    GEL_MapAddStr( 0x481D2000, 0, 0x00002000, "R|W|AS4", 0 );  // DCAN1 Support Registers
+    GEL_MapAddStr( 0x481D8000, 0, 0x00010000, "R|W|AS4", 0 );  // MMC/SD/SDIO1 Peripheral Registers
+    GEL_MapAddStr( 0x481E8000, 0, 0x00001000, "R|W|AS4", 0 );  // MMC/SD/SDIO1 Support Registers
+    GEL_MapAddStr( 0x48200000, 0, 0x00001000, "R|W|AS4", 0 );  // Interrupt controller
+    GEL_MapAddStr( 0x48240000, 0, 0x00001000, "R|W|AS4", 0 );  // MPUSS config register(
+    GEL_MapAddStr( 0x48280000, 0, 0x00001000, "R|W|AS4", 0 );  // SSM
+    GEL_MapAddStr( 0x48300000, 0, 0x00001000, "R|W|AS4", 0 );  // eHRPWM1/eCAP1/ePWM1
+    GEL_MapAddStr( 0x48302000, 0, 0x00001000, "R|W|AS4", 0 );  // eHRPWM2/eCAP2/ePWM2
+    GEL_MapAddStr( 0x48304000, 0, 0x00001000, "R|W|AS4", 0 );  // eHRPWM3/eCAP3/ePWM3
+    GEL_MapAddStr( 0x48320000, 0, 0x00001000, "R|W|AS4", 0 );  // GPIO 4
+    GEL_MapAddStr( 0x48322000, 0, 0x00001000, "R|W|AS4", 0 );  // GPIO 5
+    GEL_MapAddStr( 0x48340000, 0, 0x00001000, "R|W|AS4", 0 );  // UART6
+    GEL_MapAddStr( 0x48342000, 0, 0x00001000, "R|W|AS4", 0 );  // UART7
+    GEL_MapAddStr( 0x48350000, 0, 0x00002000, "R|W|AS4", 0 );  // ADC_TSC
+
+
+    // L4 High Speed Peripheral
+    GEL_MapAddStr( 0x4A000000, 0, 0x00000800, "R|W|AS4", 0 );  // L4_High Speed configuration-Address/Protection (AP)
+    GEL_MapAddStr( 0x4A000800, 0, 0x00000800, "R|W|AS4", 0 );  // L4_High Speed configuration-Link Agent (LA)
+    GEL_MapAddStr( 0x4A001000, 0, 0x00000400, "R|W|AS4", 0 );  // L4_High Speed configuration-Initiator Port (IP0)
+    GEL_MapAddStr( 0x4A001400, 0, 0x00000400, "R|W|AS4", 0 );  // L4_High Speed configuration-Initiator Port (IP1)
+    GEL_MapAddStr( 0x4A100000, 0, 0x00008000, "R|W|AS4", 0 );  // EMAC SW Peripheral Registers
+    GEL_MapAddStr( 0x4A108000, 0, 0x00001000, "R|W|AS4", 0 );  // EMAC SW Support Registers
+    GEL_MapAddStr( 0x4A140000, 0, 0x00010000, "R|W|AS4", 0 );  // SATA Registers
+    GEL_MapAddStr( 0x4A1A2000, 0, 0x00002000, "R|W|AS4", 0 );  // McASP3 Configuration Peripheral Registers
+    GEL_MapAddStr( 0x4A1A4000, 0, 0x00001000, "R|W|AS4", 0 );  // McASP3 Configuration Support Registers
+    GEL_MapAddStr( 0x4A1A5000, 0, 0x00001000, "R|W|AS4", 0 );  // McASP3 Data Peripheral Registers
+    GEL_MapAddStr( 0x4A1A6000, 0, 0x00001000, "R|W|AS4", 0 );  // McASP3 Data Support Registers
+    GEL_MapAddStr( 0x4A1A8000, 0, 0x00002000, "R|W|AS4", 0 );  // McASP4 Configuration Peripheral Registers
+    GEL_MapAddStr( 0x4A1AA000, 0, 0x00001000, "R|W|AS4", 0 );  // McASP4 Configuration Support Registers
+    GEL_MapAddStr( 0x4A1AB000, 0, 0x00001000, "R|W|AS4", 0 );  // McASP4 Data Peripheral Registers
+    GEL_MapAddStr( 0x4A1AC000, 0, 0x00001000, "R|W|AS4", 0 );  // McASP4 Data Support Registers
+    GEL_MapAddStr( 0x4A1AE000, 0, 0x00002000, "R|W|AS4", 0 );  // McASP5 Configuration Peripheral Registers
+    GEL_MapAddStr( 0x4A1B0000, 0, 0x00001000, "R|W|AS4", 0 );  // McASP5 Configuration Support Registers
+    GEL_MapAddStr( 0x4A1B1000, 0, 0x00001000, "R|W|AS4", 0 );  // McASP5 Data Peripheral Registers
+    GEL_MapAddStr( 0x4A1B2000, 0, 0x00001000, "R|W|AS4", 0 );  // McASP5 Data Support Registers
+    GEL_MapAddStr( 0x4A1B2000, 0, 0x00080000, "R|W|AS4", 0 );  // ICSS PRUSS0 Peripheral Registers
+    GEL_MapAddStr( 0x4A1B2000, 0, 0x00001000, "R|W|AS4", 0 );  // ICSS PRUSS0 Support Registers
+    GEL_MapAddStr( 0x4A1B2000, 0, 0x00080000, "R|W|AS4", 0 );  // ICSS PRUSS1 Peripheral Registers
+    GEL_MapAddStr( 0x4A1B2000, 0, 0x00001000, "R|W|AS4", 0 );  // ICSS PRUSS1 Support Registers
+
+    /* Cortex™-A8 Memory Map */
+    // L3 Target Space not redefined
+    GEL_MapAddStr( 0x00000000, 0, 0x00100000, "R|W|AS4", 0 );  // Boot Space
+    GEL_MapAddStr( 0x40020000, 0, 0x0000C000, "R|W|AS4", 0 );  // ROM internal
+    GEL_MapAddStr( 0x48200000, 0, 0x00040000, "R|W|AS4", 0 );  // Cortex™-A8 Interrupt Controller
+
+    /* C674x Memory Map */
+    GEL_MapAddStr( 0x00400000, 0, 0x00040000, "R|W|AS4", 0 );  // Reserved (UMAP1)
+    GEL_MapAddStr( 0x00500000, 0, 0x00040000, "R|W|AS4", 0 );  // Reserved (UMAP1)
+    GEL_MapAddStr( 0x00800000, 0, 0x00040000, "R|W|AS4", 0 );  // C674x UMAP0 (L2 RAM)
+    GEL_MapAddStr( 0x00E00000, 0, 0x00008000, "R|W|AS4", 0 );  // C674x L1P Cache/RAM
+    GEL_MapAddStr( 0x00F00000, 0, 0x00008000, "R|W|AS4", 0 );  // C674x L1D Cache/RAM
+    GEL_MapAddStr( 0x01800000, 0, 0x00400000, "R|W|AS4", 0 );  // C674x Internal CFG registers
+    GEL_MapAddStr( 0x02000000, 0, 0x01000000, "R|W|AS4", 0 );  // SecuritySS
+    GEL_MapAddStr( 0x04000000, 0, 0x00400000, "R|W|AS4", 0 );  // L3F CFG Regs
+    GEL_MapAddStr( 0x04400000, 0, 0x00400000, "R|W|AS4", 0 );  // L3M CFG Regs
+    GEL_MapAddStr( 0x04800000, 0, 0x00400000, "R|W|AS4", 0 );  // L3S CFG Regs
+    GEL_MapAddStr( 0x05000000, 0, 0x00400000, "R|W|AS4", 0 );  // L4_Firewall Domain
+    GEL_MapAddStr( 0x06000000, 0, 0x01000000, "R|W|AS4", 0 );  // Instrumentation
+    GEL_MapAddStr( 0x07000000, 0, 0x01000000, "R|W|AS4", 0 );  // EMIF0 Regs
+    GEL_MapAddStr( 0x0C000000, 0, 0x01000000, "R|W|AS4", 0 );  // GPMC Regs
+    GEL_MapAddStr( 0x0D000000, 0, 0x01000000, "R|W|AS4", 0 );  // PCIe Regs
+    GEL_MapAddStr( 0x0E000000, 0, 0x01000000, "R|W|AS4", 0 );  // Ducati Slave Port
+    GEL_MapAddStr( 0x0F000000, 0, 0x01000000, "R|W|AS4", 0 );  // SGX530 Slave Port
+    GEL_MapAddStr( 0x08000000, 0, 0x01000000, "R|W|AS4", 0 );  // L4 Standard Domain
+    GEL_MapAddStr( 0x09000000, 0, 0x00100000, "R|W|AS4", 0 );  // EDMA TPCC Registers
+    GEL_MapAddStr( 0x09800000, 0, 0x00100000, "R|W|AS4", 0 );  // EDMA TPTC0 Registers
+    GEL_MapAddStr( 0x09900000, 0, 0x00100000, "R|W|AS4", 0 );  // EDMA TPTC1 Registers
+    GEL_MapAddStr( 0x09A00000, 0, 0x00100000, "R|W|AS4", 0 );  // EDMA TPTC2 Registers
+    GEL_MapAddStr( 0x09B00000, 0, 0x00100000, "R|W|AS4", 0 );  // EDMA TPTC3 Registers
+    GEL_MapAddStr( 0x0A000000, 0, 0x01000000, "R|W|AS4", 0 );  // L4 High-Speed Domain
+    GEL_MapAddStr( 0x10000000, 0, 0x01000000, "R|W|AS4", 0 );  // C674x L1/L2 C674x Internal Global Address
+    GEL_MapAddStr( 0x60000000, 0, 0x20000000, "R|W|AS4", 0 );  // GPMC
+}
+
+menuitem "J5 CORE_CLKS Configuration"
+
+/********* Clocks PRCM for Control Module  *******/
+hotmenu ControlModule_ClkEnable_API()
+{
+    ControlModule_ClkEnable();
+}
+
+/********* Enable the OCMC0RAM Clocks ************/
+ hotmenu PrcmAlwayOnClkEnable_API()
+{
+    PrcmAlwayOnClkEnable();
+}
+
+/************ Enable the Ducati Clocks ***************/
+hotmenu DucatiClkEnable_API()
+{
+    DucatiClkEnable();
+}
+
+/************ Enable the IVA Clocks ***************/
+hotmenu IVAHD0ClkEnable_API()
+{
+    IVAHD0ClkEnable();
+}
+
+/************ Enable the TPPSS ***************/
+hotmenu PrcmTPPSSEnable_API()
+{
+    PrcmTPPSSEnable();
+}
+
+/************ Enable the GEMSS Clocks ***************/
+hotmenu GEMSSClkEnable_API()
+{
+    GEMSSClkEnable();
+}
+
+/************ Enable the GPMC Clocks ***************/
+hotmenu GPMC_ClkEnable_API()
+{
+    GPMC_ClkEnable();
+}
+
+
+/***************************************************************************************************************
+                                 REGISTER MAP DEFINES
+***************************************************************************************************************/
+
+
+#define DMM_BASE_ADDR           0x4E000000
+#define EMIF4_0_CFG_BASE_ADDR   0x4C000000
+#define EMIF4_1_CFG_BASE_ADDR   0x4D000000
+#define GPMC_MEM_BASE_ADDR      0x02000000
+#define DDR_MEM_BASE_ADDR       0x80000000
+#define DUCATI_BASE_ADDR        0x55020000
+#define DUCATI_MMU_CFG          0x55080000
+#define CTRL_MODULE_BASE_ADDR   0x48140000
+#define GEM_L2RAM_BASE_ADDR     0x40800000
+
+/* Control Module*/
+#define CM_CTRL_CLKCTRL         0x481815c4
+#define DSPBOOTADDR             (CTRL_MODULE_BASE_ADDR + 0x0048)
+#define DSPMEM_SLEEP            (CTRL_MODULE_BASE_ADDR + 0x0650)
+
+#define PRCM_BASE_ADDR              0x48180000
+#define CM_ALWON_MCA_2_CLKSTCTRL    (PRCM_BASE_ADDR + 0x1548)
+#define CM_ALWON_L3_SLOW_CLKSTCTRL  (PRCM_BASE_ADDR + 0x1400)
+
+/* Ethernet */
+#define CM_ALWON_ETHERNET_CLKSTCTRL (PRCM_BASE_ADDR + 0x1404)
+#define CM_ALWON_ETHERNET_0_CLKCTRL (PRCM_BASE_ADDR + 0x15d4)
+#define CM_ALWON_ETHERNET_1_CLKCTRL (PRCM_BASE_ADDR + 0x15d8)
+
+/*UART*/
+#define CM_ALWON_UART_0_CLKCTRL     (PRCM_BASE_ADDR + 0x1550)
+#define CM_ALWON_UART_1_CLKCTRL     (PRCM_BASE_ADDR + 0x1554)
+#define CM_ALWON_UART_2_CLKCTRL     (PRCM_BASE_ADDR + 0x1558)
+#define CM_ALWON_GPIO_0_CLKCTRL     (PRCM_BASE_ADDR + 0x155C)
+#define CM_ALWON_GPIO_1_CLKCTRL     (PRCM_BASE_ADDR + 0x1560)
+#define CM_ALWON_I2C_0_CLKCTRL      (PRCM_BASE_ADDR + 0x1564)
+#define CM_ALWON_I2C_1_CLKCTRL      (PRCM_BASE_ADDR + 0x1568)
+
+#define CM_DEFAULT_DUCATI_CLKSTCTRL (PRCM_BASE_ADDR + 0x0518)
+#define CM_DEFAULT_DUCATI_CLKCTRL   (PRCM_BASE_ADDR + 0x0574)
+#define RM_DEFAULT_RSTCTRL          (PRCM_BASE_ADDR + 0x0B10)
+#define RM_DEFAULT_RSTST            (PRCM_BASE_ADDR + 0x0B14)
+#define CM_ALWON_OCMC_0_CLKSTCTRL   (PRCM_BASE_ADDR + 0x1414)
+#define CM_ALWON_OCMC_0_CLKCTRL     (PRCM_BASE_ADDR + 0x15B4)
+#define CM_ALWON_GPMC_CLKCTRL       (PRCM_BASE_ADDR + 0x15D0)
+
+/*IVAHD0 PRCM Definition*/
+#define CM_IVAHD0_CLKSTCTRL         (PRCM_BASE_ADDR + 0x0600)
+#define CM_IVAHD0_IVAHD_CLKCTRL     (PRCM_BASE_ADDR + 0x0620)
+#define CM_IVAHD0_SL2_CLKCTRL       (PRCM_BASE_ADDR + 0x0624)
+#define PM_IVAHD0_PWRSTST           (PRCM_BASE_ADDR + 0x0C04)
+#define RM_IVAHD0_RSTCTRL           (PRCM_BASE_ADDR + 0x0C10)
+#define RM_IVAHD0_RSTST             (PRCM_BASE_ADDR + 0x0C14)
+
+/*SPI PRCM Definition*/
+#define CM_ALWON_SPI_0_CLKSTCTRL    (PRCM_BASE_ADDR + 0x1590)
+
+/*ISS PRCM Definition*/
+#define CM_ISS_CLKSTCTRL            (PRCM_BASE_ADDR + 0x0700)
+#define CM_ISS_IVAHD_CLKCTRL        (PRCM_BASE_ADDR + 0x0720)
+#define CM_ISS_SL2_CLKCTRL          (PRCM_BASE_ADDR + 0x0724)
+#define PM_ISS_PWRSTST              (PRCM_BASE_ADDR + 0x0D04)
+#define RM_ISS_RSTCTRL              (PRCM_BASE_ADDR + 0x0D10)
+#define RM_ISS_RSTST                (PRCM_BASE_ADDR + 0x0D14)
+
+/*GEMSS PRCEM definition*/
+#define CM_GEM_CLKSTCTRL            (PRCM_BASE_ADDR + 0x0400)
+#define CM_ACTIVE_GEM_CLKCTRL       (PRCM_BASE_ADDR + 0x0420)
+#define PM_ACTIVE_PWRSTST           (PRCM_BASE_ADDR + 0x0A04)
+#define RM_ACTIVE_RSTCTRL           (PRCM_BASE_ADDR + 0x0A10)
+#define RM_ACTIVE_RSTST             (PRCM_BASE_ADDR + 0x0A14)
+
+#define CM_MMU_CLKSTCTRL            (PRCM_BASE_ADDR + 0x140C)
+#define CM_ALWON_MMUDATA_CLKCTRL    (PRCM_BASE_ADDR + 0x159C)
+
+#define CM_MMUCFG_CLKSTCTRL         (PRCM_BASE_ADDR + 0x1410)
+#define CM_ALWON_MMUCFG_CLKCTRL     (PRCM_BASE_ADDR + 0x15A8)
+
+
+#define CM_ALWON_VCP2_CLKCTRL       (PRCM_BASE_ADDR + 0x1418)
+#define CM_ALWON_VCP2_CLKCTRL_2     (PRCM_BASE_ADDR + 0x15B8)
+
+//TPPSS
+#define CM_DEFAULT_TPPSS_CLKSTCTRL  (PRCM_BASE_ADDR + 0x50C)
+#define CM_DEFAULT_TPPSS_CLKCTRL    (PRCM_BASE_ADDR + 0x554)
+#define TPPIRAM_BASE_ADDR           0x57180000
+
+//Control Module Always on ClockControl
+#define CM_ALWON_L3_SLOW_CLKSTCTRL      (PRCM_BASE_ADDR + 0x1400)
+#define CM_ALWON_TIMER_0_CLKCTRL        (PRCM_BASE_ADDR + 0x156C)
+#define CM_ALWON_TIMER_1_CLKCTRL        (PRCM_BASE_ADDR + 0x1570)
+#define CM_ALWON_TIMER_2_CLKCTRL        (PRCM_BASE_ADDR + 0x1574)
+#define CM_ALWON_TIMER_3_CLKCTRL        (PRCM_BASE_ADDR + 0x1578)
+#define CM_ALWON_TIMER_4_CLKCTRL        (PRCM_BASE_ADDR + 0x157C)
+#define CM_ALWON_TIMER_5_CLKCTRL        (PRCM_BASE_ADDR + 0x1580)
+#define CM_ALWON_TIMER_6_CLKCTRL        (PRCM_BASE_ADDR + 0x1584)
+#define CM_ALWON_TIMER_7_CLKCTRL        (PRCM_BASE_ADDR + 0x1588)
+#define CM_ALWON_SYSCLK5_CLKSTCTRL      (PRCM_BASE_ADDR + 0x1424)
+#define CM_ALWON_DCAN_0_1_CLKCTRL       (PRCM_BASE_ADDR + 0x1618)
+
+#define CM_TIMER0_CLKSEL                (PRCM_BASE_ADDR + 0x038C)
+#define CM_TIMER1_CLKSEL                (PRCM_BASE_ADDR + 0x0390)
+#define CM_TIMER2_CLKSEL                (PRCM_BASE_ADDR + 0x0394)
+#define CM_TIMER3_CLKSEL                (PRCM_BASE_ADDR + 0x0398)
+#define CM_TIMER4_CLKSEL                (PRCM_BASE_ADDR + 0x039C)
+#define CM_TIMER5_CLKSEL                (PRCM_BASE_ADDR + 0x03A0)
+#define CM_TIMER6_CLKSEL                (PRCM_BASE_ADDR + 0x03A4)
+#define CM_TIMER7_CLKSEL                (PRCM_BASE_ADDR + 0x03A8)
+
+#define CM_ALWON_MAILBOX_CLKCTRL                (PRCM_BASE_ADDR + 0x1594)
+
+#define CM_HDVPSS_CLKSTCTRL             (PRCM_BASE_ADDR + 0x0800)
+#define CM_HDVPSS_HDVPSS_CLKCTRL        (PRCM_BASE_ADDR + 0x0820)
+#define CM_HDVPSS_HDMI_CLKCTRL          (PRCM_BASE_ADDR + 0x0824)
+
+//#define SIZE 0x8000
+//#define DATA_SIZE 10
+#define OCMC0RAM_BASE_ADDR              0x40300000
+#define OCMC1RAM_BASE_ADDR              0x40400000
+
+#define DMTIMER0_BASE_ADDR              0x4802C000
+#define DMTIMER1_BASE_ADDR              0x4802E000
+
+#define DMTIMER2_BASE_ADDR              0x48040000
+#define DMTIMER3_BASE_ADDR              0x48042000
+#define DMTIMER4_BASE_ADDR              0x48044000
+#define DMTIMER5_BASE_ADDR              0x48046000
+#define DMTIMER6_BASE_ADDR              0x48048000
+#define DMTIMER7_BASE_ADDR              0x4804A000
+
+/*****************************************************************************/
+/*EMIF4 PRCM Defintion*/
+#define CM_DEFAULT_L3_FAST_CLKSTCTRL    (PRCM_BASE_ADDR + 0x0508)
+#define CM_DEFAULT_EMIF_0_CLKCTRL       (PRCM_BASE_ADDR + 0x0520)
+#define CM_DEFAULT_EMIF_1_CLKCTRL       (PRCM_BASE_ADDR + 0x0524)
+#define CM_DEFAULT_DMM_CLKCTRL          (PRCM_BASE_ADDR + 0x0528)
+#define CM_DEFAULT_FW_CLKCTRL           (PRCM_BASE_ADDR + 0x052C)
+/*end of EMIF4 PRCM definition*/
+
+#define    DDR0_PHY_BASE_ADDR           0x47C0C400
+#define    DDR1_PHY_BASE_ADDR           0x47C0C800
+#define    DDR0_IO_CTRL                 0x48140E04
+#define    DDR1_IO_CTRL                 0x48140E08
+#define    VTP0_CTRL_REG                0x48140E0C
+#define    VTP1_CTRL_REG                0x48140E10
+#define    EMIF4_0_CFG_BASE_ADDR        0x4C000000
+#define    EMIF4_1_CFG_BASE_ADDR        0x4D000000
+#define    DMM_BASE_ADDR                0x4E000000
+
+//-DMM & EMIF4 MMR Declaration
+#define DMM_LISA_MAP__0                 (DMM_BASE_ADDR + 0x40)
+#define DMM_LISA_MAP__1                 (DMM_BASE_ADDR + 0x44)
+#define DMM_LISA_MAP__2                 (DMM_BASE_ADDR + 0x48)
+#define DMM_LISA_MAP__3                 (DMM_BASE_ADDR + 0x4C)
+#define DMM_PAT_BASE_ADDR               (DMM_BASE_ADDR + 0x460)
+
+#define EMIF4_0_SDRAM_CONFIG            (EMIF4_0_CFG_BASE_ADDR + 0x08)
+#define EMIF4_0_SDRAM_CONFIG2           (EMIF4_0_CFG_BASE_ADDR + 0x0C)
+#define EMIF4_0_SDRAM_REF_CTRL          (EMIF4_0_CFG_BASE_ADDR + 0x10)
+#define EMIF4_0_SDRAM_REF_CTRL_SHADOW   (EMIF4_0_CFG_BASE_ADDR + 0x14)
+#define EMIF4_0_SDRAM_TIM_1             (EMIF4_0_CFG_BASE_ADDR + 0x18)
+#define EMIF4_0_SDRAM_TIM_1_SHADOW      (EMIF4_0_CFG_BASE_ADDR + 0x1C)
+#define EMIF4_0_SDRAM_TIM_2             (EMIF4_0_CFG_BASE_ADDR + 0x20)
+#define EMIF4_0_SDRAM_TIM_2_SHADOW      (EMIF4_0_CFG_BASE_ADDR + 0x24)
+#define EMIF4_0_SDRAM_TIM_3             (EMIF4_0_CFG_BASE_ADDR + 0x28)
+#define EMIF4_0_SDRAM_TIM_3_SHADOW      (EMIF4_0_CFG_BASE_ADDR + 0x2C)
+#define EMIF4_0_DDR_PHY_CTRL_1          (EMIF4_0_CFG_BASE_ADDR + 0xE4)
+#define EMIF4_0_DDR_PHY_CTRL_1_SHADOW   (EMIF4_0_CFG_BASE_ADDR + 0xE8)
+#define EMIF4_0_RDWR_LVL_RMP_CTRL       (EMIF4_0_CFG_BASE_ADDR + 0xD8)
+#define EMIF4_0_RDWR_LVL_CTRL           (EMIF4_0_CFG_BASE_ADDR + 0xDC)
+
+
+#define EMIF4_1_SDRAM_CONFIG            (EMIF4_1_CFG_BASE_ADDR + 0x08)
+#define EMIF4_1_SDRAM_CONFIG2           (EMIF4_1_CFG_BASE_ADDR + 0x0C)
+#define EMIF4_1_SDRAM_REF_CTRL          (EMIF4_1_CFG_BASE_ADDR + 0x10)
+#define EMIF4_1_SDRAM_REF_CTRL_SHADOW   (EMIF4_1_CFG_BASE_ADDR + 0x14)
+#define EMIF4_1_SDRAM_TIM_1             (EMIF4_1_CFG_BASE_ADDR + 0x18)
+#define EMIF4_1_SDRAM_TIM_1_SHADOW      (EMIF4_1_CFG_BASE_ADDR + 0x1C)
+#define EMIF4_1_SDRAM_TIM_2             (EMIF4_1_CFG_BASE_ADDR + 0x20)
+#define EMIF4_1_SDRAM_TIM_2_SHADOW      (EMIF4_1_CFG_BASE_ADDR + 0x24)
+#define EMIF4_1_SDRAM_TIM_3             (EMIF4_1_CFG_BASE_ADDR + 0x28)
+#define EMIF4_1_SDRAM_TIM_3_SHADOW      (EMIF4_1_CFG_BASE_ADDR + 0x2C)
+#define EMIF4_1_DDR_PHY_CTRL_1          (EMIF4_1_CFG_BASE_ADDR + 0xE4)
+#define EMIF4_1_DDR_PHY_CTRL_1_SHADOW   (EMIF4_1_CFG_BASE_ADDR + 0xE8)
+#define EMIF4_1_RDWR_LVL_RMP_CTRL       (EMIF4_1_CFG_BASE_ADDR + 0xD8)
+#define EMIF4_1_RDWR_LVL_CTRL           (EMIF4_1_CFG_BASE_ADDR + 0xDC)
+
+
+//- DDR0 Phy MMRs
+#define    CMD0_REG_PHY0_CTRL_SLAVE_RATIO_0 (0x01C + DDR0_PHY_BASE_ADDR)
+#define    CMD0_REG_PHY0_DLL_LOCK_DIFF_0    (0x028 + DDR0_PHY_BASE_ADDR)
+#define    CMD0_REG_PHY0_INVERT_CLKOUT_0    (0x02C + DDR0_PHY_BASE_ADDR)
+#define    CMD1_REG_PHY0_CTRL_SLAVE_RATIO_0 (0x050 + DDR0_PHY_BASE_ADDR)
+#define    CMD1_REG_PHY0_DLL_LOCK_DIFF_0    (0x05C + DDR0_PHY_BASE_ADDR)
+#define    CMD1_REG_PHY0_INVERT_CLKOUT_0    (0x060 + DDR0_PHY_BASE_ADDR)
+#define    CMD2_REG_PHY0_CTRL_SLAVE_RATIO_0 (0x084 + DDR0_PHY_BASE_ADDR)
+#define    CMD2_REG_PHY0_DLL_LOCK_DIFF_0    (0x090 + DDR0_PHY_BASE_ADDR)
+#define    CMD2_REG_PHY0_INVERT_CLKOUT_0    (0x094 + DDR0_PHY_BASE_ADDR)
+
+#define    DATA0_REG_PHY0_RD_DQS_SLAVE_RATIO_0  (0x0C8 + DDR0_PHY_BASE_ADDR)
+#define    DATA0_REG_PHY0_WR_DQS_SLAVE_RATIO_0  (0x0DC + DDR0_PHY_BASE_ADDR)
+#define    DATA0_REG_PHY0_WRLVL_INIT_RATIO_0    (0x0F0 + DDR0_PHY_BASE_ADDR)
+#define    DATA0_REG_PHY0_WRLVL_INIT_MODE_0     (0x0F8 + DDR0_PHY_BASE_ADDR)
+#define    DATA0_REG_PHY0_GATELVL_INIT_RATIO_0  (0x0FC + DDR0_PHY_BASE_ADDR)
+#define    DATA0_REG_PHY0_GATELVL_INIT_MODE_0   (0x104 + DDR0_PHY_BASE_ADDR)
+#define    DATA0_REG_PHY0_FIFO_WE_SLAVE_RATIO_0 (0x108 + DDR0_PHY_BASE_ADDR)
+#define    DATA0_REG_PHY0_WR_DATA_SLAVE_RATIO_0 (0x120 + DDR0_PHY_BASE_ADDR)
+#define    DATA0_REG_PHY0_USE_RANK0_DELAYS      (0x134 + DDR0_PHY_BASE_ADDR)
+#define    DATA0_REG_PHY0_DLL_LOCK_DIFF_0       (0x138 + DDR0_PHY_BASE_ADDR)
+
+#define    DATA1_REG_PHY0_RD_DQS_SLAVE_RATIO_0  (0x16C + DDR0_PHY_BASE_ADDR)
+#define    DATA1_REG_PHY0_WR_DQS_SLAVE_RATIO_0  (0x180 + DDR0_PHY_BASE_ADDR)
+#define    DATA1_REG_PHY0_WRLVL_INIT_RATIO_0    (0x194 + DDR0_PHY_BASE_ADDR)
+#define    DATA1_REG_PHY0_WRLVL_INIT_MODE_0     (0x19C + DDR0_PHY_BASE_ADDR)
+#define    DATA1_REG_PHY0_GATELVL_INIT_RATIO_0  (0x1A0 + DDR0_PHY_BASE_ADDR)
+#define    DATA1_REG_PHY0_GATELVL_INIT_MODE_0   (0x1A8 + DDR0_PHY_BASE_ADDR)
+#define    DATA1_REG_PHY0_FIFO_WE_SLAVE_RATIO_0 (0x1AC + DDR0_PHY_BASE_ADDR)
+#define    DATA1_REG_PHY0_WR_DATA_SLAVE_RATIO_0 (0x1C4 + DDR0_PHY_BASE_ADDR)
+#define    DATA1_REG_PHY0_USE_RANK0_DELAYS      (0x1D8 + DDR0_PHY_BASE_ADDR)
+#define    DATA1_REG_PHY0_DLL_LOCK_DIFF_0       (0x1DC + DDR0_PHY_BASE_ADDR)
+
+#define    DATA2_REG_PHY0_RD_DQS_SLAVE_RATIO_0  (0x210 + DDR0_PHY_BASE_ADDR)
+#define    DATA2_REG_PHY0_WR_DQS_SLAVE_RATIO_0  (0x224 + DDR0_PHY_BASE_ADDR)
+#define    DATA2_REG_PHY0_WRLVL_INIT_RATIO_0    (0x238 + DDR0_PHY_BASE_ADDR)
+#define    DATA2_REG_PHY0_WRLVL_INIT_MODE_0     (0x240 + DDR0_PHY_BASE_ADDR)
+#define    DATA2_REG_PHY0_GATELVL_INIT_RATIO_0  (0x244 + DDR0_PHY_BASE_ADDR)
+#define    DATA2_REG_PHY0_GATELVL_INIT_MODE_0   (0x24C + DDR0_PHY_BASE_ADDR)
+#define    DATA2_REG_PHY0_FIFO_WE_SLAVE_RATIO_0 (0x250 + DDR0_PHY_BASE_ADDR)
+#define    DATA2_REG_PHY0_WR_DATA_SLAVE_RATIO_0 (0x268 + DDR0_PHY_BASE_ADDR)
+#define    DATA2_REG_PHY0_USE_RANK0_DELAYS      (0x27C + DDR0_PHY_BASE_ADDR)
+#define    DATA2_REG_PHY0_DLL_LOCK_DIFF_0       (0x280 + DDR0_PHY_BASE_ADDR)
+
+#define    DATA3_REG_PHY0_RD_DQS_SLAVE_RATIO_0  (0x2B4 + DDR0_PHY_BASE_ADDR)
+#define    DATA3_REG_PHY0_WR_DQS_SLAVE_RATIO_0  (0x2C8 + DDR0_PHY_BASE_ADDR)
+#define    DATA3_REG_PHY0_WRLVL_INIT_RATIO_0    (0x2DC + DDR0_PHY_BASE_ADDR)
+#define    DATA3_REG_PHY0_WRLVL_INIT_MODE_0     (0x2E4 + DDR0_PHY_BASE_ADDR)
+#define    DATA3_REG_PHY0_GATELVL_INIT_RATIO_0  (0x2E8 + DDR0_PHY_BASE_ADDR)
+#define    DATA3_REG_PHY0_GATELVL_INIT_MODE_0   (0x2F0 + DDR0_PHY_BASE_ADDR)
+#define    DATA3_REG_PHY0_FIFO_WE_SLAVE_RATIO_0 (0x2F4 + DDR0_PHY_BASE_ADDR)
+#define    DATA3_REG_PHY0_WR_DATA_SLAVE_RATIO_0 (0x30C + DDR0_PHY_BASE_ADDR)
+#define    DATA3_REG_PHY0_USE_RANK0_DELAYS      (0x320 + DDR0_PHY_BASE_ADDR)
+#define    DATA3_REG_PHY0_DLL_LOCK_DIFF_0       (0x324 + DDR0_PHY_BASE_ADDR)
+
+
+//- DDR1 Phy MMRs
+#define    CMD0_REG_PHY1_CTRL_SLAVE_RATIO_0     (0x01C + DDR1_PHY_BASE_ADDR)
+#define    CMD0_REG_PHY1_DLL_LOCK_DIFF_0        (0x028 + DDR1_PHY_BASE_ADDR)
+#define    CMD0_REG_PHY1_INVERT_CLKOUT_0        (0x02C + DDR1_PHY_BASE_ADDR)
+#define    CMD1_REG_PHY1_CTRL_SLAVE_RATIO_0     (0x050 + DDR1_PHY_BASE_ADDR)
+#define    CMD1_REG_PHY1_DLL_LOCK_DIFF_0        (0x05C + DDR1_PHY_BASE_ADDR)
+#define    CMD1_REG_PHY1_INVERT_CLKOUT_0        (0x060 + DDR1_PHY_BASE_ADDR)
+#define    CMD2_REG_PHY1_CTRL_SLAVE_RATIO_0     (0x084 + DDR1_PHY_BASE_ADDR)
+#define    CMD2_REG_PHY1_DLL_LOCK_DIFF_0        (0x090 + DDR1_PHY_BASE_ADDR)
+#define    CMD2_REG_PHY1_INVERT_CLKOUT_0        (0x094 + DDR1_PHY_BASE_ADDR)
+
+#define    DATA0_REG_PHY1_RD_DQS_SLAVE_RATIO_0  (0x0C8 + DDR1_PHY_BASE_ADDR)
+#define    DATA0_REG_PHY1_WR_DQS_SLAVE_RATIO_0  (0x0DC + DDR1_PHY_BASE_ADDR)
+#define    DATA0_REG_PHY1_WRLVL_INIT_RATIO_0    (0x0F0 + DDR1_PHY_BASE_ADDR)
+#define    DATA0_REG_PHY1_WRLVL_INIT_MODE_0     (0x0F8 + DDR1_PHY_BASE_ADDR)
+#define    DATA0_REG_PHY1_GATELVL_INIT_RATIO_0  (0x0FC + DDR1_PHY_BASE_ADDR)
+#define    DATA0_REG_PHY1_GATELVL_INIT_MODE_0   (0x104 + DDR1_PHY_BASE_ADDR)
+#define    DATA0_REG_PHY1_FIFO_WE_SLAVE_RATIO_0 (0x108 + DDR1_PHY_BASE_ADDR)
+#define    DATA0_REG_PHY1_WR_DATA_SLAVE_RATIO_0 (0x120 + DDR1_PHY_BASE_ADDR)
+#define    DATA0_REG_PHY1_USE_RANK0_DELAYS      (0x134 + DDR1_PHY_BASE_ADDR)
+#define    DATA0_REG_PHY1_DLL_LOCK_DIFF_0       (0x138 + DDR1_PHY_BASE_ADDR)
+
+#define    DATA1_REG_PHY1_RD_DQS_SLAVE_RATIO_0  (0x16C + DDR1_PHY_BASE_ADDR)
+#define    DATA1_REG_PHY1_WR_DQS_SLAVE_RATIO_0  (0x180 + DDR1_PHY_BASE_ADDR)
+#define    DATA1_REG_PHY1_WRLVL_INIT_RATIO_0    (0x194 + DDR1_PHY_BASE_ADDR)
+#define    DATA1_REG_PHY1_WRLVL_INIT_MODE_0     (0x19C + DDR1_PHY_BASE_ADDR)
+#define    DATA1_REG_PHY1_GATELVL_INIT_RATIO_0  (0x1A0 + DDR1_PHY_BASE_ADDR)
+#define    DATA1_REG_PHY1_GATELVL_INIT_MODE_0   (0x1A8 + DDR1_PHY_BASE_ADDR)
+#define    DATA1_REG_PHY1_FIFO_WE_SLAVE_RATIO_0 (0x1AC + DDR1_PHY_BASE_ADDR)
+#define    DATA1_REG_PHY1_WR_DATA_SLAVE_RATIO_0 (0x1C4 + DDR1_PHY_BASE_ADDR)
+#define    DATA1_REG_PHY1_USE_RANK0_DELAYS      (0x1D8 + DDR1_PHY_BASE_ADDR)
+#define    DATA1_REG_PHY1_DLL_LOCK_DIFF_0       (0x1DC + DDR1_PHY_BASE_ADDR)
+
+#define    DATA2_REG_PHY1_RD_DQS_SLAVE_RATIO_0  (0x210 + DDR1_PHY_BASE_ADDR)
+#define    DATA2_REG_PHY1_WR_DQS_SLAVE_RATIO_0  (0x224 + DDR1_PHY_BASE_ADDR)
+#define    DATA2_REG_PHY1_WRLVL_INIT_RATIO_0    (0x238 + DDR1_PHY_BASE_ADDR)
+#define    DATA2_REG_PHY1_WRLVL_INIT_MODE_0     (0x240 + DDR1_PHY_BASE_ADDR)
+#define    DATA2_REG_PHY1_GATELVL_INIT_RATIO_0  (0x244 + DDR1_PHY_BASE_ADDR)
+#define    DATA2_REG_PHY1_GATELVL_INIT_MODE_0   (0x24C + DDR1_PHY_BASE_ADDR)
+#define    DATA2_REG_PHY1_FIFO_WE_SLAVE_RATIO_0 (0x250 + DDR1_PHY_BASE_ADDR)
+#define    DATA2_REG_PHY1_WR_DATA_SLAVE_RATIO_0 (0x268 + DDR1_PHY_BASE_ADDR)
+#define    DATA2_REG_PHY1_USE_RANK0_DELAYS      (0x27C + DDR1_PHY_BASE_ADDR)
+#define    DATA2_REG_PHY1_DLL_LOCK_DIFF_0       (0x280 + DDR1_PHY_BASE_ADDR)
+
+#define    DATA3_REG_PHY1_RD_DQS_SLAVE_RATIO_0  (0x2B4 + DDR1_PHY_BASE_ADDR)
+#define    DATA3_REG_PHY1_WR_DQS_SLAVE_RATIO_0  (0x2C8 + DDR1_PHY_BASE_ADDR)
+#define    DATA3_REG_PHY1_WRLVL_INIT_RATIO_0    (0x2DC + DDR1_PHY_BASE_ADDR)
+#define    DATA3_REG_PHY1_WRLVL_INIT_MODE_0     (0x2E4 + DDR1_PHY_BASE_ADDR)
+#define    DATA3_REG_PHY1_GATELVL_INIT_RATIO_0  (0x2E8 + DDR1_PHY_BASE_ADDR)
+#define    DATA3_REG_PHY1_GATELVL_INIT_MODE_0   (0x2F0 + DDR1_PHY_BASE_ADDR)
+#define    DATA3_REG_PHY1_FIFO_WE_SLAVE_RATIO_0 (0x2F4 + DDR1_PHY_BASE_ADDR)
+#define    DATA3_REG_PHY1_WR_DATA_SLAVE_RATIO_0 (0x30C + DDR1_PHY_BASE_ADDR)
+#define    DATA3_REG_PHY1_USE_RANK0_DELAYS      (0x320 + DDR1_PHY_BASE_ADDR)
+#define    DATA3_REG_PHY1_DLL_LOCK_DIFF_0       (0x324 + DDR1_PHY_BASE_ADDR)
+
+#define    DATA_MACRO_0             0
+#define    DATA_MACRO_1             1
+#define    DATA_MACRO_2             2
+#define    DATA_MACRO_3             3
+#define    DDR_PHY0       0
+#define    DDR_PHY1       1
+
+#define    DDR_FREQ      666 // 333MHz
+
+//- Common DDR PHY parameters
+#define    PHY_INVERT_CLKOUT_DEFINE              0
+#define    DDR3_PHY_INVERT_CLKOUT_DEFINE         0
+#define    PHY_REG_USE_RANK0_DELAY_DEFINE        0
+#define    mDDR_PHY_REG_USE_RANK0_DELAY_DEFINE   1
+#define    PHY_DLL_LOCK_DIFF_DEFINE              0x4
+#define    PHY_CMD0_DLL_LOCK_DIFF_DEFINE         0x4
+
+#define    PHY_GATELVL_INIT_CS0_DEFINE           0x0
+#define    PHY_WRLVL_INIT_CS0_DEFINE             0x0
+
+#define    PHY_GATELVL_INIT_CS1_DEFINE           0x0
+#define    PHY_WRLVL_INIT_CS1_DEFINE             0x0
+#define    PHY_CTRL_SLAVE_RATIO_CS1_DEFINE       0x80
+
+//- DDR2 parameters
+#define    DDR2_EMIF_READ_LATENCY_DEFINE         0x09
+#define    DDR2_EMIF_TIM1_DEFINE                 0x0EF197EC
+#define    DDR2_EMIF_TIM2_DEFINE                 0x144931E2
+#define    DDR2_EMIF_TIM3_DEFINE                 0x00000447
+#define    DDR2_EMIF_REF_CTRL_DEFINE             0x1000103D
+#define    DDR2_EMIF_SDRAM_CONFIG_DEFINE         0x43801E32
+
+#define    DDR2_PHY_RD_DQS_CS0_DEFINE            0x35
+#define    DDR2_PHY_WR_DQS_CS0_DEFINE            0x20
+#define    DDR2_PHY_FIFO_WE_CS0_DEFINE           0x90
+#define    DDR2_PHY_WR_DATA_CS0_DEFINE           0x50
+#define    DDR2_PHY_CTRL_SLAVE_RATIO_CS0_DEFINE  0x80
+
+//- DDR3 parameters
+
+#define    DDR3_EMIF_READ_LATENCY_DEFINE         0xC
+#define    DDR3_EMIF_TIM1_DEFINE                 0x1557B9A5
+#define    DDR3_EMIF_TIM2_DEFINE                 0x4C5F7FEB
+#define    DDR3_EMIF_TIM3_DEFINE                 0x00000578
+#define    DDR3_EMIF_REF_CTRL_DEFINE             0x10001860
+#define    DDR3_EMIF_SDRAM_CONFIG_DEFINE_2G2x16  0x62833AB2
+#define    DDR3_EMIF_SDRAM_CONFIG_DEFINE_2G4x8   0x62833B32
+
+#define    DDR3_PHY_CTRL_SLAVE_RATIO_CS0_DEFINE  0x80
+
+//#define      DDR3_PHY_RD_DQS_CS0_DEFINE        0x34 // WORKING @ 250mHZ HISPEED26
+//#define      DDR3_PHY_WR_DQS_CS0_DEFINE        0x7
+//#define      DDR3_PHY_FIFO_WE_CS0_DEFINE       0x94
+//#define      DDR3_PHY_WR_DATA_CS0_DEFINE       0x47
+
+#define    DDR3_PHY_RD_DQS_CS0_DEFINE            0x34
+#define    DDR3_PHY_WR_DQS_CS0_DEFINE            0xA
+#define    DDR3_PHY_FIFO_WE_CS0_DEFINE           0xB4
+#define    DDR3_PHY_WR_DATA_CS0_DEFINE           0x4A
+
+//- mDDR parameters
+#define    mDDR_EMIF_READ_LATENCY_DEFINE         0x5
+#define    mDDR_EMIF_TIM1_DEFINE                 0x0888831B
+#define    mDDR_EMIF_TIM2_DEFINE                 0x221A31C0
+#define    mDDR_EMIF_TIM3_DEFINE                 0x00000157
+#define    mDDR_EMIF_REF_CTRL_DEFINE             0x10000618
+#define    mDDR_EMIF_SDRAM_CONFIG_DEFINE         0x20000EA2
+
+#define    mDDR_PHY_RD_DQS_CS0_DEFINE            0x42
+#define    mDDR_PHY_WR_DQS_CS0_DEFINE            0x19
+#define    mDDR_PHY_FIFO_WE_CS0_DEFINE           0x128
+#define    mDDR_PHY_WR_DATA_CS0_DEFINE           0x56
+#define    mDDR_PHY_CTRL_SLAVE_RATIO_CS0_DEFINE  0x80
+
+
+
+
+
+/*************************************************************************/
+
+//Clockout_Enable
+// CLKOUT2DIV THis  field controls the external clock divison factor
+//          0x0:      SYS_CLKOLUT2/1
+//          0x1:      SYS_CLKOUT2/2
+//          0x2:      SYS_CLKOUT2/4
+//          0x3:      SYS_CLKOUT2/8
+//          0x4:      SYS_CLKOUT2/16
+
+// CLKOUT2SOURCE     This field selects the external output clock source
+//          0x0:      Source clock is MAIN_PLL_CLK5
+//          0x1:      Source clock is DDR_PLL_CLK1
+//          0x2:      Source clock is VIDEO_PLL_CLK1
+//          0x3:      Source clock is AUDIO_PLL_CLK1
+
+#define CLKOUT2EN    1
+#define CLKOUT2DIV  0
+#define CLKOUT2SRC  0
+
+
+/**********************************************************************/
+//Pincntrl Configurations
+#define PINCNTL(n)  (*(unsigned int *)(CTRL_MODULE_BASE_ADDR + 0x0800 + (n-1)*4))
+#define PINCNTL1    (CTRL_MODULE_BASE_ADDR + 0x0800 + (1-1)*4)
+#define PINCNTL2    (CTRL_MODULE_BASE_ADDR + 0x0800 + (2 -1)*4)
+#define PINCNTL3    (CTRL_MODULE_BASE_ADDR + 0x0800 + (3 -1)*4)
+#define PINCNTL4    (CTRL_MODULE_BASE_ADDR + 0x0800 + (4 -1)*4)
+#define PINCNTL5    (CTRL_MODULE_BASE_ADDR + 0x0800 + (5 -1)*4)
+#define PINCNTL6    (CTRL_MODULE_BASE_ADDR + 0x0800 + (6 -1)*4)
+#define PINCNTL7    (CTRL_MODULE_BASE_ADDR + 0x0800 + (7 -1)*4)
+#define PINCNTL8    (CTRL_MODULE_BASE_ADDR + 0x0800 + (8 -1)*4)
+#define PINCNTL9    (CTRL_MODULE_BASE_ADDR + 0x0800 + (9 -1)*4)
+#define PINCNTL10   (CTRL_MODULE_BASE_ADDR + 0x0800 + (10-1)*4)
+#define PINCNTL11   (CTRL_MODULE_BASE_ADDR + 0x0800 + (11-1)*4)
+#define PINCNTL12   (CTRL_MODULE_BASE_ADDR + 0x0800 + (12-1)*4)
+#define PINCNTL13   (CTRL_MODULE_BASE_ADDR + 0x0800 + (13-1)*4)
+#define PINCNTL14   (CTRL_MODULE_BASE_ADDR + 0x0800 + (14-1)*4)
+#define PINCNTL15   (CTRL_MODULE_BASE_ADDR + 0x0800 + (15-1)*4)
+#define PINCNTL16   (CTRL_MODULE_BASE_ADDR + 0x0800 + (16-1)*4)
+#define PINCNTL17   (CTRL_MODULE_BASE_ADDR + 0x0800 + (17-1)*4)
+#define PINCNTL18   (CTRL_MODULE_BASE_ADDR + 0x0800 + (18-1)*4)
+#define PINCNTL19   (CTRL_MODULE_BASE_ADDR + 0x0800 + (19-1)*4)
+#define PINCNTL20   (CTRL_MODULE_BASE_ADDR + 0x0800 + (20-1)*4)
+#define PINCNTL21   (CTRL_MODULE_BASE_ADDR + 0x0800 + (21-1)*4)
+#define PINCNTL22   (CTRL_MODULE_BASE_ADDR + 0x0800 + (22-1)*4)
+#define PINCNTL23   (CTRL_MODULE_BASE_ADDR + 0x0800 + (23-1)*4)
+#define PINCNTL24   (CTRL_MODULE_BASE_ADDR + 0x0800 + (24-1)*4)
+#define PINCNTL25   (CTRL_MODULE_BASE_ADDR + 0x0800 + (25-1)*4)
+#define PINCNTL26   (CTRL_MODULE_BASE_ADDR + 0x0800 + (26-1)*4)
+#define PINCNTL27   (CTRL_MODULE_BASE_ADDR + 0x0800 + (27-1)*4)
+#define PINCNTL28   (CTRL_MODULE_BASE_ADDR + 0x0800 + (28-1)*4)
+#define PINCNTL29   (CTRL_MODULE_BASE_ADDR + 0x0800 + (29-1)*4)
+#define PINCNTL30   (CTRL_MODULE_BASE_ADDR + 0x0800 + (30-1)*4)
+#define PINCNTL31   (CTRL_MODULE_BASE_ADDR + 0x0800 + (31-1)*4)
+#define PINCNTL32   (CTRL_MODULE_BASE_ADDR + 0x0800 + (32-1)*4)
+#define PINCNTL33   (CTRL_MODULE_BASE_ADDR + 0x0800 + (33-1)*4)
+#define PINCNTL34   (CTRL_MODULE_BASE_ADDR + 0x0800 + (34-1)*4)
+#define PINCNTL35   (CTRL_MODULE_BASE_ADDR + 0x0800 + (35-1)*4)
+#define PINCNTL36   (CTRL_MODULE_BASE_ADDR + 0x0800 + (36-1)*4)
+#define PINCNTL37   (CTRL_MODULE_BASE_ADDR + 0x0800 + (37-1)*4)
+#define PINCNTL38   (CTRL_MODULE_BASE_ADDR + 0x0800 + (38-1)*4)
+#define PINCNTL39   (CTRL_MODULE_BASE_ADDR + 0x0800 + (39-1)*4)
+#define PINCNTL40   (CTRL_MODULE_BASE_ADDR + 0x0800 + (40-1)*4)
+#define PINCNTL41   (CTRL_MODULE_BASE_ADDR + 0x0800 + (41-1)*4)
+#define PINCNTL42   (CTRL_MODULE_BASE_ADDR + 0x0800 + (42-1)*4)
+#define PINCNTL43   (CTRL_MODULE_BASE_ADDR + 0x0800 + (43-1)*4)
+#define PINCNTL44   (CTRL_MODULE_BASE_ADDR + 0x0800 + (44-1)*4)
+#define PINCNTL45   (CTRL_MODULE_BASE_ADDR + 0x0800 + (45-1)*4)
+#define PINCNTL46   (CTRL_MODULE_BASE_ADDR + 0x0800 + (46-1)*4)
+#define PINCNTL47   (CTRL_MODULE_BASE_ADDR + 0x0800 + (47-1)*4)
+#define PINCNTL48   (CTRL_MODULE_BASE_ADDR + 0x0800 + (48-1)*4)
+#define PINCNTL49   (CTRL_MODULE_BASE_ADDR + 0x0800 + (49-1)*4)
+#define PINCNTL50   (CTRL_MODULE_BASE_ADDR + 0x0800 + (50-1)*4)
+#define PINCNTL51   (CTRL_MODULE_BASE_ADDR + 0x0800 + (51-1)*4)
+#define PINCNTL52   (CTRL_MODULE_BASE_ADDR + 0x0800 + (52-1)*4)
+#define PINCNTL53   (CTRL_MODULE_BASE_ADDR + 0x0800 + (53-1)*4)
+#define PINCNTL54   (CTRL_MODULE_BASE_ADDR + 0x0800 + (54-1)*4)
+#define PINCNTL55   (CTRL_MODULE_BASE_ADDR + 0x0800 + (55-1)*4)
+#define PINCNTL56   (CTRL_MODULE_BASE_ADDR + 0x0800 + (56-1)*4)
+#define PINCNTL57   (CTRL_MODULE_BASE_ADDR + 0x0800 + (57-1)*4)
+#define PINCNTL58   (CTRL_MODULE_BASE_ADDR + 0x0800 + (58-1)*4)
+#define PINCNTL59   (CTRL_MODULE_BASE_ADDR + 0x0800 + (59-1)*4)
+#define PINCNTL60   (CTRL_MODULE_BASE_ADDR + 0x0800 + (60-1)*4)
+#define PINCNTL61   (CTRL_MODULE_BASE_ADDR + 0x0800 + (61-1)*4)
+#define PINCNTL62   (CTRL_MODULE_BASE_ADDR + 0x0800 + (62-1)*4)
+#define PINCNTL63   (CTRL_MODULE_BASE_ADDR + 0x0800 + (63-1)*4)
+#define PINCNTL64   (CTRL_MODULE_BASE_ADDR + 0x0800 + (64-1)*4)
+#define PINCNTL65   (CTRL_MODULE_BASE_ADDR + 0x0800 + (65-1)*4)
+#define PINCNTL66   (CTRL_MODULE_BASE_ADDR + 0x0800 + (66-1)*4)
+#define PINCNTL67   (CTRL_MODULE_BASE_ADDR + 0x0800 + (67-1)*4)
+#define PINCNTL68   (CTRL_MODULE_BASE_ADDR + 0x0800 + (68-1)*4)
+#define PINCNTL69   (CTRL_MODULE_BASE_ADDR + 0x0800 + (69-1)*4)
+#define PINCNTL70   (CTRL_MODULE_BASE_ADDR + 0x0800 + (70-1)*4)
+#define PINCNTL71   (CTRL_MODULE_BASE_ADDR + 0x0800 + (71-1)*4)
+#define PINCNTL72   (CTRL_MODULE_BASE_ADDR + 0x0800 + (72-1)*4)
+#define PINCNTL73   (CTRL_MODULE_BASE_ADDR + 0x0800 + (73-1)*4)
+#define PINCNTL74   (CTRL_MODULE_BASE_ADDR + 0x0800 + (74-1)*4)
+#define PINCNTL75   (CTRL_MODULE_BASE_ADDR + 0x0800 + (75-1)*4)
+#define PINCNTL76   (CTRL_MODULE_BASE_ADDR + 0x0800 + (76-1)*4)
+#define PINCNTL77   (CTRL_MODULE_BASE_ADDR + 0x0800 + (77-1)*4)
+#define PINCNTL78   (CTRL_MODULE_BASE_ADDR + 0x0800 + (78-1)*4)
+#define PINCNTL79   (CTRL_MODULE_BASE_ADDR + 0x0800 + (79-1)*4)
+#define PINCNTL80   (CTRL_MODULE_BASE_ADDR + 0x0800 + (80-1)*4)
+#define PINCNTL81   (CTRL_MODULE_BASE_ADDR + 0x0800 + (81-1)*4)
+#define PINCNTL82   (CTRL_MODULE_BASE_ADDR + 0x0800 + (82-1)*4)
+#define PINCNTL83   (CTRL_MODULE_BASE_ADDR + 0x0800 + (83-1)*4)
+#define PINCNTL84   (CTRL_MODULE_BASE_ADDR + 0x0800 + (84-1)*4)
+#define PINCNTL85   (CTRL_MODULE_BASE_ADDR + 0x0800 + (85-1)*4)
+#define PINCNTL86   (CTRL_MODULE_BASE_ADDR + 0x0800 + (86-1)*4)
+#define PINCNTL87   (CTRL_MODULE_BASE_ADDR + 0x0800 + (87-1)*4)
+#define PINCNTL88   (CTRL_MODULE_BASE_ADDR + 0x0800 + (88-1)*4)
+#define PINCNTL89   (CTRL_MODULE_BASE_ADDR + 0x0800 + (89-1)*4)
+#define PINCNTL90   (CTRL_MODULE_BASE_ADDR + 0x0800 + (90-1)*4)
+#define PINCNTL91   (CTRL_MODULE_BASE_ADDR + 0x0800 + (91-1)*4)
+#define PINCNTL92   (CTRL_MODULE_BASE_ADDR + 0x0800 + (92-1)*4)
+#define PINCNTL93   (CTRL_MODULE_BASE_ADDR + 0x0800 + (93-1)*4)
+#define PINCNTL94   (CTRL_MODULE_BASE_ADDR + 0x0800 + (94-1)*4)
+#define PINCNTL95   (CTRL_MODULE_BASE_ADDR + 0x0800 + (95-1)*4)
+#define PINCNTL96   (CTRL_MODULE_BASE_ADDR + 0x0800 + (96-1)*4)
+#define PINCNTL97   (CTRL_MODULE_BASE_ADDR + 0x0800 + (97-1)*4)
+#define PINCNTL98   (CTRL_MODULE_BASE_ADDR + 0x0800 + (98-1)*4)
+#define PINCNTL99   (CTRL_MODULE_BASE_ADDR + 0x0800 + (99-1)*4)
+#define PINCNTL100  (CTRL_MODULE_BASE_ADDR + 0x0800 + (100-1)*4)
+#define PINCNTL101  (CTRL_MODULE_BASE_ADDR + 0x0800 + (101 -1)*4)
+#define PINCNTL102  (CTRL_MODULE_BASE_ADDR + 0x0800 + (102 -1)*4)
+#define PINCNTL103  (CTRL_MODULE_BASE_ADDR + 0x0800 + (103 -1)*4)
+#define PINCNTL104  (CTRL_MODULE_BASE_ADDR + 0x0800 + (104 -1)*4)
+#define PINCNTL105  (CTRL_MODULE_BASE_ADDR + 0x0800 + (105 -1)*4)
+#define PINCNTL106  (CTRL_MODULE_BASE_ADDR + 0x0800 + (106 -1)*4)
+#define PINCNTL107  (CTRL_MODULE_BASE_ADDR + 0x0800 + (107 -1)*4)
+#define PINCNTL108  (CTRL_MODULE_BASE_ADDR + 0x0800 + (108 -1)*4)
+#define PINCNTL109  (CTRL_MODULE_BASE_ADDR + 0x0800 + (109 -1)*4)
+#define PINCNTL110  (CTRL_MODULE_BASE_ADDR + 0x0800 + (110-1)*4)
+#define PINCNTL111  (CTRL_MODULE_BASE_ADDR + 0x0800 + (111-1)*4)
+#define PINCNTL112  (CTRL_MODULE_BASE_ADDR + 0x0800 + (112-1)*4)
+#define PINCNTL113  (CTRL_MODULE_BASE_ADDR + 0x0800 + (113-1)*4)
+#define PINCNTL114  (CTRL_MODULE_BASE_ADDR + 0x0800 + (114-1)*4)
+#define PINCNTL115  (CTRL_MODULE_BASE_ADDR + 0x0800 + (115-1)*4)
+#define PINCNTL116  (CTRL_MODULE_BASE_ADDR + 0x0800 + (116-1)*4)
+#define PINCNTL117  (CTRL_MODULE_BASE_ADDR + 0x0800 + (117-1)*4)
+#define PINCNTL118  (CTRL_MODULE_BASE_ADDR + 0x0800 + (118-1)*4)
+#define PINCNTL119  (CTRL_MODULE_BASE_ADDR + 0x0800 + (119-1)*4)
+#define PINCNTL120  (CTRL_MODULE_BASE_ADDR + 0x0800 + (120-1)*4)
+#define PINCNTL121  (CTRL_MODULE_BASE_ADDR + 0x0800 + (121-1)*4)
+#define PINCNTL122  (CTRL_MODULE_BASE_ADDR + 0x0800 + (122-1)*4)
+#define PINCNTL123  (CTRL_MODULE_BASE_ADDR + 0x0800 + (123-1)*4)
+#define PINCNTL124  (CTRL_MODULE_BASE_ADDR + 0x0800 + (124-1)*4)
+#define PINCNTL125  (CTRL_MODULE_BASE_ADDR + 0x0800 + (125-1)*4)
+#define PINCNTL126  (CTRL_MODULE_BASE_ADDR + 0x0800 + (126-1)*4)
+#define PINCNTL127  (CTRL_MODULE_BASE_ADDR + 0x0800 + (127-1)*4)
+#define PINCNTL128  (CTRL_MODULE_BASE_ADDR + 0x0800 + (128-1)*4)
+#define PINCNTL129  (CTRL_MODULE_BASE_ADDR + 0x0800 + (129-1)*4)
+#define PINCNTL130  (CTRL_MODULE_BASE_ADDR + 0x0800 + (130-1)*4)
+#define PINCNTL131  (CTRL_MODULE_BASE_ADDR + 0x0800 + (131-1)*4)
+#define PINCNTL132  (CTRL_MODULE_BASE_ADDR + 0x0800 + (132-1)*4)
+#define PINCNTL133  (CTRL_MODULE_BASE_ADDR + 0x0800 + (133-1)*4)
+#define PINCNTL134  (CTRL_MODULE_BASE_ADDR + 0x0800 + (134-1)*4)
+#define PINCNTL135  (CTRL_MODULE_BASE_ADDR + 0x0800 + (135-1)*4)
+#define PINCNTL136  (CTRL_MODULE_BASE_ADDR + 0x0800 + (136-1)*4)
+#define PINCNTL137  (CTRL_MODULE_BASE_ADDR + 0x0800 + (137-1)*4)
+#define PINCNTL138  (CTRL_MODULE_BASE_ADDR + 0x0800 + (138-1)*4)
+#define PINCNTL139  (CTRL_MODULE_BASE_ADDR + 0x0800 + (139-1)*4)
+#define PINCNTL140  (CTRL_MODULE_BASE_ADDR + 0x0800 + (140-1)*4)
+#define PINCNTL141  (CTRL_MODULE_BASE_ADDR + 0x0800 + (141-1)*4)
+#define PINCNTL142  (CTRL_MODULE_BASE_ADDR + 0x0800 + (142-1)*4)
+#define PINCNTL143  (CTRL_MODULE_BASE_ADDR + 0x0800 + (143-1)*4)
+#define PINCNTL144  (CTRL_MODULE_BASE_ADDR + 0x0800 + (144-1)*4)
+#define PINCNTL145  (CTRL_MODULE_BASE_ADDR + 0x0800 + (145-1)*4)
+#define PINCNTL146  (CTRL_MODULE_BASE_ADDR + 0x0800 + (146-1)*4)
+#define PINCNTL147  (CTRL_MODULE_BASE_ADDR + 0x0800 + (147-1)*4)
+#define PINCNTL148  (CTRL_MODULE_BASE_ADDR + 0x0800 + (148-1)*4)
+#define PINCNTL149  (CTRL_MODULE_BASE_ADDR + 0x0800 + (149-1)*4)
+#define PINCNTL150  (CTRL_MODULE_BASE_ADDR + 0x0800 + (150-1)*4)
+#define PINCNTL151  (CTRL_MODULE_BASE_ADDR + 0x0800 + (151-1)*4)
+#define PINCNTL152  (CTRL_MODULE_BASE_ADDR + 0x0800 + (152-1)*4)
+#define PINCNTL153  (CTRL_MODULE_BASE_ADDR + 0x0800 + (153-1)*4)
+#define PINCNTL154  (CTRL_MODULE_BASE_ADDR + 0x0800 + (154-1)*4)
+#define PINCNTL155  (CTRL_MODULE_BASE_ADDR + 0x0800 + (155-1)*4)
+#define PINCNTL156  (CTRL_MODULE_BASE_ADDR + 0x0800 + (156-1)*4)
+#define PINCNTL157  (CTRL_MODULE_BASE_ADDR + 0x0800 + (157-1)*4)
+#define PINCNTL158  (CTRL_MODULE_BASE_ADDR + 0x0800 + (158-1)*4)
+#define PINCNTL159  (CTRL_MODULE_BASE_ADDR + 0x0800 + (159-1)*4)
+#define PINCNTL160  (CTRL_MODULE_BASE_ADDR + 0x0800 + (160-1)*4)
+#define PINCNTL161  (CTRL_MODULE_BASE_ADDR + 0x0800 + (161-1)*4)
+#define PINCNTL162  (CTRL_MODULE_BASE_ADDR + 0x0800 + (162-1)*4)
+#define PINCNTL163  (CTRL_MODULE_BASE_ADDR + 0x0800 + (163-1)*4)
+#define PINCNTL164  (CTRL_MODULE_BASE_ADDR + 0x0800 + (164-1)*4)
+#define PINCNTL165  (CTRL_MODULE_BASE_ADDR + 0x0800 + (165-1)*4)
+#define PINCNTL166  (CTRL_MODULE_BASE_ADDR + 0x0800 + (166-1)*4)
+#define PINCNTL167  (CTRL_MODULE_BASE_ADDR + 0x0800 + (167-1)*4)
+#define PINCNTL168  (CTRL_MODULE_BASE_ADDR + 0x0800 + (168-1)*4)
+#define PINCNTL169  (CTRL_MODULE_BASE_ADDR + 0x0800 + (169-1)*4)
+#define PINCNTL170  (CTRL_MODULE_BASE_ADDR + 0x0800 + (170-1)*4)
+#define PINCNTL171  (CTRL_MODULE_BASE_ADDR + 0x0800 + (171-1)*4)
+#define PINCNTL172  (CTRL_MODULE_BASE_ADDR + 0x0800 + (172-1)*4)
+#define PINCNTL173  (CTRL_MODULE_BASE_ADDR + 0x0800 + (173-1)*4)
+#define PINCNTL174  (CTRL_MODULE_BASE_ADDR + 0x0800 + (174-1)*4)
+#define PINCNTL175  (CTRL_MODULE_BASE_ADDR + 0x0800 + (175-1)*4)
+#define PINCNTL176  (CTRL_MODULE_BASE_ADDR + 0x0800 + (176-1)*4)
+#define PINCNTL177  (CTRL_MODULE_BASE_ADDR + 0x0800 + (177-1)*4)
+#define PINCNTL178  (CTRL_MODULE_BASE_ADDR + 0x0800 + (178-1)*4)
+#define PINCNTL179  (CTRL_MODULE_BASE_ADDR + 0x0800 + (179-1)*4)
+#define PINCNTL180  (CTRL_MODULE_BASE_ADDR + 0x0800 + (180-1)*4)
+#define PINCNTL181  (CTRL_MODULE_BASE_ADDR + 0x0800 + (181-1)*4)
+#define PINCNTL182  (CTRL_MODULE_BASE_ADDR + 0x0800 + (182-1)*4)
+#define PINCNTL183  (CTRL_MODULE_BASE_ADDR + 0x0800 + (183-1)*4)
+#define PINCNTL184  (CTRL_MODULE_BASE_ADDR + 0x0800 + (184-1)*4)
+#define PINCNTL185  (CTRL_MODULE_BASE_ADDR + 0x0800 + (185-1)*4)
+#define PINCNTL186  (CTRL_MODULE_BASE_ADDR + 0x0800 + (186-1)*4)
+#define PINCNTL187  (CTRL_MODULE_BASE_ADDR + 0x0800 + (187-1)*4)
+#define PINCNTL188  (CTRL_MODULE_BASE_ADDR + 0x0800 + (188-1)*4)
+#define PINCNTL189  (CTRL_MODULE_BASE_ADDR + 0x0800 + (189-1)*4)
+#define PINCNTL190  (CTRL_MODULE_BASE_ADDR + 0x0800 + (190-1)*4)
+#define PINCNTL191  (CTRL_MODULE_BASE_ADDR + 0x0800 + (191-1)*4)
+#define PINCNTL192  (CTRL_MODULE_BASE_ADDR + 0x0800 + (192-1)*4)
+#define PINCNTL193  (CTRL_MODULE_BASE_ADDR + 0x0800 + (193-1)*4)
+#define PINCNTL194  (CTRL_MODULE_BASE_ADDR + 0x0800 + (194-1)*4)
+#define PINCNTL195  (CTRL_MODULE_BASE_ADDR + 0x0800 + (195-1)*4)
+#define PINCNTL196  (CTRL_MODULE_BASE_ADDR + 0x0800 + (196-1)*4)
+#define PINCNTL197  (CTRL_MODULE_BASE_ADDR + 0x0800 + (197-1)*4)
+#define PINCNTL198  (CTRL_MODULE_BASE_ADDR + 0x0800 + (198-1)*4)
+#define PINCNTL199  (CTRL_MODULE_BASE_ADDR + 0x0800 + (199-1)*4)
+#define PINCNTL200  (CTRL_MODULE_BASE_ADDR + 0x0800 + (200-1)*4)
+#define PINCNTL201  (CTRL_MODULE_BASE_ADDR + 0x0800 + (201-1)*4)
+#define PINCNTL202  (CTRL_MODULE_BASE_ADDR + 0x0800 + (202 -1)*4)
+#define PINCNTL203  (CTRL_MODULE_BASE_ADDR + 0x0800 + (203 -1)*4)
+#define PINCNTL204  (CTRL_MODULE_BASE_ADDR + 0x0800 + (204 -1)*4)
+#define PINCNTL205  (CTRL_MODULE_BASE_ADDR + 0x0800 + (205 -1)*4)
+#define PINCNTL206  (CTRL_MODULE_BASE_ADDR + 0x0800 + (206 -1)*4)
+#define PINCNTL207  (CTRL_MODULE_BASE_ADDR + 0x0800 + (207 -1)*4)
+#define PINCNTL208  (CTRL_MODULE_BASE_ADDR + 0x0800 + (208 -1)*4)
+#define PINCNTL209  (CTRL_MODULE_BASE_ADDR + 0x0800 + (209 -1)*4)
+#define PINCNTL210  (CTRL_MODULE_BASE_ADDR + 0x0800 + (210-1)*4)
+#define PINCNTL211  (CTRL_MODULE_BASE_ADDR + 0x0800 + (211-1)*4)
+#define PINCNTL212  (CTRL_MODULE_BASE_ADDR + 0x0800 + (212-1)*4)
+#define PINCNTL213  (CTRL_MODULE_BASE_ADDR + 0x0800 + (213-1)*4)
+#define PINCNTL214  (CTRL_MODULE_BASE_ADDR + 0x0800 + (214-1)*4)
+#define PINCNTL215  (CTRL_MODULE_BASE_ADDR + 0x0800 + (215-1)*4)
+#define PINCNTL216  (CTRL_MODULE_BASE_ADDR + 0x0800 + (216-1)*4)
+#define PINCNTL217  (CTRL_MODULE_BASE_ADDR + 0x0800 + (217-1)*4)
+#define PINCNTL218  (CTRL_MODULE_BASE_ADDR + 0x0800 + (218-1)*4)
+#define PINCNTL219  (CTRL_MODULE_BASE_ADDR + 0x0800 + (219-1)*4)
+#define PINCNTL220  (CTRL_MODULE_BASE_ADDR + 0x0800 + (220-1)*4)
+#define PINCNTL221  (CTRL_MODULE_BASE_ADDR + 0x0800 + (221-1)*4)
+#define PINCNTL222  (CTRL_MODULE_BASE_ADDR + 0x0800 + (222-1)*4)
+#define PINCNTL223  (CTRL_MODULE_BASE_ADDR + 0x0800 + (223-1)*4)
+#define PINCNTL224  (CTRL_MODULE_BASE_ADDR + 0x0800 + (224-1)*4)
+#define PINCNTL225  (CTRL_MODULE_BASE_ADDR + 0x0800 + (225-1)*4)
+#define PINCNTL226  (CTRL_MODULE_BASE_ADDR + 0x0800 + (226-1)*4)
+#define PINCNTL227  (CTRL_MODULE_BASE_ADDR + 0x0800 + (227-1)*4)
+#define PINCNTL228  (CTRL_MODULE_BASE_ADDR + 0x0800 + (228-1)*4)
+#define PINCNTL229  (CTRL_MODULE_BASE_ADDR + 0x0800 + (229-1)*4)
+#define PINCNTL230  (CTRL_MODULE_BASE_ADDR + 0x0800 + (230-1)*4)
+#define PINCNTL231  (CTRL_MODULE_BASE_ADDR + 0x0800 + (231-1)*4)
+#define PINCNTL232  (CTRL_MODULE_BASE_ADDR + 0x0800 + (232-1)*4)
+#define PINCNTL233  (CTRL_MODULE_BASE_ADDR + 0x0800 + (233-1)*4)
+#define PINCNTL234  (CTRL_MODULE_BASE_ADDR + 0x0800 + (234-1)*4)
+#define PINCNTL235  (CTRL_MODULE_BASE_ADDR + 0x0800 + (235-1)*4)
+#define PINCNTL236  (CTRL_MODULE_BASE_ADDR + 0x0800 + (236-1)*4)
+#define PINCNTL237  (CTRL_MODULE_BASE_ADDR + 0x0800 + (237-1)*4)
+#define PINCNTL238  (CTRL_MODULE_BASE_ADDR + 0x0800 + (238-1)*4)
+#define PINCNTL239  (CTRL_MODULE_BASE_ADDR + 0x0800 + (239-1)*4)
+#define PINCNTL240  (CTRL_MODULE_BASE_ADDR + 0x0800 + (240-1)*4)
+#define PINCNTL241  (CTRL_MODULE_BASE_ADDR + 0x0800 + (241-1)*4)
+#define PINCNTL242  (CTRL_MODULE_BASE_ADDR + 0x0800 + (242-1)*4)
+#define PINCNTL243  (CTRL_MODULE_BASE_ADDR + 0x0800 + (243-1)*4)
+#define PINCNTL244  (CTRL_MODULE_BASE_ADDR + 0x0800 + (244-1)*4)
+#define PINCNTL245  (CTRL_MODULE_BASE_ADDR + 0x0800 + (245-1)*4)
+#define PINCNTL246  (CTRL_MODULE_BASE_ADDR + 0x0800 + (246-1)*4)
+#define PINCNTL247  (CTRL_MODULE_BASE_ADDR + 0x0800 + (247-1)*4)
+#define PINCNTL248  (CTRL_MODULE_BASE_ADDR + 0x0800 + (248-1)*4)
+#define PINCNTL249  (CTRL_MODULE_BASE_ADDR + 0x0800 + (249-1)*4)
+#define PINCNTL250  (CTRL_MODULE_BASE_ADDR + 0x0800 + (250-1)*4)
+#define PINCNTL251  (CTRL_MODULE_BASE_ADDR + 0x0800 + (251-1)*4)
+#define PINCNTL252  (CTRL_MODULE_BASE_ADDR + 0x0800 + (252-1)*4)
+#define PINCNTL253  (CTRL_MODULE_BASE_ADDR + 0x0800 + (253-1)*4)
+#define PINCNTL254  (CTRL_MODULE_BASE_ADDR + 0x0800 + (254-1)*4)
+#define PINCNTL255  (CTRL_MODULE_BASE_ADDR + 0x0800 + (255-1)*4)
+#define PINCNTL256  (CTRL_MODULE_BASE_ADDR + 0x0800 + (256-1)*4)
+#define PINCNTL257  (CTRL_MODULE_BASE_ADDR + 0x0800 + (257-1)*4)
+#define PINCNTL258  (CTRL_MODULE_BASE_ADDR + 0x0800 + (258-1)*4)
+#define PINCNTL259  (CTRL_MODULE_BASE_ADDR + 0x0800 + (259-1)*4)
+#define PINCNTL260  (CTRL_MODULE_BASE_ADDR + 0x0800 + (260-1)*4)
+#define PINCNTL261  (CTRL_MODULE_BASE_ADDR + 0x0800 + (261-1)*4)
+#define PINCNTL262  (CTRL_MODULE_BASE_ADDR + 0x0800 + (262-1)*4)
+#define PINCNTL263  (CTRL_MODULE_BASE_ADDR + 0x0800 + (263-1)*4)
+#define PINCNTL264  (CTRL_MODULE_BASE_ADDR + 0x0800 + (264-1)*4)
+#define PINCNTL265  (CTRL_MODULE_BASE_ADDR + 0x0800 + (265-1)*4)
+#define PINCNTL266  (CTRL_MODULE_BASE_ADDR + 0x0800 + (266-1)*4)
+#define PINCNTL267  (CTRL_MODULE_BASE_ADDR + 0x0800 + (267-1)*4)
+#define PINCNTL268  (CTRL_MODULE_BASE_ADDR + 0x0800 + (268-1)*4)
+#define PINCNTL269  (CTRL_MODULE_BASE_ADDR + 0x0800 + (269-1)*4)
+ #define PINCNTL270  (CTRL_MODULE_BASE_ADDR + 0x0800 + (270-1)*4)
+
+
+/************************************************************************************/
+
+#define WR_MEM_32(addr, data)    *(unsigned int*)(addr) =(unsigned int)(data)
+#define RD_MEM_32(addr)          *(unsigned int*)(addr)
+#define UWORD32                  unsigned int
+
+
+/****************** PLL Configuration ******************************************/
+
+/***    PLL,Control Base Adress  Base Address   ***********/
+#define PLL_BASE_ADDRESS         0x481C5000
+#define CONTROL_BASE_ADDRESS     0x48140000
+#define OSC_SRC_CTRL            (PLL_BASE_ADDRESS+0x02c0)
+#define ARM_SRC_CLK             (PLL_BASE_ADDRESS+0x02c4)
+
+/***    Top Level ADPLLJ  Base Address   ***********/
+#define L3_PLL_BASE             (PLL_BASE_ADDRESS+0x110)
+#define IVA_PLL_BASE            (PLL_BASE_ADDRESS+0x0E0)
+#define DSS_PLL_BASE            (PLL_BASE_ADDRESS+0x170)
+#define SGX_PLL_BASE            (PLL_BASE_ADDRESS+0x0B0)
+#define DSP_PLL_BASE            (PLL_BASE_ADDRESS+0x080)
+#define ISS_PLL_BASE            (PLL_BASE_ADDRESS+0x140)
+#define USB_PLL_BASE            (PLL_BASE_ADDRESS+0x260)
+#define AUDIO_PLL_BASE          (PLL_BASE_ADDRESS+0x230)
+#define VIDEO_0_PLL_BASE        (PLL_BASE_ADDRESS+0x1A0)
+#define VIDEO_1_PLL_BASE        (PLL_BASE_ADDRESS+0x1D0)
+#define HDMI_PLL_BASE           (PLL_BASE_ADDRESS+0x200)
+#define DDR_PLL_BASE            (PLL_BASE_ADDRESS+0x290)
+#define TIMER_CLKSRC                (PLL_BASE_ADDRESS + 0x02E0)
+
+/********** ADPLL intrnal Offset Registers  ***********/
+#define CLKCTRL                 0x4
+#define TENABLE                 0x8
+#define TENABLEDIV              0xC
+#define M2NDIV                  0x10
+#define MN2DIV                  0x14
+#define STATUS                  0x24
+
+/*********** MODENA ADPLLS REGISTERS  *********/
+#define MODENAPLL_CLKCTRL       (PLL_BASE_ADDRESS+0x04c)
+#define MODENAPLL_TENABLE       (PLL_BASE_ADDRESS+0x050)
+#define MODENAPLL_TENABLEDIV    (PLL_BASE_ADDRESS+0x054)
+#define MODENAPLL_M2NDIV        (PLL_BASE_ADDRESS+0x058)
+#define MODENAPLL_MN2DIV        (PLL_BASE_ADDRESS+0x05c)
+#define MODENAPLL_STATUS        (PLL_BASE_ADDRESS+0x06c)
+
+/********   SATA PLL REGISTERS   **************/
+#define SATA_PLLCFG0            (CONTROL_BASE_ADDRESS+0x720)
+#define SATA_PLLCFG1            (CONTROL_BASE_ADDRESS+0x724)
+#define SATA_PLLCFG2            (CONTROL_BASE_ADDRESS+0x728)
+#define SATA_PLLCFG3            (CONTROL_BASE_ADDRESS+0x72c)
+#define SATA_PLLCFG4            (CONTROL_BASE_ADDRESS+0x730)
+#define SATA_PLLSTATUS          (CONTROL_BASE_ADDRESS+0x734)
+#define SATA_RXSTATUS           (CONTROL_BASE_ADDRESS+0x738)
+#define SATA_TXSTATUS           (CONTROL_BASE_ADDRESS+0x73c)
+
+/********   SATA PRCM REGISTERS   **************/
+#define CM_ALWON2_SATA_CLKCTRL                              (PRCM_BASE_ADDR + 0x0560)
+#define CM_ALWON2_L3_MED_CLKSTCTRL                          (PRCM_BASE_ADDR + 0x504)
+
+/********   SATA REGISTERS   **************/
+#define TI81XX_SATA_BASE    0x4A140000
+#define TI814X_SATA_PHY_CFGRX0_OFFSET       (0x1104)
+#define TI814X_SATA_PHY_CFGRX1_OFFSET       (0x1108)
+#define TI814X_SATA_PHY_CFGRX2_OFFSET       (0x110C)
+#define TI814X_SATA_PHY_CFGRX3_OFFSET       (0x1110)
+#define TI814X_SATA_PHY_CFGTX0_OFFSET       (0x111C)
+#define TI814X_SATA_PHY_CFGTX1_OFFSET       (0x1120)
+#define TI814X_SATA_PHY_CFGTX2_OFFSET       (0x1128)
+
+/********   SATA PHY REGISTERS   **************/
+#define PHY_CFGRX0_VAL      0x00C7CC22
+#define PHY_CFGRX1_VAL      0x008E0500
+#define PHY_CFGRX2_VAL      0x7BDEF000
+#define PHY_CFGRX3_VAL      0x1F180B0F
+#define PHY_CFGTX0_VAL      0x01001622
+#define PHY_CFGTX1_VAL      0x40000002
+#define PHY_CFGTX2_VAL      0x073CE39E
+
+/********   PCIE PLL REGISTERS   **************/
+#define PCIE_PLLCFG0            (CONTROL_BASE_ADDRESS+0x6D8)
+#define PCIE_PLLCFG1            (CONTROL_BASE_ADDRESS+0x6DC)
+#define PCIE_PLLCFG2            (CONTROL_BASE_ADDRESS+0x6E0)
+#define PCIE_PLLCFG3            (CONTROL_BASE_ADDRESS+0x6E4)
+#define PCIE_PLLCFG4            (CONTROL_BASE_ADDRESS+0x6E8)
+#define PCIE_PLLSTATUS          (CONTROL_BASE_ADDRESS+0x6EC)
+#define PCIE_RXSTATUS           (CONTROL_BASE_ADDRESS+0x6F0)
+#define PCIE_TXSTATUS           (CONTROL_BASE_ADDRESS+0x6F4)
+#define SERDES_REFCLK_CTL       (CONTROL_BASE_ADDRESS+0xE24)
+
+#define CONTROL_STATUS              (CTRL_MODULE_BASE_ADDR + 0x040)
+#define BANDGAP0_TRIM       (CTRL_MODULE_BASE_ADDR + 0x44C)
+#define BANDGAP1_TRIM       (CTRL_MODULE_BASE_ADDR + 0x454)
+#define PLL_SUBSYSTEM_BASE_ADDR       PLL_BASE_ADDRESS
+#define DSPPLL_CLOCK_CONTROL       (PLL_SUBSYSTEM_BASE_ADDR + 0x084)
+#define SGXPLL_CLOCK_CONTROL       (PLL_SUBSYSTEM_BASE_ADDR + 0x0B4)
+#define IVAPLL_CLOCK_CONTROL       (PLL_SUBSYSTEM_BASE_ADDR + 0x0E4)
+#define L3PLL_CLOCK_CONTROL        (PLL_SUBSYSTEM_BASE_ADDR + 0x114)
+#define ISSPLL_CLOCK_CONTROL       (PLL_SUBSYSTEM_BASE_ADDR + 0x144)
+#define DSSPLL_CLOCK_CONTROL       (PLL_SUBSYSTEM_BASE_ADDR + 0x174)
+#define VID0PLL_CLOCK_CONTROL      (PLL_SUBSYSTEM_BASE_ADDR + 0x1A4)
+#define VID1PLL_CLOCK_CONTROL      (PLL_SUBSYSTEM_BASE_ADDR + 0x1D4)
+#define HDMIPLL_CLOCK_CONTROL      (PLL_SUBSYSTEM_BASE_ADDR + 0x204)
+#define AUDIOPLL_CLOCK_CONTROL     (PLL_SUBSYSTEM_BASE_ADDR + 0x234)
+#define USBPLL_CLOCK_CONTROL       (PLL_SUBSYSTEM_BASE_ADDR + 0x264)
+#define DDRPLL_CLOCK_CONTROL       (PLL_SUBSYSTEM_BASE_ADDR + 0x294)
+#define MODENAPLL_CLOCK_CONTROL     (PLL_SUBSYSTEM_BASE_ADDR + 0x04C)
+
+
+/*************************************************************************************************************
+                                 ADPLLJ CLKCNTRL REGISTER CONFIGURATIONS
+
+***************************************************************************************************************/
+// ADPLLJ_CLKCRTL_Register Value Configurations
+//add ntrim values for test device  --- Rajesh/Hemanth(bits 28:24)
+#define ADPLLJ_CLKCRTL_HS2       0x00000801 //HS2 Mode,TINTZ =1  --used by all PLL's except HDMI
+#define ADPLLJ_CLKCRTL_HS1       0x00001001 //HS1 Mode,TINTZ =1  --used only for HDMI
+#define ADPLLJ_CLKCRTL_CLKDCO    0x200a0000 // Enable CLKDCOEN,CLKLDOEN,CLKDCOPWDNZ -- used for HDMI,USB
+
+
+/****************************************************************************************************************/
+// CONTROL MMMR LOCK and UNLOCK Registers
+
+#define control_pllss_mmr_lock                     0x481C5040
+#define control_mmr_lock0                          0x48140060
+#define control_mmr_lock1                          0x48140064
+#define control_mmr_lock2                          0x48140068
+#define control_mmr_lock3                          0x4814006c
+#define control_mmr_lock4                          0x48140070
+
+#define control_pllss_mmr_lock_unlock_val          0x1EDA4C3D
+#define control_mmr_lock0_unlock_val               0x2FF1AC2B
+#define control_mmr_lock1_unlock_val               0xF757FDC0
+#define control_mmr_lock2_unlock_val               0xE2BC3A6D
+#define control_mmr_lock3_unlock_val               0x1EBF131D
+#define control_mmr_lock4_unlock_val               0x6F361E05
+
+
+/****************************************************************************************************************/
+/*Netra Fire Wall Registers*/
+
+#define NETRA_TEST_DEVICE_FW_VAL 0xFFFFFFFF
+#define VLYNQ_FW            0x47C06088
+#define EMIF_FW             0x47C0C088
+#define GPMC_FW             0x47C0E088
+#define OCMC_RAM0_FW        0x47C10088
+#define OCMC_RAM1_FW        0x47C12088
+#define SGX530_FW           0x47C14088
+#define GEM_SDMA_FW         0x47C16088
+#define DUCATI_FW           0x47C18088
+#define PCIE_FW             0x47C1A088
+#define TPPSS_FW            0x47C1C088
+#define IVAHD_SL2_FW        0x47C1E088
+#define IVAHD_CFG_FW        0x47C20088
+#define MCASP_FW            0x47C28088
+#define HDMI_FW             0x47C2C088
+#define MCBSP_FW            0x47C2E088
+#define TPTC_FW             0x47C30088
+#define TPCC_FW             0x47C38088
+#define USB_FW              0x47C3A088
+
+/****************************************************************************************/
+/**  Added during OMX bring-up  *********************************************************/
+menuitem "Syslink-IPC"
+#define CM_ALWON_L4_SLOW_CLKSTCTRL  (PRCM_BASE_ADDR + 0x1400)
+#define CM_ALWON_SPINBOX_CLKCTRL    (PRCM_BASE_ADDR + 0x1598)
+
+hotmenu SpinboxEnable()
+
+{
+    GEL_TextOut("\tPRCM for SPINBOX Initialization in Progress \n","Output",1,1,1);
+    WR_MEM_32(CM_ALWON_L4_SLOW_CLKSTCTRL, 2); // it was L3
+    WR_MEM_32(CM_ALWON_SPINBOX_CLKCTRL,   2);
+    /* Wait for IDLEST to read 0x0 indicating that the module is fully functional */
+
+    while(((RD_MEM_32(CM_ALWON_SPINBOX_CLKCTRL)&0x30000)>>16)!=0);
+    GEL_TextOut("\tPRCM for SPINBOX Initialization in Done \n","Output",1,1,1);
+}
+
+
+WRITE_MEM()
+{
+    WR_MEM_32(DUCATI_BASE_ADDR,       0x10000);
+}
+
+hotmenu MaiboxEnable()
+{
+    GEL_TextOut("\tPRCM for mailboxes Initialization in Progress \n","Output",1,1,1);
+    WR_MEM_32(CM_ALWON_L4_SLOW_CLKSTCTRL, 2);
+    WR_MEM_32(CM_ALWON_MAILBOX_CLKCTRL, 2);
+
+    /* Wait for IDLEST to read 0x0 indicating that the module is fully functional */
+    while(((RD_MEM_32(CM_ALWON_MAILBOX_CLKCTRL)&0x30000)>>16)!=0);
+    GEL_TextOut("\tmailboxes Accesses are PASSED \n","Output",1,1,1);
+    GEL_TextOut("\tPmailboxes Initialization in Done \n","Output",1,1,1);
+}
+
+
+/****************************************************************************************************************
+                        Timer configuration
+****************************************************************************************************************/
+
+hotmenu Timer1_32kHClkEnable()
+{
+      UWORD32 TIMER_NUM = 1;
+    GEL_TextOut("\tPRCM for Timer1 is in Progress, Please wait.....  \n","Output",1,1,1);
+    WR_MEM_32(CM_ALWON_L3_SLOW_CLKSTCTRL, 0x2);
+    WR_MEM_32(CM_ALWON_TIMER_1_CLKCTRL,   0x2);
+    WR_MEM_32(CM_TIMER1_CLKSEL,   0x2); /*Enable Timer1 Clock*/
+    while(((RD_MEM_32(CM_ALWON_L3_SLOW_CLKSTCTRL) & (0x80000<<TIMER_NUM))>>(19 + TIMER_NUM)) !=0x1);
+    while(((RD_MEM_32(CM_ALWON_TIMER_1_CLKCTRL ) & 0x30000)>>16) !=0);
+
+    /* Top Level Mux for TIMER source for Timer1 */
+    *(unsigned int *)TIMER_CLKSRC &= 0xFFFFFFFF^(0x7 << (3*TIMER_NUM));
+    WR_MEM_32(CM_TIMER1_CLKSEL , 0x1); /*Configure Timer1 clock for 32 kHz */
+
+    GEL_TextOut("\tPRCM for Timer1 are Done Successfully.....  \n","Output",1,1,1);
+}
+
+
+int CLKIN = 20;
+int HSMODE = 0;
+int CLKOUT = 0;
+/* ------------------------------------------------------------------------ *
+ *                                                                          *
+ *  Setup_PLL( )                                                            *
+ *      Setup PLL                                                           *
+ *                                                                          *
+ *       PLL output = CLKINP * M/(N+1) * 1/M2                               *
+ *                                                                          *
+ * ------------------------------------------------------------------------ */
+Setup_PLL()
+{
+    GEL_TextOut("    Initializing PLLs....\n");
+
+    //pll_name (CLKINP,N , M, M2);
+    cmdMPUPLL(CLKIN,1, 60 ,1);       // 20 * 60 /(1 +1) * 1/1 = 600 MHz : Cortex A8
+    cmdL3PLL(CLKIN,19,800,4);        // 20 * 800/(19+1) * 1/4 = 200 MHz : EDMA, MMU, GPMC, McASP, etc
+    cmdDSPPLL(CLKIN,19, 500, 1);     // 20 * 500/(19+1) * 1/1 = 500 MHz : DSP
+    cmdDSSPLL(CLKIN,19, 800, 4);     // 20 * 800/(19+1) * 1/4 = 200 MHz : DSS Domain
+    cmdISSPLL(CLKIN,19, 800 ,4);     // 20 * 800/(19+1) * 1/4 = 200 MHz : ISS/Media Controller ,  EDMA, MMU, GPMC, McASP, etc
+    cmdIVAPLL(CLKIN,19, 532, 2);     // 20 * 532/(19+1) * 1/2 = 266 MHz : HDVICP
+    cmdSGXPLL(CLKIN,19, 800, 4);     // 20 * 800/(19+1) * 1/4 = 200 MHz : SGX530
+    cmdUSBPLL(CLKIN,19,960,5);       // 20 * 960/(19+1) * 1/5 = 192 MHz : USB; /5 UART0/1/2,SPI0/1/2/3, I2C0/1/2/3
+    cmdVIDEO0PLL(CLKIN,19, 1000,4);  // 20 *1000/(19+1) * 1/4 = 250 MHz : HDVPSS SD VENC
+    cmdVIDEO1PLL(CLKIN,19, 594,8);   // 20 * 594/(19+1) * 1/8 = 74  MHz : HDVPSS VOUT0
+    cmdHDMIPLL(CLKIN,19, 1485,10);   // 20 *1485/(19+1) * 1/10= 148 MHz : HDMI, TPPSS
+    cmdDDRPLL(CLKIN,19,DDR_FREQ, 2); // 20 * 666/(19+1) * 1/2 = 333 MHz : DDR
+    cmdAUDIOPLL(CLKIN,19,800,4);     // 20 * 800/(19+1) * 1/4 = 200 MHz : MCASP0/1/2, MCBSP, HDMII2C
+
+    GEL_TextOut("    PLL Initialization Done\n");
+}
+
+cmdMPUPLL(int CLKIN,int N, int M, int M2)
+{
+    MPU_PLL_Config(CLKIN,N,M,M2);
+    GEL_TextOut("    MPU ADPLLJ CLKOUT  value is  = %d \n",,,,,CLKOUT);
+}
+
+cmdL3PLL(int CLKIN,int N, int M, int M2)
+{
+    DCOCLK_COMP(CLKIN,N,M);
+    if(HSMODE == 2)
+    {
+        PLL_Clocks_Config(L3_PLL_BASE,CLKIN,N,M,M2,ADPLLJ_CLKCRTL_HS2);
+        GEL_TextOut("    L3  ADPLLJ CLKOUT  value is  = %d \n",,,,,CLKOUT);
+    }
+    else if (HSMODE == 1)
+    {
+        PLL_Clocks_Config(L3_PLL_BASE,CLKIN,N,M,M2,ADPLLJ_CLKCRTL_HS1);
+        GEL_TextOut("    L3  ADPLLJ CLKOUT  value is  = %d \n",,,,,CLKOUT);
+    }
+    else
+    {
+        GEL_TextOut("    L3 PLL NOT Configured.Wrong DCOCLK Output\n");
+    }
+
+}
+cmdDSPPLL(int CLKIN,int N, int M, int M2)
+{
+    DCOCLK_COMP(CLKIN,N,M);
+    if(HSMODE == 2)
+    {
+       PLL_Clocks_Config(DSP_PLL_BASE,CLKIN,N,M,M2,ADPLLJ_CLKCRTL_HS2);
+       GEL_TextOut("    DSP ADPLLJ CLKOUT  value is  = %d \n",,,,,CLKOUT);
+    }
+    else if (HSMODE == 1)
+    {
+        PLL_Clocks_Config(DSP_PLL_BASE,CLKIN,N,M,M2,ADPLLJ_CLKCRTL_HS1);
+        GEL_TextOut("    DSP ADPLLJ CLKOUT  value is  = %d \n",,,,,CLKOUT);
+    }
+    else
+    {
+        GEL_TextOut("    DSP PLL NOT Configured.Wrong DCOCLK Output\n");
+    }
+
+}
+cmdDSSPLL(int CLKIN, int N, int M, int M2)
+{
+    DCOCLK_COMP(CLKIN,N,M);
+    if(HSMODE == 2)
+    {
+        PLL_Clocks_Config(DSS_PLL_BASE,CLKIN,N,M,M2,ADPLLJ_CLKCRTL_HS2);
+        GEL_TextOut("    DSS ADPLLJ CLKOUT  value is  = %d \n",,,,,CLKOUT);
+    }
+    else if (HSMODE == 1)
+    {
+        PLL_Clocks_Config(DSS_PLL_BASE,CLKIN,N,M,M2,ADPLLJ_CLKCRTL_HS1);
+        GEL_TextOut("    DSS ADPLLJ CLKOUT  value is  = %d \n",,,,,CLKOUT);
+    }
+    else
+        GEL_TextOut("    DSS PLL NOT Configured.Wrong DCOCLK Output\n");
+
+    }
+
+cmdSGXPLL(int CLKIN, int N, int M, int M2)
+{
+    DCOCLK_COMP(CLKIN,N,M);
+    if(HSMODE == 2)
+    {
+        PLL_Clocks_Config(SGX_PLL_BASE,CLKIN,N,M,M2,ADPLLJ_CLKCRTL_HS2);
+        GEL_TextOut("    SGX ADPLLJ CLKOUT  value is  = %d \n",,,,,CLKOUT);
+    }
+    else if (HSMODE == 1)
+    {
+        PLL_Clocks_Config(SGX_PLL_BASE,CLKIN,N,M,M2,ADPLLJ_CLKCRTL_HS1);
+        GEL_TextOut("    GX ADPLLJ CLKOUT  value is  = %d \n",,,,,CLKOUT);
+    }
+    else
+        GEL_TextOut("    SGX PLL NOT Configured.Wrong DCOCLK Output\n");
+}
+
+ cmdIVAPLL(int CLKIN,int N, int M, int M2)
+{
+    DCOCLK_COMP(CLKIN,N,M);
+    if(HSMODE == 2)
+    {
+        PLL_Clocks_Config(IVA_PLL_BASE,CLKIN,N,M,M2,ADPLLJ_CLKCRTL_HS2);
+        GEL_TextOut("    IVA ADPLLJ CLKOUT  value is  = %d \n",,,,,CLKOUT);
+    }
+    else if (HSMODE == 1)
+    {
+        PLL_Clocks_Config(IVA_PLL_BASE,CLKIN,N,M,M2,ADPLLJ_CLKCRTL_HS1);
+        GEL_TextOut("    IVA ADPLLJ CLKOUT  value is  = %d \n",,,,,CLKOUT);
+    }
+    else
+        GEL_TextOut("    IVA PLL NOT Configured.Wrong DCOCLK Output\n");
+}
+
+cmdISSPLL(int CLKIN,int N, int M, int M2)
+{
+    DCOCLK_COMP(CLKIN,N,M);
+    if(HSMODE == 2)
+    {
+        PLL_Clocks_Config(ISS_PLL_BASE,CLKIN,N,M,M2,ADPLLJ_CLKCRTL_HS2);
+        GEL_TextOut("    ISS ADPLLJ CLKOUT  value is  = %d \n",,,,,CLKOUT);
+    }
+    else if (HSMODE == 1){
+        PLL_Clocks_Config(ISS_PLL_BASE,CLKIN,N,M,M2,ADPLLJ_CLKCRTL_HS1);
+        GEL_TextOut("    ISS ADPLLJ CLKOUT  value is  = %d \n",,,,,CLKOUT);
+    }
+    else
+
+        GEL_TextOut("    ISS PLL NOT Configured.Wrong DCOCLK Output\n");
+}
+
+// enabling the CLKOUTDCO,CLKDCOLDO
+cmdUSBPLL(int CLKIN,int N, int M, int M2)
+{
+    DCOCLK_COMP(CLKIN,N,M);
+    if(HSMODE == 2)
+    {
+        PLL_Clocks_Config(USB_PLL_BASE,CLKIN,N,M,M2,ADPLLJ_CLKCRTL_HS2+ADPLLJ_CLKCRTL_CLKDCO);
+        GEL_TextOut("    USB ADPLLJ CLKOUT  value is  = %d \n",,,,,CLKOUT);
+    }
+    else if (HSMODE == 1)
+    {
+        PLL_Clocks_Config(USB_PLL_BASE,CLKIN,N,M,M2,ADPLLJ_CLKCRTL_HS1+ADPLLJ_CLKCRTL_CLKDCO);
+        GEL_TextOut("    USB ADPLLJ CLKOUT  value is  = %d \n",,,,,CLKOUT);
+    }
+        else
+            GEL_TextOut("    USB PLL NOT Configured.Wrong DCOCLK Output\n");
+}
+
+cmdVIDEO0PLL(int CLKIN,int N, int M, int M2)
+{
+    DCOCLK_COMP(CLKIN,N,M);
+    if(HSMODE == 2)
+    {
+        PLL_Clocks_Config(VIDEO_0_PLL_BASE,CLKIN,N,M,M2,ADPLLJ_CLKCRTL_HS2);
+        GEL_TextOut("    VIDEO-0 ADPLLJ CLKOUT  value is  = %d \n",,,,,CLKOUT);
+    }
+    else if (HSMODE == 1)
+    {
+        PLL_Clocks_Config(VIDEO_0_PLL_BASE,CLKIN,N,M,M2,ADPLLJ_CLKCRTL_HS1);
+        GEL_TextOut("    VIDEO-0 ADPLLJ CLKOUT  value is  = %d \n",,,,,CLKOUT);
+    }
+    else
+        GEL_TextOut("    VIDEO-0 PLL NOT Configured.Wrong DCOCLK Output\n");
+}
+
+cmdVIDEO1PLL(int CLKIN,int N, int M, int M2)
+{
+    DCOCLK_COMP(CLKIN,N,M);
+    if(HSMODE == 2)
+    {
+        PLL_Clocks_Config(VIDEO_1_PLL_BASE,CLKIN,N,M,M2,ADPLLJ_CLKCRTL_HS2);
+        GEL_TextOut("    VIDEO-1 ADPLLJ CLKOUT  value is  = %d \n",,,,,CLKOUT);
+    }
+    else if (HSMODE == 1)
+    {
+        PLL_Clocks_Config(VIDEO_1_PLL_BASE,CLKIN,N,M,M2,ADPLLJ_CLKCRTL_HS1);
+        GEL_TextOut("    VIDEO-1 ADPLLJ CLKOUT  value is  = %d \n",,,,,CLKOUT);
+    }
+    else
+        GEL_TextOut("    VIDEO-1 PLL NOT Configured.Wrong DCOCLK Output\n");
+}
+
+cmdHDMIPLL(int CLKIN,int N, int M, int M2)
+{
+    DCOCLK_COMP(CLKIN,N,M);
+    if(HSMODE == 2)
+    {
+        PLL_Clocks_Config(HDMI_PLL_BASE,CLKIN,N,M,M2,ADPLLJ_CLKCRTL_HS2+ADPLLJ_CLKCRTL_CLKDCO);
+        GEL_TextOut("    VIDEO-2/HDMI ADPLLJ CLKOUT  value is  = %d \n",,,,,CLKOUT);
+    }
+    else if (HSMODE == 1)
+    {
+        PLL_Clocks_Config(HDMI_PLL_BASE,CLKIN,N,M,M2,ADPLLJ_CLKCRTL_HS1+ADPLLJ_CLKCRTL_CLKDCO);
+        GEL_TextOut("    VIDEO-2/HDMI ADPLLJ CLKOUT  value is  = %d \n",,,,,CLKOUT);
+    }
+    else
+        GEL_TextOut("    VIDEO-2/HDMI PLL NOT Configured.Wrong DCOCLK Output\n");
+}
+
+cmdDDRPLL(int CLKIN,int N, int M, int M2)
+{
+    DCOCLK_COMP(CLKIN,N,M);
+    if(HSMODE == 2)
+    {
+        PLL_Clocks_Config(DDR_PLL_BASE,CLKIN,N,M,M2,ADPLLJ_CLKCRTL_HS2);
+        GEL_TextOut("    DDR ADPLLJ CLKOUT  value is  = %d \n",,,,,CLKOUT);
+    }
+    else if (HSMODE == 1)
+    {
+        PLL_Clocks_Config(DDR_PLL_BASE,CLKIN,N,M,M2,ADPLLJ_CLKCRTL_HS1);
+        GEL_TextOut("    DDR ADPLLJ CLKOUT  value is  = %d \n",,,,,CLKOUT);
+    }
+    else
+        GEL_TextOut("    DDR PLL NOT Configured.Wrong DCOCLK Output\n");
+}
+
+cmdAUDIOPLL(int CLKIN,int N, int M, int M2)
+{
+    DCOCLK_COMP(CLKIN,N,M);
+    if(HSMODE == 2)
+    {
+        PLL_Clocks_Config(AUDIO_PLL_BASE,CLKIN,N,M,M2,ADPLLJ_CLKCRTL_HS2);
+        GEL_TextOut("    AUDIO ADPLLJ CLKOUT  value is  = %d \n",,,,,CLKOUT);
+    }
+    else if (HSMODE == 1)
+    {
+        PLL_Clocks_Config(AUDIO_PLL_BASE,CLKIN,N,M,M2,ADPLLJ_CLKCRTL_HS1);
+        GEL_TextOut("    AUDIO ADPLLJ CLKOUT  value is  = %d \n",,,,,CLKOUT);
+    }
+    else
+
+                  GEL_TextOut("    AUDIO PLL NOT Configured.Wrong DCOCLK Output\n");
+}
+
+hotmenu SATA_PHY_SEQUENCE_20Mhz()
+{
+    /* Configuring PHY registers for SATA */
+    WR_MEM_32(TI81XX_SATA_BASE + TI814X_SATA_PHY_CFGRX0_OFFSET, PHY_CFGRX0_VAL);
+    WR_MEM_32(TI81XX_SATA_BASE + TI814X_SATA_PHY_CFGRX1_OFFSET, PHY_CFGRX1_VAL);
+    WR_MEM_32(TI81XX_SATA_BASE + TI814X_SATA_PHY_CFGRX2_OFFSET, PHY_CFGRX2_VAL);
+    WR_MEM_32(TI81XX_SATA_BASE + TI814X_SATA_PHY_CFGRX3_OFFSET, PHY_CFGRX3_VAL);
+    WR_MEM_32(TI81XX_SATA_BASE + TI814X_SATA_PHY_CFGTX0_OFFSET, PHY_CFGTX0_VAL);
+    WR_MEM_32(TI81XX_SATA_BASE + TI814X_SATA_PHY_CFGTX1_OFFSET, PHY_CFGTX1_VAL);
+    WR_MEM_32(TI81XX_SATA_BASE + TI814X_SATA_PHY_CFGTX2_OFFSET, PHY_CFGTX2_VAL);
+
+    GEL_TextOut("\t SATA PHY Initialised..... \n","Output",1,1,1);
+}
+
+hotmenu SATA_PLL_Config()
+{
+    GEL_TextOut("\t ****  CENTAURUS2 SATA PLL INIT IS In Progress ......... \n","Output",1,1,1);
+    //PLL program sequence to get 125Mhz ethernet clockout.
+
+    WR_MEM_32(SATA_PLLCFG1, 0xC12C003C);    //cfgpll1
+    wait_delay(2000);
+    WR_MEM_32(SATA_PLLCFG3, 0x004008E0);    //cfgpll3
+    wait_delay(2000);
+    //wait for bias to be stable --50us
+    WR_MEM_32(SATA_PLLCFG0, 0x80000004);    //cfgpll0
+    wait_delay(2000);
+    WR_MEM_32(SATA_PLLCFG0, 0x80000014);    //cfgpll0
+    wait_delay(2000);
+    WR_MEM_32(SATA_PLLCFG0, 0x80000016);    //cfgpll0
+    wait_delay(2000);
+    WR_MEM_32(SATA_PLLCFG0, 0xc0000017);    //cfgpll0
+    wait_delay(2000);
+
+    //poll the status field to check if pll lock occured.
+    while( ((*(unsigned int *)0x48140734) & 0x1) != 0x1)
+    {
+    }
+    WR_MEM_32(CM_ALWON2_SATA_CLKCTRL,    0x2); /*Enable SATA Clock*/
+    while((RD_MEM_32(CM_ALWON2_SATA_CLKCTRL) & 0x0F) !=0x2);        /*Poll for Module is functional*/
+
+    WR_MEM_32(CM_ALWON2_L3_MED_CLKSTCTRL,    0x2); /*Enable SATA Clock*/
+    while((RD_MEM_32(CM_ALWON2_L3_MED_CLKSTCTRL) & 0x103) != 0x102);        /*Poll for Module is functional*/
+
+    GEL_TextOut("\t --- SATA PLL Locked\n","Output",1,1,1);
+
+    GEL_TextOut("\t ****  CENTAURUS2 SATA PLL INIT IS DONE  ********* \n","Output",1,1,1);
+
+}
+
+hotmenu PCIE_PLL_Config()
+{
+    GEL_TextOut("\t ****  CENTAURUS2 PCIE PLL INIT IS In Progress ......... \n","Output",1,1,1);
+    cmdPCIEPLL();
+    GEL_TextOut("\t ****  CENTAURUS2 PCIE PLL INIT IS DONE  ********* \n","Output",1,1,1);
+
+}
+
+//pci express pll sequence
+cmdPCIEPLL()
+{
+    GEL_TextOut("\t **** PCIE PLL INIT IS In Progress Please wait ..... \n","Output",1,1,1);
+    WR_MEM_32(SERDES_REFCLK_CTL,0x00000002); //PowerDown 0x00000000-centaurus1
+    WR_MEM_32(PCIE_PLLCFG0,0x00000000); //cfgpll0
+    WR_MEM_32(PCIE_PLLCFG1,0x00640000); //cfgpll1
+    WR_MEM_32(PCIE_PLLCFG2,0x00000000); //cfgpll2
+    WR_MEM_32(PCIE_PLLCFG3,0x004008E0); //cfgpll3
+    WR_MEM_32(PCIE_PLLCFG4,0x0000609C); //cfgpll4
+
+    //WR_MEM_32(0x48141318,0x00000E7B); //pcie_serdes_cfg_misc centaurus2 commented
+    wait_delay(3); // Wait 100 ns
+    WR_MEM_32(PCIE_PLLCFG0,0x00000004); //Config PLL CFG0 bit [2] - ENBGSC_REF
+    wait_delay(3); // Wait 250 ns
+    WR_MEM_32(PCIE_PLLCFG0,0x00000014); //Config PLL CFG0 bit [4] - DIGLDO
+    wait_delay(3); // Wait 200 ns
+    WR_MEM_32(PCIE_PLLCFG0,0x00000016); //Config PLL CFG0 bit [1] - ENPLLLDO
+    wait_delay(3); // Wait 200 ns
+    WR_MEM_32(PCIE_PLLCFG0,0x30000016); // Configure proxy TXLDO and RXLDO enables (Centaurus ECO 3/30/10)
+    wait_delay(3); // Wait 200 ns
+    WR_MEM_32(PCIE_PLLCFG0,0x70007016); // Configure multiplier
+    wait_delay(3); // Wait 200 ns
+    WR_MEM_32(PCIE_PLLCFG0,0x70007017);  // Enable PLL
+    wait_delay(3); // Wait 200 ns
+     //poll the status field to check if pll lock occured.
+    while ((RD_MEM_32(PCIE_PLLSTATUS) & 0x1 )!= 0x1);
+    GEL_TextOut("\t **** PCIE PLL INIT IS In DONE ***************** \n","Output",1,1,1);
+}
+
+wait_delay(UWORD32 noopcount)
+{
+    int i;
+    for(i=0;i<noopcount;i++)
+    {}
+}
+
+PLL_Clocks_Config(UWORD32 Base_Address,UWORD32 CLKIN,UWORD32 N,UWORD32 M,UWORD32 M2,UWORD32 CLKCTRL_VAL)
+{
+    UWORD32 m2nval,mn2val,read_clkctrl,clk_out,ref_clk,clkout_dco = 0;
+    m2nval = (M2<<16) | N;
+    mn2val =  M;
+    ref_clk     = CLKIN/(N+1);
+    clkout_dco  = ref_clk*M;
+    clk_out     = clkout_dco/M2;
+    WR_MEM_32(Base_Address+CLKCTRL, RD_MEM_32(Base_Address+CLKCTRL)|0x00800000);
+    while (( (RD_MEM_32(Base_Address+STATUS)) & 0x00000101) != 0x00000101);
+    WR_MEM_32(Base_Address+CLKCTRL, RD_MEM_32(Base_Address+CLKCTRL)& 0xfffffffe);
+    wait_delay(3);
+    WR_MEM_32((Base_Address+M2NDIV    ),m2nval);
+    WR_MEM_32((Base_Address+MN2DIV    ),mn2val);
+    wait_delay(3);
+    WR_MEM_32((Base_Address+TENABLEDIV),0x1);
+    wait_delay(3);
+    WR_MEM_32((Base_Address+TENABLEDIV),0x0);
+    wait_delay(3);
+    WR_MEM_32((Base_Address+TENABLE   ),0x1);
+    wait_delay(3);
+    WR_MEM_32((Base_Address+TENABLE   ),0x0);
+    wait_delay(3);
+    read_clkctrl = RD_MEM_32(Base_Address+CLKCTRL);
+    //configure the TINITZ(bit0) and CLKDCO BITS IF REQUIRED
+    WR_MEM_32(Base_Address+CLKCTRL,(read_clkctrl & 0xff7fe3ff) | CLKCTRL_VAL);
+    read_clkctrl = RD_MEM_32(Base_Address+CLKCTRL);
+    // poll for the freq,phase lock to occur
+    while (( (RD_MEM_32(Base_Address+STATUS)) & 0x00000600) != 0x00000600);
+    //wait fot the clocks to get stabized
+    wait_delay(10);
+    CLKOUT    = clk_out;
+}
+
+MPU_PLL_Config(UWORD32 CLKIN,UWORD32 N,UWORD32 M,UWORD32 M2)
+{
+    UWORD32 rval_ctrl,ref_clk,clk_out = 0;
+    UWORD32 m2nval,mn2val = 0;
+    ref_clk     = CLKIN/(N+1);
+    clk_out     = (ref_clk*M)/M2;
+
+    m2nval = (M2<<16) | N; //need to check the bit position of M2
+    mn2val =  M;
+    WR_MEM_32(MODENAPLL_M2NDIV      ,m2nval);
+    WR_MEM_32(MODENAPLL_MN2DIV      ,mn2val);
+    WR_MEM_32(MODENAPLL_TENABLEDIV  ,0x1);
+    wait_delay(3);
+    WR_MEM_32(MODENAPLL_TENABLEDIV  ,0x0);
+    wait_delay(3);
+    WR_MEM_32(MODENAPLL_TENABLE     ,0x1);
+    wait_delay(3);
+    WR_MEM_32(MODENAPLL_TENABLE     ,0x0);
+    wait_delay(3);
+    rval_ctrl = RD_MEM_32(MODENAPLL_CLKCTRL);
+    WR_MEM_32(MODENAPLL_CLKCTRL,(rval_ctrl & 0xff7fffff) | 0x1);
+    while (( (RD_MEM_32(MODENAPLL_STATUS)) & 0x00000600) != 0x00000600);
+    wait_delay(10);
+    CLKOUT = clk_out;
+}
+
+DCOCLK_COMP(int CLKIN,int N, int M)
+{
+    int DCOCLK;
+    DCOCLK = (CLKIN/(N+1))*M;
+
+    if(DCOCLK >= 500 && DCOCLK < 1000)
+    {
+        HSMODE = 2;  //HS2 Mode
+    }
+    else if(DCOCLK >= 1000 && DCOCLK < 2000)
+    {
+        HSMODE = 1;  //HS1 Mode
+    }
+    else HSMODE = 0;  //wrong configuration
+
+    //return HSMODE;
+}
+
+ControlModule_ClkEnable()
+{
+    GEL_TextOut("\tPRCM for Control Module in Progress \n","Output",1,1,1);
+    /*Enable the  Clocks*/
+    WR_MEM_32(CM_CTRL_CLKCTRL,   2);
+    while(((RD_MEM_32(CM_CTRL_CLKCTRL)&0x30000))!=0x30000);
+    GEL_TextOut("\tPRCM for Control Module Done \n","Output",1,1,1);
+}
+
+PrcmAlwayOnClkEnable()
+{
+    unsigned int fail=0, k=0;
+    GEL_TextOut("\tPRCM for OCMCRAM0/1 Initialization in Progress \n","Output",1,1,1);
+    /*Enable the OCMC0RAM Clocks*/
+    WR_MEM_32(CM_ALWON_OCMC_0_CLKSTCTRL, 2);
+    WR_MEM_32(CM_ALWON_OCMC_0_CLKCTRL,   2);
+    while(((RD_MEM_32(CM_ALWON_OCMC_0_CLKSTCTRL) & 0x100)>>8)!=1);
+    while(((RD_MEM_32(CM_ALWON_OCMC_0_CLKCTRL)&0x30000)>>17)!=0);
+    GEL_TextOut("\tPRCM for OCMCRAM0 Initialization Done \n","Output",1,1,1);
+
+
+    /*for(k=0; k<SIZE; k++)
+    {
+        WR_MEM_32(OCMC0RAM_BASE_ADDR+4*k, 0x12345678+k);
+    }
+    for(k=0;  k<SIZE; k++)
+    {
+        if(RD_MEM_32(OCMC0RAM_BASE_ADDR+4*k) != (0x12345678+k) )
+        {
+            fail++;
+        }
+    }
+
+    if(fail!=0)
+    {
+        GEL_TextOut("\tOCMCRAM0 Accesses FAILED \n","Output",1,1,1);
+    }
+
+    GEL_TextOut("\tOCMCRAM0 Accesses PASSED \n","Output",1,1,1);
+    */
+}
+
+
+/************ Enable the Ducati Clocks ***************/
+DucatiClkEnable()
+{
+    int i;
+    GEL_TextOut("\tPRCM for DucatiSS is in Progress ..... \n","Output",1,1,1);
+    //while(RD_MEM_32(CM_DEFAULT_DUCATI_CLKSTCTRL)!=0x1);
+    //GEL_TextOut("\tPRCM for DucatiSS is in Progress  \n","Output",1,1,1);
+    GEL_TextOut("Tests Executed: %x \n",,,,,*(unsigned int *)CM_DEFAULT_DUCATI_CLKSTCTRL);
+    WR_MEM_32(RM_DEFAULT_RSTCTRL,   0xEF); /*Enable the Ducati Logic*/
+    WR_MEM_32(CM_DEFAULT_DUCATI_CLKSTCTRL, 2); /*Enable Power Domain Transition*/
+    WR_MEM_32(CM_DEFAULT_DUCATI_CLKCTRL,   2); /*Enable Ducati Clocks*/
+
+    /*Check CLKIN200TR & CLKINTR  are active*/
+    while(((RD_MEM_32(CM_DEFAULT_DUCATI_CLKSTCTRL)&0x300)>>8)!=3) ;
+    GEL_TextOut("\t   Clock is Active  \n","Output",1,1,1);
+
+    //----------------------WR_MEM_32(RM_DEFAULT_RSTCTRL,   0xEF); /*Enable the Ducati Logic*/
+    //--WR_MEM_32(RM_DEFAULT_RSTCTRL,   0xE3); /*Enable the Ducati Logic*/
+    GEL_TextOut("Tests Executed: %x \n",,,,,*(unsigned int *)RM_DEFAULT_RSTCTRL);
+    GEL_TextOut("Tests Executed: %x \n",,,,,*(unsigned int *)RM_DEFAULT_RSTST);
+    //    for(i=0;i<100;i++);
+    //    GEL_TextOut("\tDelay gone  \n","Output",1,1,1);
+    /*Write Ducate IRAM Boot Image */
+    WR_MEM_32(DUCATI_BASE_ADDR,         0x10000);
+    WR_MEM_32(DUCATI_BASE_ADDR+0x4,   0x9);
+    WR_MEM_32(DUCATI_BASE_ADDR+0x8,   0xE7FEE7FE);
+    //  GEL_TextOut("\tAfter RAM written  \n","Output",1,1,1);
+
+    /*Large Page Translations */
+
+    WR_MEM_32(DUCATI_MMU_CFG+0x800,         0x40000000);
+    WR_MEM_32(DUCATI_MMU_CFG+0x804,         0x80000000);
+    WR_MEM_32(DUCATI_MMU_CFG+0x808,         0xA0000000);
+    WR_MEM_32(DUCATI_MMU_CFG+0x80C,         0x60000000);
+
+    WR_MEM_32(DUCATI_MMU_CFG+0x820,         0x40000000);
+    WR_MEM_32(DUCATI_MMU_CFG+0x824,         0x80000000);
+    WR_MEM_32(DUCATI_MMU_CFG+0x828,         0xA0000000);
+    WR_MEM_32(DUCATI_MMU_CFG+0x82C,         0x60000000);
+
+    WR_MEM_32(DUCATI_MMU_CFG+0x840,         0x00000007);
+    WR_MEM_32(DUCATI_MMU_CFG+0x844,         0x000B0007);
+    WR_MEM_32(DUCATI_MMU_CFG+0x848,         0x00020007);
+    WR_MEM_32(DUCATI_MMU_CFG+0x84C,         0x00020007);
+
+    /*Medium Page*/
+    WR_MEM_32(DUCATI_MMU_CFG+0x860,         0x00300000);
+    WR_MEM_32(DUCATI_MMU_CFG+0x864,         0x00400000);
+
+    WR_MEM_32(DUCATI_MMU_CFG+0x8A0,         0x40300000);
+    WR_MEM_32(DUCATI_MMU_CFG+0x8A4,         0x40400000);
+
+    WR_MEM_32(DUCATI_MMU_CFG+0x8E0,         0x00000007);
+    WR_MEM_32(DUCATI_MMU_CFG+0x8E4,         0x00020007);
+
+    /*Small Page*/
+    WR_MEM_32(DUCATI_MMU_CFG+0x920,         0x00000000);
+    WR_MEM_32(DUCATI_MMU_CFG+0x924,         0x40000000);
+    WR_MEM_32(DUCATI_MMU_CFG+0x928,         0x00004000);
+    WR_MEM_32(DUCATI_MMU_CFG+0x92C,         0x00008000);
+    WR_MEM_32(DUCATI_MMU_CFG+0x930,         0x0000C000);
+
+    WR_MEM_32(DUCATI_MMU_CFG+0x9A0,         0x55020000);
+    WR_MEM_32(DUCATI_MMU_CFG+0x9A4,         0x55080000);
+    WR_MEM_32(DUCATI_MMU_CFG+0x9A8,         0x55024000);
+    WR_MEM_32(DUCATI_MMU_CFG+0x9AC,         0x55028000);
+    WR_MEM_32(DUCATI_MMU_CFG+0x9B0,         0x5502C000);
+
+    WR_MEM_32(DUCATI_MMU_CFG+0xA20,         0x0001000B);
+    WR_MEM_32(DUCATI_MMU_CFG+0xA24,         0x0000000B);
+    WR_MEM_32(DUCATI_MMU_CFG+0xA28,         0x00010007);
+    WR_MEM_32(DUCATI_MMU_CFG+0xA2C,         0x00000007);
+    WR_MEM_32(DUCATI_MMU_CFG+0xA30,         0x00000007);
+
+
+    GEL_TextOut("\tDUCATI MMU has been written  \n","Output",1,1,1);
+
+
+
+
+    WR_MEM_32(RM_DEFAULT_RSTCTRL,   0xE3); //0xE3
+
+    /*Check for Ducati M3_0 & M3_1 out of Reset*/
+    while(((RD_MEM_32(RM_DEFAULT_RSTST)&0x1C))!=0x1C) ;
+ //     GEL_TextOut("\tDucati is out of Reset\n","Output",1,1,1);
+
+    /*Check Module is in Functional Mode */
+    while(((RD_MEM_32(CM_DEFAULT_DUCATI_CLKCTRL)&0x30000)>>16)!=0) ;
+
+    GEL_TextOut("\tPRCM for DucatiSS is Done Successfully ******** \n","Output",1,1,1);
+}
+
+
+IVAHD0ClkEnable()
+{
+    GEL_TextOut("\tPRCM for IVHD0 is in Progress, Please wait.....  \n","Output",1,1,1);
+    WR_MEM_32(CM_IVAHD0_CLKSTCTRL,      2); /*Enable Power Domain Transition*/
+    while(RD_MEM_32(PM_IVAHD0_PWRSTST)!=0x37);  /*Check Power is ON*/
+    WR_MEM_32(CM_IVAHD0_IVAHD_CLKCTRL,  2); /*Enable IVHD0 Clocks*/
+    WR_MEM_32(CM_IVAHD0_SL2_CLKCTRL,    2); /*Enable IVHD0 SL2 Clocks*/
+
+    while(((RD_MEM_32(CM_IVAHD0_CLKSTCTRL)&0x100))!=0x100); /*IVAHD0_GCLK is Active*/
+
+    WR_MEM_32(RM_IVAHD0_RSTCTRL,    3); /*Enable IVHD0 logic & SL2 */
+
+    while(RD_MEM_32(RM_IVAHD0_RSTST)!=4);
+
+    WR_MEM_32(0x58088000, 0xEAFFFFFE); /*Write Self Branch Instruction in ICONT1 ITCM 0 Location*/
+
+    WR_MEM_32(0x58098000, 0xEAFFFFFE); /*Write Self Branch Instruction in ICONT2 ITCM 0 Location*/
+
+    WR_MEM_32(RM_IVAHD0_RSTCTRL,    0); /*Bring ICONT1 & ICONT2 out of Reset*/
+
+    while(RD_MEM_32(RM_IVAHD0_RSTST)!=7); /*ICONT1 & ICONT2 are out of Reset*/
+
+    GEL_TextOut("\tPRCM for IVHD0 is Done Successfully  \n","Output",1,1,1);
+    GEL_TextOut("\tUser Can Connect to ICONT1 & ICONT2 of IVHD0  \n","Output",1,1,1);
+}
+
+
+PrcmTPPSSEnable()
+{
+
+    unsigned int fail=0, k=0;
+
+    GEL_TextOut("\tPRCM for TPPSS Initialization in Progress \n","Output",1,1,1);
+    WR_MEM_32(RM_DEFAULT_RSTCTRL,   0xFD); /*Bring TPP ARM out of Reset*/
+
+    /*Enable the TPPSS Clocks*/
+    WR_MEM_32(CM_DEFAULT_TPPSS_CLKSTCTRL, 2);
+    WR_MEM_32(CM_DEFAULT_TPPSS_CLKCTRL,   2);
+    while(((RD_MEM_32(CM_DEFAULT_TPPSS_CLKSTCTRL) & 0x7F00)>>8)!=0x7F);
+    while(((RD_MEM_32(CM_DEFAULT_TPPSS_CLKCTRL)&0x30000)>>16)!=0);
+    GEL_TextOut("\tPRCM for TPPSS Initialization in Done \n","Output",1,1,1);
+
+    //Fill the ITCM RAM of TPPSS
+    for(k=0; k<10; k++)
+    {
+          WR_MEM_32(TPPIRAM_BASE_ADDR+4*k, 0xEAFFFFFE);
+
+    }
+
+    /*Check CLKIN200TR & CLKINTR  are active*/
+    /*Implement Different Logic in C, Based on Application requirement for TPPSS, Ducati*/
+    if((RD_MEM_32(CM_DEFAULT_DUCATI_CLKSTCTRL)&0x300) ==0x300 )
+    {
+        WR_MEM_32(RM_DEFAULT_RSTCTRL,   0xE0); /*Bring Ducati M3_0, M3_1 and TPPSS out of Reset*/
+        GEL_TextOut("\tDucati is Already out of Reset, Bring TPPSS out of Reset  \n","Output",1,1,1);
+    }
+    else
+      WR_MEM_32(RM_DEFAULT_RSTCTRL,   0xFC); /*Bring TPP out of Local Reset*/
+
+    GEL_TextOut("\tTPPSS Initialization in Done \n","Output",1,1,1);
+}
+
+
+
+GEMSSClkEnable()
+{
+    unsigned int i=0, k=0, fail=0;
+
+    GEL_TextOut("\tPRCM for GEMSS is in Progress, Please wait.....  \n","Output",1,1,1);
+
+    /*Cortex A8 must be in Supervisor Mode to Access the following two registers*/
+    WR_MEM_32(DSPMEM_SLEEP,         0); /*Bring GEM L2RAM out of Power down Mode*/
+    WR_MEM_32(DSPBOOTADDR,          0x00800000); /*DSPBOOT ADDRESS*/
+
+    GEL_TextOut("\t CP0...Done \n");
+
+    /*Enable Clock to MMU CFG*/
+    WR_MEM_32(CM_MMUCFG_CLKSTCTRL,      2);
+    WR_MEM_32(CM_ALWON_MMUCFG_CLKCTRL,      2);
+    while(((RD_MEM_32(CM_ALWON_MMUCFG_CLKCTRL)&0x0))!=0x0);
+    while(((RD_MEM_32(CM_MMUCFG_CLKSTCTRL)&0x100))!=0x100);
+
+    GEL_TextOut("\t CP1...Done \n");
+
+    /*Enable Clock to Data*/
+    WR_MEM_32(CM_MMU_CLKSTCTRL,         2);
+    WR_MEM_32(CM_ALWON_MMUDATA_CLKCTRL,         2);
+    while(((RD_MEM_32(CM_ALWON_MMUDATA_CLKCTRL)&0x0))!=0x0);
+    while(((RD_MEM_32(CM_MMU_CLKSTCTRL)&0x100))!=0x100);
+
+    GEL_TextOut("\t CP2...Done \n");
+
+    /*Enable Clock to GEMSS*/
+    WR_MEM_32(CM_GEM_CLKSTCTRL,         2); /*Enable Power Domain Transition*/
+    while(RD_MEM_32(PM_ACTIVE_PWRSTST)!=0x37);  /*Check Power is ON*/
+    WR_MEM_32(CM_ACTIVE_GEM_CLKCTRL,    2); /*Enable GEMSS Clocks*/
+
+    GEL_TextOut("\t CP3...Done \n");
+    while(((RD_MEM_32(CM_GEM_CLKSTCTRL)&0x700))!=0x700); /*GME Clocks are Active*/
+    WR_MEM_32(RM_ACTIVE_RSTCTRL,    1); /*Issue GEM Warm Reset To access GEMSS memories */
+    while(((RD_MEM_32(RM_ACTIVE_RSTST)&0x2))!=0x2); /*GEMSS Warm Reset has been Asserted*/
+    GEL_TextOut("\t CP4...Done \n");
+    for(i=0; i<8; i++)
+    {
+        WR_MEM_32((GEM_L2RAM_BASE_ADDR+4*i), 0x12); /*Write Self Branch Instruction*/
+    }
+    GEL_TextOut("\t CP5...Done \n");
+    WR_MEM_32(RM_ACTIVE_RSTCTRL,    0); /*Bring GEM Core out of Reset*/
+    while(((RD_MEM_32(RM_ACTIVE_RSTST)&0x3))!=0x3); /*GEM core core is out of Reset*/
+    GEL_TextOut("\t CP6...Done \n");
+
+    /*for(k=0; k<SIZE; k++)
+    {
+        WR_MEM_32(GEM_L2RAM_BASE_ADDR+0x100+4*k, 0x12345678+k);
+    }
+
+    GEL_TextOut("\t CP7...Done");
+
+    for(k=0;  k<SIZE; k++)
+    {
+        if(RD_MEM_32(GEM_L2RAM_BASE_ADDR+0x100+4*k) != (0x12345678+k) )
+        {
+            fail++;
+        }
+    }
+    if(fail!=0)
+    {
+        GEL_TextOut("\tGEM L2 RAM Accesses are FAILED \n","Output",1,1,1);
+        GEL_TextOut("\tPRCM for GEMSS is Failed  \n","Output",1,1,1);
+        GEL_TextOut("\tDebug the Failed Scenario   \n","Output",1,1,1);
+    }
+
+    GEL_TextOut("\tGEM L2 RAM Accesses are PASSED \n","Output",1,1,1);
+    GEL_TextOut("\tPRCM for GEMSS is Done Successfully  \n","Output",1,1,1);
+    */
+    GEL_TextOut("\tUser Can Connect to GEMSS   \n","Output",1,1,1);
+    GEL_TextOut("\tPRCM for GEMSS is DONE ******  \n","Output",1,1,1);
+}
+
+
+GPMC_ClkEnable()
+{
+    unsigned int i,data_fail = 0;
+    GEL_TextOut("\tEnabling Clock for GPMC is in Progress, Please wait.....  \n","Output",1,1,1);
+    WR_MEM_32(CM_ALWON_GPMC_CLKCTRL,    0x2); /*Enable GPMC Clock*/
+    while(RD_MEM_32(CM_ALWON_GPMC_CLKCTRL)!=0x2);
+    GEL_TextOut("\tGPMC Clock is Active\n","Output",1,1,1);
+
+//  GEL_TextOut("Reg default Value: %x \n",,,,,*(unsigned int *)PINCNTL105);
+
+//  GEL_TextOut("\tPINMUX configuration is in Progress, Please wait.....  \n","Output",1,1,1);
+
+  //  WR_MEM_32(PINCNTL235,    RD_MEM_32(PINCNTL235) | 0x1);
+//  WR_MEM_32(PINCNTL243,    RD_MEM_32(PINCNTL243) | 0x10);
+//  WR_MEM_32(PINCNTL244,    RD_MEM_32(PINCNTL244) | 0x10);
+//  WR_MEM_32(PINCNTL245,    RD_MEM_32(PINCNTL245) | 0x10);
+//  WR_MEM_32(PINCNTL246,    RD_MEM_32(PINCNTL246) | 0x10);
+//  WR_MEM_32(PINCNTL247,    RD_MEM_32(PINCNTL247) | 0x10);
+//  WR_MEM_32(PINCNTL248,    RD_MEM_32(PINCNTL248) | 0x10);
+//  WR_MEM_32(PINCNTL249,    RD_MEM_32(PINCNTL249) | 0x10);
+//  WR_MEM_32(PINCNTL250,    RD_MEM_32(PINCNTL250) | 0x10);
+//  WR_MEM_32(PINCNTL251,    RD_MEM_32(PINCNTL251) | 0x10);
+//  WR_MEM_32(PINCNTL252,    RD_MEM_32(PINCNTL252) | 0x10);
+//  WR_MEM_32(PINCNTL253,    RD_MEM_32(PINCNTL253) | 0x10);
+//  WR_MEM_32(PINCNTL254,    RD_MEM_32(PINCNTL254) | 0x10);
+//  WR_MEM_32(PINCNTL255,    RD_MEM_32(PINCNTL255) | 0x10);
+//  WR_MEM_32(PINCNTL256,    RD_MEM_32(PINCNTL256) | 0x10);
+//  WR_MEM_32(PINCNTL257,    RD_MEM_32(PINCNTL257) | 0x10);
+//  WR_MEM_32(PINCNTL258,    RD_MEM_32(PINCNTL258) | 0x10);
+
+//  WR_MEM_32(PINCNTL89,    RD_MEM_32(PINCNTL89) | 0x01);
+//  WR_MEM_32(PINCNTL90,    RD_MEM_32(PINCNTL90) | 0x01);
+//  WR_MEM_32(PINCNTL91,    RD_MEM_32(PINCNTL91) | 0x01);
+//  WR_MEM_32(PINCNTL92,    RD_MEM_32(PINCNTL92) | 0x01);
+//  WR_MEM_32(PINCNTL93,    RD_MEM_32(PINCNTL93) | 0x01);
+//  WR_MEM_32(PINCNTL94,    RD_MEM_32(PINCNTL94) | 0x01);
+//  WR_MEM_32(PINCNTL95,    RD_MEM_32(PINCNTL95) | 0x01);
+//  WR_MEM_32(PINCNTL96,    RD_MEM_32(PINCNTL96) | 0x01);
+//  WR_MEM_32(PINCNTL97,    RD_MEM_32(PINCNTL97) | 0x01);
+//  WR_MEM_32(PINCNTL98,    RD_MEM_32(PINCNTL98) | 0x01);
+//  WR_MEM_32(PINCNTL99,    RD_MEM_32(PINCNTL99) | 0x01);
+//  WR_MEM_32(PINCNTL100,   RD_MEM_32(PINCNTL100) | 0x01);
+//  WR_MEM_32(PINCNTL101,   RD_MEM_32(PINCNTL101) | 0x01);
+//  WR_MEM_32(PINCNTL102,   RD_MEM_32(PINCNTL102) | 0x01);
+//  WR_MEM_32(PINCNTL103,   RD_MEM_32(PINCNTL103) | 0x01);
+//  WR_MEM_32(PINCNTL104,   RD_MEM_32(PINCNTL104) | 0x01);
+
+//  WR_MEM_32(PINCNTL105,   RD_MEM_32(PINCNTL105) | 0x01);
+//  WR_MEM_32(PINCNTL106,    RD_MEM_32(PINCNTL106) | 0x01);
+//  WR_MEM_32(PINCNTL107,    RD_MEM_32(PINCNTL107) | 0x01);
+//  WR_MEM_32(PINCNTL108,    RD_MEM_32(PINCNTL108) | 0x01);
+//  WR_MEM_32(PINCNTL109,    RD_MEM_32(PINCNTL109) | 0x01);
+//  WR_MEM_32(PINCNTL110,    RD_MEM_32(PINCNTL110) | 0x01);
+//  WR_MEM_32(PINCNTL111,    RD_MEM_32(PINCNTL111) | 0x01);
+//  WR_MEM_32(PINCNTL112,    RD_MEM_32(PINCNTL112) | 0x01);
+
+//  WR_MEM_32(PINCNTL122,    RD_MEM_32(PINCNTL122) | 0x01);
+//  WR_MEM_32(PINCNTL123,    RD_MEM_32(PINCNTL123) | 0x01);
+//  WR_MEM_32(PINCNTL124,    RD_MEM_32(PINCNTL124) | 0x01);
+//  WR_MEM_32(PINCNTL125,    RD_MEM_32(PINCNTL125) | 0x01);
+//  WR_MEM_32(PINCNTL126,    RD_MEM_32(PINCNTL126) | 0x01);
+//  WR_MEM_32(PINCNTL127,    RD_MEM_32(PINCNTL127) | 0x01);
+//  WR_MEM_32(PINCNTL128,    RD_MEM_32(PINCNTL128) | 0x01);
+//  WR_MEM_32(PINCNTL129,    RD_MEM_32(PINCNTL129) | 0x01);
+//  WR_MEM_32(PINCNTL130,    RD_MEM_32(PINCNTL130) | 0x01);
+//  WR_MEM_32(PINCNTL131,    RD_MEM_32(PINCNTL131) | 0x01);
+//  WR_MEM_32(PINCNTL132,    RD_MEM_32(PINCNTL132) | 0x01);
+//  WR_MEM_32(PINCNTL133,    RD_MEM_32(PINCNTL133) | 0x01);
+
+//  GEL_TextOut("Reg written value: %x \n",,,,,*(unsigned int *)PINCNTL105);
+
+    WR_MEM_32(0x50000060,    RD_MEM_32(0x50000060) & 0xFFFFFCFF);// Bit 9:8 make 00, Non multiplex
+    WR_MEM_32(0x50000078,    RD_MEM_32(0x50000078) & 0xFFFFFFFC);
+    WR_MEM_32(0x50000078,    RD_MEM_32(0x50000078) | 2); // Map to 0x02000000 address
+
+//  GEL_TextOut("\tPinmux is configured successfully !!!\n","Output",1,1,1);
+    GEL_TextOut("\tWait .... busy writing memory \n","Output",1,1,1);
+
+    for(i=0; i<DATA_SIZE; i++)
+    {
+      WR_MEM_32(GPMC_MEM_BASE_ADDR+4*i, 0xABCD0000+i);
+    }
+
+    for(i=0; i<DATA_SIZE; i++)
+    {
+        if(RD_MEM_32(GPMC_MEM_BASE_ADDR + 4*i) != (0xABCD0000+i) )
+        {
+            data_fail++;
+        }
+    }
+    if(data_fail != 0)
+        GEL_TextOut("\tGPMC Memory write failed, Try again ...\n","Output",1,1,1);
+    else
+        GEL_TextOut("\tGPMC Memory written successfully !!!\n","Output",1,1,1);
+
+
+}
+
+OpenFireWall()
+{
+
+    if( (RD_MEM_32(CONTROL_STATUS) & 0x700) ==0)
+    {
+        GEL_TextOut("\tDevice type is TEST \n","Output",1,1,1);
+        GEL_TextOut("\tOpen the Firewall for public \n","Output",1,1,1);
+        WR_MEM_32(VLYNQ_FW     ,    NETRA_TEST_DEVICE_FW_VAL);
+        WR_MEM_32(GPMC_FW      ,    NETRA_TEST_DEVICE_FW_VAL);
+        WR_MEM_32(OCMC_RAM0_FW,     NETRA_TEST_DEVICE_FW_VAL);
+//      WR_MEM_32(OCMC_RAM1_FW,       NETRA_TEST_DEVICE_FW_VAL);
+        WR_MEM_32(SGX530_FW,        NETRA_TEST_DEVICE_FW_VAL);
+        WR_MEM_32(GEM_SDMA_FW,      NETRA_TEST_DEVICE_FW_VAL);
+        WR_MEM_32(DUCATI_FW,        NETRA_TEST_DEVICE_FW_VAL);
+        WR_MEM_32(PCIE_FW,          NETRA_TEST_DEVICE_FW_VAL);
+        WR_MEM_32(TPPSS_FW,         NETRA_TEST_DEVICE_FW_VAL);
+        WR_MEM_32(IVAHD_SL2_FW,     NETRA_TEST_DEVICE_FW_VAL);
+        WR_MEM_32(IVAHD_CFG_FW,     NETRA_TEST_DEVICE_FW_VAL);
+        WR_MEM_32(MCASP_FW,         NETRA_TEST_DEVICE_FW_VAL);
+        WR_MEM_32(HDMI_FW,          NETRA_TEST_DEVICE_FW_VAL);
+        WR_MEM_32(MCBSP_FW,         NETRA_TEST_DEVICE_FW_VAL);
+        WR_MEM_32(TPTC_FW,          NETRA_TEST_DEVICE_FW_VAL);
+        WR_MEM_32(TPCC_FW,          NETRA_TEST_DEVICE_FW_VAL);
+        WR_MEM_32(USB_FW,           NETRA_TEST_DEVICE_FW_VAL);
+    }
+    else if( (RD_MEM_32(CONTROL_STATUS) & 0x700) ==0x300)
+    {
+        GEL_TextOut("\tDevice type is GP \n","Output",1,1,1);
+    }
+}
+
+Unlock_PLL_Control_MMR()
+{
+    WR_MEM_32(control_pllss_mmr_lock,control_pllss_mmr_lock_unlock_val);
+    WR_MEM_32(control_mmr_lock0,control_mmr_lock0_unlock_val);
+    WR_MEM_32(control_mmr_lock1,control_mmr_lock1_unlock_val);
+    WR_MEM_32(control_mmr_lock2,control_mmr_lock2_unlock_val);
+    WR_MEM_32(control_mmr_lock3,control_mmr_lock3_unlock_val);
+    WR_MEM_32(control_mmr_lock4,control_mmr_lock4_unlock_val);
+    GEL_TextOut("\n PLL and Control MMR unlock done ... \n");
+}
+
+mmr_unlock()
+{
+    *(unsigned int *)0x481C504c |= 0x06000000;
+    *(unsigned int *)0x481C5040 = 0x1EDA4C3D;
+    *(unsigned int *)0x48140060 = 0x2FF1AC2B;
+    *(unsigned int *)0x48140064 = 0xF757FDC0;
+    *(unsigned int *) 0x48140068 = 0xE2BC3A6D;
+    *(unsigned int *)0x4814006c = 0x1EBF131D;
+    *(unsigned int *)0x48140070 = 0x6F361E05;
+    GEL_TextOut("\tInitialized Successfully.....  \n");
+}
+
+EMACClkEnable()
+{
+    GEL_TextOut("    CONFIGURE PRCM CLOCKS of EMAC in progress \n");
+    *((unsigned int*)(0x48181404)) = 0x2;
+    *((unsigned int*)(0x481815d4)) = 0x2;
+//    *((unsigned int*)(0x481815d8)) = 0x2;
+    while(RD_MEM_32(0x48181404)!=0x0302);
+    while(RD_MEM_32(0x481815d4)!=0x2);
+    GEL_TextOut("    PRCM CLOCKS of EMAC  is complete \n");
+}
+
+Clockout_Enable()
+{
+    //*(unsigned int *)0x481402e4 =0 ;             // clkout0,1 selection
+    *(unsigned int *)0x481C52e4 =0;
+    *(unsigned int *)0x481409f8 =0x10 ;   // clkout1
+    *(unsigned int *)0x48140c08 =0x4 ;     //clkout0
+    *(unsigned int *)0x48180100 = ( (CLKOUT2EN << 7) | (CLKOUT2DIV << 3) | (CLKOUT2SRC << 0) );
+    GEL_TextOut("\tCentaurus clkout done.... \n","Output",1,1,1);   }
+
+MCASP2ClkEnable()
+{
+    WR_MEM_32(CM_ALWON_MCA_2_CLKSTCTRL,    0x2);        /*Enable McASP Clock*/
+    while(RD_MEM_32(CM_ALWON_MCA_2_CLKSTCTRL)!=0x2);    /*Poll for Module is functional*/
+
+    GEL_TextOut("    Initializing MCASP2 done\n");
+}
+
+SPIClkEnable()
+{
+    GEL_TextOut("    PRCM for SPI0 is in Progress....  \n");
+
+    WR_MEM_32(CM_ALWON_SPI_0_CLKSTCTRL,    0x2);          /*Enable SPI0 Clock*/
+    while(RD_MEM_32(CM_ALWON_SPI_0_CLKSTCTRL)!=0x2);        /*Poll for Module is functional*/
+
+    GEL_TextOut("    PRCM for SPI0 was Done Successfully  \n");
+}
+
+UARTClkEnable()
+{
+
+    GEL_TextOut("    PRCM for UART0, UART1 and UART2 are in Progress....  \n");
+
+    WR_MEM_32(CM_ALWON_L3_SLOW_CLKSTCTRL, 0x2);     //Enable the Power Domain Transition of L3 Slow Domain Peripheral
+
+    WR_MEM_32(CM_ALWON_UART_0_CLKCTRL,    0x2);     //Enable UART0 Clock
+    while(RD_MEM_32(CM_ALWON_UART_0_CLKCTRL)!=0x2);
+
+    WR_MEM_32(CM_ALWON_UART_1_CLKCTRL,    0x2);     //Enable UART1 Clock
+    while(RD_MEM_32(CM_ALWON_UART_1_CLKCTRL)!=0x2);
+
+    WR_MEM_32(CM_ALWON_UART_2_CLKCTRL,    0x2);     // Enable UART2 Clock
+    while(RD_MEM_32(CM_ALWON_UART_2_CLKCTRL)!=0x2);
+
+    while(RD_MEM_32(CM_ALWON_L3_SLOW_CLKSTCTRL) & 0x2100 !=0x2100);
+
+    GEL_TextOut("    PRCM for UART0, UART1 and UART2 are Done Successfully.....  \n");
+}
+
+I2CClkEnable()
+{
+
+    GEL_TextOut("    PRCM for I2C1 is in Progress....  \n");
+
+    WR_MEM_32(CM_ALWON_L3_SLOW_CLKSTCTRL, 0x2);     //Enable the Power Domain Transition of L3 Slow Domain Peripheral
+
+    WR_MEM_32(CM_ALWON_I2C_1_CLKCTRL,    0x2);     //Enable I2C1 Clock
+    while(RD_MEM_32(CM_ALWON_I2C_1_CLKCTRL)!=0x2);
+
+    while(RD_MEM_32(CM_ALWON_L3_SLOW_CLKSTCTRL) & 0x2100 !=0x2100);
+
+    GEL_TextOut("    PRCM for I2C1 Done Successfully.....  \n");
+}
+
+GPIOClkEnable()
+{
+
+    GEL_TextOut("    PRCM for GPIO0 / GPIO1 is in Progress....  \n");
+
+    WR_MEM_32(CM_ALWON_L3_SLOW_CLKSTCTRL, 0x2);     //Enable the Power Domain Transition of L3 Slow Domain Peripheral
+
+    WR_MEM_32(CM_ALWON_GPIO_0_CLKCTRL,    0x2);     //Enable GPIO0 Clock
+    while(RD_MEM_32(CM_ALWON_GPIO_0_CLKCTRL)!=0x2);
+
+    WR_MEM_32(CM_ALWON_GPIO_1_CLKCTRL,    0x2);     //Enable GPIO1 Clock
+    while(RD_MEM_32(CM_ALWON_GPIO_1_CLKCTRL)!=0x2);
+
+    while(RD_MEM_32(CM_ALWON_L3_SLOW_CLKSTCTRL) & 0x2100 !=0x2100);
+
+    GEL_TextOut("    PRCM for GPIO0 / GPIO1 Done Successfully.....  \n");
+}
+
+ISS_A8_Enable()
+{
+    WR_MEM_32(0x48180D00, 0x2); //PM_ISP_PWRSTCTRL
+    WR_MEM_32(0x48180D10, 0x3); //RM_ISP_RSTCTRL
+    WR_MEM_32(0x48180700, 0x2) ; //CM_ISP_CLKSTCTRL
+    WR_MEM_32(0x48180720, 0x2) ;  //CM_ISP_ISP_CLKCTRL
+    WR_MEM_32(0x48180724, 0x2) ;  //CM_ISP_FDIF_CLKCTRL
+
+    GEL_TextOut("\tPRCM for ISS Done Successfully.....  \n","Output",1,1,1);
+}
+
+DSSClkEnable()
+{
+    *(unsigned int *)0x48180E10 =0;
+    GEL_TextOut("\tPower Enabled.....  \n","Output",1,1,1);
+
+    /* Enabling DSS Clocks */
+    *(unsigned int *)0x48180800=2 ;
+    delay();
+    *(unsigned int *)0x48180820=2 ;
+    delay();
+    *(unsigned int *)0x48180824=2 ;
+    delay();
+
+    GEL_TextOut("\tPRCM for DSS in Progress, Please wait.....  \n","Output",1,1,1);
+    while ( (*(unsigned int *)0x48180800 & 0x100) != 0x100)
+    {}
+
+    /*Deasserting resets */
+
+    *(unsigned int *)0x48180E10 =0;
+    GEL_TextOut("\tPRCM for DSS Done Successfully.....  \n","Output",1,1,1);
+}
+
+MLBClkEnable()
+{
+    GEL_TextOut("\tPRCM for MLB is in Progress, Please wait.....  \n","Output",1,1,1);
+
+    WR_MEM_32(CM_ALWON_L3_SLOW_CLKSTCTRL, 0x2); /*Enable the Power Domain Transition of L3 Slow Domain Peripheral*/
+
+    WR_MEM_32(CM_ALWON_TIMER_2_CLKCTRL, 0x2); /*Enable MLB Clk domain */
+    while(RD_MEM_32(CM_ALWON_TIMER_2_CLKCTRL) != 0x2);
+    //while(((RD_MEM_32(CM_ALWON_MLB_CLKCTRL)) & (0x3 << 16)) != 0);
+    GEL_TextOut("\t1st while loop done...\n");
+
+    /*Ensure the Clk domains are fully functional */
+
+    /* SHB Clk */
+    while(RD_MEM_32(CM_ALWON_L3_SLOW_CLKSTCTRL) & 0x100 != 0x100);
+    GEL_TextOut("\t 2nd while loop done...\n");
+
+    /* SPB and SYS Clk Domain */
+    while(RD_MEM_32(CM_ALWON_SYSCLK5_CLKSTCTRL) & 0x100 != 0x100);
+    GEL_TextOut("\t 3rd while loop done ... \n");
+    // mlb data pin mux
+    WR_MEM_32(PINCNTL60, 0x00040001);
+/* 0000 0000 0000 0100 0000 0000 0000 0001*/
+    // mlb sig pin mux
+    WR_MEM_32(PINCNTL59, 0x00040001);
+
+    GEL_TextOut("\tPRCM for MLB has been done successfully.\n","Output",1,1,1);
+}
+
+DCANClkEnable()
+{
+    GEL_TextOut("\tPRCM for DCAN is in Progress, Please wait.....  \n","Output",1,1,1);
+
+    WR_MEM_32(CM_ALWON_L3_SLOW_CLKSTCTRL, 0x2); /*Enable the Power Domain Transition of L3 Slow Domain Peripheral*/
+
+    WR_MEM_32(CM_ALWON_DCAN_0_1_CLKCTRL, 0x2); /*Enable DCAN Clk domain */
+    while(RD_MEM_32(CM_ALWON_DCAN_0_1_CLKCTRL) != 0x2);
+    // DCAN0 RX pin mux
+    WR_MEM_32(PINCNTL69, 0x00040001);
+    // DCAN0 TX pin mux
+//  WR_MEM_32(PINCNTL68, 0x00000001);
+    // DCAN1 RX pin mux, func4
+//  WR_MEM_32(PINCNTL73, 0x00040008);
+    // DCAN1 TX pin mux, func4
+    WR_MEM_32(PINCNTL72, 0x00000008);
+    GEL_TextOut("\t1st while loop done...\n");
+
+    GEL_TextOut("\tPRCM for DCAN has been done successfully.\n","Output",1,1,1);
+}
+
+delay()
+{
+    int del_cnt;
+    for(del_cnt=0;del_cnt<200;del_cnt++);
+}
+
+hotmenu DDR3_EMIF0_EMIF1_Config()
+{
+    GEL_TextOut("    CENTAURUS2 DDR3 EMIF0 and EMIF1 configuration in progress.... \n");
+    cmd_DDR3_EMIF0_EMIF1_Config(DDR3_PHY_RD_DQS_CS0_DEFINE,DDR3_PHY_WR_DQS_CS0_DEFINE,DDR3_PHY_FIFO_WE_CS0_DEFINE,
+                                DDR3_PHY_WR_DATA_CS0_DEFINE,DDR3_EMIF_READ_LATENCY_DEFINE,DDR3_EMIF_TIM1_DEFINE,
+                                DDR3_EMIF_TIM2_DEFINE,DDR3_EMIF_TIM3_DEFINE,DDR3_EMIF_REF_CTRL_DEFINE,
+                                DDR3_EMIF_SDRAM_CONFIG_DEFINE_2G2x16 /*DDR3_EMIF_SDRAM_CONFIG_DEFINE*/);
+    GEL_TextOut("    CENTAURUS2 DDR3 EMIF0 and EMIF1 configuration is DONE\n");
+}
+
+/***********************************************************************
+
+                   EMIF/DDR FUNCTIONS
+
+************************************************************************/
+
+cmd_DDR3_EMIF0_EMIF1_Config(UWORD32 ddr3_phy_rd_dqs_cs0_arg,UWORD32 ddr3_phy_wr_dqs_cs0_arg,
+                            UWORD32 ddr3_phy_fifo_we_cs0_arg,UWORD32 ddr3_phy_wr_data_cs0_arg,UWORD32                             ddr3_emif_read_latency_arg,UWORD32 ddr3_emif_tim1_arg,UWORD32 ddr3_emif_tim2_arg,
+                            UWORD32 ddr3_emif_tim3_arg,UWORD32 ddr3_emif_ref_ctrl_arg,UWORD32                             ddr3_emif_sdram_config_arg)
+{
+    Emif_PRCM_Clk_Enable();
+
+    Cmd_Macro_Config(DDR3_PHY_INVERT_CLKOUT_DEFINE,DDR3_PHY_CTRL_SLAVE_RATIO_CS0_DEFINE,PHY_CMD0_DLL_LOCK_DIFF_DEFINE);
+    Data_Macro_Config(DATA_MACRO_0,DDR_PHY0,ddr3_phy_rd_dqs_cs0_arg,ddr3_phy_wr_dqs_cs0_arg,ddr3_phy_fifo_we_cs0_arg,ddr3_phy_wr_data_cs0_arg);
+    Data_Macro_Config(DATA_MACRO_1,DDR_PHY0,ddr3_phy_rd_dqs_cs0_arg,ddr3_phy_wr_dqs_cs0_arg,ddr3_phy_fifo_we_cs0_arg,ddr3_phy_wr_data_cs0_arg);
+    Data_Macro_Config(DATA_MACRO_2,DDR_PHY0,ddr3_phy_rd_dqs_cs0_arg,ddr3_phy_wr_dqs_cs0_arg,ddr3_phy_fifo_we_cs0_arg,ddr3_phy_wr_data_cs0_arg);
+    Data_Macro_Config(DATA_MACRO_3,DDR_PHY0,ddr3_phy_rd_dqs_cs0_arg,ddr3_phy_wr_dqs_cs0_arg,ddr3_phy_fifo_we_cs0_arg,ddr3_phy_wr_data_cs0_arg);
+
+    Data_Macro_Config(DATA_MACRO_0,DDR_PHY1,ddr3_phy_rd_dqs_cs0_arg,ddr3_phy_wr_dqs_cs0_arg,ddr3_phy_fifo_we_cs0_arg,ddr3_phy_wr_data_cs0_arg);
+    Data_Macro_Config(DATA_MACRO_1,DDR_PHY1,ddr3_phy_rd_dqs_cs0_arg,ddr3_phy_wr_dqs_cs0_arg,ddr3_phy_fifo_we_cs0_arg,ddr3_phy_wr_data_cs0_arg);
+    Data_Macro_Config(DATA_MACRO_2,DDR_PHY1,ddr3_phy_rd_dqs_cs0_arg,ddr3_phy_wr_dqs_cs0_arg,ddr3_phy_fifo_we_cs0_arg,ddr3_phy_wr_data_cs0_arg);
+    Data_Macro_Config(DATA_MACRO_3,DDR_PHY1,ddr3_phy_rd_dqs_cs0_arg,ddr3_phy_wr_dqs_cs0_arg,ddr3_phy_fifo_we_cs0_arg,ddr3_phy_wr_data_cs0_arg);
+
+    Vtp_Enable();
+
+#define PG2_1_DMM_LISA_MAP__0       0x0
+#define PG2_1_DMM_LISA_MAP__1       0x0
+#define PG2_1_DMM_LISA_MAP__2       0x80500100
+#define PG2_1_DMM_LISA_MAP__3       0xA0500100
+
+
+    /*Program the DMM to Access EMIF0 and EMIF1*/
+    WR_MEM_32(DMM_LISA_MAP__0, 0x80500100);
+    WR_MEM_32(DMM_LISA_MAP__1, 0x80500100);
+    WR_MEM_32(DMM_LISA_MAP__2, 0xA0500200);
+    WR_MEM_32(DMM_LISA_MAP__3, 0xA0500200);
+
+
+    GEL_TextOut("\t Busy reading back DMM registers Please wait ...\n","Output",1,1,1);
+    while(RD_MEM_32(DMM_LISA_MAP__0)!=0x80500100);
+    while(RD_MEM_32(DMM_LISA_MAP__1)!=0x80500100);
+    while(RD_MEM_32(DMM_LISA_MAP__2)!=0xA0500200);
+    while(RD_MEM_32(DMM_LISA_MAP__3)!=0xA0500200);
+    GEL_TextOut("\t DMM register read successfully  \n","Output",1,1,1);
+
+    WR_MEM_32(DMM_PAT_BASE_ADDR, 0x80000000);
+    Emif0_MMR_Config(ddr3_emif_read_latency_arg,ddr3_emif_tim1_arg,ddr3_emif_tim2_arg,
+                     ddr3_emif_tim3_arg,ddr3_emif_ref_ctrl_arg,DDR3_EMIF_SDRAM_CONFIG_DEFINE_2G2x16);
+    if (EVMTYPE == EVMTYPE_VAYU)
+        Emif1_MMR_Config(ddr3_emif_read_latency_arg,ddr3_emif_tim1_arg,ddr3_emif_tim2_arg,
+                     ddr3_emif_tim3_arg,ddr3_emif_ref_ctrl_arg,DDR3_EMIF_SDRAM_CONFIG_DEFINE_2G4x8);
+    else
+        Emif1_MMR_Config(ddr3_emif_read_latency_arg,ddr3_emif_tim1_arg,ddr3_emif_tim2_arg,
+                     ddr3_emif_tim3_arg,ddr3_emif_ref_ctrl_arg,DDR3_EMIF_SDRAM_CONFIG_DEFINE_2G2x16);
+}
+
+cmd_mDDR_EMIF0_EMIF1_Config(UWORD32 mDDR_phy_rd_dqs_cs0_arg,UWORD32 mDDR_phy_wr_dqs_cs0_arg,UWORD32 mDDR_phy_fifo_we_cs0_arg,
+                            UWORD32 mDDR_phy_wr_data_cs0_arg,UWORD32 mDDR_emif_read_latency_arg,UWORD32 mDDR_emif_tim1_arg,
+                            UWORD32 mDDR_emif_tim2_arg,UWORD32 mDDR_emif_tim3_arg,UWORD32 mDDR_emif_ref_ctrl_arg,UWORD32                             mDDR_emif_sdram_config_arg)
+{
+    Emif_PRCM_Clk_Enable();
+
+    Cmd_Macro_Config(PHY_INVERT_CLKOUT_DEFINE,mDDR_PHY_CTRL_SLAVE_RATIO_CS0_DEFINE,PHY_CMD0_DLL_LOCK_DIFF_DEFINE);
+    Data_Macro_Config(DATA_MACRO_0,ddr_phy0,mDDR_phy_rd_dqs_cs0_arg,mDDR_phy_wr_dqs_cs0_arg,mDDR_phy_fifo_we_cs0_arg,mDDR_phy_wr_data_cs0_arg);
+    Data_Macro_Config(DATA_MACRO_1,ddr_phy0,mDDR_phy_rd_dqs_cs0_arg,mDDR_phy_wr_dqs_cs0_arg,mDDR_phy_fifo_we_cs0_arg,mDDR_phy_wr_data_cs0_arg);
+    Data_Macro_Config(DATA_MACRO_2,ddr_phy0,mDDR_phy_rd_dqs_cs0_arg,mDDR_phy_wr_dqs_cs0_arg,mDDR_phy_fifo_we_cs0_arg,mDDR_phy_wr_data_cs0_arg);
+    Data_Macro_Config(DATA_MACRO_3,ddr_phy0,mDDR_phy_rd_dqs_cs0_arg,mDDR_phy_wr_dqs_cs0_arg,mDDR_phy_fifo_we_cs0_arg,mDDR_phy_wr_data_cs0_arg);
+
+    Data_Macro_Config(DATA_MACRO_0,ddr_phy1,mDDR_phy_rd_dqs_cs0_arg,mDDR_phy_wr_dqs_cs0_arg,mDDR_phy_fifo_we_cs0_arg,mDDR_phy_wr_data_cs0_arg);
+    Data_Macro_Config(DATA_MACRO_1,ddr_phy1,mDDR_phy_rd_dqs_cs0_arg,mDDR_phy_wr_dqs_cs0_arg,mDDR_phy_fifo_we_cs0_arg,mDDR_phy_wr_data_cs0_arg);
+    Data_Macro_Config(DATA_MACRO_2,ddr_phy1,mDDR_phy_rd_dqs_cs0_arg,mDDR_phy_wr_dqs_cs0_arg,mDDR_phy_fifo_we_cs0_arg,mDDR_phy_wr_data_cs0_arg);
+    Data_Macro_Config(DATA_MACRO_3,ddr_phy1,mDDR_phy_rd_dqs_cs0_arg,mDDR_phy_wr_dqs_cs0_arg,mDDR_phy_fifo_we_cs0_arg,mDDR_phy_wr_data_cs0_arg);
+
+    WR_MEM_32(DATA0_REG_PHY0_USE_RANK0_DELAYS,    mDDR_PHY_REG_USE_RANK0_DELAY_DEFINE);
+    WR_MEM_32(DATA0_REG_PHY1_USE_RANK0_DELAYS,    mDDR_PHY_REG_USE_RANK0_DELAY_DEFINE);
+
+    WR_MEM_32(DDR0_IO_CTRL, RD_MEM_32(DDR0_IO_CTRL) | 0x10000000 );
+    WR_MEM_32(DDR1_IO_CTRL, RD_MEM_32(DDR1_IO_CTRL) | 0x10000000 );
+
+    Vtp_Enable();
+
+    /*Program the DMM to Access EMIF0 and EMIF1*/
+    WR_MEM_32(DMM_LISA_MAP__0, 0x80500100);
+    WR_MEM_32(DMM_LISA_MAP__1, 0x80500100);
+    WR_MEM_32(DMM_LISA_MAP__2, 0xA0500200);
+    WR_MEM_32(DMM_LISA_MAP__3, 0xA0500200);
+
+    GEL_TextOut("\tBusy reading back DMM registers Please wait ...\n","Output",1,1,1);
+    while(RD_MEM_32(DMM_LISA_MAP__0)!=0x80500100);
+    while(RD_MEM_32(DMM_LISA_MAP__1)!=0x80500100);
+    while(RD_MEM_32(DMM_LISA_MAP__2)!=0xA0500200);
+    while(RD_MEM_32(DMM_LISA_MAP__3)!=0xA0500200);
+    GEL_TextOut("\tDMM register read successfully  \n","Output",1,1,1);
+
+    WR_MEM_32(DMM_PAT_BASE_ADDR, 0x80000000);
+
+    Emif0_MMR_Config(mDDR_emif_read_latency_arg,mDDR_emif_tim1_arg,mDDR_emif_tim2_arg,mDDR_emif_tim3_arg,mDDR_emif_ref_ctrl_arg,mDDR_emif_sdram_config_arg);
+    Emif1_MMR_Config(mDDR_emif_read_latency_arg,mDDR_emif_tim1_arg,mDDR_emif_tim2_arg,mDDR_emif_tim3_arg,mDDR_emif_ref_ctrl_arg,mDDR_emif_sdram_config_arg);
+}
+
+
+cmd_DDR3_EMIF0_EMIF1_Config_Full_leveling(UWORD32 ddr3_emif_read_latency_arg,UWORD32 ddr3_emif_tim1_arg,
+                                          UWORD32 ddr3_emif_tim2_arg,UWORD32 ddr3_emif_tim3_arg,UWORD32 ddr3_emif_ref_ctrl_arg,
+                                          UWORD32 ddr3_emif_sdram_config_arg)
+{
+    UWORD32 i;
+
+    Emif_PRCM_Clk_Enable();
+
+    //- DDR3_PHY_INVERT_CLKOUT_DEFINE is 1
+    WR_MEM_32(CMD0_REG_PHY0_INVERT_CLKOUT_0, DDR3_PHY_INVERT_CLKOUT_DEFINE);
+    WR_MEM_32(CMD1_REG_PHY0_INVERT_CLKOUT_0, DDR3_PHY_INVERT_CLKOUT_DEFINE);
+    WR_MEM_32(CMD2_REG_PHY0_INVERT_CLKOUT_0, DDR3_PHY_INVERT_CLKOUT_DEFINE);
+
+    Vtp_Enable();
+
+    /*Program the DMM to Access EMIF0 and EMIF1*/
+    WR_MEM_32(DMM_LISA_MAP__0, 0x80500100);
+    WR_MEM_32(DMM_LISA_MAP__1, 0x80500100);
+    WR_MEM_32(DMM_LISA_MAP__2, 0xA0500200);
+    WR_MEM_32(DMM_LISA_MAP__3, 0xA0500200);
+
+    GEL_TextOut("\tBusy reading back DMM registers Please wait ...\n","Output",1,1,1);
+    while(RD_MEM_32(DMM_LISA_MAP__0)!=0x80500100);
+    while(RD_MEM_32(DMM_LISA_MAP__1)!=0x80500100);
+    while(RD_MEM_32(DMM_LISA_MAP__2)!=0xA0500200);
+    while(RD_MEM_32(DMM_LISA_MAP__3)!=0xA0500200);
+    GEL_TextOut("\tDMM register read successfully  \n","Output",1,1,1);
+
+    WR_MEM_32(DMM_PAT_BASE_ADDR, 0x80000000);
+
+    Emif0_MMR_Config(ddr3_emif_read_latency_arg,ddr3_emif_tim1_arg,ddr3_emif_tim2_arg,ddr3_emif_tim3_arg,ddr3_emif_ref_ctrl_arg,ddr3_emif_sdram_config_arg);
+
+    WR_MEM_32(EMIF4_0_RDWR_LVL_RMP_CTRL, 0x80000000); //- Bit 31 = 1;
+    WR_MEM_32(EMIF4_0_RDWR_LVL_CTRL, 0x80000000); //- Bit 31 = 1;
+
+    for(i=0;i<50000;i++)
+    {}
+
+    Emif1_MMR_Config(ddr3_emif_read_latency_arg,ddr3_emif_tim1_arg,ddr3_emif_tim2_arg,ddr3_emif_tim3_arg,ddr3_emif_ref_ctrl_arg,ddr3_emif_sdram_config_arg);
+
+    WR_MEM_32(EMIF4_1_RDWR_LVL_RMP_CTRL, 0x80000000); //- Bit 31 = 1;
+    WR_MEM_32(EMIF4_1_RDWR_LVL_CTRL, 0x80000000); //- Bit 31 = 1;
+
+    for(i=0;i<50000;i++)
+    {}
+
+}
+
+Data_Macro_Config(UWORD32 dataMacroNum,UWORD32 ddr_phy_num,UWORD32 rd_dqs_cs0,
+                  UWORD32 wr_dqs_cs0,UWORD32 fifo_we_cs0,UWORD32 wr_data_cs0)
+{
+    UWORD32 BaseAddrOffset;
+    if(dataMacroNum == DATA_MACRO_0)
+        BaseAddrOffset = 0x00;
+    else if(dataMacroNum == DATA_MACRO_1)
+        BaseAddrOffset = 0xA4;
+    else if(dataMacroNum == DATA_MACRO_2)
+        BaseAddrOffset = 0x148;
+    else if(dataMacroNum == DATA_MACRO_3)
+        BaseAddrOffset = 0x1EC;
+    if(ddr_phy_num == DDR_PHY1)
+        BaseAddrOffset = BaseAddrOffset + 0x400;//- phy1 is at offset of 0x400 from phy0
+
+    WR_MEM_32((DATA0_REG_PHY0_RD_DQS_SLAVE_RATIO_0 + BaseAddrOffset), (rd_dqs_cs0 << 10 | rd_dqs_cs0));
+    WR_MEM_32((DATA0_REG_PHY0_WR_DQS_SLAVE_RATIO_0 + BaseAddrOffset), (wr_dqs_cs0 << 10 | wr_dqs_cs0));
+    WR_MEM_32((DATA0_REG_PHY0_WRLVL_INIT_RATIO_0 + BaseAddrOffset),   (PHY_WRLVL_INIT_CS1_DEFINE << 10  | PHY_WRLVL_INIT_CS0_DEFINE));
+    WR_MEM_32((DATA0_REG_PHY0_GATELVL_INIT_RATIO_0 + BaseAddrOffset), (PHY_GATELVL_INIT_CS1_DEFINE << 10 | PHY_GATELVL_INIT_CS0_DEFINE));
+    WR_MEM_32((DATA0_REG_PHY0_FIFO_WE_SLAVE_RATIO_0 + BaseAddrOffset),(fifo_we_cs0 << 10  | fifo_we_cs0));
+    WR_MEM_32((DATA0_REG_PHY0_WR_DATA_SLAVE_RATIO_0 + BaseAddrOffset),(wr_data_cs0 << 10 | wr_data_cs0));
+    //-WR_MEM_32((DATA0_REG_PHY0_USE_RANK0_DELAYS + BaseAddrOffset),     PHY_REG_USE_RANK0_DELAY_DEFINE);//- default is 0; for mDDR need to set as 1
+    WR_MEM_32((DATA0_REG_PHY0_DLL_LOCK_DIFF_0 + BaseAddrOffset),      PHY_DLL_LOCK_DIFF_DEFINE);
+}
+
+Cmd_Macro_Config(UWORD32 invert_clk_out,UWORD32 ctrl_slave_ratio_cs0,UWORD32 cmd_dll_lock_diff)
+{
+    WR_MEM_32(CMD0_REG_PHY0_INVERT_CLKOUT_0, invert_clk_out);
+    WR_MEM_32(CMD1_REG_PHY0_INVERT_CLKOUT_0, invert_clk_out);
+    WR_MEM_32(CMD2_REG_PHY0_INVERT_CLKOUT_0, invert_clk_out);
+
+    WR_MEM_32(CMD0_REG_PHY0_CTRL_SLAVE_RATIO_0,(ctrl_slave_ratio_cs0 << 10 | ctrl_slave_ratio_cs0));
+    WR_MEM_32(CMD1_REG_PHY0_CTRL_SLAVE_RATIO_0,(ctrl_slave_ratio_cs0 << 10 | ctrl_slave_ratio_cs0));
+    WR_MEM_32(CMD2_REG_PHY0_CTRL_SLAVE_RATIO_0,(ctrl_slave_ratio_cs0 << 10 | ctrl_slave_ratio_cs0));
+
+    WR_MEM_32(CMD0_REG_PHY0_DLL_LOCK_DIFF_0,cmd_dll_lock_diff);
+    WR_MEM_32(CMD1_REG_PHY0_DLL_LOCK_DIFF_0,cmd_dll_lock_diff);
+    WR_MEM_32(CMD2_REG_PHY0_DLL_LOCK_DIFF_0,cmd_dll_lock_diff);
+}
+
+Emif0_MMR_Config(UWORD32 read_latency,UWORD32 tim1,UWORD32 tim2,UWORD32 tim3,UWORD32 ref_ctrl,UWORD32 sdram_config)
+{
+    /*Program EMIF0 CFG Registers*/
+    WR_MEM_32(EMIF4_0_DDR_PHY_CTRL_1, read_latency);//RL =11
+    WR_MEM_32(EMIF4_0_DDR_PHY_CTRL_1_SHADOW, read_latency);//RL =11
+
+    WR_MEM_32(EMIF4_0_SDRAM_TIM_1, tim1);
+    WR_MEM_32(EMIF4_0_SDRAM_TIM_1_SHADOW, tim1);
+
+    WR_MEM_32(EMIF4_0_SDRAM_TIM_2, tim2);
+    WR_MEM_32(EMIF4_0_SDRAM_TIM_2_SHADOW, tim2);
+
+    WR_MEM_32(EMIF4_0_SDRAM_TIM_3, tim3);
+    WR_MEM_32(EMIF4_0_SDRAM_TIM_3_SHADOW, tim3);
+
+    WR_MEM_32(EMIF4_0_SDRAM_CONFIG, sdram_config);// CL = 11, row size= 13 ODT 75 Ohms  0x62833AB2
+
+    WR_MEM_32(EMIF4_0_SDRAM_REF_CTRL, ref_ctrl);
+    WR_MEM_32(EMIF4_0_SDRAM_REF_CTRL_SHADOW, ref_ctrl);
+}
+
+Emif1_MMR_Config(UWORD32 read_latency,UWORD32 tim1,UWORD32 tim2,UWORD32 tim3,UWORD32 ref_ctrl,UWORD32 sdram_config)
+{
+    /*Program EMIF0 CFG Registers*/
+    WR_MEM_32(EMIF4_1_DDR_PHY_CTRL_1, read_latency);//RL =11
+    WR_MEM_32(EMIF4_1_DDR_PHY_CTRL_1_SHADOW, read_latency);//RL =11
+
+    WR_MEM_32(EMIF4_1_SDRAM_TIM_1, tim1);
+    WR_MEM_32(EMIF4_1_SDRAM_TIM_1_SHADOW, tim1);
+
+    WR_MEM_32(EMIF4_1_SDRAM_TIM_2, tim2);
+    WR_MEM_32(EMIF4_1_SDRAM_TIM_2_SHADOW, tim2);
+
+    WR_MEM_32(EMIF4_1_SDRAM_TIM_3, tim3);
+    WR_MEM_32(EMIF4_1_SDRAM_TIM_3_SHADOW, tim3);
+
+    WR_MEM_32(EMIF4_1_SDRAM_CONFIG, sdram_config);// CL = 11, row size= 13 ODT 75 Ohms  0x62833AB2
+
+    WR_MEM_32(EMIF4_1_SDRAM_REF_CTRL, ref_ctrl);
+    WR_MEM_32(EMIF4_1_SDRAM_REF_CTRL_SHADOW, ref_ctrl);
+}
+
+Emif_PRCM_Clk_Enable()
+{
+    WR_MEM_32(CM_DEFAULT_FW_CLKCTRL, 0x2);        /*Enable the EMIF FireWall Clocks*/
+    WR_MEM_32(CM_DEFAULT_L3_FAST_CLKSTCTRL, 0x2); /*Enable the Power Domain Transition of L3 Fast Domain Peripheral*/
+    WR_MEM_32(CM_DEFAULT_EMIF_0_CLKCTRL,    0x2); /*Enable EMIF0 Clock*/
+    WR_MEM_32(CM_DEFAULT_EMIF_1_CLKCTRL,    0x2); /*Enable EMIF1 Clock*/
+    WR_MEM_32(CM_DEFAULT_DMM_CLKCTRL,       0x2); /*Enable EMIF1 Clock*/
+
+    while((RD_MEM_32(CM_DEFAULT_L3_FAST_CLKSTCTRL) & 0x300)!=0x300);    /*Poll for L3_FAST_GCLK  & DDR_GCLK  are active*/
+    while(RD_MEM_32(CM_DEFAULT_EMIF_0_CLKCTRL)!=0x2);       /*Poll for Module is functional*/
+    while(RD_MEM_32(CM_DEFAULT_EMIF_1_CLKCTRL)!=0x2);       /*Poll for Module is functional*/
+    while(RD_MEM_32(CM_DEFAULT_DMM_CLKCTRL)!=0x2);          /*Poll for Module is functional*/
+}
+
+Vtp_Enable()
+{
+    // Write 1 to ENABLE bit
+    WR_MEM_32(VTP0_CTRL_REG, RD_MEM_32(VTP0_CTRL_REG) | 0x00000040 );
+    WR_MEM_32(VTP1_CTRL_REG, RD_MEM_32(VTP1_CTRL_REG) | 0x00000040 );
+
+    // Write 0 to CLRZ bit
+    WR_MEM_32(VTP0_CTRL_REG, RD_MEM_32(VTP0_CTRL_REG) & 0xfffffffe );
+    WR_MEM_32(VTP1_CTRL_REG, RD_MEM_32(VTP1_CTRL_REG) & 0xfffffffe );
+
+    // Write 1 to CLRZ bit
+    WR_MEM_32(VTP0_CTRL_REG, RD_MEM_32(VTP0_CTRL_REG) | 0x00000001 );
+    WR_MEM_32(VTP1_CTRL_REG, RD_MEM_32(VTP1_CTRL_REG) | 0x00000001 );
+
+    // Read VTP control registers & check READY bits
+    while( (RD_MEM_32(VTP0_CTRL_REG) & 0x00000020) != 0x20);
+    while( (RD_MEM_32(VTP1_CTRL_REG) & 0x00000020) != 0x20);
+}
+
+hotmenu VCP2_Enable()
+{
+    GEL_TextOut("\tPRCM for VCP2 is in Progress, Please wait.....  \n","Output",1,1,1);
+
+    WR_MEM_32(CM_ALWON_VCP2_CLKCTRL, 0x2); /*Enable VCP2 Clk domain */
+    /*while(RD_MEM_32(CM_ALWON_VCP2_CLKCTRL) != 0x2);*/
+
+    GEL_TextOut("Printing the CM_ALWON_VCP2_CLKCTRL : %x \n",,,,,*(unsigned int *)CM_ALWON_VCP2_CLKCTRL);
+    GEL_TextOut("\tPRCM for VCP2 has been done successfully.\n","Output",1,1,1);
+}
+
+hotmenu VCP2Clk_Enable()
+{
+    GEL_TextOut("\tPRCM for VCP2 CLK is in Progress, Please wait.....  \n","Output",1,1,1);
+
+    WR_MEM_32(CM_ALWON_VCP2_CLKCTRL_2, 0x2); /*Enable VCP2 Clk domain */
+    /*while(RD_MEM_32(CM_ALWON_VCP2_CLKCTRL_2) != 0x2);*/
+
+    /*GEL_TextOut("Printing the CM_ALWON_VCP2_CLKCTRL_2 : %x \n",,,,,*(unsigned int *)CM_ALWON_VCP2_CLKCTRL_2);*/
+
+    GEL_TextOut("\tPRCM for VCP2 CLK has been done successfully.\n","Output",1,1,1);
+}
+
+hotmenu Pin_Config()
+{
+    GEL_TextOut("    Vayu EVM pin configuration is in Progress.....  \n");
+
+    WR_MEM_32(PINCNTL158,   RD_MEM_32(PINCNTL158) | 0x20020);
+    WR_MEM_32(PINCNTL159,   RD_MEM_32(PINCNTL159) | 0x20020);
+    WR_MEM_32(PINCNTL211,   RD_MEM_32(PINCNTL211) | 0x0020);
+    WR_MEM_32(PINCNTL212,   RD_MEM_32(PINCNTL212) | 0x0020);
+    WR_MEM_32(PINCNTL205,   RD_MEM_32(PINCNTL205) | 0x0020);
+    WR_MEM_32(PINCNTL206,   RD_MEM_32(PINCNTL206) | 0x0020);
+    WR_MEM_32(PINCNTL76,   RD_MEM_32(PINCNTL76) | 0x0040);
+    WR_MEM_32(PINCNTL77,   RD_MEM_32(PINCNTL77) | 0x0040);
+    WR_MEM_32(PINCNTL157,   RD_MEM_32(PINCNTL157) | 0x0080);
+    WR_MEM_32(PINCNTL162,   RD_MEM_32(PINCNTL162) | 0x0080);
+    WR_MEM_32(PINCNTL163,   RD_MEM_32(PINCNTL163) | 0x0080);
+
+    //GPMC-CPU board
+    WR_MEM_32(PINCNTL133,    RD_MEM_32(PINCNTL133) | 0x00000001);
+    WR_MEM_32(PINCNTL128,    RD_MEM_32(PINCNTL128) | 0x00000001);
+    WR_MEM_32(PINCNTL131,    RD_MEM_32(PINCNTL131) | 0x00000001);
+
+    //GPMC-JAMR2
+    WR_MEM_32(PINCNTL122,    RD_MEM_32(PINCNTL122) | 0x00002001);
+    WR_MEM_32(PINCNTL129,    RD_MEM_32(PINCNTL129) | 0x00002001);
+    WR_MEM_32(PINCNTL130,    RD_MEM_32(PINCNTL130) | 0x00002001);
+    WR_MEM_32(PINCNTL89 ,    RD_MEM_32(PINCNTL89 ) | 0x00000001);
+    WR_MEM_32(PINCNTL90 ,    RD_MEM_32(PINCNTL90 ) | 0x00000001);
+    WR_MEM_32(PINCNTL91 ,    RD_MEM_32(PINCNTL91 ) | 0x00000001);
+    WR_MEM_32(PINCNTL92 ,    RD_MEM_32(PINCNTL92 ) | 0x00000001);
+    WR_MEM_32(PINCNTL93 ,    RD_MEM_32(PINCNTL93 ) | 0x00000001);
+    WR_MEM_32(PINCNTL94 ,    RD_MEM_32(PINCNTL94 ) | 0x00000001);
+    WR_MEM_32(PINCNTL95 ,    RD_MEM_32(PINCNTL95 ) | 0x00000001);
+    WR_MEM_32(PINCNTL96 ,    RD_MEM_32(PINCNTL96 ) | 0x00000001);
+    WR_MEM_32(PINCNTL97 ,    RD_MEM_32(PINCNTL97 ) | 0x00000001);
+    WR_MEM_32(PINCNTL98 ,    RD_MEM_32(PINCNTL98 ) | 0x00000001);
+    WR_MEM_32(PINCNTL99 ,    RD_MEM_32(PINCNTL99 ) | 0x00000001);
+    WR_MEM_32(PINCNTL100,    RD_MEM_32(PINCNTL100) | 0x00000001);
+    WR_MEM_32(PINCNTL101,    RD_MEM_32(PINCNTL101) | 0x00000001);
+    WR_MEM_32(PINCNTL102,    RD_MEM_32(PINCNTL102) | 0x00000001);
+    WR_MEM_32(PINCNTL103,    RD_MEM_32(PINCNTL103) | 0x00000001);
+    WR_MEM_32(PINCNTL104,    RD_MEM_32(PINCNTL104) | 0x00000001);
+    WR_MEM_32(PINCNTL117,    RD_MEM_32(PINCNTL117) | 0x00000002);
+    WR_MEM_32(PINCNTL118,    RD_MEM_32(PINCNTL118) | 0x00000002);
+    WR_MEM_32(PINCNTL119,    RD_MEM_32(PINCNTL119) | 0x00000002);
+    WR_MEM_32(PINCNTL120,    RD_MEM_32(PINCNTL120) | 0x00000002);
+    WR_MEM_32(PINCNTL168,    RD_MEM_32(PINCNTL168) | 0x00000010);
+    WR_MEM_32(PINCNTL169,    RD_MEM_32(PINCNTL169) | 0x00000010);
+    WR_MEM_32(PINCNTL170,    RD_MEM_32(PINCNTL170) | 0x00000010);
+    WR_MEM_32(PINCNTL171,    RD_MEM_32(PINCNTL171) | 0x00000010);
+    WR_MEM_32(PINCNTL172,    RD_MEM_32(PINCNTL172) | 0x00000010);
+    WR_MEM_32(PINCNTL173,    RD_MEM_32(PINCNTL173) | 0x00000010);
+    WR_MEM_32(PINCNTL174,    RD_MEM_32(PINCNTL174) | 0x00000010);
+    WR_MEM_32(PINCNTL175,    RD_MEM_32(PINCNTL175) | 0x00000010);
+    WR_MEM_32(PINCNTL228,    RD_MEM_32(PINCNTL228) | 0x00000002);
+    WR_MEM_32(PINCNTL229,    RD_MEM_32(PINCNTL229) | 0x00000002);
+    WR_MEM_32(PINCNTL230,    RD_MEM_32(PINCNTL230) | 0x00000002);
+    WR_MEM_32(PINCNTL105,    RD_MEM_32(PINCNTL105) | 0x00000001);
+    WR_MEM_32(PINCNTL106,    RD_MEM_32(PINCNTL106) | 0x00000001);
+    WR_MEM_32(PINCNTL107,    RD_MEM_32(PINCNTL107) | 0x00000001);
+    WR_MEM_32(PINCNTL108,    RD_MEM_32(PINCNTL108) | 0x00000001);
+    WR_MEM_32(PINCNTL109,    RD_MEM_32(PINCNTL109) | 0x00000001);
+    WR_MEM_32(PINCNTL110,    RD_MEM_32(PINCNTL110) | 0x00000001);
+    WR_MEM_32(PINCNTL111,    RD_MEM_32(PINCNTL111) | 0x00000001);
+    WR_MEM_32(PINCNTL112,    RD_MEM_32(PINCNTL112) | 0x00000001);
+    WR_MEM_32(PINCNTL113,    RD_MEM_32(PINCNTL113) | 0x00000002);
+    WR_MEM_32(PINCNTL114,    RD_MEM_32(PINCNTL114) | 0x00000002);
+
+    //others
+    WR_MEM_32(PINCNTL15,   RD_MEM_32(PINCNTL15) | 0x0040);
+    WR_MEM_32(PINCNTL31,   RD_MEM_32(PINCNTL31) | 0x001);
+    WR_MEM_32(PINCNTL32,   RD_MEM_32(PINCNTL32) | 0x001);
+    WR_MEM_32(PINCNTL35,   RD_MEM_32(PINCNTL35) | 0x001);
+    WR_MEM_32(PINCNTL36,   RD_MEM_32(PINCNTL36) | 0x001);
+    WR_MEM_32(PINCNTL37,   RD_MEM_32(PINCNTL37) | 0x001);
+    WR_MEM_32(PINCNTL38,   RD_MEM_32(PINCNTL38) | 0x001);
+    WR_MEM_32(PINCNTL263,   RD_MEM_32(PINCNTL263) | 0x001);
+    WR_MEM_32(PINCNTL264,   RD_MEM_32(PINCNTL264) | 0x001);
+    WR_MEM_32(PINCNTL159,   RD_MEM_32(PINCNTL159) | 0x080);
+    WR_MEM_32(PINCNTL160,   RD_MEM_32(PINCNTL160) | 0x080);
+    WR_MEM_32(PINCNTL161,   RD_MEM_32(PINCNTL161) | 0x080);
+    WR_MEM_32(PINCNTL53,   RD_MEM_32(PINCNTL53) | 0x080);
+    WR_MEM_32(PINCNTL137,   RD_MEM_32(PINCNTL137) | 0x001);
+    WR_MEM_32(PINCNTL140,   RD_MEM_32(PINCNTL140) | 0x001);
+    WR_MEM_32(PINCNTL141,   RD_MEM_32(PINCNTL141) | 0x001);
+    WR_MEM_32(PINCNTL142,   RD_MEM_32(PINCNTL142) | 0x001);
+    WR_MEM_32(PINCNTL143,   RD_MEM_32(PINCNTL143) | 0x001);
+    WR_MEM_32(PINCNTL144,   RD_MEM_32(PINCNTL144) | 0x001);
+    WR_MEM_32(PINCNTL145,   RD_MEM_32(PINCNTL145) | 0x001);
+    WR_MEM_32(PINCNTL146,   RD_MEM_32(PINCNTL146) | 0x001);
+    WR_MEM_32(PINCNTL147,   RD_MEM_32(PINCNTL147) | 0x001);
+    WR_MEM_32(PINCNTL148,   RD_MEM_32(PINCNTL148) | 0x001);
+    WR_MEM_32(PINCNTL149,   RD_MEM_32(PINCNTL149) | 0x001);
+    WR_MEM_32(PINCNTL150,   RD_MEM_32(PINCNTL150) | 0x001);
+    WR_MEM_32(PINCNTL151,   RD_MEM_32(PINCNTL151) | 0x001);
+    WR_MEM_32(PINCNTL152,   RD_MEM_32(PINCNTL152) | 0x001);
+    WR_MEM_32(PINCNTL153,   RD_MEM_32(PINCNTL153) | 0x001);
+    WR_MEM_32(PINCNTL154,   RD_MEM_32(PINCNTL154) | 0x001);
+    WR_MEM_32(PINCNTL155,   RD_MEM_32(PINCNTL155) | 0x001);
+    WR_MEM_32(PINCNTL134,   RD_MEM_32(PINCNTL134) | 0x001);
+    WR_MEM_32(PINCNTL51,   RD_MEM_32(PINCNTL51) | 0x080);
+    WR_MEM_32(PINCNTL54,   RD_MEM_32(PINCNTL54) | 0x080);
+    WR_MEM_32(PINCNTL52,   RD_MEM_32(PINCNTL52) | 0x080);
+    WR_MEM_32(PINCNTL55,   RD_MEM_32(PINCNTL55) | 0x001);
+    WR_MEM_32(PINCNTL56,   RD_MEM_32(PINCNTL56) | 0x001);
+    WR_MEM_32(PINCNTL57,   RD_MEM_32(PINCNTL57) | 0x001);
+    WR_MEM_32(PINCNTL58,   RD_MEM_32(PINCNTL58) | 0x001);
+    //WR_MEM_32(PINCNTL14,   RD_MEM_32(PINCNTL14) | 0x020);
+    WR_MEM_32(PINCNTL116,   RD_MEM_32(PINCNTL116) | 0x080);
+    WR_MEM_32(PINCNTL214,   RD_MEM_32(PINCNTL214) | 0x080);
+    WR_MEM_32(PINCNTL8,   RD_MEM_32(PINCNTL8) | 0x001);
+    WR_MEM_32(PINCNTL9,   RD_MEM_32(PINCNTL9) | 0x001);
+    WR_MEM_32(PINCNTL10,   RD_MEM_32(PINCNTL10) | 0x001);
+    WR_MEM_32(PINCNTL11,   RD_MEM_32(PINCNTL11) | 0x001);
+    WR_MEM_32(PINCNTL12,   RD_MEM_32(PINCNTL12) | 0x001);
+    WR_MEM_32(PINCNTL13,   RD_MEM_32(PINCNTL13) | 0x001);
+
+    WR_MEM_32(PINCNTL208,   RD_MEM_32(PINCNTL208) | 0x080);
+    WR_MEM_32(PINCNTL209,   RD_MEM_32(PINCNTL209) | 0x080);
+
+    //Start
+//    WR_MEM_32(PINCNTL176,   RD_MEM_32(PINCNTL176) | 0x001);
+
+    WR_MEM_32(PINCNTL177,   RD_MEM_32(PINCNTL177) | 0x001);
+
+    WR_MEM_32(PINCNTL178,   RD_MEM_32(PINCNTL178) | 0x001);
+
+    WR_MEM_32(PINCNTL180,   RD_MEM_32(PINCNTL180) | 0x001);
+    WR_MEM_32(PINCNTL181,   RD_MEM_32(PINCNTL181) | 0x001);
+    WR_MEM_32(PINCNTL182,   RD_MEM_32(PINCNTL182) | 0x001);
+    // End
+
+    WR_MEM_32(PINCNTL183,   RD_MEM_32(PINCNTL183) | 0x001);
+    WR_MEM_32(PINCNTL184,   RD_MEM_32(PINCNTL184) | 0x001);
+    WR_MEM_32(PINCNTL185,   RD_MEM_32(PINCNTL185) | 0x001);
+    WR_MEM_32(PINCNTL186,   RD_MEM_32(PINCNTL186) | 0x001);
+    WR_MEM_32(PINCNTL187,   RD_MEM_32(PINCNTL187) | 0x001);
+    WR_MEM_32(PINCNTL188,   RD_MEM_32(PINCNTL188) | 0x001);
+    WR_MEM_32(PINCNTL189,   RD_MEM_32(PINCNTL189) | 0x001);
+    WR_MEM_32(PINCNTL190,   RD_MEM_32(PINCNTL190) | 0x001);
+    WR_MEM_32(PINCNTL191,   RD_MEM_32(PINCNTL191) | 0x001);
+    WR_MEM_32(PINCNTL192,   RD_MEM_32(PINCNTL192) | 0x001);
+    WR_MEM_32(PINCNTL193,   RD_MEM_32(PINCNTL193) | 0x001);
+    WR_MEM_32(PINCNTL194,   RD_MEM_32(PINCNTL194) | 0x001);
+    WR_MEM_32(PINCNTL195,   RD_MEM_32(PINCNTL195) | 0x001);
+    WR_MEM_32(PINCNTL127,    RD_MEM_32(PINCNTL127) | 0x00000010); //clkout1
+
+    //LCD Module
+    WR_MEM_32(PINCNTL196,   RD_MEM_32(PINCNTL196) | 0x00000001);
+    WR_MEM_32(PINCNTL197,   RD_MEM_32(PINCNTL197) | 0x00000001);
+    WR_MEM_32(PINCNTL198,   RD_MEM_32(PINCNTL198) | 0x00000001);
+    WR_MEM_32(PINCNTL199,   RD_MEM_32(PINCNTL100) | 0x00000001);
+    WR_MEM_32(PINCNTL200,   RD_MEM_32(PINCNTL200) | 0x00000001);
+    WR_MEM_32(PINCNTL201,   RD_MEM_32(PINCNTL201) | 0x00000001);
+    WR_MEM_32(PINCNTL202,   RD_MEM_32(PINCNTL202) | 0x00000001);
+    WR_MEM_32(PINCNTL203,   RD_MEM_32(PINCNTL203) | 0x00000001);
+    WR_MEM_32(PINCNTL179,   RD_MEM_32(PINCNTL179) | 0x00000001);
+
+    //GPIO3
+    WR_MEM_32(PINCNTL210,   RD_MEM_32(PINCNTL210) | 0x00000080);
+
+    //McASP3
+    WR_MEM_32(PINCNTL45,   RD_MEM_32(PINCNTL45) | 0x00000008);
+    WR_MEM_32(PINCNTL46,   RD_MEM_32(PINCNTL46) | 0x00000008);
+    WR_MEM_32(PINCNTL47,   RD_MEM_32(PINCNTL47) | 0x00000008);
+    WR_MEM_32(PINCNTL48,   RD_MEM_32(PINCNTL48) | 0x00000008);
+
+    //SPI1
+    WR_MEM_32(PINCNTL85,   RD_MEM_32(PINCNTL85) | 0x00000001);
+    WR_MEM_32(PINCNTL86,   RD_MEM_32(PINCNTL86) | 0x00000001);
+    WR_MEM_32(PINCNTL88,   RD_MEM_32(PINCNTL88) | 0x00000001);
+    WR_MEM_32(PINCNTL87,   RD_MEM_32(PINCNTL87) | 0x00000001);
+
+    //CAN
+    WR_MEM_32(PINCNTL69,   RD_MEM_32(PINCNTL69) | 0x00000001);
+    WR_MEM_32(PINCNTL68,   RD_MEM_32(PINCNTL68) | 0x00000001);
+
+    //eCap
+    WR_MEM_32(PINCNTL16,   RD_MEM_32(PINCNTL16) | 0x00000040);
+
+    //DSP GPIO4, GPIO5
+    WR_MEM_32(PINCNTL115,   RD_MEM_32(PINCNTL115) | 0x00000080);
+    WR_MEM_32(PINCNTL44,    RD_MEM_32(PINCNTL44)  | 0x00000080);
+
+    //UART
+    WR_MEM_32(PINCNTL71,   RD_MEM_32(PINCNTL71) | 0x00000001);
+    WR_MEM_32(PINCNTL70,   RD_MEM_32(PINCNTL70) | 0x00000001);
+    WR_MEM_32(PINCNTL72,   RD_MEM_32(PINCNTL72) | 0x00000001);
+    WR_MEM_32(PINCNTL73,   RD_MEM_32(PINCNTL73) | 0x00000001);
+
+    //CS
+    WR_MEM_32(PINCNTL207,   RD_MEM_32(PINCNTL207) | 0x00000080);
+
+    //Test GPIO18
+    WR_MEM_32(PINCNTL43,   RD_MEM_32(PINCNTL43) | 0x00000080);
+
+    //MMC
+    WR_MEM_32(PINCNTL121,   RD_MEM_32(PINCNTL121) | 0x00000001);
+    WR_MEM_32(PINCNTL126,   RD_MEM_32(PINCNTL126) | 0x00000002);
+    //WR_MEM_32(PINCNTL120,   RD_MEM_32(PINCNTL120) | 0x00000001);
+    //WR_MEM_32(PINCNTL119,   RD_MEM_32(PINCNTL119) | 0x00000001);
+    //WR_MEM_32(PINCNTL118,   RD_MEM_32(PINCNTL118) | 0x00000001);
+    //WR_MEM_32(PINCNTL117,   RD_MEM_32(PINCNTL117) | 0x00000001);
+
+    //I2C2
+    WR_MEM_32(PINCNTL136,   RD_MEM_32(PINCNTL136) | 0x000E0040);
+    WR_MEM_32(PINCNTL135,   RD_MEM_32(PINCNTL135) | 0x000E0040);
+    GEL_TextOut("    Configuring I2C2\n");
+    WR_MEM_32(PINCNTL136,   (RD_MEM_32(PINCNTL136) & 0xFFFFFF00) | 0x00000080);
+    WR_MEM_32(PINCNTL156,   (RD_MEM_32(PINCNTL156) & 0xFFFFFF00) | 0x00000020);  // I2C2_SCL Vayu
+
+    //PATA
+    WR_MEM_32(PINCNTL215,   RD_MEM_32(PINCNTL215) | 0x00000008);
+    WR_MEM_32(PINCNTL216,   RD_MEM_32(PINCNTL216) | 0x00000008);
+    WR_MEM_32(PINCNTL217,   RD_MEM_32(PINCNTL217) | 0x00000008);
+    WR_MEM_32(PINCNTL218,   RD_MEM_32(PINCNTL218) | 0x00000008);
+    WR_MEM_32(PINCNTL219,   RD_MEM_32(PINCNTL219) | 0x00000008);
+    WR_MEM_32(PINCNTL220,   RD_MEM_32(PINCNTL220) | 0x00000008);
+    WR_MEM_32(PINCNTL221,   RD_MEM_32(PINCNTL221) | 0x00000008);
+    WR_MEM_32(PINCNTL222,   RD_MEM_32(PINCNTL222) | 0x00000008);
+    WR_MEM_32(PINCNTL223,   RD_MEM_32(PINCNTL223) | 0x00000008);
+    WR_MEM_32(PINCNTL224,   RD_MEM_32(PINCNTL224) | 0x00000008);
+    WR_MEM_32(PINCNTL225,   RD_MEM_32(PINCNTL225) | 0x00000008);
+    WR_MEM_32(PINCNTL226,   RD_MEM_32(PINCNTL226) | 0x00000008);
+    WR_MEM_32(PINCNTL227,   RD_MEM_32(PINCNTL227) | 0x00000008);
+    //WR_MEM_32(PINCNTL228,   RD_MEM_32(PINCNTL228) | 0x00000008);
+    //WR_MEM_32(PINCNTL229,   RD_MEM_32(PINCNTL229) | 0x00000008);
+    //WR_MEM_32(PINCNTL230,   RD_MEM_32(PINCNTL230) | 0x00000008);
+    //WR_MEM_32(PINCNTL175,   RD_MEM_32(PINCNTL175) | 0x00000008);
+    //WR_MEM_32(PINCNTL204,   RD_MEM_32(PINCNTL204) | 0x00000008);
+    //WR_MEM_32(PINCNTL173,   RD_MEM_32(PINCNTL173) | 0x00000008);
+    //WR_MEM_32(PINCNTL174,   RD_MEM_32(PINCNTL174) | 0x00000008);
+    //WR_MEM_32(PINCNTL172,   RD_MEM_32(PINCNTL172) | 0x00000008);
+    //WR_MEM_32(PINCNTL168,   RD_MEM_32(PINCNTL168) | 0x00000008);
+    WR_MEM_32(PINCNTL167,   RD_MEM_32(PINCNTL167) | 0x00000008);
+    WR_MEM_32(PINCNTL164,   RD_MEM_32(PINCNTL164) | 0x00000008);
+    WR_MEM_32(PINCNTL166,   RD_MEM_32(PINCNTL166) | 0x00000008);
+    WR_MEM_32(PINCNTL165,   RD_MEM_32(PINCNTL165) | 0x00000008);
+    //WR_MEM_32(PINCNTL171,   RD_MEM_32(PINCNTL171) | 0x00000008);
+    //WR_MEM_32(PINCNTL170,   RD_MEM_32(PINCNTL170) | 0x00000008);
+    //WR_MEM_32(PINCNTL169,   RD_MEM_32(PINCNTL169) | 0x00000008);
+
+
+    //MLB (disable for now)
+//    WR_MEM_32(PINCNTL60,   RD_MEM_32(PINCNTL60) | 0x00000001);
+//    WR_MEM_32(PINCNTL59,   RD_MEM_32(PINCNTL59) | 0x00000001);
+//    WR_MEM_32(PINCNTL61,   RD_MEM_32(PINCNTL61) | 0x00000001);
+//    WR_MEM_32(PINCNTL66,   RD_MEM_32(PINCNTL66) | 0x00000001);
+//    WR_MEM_32(PINCNTL67,   RD_MEM_32(PINCNTL67) | 0x00000001);
+//    WR_MEM_32(PINCNTL62,   RD_MEM_32(PINCNTL62) | 0x00000001);
+//    WR_MEM_32(PINCNTL63,   RD_MEM_32(PINCNTL63) | 0x00000001);
+//    WR_MEM_32(PINCNTL64,   RD_MEM_32(PINCNTL64) | 0x00000001);
+//    WR_MEM_32(PINCNTL65,   RD_MEM_32(PINCNTL65) | 0x00000001);
+
+    //J5 CPU board
+    WR_MEM_32(PINCNTL49,   RD_MEM_32(PINCNTL49) | 0x00000080); //gp0[20]
+    WR_MEM_32(PINCNTL74,   RD_MEM_32(PINCNTL74) | 0x00000080); //gp1[2]
+    WR_MEM_32(PINCNTL75,   RD_MEM_32(PINCNTL75) | 0x00000080); //gp1[3]
+    WR_MEM_32(PINCNTL126,   RD_MEM_32(PINCNTL126) | 0x00000080); //gp1[8]
+    WR_MEM_32(PINCNTL204,   RD_MEM_32(PINCNTL204) | 0x00000080); //gp2[28]
+    WR_MEM_32(PINCNTL123,    RD_MEM_32(PINCNTL123) | 0x00000080); //gp1[24]
+    WR_MEM_32(PINCNTL124,    RD_MEM_32(PINCNTL124) | 0x00000080); //gp1[25]
+    WR_MEM_32(PINCNTL125,    RD_MEM_32(PINCNTL125) | 0x00000080); //gp1[26]
+    WR_MEM_32(PINCNTL232,    RD_MEM_32(PINCNTL232) | 0x00000080); //gp1[10]
+    WR_MEM_32(PINCNTL132,    RD_MEM_32(PINCNTL132) | 0x00000080); //gp1[30]
+//    WR_MEM_32(PINCNTL136,    RD_MEM_32(PINCNTL136) | 0x00000080); //gp2[1]
+    WR_MEM_32(PINCNTL139,    RD_MEM_32(PINCNTL139) | 0x00000080); //gp2[4]
+
+    WR_MEM_32(PINCNTL259,    RD_MEM_32(PINCNTL259) | 0x00000001); //clkin32
+
+    WR_MEM_32(PINCNTL270,    RD_MEM_32(PINCNTL270) | 0x00000001); //usb0_drvvbus
+    WR_MEM_32(PINCNTL14,   RD_MEM_32(PINCNTL14) | 0x00000080); //usb1_drvvbus
+
+
+    WR_MEM_32(PINCNTL81,   0x00000001); //spi0
+    WR_MEM_32(PINCNTL82,   0x00000001); //spi0
+    WR_MEM_32(PINCNTL83,   0x00000001); //spi0
+    WR_MEM_32(PINCNTL84,   0x00000001); //spi0
+
+    WR_MEM_32(PINCNTL1,   RD_MEM_32(PINCNTL1) | 0x00000001); //sd1
+    WR_MEM_32(PINCNTL2,   RD_MEM_32(PINCNTL2) | 0x00000001); //sd1
+    WR_MEM_32(PINCNTL3,   RD_MEM_32(PINCNTL3) | 0x00000001); //sd1
+    WR_MEM_32(PINCNTL4,   RD_MEM_32(PINCNTL4) | 0x00000001); //sd1
+    WR_MEM_32(PINCNTL5,   RD_MEM_32(PINCNTL5) | 0x00000001); //sd1
+    WR_MEM_32(PINCNTL6,   RD_MEM_32(PINCNTL6) | 0x00000001); //sd1
+
+    WR_MEM_32(PINCNTL78,   RD_MEM_32(PINCNTL78) | 0x00000001); //i2c1
+    WR_MEM_32(PINCNTL79,   RD_MEM_32(PINCNTL79) | 0x00000001); //i2c1
+
+    WR_MEM_32(PINCNTL17,    RD_MEM_32(PINCNTL17) | 0x00000001); //mcasp0
+    WR_MEM_32(PINCNTL18,    RD_MEM_32(PINCNTL18) | 0x00000001); //mcasp0
+    WR_MEM_32(PINCNTL21,    RD_MEM_32(PINCNTL21) | 0x00000001); //mcasp0
+    WR_MEM_32(PINCNTL22,    RD_MEM_32(PINCNTL22) | 0x00000001); //mcasp0
+
+    WR_MEM_32(PINCNTL39,    RD_MEM_32(PINCNTL39) | 0x00000001); //mcasp2
+    WR_MEM_32(PINCNTL40,    RD_MEM_32(PINCNTL40) | 0x00000001); //mcasp2
+    WR_MEM_32(PINCNTL41,    RD_MEM_32(PINCNTL41) | 0x00000001); //mcasp2
+    WR_MEM_32(PINCNTL42,    RD_MEM_32(PINCNTL42) | 0x00000001); //mcasp2
+    WR_MEM_32(PINCNTL16,    RD_MEM_32(PINCNTL16) | 0x00000004); //mcasp2_ahclkx
+
+    WR_MEM_32(PINCNTL27,    RD_MEM_32(PINCNTL27) | 0x00000002); //mcbsp
+    WR_MEM_32(PINCNTL28,    RD_MEM_32(PINCNTL28) | 0x00000002); //mcbsp
+    WR_MEM_32(PINCNTL29,    RD_MEM_32(PINCNTL29) | 0x00000002); //mcbsp
+    WR_MEM_32(PINCNTL30,    RD_MEM_32(PINCNTL30) | 0x00000002); //mcbsp
+
+    WR_MEM_32(PINCNTL233,   RD_MEM_32(PINCNTL233) | 0x00000001); //MDIO
+    WR_MEM_32(PINCNTL234,   RD_MEM_32(PINCNTL234) | 0x00000001); //MDIO
+    WR_MEM_32(PINCNTL235,   RD_MEM_32(PINCNTL235) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL236,   RD_MEM_32(PINCNTL236) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL237,   RD_MEM_32(PINCNTL237) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL238,   RD_MEM_32(PINCNTL238) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL239,   RD_MEM_32(PINCNTL239) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL240,   RD_MEM_32(PINCNTL240) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL241,   RD_MEM_32(PINCNTL241) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL242,   RD_MEM_32(PINCNTL242) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL243,   RD_MEM_32(PINCNTL243) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL244,   RD_MEM_32(PINCNTL244) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL245,   RD_MEM_32(PINCNTL245) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL246,   RD_MEM_32(PINCNTL246) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL247,   RD_MEM_32(PINCNTL247) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL248,   RD_MEM_32(PINCNTL248) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL249,   RD_MEM_32(PINCNTL249) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL250,   RD_MEM_32(PINCNTL250) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL251,   RD_MEM_32(PINCNTL251) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL252,   RD_MEM_32(PINCNTL252) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL253,   RD_MEM_32(PINCNTL253) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL254,   RD_MEM_32(PINCNTL254) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL255,   RD_MEM_32(PINCNTL255) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL256,   RD_MEM_32(PINCNTL256) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL257,   RD_MEM_32(PINCNTL257) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL258,   RD_MEM_32(PINCNTL258) | 0x00000001); //EMAC
+
+    // Added HSYNC/VSYNC for VIP1 capture
+    WR_MEM_32(PINCNTL138, 0x00040001);  /* VIN0_A_HSYNC */
+    WR_MEM_32(PINCNTL139, 0x00040001);  /* VIN0_A_VSYNC */
+
+    GEL_TextOut("    J5 CPU JAMR pin Configuration complete\n");
+}
+
+hotmenu New_Pin_Config()
+{
+    GEL_TextOut("    Pin configuration is in Progress.....  \n","Output",1,1,1);
+
+    WR_MEM_32(PINCNTL158,   RD_MEM_32(PINCNTL158) | 0x20020);
+    WR_MEM_32(PINCNTL159,   RD_MEM_32(PINCNTL159) | 0x20020);
+    WR_MEM_32(PINCNTL211,   RD_MEM_32(PINCNTL211) | 0x0020);
+    WR_MEM_32(PINCNTL212,   RD_MEM_32(PINCNTL212) | 0x0020);
+    WR_MEM_32(PINCNTL205,   RD_MEM_32(PINCNTL205) | 0x0020);
+    WR_MEM_32(PINCNTL206,   RD_MEM_32(PINCNTL206) | 0x0020);
+    WR_MEM_32(PINCNTL76,   RD_MEM_32(PINCNTL76) | 0x0040);
+    WR_MEM_32(PINCNTL77,   RD_MEM_32(PINCNTL77) | 0x0040);
+    WR_MEM_32(PINCNTL157,   RD_MEM_32(PINCNTL157) | 0x0080);
+    WR_MEM_32(PINCNTL162,   RD_MEM_32(PINCNTL162) | 0x0080);
+    WR_MEM_32(PINCNTL163,   RD_MEM_32(PINCNTL163) | 0x0080);
+
+    //GPMC-CPU board
+    WR_MEM_32(PINCNTL133,    RD_MEM_32(PINCNTL133) | 0x00000001);
+    WR_MEM_32(PINCNTL128,    RD_MEM_32(PINCNTL128) | 0x00000001);
+    WR_MEM_32(PINCNTL131,    RD_MEM_32(PINCNTL131) | 0x00000001);
+
+    //GPMC-JAMR2
+    WR_MEM_32(PINCNTL122,    RD_MEM_32(PINCNTL122) | 0x00002001);
+    WR_MEM_32(PINCNTL129,    RD_MEM_32(PINCNTL129) | 0x00002001);
+    WR_MEM_32(PINCNTL130,    RD_MEM_32(PINCNTL130) | 0x00002001);
+    WR_MEM_32(PINCNTL89 ,    RD_MEM_32(PINCNTL89 ) | 0x00000001);
+    WR_MEM_32(PINCNTL90 ,    RD_MEM_32(PINCNTL90 ) | 0x00000001);
+    WR_MEM_32(PINCNTL91 ,    RD_MEM_32(PINCNTL91 ) | 0x00000001);
+    WR_MEM_32(PINCNTL92 ,    RD_MEM_32(PINCNTL92 ) | 0x00000001);
+    WR_MEM_32(PINCNTL93 ,    RD_MEM_32(PINCNTL93 ) | 0x00000001);
+    WR_MEM_32(PINCNTL94 ,    RD_MEM_32(PINCNTL94 ) | 0x00000001);
+    WR_MEM_32(PINCNTL95 ,    RD_MEM_32(PINCNTL95 ) | 0x00000001);
+    WR_MEM_32(PINCNTL96 ,    RD_MEM_32(PINCNTL96 ) | 0x00000001);
+    WR_MEM_32(PINCNTL97 ,    RD_MEM_32(PINCNTL97 ) | 0x00000001);
+    WR_MEM_32(PINCNTL98 ,    RD_MEM_32(PINCNTL98 ) | 0x00000001);
+    WR_MEM_32(PINCNTL99 ,    RD_MEM_32(PINCNTL99 ) | 0x00000001);
+    WR_MEM_32(PINCNTL100,    RD_MEM_32(PINCNTL100) | 0x00000001);
+    WR_MEM_32(PINCNTL101,    RD_MEM_32(PINCNTL101) | 0x00000001);
+    WR_MEM_32(PINCNTL102,    RD_MEM_32(PINCNTL102) | 0x00000001);
+    WR_MEM_32(PINCNTL103,    RD_MEM_32(PINCNTL103) | 0x00000001);
+    WR_MEM_32(PINCNTL104,    RD_MEM_32(PINCNTL104) | 0x00000001);
+    WR_MEM_32(PINCNTL117,    RD_MEM_32(PINCNTL117) | 0x00000002);
+    WR_MEM_32(PINCNTL118,    RD_MEM_32(PINCNTL118) | 0x00000002);
+    WR_MEM_32(PINCNTL119,    RD_MEM_32(PINCNTL119) | 0x00000002);
+    WR_MEM_32(PINCNTL120,    RD_MEM_32(PINCNTL120) | 0x00000002);
+    WR_MEM_32(PINCNTL168,    RD_MEM_32(PINCNTL168) | 0x00000010);
+    WR_MEM_32(PINCNTL169,    RD_MEM_32(PINCNTL169) | 0x00000010);
+    WR_MEM_32(PINCNTL170,    RD_MEM_32(PINCNTL170) | 0x00000010);
+    WR_MEM_32(PINCNTL171,    RD_MEM_32(PINCNTL171) | 0x00000010);
+    WR_MEM_32(PINCNTL172,    RD_MEM_32(PINCNTL172) | 0x00000010);
+    WR_MEM_32(PINCNTL173,    RD_MEM_32(PINCNTL173) | 0x00000010);
+    WR_MEM_32(PINCNTL174,    RD_MEM_32(PINCNTL174) | 0x00000010);
+    WR_MEM_32(PINCNTL175,    RD_MEM_32(PINCNTL175) | 0x00000010);
+    WR_MEM_32(PINCNTL228,    RD_MEM_32(PINCNTL228) | 0x00000002);
+    WR_MEM_32(PINCNTL229,    RD_MEM_32(PINCNTL229) | 0x00000002);
+    WR_MEM_32(PINCNTL230,    RD_MEM_32(PINCNTL230) | 0x00000002);
+    WR_MEM_32(PINCNTL105,    RD_MEM_32(PINCNTL105) | 0x00000001);
+    WR_MEM_32(PINCNTL106,    RD_MEM_32(PINCNTL106) | 0x00000001);
+    WR_MEM_32(PINCNTL107,    RD_MEM_32(PINCNTL107) | 0x00000001);
+    WR_MEM_32(PINCNTL108,    RD_MEM_32(PINCNTL108) | 0x00000001);
+    WR_MEM_32(PINCNTL109,    RD_MEM_32(PINCNTL109) | 0x00000001);
+    WR_MEM_32(PINCNTL110,    RD_MEM_32(PINCNTL110) | 0x00000001);
+    WR_MEM_32(PINCNTL111,    RD_MEM_32(PINCNTL111) | 0x00000001);
+    WR_MEM_32(PINCNTL112,    RD_MEM_32(PINCNTL112) | 0x00000001);
+    WR_MEM_32(PINCNTL113,    RD_MEM_32(PINCNTL113) | 0x00000002);
+    WR_MEM_32(PINCNTL114,    RD_MEM_32(PINCNTL114) | 0x00000002);
+
+    //others
+    WR_MEM_32(PINCNTL15,   RD_MEM_32(PINCNTL15) | 0x0040);
+    WR_MEM_32(PINCNTL31,   RD_MEM_32(PINCNTL31) | 0x001);
+    WR_MEM_32(PINCNTL32,   RD_MEM_32(PINCNTL32) | 0x001);
+    WR_MEM_32(PINCNTL35,   RD_MEM_32(PINCNTL35) | 0x001);
+    WR_MEM_32(PINCNTL36,   RD_MEM_32(PINCNTL36) | 0x001);
+    WR_MEM_32(PINCNTL37,   RD_MEM_32(PINCNTL37) | 0x001);
+    WR_MEM_32(PINCNTL38,   RD_MEM_32(PINCNTL38) | 0x001);
+    WR_MEM_32(PINCNTL263,   RD_MEM_32(PINCNTL263) | 0x001);
+    WR_MEM_32(PINCNTL264,   RD_MEM_32(PINCNTL264) | 0x001);
+    WR_MEM_32(PINCNTL159,   RD_MEM_32(PINCNTL159) | 0x080);
+    WR_MEM_32(PINCNTL160,   RD_MEM_32(PINCNTL160) | 0x080);
+    WR_MEM_32(PINCNTL161,   RD_MEM_32(PINCNTL161) | 0x080);
+    WR_MEM_32(PINCNTL53,   RD_MEM_32(PINCNTL53) | 0x080);
+    WR_MEM_32(PINCNTL137,   RD_MEM_32(PINCNTL137) | 0x001);
+    WR_MEM_32(PINCNTL140,   RD_MEM_32(PINCNTL140) | 0x001);
+    WR_MEM_32(PINCNTL141,   RD_MEM_32(PINCNTL141) | 0x001);
+    WR_MEM_32(PINCNTL142,   RD_MEM_32(PINCNTL142) | 0x001);
+    WR_MEM_32(PINCNTL143,   RD_MEM_32(PINCNTL143) | 0x001);
+    WR_MEM_32(PINCNTL144,   RD_MEM_32(PINCNTL144) | 0x001);
+    WR_MEM_32(PINCNTL145,   RD_MEM_32(PINCNTL145) | 0x001);
+    WR_MEM_32(PINCNTL146,   RD_MEM_32(PINCNTL146) | 0x001);
+    WR_MEM_32(PINCNTL147,   RD_MEM_32(PINCNTL147) | 0x001);
+    WR_MEM_32(PINCNTL148,   RD_MEM_32(PINCNTL148) | 0x001);
+    WR_MEM_32(PINCNTL149,   RD_MEM_32(PINCNTL149) | 0x001);
+    WR_MEM_32(PINCNTL150,   RD_MEM_32(PINCNTL150) | 0x001);
+    WR_MEM_32(PINCNTL151,   RD_MEM_32(PINCNTL151) | 0x001);
+    WR_MEM_32(PINCNTL152,   RD_MEM_32(PINCNTL152) | 0x001);
+    WR_MEM_32(PINCNTL153,   RD_MEM_32(PINCNTL153) | 0x001);
+    WR_MEM_32(PINCNTL154,   RD_MEM_32(PINCNTL154) | 0x001);
+    WR_MEM_32(PINCNTL155,   RD_MEM_32(PINCNTL155) | 0x001);
+    WR_MEM_32(PINCNTL134,   RD_MEM_32(PINCNTL134) | 0x001);
+    WR_MEM_32(PINCNTL51,   RD_MEM_32(PINCNTL51) | 0x080);
+    WR_MEM_32(PINCNTL54,   RD_MEM_32(PINCNTL54) | 0x080);
+    WR_MEM_32(PINCNTL52,   RD_MEM_32(PINCNTL52) | 0x080);
+    WR_MEM_32(PINCNTL55,   RD_MEM_32(PINCNTL55) | 0x001);
+    WR_MEM_32(PINCNTL56,   RD_MEM_32(PINCNTL56) | 0x001);
+    WR_MEM_32(PINCNTL57,   RD_MEM_32(PINCNTL57) | 0x001);
+    WR_MEM_32(PINCNTL58,   RD_MEM_32(PINCNTL58) | 0x001);
+    //WR_MEM_32(PINCNTL14,   RD_MEM_32(PINCNTL14) | 0x020);
+    WR_MEM_32(PINCNTL116,   RD_MEM_32(PINCNTL116) | 0x080);
+    WR_MEM_32(PINCNTL214,   RD_MEM_32(PINCNTL214) | 0x080);
+    WR_MEM_32(PINCNTL8,   RD_MEM_32(PINCNTL8) | 0x001);
+    WR_MEM_32(PINCNTL9,   RD_MEM_32(PINCNTL9) | 0x001);
+    WR_MEM_32(PINCNTL10,   RD_MEM_32(PINCNTL10) | 0x001);
+    WR_MEM_32(PINCNTL11,   RD_MEM_32(PINCNTL11) | 0x001);
+    WR_MEM_32(PINCNTL12,   RD_MEM_32(PINCNTL12) | 0x001);
+    WR_MEM_32(PINCNTL13,   RD_MEM_32(PINCNTL13) | 0x001);
+    WR_MEM_32(PINCNTL208,   RD_MEM_32(PINCNTL208) | 0x080);
+    WR_MEM_32(PINCNTL209,   RD_MEM_32(PINCNTL209) | 0x080);
+    WR_MEM_32(PINCNTL176,   RD_MEM_32(PINCNTL176) | 0x001);
+    WR_MEM_32(PINCNTL177,   RD_MEM_32(PINCNTL177) | 0x001);
+    WR_MEM_32(PINCNTL178,   RD_MEM_32(PINCNTL178) | 0x001);
+    WR_MEM_32(PINCNTL180,   RD_MEM_32(PINCNTL180) | 0x001);
+    WR_MEM_32(PINCNTL181,   RD_MEM_32(PINCNTL181) | 0x001);
+    WR_MEM_32(PINCNTL182,   RD_MEM_32(PINCNTL182) | 0x001);
+    WR_MEM_32(PINCNTL183,   RD_MEM_32(PINCNTL183) | 0x001);
+    WR_MEM_32(PINCNTL184,   RD_MEM_32(PINCNTL184) | 0x001);
+    WR_MEM_32(PINCNTL185,   RD_MEM_32(PINCNTL185) | 0x001);
+    WR_MEM_32(PINCNTL186,   RD_MEM_32(PINCNTL186) | 0x001);
+    WR_MEM_32(PINCNTL187,   RD_MEM_32(PINCNTL187) | 0x001);
+    WR_MEM_32(PINCNTL188,   RD_MEM_32(PINCNTL188) | 0x001);
+    WR_MEM_32(PINCNTL189,   RD_MEM_32(PINCNTL189) | 0x001);
+    WR_MEM_32(PINCNTL190,   RD_MEM_32(PINCNTL190) | 0x001);
+    WR_MEM_32(PINCNTL191,   RD_MEM_32(PINCNTL191) | 0x001);
+    WR_MEM_32(PINCNTL192,   RD_MEM_32(PINCNTL192) | 0x001);
+    WR_MEM_32(PINCNTL193,   RD_MEM_32(PINCNTL193) | 0x001);
+    WR_MEM_32(PINCNTL194,   RD_MEM_32(PINCNTL194) | 0x001);
+    WR_MEM_32(PINCNTL195,   RD_MEM_32(PINCNTL195) | 0x001);
+    WR_MEM_32(PINCNTL127,    RD_MEM_32(PINCNTL127) | 0x00000010); //clkout1
+
+//LCD Module
+    WR_MEM_32(PINCNTL196,   RD_MEM_32(PINCNTL196) | 0x00000001);
+    WR_MEM_32(PINCNTL197,   RD_MEM_32(PINCNTL197) | 0x00000001);
+    WR_MEM_32(PINCNTL198,   RD_MEM_32(PINCNTL198) | 0x00000001);
+    WR_MEM_32(PINCNTL199,   RD_MEM_32(PINCNTL100) | 0x00000001);
+    WR_MEM_32(PINCNTL200,   RD_MEM_32(PINCNTL200) | 0x00000001);
+    WR_MEM_32(PINCNTL201,   RD_MEM_32(PINCNTL201) | 0x00000001);
+    WR_MEM_32(PINCNTL202,   RD_MEM_32(PINCNTL202) | 0x00000001);
+    WR_MEM_32(PINCNTL203,   RD_MEM_32(PINCNTL203) | 0x00000001);
+    WR_MEM_32(PINCNTL179,   RD_MEM_32(PINCNTL179) | 0x00000001);
+
+    //GPIO3
+    WR_MEM_32(PINCNTL210,   RD_MEM_32(PINCNTL210) | 0x00000080);
+
+    //McASP3
+    WR_MEM_32(PINCNTL45,   RD_MEM_32(PINCNTL45) | 0x00000008);
+    WR_MEM_32(PINCNTL46,   RD_MEM_32(PINCNTL46) | 0x00000008);
+    WR_MEM_32(PINCNTL47,   RD_MEM_32(PINCNTL47) | 0x00000008);
+    WR_MEM_32(PINCNTL48,   RD_MEM_32(PINCNTL48) | 0x00000008);
+
+    //SPI1
+    WR_MEM_32(PINCNTL85,   RD_MEM_32(PINCNTL85) | 0x00000001);
+    WR_MEM_32(PINCNTL86,   RD_MEM_32(PINCNTL86) | 0x00000001);
+    WR_MEM_32(PINCNTL88,   RD_MEM_32(PINCNTL88) | 0x00000001);
+    WR_MEM_32(PINCNTL87,   RD_MEM_32(PINCNTL87) | 0x00000001);
+
+    //CAN
+    WR_MEM_32(PINCNTL69,   RD_MEM_32(PINCNTL69) | 0x00000001);
+    WR_MEM_32(PINCNTL68,   RD_MEM_32(PINCNTL68) | 0x00000001);
+
+    //eCap
+    WR_MEM_32(PINCNTL16,   RD_MEM_32(PINCNTL16) | 0x00000040);
+
+    //DSP GPIO4, GPIO5
+    WR_MEM_32(PINCNTL115,   RD_MEM_32(PINCNTL115) | 0x00000080);
+    WR_MEM_32(PINCNTL44,    RD_MEM_32(PINCNTL44)  | 0x00000080);
+
+    //UART
+    WR_MEM_32(PINCNTL71,   RD_MEM_32(PINCNTL71) | 0x00000001);
+    WR_MEM_32(PINCNTL70,   RD_MEM_32(PINCNTL70) | 0x00000001);
+    WR_MEM_32(PINCNTL72,   RD_MEM_32(PINCNTL72) | 0x00000001);
+    WR_MEM_32(PINCNTL73,   RD_MEM_32(PINCNTL73) | 0x00000001);
+
+    //CS
+    WR_MEM_32(PINCNTL207,   RD_MEM_32(PINCNTL207) | 0x00000080);
+
+    //Test GPIO18
+    WR_MEM_32(PINCNTL43,   RD_MEM_32(PINCNTL43) | 0x00000080);
+
+    //MMC
+    WR_MEM_32(PINCNTL121,   RD_MEM_32(PINCNTL121) | 0x00000001);
+    WR_MEM_32(PINCNTL126,   RD_MEM_32(PINCNTL126) | 0x00000002);
+    //WR_MEM_32(PINCNTL120,   RD_MEM_32(PINCNTL120) | 0x00000001);
+    //WR_MEM_32(PINCNTL119,   RD_MEM_32(PINCNTL119) | 0x00000001);
+    //WR_MEM_32(PINCNTL118,   RD_MEM_32(PINCNTL118) | 0x00000001);
+    //WR_MEM_32(PINCNTL117,   RD_MEM_32(PINCNTL117) | 0x00000001);
+
+    //I2C2
+    WR_MEM_32(PINCNTL136,   RD_MEM_32(PINCNTL136) | 0x000E0040);
+    WR_MEM_32(PINCNTL135,   RD_MEM_32(PINCNTL135) | 0x000E0040);
+
+    //PATA
+    WR_MEM_32(PINCNTL215,   RD_MEM_32(PINCNTL215) | 0x00000008);
+    WR_MEM_32(PINCNTL216,   RD_MEM_32(PINCNTL216) | 0x00000008);
+    WR_MEM_32(PINCNTL217,   RD_MEM_32(PINCNTL217) | 0x00000008);
+    WR_MEM_32(PINCNTL218,   RD_MEM_32(PINCNTL218) | 0x00000008);
+    WR_MEM_32(PINCNTL219,   RD_MEM_32(PINCNTL219) | 0x00000008);
+    WR_MEM_32(PINCNTL220,   RD_MEM_32(PINCNTL220) | 0x00000008);
+    WR_MEM_32(PINCNTL221,   RD_MEM_32(PINCNTL221) | 0x00000008);
+    WR_MEM_32(PINCNTL222,   RD_MEM_32(PINCNTL222) | 0x00000008);
+    WR_MEM_32(PINCNTL223,   RD_MEM_32(PINCNTL223) | 0x00000008);
+    WR_MEM_32(PINCNTL224,   RD_MEM_32(PINCNTL224) | 0x00000008);
+    WR_MEM_32(PINCNTL225,   RD_MEM_32(PINCNTL225) | 0x00000008);
+    WR_MEM_32(PINCNTL226,   RD_MEM_32(PINCNTL226) | 0x00000008);
+    WR_MEM_32(PINCNTL227,   RD_MEM_32(PINCNTL227) | 0x00000008);
+    //WR_MEM_32(PINCNTL228,   RD_MEM_32(PINCNTL228) | 0x00000008);
+    //WR_MEM_32(PINCNTL229,   RD_MEM_32(PINCNTL229) | 0x00000008);
+    //WR_MEM_32(PINCNTL230,   RD_MEM_32(PINCNTL230) | 0x00000008);
+    //WR_MEM_32(PINCNTL175,   RD_MEM_32(PINCNTL175) | 0x00000008);
+    //WR_MEM_32(PINCNTL204,   RD_MEM_32(PINCNTL204) | 0x00000008);
+    //WR_MEM_32(PINCNTL173,   RD_MEM_32(PINCNTL173) | 0x00000008);
+    //WR_MEM_32(PINCNTL174,   RD_MEM_32(PINCNTL174) | 0x00000008);
+    //WR_MEM_32(PINCNTL172,   RD_MEM_32(PINCNTL172) | 0x00000008);
+    //WR_MEM_32(PINCNTL168,   RD_MEM_32(PINCNTL168) | 0x00000008);
+    WR_MEM_32(PINCNTL167,   RD_MEM_32(PINCNTL167) | 0x00000008);
+    WR_MEM_32(PINCNTL164,   RD_MEM_32(PINCNTL164) | 0x00000008);
+    WR_MEM_32(PINCNTL166,   RD_MEM_32(PINCNTL166) | 0x00000008);
+    WR_MEM_32(PINCNTL165,   RD_MEM_32(PINCNTL165) | 0x00000008);
+    //WR_MEM_32(PINCNTL171,   RD_MEM_32(PINCNTL171) | 0x00000008);
+    //WR_MEM_32(PINCNTL170,   RD_MEM_32(PINCNTL170) | 0x00000008);
+    //WR_MEM_32(PINCNTL169,   RD_MEM_32(PINCNTL169) | 0x00000008);
+
+
+    //MLB
+    WR_MEM_32(PINCNTL60,   RD_MEM_32(PINCNTL60) | 0x00000001);
+    WR_MEM_32(PINCNTL59,   RD_MEM_32(PINCNTL59) | 0x00000001);
+    WR_MEM_32(PINCNTL61,   RD_MEM_32(PINCNTL61) | 0x00000001);
+    WR_MEM_32(PINCNTL66,   RD_MEM_32(PINCNTL66) | 0x00000001);
+    WR_MEM_32(PINCNTL67,   RD_MEM_32(PINCNTL67) | 0x00000001);
+    WR_MEM_32(PINCNTL62,   RD_MEM_32(PINCNTL62) | 0x00000001);
+    WR_MEM_32(PINCNTL63,   RD_MEM_32(PINCNTL63) | 0x00000001);
+    WR_MEM_32(PINCNTL64,   RD_MEM_32(PINCNTL64) | 0x00000001);
+    WR_MEM_32(PINCNTL65,   RD_MEM_32(PINCNTL65) | 0x00000001);
+
+    //J5 CPU board
+    WR_MEM_32(PINCNTL49,   RD_MEM_32(PINCNTL49) | 0x00000080); //gp0[20]
+    WR_MEM_32(PINCNTL74,   RD_MEM_32(PINCNTL74) | 0x00000080); //gp1[2]
+    WR_MEM_32(PINCNTL75,   RD_MEM_32(PINCNTL75) | 0x00000080); //gp1[3]
+    WR_MEM_32(PINCNTL126,   RD_MEM_32(PINCNTL126) | 0x00000080); //gp1[8]
+    WR_MEM_32(PINCNTL204,   RD_MEM_32(PINCNTL204) | 0x00000080); //gp2[28]
+    WR_MEM_32(PINCNTL123,    RD_MEM_32(PINCNTL123) | 0x00000080); //gp1[24]
+    WR_MEM_32(PINCNTL124,    RD_MEM_32(PINCNTL124) | 0x00000080); //gp1[25]
+    WR_MEM_32(PINCNTL125,    RD_MEM_32(PINCNTL125) | 0x00000080); //gp1[26]
+    WR_MEM_32(PINCNTL232,    RD_MEM_32(PINCNTL232) | 0x00000080); //gp1[10]
+    WR_MEM_32(PINCNTL132,    RD_MEM_32(PINCNTL132) | 0x00000080); //gp1[30]
+//    WR_MEM_32(PINCNTL136,    RD_MEM_32(PINCNTL136) | 0x00000080); //gp2[1]
+    WR_MEM_32(PINCNTL139,    RD_MEM_32(PINCNTL139) | 0x00000080); //gp2[4]
+
+    WR_MEM_32(PINCNTL259,    RD_MEM_32(PINCNTL259) | 0x00000001); //clkin32
+
+    WR_MEM_32(PINCNTL270,    RD_MEM_32(PINCNTL270) | 0x00000001); //usb0_drvvbus
+    WR_MEM_32(PINCNTL14,   RD_MEM_32(PINCNTL14) | 0x00000080); //usb1_drvvbus
+
+
+    WR_MEM_32(PINCNTL81,   0x00000001); //spi0
+    WR_MEM_32(PINCNTL82,   0x00000001); //spi0
+    WR_MEM_32(PINCNTL83,   0x00000001); //spi0
+    WR_MEM_32(PINCNTL84,   0x00000001); //spi0
+
+    WR_MEM_32(PINCNTL1,   RD_MEM_32(PINCNTL1) | 0x00000001); //sd1
+    WR_MEM_32(PINCNTL2,   RD_MEM_32(PINCNTL2) | 0x00000001); //sd1
+    WR_MEM_32(PINCNTL3,   RD_MEM_32(PINCNTL3) | 0x00000001); //sd1
+    WR_MEM_32(PINCNTL4,   RD_MEM_32(PINCNTL4) | 0x00000001); //sd1
+    WR_MEM_32(PINCNTL5,   RD_MEM_32(PINCNTL5) | 0x00000001); //sd1
+    WR_MEM_32(PINCNTL6,   RD_MEM_32(PINCNTL6) | 0x00000001); //sd1
+
+    WR_MEM_32(PINCNTL78,   RD_MEM_32(PINCNTL78) | 0x00000001); //i2c1
+    WR_MEM_32(PINCNTL79,   RD_MEM_32(PINCNTL79) | 0x00000001); //i2c1
+
+    WR_MEM_32(PINCNTL17,    RD_MEM_32(PINCNTL17) | 0x00000001); //mcasp0
+    WR_MEM_32(PINCNTL18,    RD_MEM_32(PINCNTL18) | 0x00000001); //mcasp0
+    WR_MEM_32(PINCNTL21,    RD_MEM_32(PINCNTL21) | 0x00000001); //mcasp0
+    WR_MEM_32(PINCNTL22,    RD_MEM_32(PINCNTL22) | 0x00000001); //mcasp0
+
+    WR_MEM_32(PINCNTL39,    RD_MEM_32(PINCNTL39) | 0x00000001); //mcasp2
+    WR_MEM_32(PINCNTL40,    RD_MEM_32(PINCNTL40) | 0x00000001); //mcasp2
+    WR_MEM_32(PINCNTL41,    RD_MEM_32(PINCNTL41) | 0x00000001); //mcasp2
+    WR_MEM_32(PINCNTL42,    RD_MEM_32(PINCNTL42) | 0x00000001); //mcasp2
+    WR_MEM_32(PINCNTL16,    RD_MEM_32(PINCNTL16) | 0x00000004); //mcasp2_ahclkx
+
+    WR_MEM_32(PINCNTL27,    RD_MEM_32(PINCNTL27) | 0x00000002); //mcbsp
+    WR_MEM_32(PINCNTL28,    RD_MEM_32(PINCNTL28) | 0x00000002); //mcbsp
+    WR_MEM_32(PINCNTL29,    RD_MEM_32(PINCNTL29) | 0x00000002); //mcbsp
+    WR_MEM_32(PINCNTL30,    RD_MEM_32(PINCNTL30) | 0x00000002); //mcbsp
+
+    WR_MEM_32(PINCNTL233,   RD_MEM_32(PINCNTL233) | 0x00000001); //MDIO
+    WR_MEM_32(PINCNTL234,   RD_MEM_32(PINCNTL234) | 0x00000001); //MDIO
+    WR_MEM_32(PINCNTL235,   RD_MEM_32(PINCNTL235) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL236,   RD_MEM_32(PINCNTL236) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL237,   RD_MEM_32(PINCNTL237) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL238,   RD_MEM_32(PINCNTL238) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL239,   RD_MEM_32(PINCNTL239) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL240,   RD_MEM_32(PINCNTL240) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL241,   RD_MEM_32(PINCNTL241) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL242,   RD_MEM_32(PINCNTL242) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL243,   RD_MEM_32(PINCNTL243) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL244,   RD_MEM_32(PINCNTL244) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL245,   RD_MEM_32(PINCNTL245) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL246,   RD_MEM_32(PINCNTL246) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL247,   RD_MEM_32(PINCNTL247) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL248,   RD_MEM_32(PINCNTL248) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL249,   RD_MEM_32(PINCNTL249) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL250,   RD_MEM_32(PINCNTL250) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL251,   RD_MEM_32(PINCNTL251) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL252,   RD_MEM_32(PINCNTL252) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL253,   RD_MEM_32(PINCNTL253) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL254,   RD_MEM_32(PINCNTL254) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL255,   RD_MEM_32(PINCNTL255) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL256,   RD_MEM_32(PINCNTL256) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL257,   RD_MEM_32(PINCNTL257) | 0x00000001); //EMAC
+    WR_MEM_32(PINCNTL258,   RD_MEM_32(PINCNTL258) | 0x00000001); //EMAC
+
+
+    GEL_TextOut("    J5 CPU JAMR pin Configuration complete");
+}
+hotmenu MMC_PATA_Pin_select()
+{
+
+    GEL_TextOut("\t MMC PATA pin configuration is in Progress, Please wait.....  \n","Output",1,1,1);
+    WR_MEM_32(PINCNTL120,   RD_MEM_32(PINCNTL120) | 0x00000001);
+    WR_MEM_32(PINCNTL119,   RD_MEM_32(PINCNTL119) | 0x00000001);
+    WR_MEM_32(PINCNTL118,   RD_MEM_32(PINCNTL118) | 0x00000001);
+    WR_MEM_32(PINCNTL117,   RD_MEM_32(PINCNTL117) | 0x00000001);
+
+    WR_MEM_32(PINCNTL228,   RD_MEM_32(PINCNTL228) | 0x00000008);
+    WR_MEM_32(PINCNTL229,   RD_MEM_32(PINCNTL229) | 0x00000008);
+    WR_MEM_32(PINCNTL230,   RD_MEM_32(PINCNTL230) | 0x00000008);
+    WR_MEM_32(PINCNTL175,   RD_MEM_32(PINCNTL175) | 0x00000008);
+    WR_MEM_32(PINCNTL173,   RD_MEM_32(PINCNTL173) | 0x00000008);
+    WR_MEM_32(PINCNTL174,   RD_MEM_32(PINCNTL174) | 0x00000008);
+    WR_MEM_32(PINCNTL172,   RD_MEM_32(PINCNTL172) | 0x00000008);
+    WR_MEM_32(PINCNTL168,   RD_MEM_32(PINCNTL168) | 0x00000008);
+    WR_MEM_32(PINCNTL171,   RD_MEM_32(PINCNTL171) | 0x00000008);
+    WR_MEM_32(PINCNTL170,   RD_MEM_32(PINCNTL170) | 0x00000008);
+    WR_MEM_32(PINCNTL169,   RD_MEM_32(PINCNTL169) | 0x00000008);
+
+    GEL_TextOut("\t MMC PATA pin Configuration complete");
+}
+
+hotmenu J5CPU_cfgForUSB0_1()
+{
+    unsigned int tmp;
+
+    // CM_DEFAULT_USB_CLKCTRL
+    *(unsigned int *)0x48180558  = 2;                       // release USB1/2 from clockGating?
+    while( ((*(unsigned int *)0x48180558) & 0x0F)!= 0x2 );  // Poll for Module is functional
+
+    // CM_DEFAULT_L3_SLOW_CLKSTCTRL
+    *(unsigned int *)0x48180514  = 2;                       // Enable USB Clock
+    while( ((*(unsigned int *)0x48180514) &0x103)!=0x102 ); // Poll for Module is functional
+
+    //
+    // Muxing pins for USBs - only DRV_VBUS pins are muxed
+    //
+    PINCNTL(270) = 0x00060001; //PINCNTL_PD_ENABLED | 0x01;  // usb0_drvvbus (Internal Pull-Down)
+    PINCNTL(14)  = 0x00060080; //PINCNTL_PD_ENABLED | 0x80;  // usb1_drvvbus (Internal Pull-Down)
+    PINCNTL(258) = 0x00010001;                 // Wen - what is this?
+
+    // Init phys.
+    GEL_TextOut("    Initialize PHY0/1\n",,,,, );
+    *(unsigned int *)0x48140620 = 0x3C1E64F4;    // PHY INIT
+    *(unsigned int *)0x48140628 = 0x3C1E64F4;    // PHY INIT
+
+
+    GEL_TextOut("    USB0/1 initialization done\n",,,,, );
+}
+
+//menuitem "JAMR2_SDcard"
+//hotmenu
+SD2_config()
+{
+    WR_MEM_32(PINCNTL117,    (RD_MEM_32(PINCNTL117) & 0xFFFFFF00) | 0x00000001);
+    WR_MEM_32(PINCNTL118,    (RD_MEM_32(PINCNTL118) & 0xFFFFFF00) | 0x00000001);
+    WR_MEM_32(PINCNTL119,    (RD_MEM_32(PINCNTL119) & 0xFFFFFF00) | 0x00000001);
+    WR_MEM_32(PINCNTL120,    (RD_MEM_32(PINCNTL120) & 0xFFFFFF00) | 0x00000001);
+    WR_MEM_32(PINCNTL121,    (RD_MEM_32(PINCNTL121) & 0xFFFFFF00) | 0x00000001);
+    WR_MEM_32(PINCNTL126,    (RD_MEM_32(PINCNTL126) & 0xFFFFFF00) | 0x00000002);
+    GEL_TextOut("    JAMR2 SD card configured\n");
+}
+
+/* PLLSS */
+#define PLLSS_BASE           0x481C5000                            // PLLSS Base
+#define CLKOUT_MUX           *( unsigned int * )( PLLSS_BASE + 0x02E4 )
+
+//menuitem "JAMR2_AIC3106"
+//hotmenu
+EVM811x_AIC3106_config()
+{
+    WR_MEM_32(PINCNTL127,    (RD_MEM_32(PINCNTL117) & 0xFFFFFF00) | 0x00000010);
+    CLKOUT_MUX &= 0x0000FFFF;
+    CLKOUT_MUX |= 0x00070000;
+    WR_MEM_32(PINCNTL55,    (RD_MEM_32(PINCNTL55) & 0xFFFFFF00) | 0x00000001);  // McASP
+    WR_MEM_32(PINCNTL56,    (RD_MEM_32(PINCNTL56) & 0xFFFFFF00) | 0x00000001);
+    WR_MEM_32(PINCNTL57,    (RD_MEM_32(PINCNTL57) & 0xFFFFFF00) | 0x00000001);
+    WR_MEM_32(PINCNTL58,    (RD_MEM_32(PINCNTL58) & 0xFFFFFF00) | 0x00000001);
+    WR_MEM_32(PINCNTL135, 0x000E0040);  /* i2c */
+    WR_MEM_32(PINCNTL136, 0x000E0040);  /* i2c */
+    GEL_TextOut("    EVM811x JAMR2 AIC3106 configured\n");
+}
+
+//hotmenu
+J5_AIC3106_config()
+{
+    WR_MEM_32(PINCNTL127,    (RD_MEM_32(PINCNTL117) & 0xFFFFFF00) | 0x00000010);
+    CLKOUT_MUX &= 0x0000FFFF;
+    CLKOUT_MUX |= 0x00070000;
+    WR_MEM_32(PINCNTL53,    (RD_MEM_32(PINCNTL53)  & 0xFFFFFF00) | 0x00000001);
+    WR_MEM_32(PINCNTL54,    (RD_MEM_32(PINCNTL54)  & 0xFFFFFF00) | 0x00000001);
+    WR_MEM_32(PINCNTL136,   (RD_MEM_32(PINCNTL136) & 0xFFFFFF00) | 0x00000080);
+    WR_MEM_32(PINCNTL156,   (RD_MEM_32(PINCNTL156) & 0xFFFFFF00) | 0x00000020);
+    GEL_TextOut("    J5 JAMR2 AIC3106 configured\n");
+}
+
+//menuitem "JAMR2_NOR"
+//hotmenu
+EVM811x_NOR_config()
+{
+    WR_MEM_32(PINCNTL244,    (RD_MEM_32(PINCNTL244) & 0xFFFFFF00) | 0x00000010);
+    WR_MEM_32(PINCNTL245,    (RD_MEM_32(PINCNTL245) & 0xFFFFFF00) | 0x00000010);
+    WR_MEM_32(PINCNTL246,    (RD_MEM_32(PINCNTL246) & 0xFFFFFF00) | 0x00000010);
+    WR_MEM_32(PINCNTL247,    (RD_MEM_32(PINCNTL247) & 0xFFFFFF00) | 0x00000010);
+    WR_MEM_32(PINCNTL248,    (RD_MEM_32(PINCNTL248) & 0xFFFFFF00) | 0x00000010);
+    WR_MEM_32(PINCNTL249,    (RD_MEM_32(PINCNTL249) & 0xFFFFFF00) | 0x00000010);
+    WR_MEM_32(PINCNTL250,    (RD_MEM_32(PINCNTL250) & 0xFFFFFF00) | 0x00000010);
+    WR_MEM_32(PINCNTL251,    (RD_MEM_32(PINCNTL251) & 0xFFFFFF00) | 0x00000010);
+    WR_MEM_32(PINCNTL252,    (RD_MEM_32(PINCNTL252) & 0xFFFFFF00) | 0x00000010);
+    WR_MEM_32(PINCNTL253,    (RD_MEM_32(PINCNTL253) & 0xFFFFFF00) | 0x00000010);
+    WR_MEM_32(PINCNTL254,    (RD_MEM_32(PINCNTL254) & 0xFFFFFF00) | 0x00000010);
+    WR_MEM_32(PINCNTL255,    (RD_MEM_32(PINCNTL255) & 0xFFFFFF00) | 0x00000010);
+    WR_MEM_32(PINCNTL256,    (RD_MEM_32(PINCNTL256) & 0xFFFFFF00) | 0x00000010);
+    WR_MEM_32(PINCNTL257,    (RD_MEM_32(PINCNTL257) & 0xFFFFFF00) | 0x00000010);
+    WR_MEM_32(PINCNTL258,    (RD_MEM_32(PINCNTL258) & 0xFFFFFF00) | 0x00000010);
+
+}
+
+EMAC_init()
+{
+    WR_MEM_32(0x48140650, 0x33a);        // Set RGMII mode in GMII_SEL (both ports)
+}
+
+
+// GPIO Register definitions
+#define GPIO0_BASE      0x48032000
+#define GPIO0_OE        (GPIO0_BASE + 0x134)
+#define GPIO0_DATAIN    (GPIO0_BASE + 0x138)
+#define GPIO0_DATAOUT   (GPIO0_BASE + 0x13C)
+#define GPIO1_BASE      0x4804C000
+#define GPIO1_OE        (GPIO1_BASE + 0x134)
+#define GPIO1_DATAIN    (GPIO1_BASE + 0x138)
+#define GPIO1_DATAOUT   (GPIO1_BASE + 0x13C)
+#define GPIO2_BASE      0x481AC000
+#define GPIO2_OE        (GPIO2_BASE + 0x134)
+#define GPIO2_DATAIN    (GPIO2_BASE + 0x138)
+#define GPIO2_DATAOUT   (GPIO2_BASE + 0x13C)
+#define GPIO3_BASE      0x481AE000
+#define GPIO3_OE        (GPIO3_BASE + 0x134)
+#define GPIO3_DATAIN    (GPIO3_BASE + 0x138)
+#define GPIO3_DATAOUT   (GPIO3_BASE + 0x13C)
+
+SetVisionAppplicationBoardMux()
+{
+    // Set mux_sel pins as GPIOs
+    WR_MEM_32(PINCNTL33, 0x02);   // DEMUX_FPD_A - J5 ball M1 (MCA1_AXR4)
+    WR_MEM_32(PINCNTL34, 0x02);   // DEMUX_FPD_B - J5 ball M2 (MCA1_AXR5)
+    WR_MEM_32(PINCNTL44, 0x02);   // DEMUX_FPD_C - J5 ball H2 (MCA1_AXR7)
+
+    WR_MEM_32(PINCNTL219,   0x00010080);  // MUX1_SEL0 GP3[11]
+    WR_MEM_32(PINCNTL220,   0x00010080);  // MUX1_SEL1 GP3[12]
+    WR_MEM_32(PINCNTL221,   0x00010080);  // MUX1_SEL0 GP3[13]
+    WR_MEM_32(PINCNTL222,   0x00010080);  // MUX2_SEL1 GP3[14]
+    // GPIO3.11 = MUX1_SEL0
+    // GPIO3.12 = MUX1_SEL1
+    // GPIO3.13 = MUX2_SEL0
+    // GPIO3.14 = MUX2_SEL1
+    WR_MEM_32(GPIO3_OE, RD_MEM_32(GPIO3_OE) & 0xffff87ff);  // GPIO3[11..14] as outputs (0 = output, 1 = input)
+
+    // MUX1_SEL = 11, MUX2_SEL = 00
+    WR_MEM_32(GPIO3_DATAOUT, (RD_MEM_32(GPIO3_DATAOUT) & 0xffff87ff) | (0x3 << 11) | (0x0 << 13));
+
+    GEL_TextOut("    Vision application board muxes configured\n");
+}
+
+
+
+HdvpssClkEnable ()
+{
+    GEL_TextOut("\t Enabling the HDVPSS Clocks.... \n");
+    WR_MEM_32(CM_HDVPSS_CLKSTCTRL,0x2);
+    WR_MEM_32(CM_HDVPSS_HDMI_CLKCTRL,0x2);
+    WR_MEM_32(CM_HDVPSS_HDVPSS_CLKCTRL,0x2);
+
+    WR_MEM_32(0x48180E00,0x3);
+    WR_MEM_32(0x48180E10, 0x0);
+
+    GEL_TextOut("\t HDMI RX:CM_HDVPSS_CLKSTCTRL... \n");
+    while((RD_MEM_32(CM_HDVPSS_CLKSTCTRL) & 0x100)!=0x100);
+    GEL_TextOut("\t HDMI RX:CM_HDVPSS_HDMI_CLKCTRL... \n");
+    while(RD_MEM_32(CM_HDVPSS_HDMI_CLKCTRL)!=0x2);
+    GEL_TextOut("\t HDMI RX:CM_HDVPSS_HDVPSS_CLKCTRL... \n");
+    while(RD_MEM_32(CM_HDVPSS_HDVPSS_CLKCTRL)!=0x2);
+    GEL_TextOut("\t Done Enabling HDVPSS Clock.... \n");
+}
+
+Enable_dvo_hdmi_clk_dss_level()
+{
+    *(unsigned int *)0x48100100 = 0x01031fff;            // dss module enable
+    *(unsigned int *)0x48100114 = (0x9000D);                //venc settings
+    *(unsigned int *)0x48100118 = (0xD);                //venc settings
+
+    //*(volatile Uint32*)0x48100118 = (0xF);
+}
+
+Vid0CapturePinMuxConfig ()
+{
+    GEL_TextOut("\t Setting up Pin-Mux for Video-0 Capture \n");
+
+    WR_MEM_32(PINCNTL134, 0x00040001);  /* VIN0_CLK1 */
+    WR_MEM_32(PINCNTL135, 0x00040010);  /* VIN0_A_HSYNC1*/
+    WR_MEM_32(PINCNTL136, 0x00040010);  /* VIN0_A_VSYNC1 */
+    WR_MEM_32(PINCNTL136, 0x00040001);  /* VIN0_FLD0_MUX0 */
+    WR_MEM_32(PINCNTL137, 0x00040001);  /* VIN0_CLK0 */
+    WR_MEM_32(PINCNTL138, 0x00040001);  /* VIN0_A_HSYNC */
+    WR_MEM_32(PINCNTL139, 0x00040001);  /* VIN0_A_VSYNC */
+    WR_MEM_32(PINCNTL140, 0x00040001);  /* VIN0_D0 */
+    WR_MEM_32(PINCNTL141, 0x00040001);  /* VIN0_D1 */
+    WR_MEM_32(PINCNTL142, 0x00040001);  /* VIN0_D2 */
+    WR_MEM_32(PINCNTL143, 0x00040001);  /* VIN0_D3 */
+    WR_MEM_32(PINCNTL144, 0x00040001);  /* VIN0_D4 */
+    WR_MEM_32(PINCNTL145, 0x00040001);  /* VIN0_D5 */
+    WR_MEM_32(PINCNTL146, 0x00040001);  /* VIN0_D6 */
+    WR_MEM_32(PINCNTL147, 0x00040001);  /* VIN0_D7 */
+    WR_MEM_32(PINCNTL148, 0x00040001);  /* VIN0_D8 */
+    WR_MEM_32(PINCNTL149, 0x00040001);  /* VIN0_D9 */
+    WR_MEM_32(PINCNTL150, 0x00040001);  /* VIN0_D10 */
+    WR_MEM_32(PINCNTL151, 0x00040001);  /* VIN0_D11 */
+    WR_MEM_32(PINCNTL152, 0x00040001);  /* VIN0_D12 */
+    WR_MEM_32(PINCNTL153, 0x00040001);  /* VIN0_D13 */
+    WR_MEM_32(PINCNTL154, 0x00040001);  /* VIN0_D14 */
+    WR_MEM_32(PINCNTL155, 0x00040001);  /* VIN0_D15 */
+    WR_MEM_32(PINCNTL156, 0x00040001);  /* VIN0_D16 */
+    WR_MEM_32(PINCNTL157, 0x00040001);  /* VIN0_D17 */
+    WR_MEM_32(PINCNTL158, 0x00040001);  /* VIN0_D18 */
+    WR_MEM_32(PINCNTL159, 0x00040001);  /* VIN0_D19 */
+    WR_MEM_32(PINCNTL160, 0x00040001);  /* VIN0_D20 */
+    WR_MEM_32(PINCNTL161, 0x00040001);  /* VIN0_D21 */
+    WR_MEM_32(PINCNTL162, 0x00040001);  /* VIN0_D22 */
+    WR_MEM_32(PINCNTL163, 0x00040001);  /* VIN0_D23 */
+    WR_MEM_32(PINCNTL164, 0x00040001);  /* vin0_de0_mux1 */
+    WR_MEM_32(PINCNTL165, 0x00040001);  /* vin0_de1 */
+    WR_MEM_32(PINCNTL166, 0x00040001);  /* vin0_fid0_mux1 */
+    WR_MEM_32(PINCNTL167, 0x00040001);  /* vin0_fid1 */
+
+    GEL_TextOut("\t ============================================= \n");
+
+}
+
+VidOut0PinConfig()
+{
+    GEL_TextOut("\t Configuring the Pin-Mux for Video-0 output.\n");
+    WR_MEM_32(PINCNTL175, 0x00010001);  /* VOUT0_FlD_MUX1 */
+    WR_MEM_32(PINCNTL176, 0x00010001);  /* VOUT0_CLK */
+    WR_MEM_32(PINCNTL177, 0x00010001);  /* VOUT0_HSYNC */
+    WR_MEM_32(PINCNTL178, 0x00010001);  /* VOUT0_VSYNC */
+    WR_MEM_32(PINCNTL179, 0x00010001);  /* VOUT0_AVID */
+    WR_MEM_32(PINCNTL180, 0x00010001);  /* VOUT0_B_CB_C2 */
+    WR_MEM_32(PINCNTL181, 0x00010001);  /* VOUT0_B_CB_C3 */
+    WR_MEM_32(PINCNTL182, 0x00010001);  /* VOUT0_B_CB_C4 */
+    WR_MEM_32(PINCNTL183, 0x00010001);  /* VOUT0_B_CB_C5 */
+    WR_MEM_32(PINCNTL184, 0x00010001);  /* VOUT0_B_CB_C6 */
+    WR_MEM_32(PINCNTL185, 0x00010001);  /* VOUT0_B_CB_C7 */
+    WR_MEM_32(PINCNTL186, 0x00010001);  /* VOUT0_B_CB_C8 */
+    WR_MEM_32(PINCNTL187, 0x00010001);  /* VOUT0_B_CB_C9 */
+    WR_MEM_32(PINCNTL188, 0x00010001);  /* VOUT_G_Y_YC2 */
+    WR_MEM_32(PINCNTL189, 0x00010001);  /* VOUT_G_Y_YC3 */
+    WR_MEM_32(PINCNTL190, 0x00010001);  /* VOUT_G_Y_YC4 */
+    WR_MEM_32(PINCNTL191, 0x00010001);  /* VOUT_G_Y_YC5 */
+    WR_MEM_32(PINCNTL192, 0x00010001);  /* VOUT_G_Y_YC6 */
+    WR_MEM_32(PINCNTL193, 0x00010001);  /* VOUT_G_Y_YC7 */
+    WR_MEM_32(PINCNTL194, 0x00010001);  /* VOUT_G_Y_YC8 */
+    WR_MEM_32(PINCNTL195, 0x00010001);  /* VOUT_G_Y_YC9 */
+    WR_MEM_32(PINCNTL196, 0x00010001);  /* VOUT_R_CR2 */
+    WR_MEM_32(PINCNTL197, 0x00010001);  /* VOUT_R_CR3 */
+    WR_MEM_32(PINCNTL198, 0x00010001);  /* VOUT_R_CR4 */
+    WR_MEM_32(PINCNTL199, 0x00010001);  /* VOUT_R_CR5 */
+    WR_MEM_32(PINCNTL200, 0x00010001);  /* VOUT_R_CR6 */
+    WR_MEM_32(PINCNTL201, 0x00010001);  /* VOUT_R_CR7 */
+    WR_MEM_32(PINCNTL202, 0x00010001);  /* VOUT_R_CR8 */
+    WR_MEM_32(PINCNTL203, 0x00010001);  /* VOUT_R_CR9 */
+    GEL_TextOut("\t Completed the Pin-Mux for Video-0 output.\n");
+
+}
+
+VidOut1PinConfig()
+{
+    GEL_TextOut("\t Configuring the Pin-Mux for Video-0 output.\n");
+    WR_MEM_32(PINCNTL168, 0x00010001);  /* VOUT0_FlD_MUX1 */
+    WR_MEM_32(PINCNTL169, 0x00010001);  /* VOUT0_CLK */
+    WR_MEM_32(PINCNTL170, 0x00010001);  /* VOUT0_HSYNC */
+    WR_MEM_32(PINCNTL171, 0x00010001);  /* VOUT0_VSYNC */
+    WR_MEM_32(PINCNTL172, 0x00010001);  /* VOUT0_AVID */
+    WR_MEM_32(PINCNTL173, 0x00010001);  /* VOUT0_B_CB_C2 */
+    WR_MEM_32(PINCNTL174, 0x00010001);  /* VOUT0_B_CB_C3 */
+    WR_MEM_32(PINCNTL204, 0x00010001);  /* VOUT0_B_CB_C4 */
+    WR_MEM_32(PINCNTL205, 0x00010001);  /* VOUT0_B_CB_C5 */
+    WR_MEM_32(PINCNTL206, 0x00010001);  /* VOUT0_B_CB_C6 */
+    WR_MEM_32(PINCNTL207, 0x00010001);  /* VOUT0_B_CB_C7 */
+    WR_MEM_32(PINCNTL208, 0x00010001);  /* VOUT0_B_CB_C8 */
+    WR_MEM_32(PINCNTL209, 0x00010001);  /* VOUT0_B_CB_C9 */
+    WR_MEM_32(PINCNTL210, 0x00010001);  /* VOUT_G_Y_YC2 */
+    WR_MEM_32(PINCNTL211, 0x00010001);  /* VOUT_G_Y_YC3 */
+    WR_MEM_32(PINCNTL212, 0x00010001);  /* VOUT_G_Y_YC4 */
+    WR_MEM_32(PINCNTL213, 0x00010001);  /* VOUT_G_Y_YC5 */
+    WR_MEM_32(PINCNTL214, 0x00010001);  /* VOUT_G_Y_YC6 */
+    WR_MEM_32(PINCNTL215, 0x00010001);  /* VOUT_G_Y_YC7 */
+    WR_MEM_32(PINCNTL216, 0x00010001);  /* VOUT_G_Y_YC8 */
+    WR_MEM_32(PINCNTL217, 0x00010001);  /* VOUT_G_Y_YC9 */
+    WR_MEM_32(PINCNTL218, 0x00010001);  /* VOUT_R_CR2 */
+    WR_MEM_32(PINCNTL219, 0x00010001);  /* VOUT_R_CR3 */
+    WR_MEM_32(PINCNTL220, 0x00010001);  /* VOUT_R_CR4 */
+    WR_MEM_32(PINCNTL221, 0x00010001);  /* VOUT_R_CR5 */
+    WR_MEM_32(PINCNTL222, 0x00010001);  /* VOUT_R_CR6 */
+    WR_MEM_32(PINCNTL223, 0x00010001);  /* VOUT_R_CR7 */
+    WR_MEM_32(PINCNTL224, 0x00010001);  /* VOUT_R_CR8 */
+    WR_MEM_32(PINCNTL225, 0x00010001);  /* VOUT_R_CR9 */
+    WR_MEM_32(PINCNTL226, 0x00010001);
+    WR_MEM_32(PINCNTL227, 0x00010001);
+    WR_MEM_32(PINCNTL228, 0x00010001);
+    WR_MEM_32(PINCNTL229, 0x00010001);
+    WR_MEM_32(PINCNTL230, 0x00010001);
+    WR_MEM_32(PINCNTL231, 0x00010001);
+
+    GEL_TextOut("\t Completed the Pin-Mux for Video-0 output.\n");
+
+}
+
+
+NEWLCD_init()
+{
+    int i;
+
+    GEL_TextOut("    Initializing LCD....\n");
+    WR_MEM_32(CM_ALWON_L3_SLOW_CLKSTCTRL, 0x2);     //Enable the Power Domain Transition of L3 Slow Domain Peripheral
+
+    /* Set pin control to GPIO */
+    i = RD_MEM_32(PINCNTL61) & 0xffffff00;
+    WR_MEM_32(PINCNTL61, (i | 0x00000080)); // Set as GPIO31
+
+    /* Turn on GPIO0 PRCM */
+   WR_MEM_32(CM_ALWON_GPIO_0_CLKCTRL, 0x02);
+//    while( RD_MEM_32(CM_ALWON_GPIO_0_CLKCTRL & 0x02));
+
+    /* Turn on GP0 31 */
+    i = RD_MEM_32(GPIO0_OE);
+    WR_MEM_32(GPIO0_OE, (i & 0x7FFFFFFF)); // Set as output
+
+    i = RD_MEM_32(GPIO0_DATAOUT);
+    WR_MEM_32(GPIO0_DATAOUT, (i | 0x80000000));
+
+
+//    GPIO0_OE &= ~0x80000000;
+//    GPIO0_DATAOUT;
+    while(RD_MEM_32(CM_ALWON_L3_SLOW_CLKSTCTRL) & 0x2100 !=0x2100);
+    GEL_TextOut("    LCD Initialized\n");
+}
+
+
+menuitem "VayuEVM_Test"
+hotmenu VayuEVM_LCD_Setup ()
+{
+    GEL_TextOut("    Configuring for LCD output.\n");
+
+    NEWLCD_init();
+    VidOut0PinConfig();
+    HdvpssClkEnable();
+    Enable_dvo_hdmi_clk_dss_level();
+
+    GEL_TextOut("    ***** Successfully concluded the Initialization....***** \n");
+
+}
+
+VayuEVM_HDMI ()
+{
+    GEL_TextOut("\tConfiguring for Sil9022A output.\n");
+
+    NEWLCD_init();
+    VidOut1PinConfig();
+    HdvpssClkEnable();
+    Enable_dvo_hdmi_clk_dss_level();
+
+    GEL_TextOut("\t ***** Successfully concluded the Initialization....***** \n");
+
+}
+
+hotmenu VayuEVM_QSPI_Setup()
+
+{
+//    WR_MEM_32(PINCNTL228,   0x80); //RTCLK (Vayu-GPMC_A13)  (CENT-GP3[20])
+//    WR_MEM_32(PINCNTL229,   0x80); //D[3]  (Vayu-GPMC_A14)  (CENT-GP3[21])
+//    WR_MEM_32(PINCNTL230,   0x80); //D[2]  (Vayu-GPMC_A15)  (CENT-GP3[22])
+    WR_MEM_32(PINCNTL105,   0x80); //D[1]  (Vayu-GPMC_A16)  (CENT-GP2[5])
+    WR_MEM_32(PINCNTL106,   0x80); //D[0]  (Vayu-GPMC_A17)  (CENT-GP2[6])
+    WR_MEM_32(PINCNTL107,   0x80); //SCLK  (Vayu-GPMC_A18)  (CENT-GP1[13])
+    WR_MEM_32(PINCNTL124,   0x80); //CS[0] (Vayu-GPMC_nCS2) (CENT-GP1[25])
+    GEL_TextOut("   QSPI muxes configured\n");
+
+}
+
+

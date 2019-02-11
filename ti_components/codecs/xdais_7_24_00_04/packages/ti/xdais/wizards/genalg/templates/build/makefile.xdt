@@ -1,0 +1,164 @@
+%%{
+/*
+ * Copyright (c) 2006-2012, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ */
+%%}
+
+# your XDCTOOLS installation directory
+% if (!this.xdcVersOK) {
+    $(error assign XDC_INSTALL_DIR to xdctools_3_16 or higher, then delete this error)
+XDC_INSTALL_DIR=<your_XDCTOOLS_installation_directory>
+% }
+% else {
+XDC_INSTALL_DIR=`this.xdcInstall`
+% }
+
+# your XDAIS installation directory
+XDAIS_INSTALL_DIR=`this.xdaisInstall`
+
+# Uncomment this for verbose builds
+#XDCOPTIONS=v
+
+% // Do we need to test that this.cgTools is set?  And if not, add something
+% // like CODEGEN_INSTALL_DIR=___Add_your_cgtools_here___ ?
+% var xdcArgs = '';
+% var C64P = false;
+% var C66 = false;
+% var C674 = false;
+% var C67P = false;
+% var v5T = false;
+% var v6 = false;
+% var v7A = false;
+% var M3 = false;
+% for (var i = 0; i < this.targets.length; i++) {
+%     if (!C64P && this.targets[i].cgTools == 'C64P') {
+%         C64P = true;
+%     }
+%     if (!C66 && this.targets[i].cgTools == 'C66') {
+%         C66 = true;
+%     }
+%     else if (!C674 && this.targets[i].cgTools == 'C674') {
+%         C674 = true;
+%     }
+%     else if (!C67P && this.targets[i].cgTools == 'C67P') {
+%         C67P = true;
+%     }
+%     else if (!v5T && this.targets[i].cgTools == 'v5T') {
+%         v5T = true;
+%     }
+%     else if (!v6 && this.targets[i].cgTools == 'v6') {
+%         v6 = true;
+%     }
+%     else if (!v7A && this.targets[i].cgTools == 'v7A') {
+%         v7A = true;
+%     }
+%     else if (!M3 && this.targets[i].cgTools == 'M3') {
+%         M3 = true;
+%     }
+% }
+% if (C64P || C674 || C66 || C67P) {
+CODEGEN_INSTALL_DIR=`this.cgTools`
+% }
+% if (v5T || v6 ||v7A) {
+CSTOOL_DIR=`this.gccCgTools`
+% }
+% if (M3) {
+M3TOOLS_DIR=`this.m3cgTools`
+% }
+
+# If we're a subcomponent, allow larger product settings to override our
+# defaults.  The variable $(RULES_MAKE) can be overridden on the 'make'
+# command-line if the location below is not correct (for example, if you
+# want to use a Rules.make from some other location.
+RULES_MAKE := $(CE_INSTALL_DIR)/../Rules.make
+ifneq ($(wildcard $(RULES_MAKE)),)
+include $(RULES_MAKE)
+endif
+
+% if (C64P) {
+CGTOOLS_C64P=$(CODEGEN_INSTALL_DIR)
+%     xdcArgs += 'CGTOOLS_C64P=\\"$(CGTOOLS_C64P)\\"';
+% }
+% if (C66) {
+CGTOOLS_C66=$(CODEGEN_INSTALL_DIR)
+%     xdcArgs += ' CGTOOLS_C66=\\"$(CGTOOLS_C66)\\"';
+% }
+% if (C674) {
+CGTOOLS_C674=$(CODEGEN_INSTALL_DIR)
+%     if (xdcArgs.length) {
+%        xdcArgs += ' ';
+%     }
+%     xdcArgs += ' CGTOOLS_C674=\\"$(CGTOOLS_C674)\\"';
+% }
+% if (C67P) {
+CGTOOLS_C67P=$(CODEGEN_INSTALL_DIR)
+%     xdcArgs += ' CGTOOLS_C67P=\\"$(CGTOOLS_C67P)\\"';
+% }
+% if (v5T) {
+CGTOOLS_V5T=$(CSTOOL_DIR)
+%     if (xdcArgs.length) {
+%        xdcArgs += ' ';
+%     }
+%     xdcArgs += 'CGTOOLS_V5T=\\"$(CGTOOLS_V5T)\\" CC_V5T="bin/arm-none-linux-gnueabi-gcc"';
+% }
+% if (v6) {
+CGTOOLS_V6=$(CSTOOL_DIR)
+%     if (xdcArgs.length) {
+%        xdcArgs += ' ';
+%     }
+%     xdcArgs += 'CGTOOLS_V6=\\"$(CGTOOLS_V6)\\" CC_V6="bin/arm-none-linux-gnueabi-gcc"';
+% }
+% if (v7A) {
+CGTOOLS_V7A=$(CSTOOL_DIR)
+%     if (xdcArgs.length) {
+%        xdcArgs += ' ';
+%     }
+%     xdcArgs += 'CGTOOLS_V7A=\\"$(CGTOOLS_V7A)\\" CC_V7A="bin/arm-none-linux-gnueabi-gcc"';
+% }
+% if (M3) {
+CGTOOLS_M3ELF=$(M3TOOLS_DIR)
+%     if (xdcArgs.length) {
+%        xdcArgs += ' ';
+%     }
+%     xdcArgs += 'CGTOOLS_M3ELF=\\"$(CGTOOLS_M3ELF)\\"';
+% }
+
+XDCARGS=`xdcArgs`
+
+XDCPATH=$(XDAIS_INSTALL_DIR)/packages
+
+all:
+	"$(XDC_INSTALL_DIR)/xdc" XDCOPTIONS=$(XDCOPTIONS) XDCARGS="$(XDCARGS)" --xdcpath="$(XDCPATH)" release
+
+clean:
+	"$(XDC_INSTALL_DIR)/xdc" XDCOPTIONS=$(XDCOPTIONS) clean
+

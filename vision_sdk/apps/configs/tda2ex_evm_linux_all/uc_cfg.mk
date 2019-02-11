@@ -1,0 +1,22 @@
+UC_lvds_vip_multi_cam_3d_srv=yes
+UC_csi2Cal_multi_cam_3d_srv=yes
+UC_csi2Cal_multi_cam_3d_srv_cbb=yes
+UC_lvds_vip_multi_cam_view_sgx_display=yes
+UC_lvds_vip_multi_cam_vpe_enc_null=yes
+UC_csi2Cal_multi_cam_view=yes
+UC_srv_calibration=yes
+UC_null_src_decode_display=yes
+UC_vip_single_cam_connectorLinksA15_sgx_display=yes
+UC_vip_single_cam_enc_dec_sgx_display=yes
+UC_vip_single_cam_framecopy_sgx_display=yes
+UC_vip_single_cam_sgx_display=yes
+ifeq ($(AVB_INCLUDE),yes)
+UC_avb_rx_multi_cam_decode_sgx_display=yes
+UC_avb_rx_multi_cam_3d_srv=yes
+UC_avbrx_sv_display_avbtx=yes
+endif
+
+ifeq ($(EARLY_USECASE_ENABLE),yes)
+UC_early_capture_late_weston=yes
+endif
+

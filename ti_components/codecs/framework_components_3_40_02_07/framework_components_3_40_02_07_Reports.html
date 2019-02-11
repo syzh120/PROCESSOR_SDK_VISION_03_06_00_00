@@ -1,0 +1,281 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!--
+ *  Copyright (c) 2014, Texas Instruments Incorporated
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *
+ *  *  Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *
+ *  *  Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ *
+ *  *  Neither the name of Texas Instruments Incorporated nor the names of
+ *     its contributors may be used to endorse or promote products derived
+ *     from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ *  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ *  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ *  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ *  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ *  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ *  OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ *  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ *  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ *  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<html>
+<head>
+    <title>Framework Components 3.40.02.07 Report </title>
+    <!-- For now, we use the doxygen style sheet -->
+    <link type="text/css" rel="stylesheet" href="docs/html/doxygen.css">
+    <!-- doxygen's css .memproto's all have tables for a little extra pad...
+         don't like tables, so give 'em a little extra left pad ourselves
+    --->
+    <style type="text/css">
+    body {
+        margin: 20px;
+    }
+    .memproto {
+        padding-left: 6px;
+    }
+    </style>
+</head>
+<body>
+<table width="100%">
+  <tbody>
+    <tr>
+      <td bgcolor="black" width="1">
+        <a href="http://www.ti.com">
+          <img border=0 src="docs/html/tilogo.gif" alt="Texas Instruments">
+        </a>
+      </td>
+      <td bgcolor="red">
+        <img src="docs/html/titagline.gif" alt="Technology for Innovators(tm)">
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h1 align="center">Framework Components 3.40.02.07 Report </h1>
+<h2 align="center">June 2016</h2>
+
+<h2><a name="Introduction">Introduction</a></h2>
+<p>
+This report summarizes results from two software quality assessment
+tools used to analyze the software in this product:
+<ul>
+  <li>Static Program Analysis:
+    <a href="http://coverity.com/products/static-analysis.html">
+      Coverity Static Analysis</a>
+  </li>
+  <li>MISRA-C:2004 Rules:
+    <a href="http://processors.wiki.ti.com/index.php/TI_Compiler_Information">
+      Texas Instruments C/C++ Compiler</a>
+  </li>
+</ul>
+</p>
+<p>
+Unless noted below, all source code, both .c and .h files, for
+embedded target libraries was analyzed using these tools.
+</p>
+
+<hr>
+
+<h2><a name="CovSummary">Static Program Analysis Summary</a></h2>
+<p>
+This report summarizes the Static Program Analysis results. For each
+library, a listing provides:
+<ul>
+  <li>the command-line invocation for the tool actually used for the
+  analysis</li>
+  <li>summary of lines-of-code (LoC) analyzed and defect types and
+  counts (if any)</li>
+  <li>location of defects in the source code (file name and line
+  number) (if any)</li>
+</ul>
+</p>
+<p>
+<div style="width:500px;text-align:left;padding:5px;background-color:gold;border:1px
+ solid black;">
+<a href="docs/framework_components_3_40_02_07_coverity.txt">Click here to view the
+  Static Analysis Report.</a>
+</div>
+</p>
+<p>Justification for Not Addressing Coverity Violations</p>
+<ul>
+<li>In the ti.sdo.fc.edma3 package, a coverity violation of "OVERRUN_STATIC" is being reported but this seems like a false positive.
+The complaint is regarding the value "1010u" being assigned to resObj.resId and being used to reference an array.
+In reality, this value is overwritten by an actual EDMA3 resource Id by the EDMA3_RM_alloc APIs.</li>
+<hr>
+
+<h2><a name="MisraSummary">MISRA-C:2004 Summary</a></h2>
+<p>
+There are several rules in MISRA-C:2004 that are contrary to
+long-standing coding standards used in this product, and, hence will
+not be addressed in the product source code. These rules are listed in the
+table below. The corresponding checks were explicitly disabled in the
+tool when the source code was analyzed.
+</p>
+
+<table border=1 cellspacing=0>
+ <tr>
+  <th width="10%"><b>MISRA C Id</b></th>
+  <th width="45%"><b>Brief Summary</b></th>
+  <th width="45%"><b>Exemption Rationale</b></th>
+ </tr>
+  <tr>
+    <td>5.2/R</td>
+    <td>Identifiers in an inner scope shall not use the same name as an identifier in an outer scope, and therefore hide that identifier.</td>
+    <td>Coding conventions</td>
+  </tr>
+  <tr>
+    <td>5.3/R</td>
+    <td>A typedef name shall be a unique identifier.</td>
+    <td>Coding conventions</td>
+  </tr>
+  <tr>
+    <td>5.4/R</td>
+    <td>A tag name shall be a unique identifier.</td>
+    <td>Coding conventions.   The C standard explicitly states (ISO/IEC 9899:1999 6.2.3) that type tags do _not_ need to be unique w.r.t. other identifiers; this pattern is required by our naming/coding conventions so that _all_ types can be consistently identified solely by their letter case.</td>
+  </tr>
+  <tr>
+    <td>5.6/A</td>
+    <td>No identifier in one name space should have the same spelling as an identifier in another name space, with the exception of structure and union member names.</td>
+    <td>Coding convention</td>
+  </tr>
+  <tr>
+    <td>5.7/A</td>
+    <td>No identifier name should be reused.</td>
+    <td>Coding convention</td>
+  </tr>
+  <tr>
+    <td>6.3/A</td>
+    <td>typedefs that indicate size and signedness should be used in place of the basic numerical types.</td>
+    <td>Coding conventions</td>
+  </tr>
+  <tr>
+    <td>10.1/R</td>
+    <td>The value of an expression of integer type shall not be implicitly converted to a different underlying type if (...).</td>
+    <td>Coding convention</td>
+  </tr>
+  <tr>
+    <td>10.3/R</td>
+    <td>The value of a complex expression of integer type may only be cast to a type that is narrower and of the same signedness as the underlying type of the expression.</td>
+    <td>Coding convention</td>
+  </tr>
+  <tr>
+    <td>10.6/R</td>
+    <td>A "U" suffix shall be applied to all constants of unsigned type.</td>
+    <td>Coding convention</td>
+  </tr>
+  <tr>
+    <td>11.3/A</td>
+    <td>A cast should not be performed between a pointer type and an integral type.</td>
+    <td>Coding convention</td>
+  </tr>
+  <tr>
+    <td>11.4/A</td>
+    <td>A cast should not be performed between a pointer to object type and a different pointer to object type.</td>
+    <td>Coding convention</td>
+  </tr>
+  <tr>
+    <td>12.6/A</td>
+    <td>The operands of logical operators (&&, || and !) should be effectively Boolean.  Expressions that are effectively Boolean should not be used as operands to operators other than (&&, || and !).</td>
+    <td>Coding convention</td>
+  </tr>
+  <tr>
+    <td>12.7/R</td>
+    <td>Bitwise operators shall not be applied to operands whose  underlying type is signed.</td>
+    <td>Coding convention</td>
+  </tr>
+  <tr>
+    <td>14.4/R</td>
+    <td>The goto statement shall not be used.</td>
+    <td>Coding convention</td>
+  </tr>
+  <tr>
+    <td>14.5/R</td>
+    <td>The continue statement shall not be used.</td>
+    <td>Coding convention</td>
+  </tr>
+  <tr>
+    <td>15.2/R</td>
+    <td>An unconditional break statement shall terminate every non-empty switch clause.</td>
+    <td>Coding convention</td>
+  </tr>
+  <tr>
+    <td>15.3/R</td>
+    <td>The final clause of a switch statement shall be the default clause.</td>
+    <td>Coding convention</td>
+  </tr>
+  <tr>
+    <td>16.7/A</td>
+    <td>A pointer parameter in a function prototype should be declared as pointer to const if the pointer is not used to modify the addressed object.</td>
+    <td>Coding convention</td>
+  </tr>
+  <tr>
+    <td>17.5/A</td>
+    <td>The declaration of objects should contain no more than 2 levels of pointer indirection.</td>
+    <td>Coding convention</td>
+  </tr>
+  <tr>
+    <td>18.4/R</td>
+    <td>Unions shall not be used.</td>
+    <td>Coding convention</td>
+  </tr>
+  <tr>
+    <td>19.1/A</td>
+    <td>#include statements in a file should only be preceded by other preprocessor directives or comments.</td>
+    <td>Tool reports false positives</td>
+  </tr>
+  <tr>
+    <td>19.4/R</td>
+    <td>C macros shall only expand to a braced initialiser, a constant, a parenthesised expression, a type qualifier, a storage class specifier, or a do-while-zero construct.</td>
+    <td>Coding convention</td>
+  </tr>
+  <tr>
+    <td>19.7/A</td>
+    <td>A function should not be used in preference to a function-like macro.</td>
+    <td>Coding conventions</td>
+  </tr>
+  <tr>
+    <td>19.13/A</td>
+    <td>The # and ## preprocessor operators should not be used.</td>
+    <td>Coding conventions</td>
+  </tr>
+  <tr>
+    <td>19.15/R</td>
+    <td>Precautions shall be taken in order to prevent the contents of a header file being included twice.</td>
+    <td>Tool reports false positives</td>
+  </tr>
+</table>
+
+<p>
+<div style="width:500px;text-align:left;padding:5px;background-color:gold;border:1px
+ solid black;">
+<a href="docs/framework_components_3_40_02_07_misra.txt">Click here to view the
+  MISRA-C:2004 Findings Report.</a>
+</div>
+</p>
+
+<p>Justification for Not Addressing MISRA-C:2004 Violations</p>
+<ul>
+<li>In one case, 19.10/R is being reported that complains about
+macro arguments not being enclosed in parantheses. The macros in
+this particular instance have arguments that represent elements of
+a C structure. Enclosing these in parantheses cause C compilation
+errors and hence this error has been ignored. We are investigating if
+this requires a cgtools fix.
+</li>
+</ul>
+</p>
+
+</body>
+</html>

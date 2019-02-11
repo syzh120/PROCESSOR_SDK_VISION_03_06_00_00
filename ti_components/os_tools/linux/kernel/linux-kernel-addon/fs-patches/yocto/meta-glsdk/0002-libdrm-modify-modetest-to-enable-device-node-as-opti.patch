@@ -1,0 +1,118 @@
+From 37f8dfddb4e7b74318d7bcb5c940d34dd9579f9e Mon Sep 17 00:00:00 2001
+From: Subhajit Paul <a0132170@ti.com>
+Date: Tue, 22 May 2018 18:27:16 +0530
+Subject: [PATCH 2/5] libdrm: modify modetest to enable device node as option
+
+Signed-off-by: Subhajit Paul <a0132170@ti.com>
+---
+ .../0001-modetest-add-option-for-devnode.patch     | 83 ++++++++++++++++++++++
+ recipes-graphics/drm/libdrm_2.4.67.bbappend        |  7 +-
+ 2 files changed, 89 insertions(+), 1 deletion(-)
+ create mode 100644 recipes-graphics/drm/libdrm/0001-modetest-add-option-for-devnode.patch
+
+diff --git a/recipes-graphics/drm/libdrm/0001-modetest-add-option-for-devnode.patch b/recipes-graphics/drm/libdrm/0001-modetest-add-option-for-devnode.patch
+new file mode 100644
+index 0000000..85ebf79
+--- /dev/null
++++ b/recipes-graphics/drm/libdrm/0001-modetest-add-option-for-devnode.patch
+@@ -0,0 +1,83 @@
++From 41429ab7a3f437744055690cbdd97811475f94bb Mon Sep 17 00:00:00 2001
++From: Subhajit Paul <a0132170@ti.com>
++Date: Tue, 22 May 2018 18:22:25 +0530
++Subject: [PATCH] modetest: add option for devnode
++
++Signed-off-by: Subhajit Paul <a0132170@ti.com>
++---
++ tests/modetest/modetest.c | 24 ++++++++++++++++++++----
++ 1 file changed, 20 insertions(+), 4 deletions(-)
++
++diff --git a/tests/modetest/modetest.c b/tests/modetest/modetest.c
++index f4ce0ad..838bc3b 100644
++--- a/tests/modetest/modetest.c
+++++ b/tests/modetest/modetest.c
++@@ -71,6 +71,9 @@
++ #include "buffers.h"
++ #include "cursor.h"
++ 
+++#include <unistd.h>
+++#include <fcntl.h>
+++
++ struct crtc {
++ 	drmModeCrtc *crtc;
++ 	drmModeObjectProperties *props;
++@@ -1495,7 +1498,7 @@ static int pipe_resolve_connectors(struct device *dev, struct pipe_arg *pipe)
++ 	return 0;
++ }
++ 
++-static char optstr[] = "cdD:efM:P:ps:Cvw:t";
+++static char optstr[] = "cdD:efM:P:ps:Cvw:tn:";
++ 
++ int main(int argc, char **argv)
++ {
++@@ -1507,6 +1510,7 @@ int main(int argc, char **argv)
++ 	int test_vsync = 0;
++ 	int test_cursor = 0;
++ 	char *device = NULL;
+++	char *devnode = NULL;
++ 	char *module = NULL;
++ 	unsigned int i;
++ 	unsigned int count = 0, plane_count = 0;
++@@ -1517,6 +1521,7 @@ int main(int argc, char **argv)
++ 	struct property_arg *prop_args = NULL;
++ 	unsigned int args = 0;
++ 	int ret;
+++	bool opened = false;
++ 
++ 	memset(&dev, 0, sizeof dev);
++ 
++@@ -1528,6 +1533,10 @@ int main(int argc, char **argv)
++ 		case 'c':
++ 			connectors = 1;
++ 			break;
+++		case 'n':
+++			devnode = optarg;
+++			args--;
+++			break;
++ 		case 'D':
++ 			device = optarg;
++ 			args--;
++@@ -1610,9 +1619,16 @@ int main(int argc, char **argv)
++ 	if (!args)
++ 		encoders = connectors = crtcs = planes = framebuffers = 1;
++ 
++-	dev.fd = util_open(device, module);
++-	if (dev.fd < 0)
++-		return -1;
+++	if(devnode) {
+++		dev.fd = open(devnode, O_RDWR);
+++		if (dev.fd >= 0)
+++			opened = true;
+++	}
+++	if(!opened) {
+++		dev.fd = util_open(device, module);
+++		if (dev.fd < 0)
+++			return -1;
+++	}
++ 
++ 	if (test_vsync && !page_flipping_supported()) {
++ 		fprintf(stderr, "page flipping not supported by drm.\n");
++-- 
++1.9.1
++
+diff --git a/recipes-graphics/drm/libdrm_2.4.67.bbappend b/recipes-graphics/drm/libdrm_2.4.67.bbappend
+index 4a0784d..4942564 100644
+--- a/recipes-graphics/drm/libdrm_2.4.67.bbappend
++++ b/recipes-graphics/drm/libdrm_2.4.67.bbappend
+@@ -1,3 +1,8 @@
+ FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
+ 
+-SRC_URI += "file://0001-libdrm_omap-Add-new-masks-for-memory-allocations.patch"
++SRC_URI += " \
++	    file://0001-libdrm_omap-Add-new-masks-for-memory-allocations.patch \
++	    file://0001-modetest-add-option-for-devnode.patch \
++	   "
++
++PR_append = "_vision_sdk"
+-- 
+1.9.1
+

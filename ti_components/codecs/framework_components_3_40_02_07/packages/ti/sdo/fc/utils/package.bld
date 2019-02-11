@@ -1,0 +1,166 @@
+/*
+ * Copyright (c) 2012-2013, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ */
+
+/*
+ *  ======== package.bld ========
+ */
+
+var Build = xdc.useModule('xdc.bld.BuildEnvironment');
+var Pkg = xdc.useModule('xdc.bld.PackageContents');
+
+/* lib/ is a generated directory that 'xdc clean' should remove */
+Pkg.generatedFiles.$add("lib/");
+
+/*
+ * This package distributes its sources in the default release.  This is to
+ * enable better understanding by the customer/field, as well as enable
+ * modification and profiling techniques in the field.
+ */
+Pkg.attrs.exportSrc = true;
+
+
+var libraries = [
+    {
+        name:    "rmm",
+        sources: [ "rmm"],
+        defs   : ""
+    },
+   {
+        name:    "smgr",
+        sources: [ "smgr"],
+        defs   : ""
+    },
+    {
+        name:    "rmmp",
+        sources: [ "rmmp", "rmm"],
+        defs   : ""
+    },
+    {
+        name: "fcutils",
+        sources: ["fcutils.c"],
+        defs : ""
+    }
+
+ ];
+
+var librariesArm = [
+    {
+        name:    "rmm",
+        sources: [ "rmm", "bios_rts"],
+        defs   : ""
+    },
+    {
+        name:    "rmmp",
+        sources: [ "rmmp", "rmm"],
+        defs   : ""
+    },
+     {
+        name:    "smgrmp",
+        sources: [ "smgrmp", "smgr"],
+        defs   : ""
+    },
+    {
+        name:    "smgr",
+        sources: [ "smgr"],
+        defs   : ""
+    },
+    {
+        name:    "shmNonMp",
+        sources: [ "shm"],
+        defs   : " "
+    }
+];
+
+var liblist = {
+    "C64P"           : libraries,
+    "C64T"           : libraries,
+    "M3"             : libraries,
+    "M4"             : libraries,
+    "C674"           : libraries,
+    "A8F"            : libraries,
+    "ARP32"          : libraries,
+    "C66"            : libraries,
+    "C66_big_endian" : libraries,
+    "Arm9t"          : librariesArm,
+};
+
+
+Pkg.otherFiles = [
+    "shm.h",
+    "_rmm.h",
+    "_smgr.h",
+    "rmm.h",
+    "smgr.h",
+    "lock.h",
+    "utils.xs",
+    "rmmp.h",
+    "smgrmp.h",
+    "package.bld",
+    "bios_rts.h",
+    "memleakcheck.h",
+    "_rmmScratch.h",
+    "_rmmp.h",
+    "_smgrmp.h",
+    "fcutils.h",
+];
+
+for (var i = 0; i < Build.targets.length; i++) {
+
+    var targ = Build.targets[i];
+
+    if (liblist[targ.name] == null) {
+        print("Don't know how to build for target " + targ.name + " ...");
+        continue;
+    }
+
+//    print("building for target " + targ.name + " ...");
+
+    var libs = liblist[targ.name];
+
+    for (var j = 0; j < libs.length; j++) {
+
+//        print("Library " + libs[j].name + " ...");
+//        print("Source List " + libs[j].sources + " ...");
+
+        /* Build for all profiles */
+        for (var profile in targ.profiles) {
+
+            var srcs = libs[j].sources;
+
+            Pkg.addLibrary("lib/" + profile + "/" + libs[j].name, targ, {
+                profile: profile,
+                defs    : libs[j].defs
+            }).addObjects(srcs);
+        }
+    }
+}

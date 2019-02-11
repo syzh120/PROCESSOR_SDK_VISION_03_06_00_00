@@ -1,0 +1,61 @@
+From e974894771cfb415d1d2ed3d67c5a2677df8e54d Mon Sep 17 00:00:00 2001
+From: Robert Tivy <rtivy@ti.com>
+Date: Fri, 8 Mar 2013 10:33:39 -0800
+Subject: [PATCH v8 4/7] Add support to rproc_alloc() for a default firmware
+ name
+
+Signed-off-by: Robert Tivy <rtivy@ti.com>
+---
+ drivers/remoteproc/remoteproc_core.c |   25 +++++++++++++++++++++++--
+ 1 file changed, 23 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+index dd3bfaf..94c9b74 100644
+--- a/drivers/remoteproc/remoteproc_core.c
++++ b/drivers/remoteproc/remoteproc_core.c
+@@ -1222,19 +1222,40 @@ struct rproc *rproc_alloc(struct device *dev, const char *name,
+ 				const char *firmware, int len)
+ {
+ 	struct rproc *rproc;
++	char *template = "rproc-%s-fw";
++	char *p;
++	int name_len = 0;
+ 
+ 	if (!dev || !name || !ops)
+ 		return NULL;
+ 
+-	rproc = kzalloc(sizeof(struct rproc) + len, GFP_KERNEL);
++	if (!firmware)
++		/*
++		 * Make room for default firmware name (minus %s plus '\0').
++		 * If the caller didn't pass in a firmware name then
++		 * construct a default name.  We're already glomming 'len'
++		 * bytes onto the end of the struct rproc allocation, so do
++		 * a few more for the default firmware name (but only if
++		 * the caller doesn't pass one).
++		 */
++		name_len = strlen(name) + strlen(template) - 2 + 1;
++
++	rproc = kzalloc(sizeof(struct rproc) + len + name_len, GFP_KERNEL);
+ 	if (!rproc) {
+ 		dev_err(dev, "%s: kzalloc failed\n", __func__);
+ 		return NULL;
+ 	}
+ 
++	if (!firmware) {
++		p = (char *)rproc + sizeof(struct rproc) + len;
++		sprintf(p, template, name);
++	} else {
++		p = (char *)firmware;
++	}
++
++	rproc->firmware = p;
+ 	rproc->name = name;
+ 	rproc->ops = ops;
+-	rproc->firmware = firmware;
+ 	rproc->priv = &rproc[1];
+ 
+ 	device_initialize(&rproc->dev);
+-- 
+1.7.9.4
+

@@ -1,0 +1,866 @@
+%%{
+/*
+ * Copyright (c) 2013-2015, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * */
+/*
+ *  ======== Global.xdt ========
+ *  Template to generate C code for the NDK configuration
+ */
+
+var Clock = xdc.module('ti.sysbios.knl.Clock');
+
+var Global = xdc.module('ti.ndk.config.Global');
+
+// get handles to needed modules
+var Ip = xdc.module('ti.ndk.config.Ip');
+var Tcp = xdc.module('ti.ndk.config.Tcp');
+var Udp = xdc.module('ti.ndk.config.Udp');
+
+var Http = xdc.module('ti.ndk.config.Http');
+var Telnet = xdc.module('ti.ndk.config.Telnet');
+var DhcpServer = xdc.module('ti.ndk.config.DhcpServer');
+var Nat = xdc.module('ti.ndk.config.Nat');
+var Dns = xdc.module('ti.ndk.config.Dns');
+
+%%}
+%
+% /* generate include statements */
+%
+#include <ti/sysbios/BIOS.h>
+#include <ti/sysbios/knl/Clock.h>
+#include <ti/sysbios/knl/Task.h>
+
+#include <stdio.h>
+
+%
+% if (this.IPv6) {
+%
+#ifndef _INCLUDE_IPv6_CODE
+#define _INCLUDE_IPv6_CODE
+#endif
+
+%
+% }
+%
+#include <ti/ndk/inc/netmain.h>
+#include <ti/ndk/inc/_stack.h>
+
+#include <ti/ndk/config/prototypes.h>
+
+#include <xdc/runtime/System.h>
+#include <xdc/runtime/Types.h>
+
+% // Only generate code if the user specified that this should be done!
+% if (this.enableCodeGeneration) {
+%
+/*
+ *  Local NDK Memory Buffer Pool Definitions
+ *  
+ *  The below variables/defines are used to allow the user's *.cfg settings to  
+ *  override the defaults that are set in the OSAL's mem_data.c file  
+ *  src/stack/os/mem_data.c 
+ *  
+ */
+#include <ti/ndk/inc/_oskern.h>
+
+/*
+ *  Total MAX Memory Allocation
+ *
+ *  These sizes may be overridden by defining _NDK_MIN_PAGE_SIZE.  If defined,
+ *  the values for RAW_PAGE_SIZE and RAW_PAGE_COUNT must be defined elsewhere.
+ */
+#ifndef _NDK_MIN_PAGE_SIZE
+#define RAW_PAGE_SIZE           `Global.memRawPageSize`
+#define RAW_PAGE_COUNT          `Global.memRawPageCount`
+#endif
+
+const int ti_ndk_config_Global_rawPageSize  = RAW_PAGE_SIZE;
+const int ti_ndk_config_Global_rawPageCount = RAW_PAGE_COUNT;
+
+/* P.I.T. */
+#ifdef __ti__
+#pragma DATA_SECTION(ti_ndk_config_Global_pit, "`Global.memDataSection`");
+#pragma DATA_SECTION(ti_ndk_config_Global_pitBuffer, "`Global.memDataSection`");
+PITENTRY ti_ndk_config_Global_pit[RAW_PAGE_COUNT];
+UINT8    ti_ndk_config_Global_pitBuffer[RAW_PAGE_SIZE*RAW_PAGE_COUNT];
+#elif defined (__IAR_SYSTEMS_ICC__)
+PITENTRY ti_ndk_config_Global_pit[RAW_PAGE_COUNT];
+UINT8    ti_ndk_config_Global_pitBuffer[RAW_PAGE_SIZE*RAW_PAGE_COUNT];
+#else
+PITENTRY ti_ndk_config_Global_pit[RAW_PAGE_COUNT] __attribute__ ((section("`Global.memDataSection`")));
+UINT8    ti_ndk_config_Global_pitBuffer[RAW_PAGE_SIZE*RAW_PAGE_COUNT] __attribute__ ((section("`Global.memDataSection`")));
+#endif
+
+/*
+ *  Memory Bucket Information
+ */
+#define SMALLEST                48
+#define LARGEST                 (RAW_PAGE_SIZE)
+
+const int ti_ndk_config_Global_smallest = SMALLEST;
+const int ti_ndk_config_Global_largest  = LARGEST;
+
+/* Memory Slot Tracking */
+uint ti_ndk_config_Global_Id2Size[]  =
+        {SMALLEST, 96, 128, 256, 512, 1536, LARGEST};
+
+/*
+ * Local Packet Buffer Pool Definitions
+ *  
+ *  The below variables/defines are used to allow the user's *.cfg settings to  
+ *  override the defaults that are set in the Packet Buffer Manager (PBM) file  
+ *  src/stack/pbm/pbm_data.c 
+ *  
+ */
+
+/*
+ *  Number of buffers in PBM packet buffer free pool
+ *  
+ *  The number of buffers in the free pool can have a significant effect
+ *  on performance, especially in UDP packet loss. Increasing this number
+ *  will increase the size of the static packet pool use for both sending
+ *  and receiving packets.
+ *  
+ *  DM642 Users Note: The DM642 Ethernet driver assumes that its local
+ *  buffer allocation (EMAC_MAX_RX in dm642.c) plus PKT_NUM_FRAMEBUF
+ *  defined below is less than or equal to 256. The default value for
+ *  EMAC_MAX_RX in the DM642 Ethernet driver is 16.
+ *  
+ *  This size may be overridden by defining _NDK_MIN_PBM_BUFS.  If defined, the
+ *  value for PKT_NUM_FRAMEBUF must be defined elsewhere.
+ */  
+#ifndef _NDK_MIN_PBM_BUFS
+#define PKT_NUM_FRAMEBUF    `Global.pktNumFrameBufs`
+#endif
+
+/*
+ *  Max size buffer
+ *  
+ *  On L2 cached CPUs, this size must be cache-line multiple
+ *  The LogicIO Etherent (Macronix MAC) requires a larger buffer because
+ *  it transfers data in 16 byte chunks, and with its pre-pad and data
+ *  alignment, it will overflow a 1536 byte buffer.
+ *  
+ *  This size may be overridden by defining _NDK_MIN_PBM_BUFS.  If defined, the
+ *  value for PKT_SIZE_FRAMEBUF must also be defined elsewhere.
+ */  
+#ifndef _NDK_MIN_PBM_BUFS
+#define PKT_SIZE_FRAMEBUF   `Global.pktSizeFrameBuf`
+#endif
+
+const int ti_ndk_config_Global_numFrameBuf  = PKT_NUM_FRAMEBUF;
+const int ti_ndk_config_Global_sizeFrameBuf = PKT_SIZE_FRAMEBUF;
+
+/* Data space for packet buffers */
+#ifdef __ti__
+%
+%     // if Ethernet frame size is a multiple of 128, align frame buffer array
+%     if (!(Global.pktSizeFrameBuf % 128)) {
+%
+#pragma DATA_ALIGN(ti_ndk_config_Global_pBufMem, 128);
+%
+%     }  // end if aligned to 128 ...
+%
+#pragma DATA_SECTION(ti_ndk_config_Global_pBufMem, "`Global.pbmDataSection`");
+UINT8 ti_ndk_config_Global_pBufMem[PKT_NUM_FRAMEBUF * PKT_SIZE_FRAMEBUF];
+#elif defined (__IAR_SYSTEMS_ICC__)
+%
+%     // if Ethernet frame size is a multiple of 128, align frame buffer array
+%     if (!(Global.pktSizeFrameBuf % 128)) {
+%
+#pragma data_alignment = 128
+%
+%     } // else just declare it (don't align non-cache case)
+%
+UINT8 ti_ndk_config_Global_pBufMem[PKT_NUM_FRAMEBUF*PKT_SIZE_FRAMEBUF];
+#else
+%
+%     // if Ethernet frame size is a multiple of 128, align frame buffer array
+%     if (!(Global.pktSizeFrameBuf % 128)) {
+%
+UINT8 ti_ndk_config_Global_pBufMem[PKT_NUM_FRAMEBUF * PKT_SIZE_FRAMEBUF] __attribute__ ((aligned(128), section("`Global.pbmDataSection`")));
+%
+%     }
+%     else { // else just declare it (don't align non-cache case)
+%
+UINT8 ti_ndk_config_Global_pBufMem[PKT_NUM_FRAMEBUF * PKT_SIZE_FRAMEBUF] __attribute__ ((section("`Global.pbmDataSection`")));
+%
+%     }  // end if aligned to 128 ...
+%
+#endif
+
+#ifdef __ti__
+%
+%     // if Ethernet frame size is a multiple of 128, align frame buffer header array
+%     if (!(Global.pktSizeFrameBuf % 128)) {
+%
+#pragma DATA_ALIGN(ti_ndk_config_Global_pHdrMem, 128);
+%
+%     }  // end if aligned to 128 ...
+%
+#pragma DATA_SECTION(ti_ndk_config_Global_pHdrMem, "`Global.pbmDataSection`");
+UINT8 ti_ndk_config_Global_pHdrMem[PKT_NUM_FRAMEBUF * sizeof(PBM_Pkt)];
+#elif defined (__IAR_SYSTEMS_ICC__)
+%
+%     // if Ethernet frame size is a multiple of 128, align frame buffer header array
+%     if (!(Global.pktSizeFrameBuf % 128)) {
+%
+#pragma data_alignment = 128
+%
+%     } // else just declare it (don't align non-cache case)
+UINT8 ti_ndk_config_Global_pHdrMem[PKT_NUM_FRAMEBUF*sizeof(PBM_Pkt)];
+#else
+%
+%     // if Ethernet frame size is a multiple of 128, align frame buffer header array
+%     if (!(Global.pktSizeFrameBuf % 128)) {
+%
+UINT8 ti_ndk_config_Global_pHdrMem[PKT_NUM_FRAMEBUF * sizeof(PBM_Pkt)] __attribute__ ((aligned(128), section("`Global.pbmDataSection`")));
+%
+%     }
+%     else { // else just declare it (don't align non-cache case)
+%
+UINT8 ti_ndk_config_Global_pHdrMem[PKT_NUM_FRAMEBUF * sizeof(PBM_Pkt)] __attribute__ ((section("`Global.pbmDataSection`")));
+%
+%     }  // end if aligned to 128 ...
+%
+#endif
+
+%     /*
+%      * User is responsible for creating these functions if they create their
+%      * own stack thread.
+%      */
+%     if (this.stackThreadUser == null) {
+/* Our NETCTRL callback functions */
+static void ti_ndk_config_Global_NetworkOpen();
+static void ti_ndk_config_Global_NetworkClose();
+static void ti_ndk_config_Global_NetworkIPAddr(IPN IPAddr, uint IfIdx, uint fAdd);
+%     } // end if stackThreadUser
+%
+% } // end if enableCodeGeneration
+%
+% // Only generate code if the user specified that this should be done!
+% if (this.enableCodeGeneration) {
+%
+char *ti_ndk_config_Global_HostName    = "`Ip.hostName`";
+%
+%     if (Ip.address != null && Ip.address != "" &&
+%             Ip.address.toLowerCase() != "none") {
+%
+/* Static IP Address settings */
+char *LocalIPAddr = "`Ip.address`";
+char *LocalIPMask = "`Ip.mask`";
+char *GatewayIP   = "`Ip.gatewayIpAddr`";
+char *DomainName  = "`Ip.domainName`";
+%
+%     } // end if Ip.address != null
+% } // end if enableCodeGeneration
+%
+%
+
+%
+%
+% /* if set, user will define their own stackThread */
+% if (this.stackThreadUser == null) {
+% /* else generate stack thread for user here: */
+%
+extern void llTimerTick();
+
+/* Main Thread */
+Void ti_ndk_config_Global_stackThread(UArg arg0, UArg arg1)
+{
+%
+% // Only generate code if the user specified that this should be done!
+% if (this.enableCodeGeneration) {
+%
+    int rc;
+    HANDLE hCfg;
+%
+% } // end if enableCodeGeneration
+%
+
+    ti_sysbios_knl_Clock_Params clockParams;
+
+%
+% if (Program.build.target.name == "C64P"            ||
+%     Program.build.target.name == "C64P_big_endian" ||
+%     Program.build.target.name == "C66"             ||
+%     Program.build.target.name == "C66_big_endian") {
+%
+    extern volatile cregister Uns DNUM;
+
+    /* 
+     *  Only create NDK heartbeat on cores user has specifed to run stack on
+     *  via Global.multiCoreStackRunMode param(C6000 multi core devices only)
+     */
+if ((1 << DNUM) & (`Global.multiCoreStackRunMode`)) {
+
+%
+% } // end if C64P || C66 ...
+%
+    /* Create the NDK heart beat */
+    ti_sysbios_knl_Clock_Params_init(&clockParams);
+    clockParams.startFlag = TRUE;
+    clockParams.period = `Global.ndkTickPeriod`;
+    ti_sysbios_knl_Clock_create(&llTimerTick, clockParams.period, &clockParams, NULL);
+
+%
+% // Only generate code if the user specified that this should be done!
+% if (this.enableCodeGeneration) {
+%
+
+%
+% // generate call to "beginning" user hook:
+% if (Global.stackBeginHook != null) {
+%     var stkBegHookName = Global.stackBeginHook.$name;
+%     stkBegHookName = stkBegHookName.replace(/\./g,'_');
+    {
+        extern Void `stkBegHookName`();
+
+        /* call user defined stack beginning hook */
+        `stkBegHookName`();
+    }
+
+% } // end if (Global.stackBeginHook ...
+%
+% // convert net event scheduler priority and operating mode to strings
+% var localNetSchedPri;
+% if (Global.netSchedulerPri == Global.NC_PRIORITY_LOW) {
+%     localNetSchedPri = "NC_PRIORITY_LOW";
+% }
+% else {
+%     localNetSchedPri = "NC_PRIORITY_HIGH";
+% }
+%
+% var localNetSchedOp;
+% if (Global.netSchedulerOpMode == Global.NC_OPMODE_POLLING) {
+%     localNetSchedOp = "NC_OPMODE_POLLING";
+% }
+% else {
+%     localNetSchedOp = "NC_OPMODE_INTERRUPT";
+% }
+%
+    /* THIS MUST BE THE ABSOLUTE FIRST THING DONE IN AN APPLICATION!! */
+    rc = NC_SystemOpen(`localNetSchedPri`, `localNetSchedOp`);
+    if (rc) {
+        xdc_runtime_System_abort("NC_SystemOpen Failed (%d)\n");
+    }
+
+%
+% /* Create a new configuration */
+%
+    /* Create and build the system configuration from scratch. */
+    hCfg = CfgNew();
+    if (!hCfg) {
+        xdc_runtime_System_printf("Unable to create configuration\n");
+        goto main_exit;
+    }
+
+% if (Global.stackInitHook != null) {
+%     var stkInitHookName = Global.stackInitHook.$name;
+%     stkInitHookName = stkInitHookName.replace(/\./g,'_');
+    {
+        extern Void `stkInitHookName`();
+
+        /* call user defined stack initialization hook */
+        `stkInitHookName`(hCfg);
+    }
+
+% } // end if (Global.stackInitHook ...
+%
+% // Configure Ip if necessary
+% if (Ip.$used > 0) {
+    /* add the Ip module configuration settings. */
+    ti_ndk_config_ip_init(hCfg);
+
+% }
+%
+% // Configure HTTP if necessary
+% if (Http.$used > 0 && Http.$instances.length > 0) {
+    /* add the Http module configuration settings. */
+    ti_ndk_config_http_init(hCfg);
+
+% }
+%
+% // Configure Telnet if necessary
+% if (Telnet.$used > 0 && Telnet.$instances.length > 0) {
+    /* add the Telnet module configuration settings. */
+    ti_ndk_config_telnet_init(hCfg);
+
+% }
+%
+% // Configure Tcp if necessary
+% if (Tcp.$used > 0) {
+    /* add the Tcp module configuration settings. */
+    ti_ndk_config_tcp_init(hCfg);
+
+% }
+%
+% // Configure Udp if necessary
+% if (Udp.$used > 0) {
+    /* add the Udp module configuration settings. */
+    ti_ndk_config_udp_init(hCfg);
+
+% }
+%
+% // Configure NAT if necessary
+% if (Nat.$used > 0 && Nat.$instances.length > 0) {
+    /* add the Nat module configuration settings. */
+    ti_ndk_config_nat_init(hCfg);
+
+% }
+%
+% // Configure DNS Server if necessary
+% if (Dns.$used > 0 && Dns.$instances.length > 0) {
+    /* add the Dns module configuration settings. */
+    ti_ndk_config_dns_init(hCfg);
+
+% }
+%
+% /*
+%  *  Configure an external DNS Server if specified.  This must be done here
+%  *  only if the user has configured a static IP address and also has specified
+%  *  the address to an external DNS server.  If the program will use DHCP to
+%  *  obtain an IP address for the DSP, then this must be done in the Service
+%  *  Report function (ti_..._serviceReport())
+%  */
+%
+% if ((Ip.address != null && Ip.address != "" &&
+%         Ip.address.toLowerCase() != "none") && Dns.externDnsServIp != null) {
+    /* add the external DNS server to the configuration. */
+    ti_ndk_config_external_dns_init(hCfg);
+
+% }
+%
+%
+% // Configure DHCP Server if necessary
+% if (DhcpServer.$used > 0 && DhcpServer.$instances.length > 0) {
+    /* add the DhcpServer module configuration settings. */
+    ti_ndk_config_dhcpserver_init(hCfg);
+
+% }
+%
+% // Configure the severity level of system debug print messages to be displayed
+% // if it's been changed from the default value:
+% if (Global.debugPrintLevel != Global.defaultDebugPrintLevel) {
+    /* add the configuration settings for debug messages. */
+    rc = `Global.debugPrintLevel`;
+    CfgAddEntry(hCfg, CFGTAG_OS, CFGITEM_OS_DBGPRINTLEVEL,
+                 CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0 );
+
+% }
+%
+% // Configure the severity level debug abort messages to be displayed
+% if (Global.debugAbortLevel != Global.defaultDebugAbortLevel) {
+    /* add the configuration settings for debug aborts. */
+    rc = `Global.debugAbortLevel`;
+    CfgAddEntry(hCfg, CFGTAG_OS, CFGITEM_OS_DBGABORTLEVEL,
+                 CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0 );
+
+% }
+%
+% // Configure the priority level for low priority NDK tasks if changed from
+% // the default value
+% if (Global.lowTaskPriLevel != Global.defaultLowTaskPriLevel) {
+    /* add the configuration settings for NDK low priority task level. */
+    rc = `Global.lowTaskPriLevel`;
+    CfgAddEntry(hCfg, CFGTAG_OS, CFGITEM_OS_TASKPRILOW,
+                 CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0 );
+
+% }
+%
+% // Configure the priority level for normal priority NDK tasks if changed from
+% // the default value
+% if (Global.normTaskPriLevel != Global.defaultNormTaskPriLevel) {
+    /* add the configuration settings for NDK normal priority task level. */
+    rc = `Global.normTaskPriLevel`;
+    CfgAddEntry(hCfg, CFGTAG_OS, CFGITEM_OS_TASKPRINORM,
+                 CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0 );
+
+% }
+%
+% // Configure the priority level for high priority NDK tasks if changed from
+% // the default value
+% if (Global.highTaskPriLevel != Global.defaultHighTaskPriLevel) {
+    /* add the configuration settings for NDK high priority task level. */
+    rc = `Global.highTaskPriLevel`;
+    CfgAddEntry(hCfg, CFGTAG_OS, CFGITEM_OS_TASKPRIHIGH,
+                 CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0 );
+
+% }
+%
+% // Configure the priority level for kernel priority NDK tasks if changed from
+% // the default value
+% if (Global.kernTaskPriLevel != Global.defaultKernTaskPriLevel) {
+    /* add the configuration settings for NDK kernel priority task level. */
+    rc = `Global.kernTaskPriLevel`;
+    CfgAddEntry(hCfg, CFGTAG_OS, CFGITEM_OS_TASKPRIKERN,
+                 CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0 );
+
+% }
+%
+% // Configure the stack size for low priority NDK tasks if changed from
+% // the default value
+% if (Global.lowTaskStackSize != Global.defaultLowTaskStackSize) {
+    /* add the configuration settings for NDK low priority tasks stack size. */
+    rc = `Global.lowTaskStackSize`;
+    CfgAddEntry(hCfg, CFGTAG_OS, CFGITEM_OS_TASKSTKLOW,
+                 CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0 );
+
+% }
+%
+% // Configure the stack size for normal priority NDK tasks if changed from
+% // the default value
+% if (Global.normTaskStackSize != Global.defaultNormTaskStackSize) {
+    /* add the configuration settings for NDK norm priority tasks stack size. */
+    rc = `Global.normTaskStackSize`;
+    CfgAddEntry(hCfg, CFGTAG_OS, CFGITEM_OS_TASKSTKNORM,
+                 CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0 );
+
+% }
+%
+% // Configure the stack size for high priority NDK tasks if changed from
+% // the default value
+% if (Global.highTaskStackSize != Global.defaultHighTaskStackSize) {
+    /* add the configuration settings for NDK high priority tasks stack size. */
+    rc = `Global.highTaskStackSize`;
+    CfgAddEntry(hCfg, CFGTAG_OS, CFGITEM_OS_TASKSTKHIGH,
+                 CFG_ADDMODE_UNIQUE, sizeof(uint), (UINT8 *)&rc, 0 );
+
+% }
+%
+% if (Global.realm1Name != null && Global.realm1Name != "") {
+    CfgAddEntry(hCfg, CFGTAG_SYSINFO, CFGITEM_SYSINFO_REALM1, 0, 30,
+            (UINT8 *)"`Global.realm1Name`", 0);
+
+% }
+%
+% if (Global.realm2Name != null && Global.realm2Name != "") {
+    CfgAddEntry(hCfg, CFGTAG_SYSINFO, CFGITEM_SYSINFO_REALM1, 0, 30,
+            (UINT8 *)"`Global.realm2Name`", 0);
+
+% }
+%
+% if (Global.realm3Name != null && Global.realm3Name != "") {
+    CfgAddEntry(hCfg, CFGTAG_SYSINFO, CFGITEM_SYSINFO_REALM1, 0, 30,
+            (UINT8 *)"`Global.realm3Name`", 0);
+
+% }
+%
+% if (Global.realm4Name != null && Global.realm4Name != "") {
+    CfgAddEntry(hCfg, CFGTAG_SYSINFO, CFGITEM_SYSINFO_REALM1, 0, 30,
+            (UINT8 *)"`Global.realm4Name`", 0);
+
+% }
+%
+% // Configure user accounts if necessary
+% if (Global.userAccounts.length > 0) {
+    ti_ndk_config_global_addUserAccts(hCfg);
+
+% } 
+%
+% /* generate network start code + code to close the stack. */
+%
+    /*
+     *  Boot the system using this configuration
+     *
+     *  We keep booting until the function returns 0. This allows
+     *  us to have a "reboot" command.
+    */
+    do
+    {
+        rc = NC_NetStart(hCfg, ti_ndk_config_Global_NetworkOpen, 
+                         ti_ndk_config_Global_NetworkClose, 
+                         ti_ndk_config_Global_NetworkIPAddr);
+
+%     // call user hook function
+%     if (Global.stackRebootHook != null) {
+%         var stkRebHookName = Global.stackRebootHook.$name;
+%         stkRebHookName = stkRebHookName.replace(/\./g,'_');
+        {
+            extern Void `stkRebHookName`();
+
+            /* call user defined stack reboot hook */
+            `stkRebHookName`(hCfg, rc);
+        }
+
+%     } // end if (Global.stackRebootHook ...
+%
+    } while( rc > 0 );
+
+% // call user hook function
+% if (Global.stackDeleteHook != null) {
+%     var stkDelHookName = Global.stackDeleteHook.$name;
+%     stkDelHookName = stkDelHookName.replace(/\./g,'_');
+    {
+        extern Void `stkDelHookName`();
+
+        /* call user defined stack delete hook */
+        `stkDelHookName`(hCfg, rc);
+    }
+
+% } // end if (Global.stackDeleteHook ...
+%
+    /* Delete Configuration */
+    CfgFree(hCfg);
+
+    /* Close the OS */
+main_exit:
+    NC_SystemClose();
+    xdc_runtime_System_flush();
+
+%
+% } // end if enableCodeGeneration
+%
+% if (Program.build.target.name == "C64P"            ||
+%     Program.build.target.name == "C64P_big_endian" ||
+%     Program.build.target.name == "C66"             ||
+%     Program.build.target.name == "C66_big_endian") {
+%
+}  // end if ((1 << DNUM ...
+%
+% } // end if C64P || C66 ...
+%
+%
+}
+%
+% } // end if stackThreadUser == null
+
+%
+% /*
+%  *  Only generate code if the user specified that this should be done!
+%  */
+% if (this.enableCodeGeneration) {
+%     /*
+%      * User is responsible for creating callback functions if they create
+%      * their own stack thread.
+%      */
+%     if (this.stackThreadUser == null) {
+%
+/*
+ *  ti_ndk_config_Global_NetworkOpen
+ *
+ *  This function is called after the configuration has booted
+ */
+static void ti_ndk_config_Global_NetworkOpen()
+{
+% // call user hook function
+% if (Global.networkOpenHook != null) {
+%     var netOpenHookName = Global.networkOpenHook.$name;
+%     netOpenHookName = netOpenHookName.replace(/\./g,'_');
+    {
+        extern Void `netOpenHookName`();
+
+        /* call user defined network open hook */
+        `netOpenHookName`();
+    }
+% } // end if (networkOpenHook ...
+}
+
+/*
+ *  ti_ndk_config_Global_NetworkClose
+ *
+ *  This function is called when the network is shutting down,
+ *  or when it no longer has any IP addresses assigned to it.
+ */
+static void ti_ndk_config_Global_NetworkClose()
+{
+% // call user hook function
+% if (Global.networkCloseHook != null) {
+%     var netCloseHookName = Global.networkCloseHook.$name;
+%     netCloseHookName = netCloseHookName.replace(/\./g,'_');
+    {
+        extern Void `netCloseHookName`();
+
+        /* call user defined network close hook */
+        `netCloseHookName`();
+    }
+% } // end if (networkCloseHook ...
+}
+
+/*
+ *  ti_ndk_config_Global_NetworkIPAddr
+ *
+ *  This function is called whenever an IP address binding is
+ *  added or removed from the system.
+ */
+static void ti_ndk_config_Global_NetworkIPAddr(IPN IPAddr, uint IfIdx, uint fAdd)
+{
+    IPN IPTmp;
+
+    if (fAdd) {
+        xdc_runtime_System_printf("Network Added: ");
+    }
+    else {
+        xdc_runtime_System_printf("Network Removed: ");
+    }
+
+    // Print a message
+    IPTmp = ntohl(IPAddr);
+    xdc_runtime_System_printf("If-%d:%d.%d.%d.%d\n", IfIdx,
+            (UINT8)(IPTmp>>24)&0xFF, (UINT8)(IPTmp>>16)&0xFF,
+            (UINT8)(IPTmp>>8)&0xFF, (UINT8)IPTmp&0xFF);
+
+% // call user hook function
+% if (Global.networkIPAddrHook != null) {
+%     var netIpAddrHookName = Global.networkIPAddrHook.$name;
+%     netIpAddrHookName = netIpAddrHookName.replace(/\./g,'_');
+    {
+        extern Void `netIpAddrHookName`();
+
+        /* call user defined network IP address hook */
+        `netIpAddrHookName`(IPAddr, IfIdx, fAdd);
+    }
+% } // end if (networkIPAddrHook ...
+%
+    xdc_runtime_System_flush();
+}
+%
+%    } // end "if (Global.stackThreadUser ..."
+%
+/*
+ * Service Status Reports
+ *
+ * Function for reporting service status updates.
+ */
+static char *TaskName[]  = {"Telnet","HTTP","NAT","DHCPS","DHCPC","DNS"};
+static char *ReportStr[] = {"","Running","Updated","Complete","Fault"};
+static char *StatusStr[] = {"Disabled","Waiting","IPTerm","Failed","Enabled"};
+Void ti_ndk_config_Global_serviceReport(uint Item, uint Status,
+        uint Report, HANDLE h)
+{
+    xdc_runtime_System_printf("Service Status: %-9s: %-9s: %-9s: %03d\n",
+            TaskName[Item-1], StatusStr[Status],
+            ReportStr[Report/256], Report&0xFF);
+
+% /*
+%  *  Configure an external DNS Server if specified.  This must be done here
+%  *  only if the user specified to use DHCP (IP address == null) IP address and also
+%  *  has specified the address to an external DNS server.
+%  */
+% if ((Ip.address == null || Ip.address == "") && Dns.externDnsServIp != null) {
+    if (Item == CFGITEM_SERVICE_DHCPCLIENT &&
+        Status == CIS_SRV_STATUS_ENABLED &&
+        (Report == (NETTOOLS_STAT_RUNNING|DHCPCODE_IPADD) ||
+         Report == (NETTOOLS_STAT_RUNNING|DHCPCODE_IPRENEW)) ) {
+
+        /* add the external DNS server to the configuration. */
+        ti_ndk_config_external_dns_init(h);
+    }
+
+% } //end "if (Ip.addressType ..."
+%
+% // call user hook function
+% if (Global.serviceReportHook != null) {
+%     var serviceRepHookName = Global.serviceReportHook.$name;
+%     serviceRepHookName = serviceRepHookName.replace(/\./g,'_');
+    {
+        extern Void `serviceRepHookName`();
+
+        /* call user defined status report hook */
+        `serviceRepHookName`(Item, Status, Report, h);
+    }
+% } // end if (serviceReportHook ...
+%
+    xdc_runtime_System_flush();
+}
+
+%     if (Global.userAccounts.length > 0) {
+/*
+ * ======== ti_ndk_config_global_addUserAccts ========
+ */
+Void ti_ndk_config_global_addUserAccts(HANDLE hCfg)
+{
+    CI_ACCT acct;
+
+%         for (var i = 0; i < Global.userAccounts.length; i++) {
+    strcpy(acct.Username, "`Global.userAccounts[i].username`" );
+    strcpy(acct.Password, "`Global.userAccounts[i].password`" );
+    acct.Flags = CFG_ACCTFLG_CH1;
+    CfgAddEntry(hCfg, CFGTAG_ACCT, CFGITEM_ACCT_REALM, 0, sizeof(CI_ACCT),
+            (UINT8 *)&acct, 0);
+
+%        } // end "for (var i = 0 ..."
+}
+%    } // end "if (Global.userAccounts ..."
+%
+%} // end "if(enableCodeGeneration) ..."
+
+%
+% /*
+%  * Must ALWAYS generate the below taskCreateHook and taskExitHook functions!
+%  * These functions are called from within the NDK OSAL (task.c). As such,
+%  * they are also called for applications that have enableCodeGeneration set
+%  * to false.  If these are not generated, then apps that are not using NDK
+%  * config + code generation will not link due to undefined symbols for these
+%  * functions.
+%  */
+%
+/*
+ * ======== ti_ndk_config_global_taskCreateHook ========
+ * Automatically call fdOpenSession for dynamically created tasks.
+ * Requires Global.enableCodeGeneration == true
+ */
+Void ti_ndk_config_global_taskCreateHook(ti_sysbios_knl_Task_Handle h)
+{
+%
+% /* must use NDK config with code generation to get this feature */
+% if (this.enableCodeGeneration && Global.autoOpenCloseFD) {
+%
+    /* open the file descriptor session automatically */
+    if ((ti_sysbios_BIOS_getThreadType() == ti_sysbios_BIOS_ThreadType_Task)
+        && (h != ti_sysbios_knl_Task_getIdleTask())) {
+        /* open FD table session for the user.  Don't call if idle task */
+        fdOpenSession(h);
+    }
+%
+% } // end "if(enableCodeGeneration && autoOpenCloseFD) ..."
+%
+}
+
+/*
+ * ======== ti_ndk_config_global_taskExitHook ========
+ * Automatically call fdCloseSession for dynamically created tasks.
+ * Requires Global.enableCodeGeneration == true
+ */
+Void ti_ndk_config_global_taskExitHook(ti_sysbios_knl_Task_Handle h)
+{
+%
+% /* must use NDK config with code generation to get this feature */
+% if (this.enableCodeGeneration && Global.autoOpenCloseFD) {
+%
+    if (h != ti_sysbios_knl_Task_getIdleTask()) {
+        /* close FD table session for the user.  Don't call if idle task */
+        fdCloseSession(h);
+    }
+%
+% } // end "if(enableCodeGeneration && autoOpenCloseFD) ..."
+%
+}

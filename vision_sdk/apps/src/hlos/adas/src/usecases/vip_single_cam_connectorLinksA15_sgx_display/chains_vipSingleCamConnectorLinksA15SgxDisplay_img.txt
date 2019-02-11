@@ -1,0 +1,43 @@
+digraph chains_vipSingleCamConnectorLinksA15SgxDisplay {
+
+       ColorScheme [shape=none, margin=0, label=<
+       <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+       <TR><TD bgcolor="lightblue">IPU1_0</TD></TR>
+       <TR><TD bgcolor="lightsalmon">A15</TD></TR>
+       </TABLE>>];
+
+       /************** LINKS ************************/
+       Capture [color=lightblue, style=filled]
+       IPCOut_IPU1_0_A15_0_0 [color=lightblue, style=filled]
+       IPCIn_A15_0_IPU1_0_0 [color=lightsalmon, style=filled]
+       Dup_1 [color=lightsalmon, style=filled]
+       Alg_FrameCopy_2 [color=lightsalmon, style=filled]
+       Alg_FrameCopy_1 [color=lightsalmon, style=filled]
+       Merge [color=lightsalmon, style=filled]
+       Select_1 [color=lightsalmon, style=filled]
+       Gate_1 [color=lightsalmon, style=filled]
+       Null [color=lightsalmon, style=filled]
+       SgxFrmcpy [color=lightsalmon, style=filled]
+       IPCOut_A15_0_IPU1_0_0 [color=lightsalmon, style=filled]
+       IPCIn_IPU1_0_A15_0_0 [color=lightblue, style=filled]
+       Display_M4 [color=lightblue, style=filled]
+       GrpxSrc [color=lightblue, style=filled]
+       Display_Grpx [color=lightblue, style=filled]
+
+       /************** CONNECTIONS ************************/
+       Merge -> Select_1
+       Alg_FrameCopy_1 -> Merge[headlabel=Q0 minlen=2, labeldistance=3]
+       Dup_1 -> Alg_FrameCopy_1[taillabel=Q0, minlen=2, labeldistance=3]
+       Dup_1 -> Alg_FrameCopy_2[taillabel=Q1, minlen=2, labeldistance=3]
+       Capture -> IPCOut_IPU1_0_A15_0_0
+       SgxFrmcpy -> IPCOut_A15_0_IPU1_0_0
+       Select_1 -> SgxFrmcpy[taillabel=Q0, minlen=2, labeldistance=3]
+       Select_1 -> Gate_1[taillabel=Q1, minlen=2, labeldistance=3]
+       Alg_FrameCopy_2 -> Merge[headlabel=Q1 minlen=2, labeldistance=3]
+       Gate_1 -> Null
+       GrpxSrc -> Display_Grpx
+       IPCOut_IPU1_0_A15_0_0 -> IPCIn_A15_0_IPU1_0_0
+       IPCIn_A15_0_IPU1_0_0 -> Dup_1
+       IPCOut_A15_0_IPU1_0_0 -> IPCIn_IPU1_0_A15_0_0
+       IPCIn_IPU1_0_A15_0_0 -> Display_M4
+}

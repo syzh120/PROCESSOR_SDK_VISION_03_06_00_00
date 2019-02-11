@@ -1,0 +1,23 @@
+digraph chains_lvdsVipMultiCam_vpeEncNull {
+
+       ColorScheme [shape=none, margin=0, label=<
+       <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+       <TR><TD bgcolor="lightblue">IPU1_0</TD></TR>
+       <TR><TD bgcolor="lightsalmon">A15</TD></TR>
+       </TABLE>>];
+
+       /************** LINKS ************************/
+       Capture [color=lightblue, style=filled]
+       VPE [color=lightblue, style=filled]
+       Encode [color=lightblue, style=filled]
+       IPCOut_IPU1_0_A15_0_0 [color=lightblue, style=filled]
+       IPCIn_A15_0_IPU1_0_0 [color=lightsalmon, style=filled]
+       Null [color=lightsalmon, style=filled]
+
+       /************** CONNECTIONS ************************/
+       Encode -> IPCOut_IPU1_0_A15_0_0
+       VPE -> Encode
+       Capture -> VPE
+       IPCOut_IPU1_0_A15_0_0 -> IPCIn_A15_0_IPU1_0_0
+       IPCIn_A15_0_IPU1_0_0 -> Null
+}

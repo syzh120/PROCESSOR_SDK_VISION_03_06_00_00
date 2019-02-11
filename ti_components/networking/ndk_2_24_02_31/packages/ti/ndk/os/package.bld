@@ -1,0 +1,112 @@
+/*
+ * Copyright (c) 2012, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * */
+/*
+ * ======== package.bld ========
+ */
+
+Pkg.otherFiles = ["package.bld"];
+
+/*
+ *       M3 Library Build Options
+ *
+ * NOTE: currently only IPv4 M3 libraries have reduced sizes.
+ *
+ * Building for M3 requires reduced values for the following sizes,
+ * normally defined in pbm.c and mem.c:
+ *
+ *     RAW_PAGE_SIZE
+ *     RAW_PAGE_COUNT
+ *
+ * By defining _NDK_MIN_PAGE_SIZE, this allows
+ * these sizes to be redefined elsewhere.  For M3, we'll redefine
+ * them here, in the compiler options variable 'copts', then pass this for all
+ * BIOS 6 library versions for M3:
+ */
+var m3PbmCopts = " -D_NDK_MIN_PAGE_SIZE" +
+                 " -DRAW_PAGE_SIZE=3072" +
+                 " -DRAW_PAGE_COUNT=8 ";
+
+/* List of all the OS files */
+var osBios6LibFiles = [
+    "efs.c", 
+    "mem.c",
+    "mem_data.c",
+    "oem.c",
+    "ossys.c",
+    "task.c", 
+    "semaphore.c",
+    "intmgmt.c",
+];
+
+/* Build the libraries for all the targets specified. */
+for (var i = 0; i < Build.targets.length; i++) {
+    var target = Build.targets[i];
+
+    // first library to build
+    var libName = "os";
+
+    // build non-semaphore OSAL library
+    var libOptions = {
+            copts: "-DUSE_LL_SEMAPHORE=0 -D_NDK_EXTERN_CONFIG ",
+            incs: ndkPathInclude, 
+    };
+
+    // build M3 library with reduced buffer sizes for pbm.c and mem.c
+    if (target.name == "M3") {
+        libOptions.copts += m3PbmCopts;
+    }
+
+    var lib = Pkg.addLibrary("lib/" + libName, target,
+            libOptions);
+    lib.addObjects(osBios6LibFiles);
+
+    // build non-semaphore OSAL library
+    var libName = "os_sem";
+    var libOptions = {
+            copts: "-DUSE_LL_SEMAPHORE=1 -D_NDK_EXTERN_CONFIG ",
+            incs: ndkPathInclude, 
+    };
+
+    // build M3 library with reduced buffer sizes for pbm.c and mem.c
+    if (target.name == "M3") {
+        libOptions.copts += m3PbmCopts;
+    }
+
+    var lib = Pkg.addLibrary("lib/" + libName, target,
+             libOptions);
+    lib.addObjects(osBios6LibFiles);
+}
+
+/* include source files in the release package */
+Pkg.attrs.exportSrc = true;
+Pkg.attrs.exportCfg = true;
+

@@ -1,0 +1,60 @@
+clean::
+	$(RM) package/ti.sdo.fc.ires.hdvicp.sch
+	$(RM) package/.vers_g180
+	$(RM) package/.vers_r170
+	$(RM) package/.vers_b160
+	$(RM) package/.xdc-B06
+	$(RM) package/ti_sdo_fc_ires_hdvicp.java
+	$(RM) package/ti_sdo_fc_ires_hdvicp.class
+	$(RM) package/package_ti.sdo.fc.ires.hdvicp.c
+	$(RM) package/package.defs.h
+	$(RM) package/ti.sdo.fc.ires.hdvicp.ccs
+
+.interfaces: package/ti.sdo.fc.ires.hdvicp.sch package/.vers_g180 package/.vers_r170 package/.vers_b160 package/.xdc-B06 package/ti_sdo_fc_ires_hdvicp.java package/package_ti.sdo.fc.ires.hdvicp.c package/package.defs.h package/ti.sdo.fc.ires.hdvicp.ccs 
+package/package.xdc.inc: package/.vers_g180
+package/.vers_g180:
+package/package.xdc.inc: package/.vers_r170
+package/.vers_r170:
+package/package.xdc.inc: package/.vers_b160
+package/.vers_b160:
+
+.interfaces: HDVICP.xdc HDVICP2.xdc 
+
+# schema include file dependencies
+package.xs:
+package/package.xdc.inc: package.xs
+HDVICP2.xs:
+package/package.xdc.inc: HDVICP2.xs
+
+# schema update dependencies
+package/package.xdc.inc: HDVICP.xdc
+package/package.xdc.inc: HDVICP2.xdc
+package/package.xdc.inc: xdc/IPackage.xdc
+xdc/IPackage.xdc:
+vpath xdc/IPackage.xdc $(XPKGVPATH)
+package/package.xdc.inc: ti/sdo/fc/ires/IRESMAN.xdc
+ti/sdo/fc/ires/IRESMAN.xdc:
+vpath ti/sdo/fc/ires/IRESMAN.xdc $(XPKGVPATH)
+
+ifneq (clean,$(MAKECMDGOALS))
+/datalocal1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/shelf/java/tar.jar:
+package/package.xdc.inc: /datalocal1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/shelf/java/tar.jar
+/datalocal1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/services/spec/java/package.jar:
+package/package.xdc.inc: /datalocal1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/services/spec/java/package.jar
+/datalocal1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/services/intern/gen/java/package.jar:
+package/package.xdc.inc: /datalocal1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/services/intern/gen/java/package.jar
+/datalocal1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/services/intern/xsr/java/package.jar:
+package/package.xdc.inc: /datalocal1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/services/intern/xsr/java/package.jar
+/datalocal1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/services/global/java/package.jar:
+package/package.xdc.inc: /datalocal1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/services/global/java/package.jar
+/datalocal1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/shelf/java/js.jar:
+package/package.xdc.inc: /datalocal1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/shelf/java/js.jar
+/datalocal1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/shelf/java/antlr.jar:
+package/package.xdc.inc: /datalocal1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/shelf/java/antlr.jar
+/datalocal1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/shelf/java/ecj.jar:
+package/package.xdc.inc: /datalocal1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/shelf/java/ecj.jar
+/datalocal1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/services/intern/cmd/java/package.jar:
+package/package.xdc.inc: /datalocal1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/services/intern/cmd/java/package.jar
+endif
+# goals for files generated during schema generation but unspecified by schema's pattern rule
+

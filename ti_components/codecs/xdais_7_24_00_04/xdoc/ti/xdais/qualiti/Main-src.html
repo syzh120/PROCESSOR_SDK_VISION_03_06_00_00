@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>module ti.xdais.qualiti.Main</title>
+<meta name="googlebot" content="noindex,nofollow">
+<link rel="stylesheet" type="text/css" href="../../../src.css"/>
+</head>
+<body>
+<pre class=src>
+     1    <span class="comment">/*
+</span>     2    <span class="comment"> * Copyright (c) 2006-2012, Texas Instruments Incorporated
+</span>     3    <span class="comment"> * All rights reserved.
+</span>     4    <span class="comment"> *
+</span>     5    <span class="comment"> * Redistribution and use in source and binary forms, with or without
+</span>     6    <span class="comment"> * modification, are permitted provided that the following conditions
+</span>     7    <span class="comment"> * are met:
+</span>     8    <span class="comment"> *
+</span>     9    <span class="comment"> * *  Redistributions of source code must retain the above copyright
+</span>    10    <span class="comment"> *    notice, this list of conditions and the following disclaimer.
+</span>    11    <span class="comment"> *
+</span>    12    <span class="comment"> * *  Redistributions in binary form must reproduce the above copyright
+</span>    13    <span class="comment"> *    notice, this list of conditions and the following disclaimer in the
+</span>    14    <span class="comment"> *    documentation and/or other materials provided with the distribution.
+</span>    15    <span class="comment"> *
+</span>    16    <span class="comment"> * *  Neither the name of Texas Instruments Incorporated nor the names of
+</span>    17    <span class="comment"> *    its contributors may be used to endorse or promote products derived
+</span>    18    <span class="comment"> *    from this software without specific prior written permission.
+</span>    19    <span class="comment"> *
+</span>    20    <span class="comment"> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+</span>    21    <span class="comment"> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+</span>    22    <span class="comment"> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+</span>    23    <span class="comment"> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+</span>    24    <span class="comment"> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+</span>    25    <span class="comment"> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+</span>    26    <span class="comment"> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+</span>    27    <span class="comment"> * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+</span>    28    <span class="comment"> * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+</span>    29    <span class="comment"> * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+</span>    30    <span class="comment"> * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+</span>    31    <span class="comment"> *
+</span>    32    <span class="comment"> */</span>
+    33    <span class=key>metaonly</span> <span class=key>module</span> Main <span class=key>inherits</span> xdc.tools.ICmd {
+    34    
+    35        <span class=key>function</span> createPartControl(parent);
+    36        <span class="xdoc">/*!
+</span>    37    <span class="xdoc">     * usage help message
+</span>    38    <span class="xdoc">     */</span>
+    39        <span class=key>override</span> <span class=key>config</span> String usage[] = [
+    40            <span class="string">'[-h] [-u file] [-o outDir] [-ol] [-e] [-t toolsIniFile] '</span>,
+    41            <span class="string">'[-d 0|1|2] [-f] [-v|q] [-g] algproject'</span>,
+    42            <span class="string">'  -u: run user script'</span>,
+    43            <span class="string">'(following options in command-line mode only)'</span>,
+    44            <span class="string">'  -o: output HTML reports to outDir'</span>,
+    45            <span class="string">'  -l: output HTML reports in the algorithm library dir'</span>,
+    46            <span class="string">'       (default is in the algorithm base dir)'</span>,
+    47            <span class="string">'  -e: embed time stamp in the report filename'</span>,
+    48            <span class="string">'  -t: specify alternative Tools.ini file with toolpaths'</span>,
+    49            <span class="string">'  -d: report detail level'</span>,
+    50            <span class="string">'  -f: make report diff friendly'</span>,
+    51            <span class="string">'  -v: verbose'</span>,
+    52            <span class="string">'  -q: quiet'</span>,
+    53            <span class="string">'  algproject: a .qti file with algorithm description'</span>,
+    54        ];
+    55    
+    56    <span class=key>instance</span>:
+    57        <span class="xdoc">/*!
+</span>    58    <span class="xdoc">     * help
+</span>    59    <span class="xdoc">     */</span>
+    60        @CommandOption(<span class="string">"h"</span>)
+    61        <span class=key>config</span> Bool help = <span class=key>false</span>;
+    62        
+    63        <span class="xdoc">/*!
+</span>    64    <span class="xdoc">     * User script to run before the main script
+</span>    65    <span class="xdoc">     */</span>
+    66        @CommandOption(<span class="string">"u"</span>)
+    67        <span class=key>config</span> String userIniFile = <span class=key>null</span>;
+    68        
+    69        <span class="xdoc">/*!
+</span>    70    <span class="xdoc">     * HTML report output in alg. lib directory and not base directory
+</span>    71    <span class="xdoc">     */</span>
+    72        @CommandOption(<span class="string">"l"</span>)
+    73        <span class=key>config</span> Bool outputInLibDir = <span class=key>false</span>;
+    74    
+    75        <span class="xdoc">/*!
+</span>    76    <span class="xdoc">     * Make report diff friendly
+</span>    77    <span class="xdoc">     */</span>
+    78        @CommandOption(<span class="string">"f"</span>)
+    79        <span class=key>config</span> Bool diffFriendly = <span class=key>false</span>;
+    80    
+    81        <span class="xdoc">/*!
+</span>    82    <span class="xdoc">     * HTML report output in a specified directory
+</span>    83    <span class="xdoc">     */</span>
+    84        @CommandOption(<span class="string">"o"</span>)
+    85        <span class=key>config</span> String outputDir = <span class=key>null</span>;
+    86    
+    87        <span class="xdoc">/*!
+</span>    88    <span class="xdoc">     * Embed time stamp in HTML report filename
+</span>    89    <span class="xdoc">     */</span>
+    90        @CommandOption(<span class="string">"e"</span>)
+    91        <span class=key>config</span> Bool embedTimeStampInReportName = <span class=key>false</span>;
+    92    
+    93        <span class="xdoc">/*!
+</span>    94    <span class="xdoc">     * Test detail level
+</span>    95    <span class="xdoc">     */</span>
+    96        @CommandOption(<span class="string">"d"</span>)
+    97        <span class=key>config</span> Int testDetailLevel = 2;
+    98    
+    99        <span class="xdoc">/*!
+</span>   100    <span class="xdoc">     * Alternative Tools.ini file (full path)
+</span>   101    <span class="xdoc">     */</span>
+   102        @CommandOption(<span class="string">"t"</span>)
+   103        <span class=key>config</span> String toolsIniFile = <span class=key>null</span>;
+   104    
+   105        <span class="xdoc">/*!
+</span>   106    <span class="xdoc">     * Verbose
+</span>   107    <span class="xdoc">     */</span>
+   108        @CommandOption(<span class="string">"v"</span>)
+   109        <span class=key>config</span> Bool verbose = <span class=key>false</span>;
+   110    
+   111        <span class="xdoc">/*!
+</span>   112    <span class="xdoc">     * Quiet
+</span>   113    <span class="xdoc">     */</span>
+   114        @CommandOption(<span class="string">"q"</span>)
+   115        <span class=key>config</span> Bool quiet = <span class=key>false</span>;
+   116    
+   117        <span class="xdoc">/*!
+</span>   118    <span class="xdoc">     * Gui
+</span>   119    <span class="xdoc">     */</span>
+   120        @CommandOption(<span class="string">"g"</span>)
+   121        <span class=key>config</span> Bool gui = <span class=key>false</span>;
+   122    
+   123    }
+</pre>
+</body></html>

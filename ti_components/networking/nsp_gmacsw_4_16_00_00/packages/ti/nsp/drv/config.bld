@@ -1,0 +1,154 @@
+/*
+ *  ======== config.bld ========
+ *  Sample Build configuration script
+ */
+
+/*
+ *  Must define Code Generation Tools, XDC Tools and NDK installation locations
+ *  here
+ *
+ *  These variables are used to find the correct header files during a
+ *  rebuild of the NSP ethernet  driver librares.
+ *
+ *  Note: when defining the path to your Code Generation Tools, XDC Tools and
+ *  NDK installations, you should use the forward slash ("/") character for path
+ *  separation.
+ *
+ *  For example, if you have installed NDK in the following
+ *  location:
+ *
+ *   C:\Program Files\Texas Instruments\ndk_2_22_01_14
+ *
+ *  Then you should specify ndkRoot as follows:
+ *
+ *  // note use of "/" as path seperator:
+ *  var ndkRoot = "D:/NDK/TI-NDK/ndk_2_20_03_24/packages";
+ *
+ */
+
+/*
+ * Dependent Packages install locations. Update these for your system.
+ */
+
+var os = java.lang.System.getProperty("os.name");
+
+if (os.contains("Linux")) {
+    var toolsDir = "/opt/ti/";
+} else if (os.contains("Windows"))  {
+    var toolsDir = "c:/ti/";
+} else {
+    throw "OS is not supported!";
+}
+
+var compilerDir = toolsDir + "ccsv7/tools/compiler/";
+
+var ndkRoot = java.lang.System.getenv("NDK_ROOT");
+var edmaRoot = java.lang.System.getenv("EDMA3_ROOT");
+var biosRoot = java.lang.System.getenv("BIOS_ROOT");
+var tiArmRoot = java.lang.System.getenv("TIARMCGT_ROOT");
+var gccRoot = java.lang.System.getenv("GCC_ROOT");
+var tiDspRoot = java.lang.System.getenv("CGT6X_ROOT");
+
+if (ndkRoot == null) ndkRoot = toolsDir + "ndk_2_24_02_31";
+if (edmaRoot == null) edmaRoot = toolsDir + "edma3_lld_02_12_00_21";
+if (biosRoot == null) biosRoot = toolsDir + "bios_6_46_06_00";
+if (tiArmRoot == null) tiArmRoot = compilerDir + "ti-cgt-arm_16.9.2.LTS";
+if (gccRoot == null) gccRoot = compilerDir + "gcc-arm-none-eabi-4_9-2015q3";
+if (tiDspRoot == null) tiDspRoot = compilerDir + "ti-cgt-c6000_8.2.4";
+
+if (!java.io.File(ndkRoot).exists()) throw "define NDK_ROOT!";
+if (!java.io.File(edmaRoot).exists()) throw "define EDMA3_ROOT!";
+if (!java.io.File(biosRoot).exists()) throw "define BIOS_ROOT!";
+if (!java.io.File(tiArmRoot).exists()) throw "define TIARMCGT_ROOT!";
+if (!java.io.File(gccRoot).exists()) throw "define GCC_ROOT!";
+if (!java.io.File(tiDspRoot).exists()) throw "define CGT6X_ROOT!";
+
+var commonInc   = "-I\"" + biosRoot + "/packages\" " +
+                  "-I\"" + ndkRoot + "/packages\" " +
+                  "-I\"" + edmaRoot + "/packages\" " +
+                  "-I\"" + edmaRoot + "/examples/edma3_driver/src\" ";
+
+var tiDspCommonCopts = " ";
+var tiDspInc = " -I\"" + tiDspRoot + "/include\" ";
+var tiArmCommonCopts = " ";
+var tiArmInc = " -I\"" + tiArmRoot + "/include\" ";
+var gccCommonCopts = " ";
+var gccInc   = " -I\"" + gccRoot + "/include\" ";
+
+/* Uncomment below to enable NSP dynamic allocation */
+//tiDspCommonCopts += " -DNSP_DYNAMIC_ALLOCATION";
+//tiArmCommonCopts += " -DNSP_DYNAMIC_ALLOCATION";
+//gccCommonCopts   += " -DNSP_DYNAMIC_ALLOCATION";
+
+/* Uncomment below to enable Dual MAC mode */
+// tiDspCommonCopts += " -DDUAL_MAC_MODE ";
+// tiArmCommonCopts += " -DDUAL_MAC_MODE ";
+// gccCommonCopts   += " -DDUAL_MAC_MODE ";
+
+/* TI C674x DSP Target compiler options */
+var tiC674DSPTarget = xdc.useModule('ti.targets.elf.C674');
+tiC674DSPTarget.rootDir = tiDspRoot;
+tiC674DSPTarget.ccOpts.prefix += tiDspCommonCopts + " -mi10 -mo";
+tiC674DSPTarget.ccOpts.suffix += tiDspInc + commonInc;
+
+/* TI C66x DSP Target compiler options */
+var tiC66DSPTarget = xdc.useModule('ti.targets.elf.C66');
+tiC66DSPTarget.rootDir = tiDspRoot;
+tiC66DSPTarget.ccOpts.prefix += tiDspCommonCopts + " -mi10 -mo";
+tiC66DSPTarget.ccOpts.suffix += tiDspInc + commonInc;
+
+/* GCC ARM v7A Cortex A8 Target compiler options */
+var gccA8MPUTarget = xdc.useModule('gnu.targets.arm.A8F');
+gccA8MPUTarget.rootDir = gccRoot;
+gccA8MPUTarget.ccOpts.prefix += gccCommonCopts + " -DCORTEX_AX";
+gccA8MPUTarget.ccOpts.suffix += gccInc + commonInc;
+
+/* GCC ARM v7A Cortex A15 Target compiler options */
+var gccA15MPUTarget = xdc.useModule('gnu.targets.arm.A15F');
+gccA15MPUTarget.rootDir = gccRoot;
+gccA15MPUTarget.ccOpts.prefix += gccCommonCopts + " -DCORTEX_AX";
+gccA15MPUTarget.ccOpts.suffix += gccInc + commonInc;
+
+/* TI ARM v7A Cortex A8 Target compiler options */
+var tiA8MPUTarget = xdc.useModule('ti.targets.arm.elf.A8F');
+tiA8MPUTarget.rootDir = tiArmRoot;
+tiA8MPUTarget.ccOpts.prefix += tiArmCommonCopts + " -ms -DCORTEX_AX";
+tiA8MPUTarget.ccOpts.suffix += tiArmInc + commonInc;
+
+/* GCC ARM v7M Cortex M3 Target compiler options */
+var gccM3IPUTarget = xdc.useModule('gnu.targets.arm.M3');
+gccM3IPUTarget.rootDir = gccRoot;
+gccM3IPUTarget.ccOpts.prefix += gccCommonCopts + " -DCORTEX_MX";
+gccM3IPUTarget.ccOpts.suffix += gccInc + commonInc;
+
+/* GCC ARM v7M Cortex M4 Target compiler options */
+var gccM4IPUTarget = xdc.useModule('gnu.targets.arm.M4');
+gccM4IPUTarget.rootDir = gccRoot;
+gccM4IPUTarget.ccOpts.prefix += gccCommonCopts + " -DCORTEX_MX";
+gccM4IPUTarget.ccOpts.suffix += gccInc + commonInc;
+
+/* TI ARM v7M Cortex M3 Target compiler options */
+var tiM3IPUTarget = xdc.useModule('ti.targets.arm.elf.M3');
+tiM3IPUTarget.rootDir = tiArmRoot;
+tiM3IPUTarget.ccOpts.prefix += tiArmCommonCopts + " -DCORTEX_MX";
+tiM3IPUTarget.ccOpts.suffix += tiArmInc + commonInc;
+
+/* TI ARM v7M Cortex M4 Target compiler options */
+var tiM4IPUTarget = xdc.useModule('ti.targets.arm.elf.M4');
+tiM4IPUTarget.rootDir = tiArmRoot;
+tiM4IPUTarget.ccOpts.prefix += tiArmCommonCopts + " -DCORTEX_MX";
+tiM4IPUTarget.ccOpts.suffix += tiArmInc + commonInc;
+
+/* List the compiler targets in in the Build.targets array */
+Build.targets = [
+                    //tiC674DSPTarget,
+                    //tiC66DSPTarget,
+                    //gccA8MPUTarget,
+                    gccA15MPUTarget,
+                    //tiA8MPUTarget,
+                    //gccM3IPUTarget,
+                    //gccM4IPUTarget,
+                    //tiM3IPUTarget,
+                    tiM4IPUTarget
+                ];
+

@@ -1,0 +1,49 @@
+/*
+ *  ======== config.bld ========
+ *  Sample Build configuration script
+ */
+
+/* load the required modules for the configuration */
+
+var platform_xs = xdc.loadCapsule("platform.xs");
+
+/**********************************c66******************************/
+var C66_ELF = xdc.useModule('ti.targets.elf.C66');
+
+C66_ELF.rootDir = java.lang.System.getenv("CGTOOLS_ELF");
+
+C66_ELF.ccOpts.suffix += " -mi10 -mo --symdebug:none -O3";
+
+/* linker options */
+
+C66_ELF.lnkOpts.suffix += " --zero_init=off ";
+C66_ELF.lnkOpts.suffix += " --dynamic --retain=_Ipc_ResetVector";
+
+C66_ELF.platforms = ["ti.platforms.evmDRA7XX:DSP_1"];
+
+C66_ELF.platform = C66_ELF.platforms[0];
+/**********************************c66******************************/
+
+/**********************************c66******************************/
+var C66e = xdc.useModule('ti.targets.elf.C66_big_endian');
+
+C66e.rootDir = java.lang.System.getenv("CGTOOLS_ELF");
+
+C66e.ccOpts.suffix += " -mi10 -mo -me --symdebug:none -O3";
+
+/* linker options */
+
+C66e.lnkOpts.suffix += " --zero_init=off ";
+C66e.lnkOpts.suffix += " --dynamic --retain=_Ipc_ResetVector";
+
+C66e.platforms = ["ti.platforms.evmDRA7XX:DSP_1"];
+
+C66e.platform = C66e.platforms[0];
+/**********************************c66******************************/
+
+
+/* list interested targets in Build.targets array  */
+Build.targets = [
+                    C66_ELF,
+                    C66e
+                ];

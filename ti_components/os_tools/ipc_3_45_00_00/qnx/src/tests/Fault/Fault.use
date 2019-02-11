@@ -1,0 +1,25 @@
+Fault Test
+
+Syntax:
+  Fault [-f<faultNum>] <num_iterations> [<procId>]
+
+    <faultNum>       can be
+                      1: MMU Fault (data read access)
+                      2: MMU Fault (data write access)
+                      3: MMU Fault (program access)
+                      4: Exception
+                      5: Watchdog timeout
+                     If faultNum is negative, the fault happens before the slave
+                     processor replies to first incoming message. Otherwise,
+                     the fault happens after the slave processor calls
+                     MessageQ_put to reply to the first incoming message.
+
+    <num_iterations> Number of messages to send
+
+    <procId>         Multiproc Id of processor to communicate with. Default
+                     of 1.
+
+Examples:
+  Fault -f 1 10        Initiate an MMU fault via an invalid data read access on
+                       slave core with procId 1, and then exchange 10 msgs with
+                       it after recovery.

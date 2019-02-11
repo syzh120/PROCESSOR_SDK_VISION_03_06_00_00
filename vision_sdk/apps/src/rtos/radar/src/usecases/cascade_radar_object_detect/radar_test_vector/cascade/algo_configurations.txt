@@ -1,0 +1,108 @@
+###############################################################################
+#
+# FFT Create Params
+#
+###############################################################################
+
+###############################################################################
+# FFT algorithm Id
+FFT_Config_ID 0
+#/**< Enable Windowing */
+enableWindowing 1
+#/**< Enable Dcoffset */
+enableDcoffset 1
+#/**< Enable InterferenceZeroOut */
+enableInterferenceZeroOut 0
+#/**< Enable DopplerCorrection */
+enableDopplerCorrection 0
+#/**< Enable Windowing */
+windowingScaleFactor 15
+#/**< Enable Windowing */
+interferenceThreshold 1500
+#/**< Set it to 1 to enable overflow detection else set it to zero.
+# * If enabled the applet will return the scale factors to be applied
+# * at each stage as part of outArgs. if scale factors are zero for
+# * each stage then there is no overflow detected.
+# */
+enableOverFlowDetection 0
+#/**< Output container format. Care should be taken as the input
+# *   format for the FFT operation (Horizontal or Vertical) is 16-bit.
+# *   If you set the outputContainerFormat is set as 32 bit for First
+# *   dimension FFT then the second Dimension would not be able to
+# *   take this input.
+# */
+#typedef enum
+#{
+#  FFT_TI_CONTAINER_FORMAT_16BIT= 0,
+#  FFT_TI_CONTAINER_FORMAT_32BIT= 1
+#} FFT_TI_ContainerFormat;
+outputContainerFormat  0
+
+###############################################################################
+FFT_Config_ID 1
+enableWindowing 1
+enableDcoffset 0
+enableInterferenceZeroOut 0
+enableDopplerCorrection 0
+windowingScaleFactor 15
+interferenceThreshold 1500
+enableOverFlowDetection 0
+outputContainerFormat  1
+
+###############################################################################
+#
+# CFAR Create Params
+#
+###############################################################################
+
+#/**< Desired false detection ratio.*/
+pfa 0.000001
+#/**< Relative detection threshold. If K0 is non-zero value, pfa setting
+# *   will be ignored.*/
+K0 6.3
+#/**< Doppler search relative threshold.*/
+dopplerSearchRelThr 6.3
+#/**< Flag for enabling second pass search, if set to 1. If set to 0,
+# *   no second pass search*/
+enableSecondPassSearch 1
+#/**< Search window size for range domain search.*/
+searchWinSizeRange 16
+#/**< Number of guard samples for range domain search.*/
+guardSizeRange 4
+#/**< Search window size for Doppler domain search.*/
+searchWinSizeDoppler 8
+#/**< Number of guard samples for Doppler domain search.*/
+guardSizeDoppler 0
+#/**< maximum number of detected obj.*/
+maxNumDetObj 200
+#/**< number of samples to be skipped on the left side in range domain. */
+leftSkipSize 1
+#/**< number of samples to be skipped on the right side in range domain. */
+rightSkipSize 18
+#/**< number of samples to be skipped on the left side in azimuth domain. */
+leftSkipSizeAzimuth 0
+#/**< number of samples to be skipped on the right side in azimuth domain. */
+rightSkipSizeAzimuth 0
+#/**<use log2(mag) as input*/
+log2MagFlag 0
+
+###############################################################################
+#
+# AoA Create Params
+#
+###############################################################################
+
+#/**< azimuth FFT output row in which the maximums are search */
+rxMainRowIndex 0
+#/**< Azimuth FFT size */
+azimuthFFTsize 256
+#/**< Number of azimuth FFTs per detected Range/Doppler point */
+numAzimuthFFTs 4
+#/**< Elevation FFT Size */
+elevationFFTsize 64
+#/**< Threshold for multiple peak detection */
+multiPeakThresholdScale 0.95
+#/**< Enabling flag for clutter removal. */
+enableClutterRemoval 0
+#/**< Enabling flag for max velocity */
+enableExtendedMaxVelocity 0

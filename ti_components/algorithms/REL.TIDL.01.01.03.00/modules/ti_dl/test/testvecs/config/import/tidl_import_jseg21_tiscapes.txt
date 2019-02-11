@@ -1,0 +1,25 @@
+# Default - 0
+randParams         = 0 
+
+# 0: Caffe, 1: TensorFlow, Default - 0
+modelType          = 0 
+
+# 0: Fixed quantization By tarininng Framework, 1: Dyanamic quantization by TIDL, Default - 1
+quantizationStyle  = 1 
+
+# quantRoundAdd/100 will be added while rounding to integer, Default - 50
+quantRoundAdd      = 25
+
+numParamBits       = 8
+# 0 : 8bit Unsigned, 1 : 8bit Signed Default - 1
+inElementType      = 0
+
+inputNetFile       = ..\..\test\testvecs\config\caffe_models\tiscapes_jseg21\jacintonet11+seg10_train_L1_nobn_noquant_optimized_iter_32000_tidl.prototxt 
+inputParamsFile    = ..\..\test\testvecs\config\caffe_models\tiscapes_jseg21\jacintonet11+seg10_train_L1_bn_noquant_optimized_iter_32000.caffemodel
+
+outputNetFile      = "..\..\test\testvecs\config\tidl_models\jsegnet21\tidl_net_jsegnet21v2.bin"
+outputParamsFile   = "..\..\test\testvecs\config\tidl_models\jsegnet21\tidl_param_jsegnet21v2.bin"
+
+rawSampleInData = 1
+sampleInData = "..\..\test\testvecs\input\000100_1024x512_bgr.y"
+tidlStatsTool = "..\quantStatsTool\eve_test_dl_algo.out.exe"

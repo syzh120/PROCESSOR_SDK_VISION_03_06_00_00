@@ -1,0 +1,17 @@
+UseCase: chains_issMultCaptIspSimcop_Stereo
+
+
+IssCapture -> IssM2mIsp -> VPE_Capture -> Select_Capture -> IssM2mSimcop -> Merge_Simcop -> Sync_CensusIn -> Dup_CensusIn 
+
+Select_Capture -> Merge_Simcop
+
+
+
+Dup_CensusIn -> Alg_Census (EVE1) -> Alg_DisparityHamDist (EVE1) -> Merge_StereoOut -> Alg_StereoPostProcess (DSP1) -> Display_Disparity
+
+Dup_CensusIn->Merge_StereoOut
+
+
+IssM2mIsp -> Select -> Alg_IssAewb
+
+GrpxSrc -> Display_Grpx

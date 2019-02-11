@@ -1,0 +1,37 @@
+rpmsg-omx Stress Test
+
+Syntax:
+  rpmsg-omx-errors -t <test_no> [-c <id>] [-a <arg>]
+
+  Where:
+    -t <test_no>    Test number to be run. Valid values are 1-6.
+                    1: Run Divide by Zero test
+                    2: Run Watchdog test
+                    3: Run MMU Fault test
+                    4: Run AMMU Fault test
+                    5: Run Read Invalid Address test
+                    6: Run Write Invalid Address test
+    -c <id>         Core ID with which to communicate.
+                    0: IPU CORE0 (default)
+                    1: IPU CORE1
+    -a <arg>        For tests 3 through 6, the argument to be used with the test
+                    There is no default, and this must be set for these tests.
+                    For tests 3 and 4: 1 for Read operaion, 2 for Write
+                    For tests 5 and 6: Address in hex
+
+Examples:
+  rpmsg-omx-errors -t 1 -c 0            Runs the Divide by Zero test on CORE0
+  rpmsg-omx-errors -t 1 -c 1            Runs the Divide by Zero test on CORE1
+  rpmsg-omx-errors -t 2 -c 1            Runs the Watchdog test on CORE1
+  rpmsg-omx-errors -t 3 -c 0 -a 1       Runs the MMU Fault by Read operation
+                                        test on CORE0
+  rpmsg-omx-errors -t 3 -c 1 -a 2       Runs the MMU Fault by Write operation
+                                        test on CORE1
+  rpmsg-omx-errors -t 4 -c 0 -a 1       Runs the AMMU Fault by Read operation
+                                        test on CORE0
+  rpmsg-omx-errors -t 4 -c 1 -a 2       Runs the AMMU Fault by Write operation
+                                        test on CORE1
+  rpmsg-omx-errors -t5 -c0 -a99000000   Runs the Invalid Read Address test at
+                                        address 0x99000000 on CORE0
+  rpmsg-omx-errors -t6 -c1 -a99000000   Runs the Invalid Write Address test at
+                                        address 0x99000000 on CORE1

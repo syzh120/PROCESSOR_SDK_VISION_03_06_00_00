@@ -1,0 +1,517 @@
+/*******************************************************************/
+/* This GEL file is loaded on the command line of Code Composer    */
+/* The StartUp() function is called every time you start           */
+/* Code Composer.  You can customize this function to              */
+/* initialize wait states or to perform other initialization.      */
+/*                                                                 */
+/* DRA7xx set up all cores for EVESW                               */
+/*                                                                 */
+/*                                                                 */
+/*******************************************************************/
+
+#define WR_MEM_32(addr, data)   *(unsigned int*)(addr) =(unsigned int)(data)
+#define RD_MEM_32(addr)         *(unsigned int*)(addr)
+#define uint32_t                unsigned int
+
+#define DEBUG_PRINT     1
+
+
+/*******************************************************************************
+        DRA7xx Registers Map Defines: CortexA15_CPU1 view
+*******************************************************************************/
+#define GPMC_TARG                    0x00000000
+#define MPU_RAM                      0x402F0000
+#define OCMC_RAM1_TARG               0x40300000
+#define OCMC_RAM2_TARG               0x40400000
+#define OCMC_RAM3_TARG               0x40500000
+#define DSP1_L2_SRAM_TARG            0x40800000
+#define DSP1_SYSTEM_TARG             0x40D00000
+#define DSP1_MMU0CFG_TARG            0x40D01000
+#define DSP1_MMU1CFG_TARG            0x40D02000
+#define DSP1_FW0CFG_TARG             0x40D03000
+#define DSP1_FW1CFG_TARG             0x40D04000
+#define DSP1_EDMA_TC0_TARG           0x40D05000
+#define DSP1_EDMA_TC1_TARG           0x40D06000
+#define DSP1_NoC_TARG                0x40D07000
+#define DSP1_EDMA_CC_TARG            0x40D10000
+#define DSP1_L1P_SRAM_TARG           0x40E00000
+#define DSP1_L1D_SRAM_TARG           0x40F00000
+#define DSP2_L2_SRAM_TARG            0x41000000
+#define DSP2_SYSTEM_TARG             0x41500000
+#define DSP2_MMU0CFG_TARG            0x41501000
+#define DSP2_MMU1CFG_TARG            0x41502000
+#define DSP2_FW0CFG_TARG             0x41503000
+#define DSP2_FW1CFG_TARG             0x41504000
+#define DSP2_EDMA_TC0_TARG           0x41505000
+#define DSP2_EDMA_TC1_TARG           0x41506000
+#define DSP2_NoC_TARG                0x41507000
+#define DSP2_EDMA_CC_TARG            0x41510000
+#define DSP2_L1P_SRAM_TARG           0x41600000
+#define DSP2_L1D_SRAM_TARG           0x41700000
+#define OCMC_RAM1_CBUF_TARG          0x41800000
+#define EVE1_TARG                    0x62000000
+#define EDMA_TPCC_TARG               0x43300000
+#define EDMA_TC0_TARG                0x43400000
+#define EDMA_TC1_TARG                0x43500000
+#define OCMC_ROM_TARG                0x43A00000
+#define SN_L3_MAIN_TARG              0x44000000
+#define McASP1_TARG                  0x45800000
+#define McASP2_TARG                  0x45C00000
+#define McASP3_TARG                  0x46000000
+#define L4_PER1_TARG                 0x48000000
+#define MPU_MA                       0x482AF000
+#define L4_PER2_TARG                 0x48400000
+#define L4_PER3_TARG                 0x48800000
+#define OCMC_RAM2_CBUF_TARG          0x49000000
+#define OCMC_RAM3_CBUF_TARG          0x49800000
+#define L4_CFG_TARG                  0x4A000000
+#define L4_WKUP_TARG                 0x4AE00000
+#define QSPI_ADDRSP0_TARG            0x4B300000
+#define EMIF1_CONF_REGS              0x4C000000
+#define EMIF2_CONF_REGS              0x4D000000
+#define DMM_CONF_REGS_TARG           0x4E000000
+#define GPMC_CONF_REGS_TARG          0x50000000
+#define IPU2_TARGET_TARG             0x55000000
+#define GPU_TARG                     0x56000000
+#define DSS_TARG                     0x58000000
+#define IPU1_TARGET_TARG             0x58800000
+#define BB2D_TARG                    0x59000000
+#define IVA_CONFIG_TARG              0x5A000000
+#define IVA_SL2IF_TARG               0x5B000000
+#define QSPI_ADDRSP1_TARG            0x5C000000
+#define TILER                        0x60000000
+#define EMIF1_SDRAM_CS0              0x80000000
+#define EMIF2_SDRAM_CS0              0xC0000000
+
+/*******************************************************************************
+        L4_CFG Registers Map Defines: CortexA15_CPU1 view
+*******************************************************************************/
+#define CTRL_MODULE_CORE             (L4_CFG_TARG + 0x2000)
+#define CM_CORE_AON                  (L4_CFG_TARG + 0x5000)
+#define CM_CORE                      (L4_CFG_TARG + 0x8000)
+
+/*******************************************************************************
+        L4_WKUP Registers Map Defines: CortexA15_CPU1 view
+*******************************************************************************/
+#define PRM                          (L4_WKUP_TARG + 0x6000)
+
+/*******************************************************************************
+        PRCM Registers Map Defines: CortexA15_CPU1 view
+*******************************************************************************/
+#define IPU_CM_CORE_AON              (CM_CORE_AON + 0x500)
+#define DSP1_CM_CORE_AON             (CM_CORE_AON + 0x400)
+#define DSP2_CM_CORE_AON             (CM_CORE_AON + 0x600)
+#define EVE1_CM_CORE_AON             (CM_CORE_AON + 0x640)
+#define EVE2_CM_CORE_AON             (CM_CORE_AON + 0x680)
+#define EVE3_CM_CORE_AON             (CM_CORE_AON + 0x6C0)
+#define EVE4_CM_CORE_AON             (CM_CORE_AON + 0x700)
+#define CORE_CM_CORE                 (CM_CORE + 0x700)
+#define IVA_CM_CORE                  (CM_CORE + 0xF00)
+#define DSP1_PRM                     (PRM + 0x400)
+#define IPU_PRM                      (PRM + 0x500)
+#define CORE_PRM                     (PRM + 0x700)
+#define IVA_PRM                      (PRM + 0xF00)
+#define DSP2_PRM                     (PRM + 0x1B00)
+#define EVE1_PRM                     (PRM + 0x1B40)
+#define EVE2_PRM                     (PRM + 0x1B80)
+#define EVE3_PRM                     (PRM + 0x1BC0)
+#define EVE4_PRM                     (PRM + 0x1C00)
+
+/*******************************************************************************
+        IPU1 Address Map defines: CortexA15_CPU1 view
+*******************************************************************************/
+#define RM_IPU1_RSTCTRL              (IPU_PRM + 0x10)
+#define RM_IPU1_RSTST                (IPU_PRM + 0x14)
+#define CM_IPU1_CLKSTCTRL            (IPU_CM_CORE_AON + 0x0)
+#define CM_IPU1_IPU1_CLKCTRL         (IPU_CM_CORE_AON + 0x20)
+
+#define IPU1_BASE_ADDR               (IPU1_TARGET_TARG + 0x20000)
+#define IPU1_MMU_CFG                 (IPU1_TARGET_TARG + 0x80000)
+
+/*******************************************************************************
+        IPU2 Address Map defines: CortexA15_CPU1 view
+*******************************************************************************/
+#define RM_IPU2_RSTCTRL              (CORE_PRM + 0x210)
+#define RM_IPU2_RSTST                (CORE_PRM + 0x214)
+#define CM_IPU2_CLKSTCTRL            (CORE_CM_CORE + 0x200)
+#define CM_IPU2_IPU2_CLKCTRL         (CORE_CM_CORE + 0x220)
+
+#define IPU2_BASE_ADDR               (IPU2_TARGET_TARG + 0x20000)
+#define IPU2_MMU_CFG                 (IPU2_TARGET_TARG + 0x80000)
+
+/*******************************************************************************
+            IPU CPU Independent defines
+*******************************************************************************/
+#define RM_IPU_RSTCTRL               ((cpu_num == 1) ? (RM_IPU1_RSTCTRL) : (RM_IPU2_RSTCTRL))
+#define RM_IPU_RSTST                 ((cpu_num == 1) ? (RM_IPU1_RSTST) : (RM_IPU2_RSTST))
+
+#define IPU_BASE_ADDR                ((cpu_num == 1) ? (IPU1_BASE_ADDR) : (IPU2_BASE_ADDR))
+#define IPU_MMU_CFG                  ((cpu_num == 1) ? (IPU1_MMU_CFG) : (IPU2_MMU_CFG))
+
+/*******************************************************************************
+        DSPSS1 Address Map defines: CortexA15_CPU1 view
+*******************************************************************************/
+#define CM_DSP1_CLKSTCTRL            (DSP1_CM_CORE_AON + 0x0)
+#define CM_DSP1_DSP1_CLKCTRL         (DSP1_CM_CORE_AON + 0x20)
+#define RM_DSP1_RSTCTRL              (DSP1_PRM + 0x10)
+#define RM_DSP1_RSTST                (DSP1_PRM + 0x14)
+
+#define DSPSS1BOOTADDR               (CTRL_MODULE_CORE + 0x55C)
+#define DSPSS1BOOTADDRVALUE          (DSP1_L2_SRAM_TARG - 0x40000000)
+
+/*******************************************************************************
+        DSPSS2 Address Map defines: CortexA15_CPU1 view
+*******************************************************************************/
+#define CM_DSP2_CLKSTCTRL            (DSP2_CM_CORE_AON + 0x0)
+#define CM_DSP2_DSP2_CLKCTRL         (DSP2_CM_CORE_AON + 0x20)
+#define RM_DSP2_RSTCTRL              (DSP2_PRM + 0x10)
+#define RM_DSP2_RSTST                (DSP2_PRM + 0x14)
+
+#define DSPSS2BOOTADDR               (CTRL_MODULE_CORE + 0x560)
+#define DSPSS2BOOTADDRVALUE          (DSP2_L2_SRAM_TARG)
+
+/*******************************************************************************
+            DSPSS CPU Independent defines
+*******************************************************************************/
+#define CM_DSP_CLKSTCTRL             ((cpu_num == 1) ? (CM_DSP1_CLKSTCTRL) : (CM_DSP2_CLKSTCTRL))
+#define CM_DSP_DSP_CLKCTRL           ((cpu_num == 1) ? (CM_DSP1_DSP1_CLKCTRL) : (CM_DSP2_DSP2_CLKCTRL))
+#define RM_DSP_RSTCTRL               ((cpu_num == 1) ? (RM_DSP1_RSTCTRL) : (RM_DSP2_RSTCTRL))
+#define RM_DSP_RSTST                 ((cpu_num == 1) ? (RM_DSP1_RSTST) : (RM_DSP2_RSTST))
+
+#define DSPSSBOOTADDR                ((cpu_num == 1) ? (DSPSS1BOOTADDR) : (DSPSS2BOOTADDR))
+#define DSPSSBOOTADDRVALUE           ((cpu_num == 1) ? (DSPSS1BOOTADDRVALUE) : (DSPSS2BOOTADDRVALUE))
+
+#define DSP_L2_SRAM_TARG             ((cpu_num == 1) ? (DSP1_L2_SRAM_TARG) : (DSP2_L2_SRAM_TARG))
+
+/*******************************************************************************
+        EVESS1 Address Map defines: CortexA15_CPU1 view
+*******************************************************************************/
+#define CM_EVE1_CLKSTCTRL            (EVE1_CM_CORE_AON + 0x0)
+#define CM_EVE1_EVE1_CLKCTRL         (EVE1_CM_CORE_AON + 0x20)
+#define RM_EVE1_RSTCTRL              (EVE1_PRM + 0x10)
+#define RM_EVE1_RSTST                (EVE1_PRM + 0x14)
+
+/*******************************************************************************
+        EVESS2 Address Map defines: CortexA15_CPU1 view
+*******************************************************************************/
+#define CM_EVE2_CLKSTCTRL            (EVE2_CM_CORE_AON + 0x0)
+#define CM_EVE2_EVE2_CLKCTRL         (EVE2_CM_CORE_AON + 0x20)
+#define RM_EVE2_RSTCTRL              (EVE2_PRM + 0x10)
+#define RM_EVE2_RSTST                (EVE2_PRM + 0x14)
+
+/*******************************************************************************
+        EVESS3 Address Map defines: CortexA15_CPU1 view
+*******************************************************************************/
+#define CM_EVE3_CLKSTCTRL            (EVE3_CM_CORE_AON + 0x0)
+#define CM_EVE3_EVE3_CLKCTRL         (EVE3_CM_CORE_AON + 0x20)
+#define RM_EVE3_RSTCTRL              (EVE3_PRM + 0x10)
+#define RM_EVE3_RSTST                (EVE3_PRM + 0x14)
+
+/*******************************************************************************
+        EVESS4 Address Map defines: CortexA15_CPU1 view
+*******************************************************************************/
+#define CM_EVE4_CLKSTCTRL            (EVE4_CM_CORE_AON + 0x0)
+#define CM_EVE4_EVE4_CLKCTRL         (EVE4_CM_CORE_AON + 0x20)
+#define RM_EVE4_RSTCTRL              (EVE4_PRM + 0x10)
+#define RM_EVE4_RSTST                (EVE4_PRM + 0x14)
+
+/*******************************************************************************
+            EVESS CPU Independent defines
+*******************************************************************************/
+#define CM_EVE_CLKSTCTRL             ((cpu_num == 1) ? (CM_EVE1_CLKSTCTRL) : ((cpu_num == 2) ? (CM_EVE2_CLKSTCTRL) : ((cpu_num == 3) ? (CM_EVE3_CLKSTCTRL) : (CM_EVE4_CLKSTCTRL))))
+#define CM_EVE_EVE_CLKCTRL           ((cpu_num == 1) ? (CM_EVE1_EVE1_CLKCTRL) : ((cpu_num == 2) ? (CM_EVE2_EVE2_CLKCTRL) : ((cpu_num == 3) ? (CM_EVE3_EVE3_CLKCTRL) : (CM_EVE4_EVE4_CLKCTRL))))
+#define RM_EVE_RSTCTRL               ((cpu_num == 1) ? (RM_EVE1_RSTCTRL) : ((cpu_num == 2) ? (RM_EVE2_RSTCTRL) : ((cpu_num == 3) ? (RM_EVE3_RSTCTRL) : (RM_EVE4_RSTCTRL))))
+#define RM_EVE_RSTST                 ((cpu_num == 1) ? (RM_EVE1_RSTST) : ((cpu_num == 2) ? (RM_EVE2_RSTST) : ((cpu_num == 3) ? (RM_EVE3_RSTST) : (RM_EVE4_RSTST))))
+
+/*******************************************************************************
+        IVASS Address Map defines: CortexA15_CPU1 view
+*******************************************************************************/
+#define CM_IVA_CLKSTCTRL             (IVA_CM_CORE + 0x0)
+#define CM_IVA_IVA_CLKCTRL           (IVA_CM_CORE + 0x20)
+#define CM_IVA_SL2_CLKCTRL           (IVA_CM_CORE + 0x28)
+#define RM_IVA_RSTCTRL               (IVA_PRM + 0x10)
+#define RM_IVA_RSTST                 (IVA_PRM + 0x14)
+
+#define ICONT_ITCM                   (IVA_CONFIG_TARG + 0x88000)
+#define VDMA_ITCM                    (IVA_CONFIG_TARG + 0x98000)
+
+/*******************************************************************************
+        EVE1 MMU0 L3 Addresses
+*******************************************************************************/
+#define EVE1_MMU0_BASE 0x62081000//0x42081000
+#define EVE2_MMU0_BASE 0x42181000
+#define EVE3_MMU0_BASE 0x42281000
+#define EVE4_MMU0_BASE 0x42381000
+
+#define EVE_MMU0_BASE ((cpu_num == 1) ? (EVE1_MMU0_BASE) : ((cpu_num == 2) ? (EVE2_MMU0_BASE) : ((cpu_num == 3) ? (EVE3_MMU0_BASE) : (EVE4_MMU0_BASE))))
+
+#define EVE_MMU0__MMU_CNTL    (EVE_MMU0_BASE + 0x44)
+#define EVE_MMU0__MMU_CAM     (EVE_MMU0_BASE + 0x58)
+#define EVE_MMU0__MMU_RAM     (EVE_MMU0_BASE + 0x5c)
+#define EVE_MMU0__MMU_LOCK    (EVE_MMU0_BASE + 0x50)
+#define EVE_MMU0__MMU_LD_TLB  (EVE_MMU0_BASE + 0x54)
+
+/*******************************************************************************
+        EVE 1/2/3/4 Address Maps
+*******************************************************************************/
+#define PHY_ADDR1  0x80000000
+#define VIRT_ADDR1 0x00000000
+#define PHY_ADDR2  0x80000000
+#define VIRT_ADDR2 0x80000000
+#define PHY_ADDR3  0x40800000//0x48030000
+#define VIRT_ADDR3 0x40800000//0x48030000
+#define PHY_ADDR4  0x40300000
+#define VIRT_ADDR4 0x40300000
+#define PHY_ADDR5  0x81000000
+#define VIRT_ADDR5 0x81000000
+#define PHY_ADDR6  0x82000000
+#define VIRT_ADDR6 0x82000000
+
+#define PHY_ADDR7  0x83000000
+#define VIRT_ADDR7 0x83000000
+
+#define PHY_ADDR8  0x87000000
+#define VIRT_ADDR8 0x87000000
+
+#define PHY_ADDR9  0x45000000
+#define VIRT_ADDR9 0x45000000
+
+
+#define evemboxaddr 0x4A0029BC
+
+/************ Configure MMU0 for EVEs ***************/
+EVE_MMU0_Configure(uint32_t cpu_num)
+{
+    /* Configure the MMU */
+    GEL_TextOut("\tConfiguring EVE%d MMU TLB entry 1  \n","Output",1,1,1,cpu_num);
+    WR_MEM_32(EVE_MMU0__MMU_CAM, 0x0000000c | (VIRT_ADDR1 & 0xFFFFE000));
+    WR_MEM_32(EVE_MMU0__MMU_RAM, 0x000001c0 | (PHY_ADDR1  & 0xFFFFE000));
+    WR_MEM_32(EVE_MMU0__MMU_LOCK, ((RD_MEM_32(EVE_MMU0__MMU_LOCK)) & 0xFFFFFE0F) | ( 1 << 4 ));
+    WR_MEM_32(EVE_MMU0__MMU_LD_TLB, 1 );
+
+    GEL_TextOut("\tConfiguring EVE%d MMU TLB entry 2  \n","Output",1,1,1,cpu_num);
+    WR_MEM_32(EVE_MMU0__MMU_CAM, 0x0000000f | (VIRT_ADDR2 & 0xFFFFE000));
+    WR_MEM_32(EVE_MMU0__MMU_RAM, 0x000001c0 | (PHY_ADDR2  & 0xFFFFE000));
+    WR_MEM_32(EVE_MMU0__MMU_LOCK, ((RD_MEM_32(EVE_MMU0__MMU_LOCK)) & 0xFFFFFE0F) | ( 2 << 4 ));
+    WR_MEM_32(EVE_MMU0__MMU_LD_TLB, 1 );
+
+    GEL_TextOut("\tConfiguring EVE%d MMU TLB entry 3  \n","Output",1,1,1,cpu_num);
+    WR_MEM_32(EVE_MMU0__MMU_CAM, 0x0000000c | (VIRT_ADDR3 & 0xFFFFE000));
+    WR_MEM_32(EVE_MMU0__MMU_RAM, 0x000001c0 | (PHY_ADDR3  & 0xFFFFE000));
+    WR_MEM_32(EVE_MMU0__MMU_LOCK, ((RD_MEM_32(EVE_MMU0__MMU_LOCK)) & 0xFFFFFE0F) | ( 3 << 4 ));
+    WR_MEM_32(EVE_MMU0__MMU_LD_TLB, 1 );
+
+    GEL_TextOut("\tConfiguring EVE%d MMU TLB entry 4  \n","Output",1,1,1,cpu_num);
+    WR_MEM_32(EVE_MMU0__MMU_CAM, 0x0000000c | (VIRT_ADDR4 & 0xFFFFE000));
+    WR_MEM_32(EVE_MMU0__MMU_RAM, 0x000001c0 | (PHY_ADDR4  & 0xFFFFE000));
+    WR_MEM_32(EVE_MMU0__MMU_LOCK, ((RD_MEM_32(EVE_MMU0__MMU_LOCK)) & 0xFFFFFE0F) | ( 4 << 4 ));
+    WR_MEM_32(EVE_MMU0__MMU_LD_TLB, 1 );
+
+    GEL_TextOut("\tConfiguring EVE%d MMU TLB entry 5  \n","Output",1,1,1,cpu_num);
+    WR_MEM_32(EVE_MMU0__MMU_CAM, 0x0000000f | (VIRT_ADDR5 & 0xFFFFE000));
+    WR_MEM_32(EVE_MMU0__MMU_RAM, 0x000001c0 | (PHY_ADDR5  & 0xFFFFE000));
+    WR_MEM_32(EVE_MMU0__MMU_LOCK, ((RD_MEM_32(EVE_MMU0__MMU_LOCK)) & 0xFFFFFE0F) | ( 5 << 4 ));
+    WR_MEM_32(EVE_MMU0__MMU_LD_TLB, 1 );
+
+    GEL_TextOut("\tConfiguring EVE%d MMU TLB entry 6  \n","Output",1,1,1,cpu_num);
+    WR_MEM_32(EVE_MMU0__MMU_CAM, 0x0000000f | (VIRT_ADDR6 & 0xFFFFE000));
+    WR_MEM_32(EVE_MMU0__MMU_RAM, 0x000001c0 | (PHY_ADDR6  & 0xFFFFE000));
+    WR_MEM_32(EVE_MMU0__MMU_LOCK, ((RD_MEM_32(EVE_MMU0__MMU_LOCK)) & 0xFFFFFE0F) | ( 6 << 4 ));
+    WR_MEM_32(EVE_MMU0__MMU_LD_TLB, 1 );
+
+        GEL_TextOut("\tConfiguring EVE%d MMU TLB entry 7  \n","Output",1,1,1,cpu_num);
+    WR_MEM_32(EVE_MMU0__MMU_CAM, 0x0000000f | (VIRT_ADDR7 & 0xFFFFE000));
+    WR_MEM_32(EVE_MMU0__MMU_RAM, 0x000001c0 | (PHY_ADDR7  & 0xFFFFE000));
+    WR_MEM_32(EVE_MMU0__MMU_LOCK, ((RD_MEM_32(EVE_MMU0__MMU_LOCK)) & 0xFFFFFE0F) | ( 7 << 4 ));
+    WR_MEM_32(EVE_MMU0__MMU_LD_TLB, 1 );
+
+            GEL_TextOut("\tConfiguring EVE%d MMU TLB entry 8  \n","Output",1,1,1,cpu_num);
+    WR_MEM_32(EVE_MMU0__MMU_CAM, 0x0000000f | (VIRT_ADDR8 & 0xFFFFE000));
+    WR_MEM_32(EVE_MMU0__MMU_RAM, 0x000001c0 | (PHY_ADDR8  & 0xFFFFE000));
+    WR_MEM_32(EVE_MMU0__MMU_LOCK, ((RD_MEM_32(EVE_MMU0__MMU_LOCK)) & 0xFFFFFE0F) | ( 7 << 4 ));
+    WR_MEM_32(EVE_MMU0__MMU_LD_TLB, 1 );
+
+            GEL_TextOut("\tConfiguring EVE%d MMU TLB entry 9  \n","Output",1,1,1,cpu_num);
+    WR_MEM_32(EVE_MMU0__MMU_CAM, 0x0000000f | (VIRT_ADDR9 & 0xFFFFE000));
+    WR_MEM_32(EVE_MMU0__MMU_RAM, 0x000001c0 | (PHY_ADDR9  & 0xFFFFE000));
+    WR_MEM_32(EVE_MMU0__MMU_LOCK, ((RD_MEM_32(EVE_MMU0__MMU_LOCK)) & 0xFFFFFE0F) | ( 7 << 4 ));
+    WR_MEM_32(EVE_MMU0__MMU_LD_TLB, 1 );
+
+
+    /*Enable MMU*/
+    WR_MEM_32(EVE_MMU0__MMU_CNTL, ((RD_MEM_32(EVE_MMU0__MMU_CNTL)) & 0xFFFFFFFD) | 0x2);
+
+    GEL_TextOut("\tMMU0 configured for EVE%d  \n","Output",1,1,1,cpu_num);
+}
+
+
+EVESSClkMmuEnable(uint32_t cpu_num)
+{
+    GEL_TextOut("--->>> EVE%dSS Initialization is in progress ... <<<---\n",,,,, cpu_num);
+
+    /* Ware reset asserted for EVE_LRST, EVE Cache and Slave */
+    GEL_TextOut("--->>> rm eve rstctrl1: %x\n",,,,, RM_EVE_RSTCTRL);
+    GEL_TextOut("--->>> Contents rm eve rstctrl1: %x\n",,,,,  RD_MEM_32(RM_EVE_RSTCTRL));
+    WR_MEM_32(RM_EVE_RSTCTRL, 0x3);
+    GEL_TextOut("--->>> Contents rm eve rstctrl1: %x\n",,,,,  RD_MEM_32(RM_EVE_RSTCTRL));
+    /* Start a SW force wakeup for EVESS */
+    GEL_TextOut("--->>> cm eve rstctrl1: %x\n",,,,, CM_EVE_CLKSTCTRL);
+    GEL_TextOut("--->>> Contents rm eve rstctrl1: %x\n",,,,,  RD_MEM_32(CM_EVE_CLKSTCTRL));
+    WR_MEM_32(CM_EVE_CLKSTCTRL, 0x2);
+    GEL_TextOut("--->>> Contents rm eve rstctrl1: %x\n",,,,,  RD_MEM_32(CM_EVE_CLKSTCTRL));
+    /* Enable EVESS clock */
+    GEL_TextOut("--->>> cm eve rstctrl1: %x\n",,,,, CM_EVE_EVE_CLKCTRL);
+    GEL_TextOut("--->>> Contents rm eve rstctrl1: %x\n",,,,,  RD_MEM_32(CM_EVE_EVE_CLKCTRL));
+    WR_MEM_32(CM_EVE_EVE_CLKCTRL, 0x1);
+    GEL_TextOut("--->>> Contents rm eve rstctrl1: %x\n",,,,,  RD_MEM_32(CM_EVE_EVE_CLKCTRL));
+    /* Check whether GFCLK is gated or not */
+    while ((RD_MEM_32(CM_EVE_CLKSTCTRL) & 0x100) != 0x100);
+    if (DEBUG_PRINT)
+    {
+        GEL_TextOut("DEBUG: Clock is active ... \n");
+    }
+
+    /* Reset de-assertion for EVESS */
+    WR_MEM_32(RM_EVE_RSTCTRL, 0x1);
+
+    EVE_MMU0_Configure(cpu_num);
+
+    /* Reset de-assertion for EVESS */
+    WR_MEM_32(RM_EVE_RSTCTRL, 0x0);
+    /* Check the reset state: EVESS Core, Cache and Slave interface */
+    while ((RD_MEM_32(RM_EVE_RSTST) & 0x3) != 0x3);
+    /* Check module mode */
+    while ((RD_MEM_32(CM_EVE_EVE_CLKCTRL) & 0x30000) != 0x0);
+
+    GEL_TextOut("--->>> EVE%dSS Initialization is DONE! <<<---\n",,,,, cpu_num);
+}
+
+DSP1SSClkEnable(uint32_t cpu_num)
+{
+    uint32_t i, fail = 0;
+    GEL_TextOut("--->>> DSP%dSS Initialization is in progress ... <<<---\n",,,,,cpu_num);
+
+    /* DSPSS Boot Address */
+    WR_MEM_32(DSPSSBOOTADDR, DSPSSBOOTADDRVALUE);
+
+    /* Ware reset asserted for DSP_LRST, DSP Cache and Slave */
+    WR_MEM_32(RM_DSP_RSTCTRL, 0x3);
+
+    /* Start a SW force wakeup for DSPSS */
+    WR_MEM_32(CM_DSP_CLKSTCTRL, 0x2);
+    /* Enable DSPSS clock */
+    WR_MEM_32(CM_DSP_DSP_CLKCTRL, 0x1);
+
+    /* Check whether GFCLK is gated or not */
+    while ((RD_MEM_32(CM_DSP_CLKSTCTRL) & 0x100) != 0x100);
+    if (DEBUG_PRINT)
+    {
+        GEL_TextOut("DEBUG: Clock is active ... \n");
+    }
+
+    /* Reset de-assertion for DSPSS */
+    WR_MEM_32(RM_DSP_RSTCTRL, 0x0);
+    /* Check the reset state: DSPSS Core, Cache and Slave interface */
+    while ((RD_MEM_32(RM_DSP_RSTST) & 0x3) != 0x3);
+    /* Check module mode */
+    while ((RD_MEM_32(CM_DSP_DSP_CLKCTRL) & 0x30000) != 0x0);
+
+    if (DEBUG_PRINT)
+    {
+        GEL_TextOut("DEBUG: Checking for data integrity in DSPSS L2RAM ... \n");
+    }
+    for (i = 0; i < 16; i++)
+    {
+        WR_MEM_32((DSP_L2_SRAM_TARG + (i << 2)), 0x12345678);
+    }
+
+    for (i = 0; i < 16; i++)
+    {
+        if (RD_MEM_32(DSP_L2_SRAM_TARG + (i << 2)) != 0x12345678)
+        {
+            fail++;
+            break;
+        }
+    }
+
+    if (fail)
+
+    {
+        GEL_TextOut("ERROR: Data integrity check in GEM L2RAM has failed! \n");
+    }
+    else
+    {
+        if (DEBUG_PRINT)
+        {
+            GEL_TextOut("DEBUG: Data integrity check in GEM L2RAM is sucessful! \n");
+        }
+    }
+
+    GEL_TextOut("--->>> DSP%dSS Initialization is DONE! <<<---\n",,,,,cpu_num);
+}
+
+/************ Enable all cores required for EVE SW ***************/
+menuitem "DSP SETUP"
+
+hotmenu DSP_SetupAllCores()
+{
+	 DSP1SSClkEnable(1);
+	DSP1SSClkEnable(2);
+
+	/* DSP Vector Table */
+	WR_MEM_32(0x4a002540, 0x2FF1AC2B);
+	WR_MEM_32(0x4a00255C, 0x02002000);
+
+
+	    GEL_TextOut("--->>> Setup of all cores for DSP Done! <<<---\n",,,,);
+
+}
+hotmenu DSP_SetupCore1()
+{
+	 DSP1SSClkEnable(1);
+
+
+	/* DSP Vector Table */
+	WR_MEM_32(0x4a002540, 0x2FF1AC2B);
+	WR_MEM_32(0x4a00255C, 0x02002000);
+
+
+	    GEL_TextOut("--->>> Setup of core 1 for DSP Done! <<<---\n",,,,);
+
+}
+hotmenu DSP_SetupCore2()
+{
+	 DSP1SSClkEnable(2);
+
+
+	/* DSP Vector Table */
+	WR_MEM_32(0x4a002540, 0x2FF1AC2B);
+	WR_MEM_32(0x4a00255C, 0x02002000);
+
+
+	    GEL_TextOut("--->>> Setup of core 2 for DSP Done! <<<---\n",,,,);
+
+}
+
+menuitem "EVESW SETUP"
+
+hotmenu EVESW_SetupCore1()
+{
+
+    /* Load Reset Vectors for all EVEs - All eves start at 0x80000100 */
+    WR_MEM_32(0x80000000, 0x80000100); /* Reset vector points to 0x8000_0100*/
+    WR_MEM_32(0x80000004, 0x80000100); /* Reset vector points to 0x8000_0100*/
+    WR_MEM_32(0x80000008, 0x80000100); /* Reset vector points to 0x8000_0100*/
+    WR_MEM_32(0x8000000C, 0x80000100); /* Reset vector points to 0x8000_0100*/
+    WR_MEM_32(0x80000010, 0x80000100); /* Reset vector points to 0x8000_0100*/
+    WR_MEM_32(0x80000014, 0x80000100); /* Reset vector points to 0x8000_0100*/
+    WR_MEM_32(0x80000100, 0x0000037f); /* B PC+0; nop; opcode for ARP32 */
+    WR_MEM_32(0x80000104, 0x0000037f); /* B PC+0; nop; opcode for ARP32 */
+    WR_MEM_32(0x80000108, 0x0000037f); /* B PC+0; nop; opcode for ARP32 */
+    WR_MEM_32(0x8000010C, 0x0000037f); /* B PC+0; nop; opcode for ARP32 */
+
+
+    EVESSClkMmuEnable(1);
+    GEL_TextOut("--->>> Setup of core 1 for EVESW DONE! <<<---\n",,,,);
+}
+

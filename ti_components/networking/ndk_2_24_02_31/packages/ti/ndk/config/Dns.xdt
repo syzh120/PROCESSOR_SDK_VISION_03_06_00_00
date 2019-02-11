@@ -1,0 +1,92 @@
+%%{
+/*
+ * Copyright (c) 2012, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * */
+/*
+ *  ======== Dns.xdt ========
+ *  Template to generate C code for the Dns module
+ */
+
+// get handles to needed modules
+var Global = xdc.module('ti.ndk.config.Global');
+var Dns = xdc.module('ti.ndk.config.Dns');
+%%}
+%
+% if (Dns.$used > 0 && Global.enableCodeGeneration &&
+%         ((Dns.externDnsServIp != null && Dns.externDnsServIp != "") ||
+%         (Dns.$instances.length > 0))) {
+%         
+
+#include <ti/ndk/inc/netmain.h>
+#include <ti/ndk/config/prototypes.h>
+
+%
+% }
+%
+% if (Dns.$used > 0 && Dns.$instances.length > 0 &&
+%         Global.enableCodeGeneration) {
+/* function to add a DNS server to the NDK stack */
+Void ti_ndk_config_dns_init(HANDLE hCfg)
+{
+% // declare a dns struct for configuring Dns module instances
+    CI_SERVICE_DNSSERVER dnss;
+
+%     for (var i = 0; i < Dns.$instances.length; i++) {
+    /* Specify Dns service for Dns instance `i` */
+    bzero (&dnss, sizeof(dnss));
+    dnss.cisargs.Mode   = `Dns.$instances[i].mode`;
+    dnss.cisargs.IPAddr = inet_addr("`Dns.$instances[i].ipAddr`");
+    dnss.cisargs.pCbSrv = `Dns.$instances[i].pCbSrv`;
+    dnss.cisargs.IfIdx  = `Dns.$instances[i].ifIdx`;
+%
+    CfgAddEntry(hCfg, CFGTAG_SERVICE, CFGITEM_SERVICE_DNSSERVER, 0,
+            sizeof(dnss), (UINT8 *)&dnss, 0);
+
+%     } // end "for (i = 0, i < Dns.instances ..."
+}
+%
+% } // end "if (Dns.$used ..."
+%
+% // Specify an external DNS Server IP iff user specified the address to one
+% if (Dns.$used > 0 && Global.enableCodeGeneration &&
+%         (Dns.externDnsServIp != null && Dns.externDnsServIp != "")) {
+%
+/* function to specify an external DNS server */
+Void ti_ndk_config_external_dns_init(HANDLE hCfg)
+{
+    IPN IPTmp = inet_addr("`Dns.externDnsServIp`");
+    if (IPTmp) {
+        CfgAddEntry(hCfg, CFGTAG_SYSINFO, CFGITEM_DHCP_DOMAINNAMESERVER,
+            0, sizeof(IPTmp), (UINT8 *)&IPTmp, 0);
+    }
+}
+%
+% } // end "if (Dns.$used ..."

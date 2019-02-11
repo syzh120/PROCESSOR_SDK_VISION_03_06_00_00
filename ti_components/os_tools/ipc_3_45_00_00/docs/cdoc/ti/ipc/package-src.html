@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>package ti.ipc</title>
+<meta name="googlebot" content="noindex,nofollow">
+<link rel="stylesheet" type="text/css" href="../../src.css"/>
+</head>
+<body>
+<pre class=src>
+     1    <span class="comment">/*
+</span>     2    <span class="comment"> * Copyright (c) 2012-2013, Texas Instruments Incorporated
+</span>     3    <span class="comment"> * All rights reserved.
+</span>     4    <span class="comment"> *
+</span>     5    <span class="comment"> * Redistribution and use in source and binary forms, with or without
+</span>     6    <span class="comment"> * modification, are permitted provided that the following conditions
+</span>     7    <span class="comment"> * are met:
+</span>     8    <span class="comment"> *
+</span>     9    <span class="comment"> * *  Redistributions of source code must retain the above copyright
+</span>    10    <span class="comment"> *    notice, this list of conditions and the following disclaimer.
+</span>    11    <span class="comment"> *
+</span>    12    <span class="comment"> * *  Redistributions in binary form must reproduce the above copyright
+</span>    13    <span class="comment"> *    notice, this list of conditions and the following disclaimer in the
+</span>    14    <span class="comment"> *    documentation and/or other materials provided with the distribution.
+</span>    15    <span class="comment"> *
+</span>    16    <span class="comment"> * *  Neither the name of Texas Instruments Incorporated nor the names of
+</span>    17    <span class="comment"> *    its contributors may be used to endorse or promote products derived
+</span>    18    <span class="comment"> *    from this software without specific prior written permission.
+</span>    19    <span class="comment"> *
+</span>    20    <span class="comment"> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+</span>    21    <span class="comment"> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+</span>    22    <span class="comment"> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+</span>    23    <span class="comment"> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+</span>    24    <span class="comment"> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+</span>    25    <span class="comment"> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+</span>    26    <span class="comment"> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+</span>    27    <span class="comment"> * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+</span>    28    <span class="comment"> * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+</span>    29    <span class="comment"> * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+</span>    30    <span class="comment"> * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+</span>    31    <span class="comment"> */</span>
+    32    <span class="comment">/*
+</span>    33    <span class="comment"> *  ======== package.xdc ========
+</span>    34    <span class="comment"> *
+</span>    35    <span class="comment"> */</span>
+    36    
+    37    <span class="xdoc">/*!
+</span>    38    <span class="xdoc"> *  ======== ti.ipc ========
+</span>    39    <span class="xdoc"> *  Inter processor communication common headers
+</span>    40    <span class="xdoc"> *
+</span>    41    <span class="xdoc"> *  This is a package that serves as a container for common header files
+</span>    42    <span class="xdoc"> *  for various IPC modules supplied with the IPC product.
+</span>    43    <span class="xdoc"> *
+</span>    44    <span class="xdoc"> *  <b>@p(html)</b>
+</span>    45    <span class="xdoc"> *  Documentation for all runtime APIs, instance configuration parameters,
+</span>    46    <span class="xdoc"> *  error codes macros and type definitions available to the application
+</span>    47    <span class="xdoc"> *  integrator can be found in the
+</span>    48    <span class="xdoc"> *  &lt;A HREF="../../../doxygen/html/files.html"&gt;Doxygen documentation&lt;/A&gt;
+</span>    49    <span class="xdoc"> *  for the IPC product.  However, the documentation presented in RTSC cdoc
+</span>    50    <span class="xdoc"> *  should be referred to for information specific to the RTSC module, such as
+</span>    51    <span class="xdoc"> *  module configuration, Errors, and Asserts.
+</span>    52    <span class="xdoc"> *  <b>@p</b>
+</span>    53    <span class="xdoc"> *
+</span>    54    <span class="xdoc"> *  The following table shows a list of all IPC modules that have common header
+</span>    55    <span class="xdoc"> *  files.  Follow the corresponding links for doxygen or cdoc documentation
+</span>    56    <span class="xdoc"> *  for each of the modules.
+</span>    57    <span class="xdoc"> *
+</span>    58    <span class="xdoc"> *  <b>@p(html)</b>
+</span>    59    <span class="xdoc"> *  &lt;TABLE BORDER="1"&gt;
+</span>    60    <span class="xdoc"> *  &lt;COLGROUP STYLE="font-weight: bold; color: rgb(0,127,102);"&gt;&lt;/COLGROUP&gt;
+</span>    61    <span class="xdoc"> *  &lt;COLGROUP&gt;&lt;/COLGROUP&gt;
+</span>    62    <span class="xdoc"> *  &lt;COLGROUP&gt;&lt;/COLGROUP&gt;
+</span>    63    <span class="xdoc"> *  &lt;COLGROUP&gt;&lt;/COLGROUP&gt;
+</span>    64    <span class="xdoc"> *  &lt;TR&gt;
+</span>    65    <span class="xdoc"> *      &lt;TD&gt;GateMP&lt;/TD&gt;
+</span>    66    <span class="xdoc"> *      &lt;TD&gt;Multiple processor gate that provides local and remote context protection&lt;/TD&gt;
+</span>    67    <span class="xdoc"> *      &lt;TD&gt;&lt;A HREF="../../../doxygen/html/_gate_m_p_8h.html"&gt;Doxygen&lt;/A&gt;&lt;/TD&gt;
+</span>    68    <span class="xdoc"> *      &lt;TD&gt;&lt;A HREF="../sdo/ipc/GateMP.html"&gt;cdoc&lt;/A&gt;&lt;/TD&gt;
+</span>    69    <span class="xdoc"> *  &lt;/TR&gt;
+</span>    70    <span class="xdoc"> *  &lt;TR&gt;
+</span>    71    <span class="xdoc"> *      &lt;TD&gt;HeapBufMP&lt;/TD&gt;
+</span>    72    <span class="xdoc"> *      &lt;TD&gt;Multi-processor fixed-size buffer heap&lt;/TD&gt;
+</span>    73    <span class="xdoc"> *      &lt;TD&gt;&lt;A HREF="../../../doxygen/html/_heap_buf_m_p_8h.html"&gt;Doxygen&lt;/A&gt;&lt;/TD&gt;
+</span>    74    <span class="xdoc"> *      &lt;TD&gt;&lt;A HREF="../sdo/ipc/heaps/HeapBufMP.html"&gt;cdoc&lt;/A&gt;&lt;/TD&gt;
+</span>    75    <span class="xdoc"> *  &lt;/TR&gt;
+</span>    76    <span class="xdoc"> *  &lt;TR&gt;
+</span>    77    <span class="xdoc"> *      &lt;TD&gt;HeapMemMP&lt;/TD&gt;
+</span>    78    <span class="xdoc"> *      &lt;TD&gt;Multi-processor variable size buffer heap &lt;/TD&gt;
+</span>    79    <span class="xdoc"> *      &lt;TD&gt;&lt;A HREF="../../../doxygen/html/_heap_mem_m_p_8h.html"&gt;Doxygen&lt;/A&gt;&lt;/TD&gt;
+</span>    80    <span class="xdoc"> *      &lt;TD&gt;&lt;A HREF="../sdo/ipc/heaps/HeapMemMP.html"&gt;cdoc&lt;/A&gt;&lt;/TD&gt;
+</span>    81    <span class="xdoc"> *  &lt;/TR&gt;
+</span>    82    <span class="xdoc"> *  &lt;TR&gt;
+</span>    83    <span class="xdoc"> *      &lt;TD&gt;HeapMultiBufMP&lt;/TD&gt;
+</span>    84    <span class="xdoc"> *      &lt;TD&gt;Multiple fixed size buffer heap&lt;/TD&gt;
+</span>    85    <span class="xdoc"> *      &lt;TD&gt;&lt;A HREF="../../../doxygen/html/_heap_multi_buf_m_p_8h.html"&gt;Doxygen&lt;/A&gt;&lt;/TD&gt;
+</span>    86    <span class="xdoc"> *      &lt;TD&gt;&lt;A HREF="../sdo/ipc/heaps/HeapMultiBufMP.html"&gt;cdoc&lt;/A&gt;&lt;/TD&gt;
+</span>    87    <span class="xdoc"> *  &lt;/TR&gt;
+</span>    88    <span class="xdoc"> *  &lt;TR&gt;
+</span>    89    <span class="xdoc"> *      &lt;TD&gt;Ipc&lt;/TD&gt;
+</span>    90    <span class="xdoc"> *      &lt;TD&gt;Ipc Manager&lt;/TD&gt;
+</span>    91    <span class="xdoc"> *      &lt;TD&gt;&lt;A HREF="../../../doxygen/html/_ipc_8h.html"&gt;Doxygen&lt;/A&gt;&lt;/TD&gt;
+</span>    92    <span class="xdoc"> *      &lt;TD&gt;&lt;A HREF="../sdo/ipc/Ipc.html"&gt;cdoc&lt;/A&gt;&lt;/TD&gt;
+</span>    93    <span class="xdoc"> *  &lt;/TR&gt;
+</span>    94    <span class="xdoc"> *  &lt;TR&gt;
+</span>    95    <span class="xdoc"> *      &lt;TD&gt;ListMP&lt;/TD&gt;
+</span>    96    <span class="xdoc"> *      &lt;TD&gt;Multiple processor shared memory list&lt;/TD&gt;
+</span>    97    <span class="xdoc"> *      &lt;TD&gt;&lt;A HREF="../../../doxygen/html/_list_m_p_8h.html"&gt;Doxygen&lt;/A&gt;&lt;/TD&gt;
+</span>    98    <span class="xdoc"> *      &lt;TD&gt;&lt;A HREF="../sdo/ipc/ListMP.html"&gt;cdoc&lt;/A&gt;&lt;/TD&gt;
+</span>    99    <span class="xdoc"> *  &lt;/TR&gt;
+</span>   100    <span class="xdoc"> *  &lt;TR&gt;
+</span>   101    <span class="xdoc"> *      &lt;TD&gt;MessageQ&lt;/TD&gt;
+</span>   102    <span class="xdoc"> *      &lt;TD&gt;Message-passing with queuing&lt;/TD&gt;
+</span>   103    <span class="xdoc"> *      &lt;TD&gt;&lt;A HREF="../../../doxygen/html/_message_q_8h.html"&gt;Doxygen&lt;/A&gt;&lt;/TD&gt;
+</span>   104    <span class="xdoc"> *      &lt;TD&gt;&lt;A HREF="../sdo/ipc/MessageQ.html"&gt;cdoc&lt;/A&gt;&lt;/TD&gt;
+</span>   105    <span class="xdoc"> *  &lt;/TR&gt;
+</span>   106    <span class="xdoc"> *  &lt;TR&gt;
+</span>   107    <span class="xdoc"> *      &lt;TD&gt;MultiProc&lt;/TD&gt;
+</span>   108    <span class="xdoc"> *      &lt;TD&gt;Processor id manager&lt;/TD&gt;
+</span>   109    <span class="xdoc"> *      &lt;TD&gt;&lt;A HREF="../../../doxygen/html/_multi_proc_8h.html"&gt;Doxygen&lt;/A&gt;&lt;/TD&gt;
+</span>   110    <span class="xdoc"> *      &lt;TD&gt;&lt;A HREF="../sdo/utils/MultiProc.html"&gt;cdoc&lt;/A&gt;&lt;/TD&gt;
+</span>   111    <span class="xdoc"> *  &lt;/TR&gt;
+</span>   112    <span class="xdoc"> *  &lt;TR&gt;
+</span>   113    <span class="xdoc"> *      &lt;TD&gt;NameServer&lt;/TD&gt;
+</span>   114    <span class="xdoc"> *      &lt;TD&gt;Name manager&lt;/TD&gt;
+</span>   115    <span class="xdoc"> *      &lt;TD&gt;&lt;A HREF="../../../doxygen/html/_name_server_8h.html"&gt;Doxygen&lt;/A&gt;&lt;/TD&gt;
+</span>   116    <span class="xdoc"> *      &lt;TD&gt;&lt;A HREF="../sdo/utils/NameServer.html"&gt;cdoc&lt;/A&gt;&lt;/TD&gt;
+</span>   117    <span class="xdoc"> *  &lt;/TR&gt;
+</span>   118    <span class="xdoc"> *  &lt;TR&gt;
+</span>   119    <span class="xdoc"> *      &lt;TD&gt;Notify&lt;/TD&gt;
+</span>   120    <span class="xdoc"> *      &lt;TD&gt;Notification manager for IPC&lt;/TD&gt;
+</span>   121    <span class="xdoc"> *      &lt;TD&gt;&lt;A HREF="../../../doxygen/html/_notify_8h.html"&gt;Doxygen&lt;/A&gt;&lt;/TD&gt;
+</span>   122    <span class="xdoc"> *      &lt;TD&gt;&lt;A HREF="../sdo/ipc/Notify.html"&gt;cdoc&lt;/A&gt;&lt;/TD&gt;
+</span>   123    <span class="xdoc"> *  &lt;/TR&gt;
+</span>   124    <span class="xdoc"> *  &lt;TR&gt;
+</span>   125    <span class="xdoc"> *      &lt;TD&gt;SharedRegion&lt;/TD&gt;
+</span>   126    <span class="xdoc"> *      &lt;TD&gt;Shared memory manager and address translator &lt;/TD&gt;
+</span>   127    <span class="xdoc"> *      &lt;TD&gt;&lt;A HREF="../../../doxygen/html/_shared_region_8h.html"&gt;Doxygen&lt;/A&gt;&lt;/TD&gt;
+</span>   128    <span class="xdoc"> *      &lt;TD&gt;&lt;A HREF="../sdo/ipc/SharedRegion.html"&gt;cdoc&lt;/A&gt;&lt;/TD&gt;
+</span>   129    <span class="xdoc"> *  &lt;/TR&gt;
+</span>   130    <span class="xdoc"> *
+</span>   131    <span class="xdoc"> *  &lt;/TABLE&gt;
+</span>   132    <span class="xdoc"> *  <b>@p</b>
+</span>   133    <span class="xdoc"> *
+</span>   134    <span class="xdoc"> */</span>
+   135    
+   136    <span class=key>package</span> ti.ipc [1,0,0,0] {
+   137    
+   138    }
+</pre>
+</body></html>

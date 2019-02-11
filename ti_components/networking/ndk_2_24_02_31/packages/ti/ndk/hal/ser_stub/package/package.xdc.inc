@@ -1,0 +1,12 @@
+package.xdc
+package.xs
+package/ti.ndk.hal.ser_stub.sch
+package/.vers_g180
+package/.vers_r170
+package/.vers_b160
+package/.xdc-B06
+package/ti_ndk_hal_ser_stub.java
+package/ti_ndk_hal_ser_stub.class
+package/package_ti.ndk.hal.ser_stub.c
+package/package.defs.h
+package/ti.ndk.hal.ser_stub.ccs

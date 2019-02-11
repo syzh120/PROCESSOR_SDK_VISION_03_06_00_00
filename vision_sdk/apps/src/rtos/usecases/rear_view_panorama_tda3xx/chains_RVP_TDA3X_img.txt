@@ -1,0 +1,93 @@
+digraph chains_RVP_TDA3X {
+
+       ColorScheme [shape=none, margin=0, label=<
+       <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+       <TR><TD bgcolor="lightblue">IPU1_0</TD></TR>
+       <TR><TD bgcolor="palegreen">DSP1</TD></TR>
+       <TR><TD bgcolor="darkolivegreen1">DSP2</TD></TR>
+       <TR><TD bgcolor="yellow">EVE1</TD></TR>
+       </TABLE>>];
+
+       /************** LINKS ************************/
+       IssCapture [color=lightblue, style=filled]
+       IssM2mIsp [color=lightblue, style=filled]
+       Alg_IssAewb [color=lightblue, style=filled]
+       Dup_Initial [color=lightblue, style=filled]
+       Select_PanoramaRight [color=lightblue, style=filled]
+       Select_SDAIn [color=lightblue, style=filled]
+       Sync_RemapOut [color=lightblue, style=filled]
+       Alg_DeWarp_Remap [color=lightblue, style=filled]
+       Dup_RemapOut [color=lightblue, style=filled]
+       IPCOut_IPU1_0_EVE1_0 [color=lightblue, style=filled]
+       IPCIn_EVE1_IPU1_0_0 [color=yellow, style=filled]
+       Alg_Census [color=yellow, style=filled]
+       Alg_DisparityHamDist [color=yellow, style=filled]
+       IPCOut_EVE1_IPU1_0_0 [color=yellow, style=filled]
+       IPCIn_IPU1_0_EVE1_0 [color=lightblue, style=filled]
+       Merge [color=lightblue, style=filled]
+       IPCOut_IPU1_0_DSP1_1 [color=lightblue, style=filled]
+       IPCIn_DSP1_IPU1_0_0 [color=palegreen, style=filled]
+       Alg_StereoPostProcess [color=palegreen, style=filled]
+       IPCOut_DSP1_IPU1_0_0 [color=palegreen, style=filled]
+       IPCIn_IPU1_0_DSP1_1 [color=lightblue, style=filled]
+       Select_PanoramaCenter [color=lightblue, style=filled]
+       Select_PanoramaLeft [color=lightblue, style=filled]
+       Merge_ImageTransform [color=lightblue, style=filled]
+       Sync_ImageTransform [color=lightblue, style=filled]
+       Alg_DeWarp_ImageTransform [color=lightblue, style=filled]
+       Dup_ImageTransform [color=lightblue, style=filled]
+       IPCOut_IPU1_0_DSP2_3 [color=lightblue, style=filled]
+       IPCIn_DSP2_IPU1_0_1 [color=darkolivegreen1, style=filled]
+       IPCOut_IPU1_0_DSP2_2 [color=lightblue, style=filled]
+       IPCIn_DSP2_IPU1_0_0 [color=darkolivegreen1, style=filled]
+       Alg_SeamDetection [color=darkolivegreen1, style=filled]
+       Alg_Stitching [color=darkolivegreen1, style=filled]
+       IPCOut_DSP2_IPU1_0_0 [color=darkolivegreen1, style=filled]
+       IPCIn_IPU1_0_DSP2_2 [color=lightblue, style=filled]
+       Display_Panorama [color=lightblue, style=filled]
+       GrpxSrc [color=lightblue, style=filled]
+       Display_Grpx [color=lightblue, style=filled]
+
+       /************** CONNECTIONS ************************/
+       Dup_Initial -> Select_SDAIn[taillabel=Q0, minlen=2, labeldistance=3]
+       Dup_Initial -> Select_PanoramaLeft[taillabel=Q1, minlen=2, labeldistance=3]
+       Dup_Initial -> Select_PanoramaCenter[taillabel=Q2, minlen=2, labeldistance=3]
+       Dup_Initial -> Select_PanoramaRight[taillabel=Q3, minlen=2, labeldistance=3]
+       IssM2mIsp -> Dup_Initial[taillabel=Q0, minlen=2, labeldistance=3]
+       IssM2mIsp -> Alg_IssAewb[taillabel=Q1, minlen=2, labeldistance=3]
+       IssCapture -> IssM2mIsp
+       Select_SDAIn -> Sync_RemapOut
+       Merge_ImageTransform -> Sync_ImageTransform
+       Select_PanoramaLeft -> Merge_ImageTransform[headlabel=Q0 minlen=2, labeldistance=3]
+       Select_PanoramaCenter -> Merge_ImageTransform[headlabel=Q1 minlen=2, labeldistance=3]
+       Select_PanoramaRight -> Merge_ImageTransform[headlabel=Q2 minlen=2, labeldistance=3]
+       Dup_RemapOut -> Merge[headlabel=Q1, taillabel=Q1, minlen=2, labeldistance=3]
+       Dup_RemapOut -> IPCOut_IPU1_0_EVE1_0[taillabel=Q0, minlen=2, labeldistance=3]
+       Alg_DeWarp_Remap -> Dup_RemapOut
+       Sync_RemapOut -> Alg_DeWarp_Remap
+       Merge -> IPCOut_IPU1_0_DSP1_1
+       Alg_DisparityHamDist -> IPCOut_EVE1_IPU1_0_0
+       Alg_Census -> Alg_DisparityHamDist
+       Alg_StereoPostProcess -> IPCOut_DSP1_IPU1_0_0
+       Dup_ImageTransform -> IPCOut_IPU1_0_DSP2_2[taillabel=Q0, minlen=2, labeldistance=3]
+       Dup_ImageTransform -> IPCOut_IPU1_0_DSP2_3[taillabel=Q1, minlen=2, labeldistance=3]
+       Alg_DeWarp_ImageTransform -> Dup_ImageTransform
+       Sync_ImageTransform -> Alg_DeWarp_ImageTransform
+       Alg_SeamDetection -> Alg_Stitching[headlabel=Q1 minlen=2, labeldistance=3]
+       Alg_Stitching -> IPCOut_DSP2_IPU1_0_0
+       GrpxSrc -> Display_Grpx
+       IPCOut_IPU1_0_EVE1_0 -> IPCIn_EVE1_IPU1_0_0
+       IPCIn_EVE1_IPU1_0_0 -> Alg_Census
+       IPCOut_EVE1_IPU1_0_0 -> IPCIn_IPU1_0_EVE1_0
+       IPCIn_IPU1_0_EVE1_0 -> Merge[headlabel=Q0 minlen=2, labeldistance=3]
+       IPCOut_IPU1_0_DSP1_1 -> IPCIn_DSP1_IPU1_0_0
+       IPCIn_DSP1_IPU1_0_0 -> Alg_StereoPostProcess
+       IPCOut_DSP1_IPU1_0_0 -> IPCIn_IPU1_0_DSP1_1
+       IPCIn_IPU1_0_DSP1_1 -> Merge_ImageTransform[headlabel=Q3 minlen=2, labeldistance=3]
+       IPCOut_IPU1_0_DSP2_2 -> IPCIn_DSP2_IPU1_0_0
+       IPCIn_DSP2_IPU1_0_0 -> Alg_SeamDetection
+       IPCOut_IPU1_0_DSP2_3 -> IPCIn_DSP2_IPU1_0_1
+       IPCIn_DSP2_IPU1_0_1 -> Alg_Stitching[headlabel=Q0 minlen=2, labeldistance=3]
+       IPCOut_DSP2_IPU1_0_0 -> IPCIn_IPU1_0_DSP2_2
+       IPCIn_IPU1_0_DSP2_2 -> Display_Panorama
+}

@@ -1,0 +1,19 @@
+var searchData=
+[
+  ['total_5fseq_5fnum',['total_seq_num',['../structtfdtp__header.html#addbcf154996befcc7ae2e4120d51b073',1,'tfdtp_header::total_seq_num()'],['../structtfdtp__rx__buf.html#aea481c3bb2bff0832ad82221fcf630cc',1,'tfdtp_rx_buf::total_seq_num()'],['../structtfdtp__tx__buf.html#a3094bd262bd631415dfe0052cbabcf5a',1,'tfdtp_tx_buf::total_seq_num()']]],
+  ['tx_5fcb_5fdata',['tx_cb_data',['../structTFDTP__TxChOpenPrm.html#a59fe885073b5590f3d51266ac94f6a52',1,'TFDTP_TxChOpenPrm']]],
+  ['tx_5fcb_5ffxn',['tx_cb_fxn',['../structTFDTP__TxChOpenPrm.html#a077c2fbf15d8b500857635494b00a0f1',1,'TFDTP_TxChOpenPrm']]],
+  ['txbcastframes',['TxBCastFrames',['../structSTATS__STATISTICS__.html#a3d5597d0d246ef408bbce0006a133d49',1,'STATS_STATISTICS_']]],
+  ['txcarriersloss',['TxCarrierSLoss',['../structSTATS__STATISTICS__.html#a3c7512184546d4f83a76804808c644bb',1,'STATS_STATISTICS_']]],
+  ['txcollision',['TxCollision',['../structSTATS__STATISTICS__.html#aebf835e58e0cd354308a64f3727c96c1',1,'STATS_STATISTICS_']]],
+  ['txdeferred',['TxDeferred',['../structSTATS__STATISTICS__.html#a25ade846650675d1d1afbfa7804d478d',1,'STATS_STATISTICS_']]],
+  ['txexcessivecoll',['TxExcessiveColl',['../structSTATS__STATISTICS__.html#ace26c0ca174cd8ed156037ae5b8cbee3',1,'STATS_STATISTICS_']]],
+  ['txgoodframes',['TxGoodFrames',['../structSTATS__STATISTICS__.html#a969918faaaef0c9c2ab53712f2262475',1,'STATS_STATISTICS_']]],
+  ['txlatecoll',['TxLateColl',['../structSTATS__STATISTICS__.html#a76a6ad6679600520978bbaca3c80d351',1,'STATS_STATISTICS_']]],
+  ['txmcastframes',['TxMCastFrames',['../structSTATS__STATISTICS__.html#a372c7f19c3a0de8b9d9794bcafab8397',1,'STATS_STATISTICS_']]],
+  ['txmulticoll',['TxMultiColl',['../structSTATS__STATISTICS__.html#a146ed18cbb5dad97ca8fa288b76f96a4',1,'STATS_STATISTICS_']]],
+  ['txoctets',['TxOctets',['../structSTATS__STATISTICS__.html#afd1cfbc3944a1e27983df706983710d4',1,'STATS_STATISTICS_']]],
+  ['txpauseframes',['TxPauseFrames',['../structSTATS__STATISTICS__.html#a62f94ab58a01fc2855c9a15a1c1b6fdb',1,'STATS_STATISTICS_']]],
+  ['txsinglecoll',['TxSingleColl',['../structSTATS__STATISTICS__.html#a3d54dca61417975aa6796e62fda6ce9c',1,'STATS_STATISTICS_']]],
+  ['txunderrun',['TxUnderrun',['../structSTATS__STATISTICS__.html#ac2203c8323fc02b6376403801bd89654',1,'STATS_STATISTICS_']]]
+];

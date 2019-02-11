@@ -1,0 +1,50 @@
+rpmsg-omx Stress Test
+
+Syntax:
+  rpmsg-omx-stress -t <test_no> [-c <id>] [-x <num>] [-e <type>] [-l <num>]
+
+  Where:
+    -t <test_no>    Test number to be run. Valid values are 1-3.
+                    1: Run multi-srvmgr test
+                    2: Run multi-thread test
+                    3: Run select test
+    -c <id>         Core ID with which to communicate.
+                    0: IPU CORE0 (default)
+                    1: IPU CORE1
+		    2: DSP
+    -x <num>        For tests 1 and 3, the number of OMX ServiceMgr instances.
+                    Default is 1.
+    -e <type>       Type of communication with the remote core.
+                    0: Synchronous calls (default)
+                    1: Asynchronous calls
+    -l <num>        For test 2, the number of threads communicating with the
+                    remote OMX ServiceMgr. Default is 1.
+
+Examples:
+  rpmsg-omx-stress -t 1                 Runs the Multi-SrvMgr test with 1
+                                        ServiceMgr instance on CORE0 using
+                                        synchronous calls.
+  rpmsg-omx-stress -t 1 -c 1 -x 5       Runs the Multi-SrvMgr test with 5
+                                        ServiceMgr instances on CORE1 using
+                                        synchronous calls.
+  rpmsg-omx-stress -t 1 -c 1 -x 5 -e 1  Runs the Multi-SrvMgr test with 5
+                                        ServiceMgr instances on CORE1 using
+                                        asynchronous calls.
+  rpmsg-omx-stress -t 2                 Runs the Multi-thread test with 1
+                                        thread communicating with CORE0 using
+                                        synchronous calls.
+  rpmsg-omx-stress -t 2 -c 1 -l 5       Runs the Multi-thread test with 5
+                                        threads communicating with CORE1 using
+                                        synchronous calls.
+  rpmsg-omx-stress -t 2 -c 1 -l 5 -e 1  Runs the Multi-thread test with 5
+                                        threads communicating with CORE1 using
+                                        asynchronous calls.
+  rpmsg-omx-stress -t 3                 Runs the Multi-SrvMgr select test with
+                                        1 ServiceMgr instance on CORE0 using
+                                        synchronous calls.
+  rpmsg-omx-stress -t 3 -c 1 -x 5       Runs the Multi-SrvMgr select test with
+                                        5 ServiceMgr instances on CORE1 using
+                                        synchronous calls.
+  rpmsg-omx-stress -t 3 -c 1 -x 5 -e 1  Runs the Multi-SrvMgr select test with
+                                        5 ServiceMgr instances on CORE1 using
+                                        asynchronous calls.

@@ -1,0 +1,3 @@
+UC_radar_capture_only=yes
+UC_radar_objectdetect_null=yes
+UC_radar_capture_process=yes

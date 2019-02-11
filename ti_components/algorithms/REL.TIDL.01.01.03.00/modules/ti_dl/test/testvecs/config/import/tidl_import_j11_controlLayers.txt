@@ -1,0 +1,25 @@
+# Default - 0
+randParams         = 0 
+
+# 0: Caffe, 1: TensorFlow, Default - 0
+modelType          = 0 
+
+# 0: Fixed quantization By tarininng Framework, 1: Dyanamic quantization by TIDL, Default - 1
+quantizationStyle  = 1 
+
+# quantRoundAdd/100 will be added while rounding to integer, Default - 50
+quantRoundAdd      = 25
+
+numParamBits       = 8
+# 0 : 8bit Unsigned, 1 : 8bit Signed Default - 1
+inElementType      = 0
+
+inputNetFile       = "..\..\test\testvecs\config\caffe_models\jacintonet_cntrllayers\deploy.prototxt"
+inputParamsFile    = "..\..\test\testvecs\config\caffe_models\jacintonet_cntrllayers\cifar10_jacintonet11_tidl_iter_64000.caffemodel"
+outputNetFile      = "..\..\test\testvecs\config\tidl_models\tidl_net_jacintonet_cntrllayers.bin"
+outputParamsFile   = "..\..\test\testvecs\config\tidl_models\tidl_param_jacintonet_cntrllayers.bin"
+
+preProcType  = 3
+sampleInData = "..\..\test\testvecs\input\airshow.jpg"
+tidlStatsTool = "..\quantStatsTool\eve_test_dl_algo.out.exe"
+#tidlStatsTool = "..\..\test\out\eve_test_dl_algo.out.exe"

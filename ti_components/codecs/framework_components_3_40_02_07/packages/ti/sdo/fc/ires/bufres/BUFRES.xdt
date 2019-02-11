@@ -1,0 +1,93 @@
+%%{
+/*
+ * Copyright (c) 2012, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ */
+%%}
+
+%%{
+    /*
+     *  ======== BUFRES.xdt ========
+     *  Generate BUFRES configuration and initialization structures
+     */
+    var bufres = this.$package.BUFRES;
+
+    var allocFxn;
+    var freeFxn;
+
+    function su(segName) { /* "strip underscore" */
+        return (segName.charAt(0) == "_") ? segName.substr(1) : segName;
+    }
+%%}
+
+/* C code contribution from ti/sdo/fc/ires/bufres/BUFRES.xdt */
+
+#include <xdc/std.h>
+
+#define ti_sdo_fc_ires_NOPROTOCOLREV
+#include <ti/sdo/fc/ires/bufres/bufres.h>
+
+% if ((this.persistentAllocFxn != null) && (this.persistentFreeFxn != null)) {
+
+/* declaration of user-supplied RMAN.persistentAllocFxn */
+extern Bool `su(this.persistentAllocFxn)`(IALG_MemRec *memTab, Int numRecs);
+extern Void `su(this.persistentFreeFxn)`(IALG_MemRec *memTab, Int numRecs);
+%     allocFxn = su(this.persistentAllocFxn);
+%     freeFxn = su(this.persistentFreeFxn);
+% }
+% else {
+%     allocFxn = "NULL";
+%     freeFxn = "NULL";
+% }
+
+% var bufBase = bufres.bufBase == null ? "NULL" : utils.toHex(bufres.bufBase);
+%
+BUFRES_Params BUFRES_PARAMS = {
+    /* IRESMAN_Params iresConfig; */
+    {
+        /* size: The size of this structure */
+        sizeof(BUFRES_Params),
+
+        /* allocFxn: Function to allocate memory required by the resource */
+        `allocFxn`,
+
+        /* freeFxn: Function to free memory acquired by allocFxn */
+        `freeFxn`
+    },
+
+    /* Void *base; The base address of the buffer resource */
+    %//    `bufres.bufBase == null ? "NULL" : (Void *)`utils.toHex(bufres.bufBase)`,
+
+    (Void *)`bufBase`,
+
+    /* Int length; The length of the buffer resource (MAUs) */
+    `utils.toHex(bufres.bufLength)`
+};

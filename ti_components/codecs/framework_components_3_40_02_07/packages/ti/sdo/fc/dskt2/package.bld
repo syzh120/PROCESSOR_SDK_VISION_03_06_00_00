@@ -1,0 +1,181 @@
+/*
+ * Copyright (c) 2012, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ */
+/*
+ *  ======== package.bld ========
+ */
+
+var Build = xdc.useModule('xdc.bld.BuildEnvironment');
+var Pkg = xdc.useModule('xdc.bld.PackageContents');
+
+/* lib/ is a generated directory that 'xdc clean' should remove */
+Pkg.generatedFiles.$add("lib/");
+
+// check if profile is specified in XDCARGS. 'arguments' is XDCARGS
+// eg, XDCARGS="... profile=debug ..."
+var cmdProf = (" " + arguments.join(" ") + " ").match(/ profile=([^ ]+) /);
+cmdProf = cmdProf != null ? cmdProf[1] : null;
+
+if (cmdProf != null) {
+    print("Building for " + cmdProf + " profile specified on command line...");
+}
+
+
+/*
+ * This package distributes its sources in the default release.  This is to
+ * enable better understanding by the customer/field, as well as enable
+ * modification and profiling techniques in the field.
+ */
+Pkg.attrs.exportSrc = true;
+
+var OBJS = [
+    "dskt2_scratch",
+    "dskt2_seg",
+    "dskt2_qos",
+    "dskt2actv",
+    "dskt2crea",
+    "dskt2ctrl",
+    "dskt2dact",
+    "dskt2free",
+    "dskt2_permute",
+    "dskt2_lock",
+//    "dskt2_cache",
+//    "dskt2_yield",
+    "dskt2cfg",
+];
+
+var OBJS_BIOS = OBJS.concat(["dskt2_yield","dskt2_cache"]);
+
+Pkg.otherFiles = [
+    "dskt2_mem.h",
+    "dskt2_qos.h",
+    "dskt2_lock.h",
+    "dskt2.h",
+    "_dskt2.h",
+    "dskt2_permute.h",
+    "package.bld",
+];
+
+// list of libraries to build
+var libArray = new Array();
+
+libArray.push({name: "dskt2",
+               sources: OBJS,
+           });
+
+if (0) {
+// Multi-process library
+libArray.push({name: "dskt2_mp",
+               isas: ["v5T", "v7M", "i686" /* i686 = PC */],
+               sources: OBJS,
+               libAttrs: {
+                   defs: " -DDSKT2_MP ",
+               }
+});
+}
+
+// ==== loop over array of libraries ====
+for (var i = 0; i < libArray.length; i++) {
+    var lib = libArray[i];
+
+    var srcs = lib.sources;
+
+    // ==== loop over all targets in build array ====
+    for (var j = 0; j < Build.targets.length; j++) {
+        var targ = Build.targets[j];
+
+        // skip target if not supported by current library
+        if ("isas" in lib) {
+            var skipTarget = true;
+            var targIsaChain = ":" + targ.getISAChain().join(":") + ":";
+            for (var k = 0; k < lib.isas.length; k++) {
+                if (targIsaChain.match(":" + lib.isas[k] + ":")) {
+                    skipTarget = false;
+                    break;
+                }
+            }
+            if (skipTarget) continue;
+        }
+
+        if (targ.os == undefined) {
+            //Assume BIOS
+            srcs = OBJS_BIOS;
+            var defs = " -DUSEDSKT2CACHEWB ";
+        }
+        else {
+            continue;
+            var defs = "";
+        }
+
+        // ==== loop over all profiles ====
+        for (var profile in targ.profiles) {
+            if (cmdProf != null) {
+                // skip profile if different than specified on command line
+                if (profile != cmdProf) {
+                    continue;
+                }
+            }
+
+            // name = lib/profile/name.a+suffix
+            var name = "lib/" + profile + "/" + lib.name;
+
+            // pass along library attributes specified in library array
+            var libAttrs = "libAttrs" in lib ? lib.libAttrs : {};
+
+            // must set profile explicitly
+            libAttrs.profile = profile;
+
+            // build the library
+            var library = Pkg.addLibrary(name, targ, libAttrs);
+
+            /* add the source files */
+            library.addObjects(srcs);
+
+            // name = lib/profile/name.a+suffix
+            name = "lib/" + profile + "/" + lib.name + "_lazydDisable";
+
+            // pass along library attributes specified in library array
+            var libAttrs = "libAttrs" in lib ? lib.libAttrs : {};
+
+            // must set profile explicitly
+            libAttrs.profile = profile;
+
+            libAttrs.defs = " -DDSKT2_DISABLELAZYD ";
+
+            // build the library
+            var library = Pkg.addLibrary(name, targ, libAttrs);
+
+            /* add the source files */
+            library.addObjects(srcs);
+        }
+    }
+}

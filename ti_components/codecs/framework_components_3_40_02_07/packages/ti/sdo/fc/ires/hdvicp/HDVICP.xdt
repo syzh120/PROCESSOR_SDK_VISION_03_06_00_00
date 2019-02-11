@@ -1,0 +1,82 @@
+%%{
+/*
+ * Copyright (c) 2012, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ */
+%%}
+
+%%{
+    /*
+     *  ======== HDVICP.xdt ========
+     *  Generate HDVICP Resman configuration and initialization structures
+     */
+    var HDVICP = this.$package.HDVICP;
+    function su(segName) { /* "strip underscore" */
+        return (segName.charAt(0) == "_") ? segName.substr( 1 ) : segName;
+    }
+
+    var baseAddress;
+    var registerSpace;
+    var device = Program.cpu.deviceName;
+
+    if (device.match("DM355") != null) {
+        numHdvicp = 0;
+        baseAddress =   0x0;
+        memoryAddress = 0x0;
+    } else if (device.match("DM365") != null) {
+        baseAddress =   0x01E00000;
+        memoryAddress = 0x01F00000;
+        numHdvicp = 1;
+    }
+    else if (device.match("80586") != null) {
+        baseAddress =   0x0;
+        memoryAddress = 0x0;
+        numHdvicp = 0;
+    }
+    else if (device.match("DM6467") != null) {
+        baseAddress =   0x0;
+        memoryAddress = 0x0;
+        numHdvicp = 2;
+    }
+    else {
+        throw(" HDVICP error: Unsupported device \"" + device + "\"\n");
+    }
+%%}
+
+/* Generated code from the HDVICP module */
+unsigned int _HDVICP_REGBASEADDR = (unsigned int)`baseAddress`;
+unsigned int _HDVICP_MEMBASEADDR = (unsigned int)`memoryAddress`;
+unsigned int _HDVICP_NUMRESOURCES = (unsigned int)`numHdvicp`;
+
+#ifdef xdc_target__os_Linux
+/* Base key value for HDVICP Linux IPC objects */
+UInt32 _HDVICP_ipcKeyBase = `utils.toHex(this.ipcKeyBase)`;
+#endif

@@ -1,0 +1,997 @@
+﻿<!DOCTYPE html>
+<html lang="en" dir="ltr" class="client-nojs">
+<head>
+<meta charset="UTF-8" />
+<title>PDK/PDK Application Notes Video Driver Porting - Texas Instruments Wiki</title>
+<meta name="generator" content="MediaWiki 1.25.1" />
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="search" type="application/opensearchdescription+xml" href="http://processors.wiki.ti.com/opensearch_desc.php" title="Texas Instruments Wiki (en)" />
+<link rel="EditURI" type="application/rsd+xml" href="http://processors.wiki.ti.com/api.php?action=rsd" />
+<link rel="alternate" hreflang="x-default" href="PDK_Application_Notes_Video_Driver_Porting.html" />
+<link rel="copyright" href="http://creativecommons.org/licenses/by-sa/3.0/" />
+<link rel="alternate" type="application/atom+xml" title="Texas Instruments Wiki Atom feed" href="http://processors.wiki.ti.com/index.php?title=Special:RecentChanges&amp;feed=atom" />
+<link rel="stylesheet" href="load.php@debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%252Cshared%257Cmediawiki.sectionAnchor%257Cmediawiki.skinning.interface%257Cmediawiki.ui.button%257Cskins.vector.styles&amp;only=styles&amp;skin=vector&amp;%252A.css" />
+<meta name="ResourceLoaderDynamicStyles" content="" />
+<link rel="stylesheet" href="load.php@debug=false&amp;lang=en&amp;modules=site&amp;only=styles&amp;skin=vector&amp;%252A.css" />
+<style>a:lang(ar),a:lang(kk-arab),a:lang(mzn),a:lang(ps),a:lang(ur){text-decoration:none}
+/* cache key: davincid_wikidb:resourceloader:filter:minify-css:7:70500b672b667d946e900b286b62c126 */</style>
+<script src="load.php@debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector&amp;%252A"></script>
+<script>if(window.mw){
+mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"PDK/PDK_Application_Notes_Video_Driver_Porting","wgTitle":"PDK/PDK Application Notes Video Driver Porting","wgCurRevisionId":229857,"wgRevisionId":229857,"wgArticleId":45314,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["PDK","PROCESSOR-SDK","VPS"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"PDK/PDK_Application_Notes_Video_Driver_Porting","wgRelevantArticleId":45314,"wgIsProbablyEditable":false,"wgRestrictionEdit":[],"wgRestrictionMove":[],"wgWikiEditorEnabledModules":{"toolbar":true,"dialogs":true,"hidesig":true,"preview":true,"publish":false},"wgCategoryTreePageCategoryOptions":"{\"mode\":0,\"hideprefix\":20,\"showcount\":false,\"namespaces\":false}"});
+}</script><script>if(window.mw){
+mw.loader.implement("user.options",function($,jQuery){mw.user.options.set({"variant":"en"});});mw.loader.implement("user.tokens",function($,jQuery){mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\"});});
+/* cache key: davincid_wikidb:resourceloader:filter:minify-js:7:a5c52c063dc436c1ca7c9f456936a5e9 */
+}</script>
+<script>if(window.mw){
+mw.loader.load(["mediawiki.page.startup","mediawiki.legacy.wikibits","mediawiki.legacy.ajax","skins.vector.js"]);
+}</script>
+<!--[if lt IE 7]><style type="text/css">body{behavior:url("/skins/Vector/csshover.min.htc")}</style><![endif]-->
+</head>
+<body class="mediawiki ltr sitedir-ltr ns-0 ns-subject page-PDK_PDK_Application_Notes_Video_Driver_Porting skin-vector action-view vector-animateLayout">
+		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+
+							<div id="siteNotice"><div id="localNotice" lang="en" dir="ltr"><p><br />
+<span style="color:#ff0000"><b>Please note as of Wednesday, August 15th, 2018 this wiki has been set to read only. If you are a TI Employee and require Edit ability please contact x0211426 from the company directory.</b></span>
+</p></div></div>
+						<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" class="firstHeading" lang="en"><span dir="auto">PDK/PDK Application Notes Video Driver Porting</span></h1>
+						<div id="bodyContent" class="mw-body-content">
+									<div id="siteSub">From Texas Instruments Wiki</div>
+								<div id="contentSub"></div>
+												<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="PDK_Application_Notes_Video_Driver_Porting.html#mw-head">navigation</a>, 					<a href="PDK_Application_Notes_Video_Driver_Porting.html#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="hf-nsheader"><script language = "Javascript">
+var tiContentGroup;
+var tiwikicat = (typeof(mw.config.values.wgCategories[0]) === "undefined"? "":mw.config.values.wgCategories[0]);
+tiContentGroup = "/DSP/wiki/Ext/" +tiwikicat;
+var tiPageName;
+tiPageName = 'wiki/PDK/PDK_Application_Notes_Video_Driver_Porting';
+</script></div><div class="hf-header"></div><div style="padding-bottom: 10px; background-color: rgb(238,29,35); padding-left: 10px; padding-right: 10px; padding-top: 10px">
+<p><a href="http://processors.wiki.ti.com/index.php/File:Ti_stk_1c_rev_rgb_png.png" class="image" title="Ti stk 1c rev rgb png.png"><img alt="Ti stk 1c rev rgb png.png" src="Ti_stk_1c_rev_rgb_png.png" width="200" height="47" /></a>
+</p>
+</div>
+<p><br />
+</p>
+<div id="toc" class="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="PDK_Application_Notes_Video_Driver_Porting.html#Abstract"><span class="tocnumber">1</span> <span class="toctext">Abstract</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="PDK_Application_Notes_Video_Driver_Porting.html#Overview"><span class="tocnumber">2</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="PDK_Application_Notes_Video_Driver_Porting.html#VPS_I2C_Utility"><span class="tocnumber">3</span> <span class="toctext">VPS I2C Utility</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="PDK_Application_Notes_Video_Driver_Porting.html#VIP_Configuration"><span class="tocnumber">4</span> <span class="toctext">VIP Configuration</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="PDK_Application_Notes_Video_Driver_Porting.html#VIP_Instance.2FPort"><span class="tocnumber">4.1</span> <span class="toctext">VIP Instance/Port</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="PDK_Application_Notes_Video_Driver_Porting.html#VIP_External.2FEmbedded_Sync_Signal"><span class="tocnumber">4.2</span> <span class="toctext">VIP External/Embedded Sync Signal</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="PDK_Application_Notes_Video_Driver_Porting.html#VIP_Input_Data_Width"><span class="tocnumber">4.3</span> <span class="toctext">VIP Input Data Width</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="PDK_Application_Notes_Video_Driver_Porting.html#VIP_Input_Data_Format"><span class="tocnumber">4.4</span> <span class="toctext">VIP Input Data Format</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="PDK_Application_Notes_Video_Driver_Porting.html#VIP_Output_Data_Format"><span class="tocnumber">4.5</span> <span class="toctext">VIP Output Data Format</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="PDK_Application_Notes_Video_Driver_Porting.html#VIP_Pixel_Clock_Polarity_and_SYNC_Signal_Polarity"><span class="tocnumber">4.6</span> <span class="toctext">VIP Pixel Clock Polarity and SYNC Signal Polarity</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="PDK_Application_Notes_Video_Driver_Porting.html#VIP_Input_Video_Timing"><span class="tocnumber">4.7</span> <span class="toctext">VIP Input Video Timing</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="PDK_Application_Notes_Video_Driver_Porting.html#VIP_Video_Crop"><span class="tocnumber">4.8</span> <span class="toctext">VIP Video Crop</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="PDK_Application_Notes_Video_Driver_Porting.html#VIP_Interlaced.2FProgressive_Input"><span class="tocnumber">4.9</span> <span class="toctext">VIP Interlaced/Progressive Input</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="PDK_Application_Notes_Video_Driver_Porting.html#TDA2Ex.2FAM571x.2FDRA72x_Additional_SOC_Level_Mux_Setting"><span class="tocnumber">4.10</span> <span class="toctext">TDA2Ex/AM571x/DRA72x Additional SOC Level Mux Setting</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-15"><a href="PDK_Application_Notes_Video_Driver_Porting.html#DSS_Configuration"><span class="tocnumber">5</span> <span class="toctext">DSS Configuration</span></a>
+<ul>
+<li class="toclevel-2 tocsection-16"><a href="PDK_Application_Notes_Video_Driver_Porting.html#DSS_LCD.2FDPI_Instance"><span class="tocnumber">5.1</span> <span class="toctext">DSS LCD/DPI Instance</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="PDK_Application_Notes_Video_Driver_Porting.html#DSS_Interface_Format"><span class="tocnumber">5.2</span> <span class="toctext">DSS Interface Format</span></a></li>
+<li class="toclevel-2 tocsection-18"><a href="PDK_Application_Notes_Video_Driver_Porting.html#DSS_Pixel_Clock_Polarity_and_SYNC_Signal_Polarity"><span class="tocnumber">5.3</span> <span class="toctext">DSS Pixel Clock Polarity and SYNC Signal Polarity</span></a></li>
+<li class="toclevel-2 tocsection-19"><a href="PDK_Application_Notes_Video_Driver_Porting.html#DSS_LCD_Timing"><span class="tocnumber">5.4</span> <span class="toctext">DSS LCD Timing</span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="PDK_Application_Notes_Video_Driver_Porting.html#DSS_LCD_Pixel_Clock_-_Video_PLL"><span class="tocnumber">5.5</span> <span class="toctext">DSS LCD Pixel Clock - Video PLL</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-21"><a href="PDK_Application_Notes_Video_Driver_Porting.html#CAL_Configuration"><span class="tocnumber">6</span> <span class="toctext">CAL Configuration</span></a>
+<ul>
+<li class="toclevel-2 tocsection-22"><a href="PDK_Application_Notes_Video_Driver_Porting.html#CAL_Lane_position"><span class="tocnumber">6.1</span> <span class="toctext">CAL Lane position</span></a></li>
+<li class="toclevel-2 tocsection-23"><a href="PDK_Application_Notes_Video_Driver_Porting.html#CAL_Lane_polarity"><span class="tocnumber">6.2</span> <span class="toctext">CAL Lane polarity</span></a></li>
+<li class="toclevel-2 tocsection-24"><a href="PDK_Application_Notes_Video_Driver_Porting.html#CAL_Frames_not_received_.2F_No_video_captured"><span class="tocnumber">6.3</span> <span class="toctext">CAL Frames not received / No video captured</span></a>
+<ul>
+<li class="toclevel-3 tocsection-25"><a href="PDK_Application_Notes_Video_Driver_Porting.html#CAL_Sensor_Slave_Address"><span class="tocnumber">6.3.1</span> <span class="toctext">CAL Sensor Slave Address</span></a></li>
+<li class="toclevel-3 tocsection-26"><a href="PDK_Application_Notes_Video_Driver_Porting.html#CSI2_Clock_recognized_by_CAL"><span class="tocnumber">6.3.2</span> <span class="toctext">CSI2 Clock recognized by CAL</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-27"><a href="PDK_Application_Notes_Video_Driver_Porting.html#I2C_and_UART_Configuration"><span class="tocnumber">7</span> <span class="toctext">I2C and UART Configuration</span></a>
+<ul>
+<li class="toclevel-2 tocsection-28"><a href="PDK_Application_Notes_Video_Driver_Porting.html#I2C_Changes"><span class="tocnumber">7.1</span> <span class="toctext">I2C Changes</span></a></li>
+<li class="toclevel-2 tocsection-29"><a href="PDK_Application_Notes_Video_Driver_Porting.html#UART_Changes"><span class="tocnumber">7.2</span> <span class="toctext">UART Changes</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-30"><a href="PDK_Application_Notes_Video_Driver_Porting.html#Porting_Board_Module"><span class="tocnumber">8</span> <span class="toctext">Porting Board Module</span></a>
+<ul>
+<li class="toclevel-2 tocsection-31"><a href="PDK_Application_Notes_Video_Driver_Porting.html#Changing_Pin_Mux"><span class="tocnumber">8.1</span> <span class="toctext">Changing Pin Mux</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-32"><a href="PDK_Application_Notes_Video_Driver_Porting.html#Supporting_New_Sensor.2FCamera"><span class="tocnumber">9</span> <span class="toctext">Supporting New Sensor/Camera</span></a>
+<ul>
+<li class="toclevel-2 tocsection-33"><a href="PDK_Application_Notes_Video_Driver_Porting.html#Smart_Sensor"><span class="tocnumber">9.1</span> <span class="toctext">Smart Sensor</span></a>
+<ul>
+<li class="toclevel-3 tocsection-34"><a href="PDK_Application_Notes_Video_Driver_Porting.html#Smart_Sensor_-_VPS_Driver_Updates"><span class="tocnumber">9.1.1</span> <span class="toctext">Smart Sensor - VPS Driver Updates</span></a></li>
+<li class="toclevel-3 tocsection-35"><a href="PDK_Application_Notes_Video_Driver_Porting.html#Smart_Sensor_-_VISION_SDK_Updates"><span class="tocnumber">9.1.2</span> <span class="toctext">Smart Sensor - VISION SDK Updates</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-36"><a href="PDK_Application_Notes_Video_Driver_Porting.html#RAW_Sensor"><span class="tocnumber">9.2</span> <span class="toctext">RAW Sensor</span></a>
+<ul>
+<li class="toclevel-3 tocsection-37"><a href="PDK_Application_Notes_Video_Driver_Porting.html#RAW_Sensor_-_VPS_Driver_Updates"><span class="tocnumber">9.2.1</span> <span class="toctext">RAW Sensor - VPS Driver Updates</span></a></li>
+<li class="toclevel-3 tocsection-38"><a href="PDK_Application_Notes_Video_Driver_Porting.html#RAW_Sensor_-_VISION_SDK_Updates"><span class="tocnumber">9.2.2</span> <span class="toctext">RAW Sensor - VISION SDK Updates</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-39"><a href="PDK_Application_Notes_Video_Driver_Porting.html#FPD_Link_III"><span class="tocnumber">9.3</span> <span class="toctext">FPD Link III</span></a>
+<ul>
+<li class="toclevel-3 tocsection-40"><a href="PDK_Application_Notes_Video_Driver_Porting.html#De_Serializer_.2F_Aggregator_I2C_Address"><span class="tocnumber">9.3.1</span> <span class="toctext">De Serializer / Aggregator I2C Address</span></a></li>
+<li class="toclevel-3 tocsection-41"><a href="PDK_Application_Notes_Video_Driver_Porting.html#Serializer_I2C_Address"><span class="tocnumber">9.3.2</span> <span class="toctext">Serializer I2C Address</span></a></li>
+<li class="toclevel-3 tocsection-42"><a href="PDK_Application_Notes_Video_Driver_Porting.html#Sensor_I2C_Address"><span class="tocnumber">9.3.3</span> <span class="toctext">Sensor I2C Address</span></a></li>
+<li class="toclevel-3 tocsection-43"><a href="PDK_Application_Notes_Video_Driver_Porting.html#Adding_support_for_sensor_.2B_serializer_.26_de_serializer_combination"><span class="tocnumber">9.3.4</span> <span class="toctext">Adding support for sensor + serializer &amp; de serializer combination</span></a>
+<ul>
+<li class="toclevel-4 tocsection-44"><a href="PDK_Application_Notes_Video_Driver_Porting.html#Sensor_Related_changes"><span class="tocnumber">9.3.4.1</span> <span class="toctext">Sensor Related changes</span></a></li>
+<li class="toclevel-4 tocsection-45"><a href="PDK_Application_Notes_Video_Driver_Porting.html#UB913_.26_UB914_.2F_serializer_.26_de_serializer"><span class="tocnumber">9.3.4.2</span> <span class="toctext">UB913 &amp; UB914 / serializer &amp; de serializer</span></a></li>
+<li class="toclevel-4 tocsection-46"><a href="PDK_Application_Notes_Video_Driver_Porting.html#UB913_.26_UB964_.2F_serializer_.26_de_serializer"><span class="tocnumber">9.3.4.3</span> <span class="toctext">UB913 &amp; UB964 / serializer &amp; de serializer</span></a></li>
+<li class="toclevel-4 tocsection-47"><a href="PDK_Application_Notes_Video_Driver_Porting.html#Vision_SDK_Changes"><span class="tocnumber">9.3.4.4</span> <span class="toctext">Vision SDK Changes</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Abstract">Abstract</span></h1>
+<p>This application note describes the detailed steps in configuring VIP, DSS and ISS CAL video drivers to custom board. This includes board level pinmux changes, VIP/CAL data capture from sensors with different parameters and configuring DSS timing to support custom LCD
+</p>
+<h1><span class="mw-headline" id="Overview">Overview</span></h1>
+<p>This application note describes the various steps in porting the video drivers (VIP, DSS &amp; CAL) to custom board. This also explains how to port UART and I2C drivers which are typically used along with video drivers.<br />
+Below gives an overview of the various steps involved in the board bring-up. Kindly refer respective section for further details. 
+</p>
+<ul><li>Review the board schematics for VIP, DSS, UART and I2C signals and how the board level routing is done.</li></ul>
+<ul><li>Check the pin name to which the signals are connected to the SOC. Depending on this set the SOC level pinmux (mux mode). The pin mux can be set by using <code>Bsp_platformSetPinmuxRegs()</code> platform API. The 1st parameter sets the mode, the 2nd parameter takes the register offset for the pin and the 3rd parameter sets the other mux mode parameters like pull-up/down enable/disable, input enable (output or bi-directional).
+<ul><li> <b>Note: In case of VIP, the pin direction should be set to bi-directional as all VIP pins acts as input.</b><br /></li></ul></li></ul>
+<p><b>Example Code Snippet:</b><br />
+</p>
+<pre>/* PAD=VIN1B_CLK1_0, PIN=VIN3A_CLK0_6 */
+Bsp_platformSetPinmuxRegs(6U, CTRL_CORE_PAD_VIN1B_CLK1, BSP_PLATFORM_IOPAD_CFG_INPUTENABLE_BI);
+</pre>
+<ul><li>Review if any board level multiplexing is required for the video signals to propagate from external Sensor/LCD to the device pads. Review if any I2C IO expander or GPIO is used to select the required board level multiplexing. Depending on these, the application should do the required settings. (I2C Connectivity could be verified using utility mentioned in section 2)</li>
+<li>Review if any board level reset or powering-up is required for the external Sensor/LCD. Depending on these, the application should perform the required settings before reading/writing to the external Sensor/LCD.</li></ul>
+<ul><li>Program the external sensor or LCD using I2C read/write APIs. The application could use I2C read/write APIs <code>Bsp_deviceRawRead8()</code>, <code>Bsp_deviceRawWrite8()</code> etc… present in <code>include/devices/bsp_device.h</code> file. Refer board section to check the steps involved in using a different I2C instance. (I2C Connectivity could be verified using utility mentioned in section 2)</li>
+<li>VIP and DSS have different configuration line embedded/discrete sync, 24/16/8-bit interface etc which could differ depending on board design and use cases. This needs to be reviewed and accordingly the VIP and DSS drivers should be configured from the application.</li>
+<li>Chip level Interrupt cross bar configuration needs to be performed for the VIP, DSS, UART and I2C interrupts to reach the CPU core. The default configuration is done as part of the “platform” module. If the customer application requires a different interrupt mapping, the cross bar setup should be done by the application by bypassing the default configuration by setting <code>isIrqXBarSettingReq</code> parameter of <code>Bsp_PlatformInitParams</code> to FALSE.</li></ul>
+<ul><li>Once the basic changes are done, individual bring-up of the interface should be done using below example before running the final use case or trying the capture to display loopback.
+<ul><li>DSS: <code>pdk/packages/ti/drv/vps/examples/dss/displayDss</code>. Use this make command from pdk/packages/ti/build folder. <code>gmake -s vps_examples_displayDss</code></li>
+<li>VIP: <code>pdk/packages/ti/drv/vps/examples/capture/captureVip</code>. Use this make command from pdk/packages/ti/build folder. <code>gmake -s vps_examples_captureVip</code></li>
+<li>VIP to DSS Loopback: <code>pdk/packages/ti/drv/vps/examples/vps/loopback</code>. Use this make command from pdk/packages/ti/build folder. <code>gmake -s vps_examples_loopback</code></li></ul></li></ul>
+<h1><span class="mw-headline" id="VPS_I2C_Utility">VPS I2C Utility</span></h1>
+<p>Most the video systems either receive data from an external sensor and / or send data to an external peripheral (such as sensor, encoders, decoders etc… or associated peripherals such as muxes, IO expanders, etc…). These peripheral are typically controlled / programmed by an I2C.<br />
+Before attempting to bring up any video drivers, its recommended that connectivity to peripherals are established and slave addresses are verified.<br />
+<b>Requirement:</b> Kindly ensure to follow details in <a href="PDK_Application_Notes_Video_Driver_Porting.html#I2C_and_UART_Configuration" title="PDK/PDK Application Notes Video Driver Porting">I2C and UART Configuration</a> to port I2C driver.<br />
+This utility is a simple CCS console and command line based application that could be used to write / read from salves connected to TDAxx class of devices. Once the utility is executed a simple menu is displayed on CCS console and command are received from CCS console and executed.<br />
+</p>
+<h1><span class="mw-headline" id="VIP_Configuration">VIP Configuration</span></h1>
+<p>This section describes the various VIP parameters that could possibly change when migrating to new sensor or board.
+</p>
+<h2><span class="mw-headline" id="VIP_Instance.2FPort">VIP Instance/Port</span></h2>
+<p>The VIP port parameter can be changed by passing <code>instanceId</code> parameter of <code>Fvid2_create</code>. This instance ID can be generated based on the VIP instance, slice and port using <code>VPS_CAPT_VIP_MAKE_INST_ID</code> macro.<br />
+</p><p><b>Example Code Snippet:</b>
+</p>
+<pre>Uint32 instId = VPS_CAPT_VIP_MAKE_INST_ID(VPS_VIP1, VPS_VIP_S0, VPS_VIP_PORTA);
+drvHandle = Fvid2_create(FVID2_VPS_CAPT_VID_DRV, instId, &amp;createPrms, &amp;createStatus, &amp;cbPrms);
+</pre>
+<p>This instance ID along with driver ID (<code>FVID2_VPS_CAPT_VID_DRV</code>) and create parameters can be used to get a handle of the VIP driver for further operation. Below table shows the VIP port mapping to the driver instance ID.
+</p>
+<table class="wikitable">
+
+<tr>
+<th> VIP Port </th>
+<th> Driver Instance ID
+</th></tr>
+<tr>
+<td> VIN1A </td>
+<td> <code>VPS_CAPT_VIP_MAKE_INST_ID(VPS_VIP1, VPS_VIP_S0, VPS_VIP_PORTA)</code>
+</td></tr>
+<tr>
+<td> VIN1B </td>
+<td> <code>VPS_CAPT_VIP_MAKE_INST_ID(VPS_VIP1, VPS_VIP_S0, VPS_VIP_PORTB)</code>
+</td></tr>
+<tr>
+<td> VIN2A </td>
+<td> <code>VPS_CAPT_VIP_MAKE_INST_ID(VPS_VIP1, VPS_VIP_S1, VPS_VIP_PORTA)</code>
+</td></tr>
+<tr>
+<td> VIN2B </td>
+<td> <code>VPS_CAPT_VIP_MAKE_INST_ID(VPS_VIP1, VPS_VIP_S1, VPS_VIP_PORTB)</code>
+</td></tr>
+<tr>
+<td> VIN3A </td>
+<td> <code>VPS_CAPT_VIP_MAKE_INST_ID(VPS_VIP2, VPS_VIP_S0, VPS_VIP_PORTA)</code>
+</td></tr>
+<tr>
+<td> VIN3B </td>
+<td> <code>VPS_CAPT_VIP_MAKE_INST_ID(VPS_VIP2, VPS_VIP_S0, VPS_VIP_PORTB)</code>
+</td></tr>
+<tr>
+<td> VIN4A </td>
+<td> <code>VPS_CAPT_VIP_MAKE_INST_ID(VPS_VIP2, VPS_VIP_S1, VPS_VIP_PORTA)</code>
+</td></tr>
+<tr>
+<td> VIN4B </td>
+<td> <code>VPS_CAPT_VIP_MAKE_INST_ID(VPS_VIP2, VPS_VIP_S1, VPS_VIP_PORTB)</code>
+</td></tr>
+<tr>
+<td> VIN5A </td>
+<td> <code>VPS_CAPT_VIP_MAKE_INST_ID(VPS_VIP3, VPS_VIP_S0, VPS_VIP_PORTA)</code>
+</td></tr>
+<tr>
+<td> VIN5B </td>
+<td> <code>VPS_CAPT_VIP_MAKE_INST_ID(VPS_VIP3, VPS_VIP_S0, VPS_VIP_PORTB)</code>
+</td></tr>
+<tr>
+<td> VIN6A </td>
+<td> <code>VPS_CAPT_VIP_MAKE_INST_ID(VPS_VIP3, VPS_VIP_S1, VPS_VIP_PORTA)</code>
+</td></tr>
+<tr>
+<td> VIN6B </td>
+<td> <code>VPS_CAPT_VIP_MAKE_INST_ID(VPS_VIP3, VPS_VIP_S1, VPS_VIP_PORTB)</code>
+</td></tr></table>
+<h2><span class="mw-headline" id="VIP_External.2FEmbedded_Sync_Signal">VIP External/Embedded Sync Signal</span></h2>
+<p>The VIP video interface mode parameter to select embedded sync (BT.656/BT.1120) or external sync (HSYNC/VSYNC/AVID modes) can be performed by changing <code>videoIfMode</code> parameter of capture driver <code>Vps_CaptCreateParams</code> create parameter. The various interface modes supported and the corresponding macro to be used are given below
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Video Interface Mode </th>
+<th> VIP Video Interface Mode Macro
+</th></tr>
+<tr>
+<td> Embedded Sync (BT656, BT1120)* </td>
+<td> <code>FVID2_VIFM_SCH_ES</code>
+</td></tr>
+<tr>
+<td> External Sync (HSYNC/VSYNC)** </td>
+<td> <code>FVID2_VIFM_SCH_DS_HSYNC_VSYNC</code>
+</td></tr>
+<tr>
+<td> External Sync (AVID/VSYNC)*** </td>
+<td> <code>FVID2_VIFM_SCH_DS_AVID_VSYNC</code>
+</td></tr>
+<tr>
+<td> Embedded Sync (Line Muxed) </td>
+<td> <code>FVID2_VIFM_MCH_LINE_MUX_ES</code>
+</td></tr>
+<tr>
+<td> Embedded Sync (Pixel Muxed) </td>
+<td> <code>FVID2_VIFM_MCH_PIXEL_MUX_ES</code>
+</td></tr></table>
+<p><code>*</code> BT.656 and BT.1120 can be selected by setting the interface with as 8-bit or 16-bit as described in next section.<br />
+<code>**</code> Most of the video sensors provide HSYNC and VSYNC signals. This is the typically used interface mode for sensors. In this mode, the VIP captures the entire video frame including horizontal  and vertical blanking. The VIP parser crop parameters should be set in addition to this to get only the active video in memory. This is discussed in subsequent section.<br />
+<code>***</code> When the AVID signal of the sensor is connected to the VIN AVID pad of VIP, this mode can be used. In this case, the VIP will capture only the active video.<br />
+</p><p><b>Example Code Snippet:</b>
+</p>
+<pre>Vps_CaptCreateParams createPrms;
+createPrms.videoIfMode = FVID2_VIFM_SCH_DS_HSYNC_VSYNC;
+</pre>
+<h2><span class="mw-headline" id="VIP_Input_Data_Width">VIP Input Data Width</span></h2>
+<p>The VIP video interface width can be changed by setting <code>videoIfWidth</code> parameter of capture driver <code>Vps_CaptCreateParams</code> create parameter. The supported values are <code>FVID2_VIFW_8BIT</code>, <code>FVID2_VIFW_16BIT</code> and <code>FVID2_VIFW_24BIT</code>.<br />
+If the video sensor is providing 10, 12, 14 bit data, then this parameter should be set to <code>FVID2_VIFW_16BIT</code> and the VIP writes the data as 16-bit with zero padded to the MSB.<br />
+Note: 16-bit and 24-bit can be selected for only PORT A; PORT B doesn’t support 16-bit and 24-bit operation (only 8-bit is supported). Also when PORT A is selected for 16-bit and 24-bit, PORT B can’t be used, even for 8-bit operation.<br />
+</p><p><b>Example Code Snippet:</b>
+</p>
+<pre>Vps_CaptCreateParams createPrms;
+createPrms.videoIfWidth = FVID2_VIFW_16BIT;
+</pre>
+<h2><span class="mw-headline" id="VIP_Input_Data_Format">VIP Input Data Format</span></h2>
+<p>The VIP input data format can be changed by setting <code>inFmt.dataFormat</code> parameter of VIP capture driver <code>Vps_CaptVipParams</code> parameter passed to IOCTL_VPS_CAPT_SET_VIP_PARAMS IOCTL. The various input data format supported and the corresponding macro to be used are given below.
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Video Input Data Format </th>
+<th> VIP Video Input Data Format Macro
+</th></tr>
+<tr>
+<td> YUV (8-bit or 16-bit)* </td>
+<td> <code>FVID2_DF_YUV422P</code>
+</td></tr>
+<tr>
+<td> YUV 24-bit </td>
+<td> <code>FVID2_DF_YUV444P</code>
+</td></tr>
+<tr>
+<td> RGB 24-bit </td>
+<td> <code>FVID2_DF_RGB24_888</code>
+</td></tr>
+<tr>
+<td> 8-bit RAW/Bayer** </td>
+<td> <code>FVID2_DF_RAW08</code>
+</td></tr>
+<tr>
+<td> 16-bit RAW/Bayer** </td>
+<td> <code>FVID2_DF_RAW16</code>
+</td></tr>
+<tr>
+<td> 24-bit RAW** </td>
+<td> <code>FVID2_DF_RAW24</code>
+</td></tr></table>
+<p><code>*</code> In case of 8-bit YUV input, the VIP always expects input in UYVY format. Other formats are not natively supported by VIP. If the sensor inputs data in any other format (say YUYV), one could use the RAW 8-bit format and write the same data as 8-bit data at the VIP output. In this case no internal processing like CSC, SC or CHR-DS of VIP can be used.<br />
+<code>**</code> VIP doesn't natively support RAW input format or Bayer pattern input. The VIP driver uses YUV VIP parser setting and VPDMA data format to write back the data as is to the memory without doing any processing. Hence these formats are used for Bayer or any RAW input formats which doesn't require any processing.<br />
+</p><p><b>Example Code Snippet:</b>
+</p>
+<pre>Vps_CaptVipParams    vipPrms;
+vipPrms.inFmt.dataFormat = FVID2_DF_YUV422P;
+</pre>
+<h2><span class="mw-headline" id="VIP_Output_Data_Format">VIP Output Data Format</span></h2>
+<p>The VIP output data format can be changed by setting <code>outStreamInfo[0].outFmt.dataFormat</code> parameter of VIP capture driver <code>Vps_CaptVipParams</code> parameter passed to <code>IOCTL_VPS_CAPT_SET_VIP_PARAMS</code> IOCTL. The various output data format supported for the corresponding input format and the macro to be used are given below.<br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Output Data Format </th>
+<th> Supported Input Data Format </th>
+<th> VIP Output Data Format Macro
+</th></tr>
+<tr>
+<td> YUV422 Interleaved - UYVY </td>
+<td> <code>FVID2_DF_YUV422P</code> (8 or 16-bit interface) </td>
+<td> <code>FVID2_DF_YUV422I_UYVY</code>
+</td></tr>
+<tr>
+<td> YUV422 Interleaved - YUYV </td>
+<td> <code>FVID2_DF_YUV422P</code> (8 or 16-bit interface) </td>
+<td> <code>FVID2_DF_YUV422I_YUYV</code>
+</td></tr>
+<tr>
+<td> YUV422 SP </td>
+<td> <code>FVID2_DF_YUV422P</code> (8 or 16-bit interface) </td>
+<td> <code>FVID2_DF_YUV422SP_UV</code>
+</td></tr>
+<tr>
+<td> YUV420 SP </td>
+<td> <code>FVID2_DF_YUV422P</code> (8 or 16-bit interface) </td>
+<td> <code>FVID2_DF_YUV420SP_UV</code>
+</td></tr>
+<tr>
+<td> YUV444 Interleaved </td>
+<td> <code>FVID2_DF_YUV422P</code> (8 or 16-bit interface)<br /><code>FVID2_DF_YUV444P</code> </td>
+<td> <code>FVID2_DF_YUV444P</code>
+</td></tr>
+<tr>
+<td> RGB24 </td>
+<td> <code>FVID2_DF_YUV422P</code> (8 or 16-bit interface) <br /> <code>FVID2_DF_RGB24_888</code> </td>
+<td> <code>FVID2_DF_RGB24_888</code>
+</td></tr>
+<tr>
+<td> 8-bit RAW </td>
+<td> <code>FVID2_DF_RAW08</code> </td>
+<td> <code>FVID2_DF_RAW08</code>
+</td></tr>
+<tr>
+<td> 16-bit RAW </td>
+<td> <code>FVID2_DF_RAW16</code> </td>
+<td> <code>FVID2_DF_RAW16</code>
+</td></tr>
+<tr>
+<td> 24-bit RAW </td>
+<td> <code>FVID2_DF_RAW24</code> </td>
+<td> <code>FVID2_DF_RAW24</code>
+</td></tr></table>
+<p><b>Example Code Snippet:</b>
+</p>
+<pre>Vps_CaptVipParams    vipPrms;
+vipPrms.outStreamInfo[0].outFmt.dataFormat = FVID2_DF_YUV422I_YUYV;
+</pre>
+<h2><span class="mw-headline" id="VIP_Pixel_Clock_Polarity_and_SYNC_Signal_Polarity">VIP Pixel Clock Polarity and SYNC Signal Polarity</span></h2>
+<p>The VIP pixel clock polarity can be changed by setting <code>vipPortCfg.comCfg.pixClkEdgePol</code> parameter of VIP capture driver <code>Vps_CaptVipParams</code> parameter passed to <code>IOCTL_VPS_CAPT_SET_VIP_PARAMS</code> IOCTL. <br />
+Along with setting the VIP parser clock polarity, it is important to set the clock inversion at the SOC level using <code>Bsp_platformSetVipClkInversion()</code> function.<br />
+Note: In case of embedded SYNC capture failure or is seeing data artifacts around images edges, then this is the most likely change needed as the pixel clock polarity decides the data sampling. If data is not sampled at the right edge, it could lead to data corruption and hence the no data gets detected for embedded sync inputs or results in artifacts.<br />
+The VIP HSYNC, VSYNC and AVID signal polarity can be changed by setting <code>vipPortCfg.disCfg.&lt;hsync/vsync/actvid&gt;Pol</code> parameter of VIP capture driver Vps_CaptVipParams parameter passed to <code>IOCTL_VPS_CAPT_SET_VIP_PARAMS</code> IOCTL.<br />
+</p><p><b>Example Code Snippet:</b>
+</p>
+<pre>Vps_CaptVipParams    vipPrms;
+Vps_VipPortConfig    vipPortCfg;
+VpsVipPortConfig_init(&amp;vipPortCfg);
+vipPrms.vipPortCfg = &amp;vipPortCfg;
+vipPrms.vipPortCfg-&gt;disCfg.actvidPol     = FVID2_POL_HIGH;
+vipPrms.vipPortCfg-&gt;disCfg.vsyncPol      = FVID2_POL_LOW;
+vipPrms.vipPortCfg-&gt;disCfg.hsyncPol      = FVID2_POL_LOW;
+vipPrms.vipPortCfg-&gt;comCfg.pixClkEdgePol = FVID2_EDGE_POL_FALLING;
+Bsp_platformSetVipClkInversion(instId, TRUE);
+/* Or */
+vipPrms.vipPortCfg-&gt;comCfg.pixClkEdgePol = FVID2_EDGE_POL_RISING;
+Bsp_platformSetVipClkInversion(instId, FALSE);
+</pre>
+<h2><span class="mw-headline" id="VIP_Input_Video_Timing">VIP Input Video Timing</span></h2>
+<p>VIP is agnostics to change in video timing. There are no parameters to set the input HSYNC and VSYNC timing. As long as the pixel clock is within 165 MHz and VSYNC interval is within reasonable FPS (say &lt; 100), VIP is capable of capturing the data to memory.<br />
+</p>
+<h2><span class="mw-headline" id="VIP_Video_Crop">VIP Video Crop</span></h2>
+<p>In HSYNC/VSYNC discrete sync capture mode, the VIP captures the entire video frame including horizontal and vertical blanking. The VIP parser crop parameters should be set to get only the active video in memory.<br />
+The VIP parser crop feature can be changed by setting <code>vipPortCfg.actCropEnable</code> and <code>vipPortCfg.actCropCfg</code> parameter of VIP capture driver <code>Vps_CaptVipParams</code> parameter passed to <code>IOCTL_VPS_CAPT_SET_VIP_PARAMS</code> IOCTL.<br />
+</p><p><b>Example Code Snippet:</b>
+</p>
+<pre>Vps_CaptVipParams    vipPrms;
+Vps_VipPortConfig    vipPortCfg;
+VpsVipPortConfig_init(&amp;vipPortCfg);
+vipPrms.vipPortCfg                     = &amp;vipPortCfg;
+vipPrms.vipPortCfg-&gt;actCropEnable      = TRUE;
+vipPrms.vipPortCfg-&gt;actCropCfg.srcNum  = 0U;/* Not used for single channel */
+vipPrms.vipPortCfg-&gt;cropCfg.cropStartX = 0U;
+vipPrms.vipPortCfg-&gt;cropCfg.cropStartY = 0U;
+vipPrms.vipPortCfg-&gt;cropCfg.cropWidth  = 1280U;
+vipPrms.vipPortCfg-&gt;cropCfg.cropHeight = 720U;
+</pre>
+<h2><span class="mw-headline" id="VIP_Interlaced.2FProgressive_Input">VIP Interlaced/Progressive Input</span></h2>
+<p>VIP and VIP driver is agnostics to interlaced or progressive input. In case of interlaced input, the VIP and the VIP driver always captures one field at a time similar to progressive frame. The driver returns the captured field ID as part of <code>Fvid2_Frame.fid</code> parameter when the frame is dequeued from the driver.<br />
+If merging of field is required (so as to give to display driver which takes frame instead of fields), then this should be done by the application by making use of buffer pitch (by setting pitch == line * 2) and also by taking corrective action when fields are swapped. This is illustrated in video loopback application in file <code>pdk/packages/ti/drv/vps/examples/vps/loopback/src/Loopback_test.c</code> TVP5158 loopback option.<br />
+</p>
+<h2><span class="mw-headline" id="TDA2Ex.2FAM571x.2FDRA72x_Additional_SOC_Level_Mux_Setting">TDA2Ex/AM571x/DRA72x Additional SOC Level Mux Setting</span></h2>
+<p>In case of TDA2Ex/AM571x/DRA72x, the VIP signals from the various pads going to the single VIP1 are multiplexed at SOC level. These are controlled by <code>CTRL_CORE_VIP_MUX_SELECT</code> register at the control module level. Refer "Pad Configuration" section of TDA2Ex TRM for more details.<br />
+</p>
+<h1><span class="mw-headline" id="DSS_Configuration">DSS Configuration</span></h1>
+<p>This section describes the various DSS parameters that could possibly change when migrating to new LCD or board.<br />
+Note: <code>IOCTL_VPS_DCTRL_SET_CONFIG</code>, <code>IOCTL_VPS_DCTRL_SET_VENC_OUTPUT</code> and <code>IOCTL_VPS_DCTRL_SET_VENC_PCLK_DIVISORS</code> IOCTLs discussed in below sections are used for setting many parameters. Each of the sections discuss about a particular set of parameters with respective to that section. The IOCTL should be called only after setting all the parameters. This is not illustrated in the code snippet for simplicity.<br />
+</p>
+<h2><span class="mw-headline" id="DSS_LCD.2FDPI_Instance">DSS LCD/DPI Instance</span></h2>
+<p>The DSS display controller (DCTRL) driver uses graph (nodes/edges) to represent the DSS hardware. With this respect, how the video pipelines, the overlays and the DSS DPI output are connected is set by using <code>numEdges</code> and <code>edgeInfo[]</code> parameters of <code>Vps_DctrlConfig</code> structure.<br />
+Each connection is represented by start node and end node which is defined by <code>VPS_DCTRL_DSS_*</code> macros defined in <code>pdk/packages/ti/drv/vps/include/vps/dss/vps_displayCtrlDataTypes.h</code> header file. In order to change the LCD/DPI instance the end node should be set to <code>VPS_DCTRL_DSS_DPI1_OUTPUT</code>, <code>VPS_DCTRL_DSS_DPI2_OUTPUT</code> or <code>VPS_DCTRL_DSS_DPI3_OUTPUT</code>. This is illustrated in below code snippet.<br />
+</p><p><b>Example Code Snippet:</b>
+</p>
+<pre>Vps_DctrlConfig dctrlCfg;
+dctrlCfg.useCase               = VPS_DCTRL_USERSETTINGS;
+dctrlCfg.edgeInfo[0].startNode = VPS_DCTRL_DSS_VID1_INPUT_PATH;
+dctrlCfg.edgeInfo[0].endNode   = VPS_DCTRL_DSS_LCD1_BLENDER;
+dctrlCfg.edgeInfo[1].startNode = VPS_DCTRL_DSS_GFX1_INPUT_PATH;
+dctrlCfg.edgeInfo[1].endNode   = VPS_DCTRL_DSS_LCD1_BLENDER;
+dctrlCfg.edgeInfo[2].startNode = VPS_DCTRL_DSS_LCD1_BLENDER;
+dctrlCfg.edgeInfo[2].endNode   = VPS_DCTRL_DSS_DPI1_OUTPUT;
+dctrlCfg.numEdges              = 3;
+retVal = Fvid2_control(dctrlHandle, IOCTL_VPS_DCTRL_SET_CONFIG, &amp;dctrlCfg, NULL);
+</pre>
+<p>Below table shows the DSS port mapping to the driver instance ID.
+</p>
+<table class="wikitable">
+
+<tr>
+<th> DSS Port </th>
+<th> Driver Node ID
+</th></tr>
+<tr>
+<td> VOUT1 </td>
+<td> <code>VPS_DCTRL_DSS_DPI1_OUTPUT</code>
+</td></tr>
+<tr>
+<td> VOUT2 </td>
+<td> <code>VPS_DCTRL_DSS_DPI2_OUTPUT</code>
+</td></tr>
+<tr>
+<td> VOUT2 </td>
+<td> <code>VPS_DCTRL_DSS_DPI3_OUTPUT</code>
+</td></tr>
+<tr>
+<td> HDMI </td>
+<td> <code>VPS_DCTRL_DSS_HDMI_OUTPUT</code>
+</td></tr></table>
+<h2><span class="mw-headline" id="DSS_Interface_Format">DSS Interface Format</span></h2>
+<p>The DSS interface type can be changed by setting <code>dvoFormat</code>, <code>dataFormat</code> and <code>videoIfWidth</code> parameter of <code>Vps_DctrlOutputInfo</code> passed to <code>IOCTL_VPS_DCTRL_SET_VENC_OUTPUT</code> IOCTL. The various output configuration possible and the corresponding settings is provided in below table.<br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Interface Format </th>
+<th> DVO Format </th>
+<th> Data Format </th>
+<th> Interface Width
+</th></tr>
+<tr>
+<td> 8-bit BT.656 (YUV422)* </td>
+<td> <code>VPS_DCTRL_DVOFMT_BT656_EMBSYNC</code> </td>
+<td> <code>FVID2_DF_YUV422I_YUYV</code> </td>
+<td> <code>FVID2_VIFW_08BIT</code>
+</td></tr>
+<tr>
+<td> 16-bit BT.1120 (YUV422)* </td>
+<td> <code>VPS_DCTRL_DVOFMT_BT1120_EMBSYNC</code> </td>
+<td> <code>FVID2_DF_YUV422I_YUYV</code> </td>
+<td> <code>FVID2_VIFW_16BIT</code>
+</td></tr>
+<tr>
+<td> RGB888 24-bit Discrete Sync </td>
+<td> <code>VPS_DCTRL_DVOFMT_GENERIC_DISCSYNC</code> </td>
+<td> <code>FVID2_DF_RGB24_888</code> </td>
+<td> <code>FVID2_VIFW_24BIT</code>
+</td></tr>
+<tr>
+<td> RGB565 16-bit Discrete Sync </td>
+<td> <code>VPS_DCTRL_DVOFMT_GENERIC_DISCSYNC</code> </td>
+<td> <code>FVID2_DF_RGB16_565</code> </td>
+<td> <code>FVID2_VIFW_16BIT</code>
+</td></tr></table>
+<p><code>*</code> Standard BT.656 and BT.1120 modes are not supported in TDA2xx and TDA2Ex platforms.<br />
+</p><p><b>Example Code Snippet:</b>
+</p>
+<pre>Vps_DctrlOutputInfo vencOutput;
+vencOutput.vencId       = VPS_DCTRL_DSS_VENC_LCD1;
+vencOutput.dvoFormat    = VPS_DCTRL_DVOFMT_GENERIC_DISCSYNC;
+vencOutput.dataFormat   = FVID2_DF_RGB24_888;
+vencOutput.videoIfWidth = FVID2_VIFW_24BIT;
+retVal = Fvid2_control(dctrlHandle, IOCTL_VPS_DCTRL_SET_VENC_OUTPUT, &amp;vencOutput, NULL);
+</pre>
+<h2><span class="mw-headline" id="DSS_Pixel_Clock_Polarity_and_SYNC_Signal_Polarity">DSS Pixel Clock Polarity and SYNC Signal Polarity</span></h2>
+<p>The DSS LCD pixel clock and SYNC signal polarity can be changed by setting <code>pixelClkPolarity</code>, <code>actVidPolarity</code>, <code>hsPolarity</code> and <code>vsPolarity</code> parameters of <code>Vps_DctrlOutputInfo</code> passed to <code>IOCTL_VPS_DCTRL_SET_VENC_OUTPUT</code> IOCTL.<br />
+Along with setting this DSS parameters, it is important to set the clock inversion at the SOC level using <code>Bsp_platformSetLcdClkPolarity()</code> function.<br />
+</p><p><b>Example Code Snippet:</b>
+</p>
+<pre>Vps_DctrlOutputInfo vencOutput;
+vencOutput.vencId           = VPS_DCTRL_DSS_VENC_LCD1;
+vencOutput.pixelClkPolarity = VPS_DCTRL_POLARITY_ACT_LOW;
+vencOutput.actVidPolarity   = VPS_DCTRL_POLARITY_ACT_HIGH;
+vencOutput.hsPolarity       = VPS_DCTRL_POLARITY_ACT_LOW;
+vencOutput.vsPolarity       = VPS_DCTRL_POLARITY_ACT_LOW;
+retVal = Fvid2_control(dctrlHandle, IOCTL_VPS_DCTRL_SET_VENC_OUTPUT, &amp;vencOutput, NULL);
+Bsp_platformSetLcdClkPolarity(BSP_PLATFORM_VENC_LCD1, FVID2_POL_LOW);
+</pre>
+<h2><span class="mw-headline" id="DSS_LCD_Timing">DSS LCD Timing</span></h2>
+<p>The DSS LCD timing can be changed by setting <code>vencInfo.modeInfo[0].mInfo</code> parameters of DSS DCTRL driver <code>Vps_DctrlConfig</code> parameter passed to <code>IOCTL_VPS_DCTRL_SET_CONFIG</code> IOCTL.<br />
+The DSS DCTRL driver supports standard video timings. This can be selected by setting <code>vencInfo.modeInfo[0].mInfo.standard</code> to any supported video standards like 1080p60 (<code>FVID2_STD_1080P_60</code>), 720p60 (<code>FVID2_STD_720P_60</code>) etc. If the timing required by the LCD panel is different from the supported standard timings, then <code>vencInfo.modeInfo[0].mInfo.standard</code> should be set to <code>FVID2_STD_CUSTOM</code> and all other timing parameters of <code>vencInfo.modeInfo[0].mInfo</code> should be set by the application.<br />
+Note: The pixel clock information (<code>pixelClock</code>) in the <code>mInfo</code> structure is not used by the DSS DCTRL driver. The application has to configure the Video PLL separately which is discussed in next section.<br />
+</p><p><b>Example Code Snippet:</b>
+</p>
+<pre>Vps_DctrlConfig dctrlCfg;
+Fvid2_ModeInfo *mInfo;
+dctrlCfg.vencInfo.numVencs  = 1U;
+dctrlCfg.vencInfo.tiedVencs = 0U;
+mInfo = &amp;dctrlCfg.vencInfo.modeInfo[0U].mInfo;
+Fvid2ModeInfo_init(mInfo);
+mInfo-&gt;standard    = FVID2_STD_CUSTOM;
+mInfo-&gt;width       = 800U;
+mInfo-&gt;height      = 480U;
+mInfo-&gt;scanFormat  = FVID2_SF_PROGRESSIVE;
+mInfo-&gt;pixelClock  = 29232U;    /* Not used by driver */
+mInfo-&gt;fps         = 60U;       /* Not used by driver */
+mInfo-&gt;hBackPorch  = 40U;
+mInfo-&gt;hSyncLen    = 48U;
+mInfo-&gt;hFrontPorch = 40U;
+mInfo-&gt;vBackPorch  = 29U;
+mInfo-&gt;vSyncLen    = 3U;
+mInfo-&gt;vFrontPorch = 13U;
+retVal = Fvid2_control(dctrlHandle, IOCTL_VPS_DCTRL_SET_CONFIG, &amp;dctrlCfg, NULL);
+</pre>
+<h2><span class="mw-headline" id="DSS_LCD_Pixel_Clock_-_Video_PLL">DSS LCD Pixel Clock - Video PLL</span></h2>
+<p>The DSS LCD pixel clock could be derived from different clock source like Video PLL or DISPC functional clock depending on the SOC clock architecture. This is described in "Display Subsystem Clock Tree" under DSS chapter of TRM. <br />
+The different clock source of the LCD pixel clock can be selected by <code>Bsp_PlatformClkSrc vencClkSrc</code> of <code>Bsp_PlatformVencSrc</code> structure which is passed to <code>Bsp_platformSetVencClkSrc()</code> platform API.<br />
+The <code>Bsp_platformSetPllFreq()</code> platform API can be used to change the Video PLL frequency as per the LCD timing. Note the <code>pixelClk</code> parameter is in KHz.<br />
+Note: The Video PLL may not be able to lock to all possible pixel clock frequency. In such cases, the DISPC internal dividers LCD and PCD can be used in conjunction with the Video PLL dividers to achieve the required pixel clock at the SOC pad level. For example, is the required pixel clock is 29.232 MHz, which can't be locked by PLL, then the video PLL can be programmed to generate 29.232*4 MHz and then use the PCD divisor as 4 to get the required pixel clock for the LCD. This can be set by setting <code>divisorLCD</code> and <code>divisorPCD</code> parameters of <code>Vps_DctrlVencDivisorInfo</code> structure passed to <code>IOCTL_VPS_DCTRL_SET_VENC_PCLK_DIVISORS IOCTL</code>.<br />
+</p><p><b>Example Code Snippet:</b>
+</p>
+<pre>Bsp_PlatformSetPllFreq vPllCfg;
+Bsp_PlatformVencSrc    vencClkCfg;
+vPllCfg.videoPll = BSP_PLATFORM_PLL_VIDEO1;
+vPllCfg.pixelClk = 29232 * 4;    /* In KHz */
+if (TRUE == Bsp_platformIsTda3xxFamilyBuild())
+{
+    vPllCfg.videoPll = BSP_PLATFORM_PLL_EVE_VID_DSP;
+}
+retVal = Bsp_platformSetPllFreq(&amp;vPllCfg);
+vencClkCfg.outputVenc = BSP_PLATFORM_VENC_LCD1;
+vencClkCfg.vencClkSrc = BSP_PLATFORM_CLKSRC_DPLL_VIDEO1_CLKOUT1;
+if (TRUE == Bsp_platformIsTda3xxFamilyBuild())
+{
+    vencClkCfg.vencClkSrc = BSP_PLATFORM_CLKSRC_DPLL_EVE_VID_DSP;
+}
+retVal = Bsp_platformSetVencClkSrc(&amp;vencClkCfg);
+/* Set the LCD PCD divisors */
+Vps_DctrlVencDivisorInfo vencDivisors;
+vencDivisors.vencId     = VPS_DCTRL_DSS_VENC_LCD1;
+vencDivisors.divisorLCD = 1;
+vencDivisors.divisorPCD = 4;
+retVal = Fvid2_control(dctrlHandle, IOCTL_VPS_DCTRL_SET_VENC_PCLK_DIVISORS, &amp;vencDivisors, NULL);
+</pre>
+<h1><span class="mw-headline" id="CAL_Configuration">CAL Configuration</span></h1>
+<p>This section describes the various CAL parameters that could possibly change while porting the driver to new board. The assumption is that CAL was able to receive from a sensor on one board (it could be TI EVM or custom board<br />
+</p>
+<h2><span class="mw-headline" id="CAL_Lane_position">CAL Lane position</span></h2>
+<p>The position of each lane could be changed using the create time parameter, with following SoC specific restriction. Please review the schematic to determine on which lanes data and clock is connected.<br />
+<b>Vision SDK Interface:</b>
+</p>
+<pre>IssCaptureLink_Csi2Params.cmplxIoCfg[x].clockLane.position
+IssCaptureLink_Csi2Params.cmplxIoCfg[x].data1Lane.position
+</pre>
+<p>where x indicate instance of PHY, which is 0 in case of TDA3x and 0 or 1 in case of TDA2EX<br />
+</p><p><b>PDK VPS Interface:</b>
+</p>
+<pre>Vps_CaptIssOpenParams_t.cmplxIoCfg[x].clockLane.position
+Vps_CaptIssOpenParams_t.cmplxIoCfg[x].data1Lane.position
+</pre>
+<p><b>Additional Care about:</b><br />
+</p>
+<ul><li>Clock Lane Position for TDA2Ex: Fixed at position 1 always</li>
+<li>Clock Lane Position for TDA3x: Cannot be the 5th lane</li></ul>
+<h2><span class="mw-headline" id="CAL_Lane_polarity">CAL Lane polarity</span></h2>
+<p>The data on CSI2 is transported on differential lines i.e. each lane will have positive and a negative line. The positive line of lane is marked as <code>csi2_0_dx0 (csi2_M_dx0)</code> and negative line is marked as <code>csi2_0_dy0 (csi2_M_dy0)</code>. The line could be configured as either positive / negative pair (<code>csi2_M_dx0/csi2_M_dy0</code>) or as negative / positive pair (<code>csi2_M_dy0/ csi2_M_dx0</code>)<br />
+When configured as positive / negative pair <code>csi2_M_dx0</code> is the positive line and <code>csi2_M_dy0</code> is the negative line and inverted if marked as negative / positive pair.
+</p><p><b>Vision SDK Interface:</b>
+</p>
+<pre>IssCaptureLink_Csi2Params.cmplxIoCfg[x].clockLane.pol
+IssCaptureLink_Csi2Params.cmplxIoCfg[x].data1Lane.pol
+</pre>
+<p>where FALSE indicated negative / positive pair and TRUE indicates positive / negative pair
+</p>
+<h2><span class="mw-headline" id="CAL_Frames_not_received_.2F_No_video_captured">CAL Frames not received / No video captured</span></h2>
+<p>After moving to “new board” if CAL is not able to capture any video stream and above parameters have been checked and verified / configured correctly, please check on below points.<br />
+</p>
+<h3><span class="mw-headline" id="CAL_Sensor_Slave_Address">CAL Sensor Slave Address</span></h3>
+<p>Ensure the sensor or CSI2 stream source address is not changed. Recommend to use I2C utility provided in VPS package to probe and check accessibility. Please refer <a href="PDK_Application_Notes_Video_Driver_Porting.html#VPS_I2C_Utility" title="PDK/PDK Application Notes Video Driver Porting">VPS I2C Utility</a> for details.<br />
+</p>
+<h3><span class="mw-headline" id="CSI2_Clock_recognized_by_CAL">CSI2 Clock recognized by CAL</span></h3>
+<p>Once the sensor &amp; CAL has synchronized (LP state transitions have been completed) the  PHY provides the byte clock to CAL PPI which in turn used to reset the PPI. Until PPI is out of reset CAL cannot receive the data, this status can be monitored by reading <code>CAL_CSI2_COMPLEXIO_CFG</code> bit 29 (RESET_DONE). This Bit should be SET.<br />
+This register could be accessed at &lt;CAL Base Address&gt; + 0x304<br />
+If CSI2 clock is not being recognized by CAL and sensor is confirmed to be working, please check the electrical characteristics of the CSI2 lines. Please check for common-mode differential voltage, peaks etc…<br />
+</p>
+<h1><span class="mw-headline" id="I2C_and_UART_Configuration">I2C and UART Configuration</span></h1>
+<p>This section describes the various steps to setup I2C and UART configuration that could possibly change when migrating to new LCD or board.
+</p>
+<h2><span class="mw-headline" id="I2C_Changes">I2C Changes</span></h2>
+<p>The I2C read/write functions to communicate to the sensors/LCD is part of the “devices” module. The information of the various I2C instances used in the board is part of the “board” module. Depending on the I2C instance used in the board, use can change this information in <code>Bsp_BoardI2cInstData</code> structure present in <code>pdk/packages/ti/drv/vps/src/boards/src/bsp_board&lt;SOC&gt;.c</code> file. This structure has the I2C instance ID used by Sensor/LCD driver, instance base address, bus frequency and CPU interrupt to be used.<br />
+Note/Caution: The driver instance ID starts from 0 where as the I2C instance starts from 1 because of legacy software compatibility.
+</p>
+<h2><span class="mw-headline" id="UART_Changes">UART Changes</span></h2>
+<p>The UART instance for console prints can be changed in file <code>pdk/packages/ti/drv/vps/examples/utility/src/bsputils_uart.c</code> file.<br />
+Note/Caution: The driver instance ID starts from 0 where as the I2C instance starts from 1 because of legacy software compatibility.
+</p>
+<h1><span class="mw-headline" id="Porting_Board_Module">Porting Board Module</span></h1>
+<h2><span class="mw-headline" id="Changing_Pin_Mux">Changing Pin Mux</span></h2>
+<p>Depending on the board level connection, the VIP and DSS pin mux needs to be changed. This can be done in the customer boot loader/application. But if the application is using the "VPS Board" module, then the change should be done in <code>Bsp_boardSetPinMux&lt;Tda2xx/Tda2ex/Tda3xx&gt;()</code> API present in <code>pdk/packages/ti/drv/vps/src/boards/src/bsp_board&lt;Tda2xx/Tda2ex/Tda3xx&gt;.c</code> file.
+In case of TDA2xx and TDA2Ex platforms, the default pin mux settings is also done in <code>Bsp_platformTda2xxSetPinMux()</code> API present in <code>pdk/packages/ti/drv/vps/src/platforms/src/bsp_platformTda2xx.c</code> file and hence should be changed. Alternatively the application can bypass the pin mux settings of this function by setting <code>Bsp_PlatformInitParams.isPinMuxSettingReq</code> to <code>FALSE</code> while calling <code>Bsp_platformInit()</code> API
+</p>
+<h1><span class="mw-headline" id="Supporting_New_Sensor.2FCamera">Supporting New Sensor/Camera</span></h1>
+<p>On TDAxx platform sensors (camera modules) could be interfaced in one following methods (but not limited to). In the following sections, we will highlight the changes required to support new sensor.
+</p>
+<ul><li>Smart Sensor (YUV/RGB), Interface&#160;: Parallel or CSI2</li>
+<li>RAW Sensor (Bayer), Interface&#160;: Parallel or CSI2</li>
+<li>FPD Link III
+<ul><li>Parallel (Sensor + UB913 -&gt; FPD Link III + UB914 -&gt; Parallel)</li>
+<li>CSI2 (Sensor + UB913 -&gt; FPD Link III + UB964 -&gt; CSI2)</li></ul></li></ul>
+<h2><span class="mw-headline" id="Smart_Sensor">Smart Sensor</span></h2>
+<h3><span class="mw-headline" id="Smart_Sensor_-_VPS_Driver_Updates">Smart Sensor - VPS Driver Updates</span></h3>
+<p>TODO
+</p>
+<h3><span class="mw-headline" id="Smart_Sensor_-_VISION_SDK_Updates">Smart Sensor - VISION SDK Updates</span></h3>
+<p>TODO
+</p>
+<h2><span class="mw-headline" id="RAW_Sensor">RAW Sensor</span></h2>
+<h3><span class="mw-headline" id="RAW_Sensor_-_VPS_Driver_Updates">RAW Sensor - VPS Driver Updates</span></h3>
+<p>RAW sensor porting is not supported in PDK VPS module. All sensor tunning is part of VISION SDK. Kindly refer next section for details.
+</p>
+<h3><span class="mw-headline" id="RAW_Sensor_-_VISION_SDK_Updates">RAW Sensor - VISION SDK Updates</span></h3>
+<p>All ISS sensors are based on the ISS sensor framework. This framework supports easy way to control and configure the external sensor and also easy way to add a new sensor or to remove existing sensor.<br />
+Below is list of main steps required to add new sensor in the Vision SDK for the ISS usecase.<br />
+</p>
+<ul><li>Each sensor is implemented in a unique file under vision_sdk\examples\tda2xx\src\modules\iss\iss_sensors folder. For the given new sensor, add a new C file.</li>
+<li>Create a global instance of the structure ChainsIssSensor_Params in this file. </li>
+<li>Implement the init function in this file. This init function should initialize instances of ChainsIssSensor_Params and registers the new sensor to the sensor frame work using ChainsIssSensor_RegisterSensor API. </li>
+<li>Implement IssGetDefaultISPConfig API. This api is used to get the default ISP configuration for this sensor. If the sensor does not support DCC, this default configuration will be used for configuring ISP. Also for H3A and GLBCE modules, the configuration comes from this file. DCC profile does not have configuration for H3A and GLBCE modules</li>
+<li>Implement IssGetAewbConfig API. If the usecase uses AEWB algorithm, this API is used for initializing AEWB create parameters. Based on the H3A configuration, it initializes AEWB create parameters, AE dynamic params and AWB calibration data. It also initializes the DCC information in AEWB create parameters.</li>
+<li>Implement IssGetSensorDefaultConfig API. This API initializes sensor configuration with the default resolution of the sensor. This resolution is used in configuring other ISP modules. </li>
+<li>Call the implemented init function from ChainsIssSensor_Init, available in the file vision_sdk/examples/tda2xx/src/modules/iss/iss_sensors/chains_iss_sensors.c</li>
+<li>Add this new sensor file in vision_sdk/examples/tda2xx/src/modules/iss/SRC_FILES.MK make file so that it gets build along with the other files</li></ul>
+<h2><span class="mw-headline" id="FPD_Link_III">FPD Link III</span></h2>
+<p>There 2 types of FPD Link III receiver supported, the received video frame are transmitted to TDAxx via a parallel interface or on CSI2 interface. A typical chain could be as show below
+<a href="http://processors.wiki.ti.com/index.php/File:Video_Driver_Porting_FPD_Link_Parallel_Output.png" class="image"><img alt="Video Driver Porting FPD Link Parallel Output.png" src="Video_Driver_Porting_FPD_Link_Parallel_Output.png" width="557" height="153" /></a><br />
+FPD Link III: Parallel Output<br />
+<a href="http://processors.wiki.ti.com/index.php/File:Video_Driver_Porting_FPD_Link_CSI2_Output.png" class="image"><img alt="Video Driver Porting FPD Link CSI2 Output.png" src="Video_Driver_Porting_FPD_Link_CSI2_Output.png" width="540" height="174" /></a><br />
+FPD Link III: CSI2 Output<br />
+</p><p>Above section highlighted in Yellow represents a camera module, that encapsulates a video sensor &amp; FPD Link III serializer. (e.g. <a rel="nofollow" class="external free" href="http://www.ti.com/tool/TIDA-00262">http://www.ti.com/tool/TIDA-00262</a> <a rel="nofollow" class="external free" href="http://www.spectrumdigital.com/multides-surround-view-kit/">http://www.spectrumdigital.com/multides-surround-view-kit/</a>). Please refer the PDK/Vision SDK user guide for supported sensor/serializer/de-serializer combinations.<br />
+<b>Assumption:</b> The reminder of this section assumes that a sensor driver for "Camera Module" is available and support for configuring/control of UB913/UB964 requires to be added in VisionSDK.<br />
+The UB960 &amp; UB914 drivers are provided as an utility as part of BSP package, please refer <code>pdk/packages/ti/drv/vps/examples/utility/src</code> in files <code>bsputils_ub960.c</code> &amp; <code>bsputils_lvds.c</code><br />
+</p>
+<h3><span class="mw-headline" id="De_Serializer_.2F_Aggregator_I2C_Address">De Serializer / Aggregator I2C Address</span></h3>
+<p>If the Deserializer address requires to be changed, please update macros below
+</p>
+<ul><li>UB960 I2C address is specified by <code>UB960_SLAVE_ADDR</code> in file pdk/packages/ti/drv/vps/examples/utility/bsputils_ub960.h</li>
+<li>UB914 I2C address is specified by <code>BSPUTILS_DESX_ADDR</code> in file <code>pdk/packages/ti/drv/vps/examples/utility/src/bsputils_lvds.c</code>
+<ul><li>Where X ranges from 1 to 6</li></ul></li></ul>
+<h3><span class="mw-headline" id="Serializer_I2C_Address">Serializer I2C Address</span></h3>
+<p>If adding support for a new sensor + Serializer &amp; De Serializer, please refer section TODO and skip this step. If the Serializer address requires to be changed, please update macros below<br />
+For a supported sensor + Serializer &amp; de Serializer combination, the actual Serializer I2C address and associated ALIAS I2C (refer section <a href="PDK_Application_Notes_Video_Driver_Porting.html#Sensor_I2C_Address" title="PDK/PDK Application Notes Video Driver Porting"> Sensor I2C Address</a>) address would be defined. It's recommended to retain the alias address and update the actual serailizer address. These addresses would be defined as below
+</p>
+<ul><li>UB960
+<ul><li>For SAT0088/OV10635 I2C address is specified by <code>SAT0088_OV10635_SER_ADDR</code> in file <code>pdk/packages/ti/drv/vps/examples/utility/bsputils_ub960.h</code></li></ul></li>
+<li>UB914 
+<ul><li>For SAT0088/OV10635 I2C address is specified by <code>BSPUTILS_SER_ID_ADDR</code> in file <code>pdk/packages/ti/drv/vps/examples/utility/src/bsputils_lvds.c</code></li></ul></li></ul>
+<h3><span class="mw-headline" id="Sensor_I2C_Address">Sensor I2C Address</span></h3>
+<p>If adding support for a new sensor + Serializer &amp; De Serializer, please refer section TODO and skip this step. If the sensor address requires to be changed, please update macros below
+For a supported sensor + Serializer &amp; de Serializer combination, the actual sensor I2C address and associated ALIAS I2C address would be defined. It's recommended to retain the alias address and update the actual serailizer address. These addresses would be defined as below
+</p>
+<ul><li>UB960
+<ul><li>For SAT0088/OV10635 I2C address  is specified by <code>SAT0088_OV10635_SENSOR_ADDR</code> in file <code>pdk/packages/ti/drv/vps/examples/utility/bsputils_ub960.h</code></li></ul></li>
+<li>UB914 
+<ul><li>For SAT0088/OV10635 I2C address is specified by <code>BSPUTILS_OV1063x_I2C_ADDR</code> in file <code>pdk/packages/ti/drv/vps/examples/utility/src/bsputils_lvds.c</code></li></ul></li>
+<li>If ALIAS I2C address requires an update, ensure to update sensor alias address in Board Module of BSP
+<ul><li>The sensor address is also stored in the Board Module of BSP</li>
+<li>The device data is represented by structure <code>Bsp_BoardDeviceData</code></li>
+<li>Search for the device driver id in <code>pdk/packages/ti/drv/vps/src/boards/src/*</code> e.g. <code>FVID2_VID_SENSOR_TIDA00262_APT_AR0140_DRV, FVID2_VID_SENSOR_MULDES_OV1063X_DRV</code> etc… </li>
+<li>Depending on the number of sensor's supported, there would multiple entries for a given sensor.</li>
+<li>As part of Device Data, the sensor I2C address is also specified, please update the address to reflect the new I2C address e.g. 
+<ul><li>For <code>FVID2_VID_SENSOR_TIDA00262_APT_AR0140_DRV</code> slave address is defined by <code>BOARD_APT_TIDA00262_AR0140_I2C_ADDR_0</code></li>
+<li>For <code>FVID2_VID_SENSOR_MULDES_OV1063X_DRV</code> slave address is defined by <code>BOARD_UB960_OV1063X_1_ALIAS_I2C_ADDR</code></li></ul></li></ul></li></ul>
+<h3><span class="mw-headline" id="Adding_support_for_sensor_.2B_serializer_.26_de_serializer_combination">Adding support for sensor + serializer &amp; de serializer combination</span></h3>
+<p>The sections below presume that the sensor driver has been added (and recommended to be tested without serializer / de serializer). Please refer section 9.1&amp; 9.2 steps to add the sensor.
+Below listed steps are to be followed to add support the required sensor with serializer &amp; de serailizer. Sensor with serializer &amp; de serializer will be referred as camera module, in the reminder of this section.
+</p>
+<h4><span class="mw-headline" id="Sensor_Related_changes">Sensor Related changes</span></h4>
+<ul><li>Add a "new" sensor driver ID, to uniquely identify the sensor + serializer &amp; de serailizer combination.
+<ul><li>In file <code>pdk/packages/ti/drv/vps/include/devices/bsp_device.h</code></li>
+<li>IMPORTANT&#160;: If this sensor cannot be connected to TDAxx devices without serializer &amp; de serializer, its recommended to skip this step. Instead use the sensor identifier itself.</li></ul></li>
+<li>Supporting the camera module in platform / SoC
+<ul><li>Devices can be selectively supported on the SoC, i.e. a given device can work only with one SoC or multiple SoC. E.g. IMX 224 is supported only on TDA3x SoC <code>FVID2_VID_SENSOR_SONY_IMX224_CSI2_DRV</code></li>
+<li>Determine on which SoC that this camera module requires to be supported</li>
+<li>Add your device as a supported device
+<ul><li>For each SoC, the supported list of devices is listed by SoC Specific board data</li></ul></li></ul></li></ul>
+<p>TDA3x: <code>pdk/packages/ti/drv/vps/src/boards/src/bsp_boardTda3xx.c, gBoardTda3xxDefaultDevData, gBoardTda3xxMultiDesDevData&lt;code&gt; etc…
+TDA2x: &lt;code&gt;pdk/packages/ti/drv/vps/src/boards/src/bsp_boardTda2xx.c, gBoardTda2xxDefaultDevData, gBoardTda2xxMultiDesDevData</code> etc…
+</p>
+<ul><li><ul><li><ul><li>Add your own &lt;your own device data&gt;.h file</li>
+<li>Add a MCARO to define/provide all the required member of <code>Bsp_BoardDeviceData</code></li>
+<li>Include this macro to initialize board data as required. Please refer </li></ul></li></ul></li>
+<li>TDA3x: <code>pdk/packages/ti/drv/vps/src/boards/src/bsp_boardTda3xx.c</code> &amp; see what is being done for <code>BSP_BOARD_TDA3XX_DEFAULT_DEVDATA, gBoardTda3xxDefaultDevData &amp; gBoardTda3xxDefaultData</code></li>
+<li>TDA2x: <code>pdk/packages/ti/drv/vps/src/boards/src/bsp_boardTda2xx.c</code> &amp; see what is being done for <code>BSP_BOARD_TDA2XX_MULTIDES_DEVDATA, gBoardTda2xxMultiDesDevData &amp; gBoardTda2xxMultiDesData</code></li>
+<li>PINMUX</li></ul>
+<p>If any pinmux is required, to bring in the data to TDAxx devices, please update function <code>Bsp_boardSetPinMux()</code> in file <code>pdk/packages/ti/drv/vps/src/boards/src/bsp_board.c</code>
+</p>
+<h4><span class="mw-headline" id="UB913_.26_UB914_.2F_serializer_.26_de_serializer">UB913 &amp; UB914 / serializer &amp; de serializer</span></h4>
+<p>UB913 &amp; UB914 configuration / control are provided as utility in VPS package. File <code>pdk/packages/ti/drv/vps/examples/utility/src/bsputils_lvds.c</code> Implements UB913/UB914 configurations/control.
+</p>
+<ul><li>UB914 Configurations
+<ul><li>The structure gMulDesParams stores the register address &amp; value pair, which would be used to configure UB914</li>
+<li>Recommended</li></ul></li>
+<li>Define your own structure, copy the contents of gMulDesParams, update for serializer, sensor &amp; their aliases</li>
+<li>Ensure that your configuration is compiled and included</li>
+<li>UB913 Configurations
+<ul><li>The structure gSerParamsstores the register address &amp; value pair, which would be used to configure UB913</li>
+<li>Recommended</li></ul></li>
+<li>Define your own structure, copy the contents of gSerParams, update for serializer, sensor &amp; their aliases</li>
+<li>Ensure that your configuration is compiled and included</li>
+<li>Follow above procedures for serializer &amp; de serializer, de-initialization</li>
+<li>I2C Expanders
+<ul><li>On TDAxx EVM's I2C IO expanders are used to configure the modes of 913, 914 and power up the sensor. Please update if required</li></ul></li></ul>
+<h4><span class="mw-headline" id="UB913_.26_UB964_.2F_serializer_.26_de_serializer">UB913 &amp; UB964 / serializer &amp; de serializer</span></h4>
+<p>UB913 &amp; UB964 configuration / control are provided as utility in BSP package. File <code>pdk/packages/ti/drv/vps/examples/utility/src/bsputils_ub960.c</code>
+</p>
+<ul><li>UB964 Configurations (UB960 Configurations)
+<ul><li>gUb960Cfg_TIDA, gUb960Cfg_IMI, gUb960Cfg_SAT0088_OV10635, etc… defines the UB964 configurations. It's a register address, value &amp; delay pairs</li>
+<li>The configuration to use is determined by the driver instance ID (<code>FVID2_VID_SENSOR_TIDA00262_APT_AR0140_DRV, FVID2_VID_SENSOR_IMI_OV10640_DRV, FVID2_VID_SENSOR_MULDES_OV1063X_DRV,</code> etc…)</li>
+<li>Recommended</li></ul></li>
+<li>Copy the UB964 configuration from one of the above, to specific sensor+serializer+deserializer combination.</li>
+<li>Make necessary changes, for</li>
+<li>I2C Address, Alias Addresses, operating modes, speed, etc…</li>
+<li>Update the function <code>BspUtils_appInitUb960()</code> to provide newly added configuration for you sensor/serializer/de serializer combination</li>
+<li>UB913 Configurations
+<ul><li>gUB913SerCfg, gUb913SerCfg_SAT0088_OV10635, etc… defines the UB913 configurations. It's a register address, value &amp; delay pairs</li>
+<li>The configuration to use is determined by the driver instance ID (<code>FVID2_VID_SENSOR_TIDA00262_APT_AR0140_DRV, FVID2_VID_SENSOR_IMI_OV10640_DRV, FVID2_VID_SENSOR_MULDES_OV1063X_DRV, </code>etc…)</li>
+<li>Recommended</li></ul></li>
+<li>Copy the UB913 configuration from one of the above, to specific sensor+serializer+deserializer combination.</li>
+<li>Make necessary changes, for</li>
+<li>Update the function <code>BspUtils_appInitUB913Ser()</code> to provide newly added configuration for you sensor/serializer/de serializer combination</li>
+<li>Follow above procedures for serializer &amp; de serializer, de-initialization</li></ul>
+<h4><span class="mw-headline" id="Vision_SDK_Changes">Vision SDK Changes</span></h4>
+<p>Please follow steps specified in section to initialize the sensor's. Before the sensor could be initialized, please follow below steps initialize serializer &amp; de deserializer's
+</p>
+<ul><li>Smart Sensor
+<ul><li>A common utility is provided to initialize the sensor in file <code>vision_sdk\examples\tda2xx\src\devices\video_sensor.c</code> and function <code>VidSensor_create()</code></li>
+<li>UB960 is initialized with a call to function <code>BspUtils_appInitUb960()</code></li>
+<li>Ensure to call <code>VidSensor_create()</code> in <code>setAppPrameter</code> function of your usecase and ensure the newly added capture source is specified</li></ul></li>
+<li>RAW Sensor</li></ul>
+
+<!-- 
+NewPP limit report
+CPU time usage: 0.228 seconds
+Real time usage: 0.248 seconds
+Preprocessor visited node count: 188/1000000
+Preprocessor generated node count: 194/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+-->
+
+<!-- 
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 - -total
+-->
+
+<!-- Saved in parser cache with key davincid_wikidb:pcache:idhash:45314-0!*!0!!en!5!* and timestamp 20190103015556 and revision id 229857
+ -->
+<div class="hf-footer"></div><div class="hf-nsfooter"><table style="text-align:center; background:white; width:100%; text-align:left; height: 65px border-top: 1px solid; border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid; border-width: 1px; border-style: solid;">
+<tr>
+<td width="305px"><a href="http://processors.wiki.ti.com/index.php/File:E2e.jpg" class="image"><img alt="E2e.jpg" src="E2e.jpg" width="305" height="63" /></a>
+</td>
+<td><i>For technical support please post your questions at <a rel="nofollow" class="external free" href="http://e2e.ti.com">http://e2e.ti.com</a>. Please post only comments about the article <b>PDK/PDK Application Notes Video Driver Porting</b> here.</i>
+</td></tr></table>
+<table style="border-style:solid; border-width:1px; text-align:center; width:100%;">
+
+<tr style="font-size:150%;">
+<td rowspan="2"> <a href="http://processors.wiki.ti.com/index.php/File:Hyperlink_blue.png" class="image"><img alt="Hyperlink blue.png" src="Hyperlink_blue.png" width="96" height="96" /></a>
+</td>
+<td><b>Links</b>
+</td></tr>
+<tr>
+<td>
+<table style="text-align: left;">
+<tr>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/amplifier_and_linear.page">Amplifiers &amp; Linear</a><br />
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/audio/audio_overview.page">Audio</a><br />
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/rfif.page">Broadband RF/IF &amp; Digital Radio</a><br />
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/clocksandtimers/clocks_and_timers.page">Clocks &amp; Timers</a><br />
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/dataconverters/data_converter.page">Data Converters</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/mems/mems.page">DLP &amp; MEMS</a><br />
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/high_reliability.page">High-Reliability</a><br />
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/interface/interface.page">Interface</a><br />
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/logic/home_overview.page">Logic</a><br />
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/powermanagement/power_portal.page">Power Management</a>
+</p>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/embedded_processor.page">Processors</a>
+</p>
+<ul><li> <a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/arm.page">ARM Processors</a></li>
+<li> <a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/dsp/home.page">Digital Signal Processors (DSP)</a></li>
+<li> <a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/microcontroller/home.page">Microcontrollers (MCU)</a></li>
+<li> <a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/omap-applications-processors/the-omap-experience.page">OMAP Applications Processors</a></li></ul>
+</td>
+<td style="padding-right: 10px; vertical-align: top;">
+<p><a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/switches_and_multiplexers.page">Switches &amp; Multiplexers</a><br />
+<a rel="nofollow" class="external text" href="http://www.ti.com/lsds/ti/analog/temperature_sensor.page">Temperature Sensors &amp; Control ICs</a><br />
+<a rel="nofollow" class="external text" href="http://focus.ti.com/wireless/docs/wirelessoverview.tsp?familyId=2003&amp;sectionId=646&amp;tabId=2735">Wireless Connectivity</a>
+</p>
+</td></tr></table>
+</td></tr></table>
+<p><!-- HitBox Sub accounts Code START -->
+<script language="JavaScript" src="http://focus.ti.com/js/shared/metrics/metrics-min.js?version=1" type="text/javascript"></script>
+<!-- HitBox Sub accounts Code END -->
+</p>
+<div id="tiPrivacy"></div>
+</div></div>									<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="http://processors.wiki.ti.com/index.php?title=PDK/PDK_Application_Notes_Video_Driver_Porting&amp;oldid=229857">http://processors.wiki.ti.com/index.php?title=PDK/PDK_Application_Notes_Video_Driver_Porting&amp;oldid=229857</a>"					</div>
+													<div id='catlinks' class='catlinks'><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="http://processors.wiki.ti.com/index.php/Special:Categories" title="Special:Categories">Categories</a>: <ul><li><a href="http://processors.wiki.ti.com/index.php/Category:PDK" title="Category:PDK">PDK</a></li><li><a href="http://processors.wiki.ti.com/index.php/Category:PROCESSOR-SDK" title="Category:PROCESSOR-SDK">PROCESSOR-SDK</a></li><li><a href="http://processors.wiki.ti.com/index.php/Category:VPS" title="Category:VPS">VPS</a></li></ul></div></div>												<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="http://processors.wiki.ti.com/index.php?title=Special:UserLogin&amp;returnto=PDK%2FPDK+Application+Notes+Video+Driver+Porting" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li><li id="pt-createaccount"><a href="http://processors.wiki.ti.com/index.php/Special:RequestAccount" title="You are encouraged to create an account and log in; however, it is not mandatory">Request account</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+															<li  id="ca-nstab-main" class="selected"><span><a href="PDK_Application_Notes_Video_Driver_Porting.html"  title="View the content page [c]" accesskey="c">Page</a></span></li>
+															<li  id="ca-talk" class="new"><span><a href="http://processors.wiki.ti.com/index.php?title=Talk:PDK/PDK_Application_Notes_Video_Driver_Porting&amp;action=edit&amp;redlink=1"  title="Discussion about the content page [t]" accesskey="t">Discussion</a></span></li>
+													</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<h3 id="p-variants-label"><span>Variants</span><a href="PDK_Application_Notes_Video_Driver_Porting.html#"></a></h3>
+
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+															<li id="ca-view" class="selected"><span><a href="PDK_Application_Notes_Video_Driver_Porting.html" >Read</a></span></li>
+															<li id="ca-viewsource"><span><a href="http://processors.wiki.ti.com/index.php?title=PDK/PDK_Application_Notes_Video_Driver_Porting&amp;action=edit"  title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li>
+															<li id="ca-history" class="collapsible"><span><a href="http://processors.wiki.ti.com/index.php?title=PDK/PDK_Application_Notes_Video_Driver_Porting&amp;action=history"  title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>
+													</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<h3 id="p-cactions-label"><span>More</span><a href="PDK_Application_Notes_Video_Driver_Porting.html#"></a></h3>
+
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+
+						<form action="http://processors.wiki.ti.com/index.php" id="searchform">
+														<div id="simpleSearch">
+															<input type="search" name="search" placeholder="Search" title="Search Texas Instruments Wiki [f]" accesskey="f" id="searchInput" /><input type="hidden" value="Special:Search" name="title" /><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton" /><input type="submit" name="go" value="Go" title="Go to a page with this exact name if exists" id="searchButton" class="searchButton" />								</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="http://processors.wiki.ti.com/index.php/Main_Page"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id='p-navigation' aria-labelledby='p-navigation-label'>
+			<h3 id='p-navigation-label'>Navigation</h3>
+
+			<div class="body">
+									<ul>
+													<li id="n-mainpage"><a href="http://processors.wiki.ti.com/index.php/Main_Page" title="Visit the main page [z]" accesskey="z">Main Page</a></li>
+													<li id="n-All-pages"><a href="http://processors.wiki.ti.com/index.php/Special:AllPages">All pages</a></li>
+													<li id="n-All-categories"><a href="http://processors.wiki.ti.com/index.php/Special:Categories">All categories</a></li>
+													<li id="n-recentchanges"><a href="http://processors.wiki.ti.com/index.php/Special:RecentChanges" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li>
+													<li id="n-randompage"><a href="http://processors.wiki.ti.com/index.php/Special:Random" title="Load a random page [x]" accesskey="x">Random page</a></li>
+													<li id="n-help"><a href="https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Contents" title="The place to find out">Help</a></li>
+											</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id='p-coll-print_export' aria-labelledby='p-coll-print_export-label'>
+			<h3 id='p-coll-print_export-label'>Print/export</h3>
+
+			<div class="body">
+									<ul>
+													<li id="coll-create_a_book"><a href="http://processors.wiki.ti.com/index.php?title=Special:Book&amp;bookcmd=book_creator&amp;referer=PDK%2FPDK+Application+Notes+Video+Driver+Porting">Create a book</a></li>
+													<li id="coll-download-as-rl"><a href="http://processors.wiki.ti.com/index.php?title=Special:Book&amp;bookcmd=render_article&amp;arttitle=PDK%2FPDK+Application+Notes+Video+Driver+Porting&amp;oldid=229857&amp;writer=rl">Download as PDF</a></li>
+													<li id="t-print"><a href="http://processors.wiki.ti.com/index.php?title=PDK/PDK_Application_Notes_Video_Driver_Porting&amp;printable=yes" title="Printable version of this page [p]" accesskey="p">Printable version</a></li>
+											</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id='p-tb' aria-labelledby='p-tb-label'>
+			<h3 id='p-tb-label'>Toolbox</h3>
+
+			<div class="body">
+									<ul>
+													<li id="t-whatlinkshere"><a href="http://processors.wiki.ti.com/index.php/Special:WhatLinksHere/PDK/PDK_Application_Notes_Video_Driver_Porting" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li>
+													<li id="t-recentchangeslinked"><a href="http://processors.wiki.ti.com/index.php/Special:RecentChangesLinked/PDK/PDK_Application_Notes_Video_Driver_Porting" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li>
+													<li id="t-specialpages"><a href="http://processors.wiki.ti.com/index.php/Special:SpecialPages" title="A list of all special pages [q]" accesskey="q">Special pages</a></li>
+													<li id="t-permalink"><a href="http://processors.wiki.ti.com/index.php?title=PDK/PDK_Application_Notes_Video_Driver_Porting&amp;oldid=229857" title="Permanent link to this revision of the page">Permanent link</a></li>
+													<li id="t-info"><a href="http://processors.wiki.ti.com/index.php?title=PDK/PDK_Application_Notes_Video_Driver_Porting&amp;action=info" title="More information about this page">Page information</a></li>
+											</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+		<div id="footer" role="contentinfo">
+							<ul id="footer-info">
+											<li id="footer-info-lastmod"> This page was last modified on 24 July 2017, at 06:24.</li>
+											<li id="footer-info-viewcount">This page has been accessed 4,102 times.</li>
+											<li id="footer-info-copyright">Content is available under <a class="external" rel="nofollow" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike</a> unless otherwise noted.</li>
+									</ul>
+							<ul id="footer-places">
+											<li id="footer-places-privacy"><a href="http://processors.wiki.ti.com/index.php/Project:Privacy_policy" title="Project:Privacy policy">Privacy policy</a></li>
+											<li id="footer-places-about"><a href="http://processors.wiki.ti.com/index.php/Project:About" title="Project:About">About Texas Instruments Wiki</a></li>
+											<li id="footer-places-disclaimer"><a href="http://processors.wiki.ti.com/index.php/Project:General_disclaimer" title="Project:General disclaimer">Disclaimers</a></li>
+											<li id="footer-places-termsofservice"><a href="http://processors.wiki.ti.com/index.php/Project:Terms_of_Service" title="Project:Terms of Service">Terms of Use</a></li>
+									</ul>
+										<ul id="footer-icons" class="noprint">
+											<li id="footer-copyrightico">
+															<a href="http://creativecommons.org/licenses/by-sa/3.0/"><img src="cc-by-sa.png" alt="Creative Commons Attribution-ShareAlike" width="88" height="31" /></a>
+													</li>
+											<li id="footer-poweredbyico">
+															<a href="http://www.mediawiki.org/"><img src="poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31" /></a>
+													</li>
+									</ul>
+						<div style="clear:both"></div>
+		</div>
+		<script>if(window.jQuery)jQuery.ready();</script><script>if(window.mw){
+mw.loader.state({"site":"loading","user":"ready","user.groups":"ready"});
+}</script>
+<script>if(window.mw){
+mw.loader.load(["mediawiki.toc","mediawiki.action.view.postEdit","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.searchSuggest"],null,true);
+}</script>
+<script>if(window.mw){
+document.write("\u003Cscript src=\"http://processors.wiki.ti.com/load.php?debug=false\u0026amp;lang=en\u0026amp;modules=site\u0026amp;only=scripts\u0026amp;skin=vector\u0026amp;*\"\u003E\u003C/script\u003E");
+}</script>
+<script>if(window.mw){
+mw.config.set({"wgBackendResponseTime":677});
+}</script>
+	</body>
+</html>

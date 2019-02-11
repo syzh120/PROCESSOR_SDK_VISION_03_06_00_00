@@ -1,0 +1,36 @@
+UseCase: chains_lvdsVipSurroundViewStandalone
+
+//
+// surround view original video display
+//
+Capture -> Dup_sv_org -> Select
+Select -> VPE_sv_org1 -> Sync_sv_org1 -> Alg_DmaSwMs_sv_org1 -> Display_sv_org1
+Select -> VPE_sv_org2 -> Sync_sv_org2 -> Alg_DmaSwMs_sv_org2 -> Display_sv_org2
+
+//
+// surround view algorithm and display
+//
+Dup_sv_org -> Sync_sv -> Dup_sv 
+
+Dup_sv -> Alg_GeoAlign (DSP1) 
+
+// Original sync'ed frames MUST be Q0 input to Synthesis
+Dup_sv -> Alg_Synthesis (DSP1)
+
+// Input for Display MUST be Q0 from Synthesis
+Alg_Synthesis -> Display_sv
+
+// Input to PhotoAlign MUST be Q1 from Synthesis
+Alg_Synthesis -> Alg_PhotoAlign (DSP1)
+
+// GeoAlign MUST be Q1 input to Synthesis
+Alg_GeoAlign -> Alg_Synthesis 
+
+// PhotoAlign MUST be Q2 input to Synthesis
+Alg_PhotoAlign -> Alg_Synthesis 
+
+
+//
+// Graphics overlay display
+//
+GrpxSrc -> Display_Grpx

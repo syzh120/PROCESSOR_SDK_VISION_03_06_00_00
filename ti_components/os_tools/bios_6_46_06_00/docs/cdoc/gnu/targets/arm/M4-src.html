@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>module gnu.targets.arm.M4</title>
+<meta name="googlebot" content="noindex,nofollow">
+<link rel="stylesheet" type="text/css" href="../../../src.css"/>
+</head>
+<body>
+<pre class=src>
+     1    <span class="comment">/* 
+</span>     2    <span class="comment"> *  Copyright (c) 2008 Texas Instruments and others.
+</span>     3    <span class="comment"> *  All rights reserved. This program and the accompanying materials
+</span>     4    <span class="comment"> *  are made available under the terms of the Eclipse Public License v1.0
+</span>     5    <span class="comment"> *  which accompanies this distribution, and is available at
+</span>     6    <span class="comment"> *  http://www.eclipse.org/legal/epl-v10.html
+</span>     7    <span class="comment"> *
+</span>     8    <span class="comment"> *  Contributors:
+</span>     9    <span class="comment"> *      Texas Instruments - initial implementation
+</span>    10    <span class="comment"> *
+</span>    11    <span class="comment"> * */</span>
+    12    import xdc.bld.ITarget2;
+    13    
+    14    <span class="xdoc">/*!
+</span>    15    <span class="xdoc"> *  ======== M4.xdc ========
+</span>    16    <span class="xdoc"> *  Embedded Cortex M4, little endian, bare metal target
+</span>    17    <span class="xdoc"> *
+</span>    18    <span class="xdoc"> *  This module defines an embedded bare metal target on Cortex M4. The target
+</span>    19    <span class="xdoc"> *  generates code compatible with the "v7M" architecture.
+</span>    20    <span class="xdoc"> *
+</span>    21    <span class="xdoc"> */</span>
+    22    <span class=key>metaonly</span> <span class=key>module</span> M4 <span class=key>inherits</span> IM {
+    23        <span class=key>override</span> <span class=key>readonly</span> <span class=key>config</span> string name                = <span class="string">"M4"</span>; 
+    24        <span class=key>override</span> <span class=key>readonly</span> <span class=key>config</span> string suffix              = <span class="string">"m4g"</span>;
+    25        <span class=key>override</span> <span class=key>readonly</span> <span class=key>config</span> string isa                 = <span class="string">"v7M4"</span>;
+    26    
+    27        <span class=key>override</span> <span class=key>readonly</span> <span class=key>config</span> ITarget2.Command cc = {
+    28            cmd: <span class="string">"$(rootDir)/bin/$(GCCTARG)-gcc -c -MD -MF $@.dep"</span>,
+    29            opts: <span class="string">"-mcpu=cortex-m4 -mthumb -mfloat-abi=soft -mabi=aapcs -g"</span>
+    30        };
+    31    
+    32        <span class=key>readonly</span> <span class=key>config</span> ITarget2.Command ccBin = {
+    33            cmd: <span class="string">"bin/arm-none-eabi-gcc -c -MD -MF $@.dep"</span>,
+    34            opts: <span class="string">"-mcpu=cortex-m4 -mthumb -mfloat-abi=soft -mabi=aapcs -g"</span>
+    35        };
+    36    
+    37        <span class=key>override</span> <span class=key>readonly</span> <span class=key>config</span> ITarget2.Command asm = {
+    38            cmd: <span class="string">"$(rootDir)/bin/$(GCCTARG)-gcc -c -x assembler-with-cpp"</span>,
+    39            opts: <span class="string">"-Wa,-mcpu=cortex-m4 -Wa,-mthumb"</span>
+    40        };
+    41    
+    42        <span class=key>readonly</span> <span class=key>config</span> ITarget2.Command asmBin = {
+    43            cmd: <span class="string">"bin/arm-none-eabi-gcc -c -x assembler-with-cpp"</span>,
+    44            opts: <span class="string">"-Wa,-mcpu=cortex-m4 -Wa,-mthumb"</span>
+    45        };
+    46    
+    47        <span class=key>override</span> <span class=key>config</span> ITarget2.Options lnkOpts = {
+    48            prefix: <span class="string">"-mthumb -march=armv7e-m -nostartfiles -Wl,-static -Wl,--gc-sections "</span>,
+    49            suffix: <span class="string">"-Wl,--start-group -lgcc -lc -lm -Wl,--end-group -Wl,-Map=$(XDCCFGDIR)/$@.map"</span>
+    50        };
+    51    }
+    52    <span class="comment">/*
+</span>    53    <span class="comment"> *  @(#) gnu.targets.arm; 1, 0, 0,0; 10-21-2016 18:16:49; /db/ztree/library/trees/xdctargets/xdctargets-l07/src/ xlibrary
+</span>    54    <span class="comment">
+</span>    55    <span class="comment"> */</span>
+    56    
+</pre>
+</body></html>

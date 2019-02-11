@@ -1,0 +1,24 @@
+UC_srv_calibration=yes
+UC_csi2Cal_multi_cam_view=yes
+UC_csi2Cal_multi_cam_3d_srv=yes
+
+ifeq ($(ISS_INCLUDE),yes)
+UC_iss_capture_isp_simcop_display=yes
+UC_iss_multi_cam_isp_sgx_3d_srv_display=yes
+UC_iss_multi_cam_isp_sgx_2mp_3d_srv=yes
+UC_iss_multi_cam_isp_sgx_2mp_3d_srv_adaptive=yes
+endif
+
+UC_vip_single_cam_connectorLinksA15_sgx_display=yes
+UC_vip_single_cam_enc_dec_sgx_display=yes
+UC_vip_single_cam_framecopy_sgx_display=yes
+UC_vip_single_cam_framecopyEve_sgx_display=yes
+UC_vip_single_cam_sgx_display=yes
+
+UC_srv_calibration=yes
+UC_lvds_vip_multi_cam_3d_srv=yes
+UC_lvds_vip_multi_cam_view_sgx_display=yes
+
+ifeq ($(AVB_INCLUDE),yes)
+UC_avb_rx_multi_cam_decode_sgx_display=yes
+endif

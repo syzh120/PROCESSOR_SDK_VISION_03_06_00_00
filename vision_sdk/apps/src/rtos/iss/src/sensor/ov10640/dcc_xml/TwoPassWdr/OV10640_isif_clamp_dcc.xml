@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ISIF_CLAMP_xml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!--this is comment-->
+  <dcc_name>isif_clamp</dcc_name>
+  <dcc_header>
+    <camera_module_id>     10640 </camera_module_id>
+      <dcc_descriptor_id>    1 </dcc_descriptor_id>
+      <algorithm_vendor_id>  1 </algorithm_vendor_id>
+      <tunning_tool_version> 0 </tunning_tool_version>
+  </dcc_header>
+  <!--=======================================================================-->
+    <typedef>
+        <iss_isif_clamp_h_black_params type="struct">
+          <v_pos type="uint16"> </v_pos> <!-- window vertical start position, U13 -->
+          <v_size type="uint8"> </v_size> <!-- window vertical dimension 2^(v_size+1), U2 -->
+          <h_pos type="uint16"> </h_pos> <!-- window horizontal start position, U13 -->
+          <h_size type="uint8"> </h_size> <!-- window horizontal dimension 2^(h_size+5), U2 -->
+          <pixel_value_limit type="uint8"> </pixel_value_limit> <!-- enable/disable limit on clamp: 0,1 -->
+          <right_window type="uint8"> </right_window> <!-- select left (0) or right (1) as the base window: 0,1 -->
+          <window_count_per_color type="uint8"> </window_count_per_color> <!-- window count per color = window count - 1 -->
+        </iss_isif_clamp_h_black_params>
+        <iss_isif_clamp_v_black_params type="struct">
+          <v_pos type="uint16"> </v_pos> <!-- window vertical start position, S13 -->
+          <v_size type="uint16"> </v_size> <!-- vertical clamp: optical black v valid, U13 -->
+          <h_pos type="uint16"> </h_pos> <!-- window horizontal start position, U13 -->
+          <h_size type="uint8"> </h_size> <!-- vertical clamp: optical black h valid 2^(h_size+1), U3 -->
+          <line_avg_coef type="uint8"> </line_avg_coef> <!-- line average coefficient, U8Q8 -->
+          <reset_mode type="int32"> </reset_mode> <!-- reset mode, S-->
+          <reset_value type="uint16"> </reset_value> <!-- vertical clamp reset value, U12 -->
+        </iss_isif_clamp_v_black_params>
+                <iss_isif_clamp type="struct">
+            <update type="uint8"> </update>
+                    <enable type="uint8"> </enable> <!-- enable/disable isif black clamp: 0,1 -->
+                    <hclamp_mode type="uint8"> </hclamp_mode> <!-- type of horizontal clamping: 0,1,2 -->
+                    <black_clamp_mode type="uint8"> </black_clamp_mode> <!-- select one or four color clamping: 0,1 -->
+            <dcoffset_clamp_value type="int16"> </dcoffset_clamp_value> <!-- additive dc offset, S13 -->
+            <black_clamp_v_start_pos type="uint16"> </black_clamp_v_start_pos> <!-- vertical start position, U12 -->
+            <horizontal_black type="iss_isif_clamp_h_black_params"> </horizontal_black> <!-- horizontal black clamp config -->
+            <vertical_black type="iss_isif_clamp_v_black_params"> </vertical_black> <!-- vertical black clamp config -->
+        </iss_isif_clamp>
+    </typedef>
+  <!--=======================================================================-->
+    <use_case val="65535"> <!-- ALL -->
+        <n-space>
+            <region0 class="0">
+                <exposure val="1" min="0" max="250000">  </exposure>
+            </region0>
+        </n-space>
+        <parameter_package>
+            <!--CLAMP parameters for photospace class 0-->
+            <isif_clamp_dcc type="iss_isif_clamp">
+              {
+                    0, //update
+                    0, // enable
+                    0, // hclamp_mode
+                    0, // black_clamp_mode
+                    -127, // dcoffset_clamp_value
+                    0, // black_clamp_v_start_pos
+               { // iss_isif_clamp_h_black_params
+                0, // v_pos
+                0, // v_size
+                0, // h_pos
+                0, // h_size
+                0, // pixel_value_limit
+                0, // right_window
+                0  // window_count_per_color
+                             },
+               { // iss_isif_clamp_v_black_params
+                 0, // v_pos
+                 0, // v_size
+                 0, // h_pos
+                 0, // h_size
+                 0, // line_avg_coef
+                 0, //reset_mode
+                 0  // reset_value
+                             }
+              }
+            </isif_clamp_dcc>
+        </parameter_package>
+    </use_case>
+  <!--=====================================================================-->
+</ISIF_CLAMP_xml>

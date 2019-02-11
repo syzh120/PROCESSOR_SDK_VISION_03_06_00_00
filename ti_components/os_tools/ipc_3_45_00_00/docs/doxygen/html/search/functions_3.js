@@ -1,0 +1,28 @@
+var searchData=
+[
+  ['ipc_5fattach',['Ipc_attach',['../_ipc_8h.html#a170f84915df79377080be708302bcb08',1,'Ipc.h']]],
+  ['ipc_5fclusterconfig',['Ipc_clusterConfig',['../_ipc_8h.html#a616d166ab8fb78d1dbce44fee596716b',1,'Ipc.h']]],
+  ['ipc_5fdetach',['Ipc_detach',['../_ipc_8h.html#abd0bc0fb5d84415b441c7050f92826c0',1,'Ipc.h']]],
+  ['ipc_5fisattached',['Ipc_isAttached',['../_ipc_8h.html#a6c17c41b2d25e8b69208082126cde887',1,'Ipc.h']]],
+  ['ipc_5freadconfig',['Ipc_readConfig',['../_ipc_8h.html#a4a5c82ebf2441ebf3fa86e6e7dc917d7',1,'Ipc.h']]],
+  ['ipc_5fstart',['Ipc_start',['../_ipc_8h.html#aca550c6a5498637cfec7b0f4e6d07828',1,'Ipc.h']]],
+  ['ipc_5fstop',['Ipc_stop',['../_ipc_8h.html#ae47b1d9fa8486f162c836f142f0ab2ee',1,'Ipc.h']]],
+  ['ipc_5ftransportconfig',['Ipc_transportConfig',['../_ipc_8h.html#a106fab915d5a1b4836f5dc30f979c5ef',1,'Ipc.h']]],
+  ['ipc_5fwriteconfig',['Ipc_writeConfig',['../_ipc_8h.html#af3b2fb0c66ad86f148870202b1b7aca1',1,'Ipc.h']]],
+  ['ipcmgr_5fipcstartup',['IpcMgr_ipcStartup',['../_ipc_mgr_8h.html#aa12cfa7459cd4f2ab29c7111aac15252',1,'IpcMgr.h']]],
+  ['ipcmgr_5frpmsgstartup',['IpcMgr_rpmsgStartup',['../_ipc_mgr_8h.html#a010a4c79a352e6f1655e8f28cb96a383',1,'IpcMgr.h']]],
+  ['ipcpower_5fcanhibernate',['IpcPower_canHibernate',['../_ipc_power_8h.html#a4bf02763585605ecd413b70f180b6b42',1,'IpcPower.h']]],
+  ['ipcpower_5fexit',['IpcPower_exit',['../_ipc_power_8h.html#a3296aba645514336a5c854b52432a353',1,'IpcPower.h']]],
+  ['ipcpower_5fgetwugenevtmask',['IpcPower_getWugenEvtMask',['../_ipc_power_8h.html#ab38cd8456e25f3d149095c8f068a63a8',1,'IpcPower.h']]],
+  ['ipcpower_5fhibernatelock',['IpcPower_hibernateLock',['../_ipc_power_8h.html#aef7ede8453ad5a6a52623188c412f2fc',1,'IpcPower.h']]],
+  ['ipcpower_5fhibernateunlock',['IpcPower_hibernateUnlock',['../_ipc_power_8h.html#a2aa7348faba4bccb24da503fed3274f9',1,'IpcPower.h']]],
+  ['ipcpower_5finit',['IpcPower_init',['../_ipc_power_8h.html#a6a4f96fdfff923d4f4fc0e794965b93e',1,'IpcPower.h']]],
+  ['ipcpower_5fpostresume',['IpcPower_postResume',['../___ipc_power_8h.html#a030bbbc427c5c7cb0cb6fd8bbe570abf',1,'_IpcPower.h']]],
+  ['ipcpower_5fpresuspend',['IpcPower_preSuspend',['../___ipc_power_8h.html#a3bdb3d5555d312eac806ecbbb3945264',1,'_IpcPower.h']]],
+  ['ipcpower_5fregistercallback',['IpcPower_registerCallback',['../_ipc_power_8h.html#abe861e0c89de23d5b45ec63588737be1',1,'IpcPower.h']]],
+  ['ipcpower_5fsetwugenevtmask',['IpcPower_setWugenEvtMask',['../_ipc_power_8h.html#a8d8906e50836603be83868f785a93d0a',1,'IpcPower.h']]],
+  ['ipcpower_5fsuspend',['IpcPower_suspend',['../_ipc_power_8h.html#acb1ccc55714dfacd4f7a48c9b0fe1fe2',1,'IpcPower.h']]],
+  ['ipcpower_5funregistercallback',['IpcPower_unregisterCallback',['../_ipc_power_8h.html#a4350d09cf7b948c1e8a9e08ba4925f50',1,'IpcPower.h']]],
+  ['ipcpower_5fwakelock',['IpcPower_wakeLock',['../_ipc_power_8h.html#ae3b009eaefdb77e1d1062e89e35d8380',1,'IpcPower.h']]],
+  ['ipcpower_5fwakeunlock',['IpcPower_wakeUnlock',['../_ipc_power_8h.html#a44aae08965cb7ccec9ab60fac5d1e6c5',1,'IpcPower.h']]]
+];

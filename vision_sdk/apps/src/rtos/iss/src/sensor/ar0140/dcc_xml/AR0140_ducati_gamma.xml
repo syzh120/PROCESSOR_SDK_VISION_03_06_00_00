@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GAMMA_DCC_xml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!--this is comment-->
+  <dcc_name>ipipe_gamma</dcc_name>
+  <dcc_header>
+    <camera_module_id>     0140 </camera_module_id>
+    <dcc_descriptor_id>     11  </dcc_descriptor_id>
+    <algorithm_vendor_id>   1   </algorithm_vendor_id>
+    <tunning_tool_version>  0   </tunning_tool_version>
+  </dcc_header>
+  <!--=======================================================================-->
+  <typedef>
+    <iss_ipipe_gamma type="struct">
+      <update type="uint8"> </update>
+      <enable type="uint8">   </enable>
+      <!--Enable/disable flag - (0-disable 1-enable)-->
+      <table type="uint8[1024]">  </table>
+      <!--Red gamma table -    (U8Q0)-->
+    </iss_ipipe_gamma>
+  </typedef>
+  <!--=======================================================================-->
+
+    <use_case val="65535">
+        <n-space>
+
+            <region0 class="0">
+                <colortemperature val="2" min="0" max="4000">  </colortemperature>
+                <exposure val="1" min="0" max="10000000">  </exposure>
+                <gain val="0" min="0" max="60">  </gain>
+            </region0>
+
+            <region1 class="1">
+                <colortemperature val="2" min="4001" max="20000">  </colortemperature>
+                <exposure val="1" min="0" max="10000000">  </exposure>
+                <gain val="0" min="0" max="60">  </gain>
+            </region1>
+
+        </n-space>
+
+        <parameter_package>
+          <sony12m_ducati_gamma_psc_0_vwf type="iss_ipipe_gamma">
+          {
+            0, //update
+            1, /* enable */
+            {
+              #include "TBL_gamma_BT709_1column.txt"
+            }
+          }
+          </sony12m_ducati_gamma_psc_0_vwf>
+        </parameter_package>
+
+        <parameter_package>
+          <sony12m_ducati_gamma_psc_0_vwf type="iss_ipipe_gamma">
+          {
+            0, //update
+            1, /* enable */
+            {
+              #include "TBL_gamma_BT709_1column.txt"
+            }
+          }
+          </sony12m_ducati_gamma_psc_0_vwf>
+        </parameter_package>
+
+    </use_case>
+
+  <!--=====================================================================-->
+</GAMMA_DCC_xml>

@@ -1,0 +1,1319 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- --COPYRIGHT--,BSD
+ *  Copyright (c) $(CPYYEAR), Texas Instruments Incorporated
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *
+ *  *  Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *
+ *  *  Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ *
+ *  *  Neither the name of Texas Instruments Incorporated nor the names of
+ *     its contributors may be used to endorse or promote products derived
+ *     from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ *  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ *  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ *  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ *  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ *  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ *  OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ *  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ *  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ *  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * --/COPYRIGHT--
+-->
+<html>
+<head>
+    <title>Framework Components 2.24 Release Notes </title>
+    <!-- For now, we use the doxygen style sheet -->
+    <link type="text/css" rel="stylesheet" href="docs/html/doxygen.css">
+</head>
+<body>
+<table width="100%">
+  <tbody>
+    <tr>
+      <td bgcolor="black" width="1">
+        <a href="http://www.ti.com">
+          <img border=0 src="docs/html/tilogo.gif" alt="Texas Instruments">
+        </a>
+      </td>
+      <td bgcolor="red">
+        <img src="docs/html/titagline.gif" alt="Technology for Innovators(tm)">
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h1 align="center">Framework Components 2.24 Release Notes </h1>
+<h2 align="center">June 2009</h2>
+
+<p align="center">
+<a href="#Introduction">Introduction</a>,
+<a href="#Documentation">Documentation</a>,
+<a href="#Whats_New">What's New</a>,
+<a href="#Upgrade_Info">Upgrade Info</a>,
+<a href="#Compatibility">Compatibility Information</a>,
+<a href="#Device_Support">Device Support</a>,
+<a href="#Validation">Validation Info</a>,
+<a href="#Known_Issues">Known Issues</a>,
+<a href="#Examples">Examples</a>,
+<a href="#Version">Version Information</a>,
+<a href="#Support">Technical Support</a>.
+</p>
+
+<hr>
+
+<h2><a name="Introduction">Introduction</a></h2>
+
+<p>
+The Framework Components are a collection of framework-independent utility
+libraries which other software frameworks can build upon.
+</p>
+
+<p>
+Primary packages in this Framework Components release are briefly described here.
+(There are others, see the <a href="xdoc/index.html">Configuration Reference
+Guide</a> documentation for a complete package list.)
+</p>
+
+<ul>
+    <li>
+        <b><tt>ti.sdo.fc.dskt2</tt></b> - xDAIS utility library for
+        instantiating xDAIS algorithms, and managing their memory resources.
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.dman3</tt></b> - DMA Manager library (EDMA3
+        specific). A library for managing DMA hardware resources for xDAIS
+        algorithms. This includes the IDMA3 interface (EDMA3 specific),
+        which xDAIS algorithms must implement to enable DMAN3 to manage their
+        DMA resources.
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.acpy3</tt></b> - High-Performance Functional
+        DMA Interface and Common Library for EDMA3-based devices.
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.rman</tt></b> - Resource Manager for
+        IRES-implementing xDAIS algorithms.
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.scpy</tt></b> - Functional library for
+        IRES-SDMA implementing xDAIS algorithms to perform SDMA transfers.
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.memutils</tt></b> - Utilities for managing Cache and   
+        to obtain Physical addresses for algorithms that need to program 
+        accelarators.
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.hdvicpsync</tt></b> - APIs for synchronization between 
+        codecs and HDVICP coprocessor usage on the DM365.
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.vicpsync</tt></b> - APIs for synchronization between 
+        codecs and VICP coprocessor usage on the DM365, DM355.
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.hdintc</tt></b> - APIs for registeration of non-BIOS,
+        non-dispatched interrupt service handles to synchronize with HDVICP
+        interrupts on the DM6467.    
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.utils</tt></b> - Utilities which frameworks
+        can built upon, including Design By Contract (<tt>DBC</tt>)
+        and Debug tracing tools (<tt>DBG</tt>).
+    </li>
+    <li>
+        <b><tt>ti.sdo.utils.trace</tt></b> - Tracing utility functions
+        (<tt>GT</tt>).
+    </li>
+</ul>
+
+<p>
+The Framework Components are provided as non-rebuildable libraries.  Source is
+provided for debugging and educational value, but is not intended to be
+modified.  Modified sources will not be supported.
+</p>
+
+<p>
+Some distributions of this product include an "fctools" directory
+containing some dependent products for convenience.  Products included in this release are:
+<ul>
+  <li>xDAIS 6.24</li>
+  <li>EDMA3 Resource Manager 1.06.00.01 (from the EDMA3 Low Level Driver
+    product).
+  </li>
+  <li>Linux Utils 2.24.01</li>
+</ul>
+See <a href="http://wiki.davincidsp.com/index.php?title=Codec_Engine_FAQ#Why_do_some_distributions_have_a_cetools_directory_and_others_don.27t.3F">
+this Framework Components fctools explanation</a> for further details.
+</p>
+
+<hr>
+<h2><a name="Documentation">Documentation</a></h2>
+<p>
+The following documentation is available:
+</p>
+<ul>
+  <li>
+    <b>Framework Components Reference Guide</b>
+    (<a href="docs/html/index.html">HTML</a> |
+    <a href="docs/html/framework_components_2_24.chm">CHM</a>)
+  </li>
+  <li>
+    <a href="xdoc/index.html">Package Reference Guide</a> - includes
+    configuration details
+  </li>
+  <li>
+    <b>Using DMA with Framework Components for 'C64x+</b> Application Note
+    (<a href="docs/FrameworkComponents_UsingDMA_AppNote.pdf">local copy</a> |
+    <a href="http://www-s.ti.com/sc/techlit/spraag1">latest</a>)
+  </li>
+  <li>
+    <b>DSKT2 User's Guide</b>
+    (<a href="docs/FrameworkComponents_DSKT2_UserGuide.pdf">local copy</a> |
+    <a href="http://www-s.ti.com/sc/techlit/spruev5">latest</a>)
+  </li>
+  <li>
+    <b>Using IRES and RMAN</b> Application Note
+    (<a href="docs/FrameworkComponents_IRES_RMAN_AppNote.pdf">local copy</a> |
+    <a href="http://www-s.ti.com/sc/techlit/spraai5">latest</a>)
+  </li>
+</ul>
+
+<p>
+In addition, users are encouraged to monitor (and contribute to!) the
+Framework Components content on the
+<a href="http://tiexpressdsp.com">TI eXpressDSP Software Wiki</a>.
+</p>
+
+<p>
+Release notes from previous releases are also available in the <a
+href="relnotes_archive">relnotes_archive</a> directory.
+</p>
+
+<hr>
+<h2><a name="Whats_New">What's New</a></h2>
+<p>The following significant changes have been made since 1.00</p>
+
+<div class="memitem">
+<h3>2.24  (This Release)</h3>
+<ul>
+  <li>New features
+    <ul>
+    <li>WinCE support</li>
+    </ul>
+  </li>  
+
+
+  <li>Updated Dependencies
+    <ul>
+      <li>Updated to LinuxUtils 2.24.01</li>
+      <li>Updated to XDAIS 6.24</li>
+    </ul>
+  </li>
+
+  <li>The following defects were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td>SDOCM00055647</td>
+      <td>Clean up FC's package dependencies
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00055687</td>
+      <td>ti.sdo.fc.ires.edma3chan doesn't declare its depedency on the ti.sdo.fc.edma3.Settings module
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00056099</td>
+      <td>Template-generated RMAN and DMAN3 fxns generate remarks
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00056368</td>
+      <td>RMAN_assignResources() returns success when underlying IRESMGR_ indicates resource allocation failure
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00057717</td>
+      <td>IRES VICP2 (smgr) gives error granting resources
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00057720</td>
+      <td>Multiple Deletion Creation sequence of MPEG4 encoder results in failure in Framework Components resource allocation
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00057723</td>
+      <td>_vicpsync.h missing from product
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00058267</td>
+      <td>EDMA3 Resource Manager overshoots the maximum limit when multiple encoders are created and deleted
+</td>
+    </tr>
+
+  </tbody>
+</table>
+  </li>
+  <br />
+
+  <li>The following enhancements were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+
+</ul>
+</div>
+
+<div class="memitem">
+<h3>2.23</h3>
+<ul>
+  <li>New features
+    <ul>
+    <li>RMAN auto-register/unregister feature for XDC cfg built executables 
+        that use RMAN. </li>
+    </ul>
+  </li>  
+
+
+  <li>Updated Dependencies
+    <ul>
+      <li>Updated to LinuxUtils 2.23</li>
+      <li>Updated to XDAIS 6.23</li>
+    </ul>
+  </li>
+
+  <li>The following defects were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td>SDOCM00046548</td>
+      <td>All example codecs should pass qualiTI
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00053331</td>
+      <td>RMAN fails to allocate multiple HDVICP resource requests on Linux builds.
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00053484</td>
+      <td>DMAN3 example fcpy lib build failure in CCS
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00054062</td>
+      <td>fastcopytest.pjt should include EDMA3_LLD_INSTALL_DIR explicity in the pjt's build options
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00055054</td>
+      <td>RMAN_assignResources in the VISA_create call through DVTB fails when the engine instance is closed and opened once again
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00055397</td>
+      <td>Framework Components fastcopy example cleanup for new OMAPL137 platform
+</td>
+    </tr>
+
+  </tbody>
+</table>
+  </li>
+  <br />
+
+  <li>The following enhancements were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td>SDOCM00046397</td>
+      <td>Enhance FC resource managers to autogenerate RMAN_register() calls
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00053546</td>
+      <td>Change EDMA3_LLD location var to EDMA3_LLD_INSTALL_DIR in examples/Makefile
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00053802</td>
+      <td>DMAN3 doesn't check if number of TCCs is correct as per the SOC's cccfg register
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+
+</ul>
+</div>
+
+<br />
+<div class="memitem">
+<h3>2.22</h3>
+<ul>
+  <li>New features
+    <ul>
+    <li>IRES EDMA3CHAN supported for DM355, DM365 target</li>
+    <li>IRES VICP supported for DM365 target</li>
+    <li>IRES HDVICP supported for DM365 target</li>
+    <li>HDVICPSYNC module supports synchronization between algorithms and 
+        HDVICP coprocessor usage </li>
+    <li>IRES ADDRSPACE module supports OS-agnostic accesses to hardware 
+        accelerator (and other) address spaces. </li>
+    </ul>
+  </li>  
+
+
+  <li>Updated Dependencies
+    <ul>
+      <li>Updated to LinuxUtils 2.22</li>
+      <li>Updated to EDMA3 LLD 1.06.00.01</li>
+      <li>Updated to XDAIS 6.22.01</li>
+    </ul>
+  </li>
+
+  <li>The following defects were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td>SDOCM00053331</td>
+      <td>RMAN fails to allocate multiple HDVICP resource requests on Linux builds</td>
+    </tr>
+  </tbody>
+</table>
+  </li>
+  <br />
+
+  <li>The following enhancements were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+     <tr>
+      <td>SDOCM00046361</td>
+      <td>HDINTC module for Kaleido interrupt registration for the DM36x</td>
+    </tr>
+    <tr>
+      <td>SDOCM00046362</td>
+      <td>IRESMAN for EDMA3CHAN on using LSP (DM365)</td>
+    </tr>
+    <tr>
+      <td>SDOCM00046363</td>
+      <td>IRESMAN for managing IMCOP memories</td>
+    </tr>
+    <tr>
+      <td>SDOCM00046363</td>
+      <td>IRESMAN for managing IMCOP memories</td>
+    </tr>
+    <tr>
+      <td>SDOCM00046262</td>
+      <td>Add support for C674 target</td>
+    </tr>
+    <tr>
+      <td>SDOCM00050216</td>
+      <td>Add more VICP buffers to ires_vicp2 for DM365</td>
+    </tr>
+  </tbody>
+</table>
+</li>
+
+</ul>
+</div>
+
+<br />
+<div class="memitem">
+<h3>2.21</h3>
+<ul>
+  <li>New features
+    <ul>
+    <li>IRES VICP supported for DM355 target</li>
+    <li>Memutils module supports cache-related APIs and virt-to-phys mapping</li>
+    <li>VICPSYNC module supports synchronization between algorithms and 
+        VICP coprocessor usage </li>
+    </ul>
+  </li>  
+
+  <li>Updated Dependencies
+    <ul>
+      <li>Updated to LinuxUtils 2.21</li>
+    </ul>
+  </li>
+
+  <li>The following defects were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td>SDOCM00046122</td>
+      <td>DMAN3 documentation needs more clarification of nullPaRamIndex</td>
+    </tr>
+  </li>
+
+  <li>The following enhancements were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td>SDOCM00046362</td>
+      <td>IRESMAN for EDMA3CHAN on using LSP (DM355)</td>
+    </tr>
+    <tr>
+      <td>SDOCM00046363</td>
+      <td>IRESMAN for managing IMCOP memories</td>
+    </tr>
+    <tr>
+      <td>SDOCM00046378</td>
+      <td>rman examples need more support when building with xdc</td>
+    </tr>
+    <tr>
+      <td>SDOCM00046050</td>
+      <td>Need to expose PSC addresses in the VICP handles to enable 
+          codec access</td>
+    </tr>
+  </tbody>
+</table>
+</li>
+
+</ul>
+</div>
+
+<br />
+
+<br />
+
+<div class="memitem">
+<h3>2.20</h3>
+<ul>
+  <li>New features
+    <ul>
+    <li>Updated uClibc toolchain</li>
+    <li>RMAN support for ARM targets</li>
+    <li>New configuration option on DMAN3 allows resource management to be
+        handled by the EDMA3 Low Level Resource manager (BIOS-based
+		environments only)</li>
+    <li>Support for OMAP3 devices</li>
+    <li>Functional library and resource management for SDMA channels on 
+        OMAP3</li>
+    </ul>
+  </li>  
+
+  <li>Removed features
+    <ul>
+    <li>Removed support for C55-based devices</li>
+    </ul>
+  </li>
+
+  <li>Updated Dependencies
+    <ul>
+      <li>Updated to LinuxUtils 2.20</li>
+      <li>Updated to XDC 3.10</li>
+      <li>Updated to XDAIS 6.20</li>
+      <li>Updated to BIOS 5.32.02</li>
+      <li>Updated to EDMA3 LLD 1.05.00</li>
+    </ul>
+  </li>
+
+  <li>The following defects were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td>SDSCM00019578</td>
+      <td>DMAN3 should support the persistent property in IDMA3 requests</td>
+    </tr>
+    <tr>
+      <td>SDSCM00024229</td>
+      <td>DSKT2 scratch and persistent alloc/free functions not exposed in the 
+          DSKT2 public headers</td>
+    </tr>
+    <tr>
+      <td>SDSCM00025464</td>
+      <td>Some ACPY3 functions give out garbage trace even if GT_set is not 
+          called</td>
+    </tr>
+    <tr>
+      <td>SDSCM00025628</td>
+      <td>RMAN examples missing common.cfg file</td>
+    </tr>
+    <tr>
+      <td>SDSCM00025631</td>
+      <td>RMAN examples need build instructions</td>
+    </tr>
+  </li>
+
+  <li>The following enhancements were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td>SDSCM00025515</td>  
+      <td>HDINTC module hard codes Interrupt and Event number for the 
+          BIOS-ISR</td>  
+    </tr>
+    <tr>
+      <td>SDSCM00025744</td>  
+      <td>RMAN on ARM should support multi-process
+    </tr>
+    <tr>
+      <td>SDSCM00025399</td>  
+      <td>DMAN3 (and ACPY3) should have configuration for CPU copy
+    </tr>
+    <tr>
+      <td>SDSCM00024890</td>  
+      <td>Standardize lib directory for all FC libraries
+    </tr>
+
+  </tbody>
+</table>
+</li>
+
+</ul>
+</div>
+
+<br />
+
+<div class="memitem">
+<h3>2.10 </h3>
+<ul>
+  <li>New features
+    <ul>
+      <li>C64+ libraries built with CG 6.0.16</li>
+      <li>Support for DM6467</li>
+      <li>Introduced DSKT2 APIs for querying alg instance memory usage
+      at runtime</li>
+      <li>Introduced IRES/RMAN app note (see documentation section above)</li>
+    </ul>
+  </li>
+
+  <li>Updated Dependencies
+    <ul>
+      <li>EDMA3 Resource Manager 1.04.00</li>
+    </ul>
+  </li>
+
+  <li>The following defects were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td>SDSCM00021022</td>
+      <td>In FC examples api.a64P should be picked up from FC not the CCS install</td>
+    </tr>
+  </tbody>
+</table>
+</li>
+
+  <li>The following enhancements were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+   <tr>
+      <td>SDSCM00015973</td>
+      <td>DMAN3's config parameter validation is required</td>
+    </tr>
+    <tr>
+      <td>SDSCM00020192</td>
+      <td>DSKT2 debug builds should assert that algs that request IALG_SCRATCH implement algActivate()/algDeactivate()</td>
+    </tr>
+  </tbody>
+</table>
+</li>
+
+</ul>
+
+</div>
+
+<br />
+
+<div class="memitem">
+<h3>2.00</h3>
+<ul>
+  <li>New features
+    <ul>
+      <li>Added ARM-based Linux support to DMAN3.  This implementation
+        currently <i>requires</i> the Codec Engine to be configured into
+        the ARM-based Linux system.
+      </li>
+      <li>Initial RMAN implementation - supporting the new xDAIS IRES
+        interface.
+      </li>
+      <li>Introduced <tt>DSKT2_createAlgExt()</tt> to create algorithms
+      and provide external memory to them regardless of the memory they
+      asked for.</li>
+      <li>Significant tracing rearchitecture.  Many packages now include a
+      <tt>.trace</tt> config param which, when set to true, enables tracing
+      support.</li>
+    </ul>
+  </li>
+
+  <li>Updated Dependencies
+    <ul>
+      <li>Updated to xDAIS 6.00</li>
+      <li>Updated to XDC 3.00</li>
+      <li>EDMA3 Resource Manager 1.01.00.01</li>
+    </ul>
+  </li>
+
+  <li>The following defects were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td>SDSCM00015980</td>
+      <td>DMAN3's XDC config support fails when configuring
+      .scratchAllocFxn</td>
+    </tr>
+    <tr>
+      <td>SDSCM00016134</td>
+      <td>ACPY3 build with ACPY3_INLINE_ALL flag gives build errors</td>
+    </tr>
+    <tr>
+      <td>SDSCM00017450</td>
+      <td>DSKT2 can fail to correctly provide external scratch memory
+      to algorithms</td>
+    </tr>
+    <tr>
+      <td>SDSCM00018734</td>
+      <td>DMAN3_grantDmaChannels() crashes in case of allocation
+      failures</td>
+    </tr>
+  </tbody>
+</table>
+</li>
+
+  <li>The following enhancements were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td>SDSCM00020198</td>
+      <td>DMAN3 should have the option of returning an error if alg requests
+        more resources than configured for its scratch group</td>
+    </tr>
+  </tbody>
+</table>
+</li>
+
+</ul>
+</div>
+
+<br />
+
+
+<div class="memitem">
+<h3>1.20</h3>
+<ul>
+  <li>C64+ libraries built with CG 6.0.8</li>
+  <li>Updated fctools to xDAIS 5.20 release</li>
+  <li>ACPY3_complete() inline support added.</li>
+  <li>fastcopy example cleanup</li>
+  <li>And the following MRs were resolved:
+
+<table width="100%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td>SDSCM00002823</td>
+      <td>Remove dependency on BIOS types</td>
+    </tr>
+    <tr>
+      <td>SDSCM00012024</td>
+      <td>DSKT2 User Guide documentation collateral should be provided for
+      Framework Components</td>
+    </tr>
+    <tr>
+      <td>SDSCM00013086</td>
+      <td>FC DMAN3 example builds have poor out of box experience</td>
+    </tr>
+    <tr>
+      <td>SDSCM00013781</td>
+      <td>Require instrumentation in ACPY3 library to support
+      DGT logging or any other kind of generic logging</td>
+    </tr>
+    <tr>
+      <td>SDSCM00014395</td>
+      <td>DSKT2 scratch memory allocation & sharing is not optimal when
+      alignment is required</td>
+    </tr>
+    <tr>
+      <td>SDSCM00014454</td>
+      <td>Hardlimit of DMAN3_MAXDMARECS to 32 not required in the dman3
+      library. Should be removed as a config option for DMAN3</td>
+    </tr>
+    <tr>
+      <td>SDSCM00014931</td>
+      <td>DMAN3_createChannels(), DMAN3_grantDMAChannels() memory overwrite
+      for non-ACPY3 channels</td>
+    </tr>
+  </tbody>
+</table>
+
+</li>
+</ul>
+</div>
+
+<br />
+
+<div class="memitem">
+<h3>1.10</h3>
+<ul>
+  <li>All libraries are built with CG 6.0.7</li>
+  <li>Updated fctools to xDAIS 5.10 release</li>
+  <li>And the following MRs were resolved:
+
+<table width="100%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td>SDSCM00013041</td>
+      <td>ACPY3 susceptible to SDSCM00012367 (Silicon Errata)</td>
+    </tr>
+    <tr>
+      <td>SDSCM00006288</td>
+      <td>Need to update the Joule DMA design guide</td>
+    </tr>
+    <tr>
+      <td>SDSCM00012532</td>
+      <td>Source code does not line up when stepping through
+       debug libraries</td>
+    </tr>
+    <tr>
+      <td>SDSCM00012770</td>
+      <td>ACPY3 specification changes are needed for
+       clarification and to match design and implementation changes</td>
+    </tr>
+    <tr>
+      <td>SDSCM00012773</td>
+      <td>DMAN3 RTSC Configuration requires custom non-public
+       initialization call to configure DMAN3 heaps</td>
+    </tr>
+  </tbody>
+</table>
+
+</li>
+</ul>
+</div>
+
+<br />
+
+<div class="memitem">
+<h3>1.03</h3>
+<ul>
+  <li>All libraries are built with CG6x 6.0.5</li>
+</ul>
+</div>
+
+<br />
+
+<div class="memitem">
+<h3>1.02</h3>
+<ul>
+  <li>OMAPS00082651 - Allow IDMA3 channel env to be allocated in DSKT2
+                       scratch memory
+    <ul>
+      <li>Also tracked as SDSCM00005723 - FC ACPY3 needs to support scratch
+          environment memory for IDMA3 channel objects</li>
+    </ul>
+  </li>
+  <li> SDSCM00010132 - ACPY3 Changes Needed for Interoperability with Codecs
+                       using QDMA Library </li>
+  <li> SDSCM00010205 - DMAN3 uses wrong QCHMAP offsets </li>
+</ul>
+</div>
+
+<br />
+
+<div class="memitem">
+<h3>1.01</h3>
+<ul>
+  <li>OMAPS00081737 - Race condition can happen in DSKT2_freeAlg
+    <ul>
+      <li>Also tracked as SDSCM00007366 - DSKT2_freeAlg and lazy
+      deactivate race condition</li>
+    </ul>
+  </li>
+
+  <li>OMAPS00079468 - ACPY3_activate causing DMA transfer when built
+  with -o3</li>
+  <li>OMAPS00078941 - ACPY3_wait() inline version not inlining</li>
+  <li>OMAPS00078784 - DSKT2 needs an API to deactivate all algs that have
+  been lazily deactivated
+    <ul>
+      <li>Also tracked as SDSCM00006538 - DSKT2's lazy deactivate can cause
+      problems when power management is introduced</li>
+      <li>This was satisfied with the introduction of
+      DSKT2_deactivateAll()</li>
+    </ul>
+  </li>
+  <li>OMAPS00079710 - DSKT2 should not try to deactivate an codec instance
+  that does not provide algDeactivate()</li>
+
+  <li>OMAPS00076836 - DSKT2 can introduce some cache coherence issues
+    <ul>
+      <li>Also tracked as SDSCM00005847 - DSKT2 doesn't BCACHE_flush
+      MEM_calloc initialized external, persistant data
+      </li>
+    </ul>
+  </li>
+  <li>OMAPS00074261 - Support Visual Studio builds of dman3 and acpy3
+  libraries</li>
+  <li>OMAPS00074262 - Fix CPU copy version of ACPY3 library</li>
+  <li>Added DSKT2 documentation to the configuration reference guide</li>
+</ul>
+</div>
+
+<br />
+
+<hr>
+<h2><a name="Upgrade_Info">Upgrade Information</a></h2>
+<p>
+The Framework Components packages are available in the "packages/"
+subdirectory of the product.  If you have a previous release of the
+Framework Components product, you can install this release next to it, and
+modify your application and/or server builds to use this newer release.</p>
+<p>
+If you're using the DVEVM, this can be done by setting the
+<b>FC_INSTALL_DIR</b> variable in the <tt>Rules.make</tt> file at the
+top of the DVEVM distribution directory.</p>
+
+<!-- 
+<h2><font color="red">Compatibility Breaks!</font></h2>
+<ul>
+no new XDCtools required
+  <li>FC 2.24 requires system integrators to update to XDC Tools
+    3.10.05.61 (or newer).
+  </li>
+no new EDMA3LLD required
+  <li>FC 2.24 requires system integrators update to EDMA3 Resource Manager
+    1.06.00.01 (or compatible).
+  </li>
+no new BIOS required
+  <li>FC 2.24 requires system integrators update to DSP BIOS
+    5.33.04 (or compatible).
+</ul>
+-->
+
+<p>
+Note, if you're upgrading from a release earlier than Framework Components 2.23, be
+sure to review the <b>Upgrade</b> section for each of the releases between
+your current Codec Engine release and this one.  Previous release notes are
+available in the <a href="relnotes_archive">relnotes_archive</a> directory.
+</p>
+
+<hr>
+<h2><a name="Compatibility">Compatibility Information</a></h2>
+<p>
+The details provided below describe each package's compatibility with the
+previous release (2.23).
+</p>
+<p>
+Note, the <a href="xdoc/index.html">Configuration Reference Guide</a> contains
+further details about each package.
+</p>
+
+<ul>
+    <li>
+        <b><tt>ti.sdo.fc.acpy3</tt></b> - This package is compatible with the previous release. (Compatibility key: <i>1,0,4</i> -> 1,0,4)
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.dman3</tt></b> - This package is compatible with the previous release. (Compatibility key: <i>1,0,4</i> -> 1,0,4)
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.dskt2</tt></b> - This package is compatible with the
+        previous release.  
+        (Compatibility key: <i>1,0,4</i> -> 1,0,4)
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.edma3</tt></b> - This package is <b>incompatible</b>
+         with the previous release.  APIs have changed.
+        (Compatibility key: <i>2,0,0</i> ->
+        <font color='red'><b>3,0,0</b></font>)
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.hdintc</tt></b> - This package is compatible with the 
+        previous release. (Compatibility key:  <i>1,0,4</i> -> 1,0,4)
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.ires</tt></b> - This package is compatible with the
+        previous release.  (Compatibility key: <i>1,0,0</i> -> 1,0,0)
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.ires.bufres</tt></b> - This package is compatible with         the previous release.  (Compatibility key: <i>1,0,0</i> -> 1,0,0)
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.ires.edma3chan</tt></b> - This package is compatible 
+        with the previous release.  (Compatibility key: <i>1,0,0</i> -> 1,0,0)
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.ires.nullresource</tt></b> - This package is compatible        with the previous release.  (Compatibility key: <i>1,0,0</i> -> 1,0,0)
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.ires.vicp</tt></b> - This package is compatible with 
+        the previous release.  (Compatibility key: <i>1,0,1</i> -> 1,0,1)
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.ires.hdvicp</tt></b> This package is compatibile with 
+        the previous release. (Compatibility key: <i>1,0,1</i> -> 1,0,1)
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.rman</tt></b> - This package is compatible with the 
+        previous release. (Compatibility key:  <i>2,0,0</i> -> 2,0,0)
+    </li>
+   <li>
+        <b><tt>ti.sdo.fc.utils</tt></b> - This package is compatible with the
+        previous release.  (Compatibility key: <i>1,0,2</i> -> 1,0,2)
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.utils.api</tt></b> - This package is compatible with 
+        the previous release.  (Compatibility key: <i>1,0,0</i> -> 1,0,0)
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.utils.gtinfra</tt></b> - This package is compatible 
+        with the previous release.  (Compatibility key: <i>1,0,0</i> -> 1,0,0)
+    </li>
+    <li>
+        <b><tt>ti.sdo.utils.trace</tt></b> - This package is compatible with the
+        previous release.  (Compatibility key: <i>1,0,0</i> -> 1,0,0)
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.scpy</tt></b> - This package is compatible with 
+        the previous release. (Compatibility key: <i>1,0,0</i> -> 1,0,0)
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.ires.sdma</tt></b> - This package is compatible with 
+        the previous release. (Compatibility key: <i>1,0,0</i> -> 1,0,0)
+    <li>
+        <b><tt>ti.sdo.fc.ires.shmbuf</tt></b> - This package is compatible with 
+        the previous release. (Compatibility key: <i>1,0,0</i> -> 1,0,0)
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.hdvicpsync</tt></b> - This package is compatible with 
+        the previous release. (Compatibility key: <i>1,0,0</i> -> 1,0,0)
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.memutils</tt></b> - This package is compatible with 
+        the previous release. (Compatibility key: <i>1,0,0</i> -> 1,0,0)
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.vicpsync</tt></b> - This package is compatible with 
+        the previous release. (Compatibility key: <i>1,0,0</i> -> 1,0,0)
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.global</tt></b> - This package is compatible with 
+        the previous release. (Compatibility key: <i>1,0,0</i> -> 1,0,0)
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.ires.addrspace</tt></b> - This package is compatible 
+        with the previous release. (Compatibility key: <i>1,0,0</i> -> 1,0,0)
+    </li>
+    <li>
+        <b><tt>ti.sdo.fc.ires.memtcm</tt></b> - This package is compatible 
+        with the previous release. (Compatibility key: <i>1,0,0</i> -> 1,0,0)
+    </li>
+    </li>
+        Compatibility with previous releases is not currently managed in
+        the examples.
+    </li>
+</ul>
+
+<p>
+If migrating from a release prior to FC 2.23, consult previous
+releases available in the <a
+href="relnotes_archive">relnotes_archive</a> directory.
+</p>
+
+<h3>Compatibility Key Definitions</h3>
+<p>
+Compatibility keys are intentionally independent of Marketing product
+numbers and are intended to:
+<ol>
+  <li>Enable tooling to identify incompatibilities between components,
+  and</li>
+  <li>Convey a level of compatibility between different releases to
+  set end user expectations.</li>
+</ol>
+</p>
+
+<p>
+Compatibility keys are composed of 3 comma-delimited numbers - M,S,R
+- where:
+<ul>
+  <li><b>M = Major</b>.  A difference in M indicates a break in
+  compatibility.</li>
+  <li><b>S = Source</b>.  A difference in S indicates source
+  compability.  That is, the user's source doesn't require change, but
+  <i>does</i> require rebuilding.</li>
+  <li><b>R = Radix</b>.  A difference in R indicates an introduction
+  of new features, but compatibility with previous interfaces has not
+  broken.  If libraries are provided by the package, an application
+  must re-link with the new libraries, but not rebuild from source.</li>
+</ul>
+</p>
+
+
+<hr>
+<h2><a name="Device_Support">Device Support</a></h2>
+
+<p>
+This release supports the following devices:
+<ul>
+  <li>DM6446 EVM:
+    <ul>
+      <li>single-processor C64+ device, running DSP/BIOS</li>
+      <li>single-processor ARM9 device, running Linux (All except DSKT2 and ACPY3)</li>
+    </ul>
+  </li>
+  <li>DM6467 EVM:
+    <ul>
+      <li>single-processor C64+ device, running DSP/BIOS</li>
+      <li>single-processor ARM9 device, running Linux (All except DSKT2 and ACPY3)</li>
+    </ul>
+  </li>
+  <li>DM6437 EVM:
+    <ul>
+      <li>single-processor C64+ device, running DSP/BIOS</li>
+    </ul>
+  </li>
+  <li>DM647/8 EVM:
+    <ul>
+      <li>single-processor C64+ device, running DSP/BIOS</li>
+    </ul>
+  </li>
+  <li>DM355 EVM:
+    <ul>
+      <li>single-processor ARM9 device, running Linux (All except DSKT2 and ACPY3)</li>
+    </ul>
+  </li>
+  <li>OMAP2430 SDP and OMAP2530 EVM:
+    <ul>
+      <li>single-processor DSP-only configuration, running DSP/BIOS</li>
+      <li>single-processor ARM device, running Linux (All except DSKT2 and ACPY3)</li>
+    </ul>
+  </li>
+  <li>OMAP3430 SDP and OMAP3530 EVM:
+    <ul>
+      <li>single-processor, DSP-only configuration, running DSP/BIOS</li>
+      <li>single-processor ARM device, running Linux (All except DSKT2 and ACPY3)</li>
+    </ul>
+  </li>
+  <li>C64+ simulators, single processor configuration:
+    <ul>
+      <li>C64+ DSP/BIOS</li>
+    </ul>
+  </li>
+</ul>
+DMAN3 and ACPY3 can be configured to run on other EDMA3-based devices
+by configuring DMAN3.qdmaPaRamBase via XDC config scripts or
+at runtime by setting <tt>DMAN3_PARAMS.qdmaPaRamBase</tt>.
+</p>
+
+<p>
+Applications which use ACPY3 but don't consume DMAN3 as an XDC package
+will need to define <tt>_DMAN3_nullPaRam, _DMAN3_edma3Addr and _DMAN3_paRamAddr (_DMAN3_paRamAddr for non-C64P targets)</tt> symbols in their application "C" 
+files
+</p>
+
+
+<hr>
+<h2><a name="Validation">Validation</a></h2>
+<p>
+This release was built and validated against using the following software
+components:
+</p>
+
+<ul>
+  <li>XDAIS <b>6.24</b></li>
+  <li>Linux Utils <b>2.24.01</b></li>
+  <li>XDCtools <b>3.10.05.61</b></li>
+  <li>DSP/BIOS <b>5.33.04</b></li>
+  <li>EDMA3 Resource Manager <b>1.06.00.01</b></li>
+  <li>Pre-built binaries were built with the following toolchains:
+    <ul>
+<!-- autogenerated list -->
+      <li>gnu.targets.Linux86 - <b>4.1.0</b></li>
+      <li>gnu.targets.MVArm9 - <b>4.2.0</b></li>
+      <li>gnu.targets.UCArm9 - <b>4.2.1</b></li>
+      <li>microsoft.targets.arm.WinCE - <b>14.01.60511</b></li>
+      <li>ti.targets.C64P - <b>6.0.16</b></li>
+      <li>ti.targets.C674 - <b>6.1.5</b></li>
+      <li>ti.targets.arm.Arm9t - <b>4.5.0</b></li>
+    </ul>
+  </li>
+</ul>
+
+<p>
+This release was validated using the following hardware platforms:
+</p>
+
+<h3>C64+</h3>
+<ul>
+    <li>DM6446 EVM</li>
+    <li>DM6467 EVM</li>
+    <li>OMAP2430 SDP</li>
+    <li>OMAP3530 EVM</li>
+    <li>Limited sanity testing using CCS C64+ Simulator</li>
+</ul>
+
+
+<h3>ARM 9 (All except DSKT2 and ACPY3)</h3>
+<ul>
+    <li>DM355 EVM</li>
+    <li>DM365 EVM</li>
+</ul>
+
+<h3>C674</h3>
+<ul>
+    <li>OMAP-L137 EVM</li>
+</ul>
+
+
+<hr>
+<h2><a name="Known_Issues">Known Issues</a></h2>
+<p>
+<h3>ACPY3</h3>
+<ul>
+  <li>
+    ACPY3 usage of IDMA0 does not provide any software workaround for
+    DaVinci silicon defect BTS_DAV_SIBUGS 75, titled:
+    "GEM IDMA can hang dependent on chip level implementation."
+    The defect only exists on Davinci Pg1.x silicon. (Fixed for
+    future Davinci Pg2.x, OMAP 2430 and 3430 silicon releases.)
+    There is no plan to address this issue in Framework Components.
+  </li>
+  <li>
+    3D DMA transfers using Joule CCNT > 1 (i.e. numFrames > 1) are
+    not supported.  There is no plan to address this limitation.
+  </li>
+</ul>
+</p>
+
+
+<hr>
+<h2><a name="Examples">Examples</a></h2>
+<p>Framework Components examples and instructions are located in the
+"examples" directory.
+</p>
+<ul>
+  <li><a href="examples/build_instructions.html">Example Build
+  Instructions</a></li>
+</ul>
+
+<hr>
+<h2><a name="Version">Version Information</a></h2>
+<p>
+This product's version follows a version format, <b>M.mm.pp.bb</b>,
+where <b>M</b> is a single digit Major number, <b>mm</b> is 2 digit
+minor number, <b>pp</b> is a 2 digit patch number, and <b>b</b> is an
+unrestricted set of digits used as an incrementing build counter.
+</p>
+
+<p>
+To support multiple side-by-side installations of the product, the
+product version is encoded in the top level directory,
+ex. <b>framework_components_2_24</b>.
+</p>
+
+<p>
+Subsequent releases of patch upgrades will be identified by the patch
+number, ex. FC 2.24.01 with directory <b>framework_components_2_24_01</b>.
+Typically, these patches only include critical bug fixes.
+</p>
+
+<hr>
+<h2><a name="Support">Technical Support</a></h2>
+<p>For technical support, contact <a href="mailto:softwaresupport@ti.com">softwaresupport@ti.com</a></p>
+
+<p>
+Check the following web site for updates: <a href="https://www-a.ti.com/downloads/sds_support/targetcontent/FC/index.html">https://www-a.ti.com/downloads/sds_support/targetcontent/FC/index.html</a>
+</p>
+
+<hr>
+<p>
+Last updated: June 3, 2009
+</p>
+</body>
+</html>

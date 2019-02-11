@@ -1,0 +1,15 @@
+UseCase: chains_tidlOD_radarProcess_display
+
+NullSource -> Decode -> VPE -> Dup
+
+Dup -> Merge
+
+Dup -> Alg_tidlpreproc (A15)
+
+Alg_tidlpreproc (A15) -> Alg_tidl_Eve1 (EVE2) -> Alg_tidl_Dsp (DSP2) -> Merge
+
+Merge -> Sync -> Alg_ObjectDraw -> Display
+
+IssCapture -> Alg_RadarProcess_fft (DSP1) -> Alg_RadarProcess_pkDetect (DSP1) -> Alg_RadarProcess_beamForm (DSP1) -> Alg_RadarProcess_drawObjs (DSP1) -> Display_Radar
+
+GrpxSrc -> Display_Grpx

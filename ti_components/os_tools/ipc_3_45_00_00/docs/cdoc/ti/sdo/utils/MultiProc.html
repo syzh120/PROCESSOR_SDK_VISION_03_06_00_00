@@ -1,0 +1,882 @@
+<html>
+<head>
+<title>module ti.sdo.utils.MultiProc</title>
+<meta name="description" content="Processor Id Module Manager">
+<link rel="stylesheet" type="text/css" href="../../../xdoc.css" />
+</head>
+<body><div id="xdocWrapper"><div id="xdocContent">
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">module</span> <span class="xdoc-id">ti.sdo.utils.</span><span class="xdoc-id">MultiProc</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/utils/List.html" title="module List"><img class="xdocHdrArrow" src="../../../Arrow_left.png"/></a></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/utils/package.html" title="package ti.sdo.utils"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/utils/NameServer.html" title="module NameServer"><img class="xdocHdrArrow" src="../../../Arrow_right.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/utils/MultiProc.html">index URL</a></div>
+<p class="xdocHdrSummary">Processor Id Module Manager</p>
+<ul class="xdocToc">
+<li class="xdocToc"><a class="xdocToc" href="#targ-synop">C synopsis</a></li>
+<li class="xdocToc2"><a class="xdocToc" href="#xdocElems">Individual elements</a></li>
+<li class="xdocToc"><a class="xdocToc" href="#meta-synop">Configuration settings</a></li>
+<li class="xdocToc2"><a class="xdocToc" href="#xdocMetaElems">Individual elements</a></li>
+</ul>
+<div class="xdocBrief">
+Many IPC modules require identifying processors in a
+  multi-processor environment. The MultiProc module centralizes
+  processor id management into one module.  Since this configuration
+  is almost always universally required, most IPC applications
+  require supplying configuration of this module.
+[&nbsp;<a class="xdocBrief" href="#xdoc-desc">more</a>&nbsp;...&nbsp;]
+</div>
+<span id='targ-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-targ2">C</span></tt> synopsis</td>
+<td class="xdocLabelCenter">target-domain</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../ti/sdo/utils/MultiProc-src.html"><span class="xdocLabelFile">ti/sdo/utils/MultiProc.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynT">
+<div class="xdocSynCode">
+<tt></tt><span class="xdoc-kw3">#include</span> <span class="xdoc-id">&lt;ti/sdo/utils/MultiProc.h&gt;</span>
+</div>
+<table cellspacing="0" cellpadding="0" border="0">
+<tr><td class="xdocSynFxnCat" colspan="2"><div class="xdocSynFxnCat">Functions common to all target modules</div></td></tr>
+
+<tr>
+<td></td>
+<td>
+<div class="xdocSynTblPack">
+<a class="xdocSynGo" href="#module-wide_built-ins"><span class="xdoc-id">MultiProc_Module_getMask</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Returns the diagnostics mask for this module</span></span></a>,
+<a class="xdocSynGo" href="#module-wide_built-ins"><span class="xdoc-id">MultiProc_Module_hasMask</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Test whether this module has a diagnostics mask</span></span></a>,
+<a class="xdocSynGo" href="#module-wide_built-ins"><span class="xdoc-id">MultiProc_Module_heap</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;The heap from which this module allocates memory</span></span></a>,
+<a class="xdocSynGo" href="#module-wide_built-ins"><span class="xdoc-id">MultiProc_Module_id</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Get this module's unique id</span></span></a>,
+<a class="xdocSynGo" href="#module-wide_built-ins"><span class="xdoc-id">MultiProc_Module_setMask</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Set the diagnostics mask for this module</span></span></a>,
+<a class="xdocSynGo" href="#module-wide_built-ins"><span class="xdoc-id">MultiProc_Module_startupDone</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Test if this module has completed startup</span></span></a>
+</div>
+</td>
+</tr>
+<tr><td colspan='2'><div class='xdocSynTblHdr'>Defines</div></td></tr>
+
+<tr valign="top"><td class="xdocSynDecl" nowrap><div class="xdocSynTblType"><tt></tt><span class="xdoc-kw3">#define</span> </div></td><td class="xdocSynDecl"><div class="xdocSynTblDecl"><a class="xdocSynGo" href="#.I.N.V.A.L.I.D.I.D"><span class="xdoc-id">MultiProc_INVALIDID</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Invalid processor id constant</span></span></a>  (<i><span class="xdoc-kw2">UInt16</span></i>)0xFFFF</div></td></tr>
+<tr><td colspan='2'><div class='xdocSynTblHdr'>Typedefs</div></td></tr>
+
+<tr valign="top"><td class="xdocSynDecl" nowrap><div class="xdocSynTblType"><tt></tt><span class="xdoc-kw1">typedef</span> <span class="xdoc-kw1">enum</span> </div></td><td class="xdocSynDecl"><div class="xdocSynTblDecl"><a class="xdocSynGo" href="#.Proc.Addr.Mode"><span class="xdoc-id">MultiProc_ProcAddrMode</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Enumerate the Processor Addressing Modes</span></span></a> ...</div></td></tr>
+<tr><td colspan='2'><div class='xdocSynTblHdr'>Constants</div></td></tr>
+
+<tr valign="top"><td class="xdocSynDecl" nowrap><div class="xdocSynTblType"><tt></tt><span class="xdoc-kw1">extern const</span> <a class="xdoc-link" href="../../../xdc/runtime/Assert.html#.Id" title="xdc.runtime.Assert.Id">Assert_Id</a>&nbsp;</div></td><td class="xdocSynDecl"><div class="xdocSynTblDecl"><a class="xdocSynGo" href="#.A_invalid.Multi.Proc.Id"><span class="xdoc-id">MultiProc_A_invalidMultiProcId</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Assert raised when an invalid processor id is used</span></span></a>;</div></td></tr>
+<tr valign="top"><td class="xdocSynDecl" nowrap><div class="xdocSynTblType"><tt></tt><span class="xdoc-kw1">extern const</span> <a class="xdoc-link" href="../../../xdc/runtime/Assert.html#.Id" title="xdc.runtime.Assert.Id">Assert_Id</a>&nbsp;</div></td><td class="xdocSynDecl"><div class="xdocSynTblDecl"><a class="xdocSynGo" href="#.A_invalid.Proc.Name"><span class="xdoc-id">MultiProc_A_invalidProcName</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Assert raised when a NULL processor name is encountered</span></span></a>;</div></td></tr>
+<tr valign="top"><td class="xdocSynDecl" nowrap><div class="xdocSynTblType"><tt></tt><span class="xdoc-kw1">extern const</span> <span class="xdoc-kw2">UInt16</span>&nbsp;</div></td><td class="xdocSynDecl"><div class="xdocSynTblDecl"><a class="xdocSynGo" href="#num.Processors"><span class="xdoc-id">MultiProc_numProcessors</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Number of processors in the system</span></span></a>;</div></td></tr>
+<tr valign="top"><td class="xdocSynDecl" nowrap><div class="xdocSynTblType"><tt></tt><span class="xdoc-kw1">extern const</span> <a class="xdoc-link" href="../../../ti/sdo/utils/MultiProc.html#.Proc.Addr.Mode" title="ti.sdo.utils.MultiProc.ProcAddrMode">MultiProc_ProcAddrMode</a>&nbsp;</div></td><td class="xdocSynDecl"><div class="xdocSynTblDecl"><a class="xdocSynGo" href="#proc.Addr.Mode"><span class="xdoc-id">MultiProc_procAddrMode</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Define which processor addressing mode is in operation</span></span></a>;</div></td></tr>
+</table>
+<div class="xdocSynSpacer">&nbsp;</div>
+</div>
+<span id="xdoc-desc"></span>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">Many IPC modules require identifying processors in a
+  multi-processor environment. The MultiProc module centralizes
+  processor id management into one module.  Since this configuration
+  is almost always universally required, most IPC applications
+  require supplying configuration of this module.</div>
+<div class="xdocText">Each processor in the MultiProc module may be uniquely identified by
+  either a name string or an integer ranging from 0 to MAXPROCESSORS - 1.
+  Configuration is supplied using the <a class="xdoc-link" href="MultiProc.html#set.Config" title="setConfig">setConfig</a> meta function,
+  the <a class="xdoc-link" href="MultiProc.html#num.Processors" title="numProcessors">numProcessors</a> and <a class="xdoc-link" href="MultiProc.html#base.Id.Of.Cluster" title="baseIdOfCluster">baseIdOfCluster</a>.</div>
+<div class="xdocText">The setConfig function tells the MultiProc module:</div>
+<div class="xdocText"><UL><LI> The specific processor for which the application is being built
+</LI><LI> The number of processors in the cluster
+</LI></UL></div>
+<div class="xdocText">A cluster is a set of processors within a system which share some share
+  shared memory and supports notifications. Typically most systems contain
+  one cluster.  When there are multiple clusters in the system, the
+  <a class="xdoc-link" href="MultiProc.html#num.Processors" title="numProcessors">numProcessors</a> and <a class="xdoc-link" href="MultiProc.html#base.Id.Of.Cluster" title="baseIdOfCluster">baseIdOfCluster</a> configuration
+  paramaters are required to be set before calling <a class="xdoc-link" href="MultiProc.html#set.Config" title="setConfig">setConfig</a></div>
+<div class="xdocText">For examle in a system with 2 C6678 devices [each C6678 contains 8
+  homogeneuous cores].  For first C6678 device:</div>
+<div class="xdocText"><PRE class="Example">  var MultiProc = xdc.useModule('ti.sdo.utils.MultiProc');
+  MultiProc.baseIdOfCluster = 0;
+  MultiProc.numProcessors = 16;
+  MultiProc.setConfig(null, ["CORE0", "CORE1", "CORE2", "CORE3",
+                             "CORE4", "CORE5", "CORE6", "CORE7"]);
+</PRE></div>
+<div class="xdocText">For second C6678 device:</div>
+<div class="xdocText"><PRE class="Example">  var MultiProc = xdc.useModule('ti.sdo.utils.MultiProc');
+  MultiProc.baseIdOfCluster = 8;
+  MultiProc.numProcessors = 16;
+  MultiProc.setConfig(null, ["CORE0", "CORE1", "CORE2", "CORE3",
+                             "CORE4", "CORE5", "CORE6", "CORE7"]);
+</PRE></div>
+<div class="xdocText">Using the information supplied using the <a class="xdoc-link" href="MultiProc.html#set.Config" title="setConfig">setConfig</a> meta function
+  and the <a class="xdoc-link" href="MultiProc.html#base.Id.Of.Cluster" title="baseIdOfCluster">baseIdOfCluster</a> module configuration, the processor IDs
+  are internally set.  Please refer to the documentation for
+  <a class="xdoc-link" href="MultiProc.html#set.Config" title="setConfig">setConfig</a> and <a class="xdoc-link" href="MultiProc.html#base.Id.Of.Cluster" title="baseIdOfCluster">baseIdOfCluster</a> for more details.</div>
+<div class="xdocText">At runtime, the <a class="xdoc-link" href="MultiProc.html#get.Id" title="getId">getId</a> call returns the MultiProc id of those
+  processors within its cluster. At config-time, the <a class="xdoc-link" href="MultiProc.html#get.Id.Meta" title="getIdMeta">getIdMeta</a>
+  call returns the the same value.</div>
+<div id="xdocSep">
+</div>
+<div id="xdocElems">
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".I.N.V.A.L.I.D.I.D"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">const</span> <span class="xdoc-id">MultiProc_</span><span class="xdoc-id">INVALIDID</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/utils/MultiProc.html" title="module MultiProc"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/utils/MultiProc.html#.I.N.V.A.L.I.D.I.D">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Invalid processor id constant</p>
+<span id='targ-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-targ2dcl">C</span></tt> synopsis</td>
+<td class="xdocLabelRight">target-domain</td>
+</tr></table>
+<div class="xdocSynTdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw3">#define</span> <span class="xdoc-id">MultiProc_INVALIDID</span>  (<i><span class="xdoc-kw2">UInt16</span></i>)0xFFFF
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">This constant denotes that the processor id is not valid.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".Proc.Addr.Mode"></a>
+<a class="xdocAnchor" id=".Proc.Addr.Mode_.Global"></a>
+<a class="xdocAnchor" id=".Proc.Addr.Mode_.Cluster"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">enum</span> <span class="xdoc-id">MultiProc_</span><span class="xdoc-id">ProcAddrMode</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/utils/MultiProc.html" title="module MultiProc"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/utils/MultiProc.html#.Proc.Addr.Mode">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Enumerate the Processor Addressing Modes</p>
+<span id='targ-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-targ2dcl">C</span></tt> synopsis</td>
+<td class="xdocLabelRight">target-domain</td>
+</tr></table>
+<div class="xdocSynTdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">typedef</span> <span class="xdoc-kw1">enum</span> <span class="xdoc-id">MultiProc_ProcAddrMode</span> {
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-id">MultiProc_ProcAddrMode_Global</span>, 
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-id">MultiProc_ProcAddrMode_Cluster</span>
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt>} <span class="xdoc-id">MultiProc_ProcAddrMode</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">VALUES</div>
+<div class="xdocChild"><span class="xdocChildId">ProcAddrMode_Global</span>
+<span class="xdocChildSum">&#151;&nbsp;Every processor in the system must
+  be directly addressable. Usually, this requires a resource
+  allocation for each processor. This might require a dedicated
+  hardware resource and/or a memory allocation on behalf of every
+  processor in the sytem. For large systems, this might result in
+  significant memory requirements. Use with caution.</span>
+</div>
+<div class="xdocChild"><span class="xdocChildId">ProcAddrMode_Cluster</span>
+<span class="xdocChildSum">&#151;&nbsp;Direct addressing is required
+  only for the processors in your cluster. Processors outside of
+  the cluster may share resources. This mode limits the per processor
+  resource allocations to just the processors within your cluster.
+  This address mode is typically used for large processor systems.</span>
+</div>
+<span id="xdoc-sect-2"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">This enumeration defines the various processor addressing modes
+  which might impact the behavior and resource allocations of modules
+  that communicate with other processors in the system (i.e. IPC).</div>
+<div class="xdocText">It is a way for the system integrator to control the internal
+  behavior and resource allocations of various module to suit the
+  needs of the program. However, it is at the discretion of each
+  module on how to respond to these processor addressing modes.</div>
+<div class="xdocText">For example, the NameServer module reflects on this mode when
+  constructing its internal data structures. For the 'Global' mode,
+  it will allocate a resource for every processor in the system.
+  When using 'Cluster' mode, resources are only allocated for
+  processors in the cluster. A side-effect is that when using
+  Cluster mode, name queries cannot be addressed to processors
+  outside of the cluster.</div>
+<div class="xdocText">Specify the addressing mode by setting the
+  <a class="xdoc-link" href="MultiProc.html#proc.Addr.Mode" title="procAddrMode">MultiProc.procAddrMode</a> configuration
+  parameter.</div>
+<span id="xdoc-sect-3"></span>
+<div class="xdocSect">SEE</div>
+<div class="xdocText"><a class="xdoc-link" href="MultiProc.html#proc.Addr.Mode" title="procAddrMode">procAddrMode</a></div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".A_invalid.Multi.Proc.Id"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">MultiProc_</span><span class="xdoc-id">A_invalidMultiProcId</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/utils/MultiProc.html" title="module MultiProc"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/utils/MultiProc.html#.A_invalid.Multi.Proc.Id">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Assert raised when an invalid processor id is used</p>
+<span id='targ-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-targ2dcl">C</span></tt> synopsis</td>
+<td class="xdocLabelRight">target-domain</td>
+</tr></table>
+<div class="xdocSynTdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">extern const</span> <a class="xdoc-link" href="../../../xdc/runtime/Assert.html#.Id" title="xdc.runtime.Assert.Id">Assert_Id</a>&nbsp;<span class="xdoc-id">MultiProc_A_invalidMultiProcId</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".A_invalid.Proc.Name"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">MultiProc_</span><span class="xdoc-id">A_invalidProcName</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/utils/MultiProc.html" title="module MultiProc"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/utils/MultiProc.html#.A_invalid.Proc.Name">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Assert raised when a NULL processor name is encountered</p>
+<span id='targ-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-targ2dcl">C</span></tt> synopsis</td>
+<td class="xdocLabelRight">target-domain</td>
+</tr></table>
+<div class="xdocSynTdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">extern const</span> <a class="xdoc-link" href="../../../xdc/runtime/Assert.html#.Id" title="xdc.runtime.Assert.Id">Assert_Id</a>&nbsp;<span class="xdoc-id">MultiProc_A_invalidProcName</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="num.Processors"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">MultiProc_</span><span class="xdoc-id">numProcessors</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/utils/MultiProc.html" title="module MultiProc"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/utils/MultiProc.html#num.Processors">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Number of processors in the system</p>
+<span id='targ-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-targ2dcl">C</span></tt> synopsis</td>
+<td class="xdocLabelRight">target-domain</td>
+</tr></table>
+<div class="xdocSynTdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">extern const</span> <span class="xdoc-kw2">UInt16</span>&nbsp;<span class="xdoc-id">MultiProc_numProcessors</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">This configuration should only be set when there is more than one
+  cluster in the system.  It must be set before calling
+  <a class="xdoc-link" href="MultiProc.html#set.Config" title="setConfig">setConfig</a>. If the system contains only one cluster,
+  it is internally set by the <a class="xdoc-link" href="MultiProc.html#set.Config" title="setConfig">setConfig</a> meta function to the
+  length of the supplied nameList array.
+  After <a class="xdoc-link" href="MultiProc.html#set.Config" title="setConfig">setConfig</a> has been  called, it is possible to
+  retrive the maximum # of processors by reading this module config
+  either at run-time or at config time.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="proc.Addr.Mode"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">MultiProc_</span><span class="xdoc-id">procAddrMode</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/utils/MultiProc.html" title="module MultiProc"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/utils/MultiProc.html#proc.Addr.Mode">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Define which processor addressing mode is in operation</p>
+<span id='targ-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-targ2dcl">C</span></tt> synopsis</td>
+<td class="xdocLabelRight">target-domain</td>
+</tr></table>
+<div class="xdocSynTdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">extern const</span> <a class="xdoc-link" href="../../../ti/sdo/utils/MultiProc.html#.Proc.Addr.Mode" title="ti.sdo.utils.MultiProc.ProcAddrMode">MultiProc_ProcAddrMode</a>&nbsp;<span class="xdoc-id">MultiProc_procAddrMode</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">This configuration parameter is reflected upon by various system
+  components whose implementation is impacted by the processor
+  addressing mode currently in effect. It allows modules to optimize
+  their behavior and resource allocations for any given processor
+  address mode.</div>
+<div class="xdocText">The MultiProc module has no specific behavior associated with
+  this configuration parameter. It is simply a convenient location
+  for such a configuration parameter as most processor aware
+  modules already depend on MultiProc.</div>
+<span id="xdoc-sect-2"></span>
+<div class="xdocSect">SEE</div>
+<div class="xdocText"><a class="xdoc-link" href="MultiProc.html#.Proc.Addr.Mode" title="ProcAddrMode">ProcAddrMode</a></div>
+<a class="xdocAnchor" id="module-wide_built-ins"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdocSynSum">Module-Wide Built-Ins</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/utils/MultiProc.html" title="module MultiProc"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/utils/MultiProc.html#module-wide_built-ins">index URL</a></div>
+<p class="xdocHdrSummary"></p>
+<span id='targ-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-targ2dcl">C</span></tt> synopsis</td>
+<td class="xdocLabelRight">target-domain</td>
+</tr></table>
+<div class="xdocSynTdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><a class="xdoc-link" href="../../../xdc/runtime/Types.html#.Module.Id" title="xdc.runtime.Types.ModuleId">Types_ModuleId</a> <span class="xdoc-id">MultiProc_Module_id</span>();
+</div>
+<div class='xdocSynSum'><tt></tt><tt></tt>//&nbsp;Get this module's unique id</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw2">Bool</span> <span class="xdoc-id">MultiProc_Module_startupDone</span>();
+</div>
+<div class='xdocSynSum'><tt></tt><tt></tt>//&nbsp;Test if this module has completed startup</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt><a class="xdoc-link" href="../../../xdc/runtime/IHeap.html#per-instance_object_types" title="xdc.runtime.IHeap.Handle">IHeap_Handle</a> <span class="xdoc-id">MultiProc_Module_heap</span>();
+</div>
+<div class='xdocSynSum'><tt></tt><tt></tt>//&nbsp;The heap from which this module allocates memory</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw2">Bool</span> <span class="xdoc-id">MultiProc_Module_hasMask</span>();
+</div>
+<div class='xdocSynSum'><tt></tt><tt></tt>//&nbsp;Test whether this module has a diagnostics mask</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw2">Bits16</span> <span class="xdoc-id">MultiProc_Module_getMask</span>();
+</div>
+<div class='xdocSynSum'><tt></tt><tt></tt>//&nbsp;Returns the diagnostics mask for this module</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw2">Void</span> <span class="xdoc-id">MultiProc_Module_setMask</span>(<span class="xdoc-kw2">Bits16</span> <span class="xdoc-id">mask</span>);
+</div>
+<div class='xdocSynSum'><tt></tt><tt></tt>//&nbsp;Set the diagnostics mask for this module</div>
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../ti/sdo/utils/MultiProc-src.html"><span class="xdocLabelFile">ti/sdo/utils/MultiProc.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynM">
+<div class="xdocSynCode">
+<tt></tt><span class="xdoc-kw1">var</span> MultiProc = <span class="xdoc-kw3">xdc.useModule</span>(<span class="xdoc-id">'ti.sdo.utils.MultiProc'</span>);
+</div>
+<div class='xdocSynHdr'>module-wide constants & types</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">const</span> <a class="xdocSynGo" href="#meta.I.N.V.A.L.I.D.I.D">MultiProc.<span class="xdoc-id">INVALIDID</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Invalid processor id constant</span></span></a> = 0xFFFF;
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><i>values of type <a class="xdocSynGo" href="#meta.Proc.Addr.Mode">MultiProc.<span class="xdoc-id">ProcAddrMode</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Enumerate the Processor Addressing Modes</span></span></a></i>
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw1">const</span> <a class="xdocSynGo" href="#meta.Proc.Addr.Mode" title="ti.sdo.utils.MultiProc.ProcAddrMode">MultiProc.<span class="xdoc-id">ProcAddrMode_Global</span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw1">const</span> <a class="xdocSynGo" href="#meta.Proc.Addr.Mode" title="ti.sdo.utils.MultiProc.ProcAddrMode">MultiProc.<span class="xdoc-id">ProcAddrMode_Cluster</span></a>;
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">var</span> <i>obj</i> = <span class="xdoc-kw1">new</span> <a class="xdocSynGo" href="#.Module.View">MultiProc.<span class="xdoc-id">ModuleView</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>obj</i>.<a class="xdocSynGo" href="#.Module.View" title="ti.sdo.utils.MultiProc.ModuleView"><span class="xdoc-id">id</span></a> = <i><span class="xdoc-kw2">UInt16</span></i><b>&nbsp;&nbsp;...</b>
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>obj</i>.<a class="xdocSynGo" href="#.Module.View" title="ti.sdo.utils.MultiProc.ModuleView"><span class="xdoc-id">numProcessors</span></a> = <i><span class="xdoc-kw2">UInt16</span></i><b>&nbsp;&nbsp;...</b>
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>obj</i>.<a class="xdocSynGo" href="#.Module.View" title="ti.sdo.utils.MultiProc.ModuleView"><span class="xdoc-id">nameList</span></a> = <i><span class="xdoc-kw2">String</span>[<span class="xdoc-kw2"></span>]</i><b>&nbsp;&nbsp;...</b>
+</div>
+<div class='xdocSynHdr'>module-wide config parameters</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#meta.A_invalid.Multi.Proc.Id">MultiProc.<span class="xdoc-id">A_invalidMultiProcId</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Assert raised when an invalid processor id is used</span></span></a> = <i><a class="xdoc-link" href="../../../xdc/runtime/Assert.html#.Desc" title="xdc.runtime.Assert.Desc">Assert.Desc</a></i> {
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>msg: "A_invalidMultiProcId: Invalid MultiProc id"
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt>};
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#meta.A_invalid.Proc.Name">MultiProc.<span class="xdoc-id">A_invalidProcName</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Assert raised when a NULL processor name is encountered</span></span></a> = <i><a class="xdoc-link" href="../../../xdc/runtime/Assert.html#.Desc" title="xdc.runtime.Assert.Desc">Assert.Desc</a></i> {
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>msg: "A_invalidProcName: NULL MultiProc name encountered"
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt>};
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#metanum.Processors">MultiProc.<span class="xdoc-id">numProcessors</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Number of processors in the system</span></span></a> = <i><span class="xdoc-kw2">UInt16</span></i> 1;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#metaproc.Addr.Mode">MultiProc.<span class="xdoc-id">procAddrMode</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Define which processor addressing mode is in operation</span></span></a> = <i><a class="xdoc-link" href="../../../ti/sdo/utils/MultiProc.html#.Proc.Addr.Mode" title="ti.sdo.utils.MultiProc.ProcAddrMode">MultiProc.ProcAddrMode</a></i> <a class="xdoc-link" href="../../../ti/sdo/utils/MultiProc.html#.Proc.Addr.Mode_.Global" title="ti.sdo.utils.MultiProc.ProcAddrMode_Global">MultiProc.ProcAddrMode_Global</a>;
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#base.Id.Of.Cluster">MultiProc.<span class="xdoc-id">baseIdOfCluster</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;The base processor ID of the cluster</span></span></a> = <i><span class="xdoc-kw2">UInt16</span></i> 0;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#common$">MultiProc.<span class="xdoc-id">common$</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Common module configuration parameters</span></span></a> = <i><a class="xdoc-link" href="../../../xdc/runtime/Types.html#.Common$" title="xdc.runtime.Types.Common$">Types.Common$</a></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#rov.View.Info">MultiProc.<span class="xdoc-id">rovViewInfo</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> = <i><a class="xdoc-link" href="../../../xdc/rov/ViewInfo.html#.Instance" title="xdc.rov.ViewInfo.Instance">ViewInfo.Instance</a></i> <a class="xdoc-link" href="../../../xdc/rov/ViewInfo.html#per-instance_creation" title="xdc.rov.ViewInfo.create">ViewInfo.create</a>;
+</div>
+<div class='xdocSynHdr'>module-wide functions</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#get.Device.Proc.Names">MultiProc.<span class="xdoc-id">getDeviceProcNames</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Returns an array of all possible processor names on the build device</span></span></a>() <i>returns</i> <i><span class="xdoc-kw2">Any</span></i>
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#get.Id.Meta">MultiProc.<span class="xdoc-id">getIdMeta</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Meta version of <span class="xdoc-link" href="MultiProc.html#get.Id" title="getId">getId</span></span></span></a>(<i><span class="xdoc-kw2">String</span></i> <span class="xdoc-id">name</span>) <i>returns</i> <i><span class="xdoc-kw2">UInt16</span></i>
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#set.Config">MultiProc.<span class="xdoc-id">setConfig</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Configure the MultiProc module</span></span></a>(<i><span class="xdoc-kw2">String</span></i> <span class="xdoc-id">name</span>, <i><span class="xdoc-kw2">String</span>[<span class="xdoc-kw2"></span>]</i> <span class="xdoc-id">nameList</span>) <i>returns</i> <i><span class="xdoc-kw2">Void</span></i>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+</div>
+<div id="xdocSep">
+</div>
+<div id="xdocMetaElems">
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="meta.I.N.V.A.L.I.D.I.D"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">const</span> <span class="xdoc-id">MultiProc.</span><span class="xdoc-id">INVALIDID</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/utils/MultiProc.html" title="module MultiProc"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/utils/MultiProc.html#.I.N.V.A.L.I.D.I.D">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Invalid processor id constant</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">const</span> MultiProc.<span class="xdoc-id">INVALIDID</span> = 0xFFFF;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">This constant denotes that the processor id is not valid.</div>
+<div class="xdocSect">C SYNOPSIS</div>
+<div class="xdocText"><a class="xdoc-link" href="#.I.N.V.A.L.I.D.I.D" title="MultiProc_INVALIDID">MultiProc_INVALIDID</a></div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="meta.Proc.Addr.Mode"></a>
+<a class="xdocAnchor" id=".Proc.Addr.Mode_.Global"></a>
+<a class="xdocAnchor" id=".Proc.Addr.Mode_.Cluster"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">enum</span> <span class="xdoc-id">MultiProc.</span><span class="xdoc-id">ProcAddrMode</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/utils/MultiProc.html" title="module MultiProc"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/utils/MultiProc.html#.Proc.Addr.Mode">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Enumerate the Processor Addressing Modes</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><i>values of type MultiProc.<span class="xdoc-id">ProcAddrMode</span></i>
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw1">const</span> MultiProc.<span class="xdoc-id">ProcAddrMode_Global</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw1">const</span> MultiProc.<span class="xdoc-id">ProcAddrMode_Cluster</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">VALUES</div>
+<div class="xdocChild"><span class="xdocChildId">ProcAddrMode_Global</span>
+<span class="xdocChildSum">&#151;&nbsp;Every processor in the system must
+  be directly addressable. Usually, this requires a resource
+  allocation for each processor. This might require a dedicated
+  hardware resource and/or a memory allocation on behalf of every
+  processor in the sytem. For large systems, this might result in
+  significant memory requirements. Use with caution.</span>
+</div>
+<div class="xdocChild"><span class="xdocChildId">ProcAddrMode_Cluster</span>
+<span class="xdocChildSum">&#151;&nbsp;Direct addressing is required
+  only for the processors in your cluster. Processors outside of
+  the cluster may share resources. This mode limits the per processor
+  resource allocations to just the processors within your cluster.
+  This address mode is typically used for large processor systems.</span>
+</div>
+<span id="xdoc-sect-2"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">This enumeration defines the various processor addressing modes
+  which might impact the behavior and resource allocations of modules
+  that communicate with other processors in the system (i.e. IPC).</div>
+<div class="xdocText">It is a way for the system integrator to control the internal
+  behavior and resource allocations of various module to suit the
+  needs of the program. However, it is at the discretion of each
+  module on how to respond to these processor addressing modes.</div>
+<div class="xdocText">For example, the NameServer module reflects on this mode when
+  constructing its internal data structures. For the 'Global' mode,
+  it will allocate a resource for every processor in the system.
+  When using 'Cluster' mode, resources are only allocated for
+  processors in the cluster. A side-effect is that when using
+  Cluster mode, name queries cannot be addressed to processors
+  outside of the cluster.</div>
+<div class="xdocText">Specify the addressing mode by setting the
+  <a class="xdoc-link" href="MultiProc.html#proc.Addr.Mode" title="procAddrMode">MultiProc.procAddrMode</a> configuration
+  parameter.</div>
+<span id="xdoc-sect-3"></span>
+<div class="xdocSect">SEE</div>
+<div class="xdocText"><a class="xdoc-link" href="MultiProc.html#proc.Addr.Mode" title="procAddrMode">procAddrMode</a></div>
+<div class="xdocSect">C SYNOPSIS</div>
+<div class="xdocText"><a class="xdoc-link" href="#.Proc.Addr.Mode" title="MultiProc_ProcAddrMode">MultiProc_ProcAddrMode</a></div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".Module.View"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">struct</span> <span class="xdoc-id">MultiProc.</span><span class="xdoc-id">ModuleView</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/utils/MultiProc.html" title="module MultiProc"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/utils/MultiProc.html#.Module.View">index URL</a></div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">var</span> <i>obj</i> = <span class="xdoc-kw1">new</span> MultiProc.<span class="xdoc-id">ModuleView</span>;
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>obj</i>.<span class="xdoc-id">id</span> = <i><span class="xdoc-kw2">UInt16</span></i><b>&nbsp;&nbsp;...</b>
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>obj</i>.<span class="xdoc-id">numProcessors</span> = <i><span class="xdoc-kw2">UInt16</span></i><b>&nbsp;&nbsp;...</b>
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>obj</i>.<span class="xdoc-id">nameList</span> = <i><span class="xdoc-kw2">String</span>[<span class="xdoc-kw2"></span>]</i><b>&nbsp;&nbsp;...</b>
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="meta.A_invalid.Multi.Proc.Id"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">MultiProc.</span><span class="xdoc-id">A_invalidMultiProcId</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/utils/MultiProc.html" title="module MultiProc"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/utils/MultiProc.html#.A_invalid.Multi.Proc.Id">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Assert raised when an invalid processor id is used</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>MultiProc.<span class="xdoc-id">A_invalidMultiProcId</span> = <i><a class="xdoc-link" href="../../../xdc/runtime/Assert.html#.Desc" title="xdc.runtime.Assert.Desc">Assert.Desc</a></i> {
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>msg: "A_invalidMultiProcId: Invalid MultiProc id"
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt>};
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSect">C SYNOPSIS</div>
+<div class="xdocText"><a class="xdoc-link" href="#.A_invalid.Multi.Proc.Id" title="MultiProc_A_invalidMultiProcId">MultiProc_A_invalidMultiProcId</a></div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="meta.A_invalid.Proc.Name"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">MultiProc.</span><span class="xdoc-id">A_invalidProcName</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/utils/MultiProc.html" title="module MultiProc"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/utils/MultiProc.html#.A_invalid.Proc.Name">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Assert raised when a NULL processor name is encountered</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>MultiProc.<span class="xdoc-id">A_invalidProcName</span> = <i><a class="xdoc-link" href="../../../xdc/runtime/Assert.html#.Desc" title="xdc.runtime.Assert.Desc">Assert.Desc</a></i> {
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>msg: "A_invalidProcName: NULL MultiProc name encountered"
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt>};
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSect">C SYNOPSIS</div>
+<div class="xdocText"><a class="xdoc-link" href="#.A_invalid.Proc.Name" title="MultiProc_A_invalidProcName">MultiProc_A_invalidProcName</a></div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="metanum.Processors"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">MultiProc.</span><span class="xdoc-id">numProcessors</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/utils/MultiProc.html" title="module MultiProc"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/utils/MultiProc.html#num.Processors">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Number of processors in the system</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>MultiProc.<span class="xdoc-id">numProcessors</span> = <i><span class="xdoc-kw2">UInt16</span></i> 1;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">This configuration should only be set when there is more than one
+  cluster in the system.  It must be set before calling
+  <a class="xdoc-link" href="MultiProc.html#set.Config" title="setConfig">setConfig</a>. If the system contains only one cluster,
+  it is internally set by the <a class="xdoc-link" href="MultiProc.html#set.Config" title="setConfig">setConfig</a> meta function to the
+  length of the supplied nameList array.
+  After <a class="xdoc-link" href="MultiProc.html#set.Config" title="setConfig">setConfig</a> has been  called, it is possible to
+  retrive the maximum # of processors by reading this module config
+  either at run-time or at config time.</div>
+<div class="xdocSect">C SYNOPSIS</div>
+<div class="xdocText"><a class="xdoc-link" href="#num.Processors" title="MultiProc_numProcessors">MultiProc_numProcessors</a></div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="metaproc.Addr.Mode"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">MultiProc.</span><span class="xdoc-id">procAddrMode</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/utils/MultiProc.html" title="module MultiProc"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/utils/MultiProc.html#proc.Addr.Mode">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Define which processor addressing mode is in operation</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>MultiProc.<span class="xdoc-id">procAddrMode</span> = <i><a class="xdoc-link" href="../../../ti/sdo/utils/MultiProc.html#.Proc.Addr.Mode" title="ti.sdo.utils.MultiProc.ProcAddrMode">MultiProc.ProcAddrMode</a></i> <a class="xdoc-link" href="../../../ti/sdo/utils/MultiProc.html#.Proc.Addr.Mode_.Global" title="ti.sdo.utils.MultiProc.ProcAddrMode_Global">MultiProc.ProcAddrMode_Global</a>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">This configuration parameter is reflected upon by various system
+  components whose implementation is impacted by the processor
+  addressing mode currently in effect. It allows modules to optimize
+  their behavior and resource allocations for any given processor
+  address mode.</div>
+<div class="xdocText">The MultiProc module has no specific behavior associated with
+  this configuration parameter. It is simply a convenient location
+  for such a configuration parameter as most processor aware
+  modules already depend on MultiProc.</div>
+<span id="xdoc-sect-2"></span>
+<div class="xdocSect">SEE</div>
+<div class="xdocText"><a class="xdoc-link" href="MultiProc.html#.Proc.Addr.Mode" title="ProcAddrMode">ProcAddrMode</a></div>
+<div class="xdocSect">C SYNOPSIS</div>
+<div class="xdocText"><a class="xdoc-link" href="#proc.Addr.Mode" title="MultiProc_procAddrMode">MultiProc_procAddrMode</a></div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="base.Id.Of.Cluster"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">config</span> <span class="xdoc-id">MultiProc.</span><span class="xdoc-id">baseIdOfCluster</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/utils/MultiProc.html" title="module MultiProc"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/utils/MultiProc.html#base.Id.Of.Cluster">index URL</a></div>
+<p class="xdocHdrSummaryDcl">The base processor ID of the cluster</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>MultiProc.<span class="xdoc-id">baseIdOfCluster</span> = <i><span class="xdoc-kw2">UInt16</span></i> 0;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">The ID of each processor in a cluster is computed by adding
+  its position in the name list of <a class="xdoc-link" href="MultiProc.html#set.Config" title="setConfig">setConfig</a> to the
+  base ID of the cluster. When more than one cluster exists in
+  the system, this parameter must be set before calling
+  <a class="xdoc-link" href="MultiProc.html#set.Config" title="setConfig">setConfig</a>.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="common$"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">config</span> <span class="xdoc-id">MultiProc.</span><span class="xdoc-id">common$</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/utils/MultiProc.html" title="module MultiProc"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/utils/MultiProc.html#common$">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Common module configuration parameters</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>MultiProc.<span class="xdoc-id">common$</span> = <i><a class="xdoc-link" href="../../../xdc/runtime/Types.html#.Common$" title="xdc.runtime.Types.Common$">Types.Common$</a></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">All modules have this configuration parameter.  Its name
+  contains the '$' character to ensure it does not conflict with
+  configuration parameters declared by the module.  This allows
+  new configuration parameters to be added in the future without
+  any chance of breaking existing modules.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="rov.View.Info"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">config</span> <span class="xdoc-id">MultiProc.</span><span class="xdoc-id">rovViewInfo</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/utils/MultiProc.html" title="module MultiProc"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/utils/MultiProc.html#rov.View.Info">index URL</a></div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>MultiProc.<span class="xdoc-id">rovViewInfo</span> = <i><a class="xdoc-link" href="../../../xdc/rov/ViewInfo.html#.Instance" title="xdc.rov.ViewInfo.Instance">ViewInfo.Instance</a></i> <a class="xdoc-link" href="../../../xdc/rov/ViewInfo.html#per-instance_creation" title="xdc.rov.ViewInfo.create">ViewInfo.create</a>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="get.Device.Proc.Names"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">metaonly </span><span class="xdoc-id">MultiProc.</span><span class="xdoc-id">getDeviceProcNames</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/utils/MultiProc.html" title="module MultiProc"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/utils/MultiProc.html#get.Device.Proc.Names">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Returns an array of all possible processor names on the build device</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>MultiProc.<span class="xdoc-id">getDeviceProcNames</span>() <i>returns</i> <i><span class="xdoc-kw2">Any</span></i>
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">@(return)           Array of valid MultiProc processor names</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="get.Id.Meta"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">metaonly </span><span class="xdoc-id">MultiProc.</span><span class="xdoc-id">getIdMeta</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/utils/MultiProc.html" title="module MultiProc"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/utils/MultiProc.html#get.Id.Meta">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Meta version of <a class="xdoc-link" href="MultiProc.html#get.Id" title="getId">getId</a></p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>MultiProc.<span class="xdoc-id">getIdMeta</span>(<i><span class="xdoc-kw2">String</span></i> <span class="xdoc-id">name</span>) <i>returns</i> <i><span class="xdoc-kw2">UInt16</span></i>
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">ARGUMENTS</div>
+<div class="xdocChild"><span class="xdocChildId">name</span>
+<span class="xdocChildSum">&#151;&nbsp;MultiProc procName</span>
+</div>
+<span id="xdoc-sect-2"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">Statically returns the internally set ID based on configuration
+  supplied via <a class="xdoc-link" href="MultiProc.html#set.Config" title="setConfig">setConfig</a>.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="set.Config"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">metaonly </span><span class="xdoc-id">MultiProc.</span><span class="xdoc-id">setConfig</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/utils/MultiProc.html" title="module MultiProc"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/utils/MultiProc.html#set.Config">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Configure the MultiProc module</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>MultiProc.<span class="xdoc-id">setConfig</span>(<i><span class="xdoc-kw2">String</span></i> <span class="xdoc-id">name</span>, <i><span class="xdoc-kw2">String</span>[<span class="xdoc-kw2"></span>]</i> <span class="xdoc-id">nameList</span>) <i>returns</i> <i><span class="xdoc-kw2">Void</span></i>
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">ARGUMENTS</div>
+<div class="xdocChild"><span class="xdocChildId">name</span>
+<span class="xdocChildSum">&#151;&nbsp;MultiProc name for the local processor</span>
+</div>
+<div class="xdocChild"><span class="xdocChildId">nameList</span>
+<span class="xdocChildSum">&#151;&nbsp;Array of all processors used by the application</span>
+</div>
+<span id="xdoc-sect-2"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">Configuration of the MultiProc module is primarily accomplished using
+  the setConfig API at config time.  The setConfig API allows the
+  MultiProc module to identify:</div>
+<div class="xdocText"><UL><LI> Which is the local processor
+</LI><LI> Which processors are being used
+</LI><LI> Which processors can synchronize
+</LI></UL></div>
+<div class="xdocText">The second of these two pieces of information is supplied via the
+  nameList argument.  The nameList is a non-empty set of distinct
+  processors valid for the particular device.  For a list of valid
+  processor names for a given device, please refer to the :
+  <a class="xdoc-linkFile" href="./../ipc/family/doc-files/procNames.html" title="./../ipc/family/doc-files/procNames.html">Table of
+   Valid Names for Each Device</a>.</div>
+<div class="xdocText">The local processor is identified by using a single name from
+  nameList.  A MultiProc id is internally set to the index of
+  'name' in the supplied 'nameList'.  I.e. in the example:</div>
+<div class="xdocText"><PRE class="Example">  MultiProc.setConfig("DSP", ["HOST", "DSP", "OTHERCORE"]);
+</PRE></div>
+<div class="xdocText">The processors, "HOST", "DSP" and "OTHERCORE" get assigned MultiProc
+  IDs 0, 1, and 2, respectively.  The local processor, "DSP" is assigned
+  an ID of '1'.</div>
+<div class="xdocText">If the local processor is not known at static time, it is possible to
+  supply a null name. MultiProc will set the local id to
+  <a class="xdoc-link" href="MultiProc.html#.I.N.V.A.L.I.D.I.D" title="INVALIDID">INVALIDID</a> until it is set at runtime using
+  MultiProc_setLocalId.</div>
+</div>
+<div id="xdocDate">generated on Wed, 15 Feb 2017 14:20:01 GMT</div>
+</div></div></body>
+</html>

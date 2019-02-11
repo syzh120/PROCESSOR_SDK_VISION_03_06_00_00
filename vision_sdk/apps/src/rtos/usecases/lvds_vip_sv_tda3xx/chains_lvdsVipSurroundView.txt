@@ -1,0 +1,25 @@
+UseCase: chains_lvdsVipSurroundView
+
+Capture -> Sync_sv -> Dup_sv
+
+Dup_sv -> Alg_GeoAlign (DSP2)
+
+// Original sync'ed frames MUST be Q0 input to Synthesis
+Dup_sv -> Alg_Synthesis (DSP1)
+
+// Input for Display MUST be Q0 from Synthesis
+Alg_Synthesis -> Display_sv
+
+// Input to PhotoAlign MUST be Q1 from Synthesis
+Alg_Synthesis -> Alg_PhotoAlign (DSP2)
+
+// GeoAlign MUST be Q1 input to Synthesis
+Alg_GeoAlign -> Alg_Synthesis
+
+// PhotoAlign MUST be Q2 input to Synthesis
+Alg_PhotoAlign -> Alg_Synthesis
+
+//
+// Graphics overlay display
+//
+GrpxSrc -> Display_Grpx

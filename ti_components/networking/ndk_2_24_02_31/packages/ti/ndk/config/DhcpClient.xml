@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<gep name="DhcpClient" title="DHCP Client Settings" version="1">
+
+<page name="Module" title="Module Settings">
+<html><body><table>
+  <tr>
+    <td>
+      <form>
+        <p>The DhcpClient module allows you to configure DHCP Client settings
+           such as host name, various modes of operation, time to live and a
+           service reporting function</p>
+        <p></p> <!-- create some white space -->
+      </form>
+    </td>
+  </tr>
+
+  <tr><td colspan="2">
+    <control type="checkbox" label="Add the DHCP client module to my configuration" value="value:this.$used" bold="true"/></td>
+  </tr>
+
+  <!-- add some white space between the use mod checkbox and inst section -->
+  <tr>
+    <td>
+      <form>
+        <p></p>
+      </form>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <h1>DHCP Client Mode Flags</h1>
+
+      <table>
+ 
+        <tr><td colspan="2">
+          <control type="checkbox" label="Use physical device index (CIS_FLG_IFIDXVALID)" value="value:ti.ndk.config.Ip.IfIdXValid" tooltip="value:ti.ndk.config.Ip.CIS_FLG_IFIDXVALID.$summary" bold="false"/></td>
+        </tr>
+        <tr><td colspan="2">
+          <control type="checkbox" label="Resolve IP address before server start (CIS_FLG_RESOLVEIP)" value="value:ti.ndk.config.Ip.ResolveIP" tooltip="value:ti.ndk.config.Ip.CIS_FLG_RESOLVEIP.$summary" bold="false"/></td>
+        </tr>
+        <tr><td colspan="2">
+          <control type="checkbox" label="Invoke HTTP server by IP address (CIS_FLG_CALLBYIP)" value="value:ti.ndk.config.Ip.CallByIP" tooltip="value:ti.ndk.config.Ip.CIS_FLG_CALLBYIP.$summary" bold="false"/></td>
+        </tr>
+        <tr><td colspan="2">
+          <control type="checkbox" label="Restart server when new IP address is available (CIS_FLG_RESTARTIPTERM)" value="value:ti.ndk.config.Ip.RestartIPTerm" tooltip="value:ti.ndk.config.Ip.CIS_FLG_RESTARTIPTERM.$summary" bold="false"/></td>
+        </tr>
+
+      </table>
+    </td>
+
+    <td>
+      <h1>General DHCP Client Options</h1>
+
+    <table>
+      <tr>
+        <td><control type="label" label="Host name" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:ti.ndk.config.Ip.hostName"
+             tooltip="value:ti.ndk.config.Ip.hostName.$summary"/></td>
+      </tr>
+      <tr>
+        <td><control type="label" label="DHCP client service report function" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:ti.ndk.config.Ip.dhcpClientPcbServer"
+             tooltip="value:ti.ndk.config.Ip.dhcpClientPcbServer.$summary"/></td>
+      </tr>
+      <tr>
+        <td><control type="label" label="Time to live" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:ti.ndk.config.Ip.socketTimeToLive"
+             tooltip="value:ti.ndk.config.Ip.socketTimeToLive.$summary"/></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+
+</table></body></html>
+</page>
+<properties name="Advanced" title="All Options" enabled="true" visible="true" link="ti.ndk.config.Ip"/>
+</gep>
+

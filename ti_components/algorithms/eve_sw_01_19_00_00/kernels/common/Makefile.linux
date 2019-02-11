@@ -1,0 +1,292 @@
+#/*==========================================================================*/
+#/*      Copyright (C) 2009-2013 Texas Instruments Incorporated.             */
+#/*                      All Rights Reserved                                 */
+#/*==========================================================================*/
+
+# Common makefile for VCOP-C kernels and drivers, Linux version
+
+# Identify the directory where this makefile resides
+mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
+makefile_dir := $(dir $(mkfile_path))
+
+# Include local paths to EVE and 7x tools
+# Set flag to use prototype tools
+PROTOTYPE_TOOLS := 1
+include $(makefile_dir)/Makefile.local 
+
+# HEAD    := root dir of EVE SW pkg ( / * / * /eve_sw_XX_XX
+# MODULES := EVE SW module
+
+HEAD    := $(makefile_dir)/../../..
+MODULES := $(HEAD)/modules
+
+# The Makefile expects users to set the variable FILE.
+# If the TEST_BENCH is not $(FILE), users need to set the variable TEST_BENCH.
+# All the *.c files to be built can be included in the variable CFILES.
+# The Makefile enforses the presence of the file ..\src_kernelC\$(FILE)_kernel.k.
+# The extra *.k files can be included in the variable KERNELFILES.
+
+# ARP32_TOOLS ?=          # setup in Makefile.local
+OBJ_DIR = ./elf_out
+
+# kernel code (VCOP-C)
+KERNEL = ../src_kernelC/$(FILE)_kernel
+
+# Kernel library to be linked in case of Object-only build.
+KERNELLIB = $(MODULES)/kernels/lib/release/libevekernels.eve.lib
+
+# It is necessary to separate out the Natural C files and the Kernel files
+# which get compiled and linked into the libevekernels.lib and libevenatckernels.lib
+# If these files don't exist (as possible for Object release mode), it is necessary
+# to avoid compiling these files to prevent make error. Only the libraries need to
+# be linked.
+# NATURALC will have the files to be compiled in src_C folder.
+# KERNELCFILES will have the files to be compiled in src_kernelC folder.
+# ALLCFILES will have all the remaining files to be compiled + Test Bench.
+NATURALC ?= $(foreach f,$(CFILES),$(if $(filter src_C,$(subst /, ,$f)),$f))
+NATURALCFINAL = $(patsubst %.c,%,$(NATURALC))
+KERNELCFILES = $(foreach f,$(CFILES),$(if $(filter src_kernelC,$(subst /, ,$f)),$f))
+ALLCFILES = $(filter-out $(NATURALC) $(KERNELCFILES),$(CFILES))
+
+# test bench code
+TEST_BENCH ?= $(FILE)
+
+HOST_EXE_FILE_NAME ?= a.out
+
+# gcc -x c++ (instead of g++) allows .k files to be compiled as c++
+# -m32 avoids several conversion warnings resulting from casting pointers to ints in harness code
+HOSTCC = gcc
+HOSTCC_FLAGS += -x c++ -m32 -g -fpermissive -I$(TARGETINC_VCOP) -I$(EVE_PROFILE_INC) -I$(EVE_TEST_INC) -DVCOP_HOST_EMULATION
+HOSTLD_FLAGS += -lstdc++ -lm
+
+# VCOP-C compiler (aka symbolic assembler)
+# KERNELCC = $(ARP32_TOOLS)/bin/vcc-arp32
+
+# EVE C compiler
+TARGETCC = $(ARP32_TOOLS)/bin/cl-arp32
+TARGETOFD = $(ARP32_TOOLS)/bin/ofd-arp32
+TARGETINC = $(ARP32_TOOLS)/include
+TEMPINC1 = $(MODULES)/starterware/inc
+TEMPINC2 = $(MODULES)/starterware/inc/baseaddress/vayu/eve
+KERNEL_INC = $(MODULES)/kernels/inc
+TARGET_INC_K = ../inc
+TARGET_SRC_K = ../src_kernelC
+TARGET_SRC_C = ../src_C
+TARGETCC_FLAGS = --opt_for_speed=5 -kh -kv --silicon_version=v210 -lu  --display_error_number --diag_suppress=26066 --diag_suppress=10063 --diag_suppress=183 $(CFLAGS)
+TARGETLD = $(ARP32_TOOLS)/bin/lnk-arp32 -cr
+EVE_LIB = $(ARP32_TOOLS)/lib/rtsarp32_v200.lib
+EVE_LCF ?= $(MODULES)/kernels/common/linker_boot_cama.cmd
+EVE_START_LIB = $(MODULES)/starterware/libs/vayu/eve/release/libevestarterware_eve.lib
+
+EVE_TEST_INC = $(MODULES)/kernels/common
+EVE_PROFILE_INC= $(MODULES)/common
+EVE_PROFILE = $(MODULES)/common/eve_profile.c
+
+EVE_PROFILEOBJ = eve_profile.obj
+CONFIG_PARSER = $(MODULES)/common/configparser.c
+CONFIG_PARSEROBJ = configparser.obj
+
+EVE_LOAD = load_eve
+
+# collect source file names
+ALLCFILES += $(TEST_BENCH).c
+ALLCFILESOBJ = $(patsubst %.c,%.obj,$(ALLCFILES))
+CURVE_FITTING = $(MODULES)/common/curve_fitting.c
+EVE_STATS_COLLLECTOR = $(MODULES)/common/ti_stats_collector.c
+
+KERNELLIB := $(patsubst %.c,%.obj,$(KERNELCFILES))
+
+ifneq (,$(wildcard $(KERNEL).k))
+KERNELLIB += $(KERNEL).obj
+# KFILES = $(KERNELCFILES)
+KFILES += $(KERNEL).k
+endif
+
+ifneq (,$(wildcard $(KERNELFILES)))
+KERNELLIB += $(patsubst %.k,%.obj,$(KERNELFILES))
+KFILES += $(KERNELFILES)
+endif
+
+files:
+	@echo "CFILES: " $(CFILES)
+	@echo "NATURALC: " $(NATURALC)
+	@echo "KERNELCFILES: " $(KERNELCFILES)
+	@echo "ALLCFILES: " $(ALLCFILES)
+	@echo "KERNEL: " $(KERNEL)
+	@echo "KFILES: " $(KFILES)
+	@echo "KERNELLIB: " $(KERNELLIB)
+
+# Linking the libevenatckernels.eve.lib library only 
+# if it is required by test bench.
+ifneq (,$(NATURALC))
+NATCLIB = $(MODULES)/kernels/lib/release/libevenatckernels.eve.lib
+NATCOBJ = $(patsubst %.c,%.obj,$(NATURALC))
+# As for KernelC, set NATCFILES NATCLIB and only if NATURALC source exists.
+# This way we can avoid compiling them if they don't exist.
+ifneq (,$(wildcard $(NATURALC)))
+NATCFILES = $(NATURALC)
+NATCLIB = $(NATCOBJ)
+endif
+endif
+
+# location of vcop.h
+#TARGETINC_VCOP = $(ARP32_TOOLS)/include/vcop
+TARGETINC_VCOP = $(TRANSLATE_INCLUDE)/vcop
+VCOP_H       = vcop.h
+
+BOOT = $(MODULES)/kernels/common/boot_arp32.obj
+
+# 'host' rules
+host: $(OBJ_DIR)/$(HOST_EXE_FILE_NAME)
+
+$(OBJ_DIR)/$(HOST_EXE_FILE_NAME) : $(OBJ_DIR) $(KFILES) $(ALLCFILES) $(HOSTFILES)
+	$(HOSTCC) $(HOSTCC_FLAGS) -I$(TARGET_INC_K) -I$(KERNEL_INC) $(ALLCFILES) $(EVE_PROFILE) $(CURVE_FITTING) $(CONFIG_PARSER) $(NATCFILES) $(KERNELCFILES) $(HOSTFILES) -o $(OBJ_DIR)/$(HOST_EXE_FILE_NAME) $(HOSTLD_FLAGS)
+
+# 'hostrun' rules
+hostrun: host.data
+
+host.data: $(OBJ_DIR)/$(HOST_EXE_FILE_NAME)
+	$(OBJ_DIR)/$(HOST_EXE_FILE_NAME) | tee host.data
+
+# 'target' rules - Default rule to build release binary for target platform
+target: DEBUG_FLAG = -O3
+target: target_build
+
+# 'profile' rules - To build debug binary on target platform
+profile: DEBUG_FLAG = -DREPORT -DSCTM -O3 -kv
+profile: target_build mem_info
+
+mem_info:
+	$(TARGETOFD) --func_info $(KERNEL).obj
+
+# 'debug' rules - To build debug binary on target platform
+debug: DEBUG_FLAG = -g
+debug: target_build
+
+# 'target_build' rules
+target_build: $(OBJ_DIR)/$(FILE)_kernelC.out
+
+$(OBJ_DIR)/$(FILE)_kernelC.out: | $(OBJ_DIR)
+
+$(OBJ_DIR)/$(FILE)_kernelC.out: $(KERNELLIB) $(BOOT) $(NATCLIB) $(ALLCFILES)
+	$(TARGETCC) $(DEBUG_FLAG) $(TARGETCC_FLAGS) -I$(TARGETINC) -I$(TARGETINC_VCOP) -I. -I$(EVE_PROFILE_INC) -I$(EVE_TEST_INC) -I$(TEMPINC1) -I$(TEMPINC2) -I$(KERNEL_INC) -I$(TARGET_INC_K) $(ALLCFILES) $(CONFIG_PARSER) $(EVE_PROFILE) $(CURVE_FITTING) $(EVE_STATS_COLLLECTOR) $(BOOT) -z $(TARGETLD_FLAGS) $(KERNELLIB) $(NATCLIB) $(EVE_LCF) $(EVE_LIB) $(EVE_START_LIB) -m $(OBJ_DIR)/$(FILE)_kernelC.map -o $@
+	rm -rf $(EVE_PROFILEOBJ) $(CONFIG_PARSEROBJ) $(ALLCFILESOBJ)
+
+# kernel .C and .K files
+$(KERNELLIB): $(KFILES) $(KERNELCFILES)
+	$(TARGETCC) $(DEBUG_FLAG) $(TARGETCC_FLAGS) -I$(TARGETINC) -I$(TARGETINC_VCOP) -I$(TARGET_INC_K) -I$(KERNEL_INC) --temp_directory=$(KERNEL_INC) --obj_directory=$(TARGET_SRC_K) $(KFILES) $(KERNELCFILES)
+
+# rule to build natural C library
+$(NATCLIB): $(NATCFILES)
+	$(TARGETCC) $(DEBUG_FLAG) $(TARGETCC_FLAGS) -I$(TARGETINC) -I$(TARGETINC_VCOP) -I$(TARGET_INC_K) --temp_directory=$(KERNEL_INC) --obj_directory=$(TARGET_SRC_C) $^
+
+# 'target_run' rule
+trun: target_run
+target_run: target.data
+
+target.data : $(OBJ_DIR)/$(FILE)_kernelC.out 
+	$(EVE_LOAD) -q -stdout_file=target.data $<
+
+#---------------------------------------------------------------------
+# 7X TRANSLATION SUPPORT
+
+# Migration tools - eventually part of EVE and/or C7x toolsets
+# TRANSLATE_TOOLS ?=                   # setup in Makefile.local
+TRANSLATE_CC = $(TRANSLATE_TOOLS)/bin/vcc-arp32 --debug:translate
+TRANSLATE_INCLUDE = $(TRANSLATE_TOOLS)/include
+TRANSLATE_LIB = $(TRANSLATE_TOOLS)/lib
+TRANSLATE_H  = $(TRANSLATE_INCLUDE)/vcop/translate.h
+
+ifeq ($(PROTOTYPE_TOOLS),1)
+# C7X_TOOLS ?=                         # setup in Makefile.local
+C7X_BIN ?= $(C7X_TOOLS)/bin
+CL7X = $(C7X_BIN)/cl6x -mv66+ 
+# LOAD7X ?=                            # setup in Makefile.local
+VENCODE_FLAGS = --vencode
+else
+# c7x tools - production tools
+C7X_TOOLS ?=                           # setup in Makefile.local
+C7X_BIN ?= $(C7X_TOOLS)/bin
+CL7X = $(C7X_BIN)/cl7x
+# LOAD7X ?=                            # setup in Makefile.local
+endif
+
+OBJ_DIR_7X = ./7x_out
+OUT_FILE_7X = $(OBJ_DIR_7X)/$(FILE)_kernelC.7x.out
+
+CFILES_7X = $(ALLCFILES) $(EVE_PROFILE) $(CURVE_FITTING) $(CONFIG_PARSER) $(NATCFILES) $(KERNELCFILES)
+CFILE_DIRS = $(dir $(CFILES_7X))
+VPATH = $(dir $(EVE_PROFILE)):$(dir $(CURVE_FITTING)):$(dir $(CONFIG_PARSER)):$(dir $(NATCFILES)):$(dir $(KERNELCFILES))
+KERNEL_7X_C = $(KFILES:.k=.7x.c)
+
+OBJ_FILES_7X = $(addprefix $(OBJ_DIR_7X)/,$(notdir $(CFILES_7X:.c=.obj)))
+KERNEL_OBJ_7X = $(addprefix $(OBJ_DIR_7X)/,$(notdir $(KERNEL_7X_C:.c=.obj)))
+
+CL7X_FLAGS = --symdebug:none -o3 -I$(TRANSLATE_INCLUDE) -I$(TRANSLATE_INCLUDE)/vcop -I$(TARGETINC_VCOP) -I$(EVE_PROFILE_INC) -I$(EVE_TEST_INC) -I$(KERNEL_INC) -I$(TARGET_INC_K) -I$(C7X_TOOLS)/include -DVCOP_7X_TRANSLATION $(CFLAGS) --display_error_number --diag_suppress=183 --diag_suppress=179 --diag_suppress=770
+
+# 'translate' rules
+translate: $(OUT_FILE_7X) 
+
+$(OUT_FILE_7X) $(OBJ_FILES_7X) $(KERNEL_OBJ_7X): | $(OBJ_DIR_7X)
+
+$(OBJ_DIR_7X):
+	mkdir -p $(OBJ_DIR_7X)
+
+$(OUT_FILE_7X): $(KERNEL_OBJ_7X) $(OBJ_FILES_7X)
+	$(CL7X) -z -c $^ -I$(TRANSLATE_LIB) -I$(C7X_TOOLS)/lib $(TRANSLATE_LIB)/lnk.cmd -o $@
+
+$(OBJ_DIR_7X)/%.obj : %.c 
+	$(CL7X) $(VENCODE_FLAGS) $(CL7X_FLAGS) -fr=$(OBJ_DIR_7X) $<
+
+$(KERNEL_OBJ_7X): $(KERNEL_7X_C)
+	$(CL7X) $(VENCODE_FLAGS) -fg $(CL7X_FLAGS) -fr=$(OBJ_DIR_7X) $^
+
+asm : $(KERNEL_7X_C)
+	$(CL7X) -fg -k -n -os -mw $(CL7X_FLAGS) -fr=$(OBJ_DIR_7X) $^
+
+%.7x.c : %.k
+	$(TRANSLATE_CC) --output_header $(KERNEL_INC)/$(notdir $(patsubst %.7x.c,%.h,$@)) $< $@
+
+# 'xrun' rules
+xrun: translate.data
+
+translate.data : $(OUT_FILE_7X)
+	$(LOAD7X) $(OUT_FILE_7X) | tee translate.data
+
+# in testbench file: change \\ to /, change \ to / in #include
+fixtest: $(wildcard *_tb.c)
+	sed -i -e 's/\\\\/\//g' -e '/#include/ s/\\/\//g' $^
+
+# change \ to / in config files
+fixconfig: $(wildcard testvecs/config/*.txt testvecs/config/*.cfg)
+	sed -i -e 's/\\/\//g' $^
+
+clean::
+	rm -rf $(OBJ_DIR_7X)
+	rm -rf $(KERNEL_7X_C)
+
+#---------------------------------------------------------------------
+
+# rule to create object dir
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
+
+# clean rules
+clean::
+	rm -rf *.o 
+	rm -rf *.obj 
+	rm -rf ../src_kernelC/*.obj 
+	rm -rf $(OBJ_DIR)/*.out 
+	rm -rf *.asm
+	rm -rf $(TARGET_INC_K)/*_kernel.c
+	rm -rf $(TARGET_INC_K)/*_kernel.h
+	rm -rf $(OBJ_DIR)/*.map 
+	rm -rf *.out 
+	rm -rf $(OBJ_DIR)
+	rm -rf *.pdb
+	rm -rf *.idb
+	rm -rf *.sdo
+	rm -rf *.ilk
+	rm -rf *.suo
+	rm -rf host.data target.data translate.data
+

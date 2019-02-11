@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <title>NSP Klocwork Static C and Misra C Report</title>
+    <!-- For now, we use the doxygen style sheet -->
+    <link type="text/css" rel="stylesheet" href="doxygen.css">
+    <!-- doxygen's css .memproto's all have tables for a little extra pad...
+         don't like tables, so give 'em a little extra left pad ourselves
+    --->
+    <style type="text/css">
+    body {
+        margin: 20px;
+    }
+    .memproto {
+        padding-left: 6px;
+    }
+    </style>
+</head>
+<body>
+<table width="100%">
+  <tbody>
+    <tr>
+      <td bgcolor="black" width="1">
+        <a href="http://www.ti.com">
+          <img border=0 src="tilogo.gif" alt="Texas Instruments">
+        </a>
+      </td>
+      <td bgcolor="red">
+        <img src="titagline.gif" alt="Technology for Innovators(tm)">
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h2><a name="Introduction">Introduction</a></h2>
+<p>
+This report summarizes results from two software quality assessment
+tools used to analyze the software in this product:
+<ul>
+  <li>Static C Program Analysis:
+    <a href="http://www.klocwork.com/products/documentation/current/C_and_C++_checker_reference">
+      Klocwork Static Analysis</a>
+  </li>
+  <li>MISRA-C:2004 Program Analysis:
+    <a href="http://www.klocwork.com/products/documentation/current/MISRA-C_checker_reference">
+      Klocwork MISRA-C Analysis</a>
+  </li>
+</ul>
+</p>
+<p>
+Unless noted below, all source code, both .c and .h files, for
+embedded target libraries was analyzed using these tools.
+</p>
+
+<hr>
+
+<h2><a name="StaticSummary">Klocwork Static C Analysis Summary</a></h2>
+<p>
+This report summarizes the Static Program Analysis results. The listing provides:
+<ul>
+  <li>location of defects in the source code (file name and line
+  number) (if any)</li>
+</ul>
+</p>
+<p>
+<div style="width:500px;text-align:left;padding:5px;background-color:gold;border:1px
+ solid black;">
+<a href="klocwork_static.txt">Click here to view the Klocwork Static C Analysis Report.</a>
+</div>
+</p>
+
+<hr>
+
+<h2><a name="MisraSummary">Klocwork MISRA-C:2004 Analysis Summary</a></h2>
+
+<p>
+This report summarizes the MISRA-C:2004 Program Analysis results. The listing provides:
+<ul>
+  <li>location of defects in the source code (file name and line
+  number) (if any)</li>
+</ul>
+</p>
+<p>
+<div style="width:500px;text-align:left;padding:5px;background-color:gold;border:1px
+ solid black;">
+<a href="klocwork_misra.txt">Click here to view the MISRA-C:2004 Findings Report.</a>
+</div>
+</p>
+
+<p>
+There are several rules in MISRA-C:2004 that are contrary to
+long-standing coding standards used in this product, and, hence will
+not be addressed in the product source code. These rules are listed in the
+table below. The corresponding checks were explicitly disabled in the
+tool when the source code was analyzed.
+</p>
+
+<table border=1 cellspacing=0>
+ <tr>
+  <th width="10%"><b>MISRA C Id</b></th>
+  <th width="40%"><b>Brief Summary</b></th>
+  <th width="40%"><b>Exemption Rationale</b></th>
+  <th width="10%"><b>Exemption Type</b></th>
+ </tr>
+  <tr>
+    <td>5.1/Required</td>
+    <td>Identifier is longer than 31 characters.</td>
+    <td>Coding convention</td>
+    <td>Blanket</td>
+  </tr>
+  <tr>
+    <td>5.6/Advisory</td>
+    <td>Type and variable/function with the same name.</td>
+    <td>Coding convention</td>
+    <td>Blanket</td>
+  </tr>
+  <tr>
+    <td>5.7/Advisory</td>
+    <td>Identifier clashes with other identifier.</td>
+    <td>Coding convention</td>
+    <td>Blanket</td>
+  </tr>
+    <tr>
+    <td>6.3/Advisory</td>
+    <td>Built-in numeric type is used.</td>
+    <td>Coding convention</td>
+    <td>Blanket</td>
+  </tr>
+  <tr>
+    <td>11.3/Advisory</td>
+    <td>Cast converts pointer to integral type.</td>
+    <td>Coding convention</td>
+    <td>Case-by-case</td>
+  </tr>
+  <tr>
+    <td>11.4/Advisory</td>
+    <td>Cast between a pointer to object type and a different pointer to object type.</td>
+    <td>Coding convention</td>
+    <td>Case-by-case</td>
+  </tr>
+  <tr>
+    <td>12.6/Advisory</td>
+    <td>Operand of logical operator is not effectively boolean. </td>
+    <td>Coding convention</td>
+    <td>Case-by-case</td>
+  </tr>
+  <tr>
+    <td>13.2/Advisory</td>
+    <td>Non-boolean expression is implicitly tested against zero.</td>
+    <td>Tool reports false positives</td>
+    <td>Blanket</td>
+  </tr>
+  <tr>
+    <td>14.7/Required (Advisory in MISRA-C:2012)</td>
+    <td>Return is not the last statement in a function.</td>
+    <td>Coding convention</td>
+    <td>Case-by-case</td>
+  </tr>
+  <tr>
+    <td>16.7/Advisory</td>
+    <td>Pointer parameter is not used to modify the addressed object but is not declared as pointer to const.</td>
+    <td>Coding convention, required to match externally specified function interfaces</td>
+    <td>Case-by-case</td>
+  </tr>
+  <tr>
+    <td>19.7/Advisory</td>
+    <td>Function-like macro definition.</td>
+    <td>Coding convention</td>
+    <td>Case-by-case</td>
+  </tr>
+</table>
+<p>Justification for Not Addressing MISRA-C:2004 Violations</p>
+<ul>
+</ul>
+</p>
+
+</body>
+</html>

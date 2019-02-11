@@ -1,0 +1,520 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>module ti.sdo.ipc.SharedRegion</title>
+<meta name="googlebot" content="noindex,nofollow">
+<link rel="stylesheet" type="text/css" href="../../../src.css"/>
+</head>
+<body>
+<pre class=src>
+     1    <span class="comment">/*
+</span>     2    <span class="comment"> * Copyright (c) 2012-2013, Texas Instruments Incorporated
+</span>     3    <span class="comment"> * All rights reserved.
+</span>     4    <span class="comment"> *
+</span>     5    <span class="comment"> * Redistribution and use in source and binary forms, with or without
+</span>     6    <span class="comment"> * modification, are permitted provided that the following conditions
+</span>     7    <span class="comment"> * are met:
+</span>     8    <span class="comment"> *
+</span>     9    <span class="comment"> * *  Redistributions of source code must retain the above copyright
+</span>    10    <span class="comment"> *    notice, this list of conditions and the following disclaimer.
+</span>    11    <span class="comment"> *
+</span>    12    <span class="comment"> * *  Redistributions in binary form must reproduce the above copyright
+</span>    13    <span class="comment"> *    notice, this list of conditions and the following disclaimer in the
+</span>    14    <span class="comment"> *    documentation and/or other materials provided with the distribution.
+</span>    15    <span class="comment"> *
+</span>    16    <span class="comment"> * *  Neither the name of Texas Instruments Incorporated nor the names of
+</span>    17    <span class="comment"> *    its contributors may be used to endorse or promote products derived
+</span>    18    <span class="comment"> *    from this software without specific prior written permission.
+</span>    19    <span class="comment"> *
+</span>    20    <span class="comment"> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+</span>    21    <span class="comment"> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+</span>    22    <span class="comment"> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+</span>    23    <span class="comment"> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+</span>    24    <span class="comment"> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+</span>    25    <span class="comment"> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+</span>    26    <span class="comment"> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+</span>    27    <span class="comment"> * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+</span>    28    <span class="comment"> * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+</span>    29    <span class="comment"> * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+</span>    30    <span class="comment"> * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+</span>    31    <span class="comment"> */</span>
+    32    <span class="comment">/*
+</span>    33    <span class="comment"> *  ======== SharedRegion.xdc ========
+</span>    34    <span class="comment"> *
+</span>    35    <span class="comment"> */</span>
+    36    
+    37    <span class=key>package</span> ti.sdo.ipc;
+    38    
+    39    import xdc.runtime.Error;
+    40    import xdc.runtime.IHeap;
+    41    import xdc.rov.ViewInfo;
+    42    
+    43    <span class="xdoc">/*!
+</span>    44    <span class="xdoc"> *  ======== SharedRegion ========
+</span>    45    <span class="xdoc"> *  Shared memory manager and address translator.
+</span>    46    <span class="xdoc"> *
+</span>    47    <span class="xdoc"> *  <b>@p(html)</b>
+</span>    48    <span class="xdoc"> *  This module has a common header that can be found in the {<b>@link</b> ti.ipc}
+</span>    49    <span class="xdoc"> *  package.  Application code should include the common header file (not the
+</span>    50    <span class="xdoc"> *  RTSC-generated one):
+</span>    51    <span class="xdoc"> *
+</span>    52    <span class="xdoc"> *  &lt;PRE&gt;#include &amp;lt;ti/ipc/SharedRegion.h&amp;gt;&lt;/PRE&gt;
+</span>    53    <span class="xdoc"> *
+</span>    54    <span class="xdoc"> *  The RTSC module must be used in the application's RTSC configuration file
+</span>    55    <span class="xdoc"> *  (.cfg) if runtime APIs will be used in the application:
+</span>    56    <span class="xdoc"> *
+</span>    57    <span class="xdoc"> *  &lt;PRE&gt;SharedRegion = xdc.useModule('ti.sdo.ipc.SharedRegion');&lt;/PRE&gt;
+</span>    58    <span class="xdoc"> *
+</span>    59    <span class="xdoc"> *  Documentation for all runtime APIs, instance configuration parameters,
+</span>    60    <span class="xdoc"> *  error codes macros and type definitions available to the application
+</span>    61    <span class="xdoc"> *  integrator can be found in the
+</span>    62    <span class="xdoc"> *  &lt;A HREF="../../../../doxygen/html/files.html"&gt;Doxygen documenation&lt;/A&gt;
+</span>    63    <span class="xdoc"> *  for the IPC product.  However, the documentation presented on this page
+</span>    64    <span class="xdoc"> *  should be referred to for information specific to the RTSC module, such as
+</span>    65    <span class="xdoc"> *  module configuration, Errors, and Asserts.
+</span>    66    <span class="xdoc"> *  <b>@p</b>
+</span>    67    <span class="xdoc"> *
+</span>    68    <span class="xdoc"> *  The SharedRegion module is designed to be used in a multi-processor
+</span>    69    <span class="xdoc"> *  environment in which memory regions are shared and accessed
+</span>    70    <span class="xdoc"> *  across different processors. The module itself does not use any shared
+</span>    71    <span class="xdoc"> *  memory, because all module state is stored locally.  SharedRegion
+</span>    72    <span class="xdoc"> *  APIs use the system gate for thread protection.
+</span>    73    <span class="xdoc"> *
+</span>    74    <span class="xdoc"> *  This module creates and stores a local shared memory region table.  The
+</span>    75    <span class="xdoc"> *  table contains the processor's view for every shared region in the system.
+</span>    76    <span class="xdoc"> *  The table must not contain any overlapping regions.  Each processor's
+</span>    77    <span class="xdoc"> *  view of a particular shared memory region is determined by the region id.
+</span>    78    <span class="xdoc"> *  In cases where a processor cannot access a certain shared memory region,
+</span>    79    <span class="xdoc"> *  that shared memory region should be left invalid for that processor.
+</span>    80    <span class="xdoc"> *  Note:  The {<b>@link</b> #numEntries} must be the same on all processors.
+</span>    81    <span class="xdoc"> *
+</span>    82    <span class="xdoc"> *  Each shared region contains the following:
+</span>    83    <span class="xdoc"> *  <b>@p(blist)</b>
+</span>    84    <span class="xdoc"> *  -base:          The base address
+</span>    85    <span class="xdoc"> *  -len:           The length
+</span>    86    <span class="xdoc"> *  -name:          The name of the region
+</span>    87    <span class="xdoc"> *  -isValid:       Whether the region is valid
+</span>    88    <span class="xdoc"> *  -ownerProcId:   The id of the processor which owns the region
+</span>    89    <span class="xdoc"> *  -cacheEnable:   Whether the region is cacheable
+</span>    90    <span class="xdoc"> *  -cacheLineSize: The cache line size
+</span>    91    <span class="xdoc"> *  -createHeap:    Whether a heap is created for the region.
+</span>    92    <span class="xdoc"> *  <b>@p</b>
+</span>    93    <span class="xdoc"> *
+</span>    94    <span class="xdoc"> *  A region is added statically using the {<b>@link</b> #setEntryMeta} API.
+</span>    95    <span class="xdoc"> *  The length of a region must be the same across all processors.
+</span>    96    <span class="xdoc"> *  The owner of the region can be specified.  If specified, the owner
+</span>    97    <span class="xdoc"> *  manages the shared region.  It creates a HeapMemMP instance which spans
+</span>    98    <span class="xdoc"> *  the full size of the region.  The other processors open the same HeapMemMP
+</span>    99    <span class="xdoc"> *  instance.
+</span>   100    <span class="xdoc"> *
+</span>   101    <span class="xdoc"> *  Note: Prior to calling Ipc_start(), If a SharedRegion's 'isValid'
+</span>   102    <span class="xdoc"> *  is true and 'createHeap' is true then the owner of the SharedRegion
+</span>   103    <span class="xdoc"> *  must be the same as the owner of SharedRegion 0.
+</span>   104    <span class="xdoc"> *
+</span>   105    <span class="xdoc"> *  An example of a SharedRegion configuration is as follows:
+</span>   106    <span class="xdoc"> *
+</span>   107    <span class="xdoc"> *  <b>@p(code)</b>
+</span>   108    <span class="xdoc"> *
+</span>   109    <span class="xdoc"> * var SharedRegion = xdc.useModule('ti.sdo.ipc.SharedRegion');
+</span>   110    <span class="xdoc"> * SharedRegion.setEntryMeta(0,
+</span>   111    <span class="xdoc"> *     { base: 0x80000000,
+</span>   112    <span class="xdoc"> *       len: 0x20000,
+</span>   113    <span class="xdoc"> *       ownerProcId: 0,
+</span>   114    <span class="xdoc"> *       isValid: true,
+</span>   115    <span class="xdoc"> *       cacheLineSize: 64,
+</span>   116    <span class="xdoc"> *       name: "DDR2",
+</span>   117    <span class="xdoc"> *     });
+</span>   118    <span class="xdoc"> *
+</span>   119    <span class="xdoc"> *  <b>@p</b>
+</span>   120    <span class="xdoc"> *
+</span>   121    <span class="xdoc"> *  The shared region table along with a shared region pointer (SRPtr)
+</span>   122    <span class="xdoc"> *  is used to do address translation at runtime. The shared region
+</span>   123    <span class="xdoc"> *  pointer is a 32-bit portable pointer composed of an id and offset.
+</span>   124    <span class="xdoc"> *  The most significant bits of a SRPtr are used for the id.
+</span>   125    <span class="xdoc"> *  The id corresponds to the index of the entry in the table.
+</span>   126    <span class="xdoc"> *  The offset is the offset from the base of the shared memory region.
+</span>   127    <span class="xdoc"> *  The number of entries in the table determines the number of bits to
+</span>   128    <span class="xdoc"> *  use for the id.  Increasing the number of entries increases the
+</span>   129    <span class="xdoc"> *  range of ids but decreases the range of the offset.
+</span>   130    <span class="xdoc"> *
+</span>   131    <span class="xdoc"> *  Note:  Region 0 must be visible by all processors.  Region 0 is used for
+</span>   132    <span class="xdoc"> *         synchonizing the processors, creating the default GateMP, and
+</span>   133    <span class="xdoc"> *         creating Notify and MessageQ transport instances.  The HeapMemMP
+</span>   134    <span class="xdoc"> *         created in Region 0 is the length of the region minus memory
+</span>   135    <span class="xdoc"> *         reserved for creating these internal instances.
+</span>   136    <span class="xdoc"> *
+</span>   137    <span class="xdoc"> *  Refer to the doxygen documentation for run-time API documenation.
+</span>   138    <span class="xdoc"> *
+</span>   139    <span class="xdoc"> */</span>
+   140    
+   141    <span class=key>module</span> SharedRegion
+   142    {
+   143        <span class="xdoc">/*!
+</span>   144    <span class="xdoc">     *  ======== RegionView ========
+</span>   145    <span class="xdoc">     *  <b>@_nodoc</b>
+</span>   146    <span class="xdoc">     */</span>
+   147        <span class=key>metaonly</span> <span class=key>struct</span> RegionView {
+   148            UInt16       id;
+   149            String       base;
+   150            String       end;
+   151            String       len;
+   152            UInt16       ownerProcId;
+   153            Bool         cacheEnable;
+   154            Bool         isValid;
+   155            UInt16       cacheLineSize;
+   156            SizeT        reservedSize;
+   157            Ptr          heap;
+   158            String       name;
+   159        };
+   160    
+   161        <span class="xdoc">/*!
+</span>   162    <span class="xdoc">     *  ======== rovViewInfo ========
+</span>   163    <span class="xdoc">     *  <b>@_nodoc</b>
+</span>   164    <span class="xdoc">     */</span>
+   165        @Facet
+   166        <span class=key>metaonly</span> <span class=key>config</span> xdc.rov.ViewInfo.Instance rovViewInfo =
+   167            xdc.rov.ViewInfo.create({
+   168                viewMap: [
+   169                    [<span class="string">'Regions'</span>,
+   170                        {
+   171                            type: xdc.rov.ViewInfo.MODULE_DATA,
+   172                            viewInitFxn: <span class="string">'viewInitRegions'</span>,
+   173                            structName: <span class="string">'RegionView'</span>
+   174                        }
+   175                    ]
+   176                ]
+   177            });
+   178    
+   179        <span class="xdoc">/*!
+</span>   180    <span class="xdoc">     *  Definition of shared region pointer type
+</span>   181    <span class="xdoc">     */</span>
+   182        <span class=key>typedef</span> Bits32 SRPtr;
+   183    
+   184        <span class="xdoc">/*!
+</span>   185    <span class="xdoc">     *  Assert raised when the id is larger than numEntries.
+</span>   186    <span class="xdoc">     */</span>
+   187        <span class=key>config</span> xdc.runtime.Assert.Id A_idTooLarge =
+   188            {msg: <span class="string">"A_idTooLarge: id cannot be larger than numEntries"</span>};
+   189    
+   190        <span class="xdoc">/*!
+</span>   191    <span class="xdoc">     *  Assert raised when an address is out of the range of the region id.
+</span>   192    <span class="xdoc">     */</span>
+   193        <span class=key>config</span> xdc.runtime.Assert.Id A_addrOutOfRange =
+   194            {msg: <span class="string">"A_addrOutOfRange: Address is out of region id's range"</span>};
+   195    
+   196        <span class="xdoc">/*!
+</span>   197    <span class="xdoc">     *  Assert raised when attempting to clear region 0
+</span>   198    <span class="xdoc">     */</span>
+   199        <span class=key>config</span> xdc.runtime.Assert.Id A_region0Clear =
+   200            {msg: <span class="string">"A_region0Clear: Region 0 cannot be cleared"</span>};
+   201    
+   202        <span class="xdoc">/*!
+</span>   203    <span class="xdoc">     *  Assert raised when region zero is invalid
+</span>   204    <span class="xdoc">     */</span>
+   205        <span class=key>config</span> xdc.runtime.Assert.Id A_region0Invalid =
+   206            {msg: <span class="string">"A_region0Invalid: Region zero is invalid"</span>};
+   207    
+   208        <span class="xdoc">/*!
+</span>   209    <span class="xdoc">     *  Assert raised when region is invalid
+</span>   210    <span class="xdoc">     */</span>
+   211        <span class=key>config</span> xdc.runtime.Assert.Id A_regionInvalid =
+   212            {msg: <span class="string">"A_regionInvalid: Region is invalid"</span>};
+   213    
+   214        <span class="xdoc">/*!
+</span>   215    <span class="xdoc">     *  Assert raised when the trying to reserve too much memory.
+</span>   216    <span class="xdoc">     */</span>
+   217        <span class=key>config</span> xdc.runtime.Assert.Id A_reserveTooMuch =
+   218            {msg: <span class="string">"A_reserveTooMuch: Trying to reserve too much memory"</span>};
+   219    
+   220        <span class="xdoc">/*!
+</span>   221    <span class="xdoc">     *  Assert raised when cache enabled but cache line size = 0.
+</span>   222    <span class="xdoc">     */</span>
+   223        <span class=key>config</span> xdc.runtime.Assert.Id A_cacheLineSizeIsZero =
+   224            {msg: <span class="string">"A_cacheLineSizeIsZero: cache line size cannot be zero"</span>};
+   225    
+   226        <span class="xdoc">/*!
+</span>   227    <span class="xdoc">     *  Assert raised when a new entry overlaps an existing one.
+</span>   228    <span class="xdoc">     */</span>
+   229        <span class=key>config</span> xdc.runtime.Assert.Id A_overlap  =
+   230            {msg: <span class="string">"A_overlap: Shared region overlaps"</span>};
+   231    
+   232        <span class="xdoc">/*!
+</span>   233    <span class="xdoc">     *  Assert raised when a valid table entry already exists.
+</span>   234    <span class="xdoc">     */</span>
+   235        <span class=key>config</span> xdc.runtime.Assert.Id A_alreadyExists =
+   236            {msg: <span class="string">"A_alreadyExists: Trying to overwrite an existing valid entry"</span>};
+   237    
+   238        <span class="xdoc">/*!
+</span>   239    <span class="xdoc">     *  Assert raised when trying to use a heap for a region that has no heap
+</span>   240    <span class="xdoc">     */</span>
+   241        <span class=key>config</span> xdc.runtime.Assert.Id A_noHeap =
+   242            {msg: <span class="string">"A_noHeap: Region has no heap"</span>};
+   243    
+   244        <span class="xdoc">/*!
+</span>   245    <span class="xdoc">     *  ======== Entry ========
+</span>   246    <span class="xdoc">     *  Structure for specifying a region.
+</span>   247    <span class="xdoc">     *
+</span>   248    <span class="xdoc">     *  Each region entry should not overlap with any other entry.  The
+</span>   249    <span class="xdoc">     *  length of a region should be the same across all processors.
+</span>   250    <span class="xdoc">     *
+</span>   251    <span class="xdoc">     *  During static configuration, the 'isValid' field can be set to 'false'
+</span>   252    <span class="xdoc">     *  to signify a partially completed entry.  This should only be done
+</span>   253    <span class="xdoc">     *  if the base address of the entry is not known during static
+</span>   254    <span class="xdoc">     *  configuration.  The entry can be completed and the
+</span>   255    <span class="xdoc">     *  'isValid' field can be set to true at runtime.
+</span>   256    <span class="xdoc">     *
+</span>   257    <span class="xdoc">     *  <b>@field(base)</b>          The base address.
+</span>   258    <span class="xdoc">     *  <b>@field(len)</b>           The length.
+</span>   259    <span class="xdoc">     *  <b>@field(ownerProcId)</b>   MultiProc id of processor that manages region.
+</span>   260    <span class="xdoc">     *  <b>@field(isValid)</b>       Whether the region is valid or not.
+</span>   261    <span class="xdoc">     *  <b>@field(cacheEnable)</b>   Whether the region is cacheable.
+</span>   262    <span class="xdoc">     *  <b>@field(cacheLineSize)</b> The cache line size for the region.
+</span>   263    <span class="xdoc">     *  <b>@field(createHeap)</b>    Whether a heap is created for the region.
+</span>   264    <span class="xdoc">     *  <b>@field(name)</b>          The name associated with the region.
+</span>   265    <span class="xdoc">     */</span>
+   266        <span class=key>struct</span> Entry {
+   267            Ptr    base;
+   268            SizeT  len;
+   269            UInt16 ownerProcId;
+   270            Bool   isValid;
+   271            Bool   cacheEnable;
+   272            SizeT  cacheLineSize;
+   273            Bool   createHeap;
+   274            String name;
+   275        };
+   276    
+   277        <span class="xdoc">/*! Specifies the invalid id */</span>
+   278        <span class=key>const</span> UInt16 INVALIDREGIONID = 0xFFFF;
+   279    
+   280        <span class="xdoc">/*! Specifies the default owner proc id */</span>
+   281        <span class=key>const</span> UInt16 DEFAULTOWNERID = ~0;
+   282    
+   283        <span class="xdoc">/*!
+</span>   284    <span class="xdoc">     *  Worst-case cache line size
+</span>   285    <span class="xdoc">     *
+</span>   286    <span class="xdoc">     *  This is the default system cache line size for all modules.
+</span>   287    <span class="xdoc">     *  When a module puts structures in shared memory, this value is
+</span>   288    <span class="xdoc">     *  used to make sure items are aligned on a cache line boundary.
+</span>   289    <span class="xdoc">     *  If no cacheLineSize is specified for a region, it will use this
+</span>   290    <span class="xdoc">     *  value.
+</span>   291    <span class="xdoc">     */</span>
+   292        <span class=key>config</span> SizeT cacheLineSize = 128;
+   293    
+   294        <span class="xdoc">/*!
+</span>   295    <span class="xdoc">     *  The number of shared region table entries.
+</span>   296    <span class="xdoc">     *
+</span>   297    <span class="xdoc">     *  This value is used for calculating the number of bits for the offset.
+</span>   298    <span class="xdoc">     *  Note: This value must be the same across all processors in the system.
+</span>   299    <span class="xdoc">     *        Increasing this parameter will increase the footprint and
+</span>   300    <span class="xdoc">     *        the time for translating a pointer to a SRPtr.
+</span>   301    <span class="xdoc">     */</span>
+   302        <span class=key>config</span> UInt16 numEntries = 4;
+   303    
+   304        <span class="xdoc">/*!
+</span>   305    <span class="xdoc">     *  Determines whether address translation is required.
+</span>   306    <span class="xdoc">     *
+</span>   307    <span class="xdoc">     *  This configuration parameter should be set to 'false' if and only if all
+</span>   308    <span class="xdoc">     *  shared memory regions have the same base address for all processors.
+</span>   309    <span class="xdoc">     *  If 'false', it results in a fast {<b>@link</b> #getPtr} and {<b>@link</b> #getSRPtr},
+</span>   310    <span class="xdoc">     *  because a SRPtr is equivalent to a Ptr and no translation is done.
+</span>   311    <span class="xdoc">     */</span>
+   312        <span class=key>config</span> Bool translate = <span class=key>true</span>;
+   313    
+   314        <span class="xdoc">/*! <b>@_nodoc</b>
+</span>   315    <span class="xdoc">     *  Value that corresponds to NULL in SRPtr address space.
+</span>   316    <span class="xdoc">     */</span>
+   317        <span class=key>config</span> SRPtr INVALIDSRPTR = 0xFFFFFFFF;
+   318    
+   319        <span class="xdoc">/*! <b>@_nodoc</b>
+</span>   320    <span class="xdoc">     *  ======== attach ========
+</span>   321    <span class="xdoc">     *  Opens a heap, for non-owner processors, for each SharedRegion.
+</span>   322    <span class="xdoc">     *
+</span>   323    <span class="xdoc">     *  Function is called in Ipc_attach().
+</span>   324    <span class="xdoc">     */</span>
+   325        Int attach(UInt16 remoteProcId);
+   326    
+   327        <span class="xdoc">/*! <b>@_nodoc</b>
+</span>   328    <span class="xdoc">     *  ======== clearReservedMemory ========
+</span>   329    <span class="xdoc">     *  Clears the reserve memory for each region in the table.
+</span>   330    <span class="xdoc">     */</span>
+   331        Void clearReservedMemory();
+   332    
+   333        <span class="xdoc">/*! <b>@_nodoc</b>
+</span>   334    <span class="xdoc">     *  ======== detach ========
+</span>   335    <span class="xdoc">     *  Close the heap, for non-owner processors when detaching from the owner.
+</span>   336    <span class="xdoc">     *
+</span>   337    <span class="xdoc">     *  Function is called in Ipc_detach().
+</span>   338    <span class="xdoc">     */</span>
+   339        Int detach(UInt16 remoteProcId);
+   340    
+   341        <span class="xdoc">/*!
+</span>   342    <span class="xdoc">     *  ======== genSectionInCmd ========
+</span>   343    <span class="xdoc">     *  Enable/Disable generation of output section in linker cmd file
+</span>   344    <span class="xdoc">     *
+</span>   345    <span class="xdoc">     *  This function can be called for each shared region to not generate
+</span>   346    <span class="xdoc">     *  an output section in the linker command file.  By default all shared
+</span>   347    <span class="xdoc">     *  region entries generate an output section in the linker command file.
+</span>   348    <span class="xdoc">     *
+</span>   349    <span class="xdoc">     *  <b>@param(id)</b>          Region id.
+</span>   350    <span class="xdoc">     *  <b>@param(gen)</b>         TRUE - generate, FALSE - don't generate
+</span>   351    <span class="xdoc">     */</span>
+   352        <span class=key>metaonly</span> Void genSectionInCmd(UInt16 id, Bool gen);
+   353    
+   354        <span class="xdoc">/*!
+</span>   355    <span class="xdoc">     *  ======== getCacheLineSizeMeta ========
+</span>   356    <span class="xdoc">     *  Meta version of Ipc_getCacheLineSize
+</span>   357    <span class="xdoc">     */</span>
+   358        <span class=key>metaonly</span> SizeT getCacheLineSizeMeta(UInt16 id);
+   359    
+   360        <span class="xdoc">/*! <b>@_nodoc</b>
+</span>   361    <span class="xdoc">     *  ======== getIdMeta ========
+</span>   362    <span class="xdoc">     *  Returns the region id for a given local address
+</span>   363    <span class="xdoc">     *
+</span>   364    <span class="xdoc">     *  <b>@param(addr)</b>    Address to retrieve the shared region pointer.
+</span>   365    <span class="xdoc">     *
+</span>   366    <span class="xdoc">     *  <b>@b(returns)</b>     region id
+</span>   367    <span class="xdoc">     */</span>
+   368        <span class=key>metaonly</span> UInt16 getIdMeta(Ptr addr);
+   369    
+   370        <span class="xdoc">/*! <b>@_nodoc</b>
+</span>   371    <span class="xdoc">     *  ======== getPtrMeta ========
+</span>   372    <span class="xdoc">     *  Meta version of {<b>@link</b> #getPtr}
+</span>   373    <span class="xdoc">     */</span>
+   374        <span class=key>metaonly</span> Ptr getPtrMeta(SRPtr srptr);
+   375    
+   376        <span class="xdoc">/*! <b>@_nodoc</b>
+</span>   377    <span class="xdoc">     *  ======== getPtrMeta$view ========
+</span>   378    <span class="xdoc">     *  ROV-time version of getPtrMeta
+</span>   379    <span class="xdoc">     *
+</span>   380    <span class="xdoc">     *  <b>@param(srptr)</b>   Shared region pointer.
+</span>   381    <span class="xdoc">     *
+</span>   382    <span class="xdoc">     *  <b>@b(returns)</b>     Pointer associated with shared region pointer.
+</span>   383    <span class="xdoc">     */</span>
+   384        <span class=key>metaonly</span> Ptr getPtrMeta$view(SRPtr srptr);
+   385    
+   386        <span class="xdoc">/*! <b>@_nodoc</b>
+</span>   387    <span class="xdoc">     *  ======== getSRPtrMeta ========
+</span>   388    <span class="xdoc">     *  Meta version of {<b>@link</b> #getSRPtr}
+</span>   389    <span class="xdoc">     */</span>
+   390        <span class=key>metaonly</span> SRPtr getSRPtrMeta(Ptr addr);
+   391    
+   392        <span class="xdoc">/*! <b>@_nodoc</b>
+</span>   393    <span class="xdoc">     *  ======== getSRPtrMeta$view ========
+</span>   394    <span class="xdoc">     *  ROV-time version of getSRPtrMeta
+</span>   395    <span class="xdoc">     *
+</span>   396    <span class="xdoc">     *  <b>@param(addr)</b>    Address to retrieve the shared region pointer.
+</span>   397    <span class="xdoc">     *
+</span>   398    <span class="xdoc">     *  <b>@b(returns)</b>     Shared region pointer.
+</span>   399    <span class="xdoc">     */</span>
+   400        <span class=key>metaonly</span> SRPtr getSRPtrMeta$view(Ptr addr);
+   401    
+   402        <span class="xdoc">/*! <b>@_nodoc</b>
+</span>   403    <span class="xdoc">     *  ======== isCacheEnabledMeta ========
+</span>   404    <span class="xdoc">     *  Meta version of {<b>@link</b> #isCacheEnabled}
+</span>   405    <span class="xdoc">     */</span>
+   406        <span class=key>metaonly</span> Bool isCacheEnabledMeta(UInt16 id);
+   407    
+   408        <span class="xdoc">/*! <b>@_nodoc</b>
+</span>   409    <span class="xdoc">     *  ======== reserveMemory ========
+</span>   410    <span class="xdoc">     *  Reserves the specified amount of memory from the specified region id.
+</span>   411    <span class="xdoc">     *
+</span>   412    <span class="xdoc">     *  Must be called before Ipc_start().  The amount of memory reserved
+</span>   413    <span class="xdoc">     *  must be the same on all cores.
+</span>   414    <span class="xdoc">     *  The return pointer is the starting address that was reserved.
+</span>   415    <span class="xdoc">     *
+</span>   416    <span class="xdoc">     *  <b>@param(id)</b>      Region id.
+</span>   417    <span class="xdoc">     *  <b>@param(size)</b>    Amount of memory to reserve.
+</span>   418    <span class="xdoc">     *
+</span>   419    <span class="xdoc">     *  <b>@b(returns)</b>     Starting address of memory reserved.
+</span>   420    <span class="xdoc">     */</span>
+   421        Ptr reserveMemory(UInt16 id, SizeT size);
+   422    
+   423        <span class="xdoc">/*! <b>@_nodoc</b>
+</span>   424    <span class="xdoc">     *  ======== resetInternalFields ========
+</span>   425    <span class="xdoc">     *  Reset the internal fields of a region.
+</span>   426    <span class="xdoc">     *
+</span>   427    <span class="xdoc">     *  This function is called in Ipc_stop() to reset the reservedSize
+</span>   428    <span class="xdoc">     *  and heap handle.  It should not be called by the user.
+</span>   429    <span class="xdoc">     *
+</span>   430    <span class="xdoc">     *  <b>@param(id)</b>      Region id.
+</span>   431    <span class="xdoc">     */</span>
+   432        Void resetInternalFields(UInt16 id);
+   433    
+   434        <span class="xdoc">/*!
+</span>   435    <span class="xdoc">     *  ======== setEntryMeta ========
+</span>   436    <span class="xdoc">     *  Sets the entry at the specified region id in the shared region table.
+</span>   437    <span class="xdoc">     *
+</span>   438    <span class="xdoc">     *  The required parameters are base and len. All the other fields will
+</span>   439    <span class="xdoc">     *  get their default if not specified.
+</span>   440    <span class="xdoc">     *
+</span>   441    <span class="xdoc">     *  <b>@param(id)</b>          Region id.
+</span>   442    <span class="xdoc">     *  <b>@param(entry)</b>       Entry fields about the region.
+</span>   443    <span class="xdoc">     */</span>
+   444        <span class=key>metaonly</span> Void setEntryMeta(UInt16 id, Entry entry);
+   445    
+   446        <span class="xdoc">/*! <b>@_nodoc</b>
+</span>   447    <span class="xdoc">     *  ======== start ========
+</span>   448    <span class="xdoc">     *  Creates a heap by owner of region for each SharedRegion.
+</span>   449    <span class="xdoc">     *
+</span>   450    <span class="xdoc">     *  Function is called by Ipc_start().  Requires that SharedRegion 0
+</span>   451    <span class="xdoc">     *  be valid before calling start().
+</span>   452    <span class="xdoc">     */</span>
+   453        Int start();
+   454    
+   455        <span class="xdoc">/*! <b>@_nodoc</b>
+</span>   456    <span class="xdoc">     *  ======== stop ========
+</span>   457    <span class="xdoc">     *  Undo what was done by start.
+</span>   458    <span class="xdoc">     *
+</span>   459    <span class="xdoc">     *  This function is called by Ipc_stop().  It deletes any heap that
+</span>   460    <span class="xdoc">     *  was created in start for the owner of any SharedRegion.  For
+</span>   461    <span class="xdoc">     *  non-owners, it doesn't do anything.
+</span>   462    <span class="xdoc">     */</span>
+   463        Int stop();
+   464    
+   465    
+   466    <span class=key>internal</span>:
+   467    
+   468        <span class=key>const</span> UInt32 CREATED = 0x08111963;
+   469    
+   470        <span class="comment">/* Information stored on a per region basis */</span>
+   471        <span class=key>struct</span> Region {
+   472            Entry        entry;
+   473            SizeT        reservedSize;
+   474            IHeap.Handle heap;
+   475        };
+   476    
+   477        <span class="comment">/* temporary storage of shared regions */</span>
+   478        <span class=key>metaonly</span> <span class=key>config</span> Entry entry[];
+   479    
+   480        <span class="comment">/* generate linker section for shared regions */</span>
+   481        <span class=key>metaonly</span> <span class=key>config</span> Bool genSectionInLinkCmd[];
+   482    
+   483        <span class="comment">/* internal to keep track of the number of entries added */</span>
+   484        <span class=key>metaonly</span> <span class=key>config</span> UInt entryCount;
+   485    
+   486        <span class="comment">/* number of bits for the offset for a SRPtr. This value is calculated */</span>
+   487        <span class=key>config</span> UInt32 numOffsetBits;
+   488    
+   489        <span class="comment">/* offset bitmask using for generating a SRPtr */</span>
+   490        <span class=key>config</span> UInt32 offsetMask;
+   491    
+   492        <span class="comment">/*
+</span>   493    <span class="comment">     *  ======== checkOverlap ========
+</span>   494    <span class="comment">     *  Determines if there is an overlap with an existing entry
+</span>   495    <span class="comment">     *
+</span>   496    <span class="comment">     *  @param(base)    Base address of the region
+</span>   497    <span class="comment">     *  @param(len)     Size of the region
+</span>   498    <span class="comment">     *
+</span>   499    <span class="comment">     *  @b(returns)     Status if successful or not.
+</span>   500    <span class="comment">     */</span>
+   501        Int checkOverlap(Ptr base, SizeT len);
+   502    
+   503        <span class="comment">/*
+</span>   504    <span class="comment">     *  ======== Module State structure ========
+</span>   505    <span class="comment">     *  The regions array contains information for each shared region entry.
+</span>   506    <span class="comment">     *  The size of the table will be determined by the number of entries.
+</span>   507    <span class="comment">     */</span>
+   508        <span class=key>struct</span> Module_State {
+   509            Region      regions[];
+   510        };
+   511    }
+</pre>
+</body></html>

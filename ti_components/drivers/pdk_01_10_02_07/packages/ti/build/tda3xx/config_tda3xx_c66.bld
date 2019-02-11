@@ -1,0 +1,38 @@
+/*
+ *  ======== config.bld ========
+ *  Sample Build configuration script
+ */
+
+/* load the required modules for the configuration */
+var C66 = xdc.useModule('ti.targets.elf.C66');
+
+
+/* compiler paths for the CCS4.0                   */
+var rootDirPre = java.lang.System.getenv("CGTOOLS_DSP");
+var rootDirPost = "";
+
+/**********************************C66******************************/
+
+/* configure the options for the c66 targets      */
+
+/* c66 compiler directory path                    */
+C66.rootDir = rootDirPre + rootDirPost;
+
+/* compiler options                                */
+C66.ccOpts.suffix += " -mi10 -mo ";
+
+/* set default platform and list of all interested *
+ * platforms for C66                              */
+
+C66.platforms = [
+                     "ti.platforms.evmTDA3XX",
+
+                ];
+/* select the default platform                     */
+C66.platform = C66.platforms[0];
+
+
+/* list interested targets in Build.targets array  */
+Build.targets = [
+                    C66,
+                ];

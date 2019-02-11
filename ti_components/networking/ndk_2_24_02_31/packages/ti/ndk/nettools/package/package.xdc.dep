@@ -1,0 +1,53 @@
+clean::
+	$(RM) package/ti.ndk.nettools.sch
+	$(RM) package/.vers_g180
+	$(RM) package/.vers_r170
+	$(RM) package/.vers_b160
+	$(RM) package/.xdc-B06
+	$(RM) package/ti_ndk_nettools.java
+	$(RM) package/ti_ndk_nettools.class
+	$(RM) package/package_ti.ndk.nettools.c
+	$(RM) package/package.defs.h
+	$(RM) package/ti.ndk.nettools.ccs
+
+.interfaces: package/ti.ndk.nettools.sch package/.vers_g180 package/.vers_r170 package/.vers_b160 package/.xdc-B06 package/ti_ndk_nettools.java package/package_ti.ndk.nettools.c package/package.defs.h package/ti.ndk.nettools.ccs 
+package/package.xdc.inc: package/.vers_g180
+package/.vers_g180:
+package/package.xdc.inc: package/.vers_r170
+package/.vers_r170:
+package/package.xdc.inc: package/.vers_b160
+package/.vers_b160:
+
+.interfaces: 
+
+# schema include file dependencies
+package.xs:
+package/package.xdc.inc: package.xs
+
+# schema update dependencies
+package/package.xdc.inc: xdc/IPackage.xdc
+xdc/IPackage.xdc:
+vpath xdc/IPackage.xdc $(XPKGVPATH)
+
+ifneq (clean,$(MAKECMDGOALS))
+/datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/services/intern/gen/java/package.jar:
+package/package.xdc.inc: /datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/services/intern/gen/java/package.jar
+/datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/shelf/java/tar.jar:
+package/package.xdc.inc: /datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/shelf/java/tar.jar
+/datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/shelf/java/antlr.jar:
+package/package.xdc.inc: /datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/shelf/java/antlr.jar
+/datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/services/spec/java/package.jar:
+package/package.xdc.inc: /datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/services/spec/java/package.jar
+/datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/shelf/java/ecj.jar:
+package/package.xdc.inc: /datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/shelf/java/ecj.jar
+/datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/services/intern/cmd/java/package.jar:
+package/package.xdc.inc: /datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/services/intern/cmd/java/package.jar
+/datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/services/global/java/package.jar:
+package/package.xdc.inc: /datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/services/global/java/package.jar
+/datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/shelf/java/js.jar:
+package/package.xdc.inc: /datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/shelf/java/js.jar
+/datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/services/intern/xsr/java/package.jar:
+package/package.xdc.inc: /datalocal1/user/surya/vsdk_02_12_RC1/ti_components/os_tools/linux/xdctools_3_32_00_06_core/packages/xdc/services/intern/xsr/java/package.jar
+endif
+# goals for files generated during schema generation but unspecified by schema's pattern rule
+

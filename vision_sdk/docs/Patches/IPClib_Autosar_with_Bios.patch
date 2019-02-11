@@ -1,0 +1,60 @@
+diff --git a/src/tda2xx/ipclib_interruptTda2xxMailboxCfg.c b/src/tda2xx/ipclib_interruptTda2xxMailboxCfg.c
+index e3c0d6c..13d2e26 100755
+--- a/src/tda2xx/ipclib_interruptTda2xxMailboxCfg.c
++++ b/src/tda2xx/ipclib_interruptTda2xxMailboxCfg.c
+@@ -212,7 +212,7 @@ IpcLib_InterruptMailboxCfg IpcLib_gMailboxConfig[IPCLIB_MAX_PROC][
+         {12U, 0U, 3U},      /* IPU1_0 -> DSP1   */
+         {14U, 1U, 4U},      /* IPU1_0 -> DSP2   */
+         {IE,  IE, IE},      /* IPU1_0 -> IPU1_0 */
+-        {14U, 3U, 5U},      /* IPU1_0 -> IPU2_0 */
++        {12U, 3U, 7U},      /* IPU1_0 -> IPU2_0 */
+         {12U, 2U, 4U},      /* IPU1_0 -> HOST   */
+         {15U, 2U, 4U},      /* IPU1_0 -> IPU1_1 */
+         {15U, 3U, 1U}       /* IPU1_0 -> IPU2_1 */
+@@ -226,7 +226,7 @@ IpcLib_InterruptMailboxCfg IpcLib_gMailboxConfig[IPCLIB_MAX_PROC][
+         {10U, 0U, 3U},      /* IPU2_0 -> EVE4   */
+         {14U, 0U, 6U},      /* IPU2_0 -> DSP1   */
+         {13U, 0U, 3U},      /* IPU2_0 -> DSP2   */
+-        {14U, 2U, 7U},      /* IPU2_0 -> IPU1_0 */
++        {13U, 3U, 2U},      /* IPU2_0 -> IPU1_0 */
+         {IE,  IE, IE},      /* IPU2_0 -> IPU2_0 */
+         {13U, 2U, 4U},      /* IPU2_0 -> HOST   */
+         {15U, 2U, 3U},      /* IPU2_0 -> IPU1_1 */
+diff --git a/src/tda2xx/ipclib_interruptTda2xxXbarCfg.c b/src/tda2xx/ipclib_interruptTda2xxXbarCfg.c
+index 12a0476..2ad19c8 100755
+--- a/src/tda2xx/ipclib_interruptTda2xxXbarCfg.c
++++ b/src/tda2xx/ipclib_interruptTda2xxXbarCfg.c
+@@ -95,6 +95,7 @@ IpcLib_InterruptXbar IpcLib_gXbarConfig[] = {
+     {44U,  250U}, /* IPU1_0 / IPU1 <- DSP1, HOST */
+     {45U,  303U}, /* IPU1_0 / IPU1 <- EVE3 */
+     {46U,  312U}, /* IPU1_0 / IPU1 <- EVE4 */
++    {51U,  256U}, /* IPU1_0 / IPU1 <- IPU2_0 */
+     {47U,  259U}, /* IPU1_0 / IPU1 <- DSP2, IPU2_0 */
+     {48U,  263U}, /* IPU1_0 / IPU1 <- IPU2_1 */
+     {LE,   LE  }  /* Last Entry - need to be maintained
+@@ -118,6 +119,7 @@ IpcLib_InterruptXbar IpcLib_gXbarConfig[] = {
+     {44U,  254U}, /* IPU2_0 / IPU2 <- DSP2, HOST */
+     {45U,  306U}, /* IPU2_0 / IPU2 <- EVE3 */
+     {46U,  315U}, /* IPU2_0 / IPU2 <- EVE4 */
++    {51U,  252U}, /* IPU2_0 / IPU2 <- IPU1_0 */
+     {47U,  260U}, /* IPU2_0 / IPU2 <- DSP1, IPU1_0 */
+     {48U,  264U}, /* IPU2_0 / IPU2 <- IPU1_1 */
+     {LE,   LE  }  /* Last Entry - need to be maintained always */
+@@ -202,7 +204,7 @@ uint32_t IpcLib_gIntNumConfig[IPCLIB_MAX_PROC] = {
+     66U,       /* DSP1 */
+     69U,       /* DSP2 */
+     IE,        /* IPU1_0 */
+-    69U,       /* IPU2_0 */
++    73U,       /* IPU2_0 */
+     66U,       /* A15 */
+     69U,       /* IPU1_1 */
+     70U        /* IPU2_1 */
+@@ -210,7 +212,7 @@ uint32_t IpcLib_gIntNumConfig[IPCLIB_MAX_PROC] = {
+         #if defined (BUILD_IPU2_0)
+     69U,       /* DSP1 */
+     66U,       /* DSP2 */
+-    69U,       /* IPU1_0 */
++    73U,       /* IPU1_0 */
+     IE,        /* IPU2_0 */
+     66U,       /* A15 */
+     70U,       /* IPU1_1 */

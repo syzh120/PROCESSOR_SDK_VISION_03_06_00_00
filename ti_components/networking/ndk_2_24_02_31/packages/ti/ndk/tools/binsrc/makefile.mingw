@@ -1,0 +1,14 @@
+#
+# Simple makefile to build examples using MinGW gcc on Windows
+#
+
+CC = gcc
+CFLAGS = -Wall
+
+%.exe : %.c
+	$(CC) $(CFLAGS) -o $@ $<
+
+all: binsrc.exe
+
+clean:
+	rm -f *.exe *.o

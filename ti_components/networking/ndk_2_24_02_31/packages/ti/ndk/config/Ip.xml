@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<gep name="Ip" title="IP Settings" version="1">
+
+<page name="Module" title="General Settings">
+<html><body><table>
+  <tr>
+    <td>
+      <form>
+        <p>The Ip module allows you to configure Internet Protocol.</p>
+        <p></p> <!-- create some white space -->
+      </form>
+    </td>
+  </tr>
+
+  <tr><td colspan="2">
+    <control type="checkbox" label="Add the IP module to my configuration" value="value:this.$used" bold="true"/></td>
+  </tr>
+
+  <tr></tr> <!-- create some white space -->
+
+  <tr>
+    <td>
+      <h1>General IP Settings</h1>
+      <table>
+      <tr>
+        <td colspan="2">
+          <control type="checkbox" label="Obtain IP address automatically" value="value:ti.ndk.config.Ip.autoIp" bold="true"/>
+        </td>
+        <td colspan="2">
+          <control type="hyperlink" link="ref:ti.ndk.config.DhcpClient" label="Click here to access DHCP client settings" visible="value:ti.ndk.config.Ip.autoIp"/>
+        </td>
+      </tr>
+      <tr>
+        <td><control type="label" label="IP address" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:this.address"
+             tooltip="value:this.address.$summary"
+             enabled="value:!(ti.ndk.config.Ip.autoIp)"/></td>
+      </tr>
+      <tr>
+        <td><control type="label" label="IP mask" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:this.mask"
+             tooltip="value:this.mask.$summary"
+             enabled="value:!(ti.ndk.config.Ip.autoIp)"/></td>
+      </tr>
+      <tr>
+        <td><control type="label" label="Gateway IP address" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:this.gatewayIpAddr"
+             tooltip="value:this.gatewayIpAddr.$summary"
+             enabled="value:!(ti.ndk.config.Ip.autoIp)"/></td>
+      </tr>
+      <tr>
+        <td><control type="label" label="Domain name" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:this.domainName"
+             tooltip="value:this.domainName.$summary"/></td>
+      </tr>
+      <tr>
+        <td><control type="label" label="IP start index" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:this.indexStart"
+             tooltip="value:this.indexStart.$summary"/></td>
+      </tr>
+      <tr>
+        <td><control type="label" label="Interface ID" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:this.ifIdx"
+             tooltip="value:this.ifIdx.$summary"/></td>
+      </tr>
+      <tr>
+         <td colspan="2"><control type="checkbox" 
+             label="Enable port forwarding"
+             value="value:this.enableForwarding" 
+             tooltip="value:this.enableForwarding.$summary"/></td>
+      </tr>
+      <tr>
+         <td colspan="2"><control type="checkbox" 
+             label="Enable IP filtering"
+             value="value:this.enableFiltering" 
+             tooltip="value:this.enableFiltering.$summary"/></td>
+      </tr>
+      <tr>
+        <td><control type="label" label="Maximum IP reassembly time (seconds)" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:this.maxReassemblyTime"
+             tooltip="value:this.maxReassemblyTime.$summary"/></td>
+      </tr>
+      <tr>
+        <td><control type="label" label="Maximum IP reassembly size (bytes)" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:this.maxReassemblySize"
+             tooltip="value:this.maxReassemblySize.$summary"/></td>
+      </tr>
+      <tr>
+         <td colspan="2"><control type="checkbox" 
+             label="Enable directed broadcast"
+             value="value:this.enableDirectedBroadcast" 
+             tooltip="value:this.enableDirectedBroadcast.$summary"/></td>
+      </tr>
+      </table>
+    </td>
+
+    <td>
+    <h1>IP Socket Options</h1>
+
+    <table>
+      <tr>
+        <td><control type="label" label="Time to live (seconds)" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:this.socketTimeToLive"
+             tooltip="value:this.socketTimeToLive.$summary"/></td>
+      </tr>
+      <tr>
+        <td><control type="label" label="Default type of service" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:this.socketTos"
+             tooltip="value:this.socketTos.$summary"/></td>
+      </tr>
+      <tr>
+        <td><control type="label" label="Maximum number of connections" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:this.socketMaxConnections"
+             tooltip="value:this.socketMaxConnections.$summary"/></td>
+      </tr>
+      <tr>
+        <td><control type="label" label="Connection timeout (seconds)" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:this.socketConnectTimeout"
+             tooltip="value:this.socketConnectTimeout.$summary"/></td>
+      </tr>
+      <tr>
+        <td><control type="label" label="Minimum send size (bytes)" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:this.socketBufMinTxSize"
+             tooltip="value:this.socketBufMinTxSize.$summary"/></td>
+      </tr>
+      <tr>
+        <td><control type="label" label="Minimum read size (bytes)" align="left"/></td>
+        <td><control type="editbox" 
+             value="value:this.socketBufMinRxSize"
+             tooltip="value:this.socketBufMinRxSize.$summary"/></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+
+</table></body></html>
+</page>
+
+<properties name="Advanced" title="All Options" enabled="true" visible="true" link="this"/>
+</gep>
+

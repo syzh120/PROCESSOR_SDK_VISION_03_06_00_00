@@ -1,0 +1,399 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>module ti.sdo.utils.List</title>
+<meta name="googlebot" content="noindex,nofollow">
+<link rel="stylesheet" type="text/css" href="../../../src.css"/>
+</head>
+<body>
+<pre class=src>
+     1    <span class="comment">/*
+</span>     2    <span class="comment"> * Copyright (c) 2012-2013, Texas Instruments Incorporated
+</span>     3    <span class="comment"> * All rights reserved.
+</span>     4    <span class="comment"> *
+</span>     5    <span class="comment"> * Redistribution and use in source and binary forms, with or without
+</span>     6    <span class="comment"> * modification, are permitted provided that the following conditions
+</span>     7    <span class="comment"> * are met:
+</span>     8    <span class="comment"> *
+</span>     9    <span class="comment"> * *  Redistributions of source code must retain the above copyright
+</span>    10    <span class="comment"> *    notice, this list of conditions and the following disclaimer.
+</span>    11    <span class="comment"> *
+</span>    12    <span class="comment"> * *  Redistributions in binary form must reproduce the above copyright
+</span>    13    <span class="comment"> *    notice, this list of conditions and the following disclaimer in the
+</span>    14    <span class="comment"> *    documentation and/or other materials provided with the distribution.
+</span>    15    <span class="comment"> *
+</span>    16    <span class="comment"> * *  Neither the name of Texas Instruments Incorporated nor the names of
+</span>    17    <span class="comment"> *    its contributors may be used to endorse or promote products derived
+</span>    18    <span class="comment"> *    from this software without specific prior written permission.
+</span>    19    <span class="comment"> *
+</span>    20    <span class="comment"> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+</span>    21    <span class="comment"> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+</span>    22    <span class="comment"> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+</span>    23    <span class="comment"> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+</span>    24    <span class="comment"> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+</span>    25    <span class="comment"> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+</span>    26    <span class="comment"> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+</span>    27    <span class="comment"> * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+</span>    28    <span class="comment"> * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+</span>    29    <span class="comment"> * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+</span>    30    <span class="comment"> * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+</span>    31    <span class="comment"> */</span>
+    32    <span class="comment">/*
+</span>    33    <span class="comment"> *  ======== List.xdc ========
+</span>    34    <span class="comment"> *
+</span>    35    <span class="comment"> */</span>
+    36    
+    37    import xdc.rov.ViewInfo;
+    38    
+    39    <span class="xdoc">/*!
+</span>    40    <span class="xdoc"> *  ======== List ========
+</span>    41    <span class="xdoc"> *  Doubly Linked List Manager
+</span>    42    <span class="xdoc"> *
+</span>    43    <span class="xdoc"> *  The List module makes available a set of functions that manipulate
+</span>    44    <span class="xdoc"> *  List objects accessed through handles of type List_Handle.
+</span>    45    <span class="xdoc"> *  Each List contains a linked sequence of zero or more elements
+</span>    46    <span class="xdoc"> *  referenced through variables of type List_Elem, which are typically
+</span>    47    <span class="xdoc"> *  embedded as the first field within a structure.
+</span>    48    <span class="xdoc"> *
+</span>    49    <span class="xdoc"> *  All List function are atomic unless noted otherwise in the API
+</span>    50    <span class="xdoc"> *  descriptions. An atomic API means that the API completes in core
+</span>    51    <span class="xdoc"> *  functionality without being interrupted. Therefore, atomic APIs are
+</span>    52    <span class="xdoc"> *  thread-safe. An example is {<b>@link</b> #put}. Multiple threads can call
+</span>    53    <span class="xdoc"> *  {<b>@link</b> #put} at the same time. The threads do not have to manage the
+</span>    54    <span class="xdoc"> *  synchronization.
+</span>    55    <span class="xdoc"> *
+</span>    56    <span class="xdoc"> *  The {<b>@link</b> xdc.runtime.Gate#enterSystem}/{<b>@link</b> xdc.runtime.Gate#leaveSystem}
+</span>    57    <span class="xdoc"> *  calls are used to make the APIs atomic. This Gate calls internally use
+</span>    58    <span class="xdoc"> *  {<b>@link</b> xdc.runtime.System}'s gate.
+</span>    59    <span class="xdoc"> *
+</span>    60    <span class="xdoc"> *  The List module can be used both as a queue (i.e. First In First Out),
+</span>    61    <span class="xdoc"> *  as a stack (i.e. Last In First Out), or as a general purpose linked list.
+</span>    62    <span class="xdoc"> *
+</span>    63    <span class="xdoc"> *  Lists are represented as doubly-linked lists, so calls to {<b>@link</b> #next}
+</span>    64    <span class="xdoc"> *  or {<b>@link</b> #prev} can loop continuously over the List.
+</span>    65    <span class="xdoc"> *  Refer to {<b>@link</b> #next} and {<b>@link</b> #prev} for examples.
+</span>    66    <span class="xdoc"> *
+</span>    67    <span class="xdoc"> *  <b>@a(List as a Queue)</b>
+</span>    68    <span class="xdoc"> *
+</span>    69    <span class="xdoc"> *  To treat the list object as a queue:
+</span>    70    <span class="xdoc"> *  <b>@p(blist)</b>
+</span>    71    <span class="xdoc"> *  -Use {<b>@link</b> #put} to put at the tail of the queue
+</span>    72    <span class="xdoc"> *  -Use {<b>@link</b> #get} to get from the head of the queue
+</span>    73    <span class="xdoc"> *  <b>@p</b>
+</span>    74    <span class="xdoc"> *
+</span>    75    <span class="xdoc"> *  Here is sample code that acts on a List instance (listHandle) as a queue
+</span>    76    <span class="xdoc"> *  in a FIFO manner.
+</span>    77    <span class="xdoc"> *
+</span>    78    <span class="xdoc"> *  <b>@p(code)</b>
+</span>    79    <span class="xdoc"> *  List_Elem  elem[4];
+</span>    80    <span class="xdoc"> *  List_Elem *tmpElem;
+</span>    81    <span class="xdoc"> *
+</span>    82    <span class="xdoc"> *  // place at the tail of the queue
+</span>    83    <span class="xdoc"> *  for (i = 0; i &lt; 4; i++) {
+</span>    84    <span class="xdoc"> *      List_put(listHandle, &amp;(elem[i]));
+</span>    85    <span class="xdoc"> *  }
+</span>    86    <span class="xdoc"> *
+</span>    87    <span class="xdoc"> *  // remove the buffers from the head
+</span>    88    <span class="xdoc"> *  while((tmpElem = List_get(listHandle)) != NULL) {
+</span>    89    <span class="xdoc"> *      // process tmpElem
+</span>    90    <span class="xdoc"> *  }
+</span>    91    <span class="xdoc"> *  <b>@p</b>
+</span>    92    <span class="xdoc"> *
+</span>    93    <span class="xdoc"> *  <b>@a(List as a Stack)</b>
+</span>    94    <span class="xdoc"> *
+</span>    95    <span class="xdoc"> *  To treat the list object as a stack:
+</span>    96    <span class="xdoc"> *  <b>@p(blist)</b>
+</span>    97    <span class="xdoc"> *  -Use {<b>@link</b> #putHead} to put at the top of the stack
+</span>    98    <span class="xdoc"> *  -Use {<b>@link</b> #get} to get from the top of the stack
+</span>    99    <span class="xdoc"> *  <b>@p</b>
+</span>   100    <span class="xdoc"> *
+</span>   101    <span class="xdoc"> *  Here is sample code that acts on a List instance (listHandle) as a stack
+</span>   102    <span class="xdoc"> *  in a LIFO manner.
+</span>   103    <span class="xdoc"> *
+</span>   104    <span class="xdoc"> *  <b>@p(code)</b>
+</span>   105    <span class="xdoc"> *  List_Elem  elem[4];
+</span>   106    <span class="xdoc"> *  List_Elem *tmpElem;
+</span>   107    <span class="xdoc"> *
+</span>   108    <span class="xdoc"> *  // push onto the top (i.e. head)
+</span>   109    <span class="xdoc"> *  for (i = 0; i &lt; 4; i++) {
+</span>   110    <span class="xdoc"> *      List_putHead(listHandle, &amp;(elem[i]));
+</span>   111    <span class="xdoc"> *  }
+</span>   112    <span class="xdoc"> *
+</span>   113    <span class="xdoc"> *  // remove the buffers in FIFO order.
+</span>   114    <span class="xdoc"> *  while((tmpElem = List_get(listHandle)) != NULL) {
+</span>   115    <span class="xdoc"> *      // process tmpElem
+</span>   116    <span class="xdoc"> *  }
+</span>   117    <span class="xdoc"> *  <b>@p</b>
+</span>   118    <span class="xdoc"> */</span>
+   119    
+   120    <span class=key>module</span> List
+   121    {
+   122        <span class=key>metaonly</span> <span class=key>struct</span> BasicView {
+   123            String  label;
+   124            Ptr     elems[];
+   125        }
+   126    
+   127        @Facet
+   128        <span class=key>metaonly</span> <span class=key>config</span> ViewInfo.Instance rovViewInfo =
+   129            ViewInfo.create({
+   130                viewMap: [
+   131                    [<span class="string">'Basic'</span>, {type: ViewInfo.INSTANCE, viewInitFxn: <span class="string">'viewInitInstance'</span>, structName: <span class="string">'BasicView'</span>}]
+   132                ]
+   133            });
+   134    
+   135        <span class="xdoc">/*!
+</span>   136    <span class="xdoc">     *  ======== Elem ========
+</span>   137    <span class="xdoc">     *  Opaque List element
+</span>   138    <span class="xdoc">     *
+</span>   139    <span class="xdoc">     *  A field of this type is placed at the head of client structs.
+</span>   140    <span class="xdoc">     */</span>
+   141        @Opaque <span class=key>struct</span> Elem {
+   142            Elem *volatile next;    <span class="comment">/* must be volatile for whole_program */</span>
+   143            Elem *volatile prev;    <span class="comment">/* must be volatile for whole_program */</span>
+   144        };
+   145    
+   146        <span class="xdoc">/*!
+</span>   147    <span class="xdoc">     *  ======== elemClearMeta ========
+</span>   148    <span class="xdoc">     *  Clears a List element's pointers
+</span>   149    <span class="xdoc">     *
+</span>   150    <span class="xdoc">     *  This API is not for removing elements from a List, and
+</span>   151    <span class="xdoc">     *  should never be called on an element in a List--only on deListed
+</span>   152    <span class="xdoc">     *  elements.
+</span>   153    <span class="xdoc">     *
+</span>   154    <span class="xdoc">     *  <b>@param(elem)</b>            element to be cleared
+</span>   155    <span class="xdoc">     */</span>
+   156        <span class=key>metaonly</span> Void elemClearMeta(Elem *elem);
+   157    
+   158        <span class="xdoc">/*!
+</span>   159    <span class="xdoc">     *  ======== elemClear ========
+</span>   160    <span class="xdoc">     *  Clears a List element's pointers
+</span>   161    <span class="xdoc">     *
+</span>   162    <span class="xdoc">     *  This API does not removing elements from a List, and
+</span>   163    <span class="xdoc">     *  should never be called on an element in a List--only on deListed
+</span>   164    <span class="xdoc">     *  elements.
+</span>   165    <span class="xdoc">     *
+</span>   166    <span class="xdoc">     *  <b>@param(elem)</b>            element to be cleared
+</span>   167    <span class="xdoc">     */</span>
+   168        @DirectCall
+   169        Void elemClear(Elem *elem);
+   170    
+   171    <span class=key>instance</span>:
+   172    
+   173        <span class="xdoc">/*!
+</span>   174    <span class="xdoc">     *  ======== metaList ========
+</span>   175    <span class="xdoc">     *  <b>@_nodoc</b>
+</span>   176    <span class="xdoc">     *  Used to store elem before the object is initialized.
+</span>   177    <span class="xdoc">     */</span>
+   178        <span class=key>metaonly</span> <span class=key>config</span> any metaList[];
+   179    
+   180        <span class="xdoc">/*!
+</span>   181    <span class="xdoc">     *  ======== create ========
+</span>   182    <span class="xdoc">     *  Create a List object
+</span>   183    <span class="xdoc">     */</span>
+   184        create();
+   185    
+   186        <span class="xdoc">/*!
+</span>   187    <span class="xdoc">     *  ======== empty ========
+</span>   188    <span class="xdoc">     *  Test for an empty List (atomic)
+</span>   189    <span class="xdoc">     *
+</span>   190    <span class="xdoc">     *  <b>@b(returns)</b>     TRUE if this List is empty
+</span>   191    <span class="xdoc">     */</span>
+   192        @DirectCall
+   193        Bool empty();
+   194    
+   195        <span class="xdoc">/*!
+</span>   196    <span class="xdoc">     *  ======== get ========
+</span>   197    <span class="xdoc">     *  Get element from front of List (atomic)
+</span>   198    <span class="xdoc">     *
+</span>   199    <span class="xdoc">     *  This function atomically removes the element from the front of a
+</span>   200    <span class="xdoc">     *  List and returns a pointer to it.
+</span>   201    <span class="xdoc">     *
+</span>   202    <span class="xdoc">     *  <b>@b(returns)</b>     pointer to former first element or NULL if empty
+</span>   203    <span class="xdoc">     */</span>
+   204        @DirectCall
+   205        Ptr get();
+   206    
+   207        <span class="xdoc">/*!
+</span>   208    <span class="xdoc">     *  ======== put ========
+</span>   209    <span class="xdoc">     *  Put element at end of List (atomic)
+</span>   210    <span class="xdoc">     *
+</span>   211    <span class="xdoc">     *  This function atomically places the element at the end of
+</span>   212    <span class="xdoc">     *  List.
+</span>   213    <span class="xdoc">     *
+</span>   214    <span class="xdoc">     *  <b>@param(elem)</b>    pointer to new List element
+</span>   215    <span class="xdoc">     */</span>
+   216        @DirectCall
+   217        Void put(Elem *elem);
+   218    
+   219        <span class="xdoc">/*!
+</span>   220    <span class="xdoc">     *  ======== putHead ========
+</span>   221    <span class="xdoc">     *  Put element at head of List (atomic)
+</span>   222    <span class="xdoc">     *
+</span>   223    <span class="xdoc">     *  This function atomically places the element at the front of
+</span>   224    <span class="xdoc">     *  List.
+</span>   225    <span class="xdoc">     *
+</span>   226    <span class="xdoc">     *  <b>@param(elem)</b>    pointer to new List element
+</span>   227    <span class="xdoc">     */</span>
+   228        @DirectCall
+   229        Void putHead(Elem *elem);
+   230    
+   231        <span class="xdoc">/*!
+</span>   232    <span class="xdoc">     *  ======== putMeta ========
+</span>   233    <span class="xdoc">     *  <b>@_nodoc</b>
+</span>   234    <span class="xdoc">     *  Put element at end of List.
+</span>   235    <span class="xdoc">     *
+</span>   236    <span class="xdoc">     *  This meta function can be used to place an element onto
+</span>   237    <span class="xdoc">     *  the end of a list during configuration. There currently
+</span>   238    <span class="xdoc">     *  is no meta API to place the elem at the head of the list
+</span>   239    <span class="xdoc">     *  during configuration.
+</span>   240    <span class="xdoc">     *
+</span>   241    <span class="xdoc">     *  <b>@param(elem)</b>            pointer to new List element
+</span>   242    <span class="xdoc">     */</span>
+   243        <span class=key>metaonly</span> Void putMeta(Elem* elem);
+   244    
+   245        <span class="xdoc">/*!
+</span>   246    <span class="xdoc">     *  ======== next ========
+</span>   247    <span class="xdoc">     *  Return next element in List (non-atomic)
+</span>   248    <span class="xdoc">     *
+</span>   249    <span class="xdoc">     *  This function returns the next element on a list. It does not
+</span>   250    <span class="xdoc">     *  remove any items from the list. The caller should protect the
+</span>   251    <span class="xdoc">     *  list from being changed while using this call since it is non-atomic.
+</span>   252    <span class="xdoc">     *
+</span>   253    <span class="xdoc">     *  To look at the first elem on the list, use NULL as the elem argument.
+</span>   254    <span class="xdoc">     *
+</span>   255    <span class="xdoc">     *  This function is useful in searching a list. The following code shows
+</span>   256    <span class="xdoc">     *  an example. The scanning of a list should be protected against other
+</span>   257    <span class="xdoc">     *  threads that modify the list.
+</span>   258    <span class="xdoc">     *
+</span>   259    <span class="xdoc">     *  <b>@p(code)</b>
+</span>   260    <span class="xdoc">     *  List_Elem  *elem = NULL;
+</span>   261    <span class="xdoc">     *
+</span>   262    <span class="xdoc">     *  // Begin protection against modification of the list.
+</span>   263    <span class="xdoc">     *
+</span>   264    <span class="xdoc">     *  while ((elem = List_next(listHandle, elem)) != NULL) {
+</span>   265    <span class="xdoc">     *      //act elem as needed. For example call List_remove().
+</span>   266    <span class="xdoc">     *  }
+</span>   267    <span class="xdoc">     *
+</span>   268    <span class="xdoc">     *  // End protection against modification of the list.
+</span>   269    <span class="xdoc">     *  <b>@p</b>
+</span>   270    <span class="xdoc">     *
+</span>   271    <span class="xdoc">     *  <b>@param(elem)</b>    element in list or NULL to start at the head
+</span>   272    <span class="xdoc">     *
+</span>   273    <span class="xdoc">     *  <b>@b(returns)</b>     next element in list or NULL to denote end
+</span>   274    <span class="xdoc">     */</span>
+   275        @DirectCall
+   276        Ptr next(Elem *elem);
+   277    
+   278        <span class="xdoc">/*!
+</span>   279    <span class="xdoc">     *  ======== prev ========
+</span>   280    <span class="xdoc">     *  Return previous element in List (non-atomic)
+</span>   281    <span class="xdoc">     *
+</span>   282    <span class="xdoc">     *  This function returns the previous element on a list. It does not
+</span>   283    <span class="xdoc">     *  remove any items from the list. The caller should protect the
+</span>   284    <span class="xdoc">     *  list from being changed while using this call since it is non-atomic.
+</span>   285    <span class="xdoc">     *
+</span>   286    <span class="xdoc">     *  To look at the last elem on the list, use NULL as the elem argument.
+</span>   287    <span class="xdoc">     *
+</span>   288    <span class="xdoc">     *  This function is useful in searching a list in reverse order. The
+</span>   289    <span class="xdoc">     *  following code shows an example. The scanning of a list should be
+</span>   290    <span class="xdoc">     *  protected against other threads that modify the list.
+</span>   291    <span class="xdoc">     *
+</span>   292    <span class="xdoc">     *  <b>@p(code)</b>
+</span>   293    <span class="xdoc">     *  List_Elem  *elem = NULL;
+</span>   294    <span class="xdoc">     *
+</span>   295    <span class="xdoc">     *  // Begin protection against modification of the list.
+</span>   296    <span class="xdoc">     *
+</span>   297    <span class="xdoc">     *  while ((elem = List_prev(listHandle, elem)) != NULL) {
+</span>   298    <span class="xdoc">     *      //act elem as needed. For example call List_remove().
+</span>   299    <span class="xdoc">     *  }
+</span>   300    <span class="xdoc">     *
+</span>   301    <span class="xdoc">     *  // End protection against modification of the list.
+</span>   302    <span class="xdoc">     *  <b>@p</b>
+</span>   303    <span class="xdoc">     *
+</span>   304    <span class="xdoc">     *  <b>@param(elem)</b>    element in list or NULL to start at the end (i.e. tail)
+</span>   305    <span class="xdoc">     *
+</span>   306    <span class="xdoc">     *  <b>@b(returns)</b>     previous element in list or NULL to denote
+</span>   307    <span class="xdoc">     *                  no previous elem
+</span>   308    <span class="xdoc">     */</span>
+   309        @DirectCall
+   310        Ptr prev(Elem *elem);
+   311    
+   312        <span class="xdoc">/*!
+</span>   313    <span class="xdoc">     *  ======== insert ========
+</span>   314    <span class="xdoc">     *  Insert element at into a List (non-atomic)
+</span>   315    <span class="xdoc">     *
+</span>   316    <span class="xdoc">     *  This function inserts `newElem` in the queue in
+</span>   317    <span class="xdoc">     *  front of `curElem`. The caller should protect the
+</span>   318    <span class="xdoc">     *  list from being changed while using this call since it is non-atomic.
+</span>   319    <span class="xdoc">     *
+</span>   320    <span class="xdoc">     *  To place an elem at the end of the list, use {<b>@link</b> #put}.
+</span>   321    <span class="xdoc">     *  To place a elem at the front of the list, use {<b>@link</b> #putHead}.
+</span>   322    <span class="xdoc">     *
+</span>   323    <span class="xdoc">     *  <b>@param(newElem)</b>         element to insert
+</span>   324    <span class="xdoc">     *
+</span>   325    <span class="xdoc">     *  <b>@param(curElem)</b>         element to insert in front of
+</span>   326    <span class="xdoc">     */</span>
+   327        @DirectCall
+   328        Void insert(Elem *newElem, Elem *curElem);
+   329    
+   330        <span class="xdoc">/*!
+</span>   331    <span class="xdoc">     *  ======== remove ========
+</span>   332    <span class="xdoc">     *  Remove elem from middle of list (non-atomic)
+</span>   333    <span class="xdoc">     *
+</span>   334    <span class="xdoc">     *  This function removes an elem from a list.
+</span>   335    <span class="xdoc">     *  The `elem` parameter is a pointer to an existing element to be removed
+</span>   336    <span class="xdoc">     *  from the List.  The caller should protect the
+</span>   337    <span class="xdoc">     *  list from being changed while using this call since it is non-atomic.
+</span>   338    <span class="xdoc">     *
+</span>   339    <span class="xdoc">     *  <b>@param(elem)</b>            element in list
+</span>   340    <span class="xdoc">     */</span>
+   341        @DirectCall
+   342        Void remove(Elem *elem);
+   343    
+   344        <span class="xdoc">/*!
+</span>   345    <span class="xdoc">     *  ======== dequeue ========
+</span>   346    <span class="xdoc">     *  Get element from front of List (non-atomic)
+</span>   347    <span class="xdoc">     *
+</span>   348    <span class="xdoc">     *  This function atomically removes the element from the front of a
+</span>   349    <span class="xdoc">     *  List and returns a pointer to it.  This API is not thread safe.
+</span>   350    <span class="xdoc">     *  Use {<b>@link</b> #put} and {<b>@link</b> #get} if multiple calling contexts
+</span>   351    <span class="xdoc">     *  share the same list.
+</span>   352    <span class="xdoc">     *
+</span>   353    <span class="xdoc">     *  <b>@b(returns)</b>     pointer to former first element or NULL if empty
+</span>   354    <span class="xdoc">     */</span>
+   355        @DirectCall
+   356        Ptr dequeue();
+   357    
+   358        <span class="xdoc">/*!
+</span>   359    <span class="xdoc">     *  ======== enqueue ========
+</span>   360    <span class="xdoc">     *  Put element at end of List (non-atomic)
+</span>   361    <span class="xdoc">     *
+</span>   362    <span class="xdoc">     *  This function places the element at the end of a List.
+</span>   363    <span class="xdoc">     *  This API is not thread safe.  Use {<b>@link</b> #put} and {<b>@link</b> #get}
+</span>   364    <span class="xdoc">     *  if multiple calling contexts share the same list.
+</span>   365    <span class="xdoc">     *
+</span>   366    <span class="xdoc">     *  <b>@param(elem)</b>    pointer to new List element
+</span>   367    <span class="xdoc">     */</span>
+   368        @DirectCall
+   369        Void enqueue(Elem *elem);
+   370    
+   371        <span class="xdoc">/*!
+</span>   372    <span class="xdoc">     *  ======== enqueueHead ========
+</span>   373    <span class="xdoc">     *  Put element at head of List (non-atomic)
+</span>   374    <span class="xdoc">     *
+</span>   375    <span class="xdoc">     *  This function places the element at the front of the List.
+</span>   376    <span class="xdoc">     *  This API is not thread safe.  Use {<b>@link</b> #putHead}
+</span>   377    <span class="xdoc">     *  if multiple calling contexts share the same list.
+</span>   378    <span class="xdoc">     *
+</span>   379    <span class="xdoc">     *  <b>@param(elem)</b>    pointer to new List element
+</span>   380    <span class="xdoc">     */</span>
+   381        @DirectCall
+   382        Void enqueueHead(Elem *elem);
+   383    
+   384    <span class=key>internal</span>:
+   385    
+   386        <span class="comment">/* instance object */</span>
+   387        <span class=key>struct</span> Instance_State {
+   388            Elem elem;
+   389        };
+   390    }
+</pre>
+</body></html>

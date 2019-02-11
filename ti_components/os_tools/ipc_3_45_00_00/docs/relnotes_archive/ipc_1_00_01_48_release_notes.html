@@ -1,0 +1,163 @@
+<!-- --COPYRIGHT--,BSD
+ *  Copyright (c) $(CPYYEAR), Texas Instruments Incorporated
+ *  All rights reserved.
+ * 
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ * 
+ *  *  Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ * 
+ *  *  Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ * 
+ *  *  Neither the name of Texas Instruments Incorporated nor the names of
+ *     its contributors may be used to endorse or promote products derived
+ *     from this software without specific prior written permission.
+ * 
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ *  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ *  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ *  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ *  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ *  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ *  OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ *  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ *  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ *  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * --/COPYRIGHT-- -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><!-- saved from url=(0120)http://wiki.sanb.design.ti.com/twiki/bin/viewfile/Process/ReleaseNotesTemplate?rev=1;filename=example_release_notes.html --><!-- saved from url=(0113)file://C:\Documents and Settings\a0323759\Local Settings\Temporary Internet Files\OLKC\example_release_notes.html --><!-- /* * Copyright 2007 by Texas Instruments Incorporated . * * All rights reserved. Property of Texas Instruments Incorporated. * Restricted rights to use, duplicate or disclose this code are * granted through contract. * */ -->
+
+
+<title>IPC 1.00 Release Notes</title><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"><!-- For now, we use the doxygen style sheet -->
+
+<link href="release_notes_template_files/css.htm" type="text/css" rel="stylesheet">
+<meta content="MSHTML 6.00.2900.3395" name="GENERATOR"></head>
+<body>
+<table width="100%">
+<tbody>
+<tr>
+<td bgcolor="black" width="1"><a href="http://www.ti.com/"><img style="border: 0px solid ; width: 222px; height: 54px;" alt="Texas Instruments" src="docs/tilogo.gif"> </a></td>
+<td bgcolor="red"><img style="width: 314px; height: 26px;" alt="Technology for Innovators(tm)" src="docs/titagline.gif">
+</td>
+</tr>
+</tbody>
+</table>
+<h1 style="text-align: left;">IPC 1.00.01.48 GA Build Release Notes</h1>This release note is divided into the following sections:<br><br><a href="#General_Info">Introduction</a>,
+<a href="#Documentation">Documentation</a>, <a href="#Whats_New">What's New</a>, <a href="#Compatibility">Upgrade &amp; Compatibility
+Information</a>, <a href="#Host_Support">Host
+Support</a>, <a href="#Dependencies">Dependencies</a>,
+<a href="#Device_Support">Device Support</a>, <a href="#Validation">Validation Info</a>, <a href="#Known_Issues">Known Issues</a>, <a href="#Examples">Examples</a>, <a href="#Version">Version
+Information</a>, <a href="#Support">Technical
+Support</a>. 
+<hr>
+<h2><a name="General_Info">Introduction</a></h2>
+
+
+<p>This is the production (GA) release of IPC 1.00.01.48*&nbsp;</p><p>Interprocess communication mechanisms including message passing,
+streams, and linked lists, which work transparently in both
+uniprocessor and muiltiprocessor configurations.</p><p>The IPC product is comprised of three main packages</p><ul><li><span style="font-weight: bold;">ti.sdo.io</span>: &nbsp; &nbsp; Contains I/O modules &nbsp;(e.g. Stream, IDriver interface, etc.) <span style="font-style: italic;"></span></li><li><span style="font-weight: bold;">ti.sdo</span><span style="font-weight: bold;">.utils</span>: Contains helper modules (e.g. MultiProc, List and NameServer)</li><li><span style="font-weight: bold;">ti.sdo.</span><span style="font-weight: bold;">ipc</span>: &nbsp; Contains multicore modules (e.g. MessageQ, Notify, ListMP, etc.) </li></ul>These packages are provided as source code and prebuilt
+libraries. <br><br>*The "ti.sdo.ipc" package is an EA (Early Adopter) release,&nbsp;so minor changes may occur in the next release.<br>
+
+<hr>
+<h2><a name="Documentation">Documentation</a></h2>
+<p>The following documentation is available:</p><ul><li><a href="docs/User_install.pdf">User Install&nbsp;Guide</a></li><li><a href="docs/sprugo6.pdf">User Guide (SPRUO6)</a></li></ul><p>Release notes from previous releases are also available in the
+<a href="docs/relnotes_archive">relnotes_archive</a>
+directory. </p>
+<hr>
+<h2><a name="Whats_New">What's New</a></h2>
+<p><b>1.00.01.48 GA Build</b> <b>Release (this release)</b><big><span class="011215021-21062007"><font size="2"><big>.</big></font></span></big> </p><p><span style="font-weight: bold;">Build Changes: </span>&nbsp;The following were changed for this release</p><ul><li>Added C64P big endian support</li><li>C64x+ ELF and C674x CodeGen: 7.0.0A09019 -&gt; 7.0.0A09147</li><li>C28 CodeGen: 5.1.2 -&gt; 5.2.1</li></ul><span style="font-weight: bold;">New Platforms:</span>&nbsp;Custom
+platform files are supplied in the ti\sdo\ipc\examples\platforms
+directory. These platforms setup the memory maps for the multicore
+processors. These platforms are used in the multicore examples. The
+platforms are<ul><li>ti.sdo.ipc.examples.platforms.evmDM6446.arm</li><li>ti.sdo.ipc.examples.platforms.evmDM6446.dsp</li><li>ti.sdo.ipc.examples.platforms.simDM740.core0</li><li>ti.sdo.ipc.examples.platforms.simDM740.core1</li><li>ti.sdo.ipc.examples.platforms.simDM740.dsp</li><li>ti.sdo.ipc.examples.platforms.simDucati.core0</li><li>ti.sdo.ipc.examples.platforms.simDucati.core1</li></ul><p>The
+customization of the memory maps for the above platforms was removed
+from the etc\config.bld.default file. Instead the
+etc\config.bld.default file references the custom platform packages
+listed above.</p><p><span style="font-weight: bold;">New Modules:</span> The following new modules are available:</p><ul><li>ti.sdo.ipc.GateSpinLock: Usable on DM740.</li><li>ti.sdo.ipc.family: several Interrupt modules to support the platforms.</li></ul><span style="font-weight: bold;"></span><p><span style="font-weight: bold;">Bug Fixes and Minor Enhancements:</span> See the 
+list below for abbreviated list of bug fixes and enhancements. <br><span style="font-weight: bold;"></span></p>
+<div class="memitem">
+<h3>1.00.01.48 (This Release)&nbsp;</h3>
+<ul><li>The following issues were resolved/verified for this release.<table width="100%">
+<colgroup width="15%"></colgroup><tbody>
+<tr>
+<td><b>ID</b></td>
+<td><b>Headline</b></td>
+</tr>
+
+
+
+
+<tr><td>SDOCM00046958&nbsp;</td><td>MessageQ message size should support more than 16 bits</td></tr><tr><td>SDOCM00053780&nbsp;</td><td>CDOC: io.stream has broken link to xdc.runtime.knl.Sync module</td></tr><tr><td>SDOCM00056491</td><td>IPC: MessageQ module does not differentiate between HIGH_PRIORITY and URGENT_PRIORITY of messages</td></tr><tr><td>SDOCM00056512</td><td>IPC: MessageQ_get API does not return messages in FIFO manner on evmDM6467-XDS510USB and IPC 1.00.00.31</td></tr><tr><td>SDOCM00056552</td><td>IPC: MessageQ module does not raise assert when a wrong handle is used in MessageQ_get API</td></tr><tr><td>SDOCM00057207</td><td>Can't open IPC 1.0.0.38 API document reference from CCSv4-&gt;help-&gt;help contents</td></tr><tr><td>SDOCM00057231</td><td>IPC-MessageQ sprugo6.pdf: signature of MessageQ_get() in pdf file is not same as in CDOC</td></tr><tr><td>SDOCM00057235</td><td>Stream/io ROV needs updating</td></tr><tr><td>SDOCM00057274</td><td>GatePeterson/GateHWSem open should return Int not Status</td></tr><tr><td>SDOCM00054968</td><td>CCSv4 : Links to xdc runtime are broken in "Help Contents" of CCSv4 for IPC Module</td></tr><tr><td>SDOCM00056333</td><td>IPC:MessageQ_setMsgPri API is not working as expected</td></tr><tr><td>SDOCM00058631</td><td>add CCS4 template support for multicore examples</td></tr><tr><td>SDOCM00058815</td><td>Adding to a NameServer Instance statically in a module for 28x is broken</td></tr><tr><td>SDOCM00058629</td><td>INameServerRemote_get return needs to be consistent with NameServer</td></tr><tr><td>SDOCM00057256</td><td>ipc examples need to be completed.</td></tr></tbody>
+</table>
+</li>
+</ul>
+</div>
+For information on enhancements and defect fixes in earlier releases,
+please refer to the release notes from previous releases that are
+available in the <a href="docs/relnotes_archive">relnotes_archive</a>
+directory.&nbsp;
+<hr>
+<h2><a name="Compatibility">Upgrade and
+Compatibility Information</a></h2><p><span style="font-weight: bold;">Interface/API changes:</span> This release in not backward compatible with &nbsp;IPC 1.00.00.40 in the following areas:</p><ul><li>INameServerRemote_get prototype changed: It now matches the NameServer_get prototype.</li><li>SharedRegion: A few API's prototypes and constants that were Int or UInt&nbsp;changed to UInt32.</li><li>ListMP: Addeda constant ALLOWGROWTH. This is the default for maxRuntimeEntries instead of NameServer.ALLOWGROWTH.</li><li>HeapMultiBuf Added&nbsp;constant ALLOWGROWTH. This is the default for maxRuntimeEntries instead of NameServer.ALLOWGROWTH.</li><li>ti.sdo.ipc.GateXXX
+modules: The open() now returns an Int instead of a Status. The return
+values are the same, just the type changed.</li><li>GateHWSem: Added local protection similar to GatePeterson. This change is backward compatible.</li></ul>
+
+<ul>
+</ul>
+<hr>
+
+<h2><a name="Host_Support">Host Support</a></h2>
+<p>This release supports the following hosts:</p><p>Windows XP SP2/SP3</p><p>Windows Vista</p><p>Linux (Redhat 4 and 5)</p>
+
+
+<p class="MsoPlainText" style="margin-left: 0.5in; text-indent: -0.25in;"><span style="font-size: 12pt; font-family: &quot;Times New Roman&quot;;"><o:p></o:p></span></p>
+<hr>
+<h2><a name="Dependencies">Dependencies</a>
+</h2>
+<p>This release requires the following other software components
+and tools versions to successfully function: </p>
+<ul>
+
+<li>DSP/BIOS 6.20.01.41</li>
+<li> XDCtools 3.15.01.59<br></li></ul>
+
+<hr>
+<h2><a name="Device_Support">Device Support</a></h2>Same devices&nbsp;as supported in DSP/BIOS 6.20.01.
+<hr>
+<h2><a name="Validation">Validation Information</a></h2>This release was validated using the following components: 
+<ul><li>CCS 4.0</li><li>DSP/BIOS&nbsp;6.20.01.41</li><li> XDCtools&nbsp;3.15.01.59</li></ul>
+<hr>
+<h2><a name="Known_Issues">Known Issues</a></h2>
+There are several know issues with this release, primarily in the ti\sdo\ipc package (which is at EA status)<br><br>
+<table width="100%"><colgroup width="15%"></colgroup><tbody>
+<tr>
+<td><b>ID</b></td>
+<td><b>Headline</b></td></tr><tr><td>SDOCM00058906&nbsp;</td><td>Remote NameServer_get hangs if dest. not up&nbsp;</td></tr><tr><td>SDOCM00058860&nbsp;</td><td>HeapBuf_sharedMemReq should return UInt32 not Int&nbsp;</td></tr><tr><td>SDOCM00058783&nbsp;</td><td>Shared memory modules must check for correct memory alignment</td></tr><tr><td>SDOCM00058782&nbsp;</td><td>Need to resolve reserved events config in Notify/Notify Driver</td></tr><tr><td>SDOCM00058747</td><td>NotifyDriverLoopback should support static creation</td></tr><tr><td>SDOCM00057295&nbsp;</td><td>IPC: documention issue</td></tr><tr><td>SDOCM00057277</td><td>NameServer: ROV should show ALLOWGROWTH instead of 0xffffffff for numDynamic</td></tr><tr><td>SDOCM00057275</td><td>ipc modules do not handle when MultiProc.Id = INVALIDID</td></tr><tr><td>SDOCM00057267</td><td>IPC modules with shared memory need to use BitsXX instead of UIntXX</td></tr><tr><td>SDOCM00057265</td><td>IPC/NameServer needs asynchronous support&nbsp;</td></tr><tr><td>SDOCM00057260</td><td>ipc/family needs code review and full regression tests</td></tr><tr><td>SDOCM00057259&nbsp;</td><td>IPC Benchmarks need be examined&nbsp;</td></tr><tr><td>SDOCM00057258</td><td>IPC portion of User Guide needs updating&nbsp;</td></tr><tr><td>SDOCM00057257</td><td>All IPC modules should support cacheFlag for better performance</td></tr><tr><td>SDOCM00057255</td><td>xGConf Product View for IPC needs to be refined.&nbsp;</td></tr><tr><td>SDOCM00057254</td><td>gates (Peterson and HWSem) needs code review and full regression tests</td></tr><tr><td>SDOCM00057253</td><td>NameServerRemoteNotify needs code review and full regression tests</td></tr><tr><td>SDOCM00057251</td><td>Notify needs code review and full regression tests&nbsp;</td></tr><tr><td>SDOCM00057250</td><td>ListMP needs code review and full regression tests&nbsp;</td></tr><tr><td>SDOCM00057249</td><td>SharedRegion needs code review and full regression tests</td></tr><tr><td>SDOCM00057248</td><td>MessageQTransportShm needs code review and full regression tests</td></tr><tr><td>SDOCM00057247</td><td>HeapMultiBuf needs code review and full regression tests</td></tr><tr><td>SDOCM00057246</td><td>HeapBuf needs code review and full reSDOCM00057242gression tests</td></tr><tr><td>SDOCM00057245</td><td>MessageQ needs code review and full regression tests</td></tr><tr><td>SDOCM00057244</td><td>HeapBuf's trackMaxAllocs does not work properly</td></tr><tr><td>SDOCM00057243</td><td>MessageQ heap management needs investigation [might require design change]</td></tr><tr><td>SDOCM00057242</td><td>HeapMultiBuf does not work&nbsp;</td></tr><tr><td>SDOCM00057241</td><td>Notify/notifyDrivers does not support static instance creation</td></tr><tr><td>SDOCM00057239</td><td>HeapBuf does not support static instance creation</td></tr><tr><td>SDOCM00057238</td><td>NameServerRemoteNotify does not support static instance creation</td></tr><tr><td>SDOCM00057236</td><td>MessageQTransportShm does not support static instance creation</td></tr><tr><td>SDOCM00057049</td><td>GatePeterson should support max protection configuration for optimization</td></tr><tr><td>SDOCM00057006</td><td>ROV views needed for GatePeterson and GateHWSem&nbsp;</td></tr><tr><td>SDOCM00057005</td><td>NotifyDriverShm should support static creation&nbsp;</td></tr><tr><td>SDOCM00047848</td><td>MSGQ needs sequence # and RTA hooks&nbsp;</td></tr><tr><td>SDOCM00047053</td><td>MessageQ_delete does not free memory back to user created heapMem</td></tr></tbody></table><br>
+<hr>
+<h2><a name="Examples">Examples</a></h2>The IPC product ships with several examples. The following is an explaination of each one. Refer to the&nbsp;<a href="docs/User_install.pdf"><span style="text-decoration: underline;"></span></a><a href="docs/User_install.pdf">User Install&nbsp;Guide</a> for details on building.<br><big><span style="font-weight: bold;">io\examples</span></big><br><div style="margin-left: 40px;">- <span style="font-weight: bold;">stream</span>: This example shows the use of ti.sysbios.io.Stream module to demonstrate IO streaming using a driver.<br><br></div><big><span style="font-weight: bold;">utils\examples</span></big><br><div style="margin-left: 40px;">- <span style="font-weight: bold;">list</span>:&nbsp;The list example shows how to use the basical functionality of the ti.sdo.utils.List module<br>- <span style="font-weight: bold;">multiProc</span>: The multiProc example shows how to use the basical functionality of the ti.sdo.utils.MultiProc module<br>- <span style="font-weight: bold;">multiProcSingleImage</span>: The multiProcSingleImage example shows how to configure an image to be able to run on multiple cores.<br><br></div><big><span style="font-weight: bold;">ipc\examples\singlecore</span></big><br><div style="margin-left: 40px;">- <span style="font-weight: bold;">notify_loopback</span>:
+This example shows how to use the Notify module. The driver is the
+NotifyDriverLoopback, so it can be run on a single processor.<br><br></div><big style="font-weight: bold;">ipc\examples\multicore<br></big>Please refer to the readme.txt in the multicore platform specific directories for details on how to run.<big style="font-weight: bold;"><br></big><div style="margin-left: 40px;">- <span style="font-weight: bold;">message</span>: This example shows messageQ on a multiprocessor system. <span style="font-style: italic;"></span><br>- <span style="font-weight: bold;">notify</span>: This example shows how to run the Notify module only on a multiprocessor system.&nbsp;<span style="font-style: italic;"></span><br></div><h2><a name="Version">Version Information</a></h2><p>All releases&nbsp;have 4 digits (<b>M.mm.pp.bb</b>).
+This includes GA and pre-releases (engineering, EA, beta, etc.).
+Pre-releases are denoted with a&nbsp;suffix (e.g. 1.01.00.15-eng or 1.01.00.21-beta).  </p><p>This product's version follows a version format, <b>M.mm.pp.bb</b>, where 
+<b>M</b> is a single digit Major number, <b>mm</b> is 2 digit minor number, 
+<b>pp</b> is a 2 digit patch number, and <b>b</b> is an unrestricted set of 
+digits used as an incrementing build counter. </p>
+<p>To support multiple side-by-side installations of the product, the product 
+version is encoded in the top level directory, ex. <b>ipc_1_00_00_40</b>. </p>
+<p>Subsequent releases of patch upgrades will be identified by the patch number, 
+ex. IPC 1.00.01.41 with directory&nbsp;<b>ipc_1_00_01_41</b>. Typically, these patches 
+only include critical bug fixes. </p>
+<p>Please note that version numbers and compatibility keys are NOT the same. For 
+an explanation of compatibility keys, please refer to the 'Upgrade and 
+Compatibility Information' section. </p><hr>
+<h2><a name="Support">Technical Support</a></h2>
+<p>For technical support, contact <a href="https://www-a.ti.com/downloads/sds_support/targetcontent/FC/index.html">softwaresupport@ti.com<br>
+</a> </p>
+<hr>
+<p>Last updated: June 11, 2009 </p>
+</body></html>

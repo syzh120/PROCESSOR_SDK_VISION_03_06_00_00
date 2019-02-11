@@ -1,0 +1,23 @@
+digraph chains_nullSrc_Display {
+
+       ColorScheme [shape=none, margin=0, label=<
+       <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+       <TR><TD bgcolor="lightblue">IPU1_0</TD></TR>
+       <TR><TD bgcolor="lightsalmon">A15</TD></TR>
+       </TABLE>>];
+
+       /************** LINKS ************************/
+       NullSource [color=lightsalmon, style=filled]
+       IPCOut_A15_0_IPU1_0_0 [color=lightsalmon, style=filled]
+       IPCIn_IPU1_0_A15_0_0 [color=lightblue, style=filled]
+       Decode [color=lightblue, style=filled]
+       VPE [color=lightblue, style=filled]
+       Display [color=lightblue, style=filled]
+
+       /************** CONNECTIONS ************************/
+       VPE -> Display
+       Decode -> VPE
+       NullSource -> IPCOut_A15_0_IPU1_0_0
+       IPCOut_A15_0_IPU1_0_0 -> IPCIn_IPU1_0_A15_0_0
+       IPCIn_IPU1_0_A15_0_0 -> Decode
+}

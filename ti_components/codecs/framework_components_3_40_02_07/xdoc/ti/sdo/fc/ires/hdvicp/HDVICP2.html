@@ -1,0 +1,658 @@
+<html>
+<head>
+<title>module ti.sdo.fc.ires.hdvicp.HDVICP2</title>
+<meta name="description" content="HDVICP2-specific IRES Resman and Protocol Implementation">
+<link rel="stylesheet" type="text/css" href="../../../../../xdoc.css" />
+</head>
+<body><div id="xdocWrapper"><div id="xdocContent">
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">module</span> <span class="xdoc-id">ti.sdo.fc.ires.hdvicp.</span><span class="xdoc-id">HDVICP2</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/hdvicp/HDVICP.html" title="module HDVICP"><img class="xdocHdrArrow" src="../../../../../Arrow_left.png"/></a></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/hdvicp/package.html" title="package ti.sdo.fc.ires.hdvicp"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/hdvicp/HDVICP2.html">index URL</a></div>
+<p class="xdocHdrSummary">HDVICP2-specific IRES Resman and Protocol Implementation</p>
+<ul class="xdocToc">
+<li class="xdocToc"><a class="xdocToc" href="#meta-synop">Configuration settings</a></li>
+<li class="xdocToc2"><a class="xdocToc" href="#xdocMetaElems">Individual elements</a></li>
+</ul>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../../ti/sdo/fc/ires/hdvicp/HDVICP2-src.html"><span class="xdocLabelFile">ti/sdo/fc/ires/hdvicp/HDVICP2.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynM">
+<div class="xdocSynCode">
+<tt></tt><span class="xdoc-kw1">var</span> HDVICP2 = <span class="xdoc-kw3">xdc.useModule</span>(<span class="xdoc-id">'ti.sdo.fc.ires.hdvicp.HDVICP2'</span>);
+</div>
+<div class='xdocSynHdr'>module-wide constants & types</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">const</span> <a class="xdocSynGo" href="#.F.O.R.E.V.E.R">HDVICP2.<span class="xdoc-id">FOREVER</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Timeout value representing "Wait forever" to be used to configure the
+  <span class="xdoc-link" href="HDVICP2.html#timeout" title="timeout">timeout</span> configuration below</span></span></a> = -1;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">const</span> <a class="xdocSynGo" href="#.M.A.X.R.E.S.O.U.R.C.E.S">HDVICP2.<span class="xdoc-id">MAXRESOURCES</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Maximum number of HDVICP2 resources
+                                      this module can manage</span></span></a> = 10;
+</div>
+<div class='xdocSynHdr'>module-wide config parameters</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#auto.Register">HDVICP2.<span class="xdoc-id">autoRegister</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> = <i><span class="xdoc-kw2">Bool</span></i> <span class="xdoc-kw2">true</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#clear.P.R.C.M.Register">HDVICP2.<span class="xdoc-id">clearPRCMRegister</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Boolean value that indicates whether the PRCM register needs to be
+  cleared in the default implementation of the "reset" function</span></span></a> = <i><span class="xdoc-kw2">Bool</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#configure.Fxn">HDVICP2.<span class="xdoc-id">configureFxn</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Function to configure the interrupt associated with the IVAHD and
+  register a callback function</span></span></a> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#delegate">HDVICP2.<span class="xdoc-id">delegate</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Package name that implements the above configure, wait, done, reset
+  functions for the IVA-HD</span></span></a> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#done.Fxn">HDVICP2.<span class="xdoc-id">doneFxn</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Function indicating "done"</span></span></a> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#free.H.D.V.I.C.P2.Fxn">HDVICP2.<span class="xdoc-id">freeHDVICP2Fxn</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#get.H.D.V.I.C.P2.Fxn">HDVICP2.<span class="xdoc-id">getHDVICP2Fxn</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#get.Yield.Args.Fxn">HDVICP2.<span class="xdoc-id">getYieldArgsFxn</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#int.Array">HDVICP2.<span class="xdoc-id">intArray</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> = <i><span class="xdoc-kw2">UInt</span>[8]</i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#max.Hdvicp2.Reset.Delay">HDVICP2.<span class="xdoc-id">maxHdvicp2ResetDelay</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Maximum number of cycles to wait for HDVICP2 to reset, after a call is
+ issued</span></span></a> = <i><span class="xdoc-kw2">UInt</span></i> 1000;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#memory.Base.Address">HDVICP2.<span class="xdoc-id">memoryBaseAddress</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> = <i><span class="xdoc-kw2">UInt</span>[<a class="xdoc-link" href="../../../../../ti/sdo/fc/ires/hdvicp/HDVICP2.html#.M.A.X.R.E.S.O.U.R.C.E.S" title="ti.sdo.fc.ires.hdvicp.HDVICP2.MAXRESOURCES">HDVICP2.MAXRESOURCES</a>]</i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#register.Base.Address">HDVICP2.<span class="xdoc-id">registerBaseAddress</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Base-address of the IVA-HD register space</span></span></a> = <i><span class="xdoc-kw2">UInt</span>[<a class="xdoc-link" href="../../../../../ti/sdo/fc/ires/hdvicp/HDVICP2.html#.M.A.X.R.E.S.O.U.R.C.E.S" title="ti.sdo.fc.ires.hdvicp.HDVICP2.MAXRESOURCES">HDVICP2.MAXRESOURCES</a>]</i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#reset.Control.Address">HDVICP2.<span class="xdoc-id">resetControlAddress</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> = <i><span class="xdoc-kw2">UInt</span>[<a class="xdoc-link" href="../../../../../ti/sdo/fc/ires/hdvicp/HDVICP2.html#.M.A.X.R.E.S.O.U.R.C.E.S" title="ti.sdo.fc.ires.hdvicp.HDVICP2.MAXRESOURCES">HDVICP2.MAXRESOURCES</a>]</i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#reset.Fxn">HDVICP2.<span class="xdoc-id">resetFxn</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Function to reset the IVAHD</span></span></a> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#sem.Create.Fxn">HDVICP2.<span class="xdoc-id">semCreateFxn</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Function to create semaphores used by the resource manager</span></span></a> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#sem.Delete.Fxn">HDVICP2.<span class="xdoc-id">semDeleteFxn</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Function to delete semaphores used by the resource manager</span></span></a> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#sem.Pend.Fxn">HDVICP2.<span class="xdoc-id">semPendFxn</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Function to pend on semaphores used by the resource manager</span></span></a> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#sem.Post.Fxn">HDVICP2.<span class="xdoc-id">semPostFxn</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Function to post on Semaphores used by the resource manager</span></span></a> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#timeout">HDVICP2.<span class="xdoc-id">timeout</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Timeout setting in microseconds, used by the "waitFxn" while waiting for      * a configured IVAHD's interrupt to fire</span></span></a> = <i><span class="xdoc-kw2">UInt</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#wait.Fxn">HDVICP2.<span class="xdoc-id">waitFxn</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Function to wait on the interrupt associated with the IVAHD to fire</span></span></a> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#yield.Acquire.Fxn">HDVICP2.<span class="xdoc-id">yieldAcquireFxn</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#yield.Release.Fxn">HDVICP2.<span class="xdoc-id">yieldReleaseFxn</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+</div>
+<div id="xdocSep">
+</div>
+<div id="xdocMetaElems">
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".F.O.R.E.V.E.R"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">const</span> <span class="xdoc-id">HDVICP2.</span><span class="xdoc-id">FOREVER</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/hdvicp/HDVICP2.html" title="module HDVICP2"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/hdvicp/HDVICP2.html#.F.O.R.E.V.E.R">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Timeout value representing "Wait forever" to be used to configure the
+  <a class="xdoc-link" href="HDVICP2.html#timeout" title="timeout">timeout</a> configuration below</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">const</span> HDVICP2.<span class="xdoc-id">FOREVER</span> = -1;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".M.A.X.R.E.S.O.U.R.C.E.S"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">const</span> <span class="xdoc-id">HDVICP2.</span><span class="xdoc-id">MAXRESOURCES</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/hdvicp/HDVICP2.html" title="module HDVICP2"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/hdvicp/HDVICP2.html#.M.A.X.R.E.S.O.U.R.C.E.S">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Maximum number of HDVICP2 resources
+                                      this module can manage</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">const</span> HDVICP2.<span class="xdoc-id">MAXRESOURCES</span> = 10;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="auto.Register"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">HDVICP2.</span><span class="xdoc-id">autoRegister</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/hdvicp/HDVICP2.html" title="module HDVICP2"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/hdvicp/HDVICP2.html#auto.Register">index URL</a></div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>HDVICP2.<span class="xdoc-id">autoRegister</span> = <i><span class="xdoc-kw2">Bool</span></i> <span class="xdoc-kw2">true</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="clear.P.R.C.M.Register"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">HDVICP2.</span><span class="xdoc-id">clearPRCMRegister</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/hdvicp/HDVICP2.html" title="module HDVICP2"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/hdvicp/HDVICP2.html#clear.P.R.C.M.Register">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Boolean value that indicates whether the PRCM register needs to be
+  cleared in the default implementation of the "reset" function</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>HDVICP2.<span class="xdoc-id">clearPRCMRegister</span> = <i><span class="xdoc-kw2">Bool</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="configure.Fxn"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">HDVICP2.</span><span class="xdoc-id">configureFxn</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/hdvicp/HDVICP2.html" title="module HDVICP2"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/hdvicp/HDVICP2.html#configure.Fxn">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Function to configure the interrupt associated with the IVAHD and
+  register a callback function</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>HDVICP2.<span class="xdoc-id">configureFxn</span> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">Function signature of callback is:</div>
+<div class="xdocText"><PRE class="Example">  Void _cbFunction(Void * cbArgs);
+
+  Function signature of configure is:
+</PRE></div>
+<div class="xdocText"><PRE class="Example">  XDAS_Void _configure(IALG_Handle algHandle,
+          IRES_HDVICP2_Obj * hdvicpHandle,
+          IRES_HDVICP2_CallbackFxn cbFunctionPtr, XDAS_Void * cbArgs);
+     
+</PRE></div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="delegate"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">HDVICP2.</span><span class="xdoc-id">delegate</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/hdvicp/HDVICP2.html" title="module HDVICP2"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/hdvicp/HDVICP2.html#delegate">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Package name that implements the above configure, wait, done, reset
+  functions for the IVA-HD</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>HDVICP2.<span class="xdoc-id">delegate</span> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="done.Fxn"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">HDVICP2.</span><span class="xdoc-id">doneFxn</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/hdvicp/HDVICP2.html" title="module HDVICP2"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/hdvicp/HDVICP2.html#done.Fxn">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Function indicating "done"</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>HDVICP2.<span class="xdoc-id">doneFxn</span> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">This is the function called from the ISR interrupt associated with
+  the IVAHD to  unblock the <a class="xdoc-link" href="HDVICP2.html#wait.Fxn" title="waitFxn">waitFxn</a>.</div>
+<div class="xdocText">Function signature is:</div>
+<div class="xdocText"><PRE class="Example">  XDAS_Void _done(IALG_Handle algHandle, IRES_HDVICP2_Obj * hdvicpHandle);
+     
+</PRE></div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="free.H.D.V.I.C.P2.Fxn"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">HDVICP2.</span><span class="xdoc-id">freeHDVICP2Fxn</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/hdvicp/HDVICP2.html" title="module HDVICP2"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/hdvicp/HDVICP2.html#free.H.D.V.I.C.P2.Fxn">index URL</a></div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>HDVICP2.<span class="xdoc-id">freeHDVICP2Fxn</span> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="get.H.D.V.I.C.P2.Fxn"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">HDVICP2.</span><span class="xdoc-id">getHDVICP2Fxn</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/hdvicp/HDVICP2.html" title="module HDVICP2"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/hdvicp/HDVICP2.html#get.H.D.V.I.C.P2.Fxn">index URL</a></div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>HDVICP2.<span class="xdoc-id">getHDVICP2Fxn</span> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="get.Yield.Args.Fxn"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">HDVICP2.</span><span class="xdoc-id">getYieldArgsFxn</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/hdvicp/HDVICP2.html" title="module HDVICP2"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/hdvicp/HDVICP2.html#get.Yield.Args.Fxn">index URL</a></div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>HDVICP2.<span class="xdoc-id">getYieldArgsFxn</span> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="int.Array"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">HDVICP2.</span><span class="xdoc-id">intArray</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/hdvicp/HDVICP2.html" title="module HDVICP2"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/hdvicp/HDVICP2.html#int.Array">index URL</a></div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>HDVICP2.<span class="xdoc-id">intArray</span> = <i><span class="xdoc-kw2">UInt</span>[8]</i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="max.Hdvicp2.Reset.Delay"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">HDVICP2.</span><span class="xdoc-id">maxHdvicp2ResetDelay</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/hdvicp/HDVICP2.html" title="module HDVICP2"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/hdvicp/HDVICP2.html#max.Hdvicp2.Reset.Delay">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Maximum number of cycles to wait for HDVICP2 to reset, after a call is
+ issued</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>HDVICP2.<span class="xdoc-id">maxHdvicp2ResetDelay</span> = <i><span class="xdoc-kw2">UInt</span></i> 1000;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="memory.Base.Address"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">HDVICP2.</span><span class="xdoc-id">memoryBaseAddress</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/hdvicp/HDVICP2.html" title="module HDVICP2"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/hdvicp/HDVICP2.html#memory.Base.Address">index URL</a></div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>HDVICP2.<span class="xdoc-id">memoryBaseAddress</span> = <i><span class="xdoc-kw2">UInt</span>[<a class="xdoc-link" href="../../../../../ti/sdo/fc/ires/hdvicp/HDVICP2.html#.M.A.X.R.E.S.O.U.R.C.E.S" title="ti.sdo.fc.ires.hdvicp.HDVICP2.MAXRESOURCES">HDVICP2.MAXRESOURCES</a>]</i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="register.Base.Address"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">HDVICP2.</span><span class="xdoc-id">registerBaseAddress</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/hdvicp/HDVICP2.html" title="module HDVICP2"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/hdvicp/HDVICP2.html#register.Base.Address">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Base-address of the IVA-HD register space</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>HDVICP2.<span class="xdoc-id">registerBaseAddress</span> = <i><span class="xdoc-kw2">UInt</span>[<a class="xdoc-link" href="../../../../../ti/sdo/fc/ires/hdvicp/HDVICP2.html#.M.A.X.R.E.S.O.U.R.C.E.S" title="ti.sdo.fc.ires.hdvicp.HDVICP2.MAXRESOURCES">HDVICP2.MAXRESOURCES</a>]</i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="reset.Control.Address"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">HDVICP2.</span><span class="xdoc-id">resetControlAddress</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/hdvicp/HDVICP2.html" title="module HDVICP2"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/hdvicp/HDVICP2.html#reset.Control.Address">index URL</a></div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>HDVICP2.<span class="xdoc-id">resetControlAddress</span> = <i><span class="xdoc-kw2">UInt</span>[<a class="xdoc-link" href="../../../../../ti/sdo/fc/ires/hdvicp/HDVICP2.html#.M.A.X.R.E.S.O.U.R.C.E.S" title="ti.sdo.fc.ires.hdvicp.HDVICP2.MAXRESOURCES">HDVICP2.MAXRESOURCES</a>]</i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="reset.Fxn"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">HDVICP2.</span><span class="xdoc-id">resetFxn</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/hdvicp/HDVICP2.html" title="module HDVICP2"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/hdvicp/HDVICP2.html#reset.Fxn">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Function to reset the IVAHD</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>HDVICP2.<span class="xdoc-id">resetFxn</span> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">This is a callback function implemented by the framework and called by
+  the codec.</div>
+<div class="xdocText">Function signature is:</div>
+<div class="xdocText"><PRE class="Example">  XDAS_UInt32 _reset(IALG_Handle algHandle,
+          IRES_HDVICP2_Obj * hdvicpHandle);
+     
+</PRE></div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="sem.Create.Fxn"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">HDVICP2.</span><span class="xdoc-id">semCreateFxn</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/hdvicp/HDVICP2.html" title="module HDVICP2"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/hdvicp/HDVICP2.html#sem.Create.Fxn">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Function to create semaphores used by the resource manager</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>HDVICP2.<span class="xdoc-id">semCreateFxn</span> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">Function signature is:</div>
+<div class="xdocText"><PRE class="Example"> Void * _semCreate(Int key, Int count);
+     
+</PRE></div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="sem.Delete.Fxn"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">HDVICP2.</span><span class="xdoc-id">semDeleteFxn</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/hdvicp/HDVICP2.html" title="module HDVICP2"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/hdvicp/HDVICP2.html#sem.Delete.Fxn">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Function to delete semaphores used by the resource manager</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>HDVICP2.<span class="xdoc-id">semDeleteFxn</span> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">Function signature is:</div>
+<div class="xdocText"><PRE class="Example">  Void _semDelete(Void * sem);
+     
+</PRE></div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="sem.Pend.Fxn"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">HDVICP2.</span><span class="xdoc-id">semPendFxn</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/hdvicp/HDVICP2.html" title="module HDVICP2"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/hdvicp/HDVICP2.html#sem.Pend.Fxn">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Function to pend on semaphores used by the resource manager</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>HDVICP2.<span class="xdoc-id">semPendFxn</span> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">Function signature is:</div>
+<div class="xdocText"><PRE class="Example">  Int _semPend(Void * sem, unsigned int timeout);
+     
+</PRE></div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="sem.Post.Fxn"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">HDVICP2.</span><span class="xdoc-id">semPostFxn</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/hdvicp/HDVICP2.html" title="module HDVICP2"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/hdvicp/HDVICP2.html#sem.Post.Fxn">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Function to post on Semaphores used by the resource manager</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>HDVICP2.<span class="xdoc-id">semPostFxn</span> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">Function signature is:</div>
+<div class="xdocText"><PRE class="Example"> Void _semPost(Void * sem);
+     
+</PRE></div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="timeout"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">HDVICP2.</span><span class="xdoc-id">timeout</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/hdvicp/HDVICP2.html" title="module HDVICP2"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/hdvicp/HDVICP2.html#timeout">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Timeout setting in microseconds, used by the "waitFxn" while waiting for      * a configured IVAHD's interrupt to fire</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>HDVICP2.<span class="xdoc-id">timeout</span> = <i><span class="xdoc-kw2">UInt</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="wait.Fxn"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">HDVICP2.</span><span class="xdoc-id">waitFxn</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/hdvicp/HDVICP2.html" title="module HDVICP2"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/hdvicp/HDVICP2.html#wait.Fxn">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Function to wait on the interrupt associated with the IVAHD to fire</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>HDVICP2.<span class="xdoc-id">waitFxn</span> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">Function signature is:</div>
+<div class="xdocText"><PRE class="Example">  XDAS_UInt32 _wait(IALG_Handle algHandle,
+          IRES_HDVICP2_Obj * hdvicpHandle,
+          IRES_YieldContext * yieldContext);
+     
+</PRE></div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="yield.Acquire.Fxn"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">HDVICP2.</span><span class="xdoc-id">yieldAcquireFxn</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/hdvicp/HDVICP2.html" title="module HDVICP2"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/hdvicp/HDVICP2.html#yield.Acquire.Fxn">index URL</a></div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>HDVICP2.<span class="xdoc-id">yieldAcquireFxn</span> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="yield.Release.Fxn"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">HDVICP2.</span><span class="xdoc-id">yieldReleaseFxn</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/fc/ires/hdvicp/HDVICP2.html" title="module HDVICP2"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/fc/ires/hdvicp/HDVICP2.html#yield.Release.Fxn">index URL</a></div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>HDVICP2.<span class="xdoc-id">yieldReleaseFxn</span> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+</div>
+<div id="xdocDate">generated on Tue, 28 Jun 2016 21:14:30 GMT</div>
+</div></div></body>
+</html>

@@ -1,0 +1,23 @@
+UseCase: chains_vipSingleCameraAnalytics2
+
+// Capture
+Capture -> Dup_capture -> Dup_dsp (DSP2) -> Merge_alg
+
+// Object Detect
+Dup_capture -> Alg_ImagePreProcess (EVE1) -> Alg_ImgPyramid -> Dup_imgpmd -> Alg_FPCompute (EVE1) -> Alg_ObjectDetection (DSP2) -> Merge_objectDetect (DSP2)
+
+// Object classification
+Dup_imgpmd -> Dup_imgpmd_dsp (DSP2) -> Merge_objectDetect -> Sync_objectDetect (DSP2) -> Alg_ObjectClassification (DSP2) -> Sync_Fcw (DSP2) -> Alg_Fcw (DSP2)
+
+// FCW
+Alg_Fcw (DSP2) -> Merge_alg (DSP2)
+
+// TLR
+Dup_dsp -> Alg_Clr (DSP2) -> Merge_alg
+
+// LD
+Dup_imgpmd_dsp -> Alg_LaneDetect (DSP2) -> Merge_alg
+
+// Drawing and Display
+Merge_alg -> Sync_alg (DSP2) -> Alg_ObjectDraw (DSP2) -> EpSink_1 (A15)
+

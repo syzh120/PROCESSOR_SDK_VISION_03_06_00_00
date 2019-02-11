@@ -1,0 +1,361 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>module ti.sdo.ipc.heaps.HeapMemMP</title>
+<meta name="googlebot" content="noindex,nofollow">
+<link rel="stylesheet" type="text/css" href="../../../../src.css"/>
+</head>
+<body>
+<pre class=src>
+     1    <span class="comment">/*
+</span>     2    <span class="comment"> * Copyright (c) 2012-2013, Texas Instruments Incorporated
+</span>     3    <span class="comment"> * All rights reserved.
+</span>     4    <span class="comment"> *
+</span>     5    <span class="comment"> * Redistribution and use in source and binary forms, with or without
+</span>     6    <span class="comment"> * modification, are permitted provided that the following conditions
+</span>     7    <span class="comment"> * are met:
+</span>     8    <span class="comment"> *
+</span>     9    <span class="comment"> * *  Redistributions of source code must retain the above copyright
+</span>    10    <span class="comment"> *    notice, this list of conditions and the following disclaimer.
+</span>    11    <span class="comment"> *
+</span>    12    <span class="comment"> * *  Redistributions in binary form must reproduce the above copyright
+</span>    13    <span class="comment"> *    notice, this list of conditions and the following disclaimer in the
+</span>    14    <span class="comment"> *    documentation and/or other materials provided with the distribution.
+</span>    15    <span class="comment"> *
+</span>    16    <span class="comment"> * *  Neither the name of Texas Instruments Incorporated nor the names of
+</span>    17    <span class="comment"> *    its contributors may be used to endorse or promote products derived
+</span>    18    <span class="comment"> *    from this software without specific prior written permission.
+</span>    19    <span class="comment"> *
+</span>    20    <span class="comment"> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+</span>    21    <span class="comment"> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+</span>    22    <span class="comment"> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+</span>    23    <span class="comment"> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+</span>    24    <span class="comment"> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+</span>    25    <span class="comment"> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+</span>    26    <span class="comment"> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+</span>    27    <span class="comment"> * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+</span>    28    <span class="comment"> * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+</span>    29    <span class="comment"> * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+</span>    30    <span class="comment"> * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+</span>    31    <span class="comment"> */</span>
+    32    <span class="comment">/*
+</span>    33    <span class="comment"> *  ======== HeapMemMP.xdc ========
+</span>    34    <span class="comment"> *
+</span>    35    <span class="comment"> */</span>
+    36    
+    37    <span class=key>package</span> ti.sdo.ipc.heaps;
+    38    
+    39    import ti.sdo.ipc.SharedRegion;
+    40    import ti.sdo.ipc.Ipc;
+    41    import ti.sdo.ipc.GateMP;
+    42    import ti.sdo.utils.NameServer;
+    43    
+    44    import xdc.rov.ViewInfo;    <span class="comment">/* Display local/shared state + FreeBlockView */</span>
+    45    
+    46    import xdc.runtime.Error;
+    47    import xdc.runtime.Assert;
+    48    import xdc.runtime.Memory;
+    49    import xdc.runtime.Startup;
+    50    
+    51    <span class="xdoc">/*!
+</span>    52    <span class="xdoc"> *  ======== HeapMemMP ========
+</span>    53    <span class="xdoc"> *  Multi-processor variable size buffer heap implementation.
+</span>    54    <span class="xdoc"> *
+</span>    55    <span class="xdoc"> *  <b>@p(html)</b>
+</span>    56    <span class="xdoc"> *  This module has a common header that can be found in the {<b>@link</b> ti.ipc}
+</span>    57    <span class="xdoc"> *  package.  Application code should include the common header file (not the
+</span>    58    <span class="xdoc"> *  RTSC-generated one):
+</span>    59    <span class="xdoc"> *
+</span>    60    <span class="xdoc"> *  &lt;PRE&gt;#include &amp;lt;ti/ipc/HeapMemMP.h&amp;gt;&lt;/PRE&gt;
+</span>    61    <span class="xdoc"> *
+</span>    62    <span class="xdoc"> *  The RTSC module must be used in the application's RTSC configuration file
+</span>    63    <span class="xdoc"> *  (.cfg) if runtime APIs will be used in the application:
+</span>    64    <span class="xdoc"> *
+</span>    65    <span class="xdoc"> *  &lt;PRE&gt;HeapMemMP = xdc.useModule('ti.sdo.ipc.heaps.HeapMemMP');&lt;/PRE&gt;
+</span>    66    <span class="xdoc"> *
+</span>    67    <span class="xdoc"> *  Documentation for all runtime APIs, instance configuration parameters,
+</span>    68    <span class="xdoc"> *  error codes macros and type definitions available to the application
+</span>    69    <span class="xdoc"> *  integrator can be found in the
+</span>    70    <span class="xdoc"> *  &lt;A HREF="../../../../../doxygen/html/files.html"&gt;Doxygen documenation&lt;/A&gt;
+</span>    71    <span class="xdoc"> *  for the IPC product.  However, the documentation presented on this page
+</span>    72    <span class="xdoc"> *  should be referred to for information specific to the RTSC module, such as
+</span>    73    <span class="xdoc"> *  module configuration, Errors, and Asserts.
+</span>    74    <span class="xdoc"> *  <b>@p</b>
+</span>    75    <span class="xdoc"> */</span>
+    76    @InstanceInitError   <span class="comment">/* For NameServer_addUInt32                            */</span>
+    77    @InstanceFinalize    <span class="comment">/* For finalizing shared memory and removing NS entry  */</span>
+    78    
+    79    <span class=key>module</span> HeapMemMP <span class=key>inherits</span> xdc.runtime.IHeap {
+    80    
+    81        <span class="xdoc">/*! <b>@_nodoc</b> */</span>
+    82        <span class=key>metaonly</span> <span class=key>struct</span> BasicView {
+    83            String          name;
+    84            Ptr             buf;
+    85            Memory.Size     totalSize;
+    86            String          objType;
+    87            Ptr             gate;
+    88        }
+    89    
+    90        <span class="xdoc">/*! <b>@_nodoc</b> */</span>
+    91        <span class=key>metaonly</span> <span class=key>struct</span> DetailedView {
+    92            String          name;
+    93            Ptr             buf;
+    94            Memory.Size     totalSize;
+    95            String          objType;
+    96            Ptr             gate;
+    97            Ptr             attrs;
+    98            Bool            cacheEnabled;
+    99            Memory.Size     totalFreeSize;
+   100            Memory.Size     largestFreeSize;
+   101        }
+   102    
+   103        <span class="xdoc">/*! <b>@_nodoc</b> */</span>
+   104        <span class=key>metaonly</span> <span class=key>struct</span> FreeBlockView {
+   105            String          address;
+   106            String          label;
+   107            String          size;
+   108        }
+   109    
+   110        <span class="xdoc">/*! <b>@_nodoc</b> */</span>
+   111        @Facet
+   112        <span class=key>metaonly</span> <span class=key>config</span> ViewInfo.Instance rovViewInfo =
+   113            ViewInfo.create({
+   114                viewMap: [
+   115                [
+   116                    <span class="string">'Basic'</span>,
+   117                    {
+   118                        type: ViewInfo.INSTANCE,
+   119                        viewInitFxn: <span class="string">'viewInitBasic'</span>,
+   120                        structName: <span class="string">'BasicView'</span>
+   121                    }
+   122                ],
+   123                [
+   124                    <span class="string">'Detailed'</span>,
+   125                    {
+   126                        type: ViewInfo.INSTANCE,
+   127                        viewInitFxn: <span class="string">'viewInitDetailed'</span>,
+   128                        structName: <span class="string">'DetailedView'</span>
+   129                    }
+   130                ],
+   131                [
+   132                    <span class="string">'FreeList'</span>,
+   133                    {
+   134                        type: ViewInfo.INSTANCE_DATA,
+   135                        viewInitFxn: <span class="string">'viewInitData'</span>,
+   136                        structName: <span class="string">'FreeBlockView'</span>
+   137                    }
+   138                ]
+   139                ]
+   140            });
+   141    
+   142        <span class="xdoc">/*!
+</span>   143    <span class="xdoc">     *  ======== ExtendedStats ========
+</span>   144    <span class="xdoc">     *  Stats structure for the getExtendedStats API.
+</span>   145    <span class="xdoc">     *
+</span>   146    <span class="xdoc">     *  <b>@field(buf)</b>           Local address of the shared buffer
+</span>   147    <span class="xdoc">     *                        This may be different from the original buf
+</span>   148    <span class="xdoc">     *                        parameter due to alignment requirements.
+</span>   149    <span class="xdoc">     *  <b>@field(size)</b>          Size of the shared buffer.
+</span>   150    <span class="xdoc">     *                        This may be different from the original size
+</span>   151    <span class="xdoc">     *                        parameter due to alignment requirements.
+</span>   152    <span class="xdoc">     */</span>
+   153        <span class=key>struct</span> ExtendedStats {
+   154            Ptr   buf;
+   155            SizeT size;
+   156        }
+   157    
+   158        <span class="xdoc">/*!
+</span>   159    <span class="xdoc">     *  Assert raised when a block of size 0 is requested.
+</span>   160    <span class="xdoc">     */</span>
+   161        <span class=key>config</span> Assert.Id A_zeroBlock =
+   162            {msg: <span class="string">"A_zeroBlock: Cannot allocate size 0"</span>};
+   163    
+   164        <span class="xdoc">/*!
+</span>   165    <span class="xdoc">     *  Assert raised when the requested heap size is too small.
+</span>   166    <span class="xdoc">     */</span>
+   167        <span class=key>config</span> Assert.Id A_heapSize =
+   168            {msg: <span class="string">"A_heapSize: Requested heap size is too small"</span>};
+   169    
+   170        <span class="xdoc">/*!
+</span>   171    <span class="xdoc">     *  Assert raised when the requested alignment is not a power of 2.
+</span>   172    <span class="xdoc">     */</span>
+   173        <span class=key>config</span> Assert.Id A_align =
+   174            {msg: <span class="string">"A_align: Requested align is not a power of 2"</span>};
+   175    
+   176        <span class="xdoc">/*!
+</span>   177    <span class="xdoc">     *  Assert raised when the free detects that an invalid addr or size.
+</span>   178    <span class="xdoc">     *
+</span>   179    <span class="xdoc">     *  This could arise when multiple frees are done on the same buffer or
+</span>   180    <span class="xdoc">     *  if corruption occurred.
+</span>   181    <span class="xdoc">     *
+</span>   182    <span class="xdoc">     *  This also could occur when an alloc is made with size N and the
+</span>   183    <span class="xdoc">     *  free for this buffer specifies size M where M &gt; N. Note: not every
+</span>   184    <span class="xdoc">     *  case is detectable.
+</span>   185    <span class="xdoc">     *
+</span>   186    <span class="xdoc">     *  This assert can also be caused when passing an invalid addr to free
+</span>   187    <span class="xdoc">     *  or if the size is causing the end of the buffer to be
+</span>   188    <span class="xdoc">     *  out of the expected range.
+</span>   189    <span class="xdoc">     */</span>
+   190        <span class=key>config</span> Assert.Id A_invalidFree =
+   191            {msg: <span class="string">"A_invalidFree: Invalid free"</span>};
+   192    
+   193        <span class="xdoc">/*!
+</span>   194    <span class="xdoc">     *  Raised when requested size exceeds largest free block.
+</span>   195    <span class="xdoc">     */</span>
+   196        <span class=key>config</span> Error.Id E_memory =
+   197            {msg: <span class="string">"E_memory: Out of memory: handle=0x%x, size=%u"</span>};
+   198    
+   199        <span class="xdoc">/*!
+</span>   200    <span class="xdoc">     *  Maximum runtime entries
+</span>   201    <span class="xdoc">     *
+</span>   202    <span class="xdoc">     *  Maximum number of HeapMemMP's that can be dynamically created and
+</span>   203    <span class="xdoc">     *  added to the NameServer.
+</span>   204    <span class="xdoc">     *
+</span>   205    <span class="xdoc">     *  To minimize the amount of runtime allocation, this parameter allows
+</span>   206    <span class="xdoc">     *  the pre-allocation of memory for the HeapMemMP's NameServer table.
+</span>   207    <span class="xdoc">     *  The default is to allow growth (i.e. memory allocation when
+</span>   208    <span class="xdoc">     *  creating a new instance).
+</span>   209    <span class="xdoc">     */</span>
+   210        <span class=key>metaonly</span> <span class=key>config</span> UInt maxRuntimeEntries = NameServer.ALLOWGROWTH;
+   211    
+   212        <span class="xdoc">/*!
+</span>   213    <span class="xdoc">     *  Maximum length for heap names
+</span>   214    <span class="xdoc">     */</span>
+   215        <span class=key>config</span> UInt maxNameLen = 32;
+   216    
+   217        <span class="xdoc">/*!
+</span>   218    <span class="xdoc">     *  Section name is used to place the names table
+</span>   219    <span class="xdoc">     *
+</span>   220    <span class="xdoc">     *  The default value of NULL implies that no explicit placement is
+</span>   221    <span class="xdoc">     *  performed.
+</span>   222    <span class="xdoc">     */</span>
+   223        <span class=key>metaonly</span> <span class=key>config</span> String tableSection = <span class=key>null</span>;
+   224    
+   225    <span class=key>instance</span>:
+   226    
+   227        <span class="xdoc">/*!
+</span>   228    <span class="xdoc">     *  GateMP used for critical region management of the shared memory
+</span>   229    <span class="xdoc">     *
+</span>   230    <span class="xdoc">     *  Using the default value of NULL will result in use of the GateMP
+</span>   231    <span class="xdoc">     *  system gate for context protection.
+</span>   232    <span class="xdoc">     */</span>
+   233        <span class=key>config</span> GateMP.Handle gate = <span class=key>null</span>;
+   234    
+   235        <span class="xdoc">/*! <b>@_nodoc</b>
+</span>   236    <span class="xdoc">     *  Set to TRUE by the open() call. No one else should touch this!
+</span>   237    <span class="xdoc">     */</span>
+   238        <span class=key>config</span> Bool openFlag = <span class=key>false</span>;
+   239    
+   240        <span class="xdoc">/*!
+</span>   241    <span class="xdoc">     *  Name of this instance.
+</span>   242    <span class="xdoc">     *
+</span>   243    <span class="xdoc">     *  The name (if not NULL) must be unique among all HeapMemMP
+</span>   244    <span class="xdoc">     *  instances in the entire system.  When creating a new
+</span>   245    <span class="xdoc">     *  heap, it is necessary to supply an instance name.
+</span>   246    <span class="xdoc">     */</span>
+   247        <span class=key>config</span> String name = <span class=key>null</span>;
+   248    
+   249        <span class="xdoc">/*!
+</span>   250    <span class="xdoc">     *  Shared region ID
+</span>   251    <span class="xdoc">     *
+</span>   252    <span class="xdoc">     *  The index corresponding to the shared region from which shared memory
+</span>   253    <span class="xdoc">     *  will be allocated.
+</span>   254    <span class="xdoc">     */</span>
+   255        <span class=key>config</span> UInt16 regionId = 0;
+   256    
+   257        <span class="xdoc">/*! <b>@_nodoc</b>
+</span>   258    <span class="xdoc">     *  Physical address of the shared memory
+</span>   259    <span class="xdoc">     *
+</span>   260    <span class="xdoc">     *  This value can be left as 'null' unless it is required to place the
+</span>   261    <span class="xdoc">     *  heap at a specific location in shared memory.  If sharedAddr is null,
+</span>   262    <span class="xdoc">     *  then shared memory for a new instance will be allocated from the
+</span>   263    <span class="xdoc">     *  heap belonging to the region identified by {<b>@link</b> #regionId}.
+</span>   264    <span class="xdoc">     */</span>
+   265        <span class=key>config</span> Ptr sharedAddr = <span class=key>null</span>;
+   266    
+   267        <span class="xdoc">/*!
+</span>   268    <span class="xdoc">     *  Size of {<b>@link</b> #sharedBuf}
+</span>   269    <span class="xdoc">     *
+</span>   270    <span class="xdoc">     *  This is the size of the buffer to be used in the HeapMemMP instance.
+</span>   271    <span class="xdoc">     *  The actual buffer size in the created instance might actually be less
+</span>   272    <span class="xdoc">     *  than the value supplied in 'sharedBufSize' because of alignment
+</span>   273    <span class="xdoc">     *  constraints.
+</span>   274    <span class="xdoc">     *
+</span>   275    <span class="xdoc">     *  It is important to note that the total amount of shared memory required
+</span>   276    <span class="xdoc">     *  for a HeapMemMP instance will be greater than the size supplied here.
+</span>   277    <span class="xdoc">     *  Additional space will be consumed by shared instance attributes and
+</span>   278    <span class="xdoc">     *  alignment-related padding.  Use the {<b>@link</b> #sharedMemReq} or the
+</span>   279    <span class="xdoc">     *  {<b>@link</b> #sharedMemReqMeta} call to determine the exact amount of shared
+</span>   280    <span class="xdoc">     *  memory required for an instance for a given sharedBufSize and cache
+</span>   281    <span class="xdoc">     *  settings.
+</span>   282    <span class="xdoc">     */</span>
+   283        <span class=key>config</span> SizeT sharedBufSize = 0;
+   284    
+   285        <span class="xdoc">/*!
+</span>   286    <span class="xdoc">     *  ======== getStats ========
+</span>   287    <span class="xdoc">     *  <b>@a(HeapMemMP)</b>
+</span>   288    <span class="xdoc">     *  getStats() will lock the heap using the HeapMemMP Gate while it retrieves
+</span>   289    <span class="xdoc">     *  the HeapMemMP's statistics.
+</span>   290    <span class="xdoc">     *
+</span>   291    <span class="xdoc">     *  The returned totalSize reflects the usable size of the buffer, not
+</span>   292    <span class="xdoc">     *  necessarily the size specified during create.
+</span>   293    <span class="xdoc">     */</span>
+   294        @DirectCall
+   295        <span class=key>override</span> Void getStats(xdc.runtime.Memory.Stats *stats);
+   296    
+   297        @DirectCall
+   298        <span class=key>override</span> Ptr alloc(SizeT size, SizeT align, xdc.runtime.Error.Block *eb);
+   299    
+   300        @DirectCall
+   301        <span class=key>override</span> Void free(Ptr block, SizeT size);
+   302    
+   303    <span class=key>internal</span>:
+   304    
+   305        <span class="xdoc">/*! Used in the attrs-&gt;status field */</span>
+   306        <span class=key>const</span> UInt32 CREATED    = 0x07041776;
+   307    
+   308        <span class="xdoc">/*!
+</span>   309    <span class="xdoc">     *  This Params object is used for temporary storage of the
+</span>   310    <span class="xdoc">     *  module wide parameters that are for setting the NameServer instance.
+</span>   311    <span class="xdoc">     */</span>
+   312        <span class=key>metaonly</span> <span class=key>config</span> NameServer.Params nameSrvPrms;
+   313    
+   314        <span class="xdoc">/*! Initialize shared memory, adjust alignment, allocate memory for buf */</span>
+   315        Void postInit(Object *obj, Error.Block *eb);
+   316    
+   317        <span class="xdoc">/*!
+</span>   318    <span class="xdoc">     * Header maintained at the lower address of every free block. The size of
+</span>   319    <span class="xdoc">     * this struct must be a power of 2
+</span>   320    <span class="xdoc">     */</span>
+   321        <span class=key>struct</span> Header {
+   322            SharedRegion.SRPtr  next;  <span class="comment">/* SRPtr to next header (Header *)    */</span>
+   323            Bits32              size;  <span class="comment">/* Size of this segment (Memory.size) */</span>
+   324        };
+   325    
+   326        <span class="xdoc">/*! Structure of attributes in shared memory */</span>
+   327        <span class=key>struct</span> Attrs {
+   328            Bits32                  status;     <span class="comment">/* Version number                */</span>
+   329            SharedRegion.SRPtr      bufPtr;     <span class="comment">/* SRPtr to buf                  */</span>
+   330            Header                  head;       <span class="comment">/* First free block pointer.     */</span>
+   331                                                <span class="comment">/* The size field will be used   */</span>
+   332                                                <span class="comment">/* to store original heap size.  */</span>
+   333            SharedRegion.SRPtr      gateMPAddr; <span class="comment">/* GateMP SRPtr                  */</span>
+   334        }
+   335    
+   336        <span class=key>struct</span> Instance_State {
+   337            Attrs               *attrs;         <span class="comment">/* Local pointer to attrs        */</span>
+   338            GateMP.Handle       gate;           <span class="comment">/* Gate for critical regions     */</span>
+   339            Ipc.ObjType         objType;        <span class="comment">/* Static/Dynamic? open/creator? */</span>
+   340            Ptr                 nsKey;          <span class="comment">/* Used to remove NS entry       */</span>
+   341            Bool                cacheEnabled;   <span class="comment">/* Whether to do cache calls     */</span>
+   342            UInt16              regionId;       <span class="comment">/* SharedRegion index            */</span>
+   343            SizeT               allocSize;      <span class="comment">/* Shared memory allocated       */</span>
+   344            Char                *buf;           <span class="comment">/* Local pointer to buf          */</span>
+   345            SizeT               minAlign;       <span class="comment">/* Minimum alignment required    */</span>
+   346            SizeT               bufSize;        <span class="comment">/* Size of usable buffer         */</span>
+   347        };
+   348    
+   349        <span class=key>struct</span> Module_State {
+   350            NameServer.Handle       nameServer;
+   351        };
+   352    }
+</pre>
+</body></html>

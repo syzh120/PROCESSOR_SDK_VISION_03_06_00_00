@@ -1,0 +1,26 @@
+UseCase: chains_issMultCaptIspSimcopSv_Display
+
+IssCapture -> IssM2mIsp -> Dup_sv
+
+Dup_sv -> Sync_ga -> Alg_GeoAlign (DSP1)
+
+// Original sync'ed frames MUST be Q0 input to Synthesis
+Dup_sv -> IssM2mSimcop -> Sync_syn -> Alg_Synthesis (DSP1)
+
+// Input for Display MUST be Q0 from Synthesis
+Alg_Synthesis -> Display_Video
+
+// Input to PhotoAlign MUST be Q1 from Synthesis
+Alg_Synthesis -> Alg_PhotoAlign (DSP1)
+
+// GeoAlign MUST be Q1 input to Synthesis
+Alg_GeoAlign (DSP1) -> IssM2mSimcop
+
+// PhotoAlign MUST be Q2 input to Synthesis
+Alg_PhotoAlign -> Alg_Synthesis  (DSP1)
+
+
+IssM2mIsp -> Alg_IssAewb
+
+GrpxSrc -> Display_Grpx
+

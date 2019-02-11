@@ -1,0 +1,309 @@
+/*
+ *  ======== package.bld ========
+ *
+ */
+
+/* add NDK and CSL header file location to compiler include path */
+Pkg.uses =
+[
+    "ti/nsp/drv/inc",
+    "ti/nsp/drv/cslr/include",
+    "ti/nsp/drv/tfdtp"
+];
+
+var tfdtpLibFiles =
+[
+    "tfdtp/tfdtp2nsp.c",
+    "tfdtp/tfdtp.c",
+    "tfdtp/tfdtp_queue.c"
+]
+
+var ndk2nspLibFiles =
+[
+    "ndk2nsp/nimu_ndk.c",
+    "ndk2nsp/ndk2nsp.c",
+    "ndk2nsp/gmacsw_sysbios_al.c"
+]
+
+var gmacswDriverLibFiles =
+[
+    "gmacsw/gmacsw.c",
+    "gmacsw/gmacsw_config.c",
+    "gmacsw/cpdma.c",
+    "gmacsw/ale.c",
+    "gmacsw/mac.c",
+    "gmacsw/mdio.c",
+    "gmacsw/stats.c",
+    "gmacsw/interrupts.c",
+    "gmacsw/port.c",
+    "gmacsw/cpts.c"
+];
+
+var deviceArray =
+[
+    {   name: 'vayu',
+        libdir: "vayu",
+        targets: ["M4","A15F","A15Fnv","C66"],
+        ccOpts: " -DDEVICE_VAYU "
+    },
+    {   name: 'j5eco',
+        libdir: "j5eco",
+        targets: ["M3","A8F","A8Fnv","C674"],
+        ccOpts: " -DDEVICE_J5ECO "
+    },
+    {   name: 'centaurus',
+        libdir: "centaurus",
+        targets: ["M3","A8F","A8Fnv","C674"],
+        ccOpts: " -DDEVICE_CENTAURUS "
+    },
+];
+
+/* For each target, build the gmacsw driver library */
+for each (var target in Build.targets)
+{
+    /* For each platform... */
+    for each (var device in deviceArray)
+    {
+        var profiles = ["debug","release"];
+
+        /* For each profile... */
+        for each (var profile in profiles)
+        {
+            var common_copts = "-DUSE_CSLR ";
+
+            /* Uncomment below to enable Jumbo frames */
+            /* common_copts += "-DENABLE_JUMBO_FRAMES "; */
+
+            if (profile == "debug")
+            {
+                common_copts += "-DDEBUG ";
+            }
+            /* Include optimization options */
+            if (profile == "release")
+            {
+                if ((target.suffix == "em3") || (target.suffix == "em4"))
+                {
+                    /* TI ARMv7M compiler */
+                    common_copts += "--opt_level=3 --opt_for_speed=2 ";
+                    common_copts += "--emit_warnings_as_errors ";
+                }
+                else if ((target.suffix == "ea8fnv") || (target.suffix == "ea8f") || (target.suffix == "ea15fnv"))
+                {
+                    /* TI ARMv7A compiler */
+                    common_copts += "--opt_level=3 --opt_for_speed=2 ";
+                    common_copts += "--emit_warnings_as_errors ";
+                }
+                else if ((target.suffix == "a8fg") || (target.suffix == "a15fg"))
+                {
+                    /* GNU ARMv7A compiler */
+                    common_copts += "-O2 ";
+                    common_copts += "-Wunused -Wunknown-pragmas -Werror ";
+                }
+                else if ((target.suffix == "m3g") || (target.suffix == "m4g"))
+                {
+                    /* GNU ARMv7M compiler */
+                    common_copts += "-O2 ";
+                    common_copts += "-Wunused -Wunknown-pragmas -Werror ";
+                }
+                else if ((target.suffix == "e674") || (target.suffix == "e66"))
+                {
+                    /* TI C674x DSP compiler */
+                    common_copts += "--opt_level=2 ";
+                    common_copts += "--emit_warnings_as_errors ";
+                }
+                else
+                {
+                    print("WARNING!!!! Unknown target suffix for release mode.");
+                }
+            }
+
+            /* If current device supports current target, build that library set */
+            if (String(','+device.targets.toString()+',').match(','+target["name"]+','))
+            {
+                /* Add in device specific compiler options */
+                common_copts += device.ccOpts;
+
+                var libName = Pkg.name + ".gmacsw";
+                var libOptions = {
+                    copts: common_copts + "",
+                    profile: profile,
+                };
+                var lib = Pkg.addLibrary('lib/' + device.name + '/' + profile + '/' + libName, target, libOptions);
+                lib.addObjects(gmacswDriverLibFiles);
+
+                var libName = Pkg.name + ".gmacsw" + "_instr";
+                var libOptions = {
+                    copts: common_copts + " -DNSP_INSTRUMENTATION_ENABLED",
+                    profile: profile,
+                };
+                var lib = Pkg.addLibrary('lib/' + device.name + '/' + profile + '/' + libName, target, libOptions);
+                lib.addObjects(gmacswDriverLibFiles);
+            }
+        }
+    }
+}
+
+/* For each target build the ndk2nsp adaptation library */
+for each (var target in Build.targets)
+{
+    /* For each profile... */
+    for each (var profile in profiles)
+    {
+        var common_copts = "-D_INCLUDE_NIMU_CODE -D_NDK_EXTERN_CONFIG ";
+
+        /* Uncomment below to enable Jumbo frames */
+        /* common_copts += "-DENABLE_JUMBO_FRAMES "; */
+
+        if (profile == "debug")
+        {
+            common_copts += "-DDEBUG ";
+        }
+        /* Include optimization options */
+        if (profile == "release")
+        {
+            if ((target.suffix == "em3") || (target.suffix == "em4"))
+            {
+                /* TI ARMv7M compiler */
+                common_copts += "--opt_level=3 --opt_for_speed=2 ";
+                common_copts += "--emit_warnings_as_errors ";
+            }
+            else if ((target.suffix == "ea8fnv") || (target.suffix == "ea8f") || (target.suffix == "ea15fnv"))
+            {
+                /* TI ARMv7A compiler */
+                common_copts += "--opt_level=3 --opt_for_speed=2 ";
+                common_copts += "--emit_warnings_as_errors ";
+            }
+            else if ((target.suffix == "a8fg") || (target.suffix == "a15fg"))
+            {
+                /* GNU ARMv7A compiler */
+                common_copts += "-O3 ";
+                common_copts += "-Wunused -Wunknown-pragmas -Werror ";
+            }
+            else if ((target.suffix == "m3g") || (target.suffix == "m4g"))
+            {
+                /* GNU ARMv7M compiler */
+                common_copts += "-O3 ";
+                common_copts += "-Wunused -Wunknown-pragmas -Werror ";
+            }
+            else if ((target.suffix == "e674") || (target.suffix == "e66"))
+            {
+                /* TI C674x DSP compiler */
+                common_copts += "--opt_level=2 ";
+                common_copts += "--emit_warnings_as_errors ";
+            }
+            else
+            {
+                print("WARNING!!!! Unknown target suffix for release mode.");
+            }
+        }
+
+        var libName = Pkg.name + ".ndktfdtp2nsp";
+        var libOptions = {
+            /* Instrumentation by default enabled for TFDTP, remove DNSP_INSTRUMENTATION_ENABLED to disable */
+            copts: common_copts + "-DTFDTP_STACK_ENABLED",
+            profile: profile,
+        };
+        var lib = Pkg.addLibrary('lib/' + profile + '/' + libName, target, libOptions);
+        lib.addObjects(ndk2nspLibFiles);
+
+        var libName = Pkg.name + ".ndktfdtp2nsp" + "_instr";
+        var libOptions = {
+            /* Instrumentation by default enabled for TFDTP, remove DNSP_INSTRUMENTATION_ENABLED to disable */
+            copts: common_copts + " -DNSP_INSTRUMENTATION_ENABLED -DTFDTP_STACK_ENABLED",
+            profile: profile,
+        };
+        var lib = Pkg.addLibrary('lib/' + profile + '/' + libName, target, libOptions);
+        lib.addObjects(ndk2nspLibFiles);
+
+        var libName = Pkg.name + ".ndk2nsp";
+        var libOptions = {
+            copts: common_copts + "",
+            profile: profile,
+        };
+        var lib = Pkg.addLibrary('lib/' + profile + '/' + libName, target, libOptions);
+        lib.addObjects(ndk2nspLibFiles);
+
+        var libName = Pkg.name + ".ndk2nsp" + "_instr";
+        var libOptions = {
+            copts: common_copts + " -DNSP_INSTRUMENTATION_ENABLED",
+            profile: profile,
+        };
+        var lib = Pkg.addLibrary('lib/' + profile + '/' + libName, target, libOptions);
+        lib.addObjects(ndk2nspLibFiles);
+
+    }
+}
+
+/* For each target build the tfdtp stack library */
+for each (var target in Build.targets)
+{
+    /* For each profile... */
+    for each (var profile in profiles)
+    {
+        var common_copts = "";
+
+        if (profile == "debug")
+        {
+            common_copts += "-DDEBUG ";
+        }
+        /* Include optimization options */
+        if (profile == "release")
+        {
+            if ((target.suffix == "em3") || (target.suffix == "em4"))
+            {
+                /* TI ARMv7M compiler */
+                common_copts += "--opt_level=3 --opt_for_speed=2 ";
+                common_copts += "--emit_warnings_as_errors ";
+
+            }
+            else if ((target.suffix == "ea8fnv") || (target.suffix == "ea8f") || (target.suffix == "ea15fnv"))
+            {
+                /* TI ARMv7A compiler */
+                common_copts += "--opt_level=3 --opt_for_speed=2 ";
+                common_copts += "--emit_warnings_as_errors ";
+            }
+            else if ((target.suffix == "a8fg") || (target.suffix == "a15fg"))
+            {
+                /* GNU ARMv7A compiler */
+                common_copts += "-O3 ";
+                common_copts += "-Wunused -Wunknown-pragmas -Werror ";
+            }
+            else if ((target.suffix == "m3g") || (target.suffix == "m4g"))
+            {
+                /* GNU ARMv7M compiler */
+                common_copts += "-O3 ";
+                common_copts += "-Wunused -Wunknown-pragmas -Werror ";
+            }
+            else if ((target.suffix == "e674") || (target.suffix == "e66"))
+            {
+                /* TI C674x DSP compiler */
+                common_copts += "--opt_level=2 ";
+                common_copts += "--emit_warnings_as_errors ";
+            }
+            else
+            {
+                print("WARNING!!!! Unknown target suffix for release mode.");
+            }
+        }
+
+        var libName = Pkg.name + ".tfdtp";
+        var libOptions = {
+            copts: common_copts + "-DTFDTP_STACK_ENABLED",
+            profile: profile,
+        };
+        var lib = Pkg.addLibrary('lib/' + profile + '/' + libName, target, libOptions);
+        lib.addObjects(tfdtpLibFiles);
+
+        var libName = Pkg.name + ".tfdtp" + "_instr";
+        var libOptions = {
+            copts: common_copts + " -DNSP_INSTRUMENTATION_ENABLED -DTFDTP_STACK_ENABLED -DTFDTP_INSTRUMENTATION_ENABLED",
+            profile: profile,
+        };
+        var lib = Pkg.addLibrary('lib/' + profile + '/' + libName, target, libOptions);
+        lib.addObjects(tfdtpLibFiles);
+    }
+}
+
+/* include source files in the release package */
+Pkg.attrs.exportSrc = true;
+Pkg.attrs.exportCfg = true;

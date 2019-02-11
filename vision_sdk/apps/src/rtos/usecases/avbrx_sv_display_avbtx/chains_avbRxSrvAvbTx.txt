@@ -1,0 +1,25 @@
+UseCase: chains_avbRxSrvAvbTx
+
+AvbRx (IPU1_1) -> Decode -> Sync_sv -> Dup_sv
+
+
+//
+// surround view algorithm and send via AVBTX
+//
+Dup_sv -> Alg_GeoAlign (DSP1)
+
+// Original sync'ed frames MUST be Q0 input to Synthesis
+Dup_sv -> Alg_Synthesis (DSP1)
+
+// Input for AVB TX MUST be Q0 from Synthesis
+Alg_Synthesis -> Encode -> AvbTx(IPU1_1)
+
+// Input to PhotoAlign MUST be Q1 from Synthesis
+Alg_Synthesis -> Alg_PhotoAlign (DSP1)
+
+// GeoAlign MUST be Q1 input to Synthesis
+Alg_GeoAlign -> Alg_Synthesis
+
+// PhotoAlign MUST be Q2 input to Synthesis
+Alg_PhotoAlign -> Alg_Synthesis
+

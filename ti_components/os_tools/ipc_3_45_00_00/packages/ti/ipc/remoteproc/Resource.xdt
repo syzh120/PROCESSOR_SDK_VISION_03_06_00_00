@@ -1,0 +1,127 @@
+%%{
+/*
+ * Copyright (c) 2011-2014, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+%%}
+
+#include <xdc/runtime/System.h>
+#include <ti/ipc/remoteproc/rsc_types.h>
+
+%var prog = xdc.om['xdc.cfg.Program'];
+
+%if (this.customTable) {
+extern struct resource_table ti_ipc_remoteproc_ResourceTable;
+%}
+%else {
+%  if (prog.platformName.match(/OMAPL138/)) {
+#include <ti/ipc/remoteproc/rsc_table_omapl138.h>
+%  }
+%  else if (prog.platformName.match(/evm6614/)) {
+#include <ti/ipc/remoteproc/rsc_table_tci6614.h>
+//#include <ti/ipc/remoteproc/rsc_table_tci6614_v3.3.h> // Test with v3.3 Linux.
+%  }
+%  else if (prog.platformName.match(/Kepler/) ||
+%         prog.cpu.deviceName.match(/^TMS320C66AK2E05$/) ||
+%         prog.cpu.deviceName.match(/^TCI66AK2G02$/) ||
+%         prog.cpu.deviceName.match(/^TMS320C66AK2H12$/) ||
+%         prog.cpu.deviceName.match(/^TMS320TCI663(0K2L|6|8)$/)) {
+%    if (this.traceOnly) {
+#define TRACE_RESOURCE_ONLY
+%    }
+#include <ti/ipc/remoteproc/rsc_table_tci6638.h>
+%  }
+%  else if (prog.cpu.deviceName.match(/^OMAP5430$/)) {
+%    if (prog.cpu.attrs.cpuCore.match(/^CM4$/)) {
+#define OMAP5
+#include <ti/ipc/remoteproc/rsc_table_omap5_ipu.h>
+%    } else if (prog.cpu.attrs.cpuCore.match(/^64T$/)) {
+#define OMAP5
+#include <ti/ipc/remoteproc/rsc_table_omap5_dsp.h>
+%    }
+%    else {
+%        print("ti.ipc.remoteproc.Resource.xdt - unable to provide OMAP5 " +
+%                "resource table (" + prog.cpu.attrs.cpuCore + ")");
+%    }
+%  }
+%  else if (prog.cpu.deviceName.match(/Vayu/) ||
+%          prog.cpu.deviceName.match(/DRA7XX/)) {
+%    if (prog.cpu.attrs.cpuCore.match(/CM4/)) {
+%       if (xdc.om["ti.sysbios.family.arm.ducati.Core"].ipuId == 1) {
+#define VAYU_IPU_1
+%           //print("ti.ipc.remoteproc.Resource.xdt : VAYU_IPU_1");
+%       }
+%       if (xdc.om["ti.sysbios.family.arm.ducati.Core"].ipuId == 2) {
+#define VAYU_IPU_2
+%           //print("ti.ipc.remoteproc.Resource.xdt : VAYU_IPU_2");
+%       }
+#include <ti/ipc/remoteproc/rsc_table_vayu_ipu.h>
+%    }
+%    else if (prog.cpu.attrs.cpuCore.match(/6600/)) {
+%       if (prog.platformName.match(/DRA7XX:dsp1$/)) {
+#define VAYU_DSP_1
+%           //print("ti.ipc.remoteproc.Resource.xdt : VAYU_DSP_1");
+%       }
+%       if (prog.platformName.match(/DRA7XX:dsp2$/)) {
+#define VAYU_DSP_2
+%           //print("ti.ipc.remoteproc.Resource.xdt : VAYU_DSP_2");
+%       }
+#include <ti/ipc/remoteproc/rsc_table_vayu_dsp.h>
+%    }
+%    else {
+%        print("ti.ipc.remoteproc.Resource.xdt - unable to provide Vayu " +
+%                "resource table (" + prog.cpu.attrs.cpuCore + ")");
+%    }
+%  }
+%  else {
+%    print("ti.ipc.remoteproc.Resource.xdt - unable to provide resource table " +
+%            "(" + prog.cpu.deviceName + ", " + prog.cpu.attrs.cpuCore + ")");
+%  }
+%}
+
+Void ti_ipc_remoteproc_Resource_init__I()
+{
+    struct resource_table *pTable =
+        (struct resource_table *)&ti_ipc_remoteproc_ResourceTable;
+
+%if (prog.platformName.match(/evm6614/)) {
+// Uncomment to test for v3.3 Linux...
+//    xdc_runtime_System_printf("Resource Table: 0x%lx\n", resources);
+//  ...and comment out this:
+    xdc_runtime_System_printf("%d Resource entries at 0x%x\n",
+            pTable->num, pTable);
+%}
+%else {
+    xdc_runtime_System_printf("%d Resource entries at 0x%x\n",
+            pTable->num, pTable);
+%}
+
+    return;
+}

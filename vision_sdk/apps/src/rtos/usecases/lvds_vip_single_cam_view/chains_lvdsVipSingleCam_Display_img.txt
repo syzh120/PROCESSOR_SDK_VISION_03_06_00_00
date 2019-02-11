@@ -1,0 +1,26 @@
+digraph chains_lvdsVipSingleCam_Display {
+
+       ColorScheme [shape=none, margin=0, label=<
+       <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+       <TR><TD bgcolor="lightblue">IPU1_0</TD></TR>
+       <TR><TD bgcolor="lightsalmon">A15</TD></TR>
+       </TABLE>>];
+
+       /************** LINKS ************************/
+       Capture [color=lightblue, style=filled]
+       Dup [color=lightblue, style=filled]
+       IPCOut_IPU1_0_A15_0_0 [color=lightblue, style=filled]
+       IPCIn_A15_0_IPU1_0_0 [color=lightsalmon, style=filled]
+       NetworkTx [color=lightsalmon, style=filled]
+       Display_video [color=lightblue, style=filled]
+       GrpxSrc [color=lightblue, style=filled]
+       Display_Grpx [color=lightblue, style=filled]
+
+       /************** CONNECTIONS ************************/
+       Dup -> Display_video[taillabel=Q0, minlen=2, labeldistance=3]
+       Dup -> IPCOut_IPU1_0_A15_0_0[taillabel=Q1, minlen=2, labeldistance=3]
+       Capture -> Dup
+       GrpxSrc -> Display_Grpx
+       IPCOut_IPU1_0_A15_0_0 -> IPCIn_A15_0_IPU1_0_0
+       IPCIn_A15_0_IPU1_0_0 -> NetworkTx
+}

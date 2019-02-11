@@ -1,0 +1,97 @@
+From 759af860ace5b1648d4a3ec91c09985d02739c2c Mon Sep 17 00:00:00 2001
+From: Surya <x0246581@ti.com>
+Date: Mon, 7 Jan 2019 17:08:26 +0530
+Subject: [PATCH] PAD Mux changes to enable Dual MAC
+
+Signed-off-by: Surya <x0246581@ti.com>
+---
+ src/platforms/src/bsp_platformTda2xx.c | 66 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 65 insertions(+), 1 deletion(-)
+
+diff --git a/src/platforms/src/bsp_platformTda2xx.c b/src/platforms/src/bsp_platformTda2xx.c
+index 75aab41..91cb326 100755
+--- a/src/platforms/src/bsp_platformTda2xx.c
++++ b/src/platforms/src/bsp_platformTda2xx.c
+@@ -487,6 +487,8 @@ static Int32 Bsp_platformTda2xxSetPinMux(
+     if (BSP_PLATFORM_ID_ZEBU != Bsp_platformGetId())
+     {
+ #if defined (SOC_TDA2XX) || defined (SOC_AM572x) || defined (SOC_TDA2PX) || defined (SOC_AM574x) || defined (SOC_DRA75x)
++#define DUAL_MAC 1U
++#if (0U == DUAL_MAC)
+         /* In TDA2XX EVM, needs to be configured as GPIO for mux programming
+          * PAD=vin2a_d12, PIN=gpio4_13
+          * PAD=vin2a_d13, PIN=gpio4_14
+@@ -516,7 +518,69 @@ static Int32 Bsp_platformTda2xxSetPinMux(
+                                    |
+                                    BSP_PLATFORM_IOPAD_CFG_PULLTYPESELECT_DOWN |
+                                    BSP_PLATFORM_IOPAD_CFG_INPUTENABLE_OUT));
+-
++#else
++    /* RGMII1 Pinmuxing*/
++    /*RGMII1_TXC*/
++    Bsp_platformSetPinmuxRegs(
++           (UInt32) 0x3,
++           (UInt32) CTRL_CORE_PAD_VIN2A_D12,
++           BSP_PLATFORM_IOPAD_CFG_DEFAULT);
++    /*RGMII1_TXCTL*/
++    Bsp_platformSetPinmuxRegs(
++           (UInt32) 0x3,
++           (UInt32) CTRL_CORE_PAD_VIN2A_D13,
++           BSP_PLATFORM_IOPAD_CFG_DEFAULT);
++    /*RGMII1_TXD3*/
++    Bsp_platformSetPinmuxRegs(
++           (UInt32) 0x3,
++           (UInt32) CTRL_CORE_PAD_VIN2A_D14,
++           BSP_PLATFORM_IOPAD_CFG_DEFAULT);
++    /*RGMII1_TXD2*/
++    Bsp_platformSetPinmuxRegs(
++           (UInt32) 0x3,
++           (UInt32) CTRL_CORE_PAD_VIN2A_D15,
++           BSP_PLATFORM_IOPAD_CFG_DEFAULT);
++    /*RGMII1_TXD1*/
++    Bsp_platformSetPinmuxRegs(
++           (UInt32) 0x3,
++           (UInt32) CTRL_CORE_PAD_VIN2A_D16,
++           BSP_PLATFORM_IOPAD_CFG_DEFAULT);
++    /*RGMII1_TXD0*/
++    Bsp_platformSetPinmuxRegs(
++           (UInt32) 0x3,
++           (UInt32) CTRL_CORE_PAD_VIN2A_D17,
++           BSP_PLATFORM_IOPAD_CFG_DEFAULT);
++    /*RGMII1_RXC*/
++    Bsp_platformSetPinmuxRegs(
++           (UInt32) 0x3,
++           (UInt32) CTRL_CORE_PAD_VIN2A_D18,
++           BSP_PLATFORM_IOPAD_CFG_DEFAULT);
++    /*RGMII1_RXCTL*/
++    Bsp_platformSetPinmuxRegs(
++           (UInt32) 0x3,
++           (UInt32) CTRL_CORE_PAD_VIN2A_D19,
++           BSP_PLATFORM_IOPAD_CFG_DEFAULT);
++    /*RGMII1_RXD3*/
++    Bsp_platformSetPinmuxRegs(
++           (UInt32) 0x3,
++           (UInt32) CTRL_CORE_PAD_VIN2A_D20,
++           BSP_PLATFORM_IOPAD_CFG_DEFAULT);
++    /*RGMII1_RXD2*/
++    Bsp_platformSetPinmuxRegs(
++           (UInt32) 0x3,
++           (UInt32) CTRL_CORE_PAD_VIN2A_D21,
++           BSP_PLATFORM_IOPAD_CFG_DEFAULT);
++    /*RGMII1_RXD1*/
++    Bsp_platformSetPinmuxRegs(
++           (UInt32) 0x3,
++           (UInt32) CTRL_CORE_PAD_VIN2A_D22,
++           BSP_PLATFORM_IOPAD_CFG_DEFAULT);
++    /*RGMII1_RXD0*/
++    Bsp_platformSetPinmuxRegs(
++           (UInt32) 0x3,
++           (UInt32) CTRL_CORE_PAD_VIN2A_D23,
++           BSP_PLATFORM_IOPAD_CFG_DEFAULT);
++#endif
+         /* PAD=mcasp2_axr6, PIN=gpio2_29
+          * PAD=mcasp2_axr4, PIN=gpio1_4
+          * PAD=mcasp2_axr5, PIN=gpio6_7 */
+-- 
+1.9.1
+

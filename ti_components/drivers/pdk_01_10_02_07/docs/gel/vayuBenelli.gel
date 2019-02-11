@@ -1,0 +1,16 @@
+menuitem "Benelli";
+hotmenu
+program_Benelli_AMMU()
+{
+
+    GEL_TextOut("programming  IPU1 AMMU to remap 0x0 to 0x55020000...\n");
+    *(unsigned int *)0x58880920=0x0;
+    *(unsigned int *)0x588809A0=0x55020000;
+    *(unsigned int *)0x58880A20=0x3;
+
+    GEL_TextOut("programming  IPU2 AMMU to remap 0x0 to 0x55020000...\n");
+    *(unsigned int*)0x55080920 = 0x0;
+    *(unsigned int*)0x550809A0 = 0x55020000;
+    *(unsigned int*)0x55080A20 = 0x3;
+}
+

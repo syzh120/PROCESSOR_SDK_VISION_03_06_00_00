@@ -1,0 +1,123 @@
+/*
+ *  Copyright 2013 by Texas Instruments Incorporated.
+ *
+ */
+
+/*
+ * Copyright (c) 2006-2012, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ */
+
+/*
+ * Generally there is no need to edit this file!
+ *
+ * This file controls which libraries are built, as well as compiler options
+ * to use.
+ *
+ * The contents of this file usually don't change, but having it in your
+ * ownership allows you to tweak your compiler options.  If you do change
+ * this file, however, on the next upgrade of the product we recommend
+ * that you take "sysbios.bld" file as supplied by the upgrade and then merge
+ * your changes with it.
+ */
+
+/*
+ *  ======== xdais.bld ========
+ *  This script is run prior to all build scripts. It sets host-system-
+ *  independent values for targets and platforms, then it attempts to
+ *  find the host-system-specific user.bld script that sets rootDirs.
+ *
+ *  These settings may be a function of the following global variables:
+ *
+ *      environment a hash table of environment strings
+ *
+ *      arguments   an array of string arguments to the _config.bld script
+ *          initialized as follows:
+ *              arguments[0] - the file name of the _config.bld script
+ *              arguments[1] - the first argument specified in XDCARGS
+ *                  :
+ *              arguments[n] - the n'th argument in XDCARGS
+ *
+ *  Build       an alias for xdc.om.xdc.bld.BuildEnvironment
+ */
+var Build = xdc.useModule('xdc.bld.BuildEnvironment');
+var Pkg = xdc.useModule('xdc.bld.PackageContents');
+
+
+/* initialize local vars with those set in xdcpaths.mak (via XDCARGS) */
+for (arg = 0; arg < arguments.length; arg++) {
+    /* split each arg into its '+' separated parts */
+    var configParts = arguments[arg].split(";");
+//    print("arg " + arg + " has " + configParts.length + " parts");
+
+    /*
+     * Get the compiler's installation directory from part one.
+     * For "ti.targets.elf.C674=/vendors/c6x/7.0.3", we get "/vendors/c6x/7.0.3"
+     */
+    var targetName = configParts[0].split("=")[0];
+    var rootDir = configParts[0].split("=")[1];
+
+    /* only build for the specified compilers */
+    if (rootDir == "" || rootDir == undefined) {
+        continue;
+    }
+
+    print("Building '" + targetName + "' using '" + rootDir + "' ...");
+
+    var target = xdc.useModule(targetName);
+    target.rootDir = rootDir;
+
+    /* for all the other parts, assign target.<left> = <right> */
+    for (var i = 1; i < configParts.length; i++) {
+        var modCfgParam = configParts[i].split("=")[0];
+        var modCfgValue = configParts[i].split("=")[1];
+
+        print("Configuring target." + modCfgParam + " = " + modCfgValue);
+        target[modCfgParam] = modCfgValue;
+    }
+
+    /* and finally add this target to the Build.targets array */
+    Build.targets.$add(target);
+}
+
+/* only build debug and release profiles */
+for (var t = 0; t < Build.targets.length; t++) {
+    for (prof in Build.targets[t].profiles) {
+        if ((prof != 'release') && (prof != 'debug')) {
+            delete Build.targets[t].profiles[prof];
+        }
+    }
+}
+/*
+ *  @(#) xdais_7_24_00_04; 1, 0, 0,1; 5-20-2013 12:17:16; /db/wtree/library/trees/dais/dais-x04/src/ xlibrary
+
+ */
+

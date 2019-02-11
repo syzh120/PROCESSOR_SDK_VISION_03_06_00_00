@@ -1,0 +1,210 @@
+<html>
+<head>
+<title>module ti.sdo.fc.ecpy.ECPY</title>
+<meta name="description" content="EDMA functional layer library">
+<link rel="stylesheet" type="text/css" href="../../../../xdoc.css" />
+</head>
+<body><div id="xdocWrapper"><div id="xdocContent">
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">module</span> <span class="xdoc-id">ti.sdo.fc.ecpy.</span><span class="xdoc-id">ECPY</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/ecpy/package.html" title="package ti.sdo.fc.ecpy"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/ecpy/ECPY.html">index URL</a></div>
+<p class="xdocHdrSummary">EDMA functional layer library</p>
+<ul class="xdocToc">
+<li class="xdocToc"><a class="xdocToc" href="#meta-synop">Configuration settings</a></li>
+<li class="xdocToc2"><a class="xdocToc" href="#xdocMetaElems">Individual elements</a></li>
+</ul>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/fc/ecpy/ECPY-src.html"><span class="xdocLabelFile">ti/sdo/fc/ecpy/ECPY.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynM">
+<div class="xdocSynCode">
+<tt></tt><span class="xdoc-kw1">var</span> ECPY = <span class="xdoc-kw3">xdc.useModule</span>(<span class="xdoc-id">'ti.sdo.fc.ecpy.ECPY'</span>);
+</div>
+<div class='xdocSynHdr'>module-wide config parameters</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#cached.Ires.Mode">ECPY.<span class="xdoc-id">cachedIresMode</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> = <i><span class="xdoc-kw2">Bool</span></i> <span class="xdoc-kw2">true</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#get.Scratch.Id.Fxn">ECPY.<span class="xdoc-id">getScratchIdFxn</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Function for obtaining scratchId associated with IALG_Handle
+  used for creating the algorithm instance.
+  When set to null, ECPY assumes scratchId =&gt; -1</span></span></a> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#persistent.Alloc.Fxn">ECPY.<span class="xdoc-id">persistentAllocFxn</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Function for allocating persistent memory for ECPY's
+  implementation's internal objects and for allocating memory for
+  ECPY handle objects</span></span></a> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#persistent.Free.Fxn">ECPY.<span class="xdoc-id">persistentFreeFxn</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Function for freeing persistent memory allocated by ECPY</span></span></a> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#scratch.Alloc.Fxn">ECPY.<span class="xdoc-id">scratchAllocFxn</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Function for allocating scratch memory for ECPY Handle.
+  The scratch memory can be overlayed with other algorithm instance's
+  handle's that are created in the same scratch group to reduce footprint
+  in high-density multi-channel environments</span></span></a> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#scratch.Free.Fxn">ECPY.<span class="xdoc-id">scratchFreeFxn</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Function for freeing scratch memory allocated by ECPY</span></span></a> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+</div>
+<div id="xdocSep">
+</div>
+<div id="xdocMetaElems">
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="cached.Ires.Mode"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">ECPY.</span><span class="xdoc-id">cachedIresMode</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/ecpy/ECPY.html" title="module ECPY"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/ecpy/ECPY.html#cached.Ires.Mode">index URL</a></div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>ECPY.<span class="xdoc-id">cachedIresMode</span> = <i><span class="xdoc-kw2">Bool</span></i> <span class="xdoc-kw2">true</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="get.Scratch.Id.Fxn"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">ECPY.</span><span class="xdoc-id">getScratchIdFxn</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/ecpy/ECPY.html" title="module ECPY"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/ecpy/ECPY.html#get.Scratch.Id.Fxn">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Function for obtaining scratchId associated with IALG_Handle
+  used for creating the algorithm instance.
+  When set to null, ECPY assumes scratchId =&gt; -1</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>ECPY.<span class="xdoc-id">getScratchIdFxn</span> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">The signature of the getScratchIdFxn is:</div>
+<div class="xdocText">extern Int DSKT2_getScratchId(IALG_Handle alg);</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="persistent.Alloc.Fxn"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">ECPY.</span><span class="xdoc-id">persistentAllocFxn</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/ecpy/ECPY.html" title="module ECPY"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/ecpy/ECPY.html#persistent.Alloc.Fxn">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Function for allocating persistent memory for ECPY's
+  implementation's internal objects and for allocating memory for
+  ECPY handle objects</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>ECPY.<span class="xdoc-id">persistentAllocFxn</span> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">The signature of the persistent alloc function is:
+      extern Bool persistentAllocFxn(IALG_MemRec * memTab, Int numRecs);</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="persistent.Free.Fxn"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">ECPY.</span><span class="xdoc-id">persistentFreeFxn</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/ecpy/ECPY.html" title="module ECPY"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/ecpy/ECPY.html#persistent.Free.Fxn">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Function for freeing persistent memory allocated by ECPY</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>ECPY.<span class="xdoc-id">persistentFreeFxn</span> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">The signature of hte persistentFreeFxn is:</div>
+<div class="xdocText">extern Void persistentFreeFxn(IALG_MemRec *memTab, Int numRecs);</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="scratch.Alloc.Fxn"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">ECPY.</span><span class="xdoc-id">scratchAllocFxn</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/ecpy/ECPY.html" title="module ECPY"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/ecpy/ECPY.html#scratch.Alloc.Fxn">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Function for allocating scratch memory for ECPY Handle.
+  The scratch memory can be overlayed with other algorithm instance's
+  handle's that are created in the same scratch group to reduce footprint
+  in high-density multi-channel environments</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>ECPY.<span class="xdoc-id">scratchAllocFxn</span> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">The signature of the shared allocation function is:</div>
+<div class="xdocText">extern Bool scratchAllocFxn(IALG_Handle alg, Int scratchId,
+                                  IALG_MemRec * memTab, Int numRecs);</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="scratch.Free.Fxn"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">ECPY.</span><span class="xdoc-id">scratchFreeFxn</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/ecpy/ECPY.html" title="module ECPY"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/ecpy/ECPY.html#scratch.Free.Fxn">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Function for freeing scratch memory allocated by ECPY</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>ECPY.<span class="xdoc-id">scratchFreeFxn</span> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">The signature of the scratchFreeFxn is:</div>
+<div class="xdocText">extern Void scratchFreeFxn(Int mutexId, Void *addr, UInt size);</div>
+</div>
+<div id="xdocDate">generated on Tue, 28 Jun 2016 21:14:29 GMT</div>
+</div></div></body>
+</html>

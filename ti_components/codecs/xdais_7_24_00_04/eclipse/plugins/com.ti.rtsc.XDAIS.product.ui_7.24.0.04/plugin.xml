@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin
+    name="XDAIS IDE Support"
+    id="com.ti.rtsc.XDAIS.product.ui"
+    version="7.24.0.04"
+    provider-name="Texas Instruments Inc.">
+
+    <extension point="org.eclipse.help.toc">
+        <toc file="toc_top.xml" primary="true"/>
+    </extension>
+
+
+    <extension point="org.eclipse.help.contentProducer">
+        <contentProducer>
+            <producer class="org.eclipse.rtsc.xdctools.ui.help.HelpContentProducer"/>
+        </contentProducer>
+    </extension>
+
+    <extension
+         point="org.eclipse.core.variables.dynamicVariables">
+     <variable 
+        name="XDAIS_CG_ROOT"
+        resolver="org.eclipse.rtsc.xdctools.ui.macros.MacroResolver"
+        description="">
+     </variable>
+   </extension>
+   
+
+    <extension point="org.eclipse.ui.actionSets">    
+        <actionSet    
+            label="XDAIS Tools"    
+            description="XDAIS Tools"    
+            visible="true"    
+            id="org.eclipse.rtsc.xdaistools.ui.actionSet">    
+            <menu    
+                id="com.ti.dvt.tools.menu"    
+                label="&amp;Tools">    
+                <groupMarker name="additions"/>    
+            </menu>    
+            <menu label="XDAIS Tools"    
+                path="com.ti.dvt.tools.menu/additions"    
+                id="org.eclipse.rtsc.xdaistools.ui.menu">    
+                <separator name="XDAISGroup"/>    
+            </menu>    
+        
+            <action    
+                id="ti.xdais.wizards.genalg"    
+                label="&amp;GenAlg"    
+                class="org.eclipse.rtsc.xdctools.sg.WorkBenchDelegate"    
+                style="push"    
+                menubarPath="com.ti.dvt.tools.menu/org.eclipse.rtsc.xdaistools.ui.menu/XDAISGroup"/>    
+        
+            <action    
+                id="ti.xdais.qualiti"    
+                label="&amp;QualiTI"    
+                class="org.eclipse.rtsc.xdctools.sg.WorkBenchDelegate"    
+                style="push"    
+                menubarPath="com.ti.dvt.tools.menu/org.eclipse.rtsc.xdaistools.ui.menu/XDAISGroup"/>    
+        </actionSet>    
+    </extension>    
+
+</plugin>

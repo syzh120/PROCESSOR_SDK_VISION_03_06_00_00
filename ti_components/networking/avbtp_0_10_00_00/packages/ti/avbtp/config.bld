@@ -1,0 +1,170 @@
+/*
+ * Copyright (C) 2013 Texas Instruments Incorporated - http://www.ti.com/
+ *
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *
+ *    Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ *    Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the
+ *    distribution.
+ *
+ *    Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ *  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ *  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ *  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ *  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ *  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+*/
+
+/*
+ *  ======== config.bld ========
+ *  AVBTP Build configuration script
+ */
+
+/*
+ * Dependent Packages install locations. Update these for your system.
+ */
+
+var os = java.lang.System.getProperty("os.name");
+
+if (os.contains("Linux")) {
+    var toolsDir = "/opt/ti/";
+} else if (os.contains("Windows"))  {
+    var toolsDir = "c:/ti/";
+} else {
+    throw "OS is not supported!";
+}
+
+var compilerDir = toolsDir + "ccsv6/tools/compiler/";
+
+var ndkRoot = java.lang.System.getenv("NDK_ROOT");
+var edmaRoot = java.lang.System.getenv("EDMA3_ROOT");
+var biosRoot = java.lang.System.getenv("BIOS_ROOT");
+var nspRoot = java.lang.System.getenv("NSP_ROOT");
+var tiArmRoot = java.lang.System.getenv("TIARMCGT_ROOT");
+var gccRoot = java.lang.System.getenv("GCC_ROOT");
+var tiDspRoot = java.lang.System.getenv("CGT6X_ROOT");
+
+var vlanId = java.lang.System.getenv("AVBTP_VLAN_ID");
+var vlanPriority = java.lang.System.getenv("AVBTP_VLAN_PRIORITY");
+var useExpEthType = java.lang.System.getenv("AVBTP_USE_EXP_ETHTYPE");
+
+if (ndkRoot == null) ndkRoot = toolsDir + "ndk_2_24_02_31";
+if (edmaRoot == null) edmaRoot = toolsDir + "edma3_lld_02_12_00_20";
+if (biosRoot == null) biosRoot = toolsDir + "bios_6_46_00_23";
+if (nspRoot == null) nspRoot = toolsDir + "nsp_gmacsw_4_15_00_00";
+if (tiArmRoot == null) tiArmRoot = compilerDir + "ti-cgt-arm_5.2.5";
+if (gccRoot == null) gccRoot = compilerDir + "gcc-arm-none-eabi-4_9-2015q3";
+if (tiDspRoot == null) tiDspRoot = compilerDir + "C6000_7.4.2";
+
+
+if (!java.io.File(ndkRoot).exists()) throw "define NDK_ROOT!";
+if (!java.io.File(edmaRoot).exists()) throw "define EDMA3_ROOT!";
+if (!java.io.File(biosRoot).exists()) throw "define BIOS_ROOT!";
+if (!java.io.File(nspRoot).exists()) throw "define NSP_ROOT!";
+if (!java.io.File(tiArmRoot).exists()) throw "define TIARMCGT_ROOT!";
+if (!java.io.File(gccRoot).exists()) throw "define GCC_ROOT!";
+if (!java.io.File(tiDspRoot).exists()) throw "define CGT6X_ROOT!";
+
+/* Setup some build options based on the environment variables */
+var commonCopts = "";
+if (useExpEthType != null) commonCopts += " -DUSE_EXPERIMENTAL_ETHTYPE";
+if (vlanId != null) commonCopts += " -DAVBTP_VLAN_ID=" + vlanId;
+if (vlanPriority != null) commonCopts += " -DAVBTP_VLAN_PRIORITY=" + vlanPriority;
+
+print("commonCopts :" + commonCopts);
+
+var commonInc   = "-I\"" + biosRoot + "/packages\" " +
+                  "-I\"" + ndkRoot + "/packages\" " +
+                  "-I\"" + nspRoot + "/packages\" " +
+                  "-I\"" + edmaRoot + "/packages\" " +
+                  "-I\"" + edmaRoot + "/examples/edma3_driver/src\" ";
+
+var tiDspCommonCopts = " ";
+var tiDspInc = " -I\"" + tiDspRoot + "/include\" ";
+var tiArmCommonCopts = " ";
+var tiArmInc = "-I\"" + tiArmRoot + "/include\" ";
+var gccCommonCopts = " ";
+var gccInc   = " -I\"" + gccRoot + "/include\" ";
+
+/* TI C674x DSP Target compiler options */
+var tiC674DSPTarget = xdc.useModule('ti.targets.elf.C674');
+tiC674DSPTarget.rootDir = tiDspRoot;
+tiC674DSPTarget.ccOpts.prefix += tiDspCommonCopts + " -mi10 -mo";
+tiC674DSPTarget.ccOpts.suffix += tiDspInc + commonInc;
+
+/* TI C66x DSP Target compiler options */
+var tiC66DSPTarget = xdc.useModule('ti.targets.elf.C66');
+tiC66DSPTarget.rootDir = tiDspRoot;
+tiC66DSPTarget.ccOpts.prefix += tiDspCommonCopts + " -mi10 -mo";
+tiC66DSPTarget.ccOpts.suffix += tiDspInc + commonInc;
+
+/* TI ARM v7M Target compiler options */
+var tiM3Target = xdc.useModule('ti.targets.arm.elf.M3');
+tiM3Target.rootDir = tiArmRoot;
+tiM3Target.ccOpts.prefix += tiArmCommonCopts + commonCopts + " -DCORTEX_MX";
+tiM3Target.ccOpts.suffix += tiArmInc + commonInc;
+
+var tiM4Target = xdc.useModule('ti.targets.arm.elf.M4');
+tiM4Target.rootDir = tiArmRoot;
+tiM4Target.ccOpts.prefix += tiArmCommonCopts + commonCopts + " -DCORTEX_MX";
+tiM4Target.ccOpts.suffix += tiArmInc + commonInc;
+
+/* GCC ARM v7M Target compiler options */
+var gccM3Target = xdc.useModule('gnu.targets.arm.M3');
+gccM3Target.rootDir = gccRoot;
+gccM3Target.ccOpts.prefix += gccCommonCopts + commonCopts + " -DCORTEX_MX";
+gccM3Target.ccOpts.suffix += gccInc + commonInc;
+
+var gccM4Target = xdc.useModule('gnu.targets.arm.M4');
+gccM4Target.rootDir = gccRoot;
+gccM4Target.ccOpts.prefix += gccCommonCopts + commonCopts + " -DCORTEX_MX";
+gccM4Target.ccOpts.suffix += gccInc + commonInc;
+
+/* TI ARM v7A Target compiler options */
+var tiA8Target = xdc.useModule('ti.targets.arm.elf.A8F');
+tiA8Target.rootDir = tiArmRoot;
+tiA8Target.ccOpts.prefix += tiArmCommonCopts + commonCopts + " -DCORTEX_AX";
+tiA8Target.ccOpts.suffix += tiArmInc + commonInc;
+
+
+/* GCC ARM v7A Target compiler options */
+var gccA8Target = xdc.useModule('gnu.targets.arm.A8F');
+gccA8Target.rootDir = gccRoot;
+gccA8Target.ccOpts.prefix += gccCommonCopts + commonCopts + " -DCORTEX_AX";
+gccA8Target.ccOpts.suffix += gccInc + commonInc;
+
+var gccA15Target = xdc.useModule('gnu.targets.arm.A15F');
+gccA15Target.rootDir = gccRoot;
+gccA15Target.ccOpts.prefix += gccCommonCopts + commonCopts + " -DCORTEX_AX";
+gccA15Target.ccOpts.suffix += gccInc + commonInc;
+
+/* List the compiler targets in in the Build.targets array */
+Build.targets = [
+                    //tiC674DSPTarget,
+                    //tiC66DSPTarget,
+                    tiM3Target,
+                    tiM4Target,
+                    //gccM3Target
+                    //gccM4Target,
+                    tiA8Target,
+                    //tiA15Target,
+                    //gccA8Target,
+                    gccA15Target
+                ];

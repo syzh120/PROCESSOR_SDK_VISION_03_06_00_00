@@ -1,0 +1,10 @@
+package/package.bld.xml
+package/build.cfg
+package/package.xdc.inc
+package.bld
+package/package.cfg.xdc.inc
+lib/hdlc.aem4f
+package/package_ti.ndk.tools.hdlc.c
+hdlc.c
+lib/hdlc.ae66
+lib/hdlc.aa15fg

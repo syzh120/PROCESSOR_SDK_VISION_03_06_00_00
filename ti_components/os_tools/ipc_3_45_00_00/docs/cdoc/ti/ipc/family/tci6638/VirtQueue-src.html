@@ -1,0 +1,395 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>module ti.ipc.family.tci6638.VirtQueue</title>
+<meta name="googlebot" content="noindex,nofollow">
+<link rel="stylesheet" type="text/css" href="../../../../src.css"/>
+</head>
+<body>
+<pre class=src>
+     1    <span class="comment">/*
+</span>     2    <span class="comment"> * Copyright (c) 2013-2015 Texas Instruments Incorporated - http://www.ti.com
+</span>     3    <span class="comment"> * All rights reserved.
+</span>     4    <span class="comment"> *
+</span>     5    <span class="comment"> * Redistribution and use in source and binary forms, with or without
+</span>     6    <span class="comment"> * modification, are permitted provided that the following conditions
+</span>     7    <span class="comment"> * are met:
+</span>     8    <span class="comment"> *
+</span>     9    <span class="comment"> * *  Redistributions of source code must retain the above copyright
+</span>    10    <span class="comment"> *    notice, this list of conditions and the following disclaimer.
+</span>    11    <span class="comment"> *
+</span>    12    <span class="comment"> * *  Redistributions in binary form must reproduce the above copyright
+</span>    13    <span class="comment"> *    notice, this list of conditions and the following disclaimer in the
+</span>    14    <span class="comment"> *    documentation and/or other materials provided with the distribution.
+</span>    15    <span class="comment"> *
+</span>    16    <span class="comment"> * *  Neither the name of Texas Instruments Incorporated nor the names of
+</span>    17    <span class="comment"> *    its contributors may be used to endorse or promote products derived
+</span>    18    <span class="comment"> *    from this software without specific prior written permission.
+</span>    19    <span class="comment"> *
+</span>    20    <span class="comment"> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+</span>    21    <span class="comment"> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+</span>    22    <span class="comment"> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+</span>    23    <span class="comment"> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+</span>    24    <span class="comment"> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+</span>    25    <span class="comment"> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+</span>    26    <span class="comment"> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+</span>    27    <span class="comment"> * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+</span>    28    <span class="comment"> * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+</span>    29    <span class="comment"> * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+</span>    30    <span class="comment"> * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+</span>    31    <span class="comment"> *
+</span>    32    <span class="comment"> */</span>
+    33    <span class="comment">/** ============================================================================
+</span>    34    <span class="comment"> *  @file       VirtQueue.xdc
+</span>    35    <span class="comment"> *
+</span>    36    <span class="comment"> *  @brief      Virtio Queue interface for BIOS
+</span>    37    <span class="comment"> *
+</span>    38    <span class="comment"> *  Differences between BIOS version and Linux kernel (include/linux/virtio.h):
+</span>    39    <span class="comment"> *  - Renamed module from virtio.h to VirtQueue.h to match the API prefixes;
+</span>    40    <span class="comment"> *  - BIOS (XDC) types and CamelCasing used;
+</span>    41    <span class="comment"> *  - virtio_device concept removed (i.e, assumes no containing device);
+</span>    42    <span class="comment"> *  - removed scatterlist;
+</span>    43    <span class="comment"> *  - VirtQueues are created statically here, so just added a VirtQueue_init()
+</span>    44    <span class="comment"> *    fxn to take the place of the Virtio vring_new_virtqueue() API;
+</span>    45    <span class="comment"> *  - The notify function is implicit in the implementation, and not provided
+</span>    46    <span class="comment"> *    by the client, as it is in Linux virtio.
+</span>    47    <span class="comment"> *  - Broke into APIs to add/get used and avail buffers, as the API is
+</span>    48    <span class="comment"> *    assymmetric.
+</span>    49    <span class="comment"> *
+</span>    50    <span class="comment"> *  Usage:
+</span>    51    <span class="comment"> *     This IPC only works between one processor designated as the Host (Linux)
+</span>    52    <span class="comment"> *     and one or more Slave processors (BIOS).
+</span>    53    <span class="comment"> *
+</span>    54    <span class="comment"> *     For any Host/Slave pair, there are 2 VirtQueues (aka Vrings);
+</span>    55    <span class="comment"> *     Only the Host adds new buffers to the avail list of a vring;
+</span>    56    <span class="comment"> *     Available buffers can be empty or full, depending on direction;
+</span>    57    <span class="comment"> *     Used buffer means "processed" (emptied or filled);
+</span>    58    <span class="comment"> *
+</span>    59    <span class="comment"> *  Host:
+</span>    60    <span class="comment"> *    - To send buffer to the slave processor:
+</span>    61    <span class="comment"> *          add_avail_buf(slave_virtqueue);
+</span>    62    <span class="comment"> *          kick(slave_virtqueue);
+</span>    63    <span class="comment"> *          get_used_buf(slave_virtqueue);
+</span>    64    <span class="comment"> *    - To receive buffer from slave processor:
+</span>    65    <span class="comment"> *          add_avail_buf(host_virtqueue);
+</span>    66    <span class="comment"> *          kick(host_virtqueue);
+</span>    67    <span class="comment"> *          get_used_buf(host_virtqueue);
+</span>    68    <span class="comment"> *
+</span>    69    <span class="comment"> *  Slave:
+</span>    70    <span class="comment"> *    - To send buffer to the host:
+</span>    71    <span class="comment"> *          get_avail_buf(host_virtqueue);
+</span>    72    <span class="comment"> *          add_used_buf(host_virtqueue);
+</span>    73    <span class="comment"> *          kick(host_virtqueue);
+</span>    74    <span class="comment"> *    - To receive buffer from the host:
+</span>    75    <span class="comment"> *          get_avail_buf(slave_virtqueue);
+</span>    76    <span class="comment"> *          add_used_buf(slave_virtqueue);
+</span>    77    <span class="comment"> *          kick(slave_virtqueue);
+</span>    78    <span class="comment"> *
+</span>    79    <span class="comment"> *  All VirtQueue operations can be called in any context.
+</span>    80    <span class="comment"> *
+</span>    81    <span class="comment"> *  The virtio header should be included in an application as follows:
+</span>    82    <span class="comment"> *  @code
+</span>    83    <span class="comment"> *  #include &lt;ti/ipc/rpmsg/VirtQueue.h&gt;
+</span>    84    <span class="comment"> *  @endcode
+</span>    85    <span class="comment"> *
+</span>    86    <span class="comment"> *  ============================================================================
+</span>    87    <span class="comment"> */</span>
+    88    <span class=key>package</span> ti.ipc.family.tci6638;
+    89    
+    90    import ti.sdo.ipc.notifyDrivers.IInterrupt;
+    91    import ti.sdo.utils.MultiProc;
+    92    import ti.sysbios.gates.GateAll;
+    93    import ti.sysbios.knl.Swi;
+    94    
+    95    <span class="xdoc">/*!
+</span>    96    <span class="xdoc"> *  ======== VirtQueue ========
+</span>    97    <span class="xdoc"> */</span>
+    98    @InstanceInitError
+    99    @Template(<span class="string">"./VirtQueue.xdt"</span>)
+   100    
+   101    <span class=key>module</span> VirtQueue
+   102    {
+   103        <span class=comment>// -------- Module Constants --------</span>
+   104    
+   105        <span class=comment>// -------- Module Types --------</span>
+   106    
+   107    
+   108        <span class="xdoc">/*!
+</span>   109    <span class="xdoc">     *  ======== BasicView ========
+</span>   110    <span class="xdoc">     *  <b>@_nodoc</b>
+</span>   111    <span class="xdoc">     */</span>
+   112        <span class=key>metaonly</span> <span class=key>struct</span> BasicView {
+   113    
+   114        };
+   115    
+   116        <span class="xdoc">/*!
+</span>   117    <span class="xdoc">     *  ======== ModuleView ========
+</span>   118    <span class="xdoc">     *  <b>@_nodoc</b>
+</span>   119    <span class="xdoc">     */</span>
+   120        <span class=key>metaonly</span> <span class=key>struct</span> ModuleView {
+   121    
+   122        };
+   123    
+   124        <span class="xdoc">/*!
+</span>   125    <span class="xdoc">     *  ======== rovViewInfo ========
+</span>   126    <span class="xdoc">     *  <b>@_nodoc</b>
+</span>   127    <span class="xdoc">     */</span>
+   128    <span class="comment">/*    @Facet
+</span>   129    <span class="comment">    metaonly config ViewInfo.Instance rovViewInfo =
+</span>   130    <span class="comment">        xdc.rov.ViewInfo.create({
+</span>   131    <span class="comment">            viewMap: [
+</span>   132    <span class="comment">                ['Basic',  {type: ViewInfo.INSTANCE, viewInitFxn: 'viewInitBasic',  structName: 'BasicView'}],
+</span>   133    <span class="comment">                ['Module', {type: ViewInfo.MODULE,   viewInitFxn: 'viewInitModule', structName: 'ModuleView'}]
+</span>   134    <span class="comment">            ]
+</span>   135    <span class="comment">         });
+</span>   136    <span class="comment">*/</span>
+   137        <span class=comment>// -------- Module Proxies --------</span>
+   138    
+   139        <span class="xdoc">/*! <b>@_nodoc</b>
+</span>   140    <span class="xdoc">     *  IInterrupt proxy that handles interrupts between multiple CPU cores
+</span>   141    <span class="xdoc">     */</span>
+   142        <span class=key>proxy</span> InterruptProxy <span class=key>inherits</span> IInterrupt;
+   143    
+   144        <span class=comment>// -------- Module Parameters --------</span>
+   145    
+   146        <span class="comment">/* Per Core offset of start of VRING control structures from CORE0 */</span>
+   147        <span class=key>config</span> UInt32 VRING_OFFSET = 0x00080000;
+   148    
+   149        <span class="comment">/*
+</span>   150    <span class="comment">     * Sizes of the virtqueues (expressed in number of buffers supported,
+</span>   151    <span class="comment">     * and must be power of two)
+</span>   152    <span class="comment">     */</span>
+   153        <span class=key>config</span> UInt VQ0_SIZE = 256;
+   154        <span class=key>config</span> UInt VQ1_SIZE = 256;
+   155    
+   156        <span class="comment">/* See VirtQueue.c also for other constants:   */</span>
+   157        <span class=key>config</span> UInt RP_MSG_NUM_BUFS = VQ0_SIZE; <span class="comment">/* must be power of two */</span>
+   158    
+   159        <span class=key>config</span> UInt PAGE_SIZE = 4096;
+   160    
+   161        <span class="comment">/*
+</span>   162    <span class="comment">     * The alignment to use between consumer and producer parts of vring.
+</span>   163    <span class="comment">     * Note: this is part of the "wire" protocol. If you change this, you need
+</span>   164    <span class="comment">     * to update your BIOS image as well
+</span>   165    <span class="comment">     */</span>
+   166        <span class=key>config</span> UInt RP_MSG_VRING_ALIGN = 4096;
+   167    
+   168       <span class="xdoc">/*!
+</span>   169    <span class="xdoc">    * ======== startup ========
+</span>   170    <span class="xdoc">    *
+</span>   171    <span class="xdoc">    * Plug interrupts, and if host, initialize vring memory and send
+</span>   172    <span class="xdoc">    * startup sequence events to slave.
+</span>   173    <span class="xdoc">    */</span>
+   174        Void startup(UInt16 remoteProcId, Bool isHost);
+   175    
+   176        <span class="xdoc">/*!
+</span>   177    <span class="xdoc">     *  ======== cacheWb ========
+</span>   178    <span class="xdoc">     *  Flush the SysMin trace buffer
+</span>   179    <span class="xdoc">     *
+</span>   180    <span class="xdoc">     *  This function should be configured as an idle function.
+</span>   181    <span class="xdoc">     *
+</span>   182    <span class="xdoc">     *  <b>@p(code)</b>
+</span>   183    <span class="xdoc">     *  var Idle = xdc.useModule('ti.sysbios.knl.Idle');
+</span>   184    <span class="xdoc">     *  Idle.addFunc('&amp;VirtQueue_cacheWb');
+</span>   185    <span class="xdoc">     *  <b>@p</b>
+</span>   186    <span class="xdoc">     */</span>
+   187        Void cacheWb();
+   188    
+   189    <span class=key>instance</span>:
+   190    
+   191        <span class="xdoc">/*!
+</span>   192    <span class="xdoc">     *  <b>@brief</b>      Initialize at runtime the VirtQueue
+</span>   193    <span class="xdoc">     *
+</span>   194    <span class="xdoc">     *  Maps to Instance_init function
+</span>   195    <span class="xdoc">     *
+</span>   196    <span class="xdoc">     *  <b>@param</b>[in]  remoteProcId    Remote processor ID associated with this VirtQueue.
+</span>   197    <span class="xdoc">     *
+</span>   198    <span class="xdoc">     *  <b>@Returns</b>    Returns a handle to a new initialized VirtQueue.
+</span>   199    <span class="xdoc">     */</span>
+   200        @DirectCall
+   201        create(UInt16 remoteProcId);
+   202    
+   203        <span class="xdoc">/*!
+</span>   204    <span class="xdoc">     *  <b>@brief</b>      Notify other processor of new buffers in the queue.
+</span>   205    <span class="xdoc">     *
+</span>   206    <span class="xdoc">     *  After one or more add_buf calls, invoke this to kick the other side.
+</span>   207    <span class="xdoc">     *
+</span>   208    <span class="xdoc">     *  <b>@param</b>[in]  vq        the VirtQueue.
+</span>   209    <span class="xdoc">     *
+</span>   210    <span class="xdoc">     *  <b>@sa</b>         VirtQueue_addBuf
+</span>   211    <span class="xdoc">     */</span>
+   212        @DirectCall
+   213        Void kick();
+   214    
+   215        <span class="xdoc">/*!
+</span>   216    <span class="xdoc">     *  <b>@brief</b>      VirtQueue instance returns slave status
+</span>   217    <span class="xdoc">     *
+</span>   218    <span class="xdoc">     *  Returns if this VirtQueue instance belongs to a slave
+</span>   219    <span class="xdoc">     *
+</span>   220    <span class="xdoc">     *  <b>@param</b>[in]  vq        the VirtQueue.
+</span>   221    <span class="xdoc">     *
+</span>   222    <span class="xdoc">     */</span>
+   223        @DirectCall
+   224        Bool isSlave();
+   225    
+   226        <span class="xdoc">/*!
+</span>   227    <span class="xdoc">     *  <b>@brief</b>      VirtQueue instance returns host status
+</span>   228    <span class="xdoc">     *
+</span>   229    <span class="xdoc">     *  Returns if this VirtQueue instance belongs to a host
+</span>   230    <span class="xdoc">     *
+</span>   231    <span class="xdoc">     *  <b>@param</b>[in]  vq        the VirtQueue.
+</span>   232    <span class="xdoc">     *
+</span>   233    <span class="xdoc">     */</span>
+   234        @DirectCall
+   235        Bool isHost();
+   236    
+   237        <span class="xdoc">/*!
+</span>   238    <span class="xdoc">     *  <b>@brief</b>      VirtQueue instance returns queue ID
+</span>   239    <span class="xdoc">     *
+</span>   240    <span class="xdoc">     *  Returns VirtQueue instance's queue ID.
+</span>   241    <span class="xdoc">     *
+</span>   242    <span class="xdoc">     *  <b>@param</b>[in]  vq        the VirtQueue.
+</span>   243    <span class="xdoc">     *
+</span>   244    <span class="xdoc">     */</span>
+   245        @DirectCall
+   246        UInt16 getId();
+   247    
+   248        <span class="xdoc">/*!
+</span>   249    <span class="xdoc">     *  <b>@brief</b>      VirtQueue instance returns Swi handle
+</span>   250    <span class="xdoc">     *
+</span>   251    <span class="xdoc">     *  Returns VirtQueue instance Swi handle
+</span>   252    <span class="xdoc">     *
+</span>   253    <span class="xdoc">     *  <b>@param</b>[in]  vq        the VirtQueue.
+</span>   254    <span class="xdoc">     *
+</span>   255    <span class="xdoc">     */</span>
+   256        @DirectCall
+   257        Swi.Handle getSwiHandle();
+   258    
+   259        <span class="comment">/*
+</span>   260    <span class="comment">     *  ========================================================================
+</span>   261    <span class="comment">     *  Host Only Functions:
+</span>   262    <span class="comment">     *  ========================================================================
+</span>   263    <span class="comment">     */</span>
+   264    
+   265        <span class="xdoc">/*!
+</span>   266    <span class="xdoc">     *  <b>@brief</b>      Add available buffer to virtqueue's available buffer list.
+</span>   267    <span class="xdoc">     *              Only used by Host.
+</span>   268    <span class="xdoc">     *
+</span>   269    <span class="xdoc">     *  <b>@param</b>[in]  vq        the VirtQueue.
+</span>   270    <span class="xdoc">     *  <b>@param</b>[in]  buf      the buffer to be processed by the slave.
+</span>   271    <span class="xdoc">     *
+</span>   272    <span class="xdoc">     *  <b>@return</b>     Remaining capacity of queue or a negative error.
+</span>   273    <span class="xdoc">     *
+</span>   274    <span class="xdoc">     *  <b>@sa</b>         VirtQueue_getUsedBuf
+</span>   275    <span class="xdoc">     */</span>
+   276        @DirectCall
+   277        Int addAvailBuf(Void *buf);
+   278    
+   279        <span class="xdoc">/*!
+</span>   280    <span class="xdoc">     *  <b>@brief</b>      Get the next used buffer.
+</span>   281    <span class="xdoc">     *              Only used by Host.
+</span>   282    <span class="xdoc">     *
+</span>   283    <span class="xdoc">     *  <b>@param</b>[in]  vq        the VirtQueue.
+</span>   284    <span class="xdoc">     *
+</span>   285    <span class="xdoc">     *  <b>@return</b>     Returns NULL or the processed buffer.
+</span>   286    <span class="xdoc">     *
+</span>   287    <span class="xdoc">     *  <b>@sa</b>         VirtQueue_addAvailBuf
+</span>   288    <span class="xdoc">     */</span>
+   289        @DirectCall
+   290        Void *getUsedBuf();
+   291    
+   292        <span class="comment">/*
+</span>   293    <span class="comment">     *  ========================================================================
+</span>   294    <span class="comment">     *  Slave Only Functions:
+</span>   295    <span class="comment">     *  ========================================================================
+</span>   296    <span class="comment">     */</span>
+   297    
+   298        <span class="xdoc">/*!
+</span>   299    <span class="xdoc">     *  <b>@brief</b>      Get the next available buffer.
+</span>   300    <span class="xdoc">     *              Only used by Slave.
+</span>   301    <span class="xdoc">     *
+</span>   302    <span class="xdoc">     *  <b>@param</b>[in]  vq        the VirtQueue.
+</span>   303    <span class="xdoc">     *  <b>@param</b>[out] buf       Pointer to location of available buffer;
+</span>   304    <span class="xdoc">     *  <b>@param</b>[out] len       Length of the available buffer message.
+</span>   305    <span class="xdoc">     *
+</span>   306    <span class="xdoc">     *  <b>@return</b>     Returns a token used to identify the available buffer, to be
+</span>   307    <span class="xdoc">     *              passed back into VirtQueue_addUsedBuf();
+</span>   308    <span class="xdoc">     *              token is negative if failure to find an available buffer.
+</span>   309    <span class="xdoc">     *
+</span>   310    <span class="xdoc">     *  <b>@sa</b>         VirtQueue_addUsedBuf
+</span>   311    <span class="xdoc">     */</span>
+   312        @DirectCall
+   313        Int16 getAvailBuf(Void **buf, Int *len);
+   314    
+   315        <span class="xdoc">/*!
+</span>   316    <span class="xdoc">     *  <b>@brief</b>      Add used buffer to virtqueue's used buffer list.
+</span>   317    <span class="xdoc">     *              Only used by Slave.
+</span>   318    <span class="xdoc">     *
+</span>   319    <span class="xdoc">     *  <b>@param</b>[in]  vq        the VirtQueue.
+</span>   320    <span class="xdoc">     *  <b>@param</b>[in]  token     token of the buffer added to vring used list.
+</span>   321    <span class="xdoc">     *  <b>@param</b>[in]  len       length of the message being added.
+</span>   322    <span class="xdoc">     *
+</span>   323    <span class="xdoc">     *  <b>@return</b>     Remaining capacity of queue or a negative error.
+</span>   324    <span class="xdoc">     *
+</span>   325    <span class="xdoc">     *  <b>@sa</b>         VirtQueue_getAvailBuf
+</span>   326    <span class="xdoc">     */</span>
+   327        @DirectCall
+   328        Int addUsedBuf(Int16 token, Int len);
+   329    
+   330        <span class=comment>// -------- Handle Parameters --------</span>
+   331    
+   332        <span class=key>config</span> Bool host = <span class=key>false</span>;
+   333    
+   334        <span class=key>config</span> Fxn callback = <span class=key>null</span>;
+   335    
+   336        <span class=key>config</span> Swi.Handle swiHandle = <span class=key>null</span>;
+   337    
+   338        <span class=key>config</span> UInt intVectorId = ~1u;
+   339    
+   340        <span class=key>config</span> Int vqId = 0;
+   341    
+   342        <span class=comment>// -------- Handle Functions --------</span>
+   343    
+   344    <span class=key>internal</span>:   <span class="comment">/* not for client use */</span>
+   345    
+   346        <span class=key>void</span> init();
+   347    
+   348        <span class="xdoc">/*!
+</span>   349    <span class="xdoc">     *  ======== hostIsr ========
+</span>   350    <span class="xdoc">     */</span>
+   351        Void hostIsr(UArg msg);
+   352    
+   353        <span class="xdoc">/*!
+</span>   354    <span class="xdoc">     *  ======== slaveIsr ========
+</span>   355    <span class="xdoc">     */</span>
+   356        Void slaveIsr(UArg msg);
+   357    
+   358        <span class="xdoc">/*!
+</span>   359    <span class="xdoc">     * ======== Module_State ========
+</span>   360    <span class="xdoc">     * <b>@_nodoc</b>
+</span>   361    <span class="xdoc">     */</span>
+   362        <span class=key>struct</span> Module_State
+   363        {
+   364            UInt16 hostSlaveSynced;
+   365            UInt16 virtQueueInitialized;
+   366            UInt32 *queueRegistry;
+   367            Ptr    traceBufPtr;
+   368        }
+   369    
+   370        <span class="xdoc">/*!
+</span>   371    <span class="xdoc">     *  ======== Instance_State ========
+</span>   372    <span class="xdoc">     *  <b>@_nodoc</b>
+</span>   373    <span class="xdoc">     */</span>
+   374        <span class=key>struct</span> Instance_State {
+   375            Bool hostSlaveSynced;
+   376            UInt16 id;
+   377            Fxn callback;
+   378            Swi.Handle swiHandle;
+   379            Void *vringPtr;
+   380            UInt16 num_free;
+   381            UInt16 last_avail_idx;
+   382            UInt16 last_used_idx;
+   383            UInt16 procId;
+   384            GateAll.Handle gateH;
+   385        };
+   386    }
+</pre>
+</body></html>

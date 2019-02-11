@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ISIF_LSC_xml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<dcc_name>isif_lsc</dcc_name>
+	<dcc_header>
+		<camera_module_id>     390 </camera_module_id>
+		<dcc_descriptor_id>    2 </dcc_descriptor_id>
+		<algorithm_vendor_id>  1 </algorithm_vendor_id>
+		<tunning_tool_version> 0 </tunning_tool_version>
+	</dcc_header>
+	<!--=======================================================================-->
+	<typedef>
+		<isif_lsc_dcc_descriptor_t type="struct">
+			<enable type="uint8"> </enable> <!-- enable/disable isif 2d lsc correction: 0,1 -->
+			<use_calib type="uint16"> </use_calib>
+			<lsc_hsize type="uint16"> </lsc_hsize> <!-- input image horizontal size: U14 -->
+			<lsc_vsize type="uint16"> </lsc_vsize> <!-- input image vertical size: U14 -->
+			<hdirection_data_offset type="uint16"> </hdirection_data_offset> <!-- horizontal direction data offset: U14 -->
+			<vdirection_data_offset type="uint16"> </vdirection_data_offset> <!-- vertical direction data offset: U14 -->
+			<hposin_paxel type="uint8"> </hposin_paxel> <!-- init_x (horizontal position in the paxel): U7 -->
+			<vposin_paxel type="uint8"> </vposin_paxel> <!-- init_y (vertical position in the paxel): U7 -->
+			<pax_height type="uint8"> </pax_height> <!-- paxel_height = 2^pax_height: U3 -->
+			<pax_length type="uint8"> </pax_length> <!-- paxel_width = 2^pax_length: U3 -->
+			<gain_format type="uint8"> </gain_format> <!-- lsc gain fixed-point format enum: U3 -->
+			<offset_scaling_factor type="uint8"> </offset_scaling_factor> <!-- offset scale factor, a: U8Q7 -->
+			<offset_shift_value type="int8"> </offset_shift_value> <!-- offset shift value, T: S8 -->
+			<offset_enable type="uint8"> </offset_enable> <!-- enable/disable isif 2d offset map: 0,1 -->
+			<gain_table_size type="uint16"> </gain_table_size> <!-- size = (ceil( (INIT_X + IMG_WIDTH) / (2^M) ) + 1) * (ceil( (INIT_Y + IMG_HEIGHT) / (2^N) ) + 1) * 4 (bytes) -->
+			<lsc_table type="uint8*"> </lsc_table> <!-- lsc gain table -->
+			<offset_table_size type="uint16"> </offset_table_size> <!-- size = (ceil( (INIT_X + IMG_WIDTH) / (2^M) ) + 1) * (ceil( (INIT_Y + IMG_HEIGHT) / (2^N) ) + 1) * 4 (bytes) -->
+			<offset_table type="uint8*"> </offset_table> <!-- lsc offset table -->
+		</isif_lsc_dcc_descriptor_t>      
+	</typedef>    
+	<!--=======================================================================-->
+	
+	<use_case val="1023">
+		<n-space>
+		
+			<region0 class="0">
+				<colortemperature val="2" min="0" max="20000">  </colortemperature>
+				<exposure val="1" min="0" max="10000000">  </exposure>
+				<gain val="0" min="0" max="1024">  </gain>
+			</region0>
+		
+		</n-space>
+		
+		<parameter_package>
+			<isif_lsc_dcc type="isif_lsc_dcc_descriptor_t">
+			{
+				0, // enable
+				0, // use_calib
+				0, // lsc_hsize
+				0, // lsc_vsize
+				0, // hdirection_data_offset
+				0, // vdirection_data_offset
+				0, // hposin_paxel
+				0, // vposin_paxel
+				6, // pax_height
+				6, // pax_length
+				5, // gain_format
+				0, // offset_scaling_factor
+				0, // offset_shift_value
+				0, // offset_enable
+				1092, // gain_table_size
+				{
+255 255 255 255 255 255 255 255 255 255 255 255 189 183 225 186 116 114 140 115 84 83 105 84 66 66 83 66 56 56 71 56 50 49 62 50 47 47 59 47 47 47 58 47 46 46 57 46 49 48 60 48 53 52 67 53 61 60 77 60 74 74 93 74 97 95 118 95 137 130 165 134 246 234 255 235 255 255 255 255 255 255 255 255 
+255 255 255 255 255 255 255 255 216 212 255 217 119 117 145 118 81 81 101 82 62 61 77 62 49 49 62 49 41 41 52 41 35 36 45 35 33 33 42 32 32 33 41 32 32 32 41 32 34 35 43 34 39 39 49 39 47 46 58 46 57 57 72 56 73 71 91 72 98 96 121 97 150 146 180 147 255 255 255 255 255 255 255 255 
+173 169 217 171 173 169 217 171 138 137 168 140 86 86 107 87 62 61 77 62 47 47 59 46 36 36 46 37 28 29 37 28 23 24 31 23 21 21 27 20 20 21 27 20 21 21 27 21 24 24 31 23 29 29 37 28 36 36 45 36 45 45 57 45 59 58 73 58 77 74 96 77 110 107 135 108 166 165 197 165 166 165 197 165 
+133 129 162 130 133 129 162 130 108 106 135 109 72 71 89 73 52 52 66 52 39 39 49 39 29 29 38 29 21 22 28 22 15 15 20 15 11 12 15 11 11 11 14 10 12 12 15 11 15 16 20 15 21 22 28 21 28 29 36 28 38 37 47 37 49 49 62 49 66 65 82 65 92 89 113 90 128 127 158 130 128 127 158 130 
+112 111 141 111 112 111 141 111 93 93 116 95 64 64 81 64 46 46 58 47 34 34 43 34 24 25 31 24 15 16 20 16 9 9 11 9 5 5 7 5 5 4 6 5 6 5 7 5 9 9 11 9 15 16 20 15 24 24 30 23 33 33 41 33 44 43 55 44 59 58 74 59 83 81 103 81 113 111 138 114 113 111 138 114 
+104 102 126 104 104 102 126 104 87 86 109 88 60 60 75 61 43 44 55 44 31 32 40 31 21 22 28 22 12 12 15 12 5 6 6 5 2 2 3 2 2 2 2 2 3 2 3 3 6 6 6 5 12 12 15 12 21 21 26 20 30 31 38 30 42 41 52 41 57 56 70 56 78 77 97 78 108 102 130 105 108 102 130 105 
+101 96 123 98 101 96 123 98 84 83 106 86 58 58 74 59 42 42 53 42 30 30 38 30 20 21 26 20 10 11 12 11 4 4 4 4 1 1 1 1 1 1 1 1 2 2 2 2 5 5 5 5 12 11 14 11 20 21 25 20 29 30 37 29 41 41 51 41 57 55 69 56 78 75 95 77 105 100 126 104 105 100 126 104 
+104 103 132 105 104 103 132 105 88 89 110 90 61 60 76 62 44 44 56 44 32 33 41 32 22 23 28 22 13 13 16 13 6 6 7 6 3 3 3 3 3 3 3 3 3 3 4 4 7 6 7 7 13 13 15 13 21 21 26 21 31 31 38 30 43 42 53 42 58 56 71 57 79 77 97 79 105 105 131 108 105 105 131 108 
+118 115 145 119 118 115 145 119 99 98 124 101 67 67 84 68 49 49 62 49 36 36 45 36 27 28 33 27 18 19 23 19 12 12 14 12 8 8 9 8 8 8 9 8 9 9 10 9 12 12 14 12 18 19 23 18 26 27 33 26 35 35 43 35 48 47 58 47 63 62 77 62 87 85 107 87 120 117 144 122 120 117 144 122 
+149 142 179 148 149 142 179 148 120 119 148 122 79 79 99 80 58 58 72 58 44 44 55 44 33 34 42 33 26 27 33 26 20 22 25 21 17 18 21 17 17 18 21 17 18 18 22 18 20 21 26 20 26 27 32 25 33 33 40 33 42 42 51 42 55 53 67 54 73 70 88 72 101 98 122 100 148 143 177 147 148 143 177 147 
+204 201 251 206 204 201 251 206 157 156 193 159 97 97 120 98 70 69 87 70 53 53 67 54 43 43 54 43 35 35 43 35 30 31 37 30 27 28 34 27 27 28 34 27 27 27 33 26 30 31 37 30 35 35 42 35 40 39 49 40 52 51 64 52 66 64 80 66 87 86 107 86 127 122 151 125 203 198 239 204 203 198 239 204 
+255 255 255 255 255 255 255 255 254 252 255 255 133 132 162 136 90 90 112 92 69 68 85 70 55 54 68 55 47 47 59 48 41 41 52 42 39 40 49 40 39 39 48 40 40 39 48 40 41 41 51 42 46 45 56 46 54 53 66 54 65 63 79 64 83 80 101 82 112 107 136 111 178 172 212 176 255 255 255 255 255 255 255 255 
+255 255 255 255 255 255 255 255 254 252 255 255 133 132 162 136 90 90 112 92 69 68 85 70 55 54 68 55 47 47 59 48 41 41 52 42 39 40 49 40 39 39 48 40 40 39 48 40 41 41 51 42 46 45 56 46 54 53 66 54 65 63 79 64 83 80 101 82 112 107 136 111 178 172 212 176 255 255 255 255 255 255 255 255 
+}
+, // lsc_table
+				1092, // offset_table_size
+				NULL  // offset_table
+			}
+			</isif_lsc_dcc>
+		</parameter_package>
+		
+	</use_case>
+	
+	<!--=====================================================================-->
+</ISIF_LSC_xml>

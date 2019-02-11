@@ -1,0 +1,14 @@
+#
+# Simple makefile to build examples using MinGW gcc on Windows
+#
+
+CC = gcc
+CFLAGS = -Wall
+
+%.exe : %.c
+	$(CC) $(CFLAGS) -o $@ $< -lwsock32
+
+all: echoc.exe helloWorld.exe recv.exe send.exe testudp.exe
+
+clean:
+	rm -f *.exe *.o

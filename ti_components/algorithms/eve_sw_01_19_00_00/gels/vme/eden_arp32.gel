@@ -1,0 +1,351 @@
+/*
+*
+* Copyright (c) {YEAR} Texas Instruments Incorporated
+*
+* All rights reserved not granted herein.
+*
+* Limited License.
+*
+* Texas Instruments Incorporated grants a world-wide, royalty-free, non-exclusive
+* license under copyrights and patents it now or hereafter owns or controls to make,
+* have made, use, import, offer to sell and sell ("Utilize") this software subject to the
+* terms herein.  With respect to the foregoing patent license, such license is granted
+* solely to the extent that any such patent is necessary to Utilize the software alone.
+* The patent license shall not apply to any combinations which include this software,
+* other than combinations with devices manufactured by or for TI ("TI Devices").
+* No hardware patent is licensed hereunder.
+*
+* Redistributions must preserve existing copyright notices and reproduce this license
+* (including the above copyright notice and the disclaimer and (if applicable) source
+* code license limitations below) in the documentation and/or other materials provided
+* with the distribution
+*
+* Redistribution and use in binary form, without modification, are permitted provided
+* that the following conditions are met:
+*
+* *       No reverse engineering, decompilation, or disassembly of this software is
+* permitted with respect to any software provided in binary form.
+*
+* *       any redistribution and use are licensed by TI for use only with TI Devices.
+*
+* *       Nothing shall obligate TI to provide you with source code for the software
+* licensed and provided to you in object code.
+*
+* If software source code is provided to you, modification and redistribution of the
+* source code are permitted provided that the following conditions are met:
+*
+* *       any redistribution and use of the source code, including any resulting derivative
+* works, are licensed by TI for use only with TI Devices.
+*
+* *       any redistribution and use of any object code compiled from the source code
+* and any resulting derivative works, are licensed by TI for use only with TI Devices.
+*
+* Neither the name of Texas Instruments Incorporated nor the names of its suppliers
+*
+* may be used to endorse or promote products derived from this software without
+* specific prior written permission.
+*
+* DISCLAIMER.
+*
+* THIS SOFTWARE IS PROVIDED BY TI AND TI'S LICENSORS "AS IS" AND ANY EXPRESS
+* OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+* OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+* IN NO EVENT SHALL TI AND TI'S LICENSORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+* INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+* BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+* DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+* OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+* OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+* OF THE POSSIBILITY OF SUCH DAMAGE.
+*
+*/
+
+
+
+//------------------------------------------------------------------------------
+// eden_arp32.gel
+//
+// GEL script for the ARP32 on the Eden subsystem.
+//
+// Step()            - Execute the requested number of steps.
+// StartUp()         - Intialize the ARP32 memory map on GEL start.
+// OnRestart()       - Make sure ARP32 is reset on program restart.
+// OnPreFileLoaded() - Make sure ARP32 is reset prior to program load.
+// OnReset()         - Make sure VCOP stepping is re-enabled after ARP32 reset.
+// OnTargetConnect() - Capture the buffer settings on ARP32 connect.
+// OnHalt()          - Capture the buffer settings when ARP32 halts.
+// EnterStepMode()   - User menu option to enable VCOP stepping.  
+// ExitStepMode()    - User menu option to disable VCOP stepping.  
+// SingleStep()      - User menu option to execute a VCOP single step.
+// StepN()           - User dialog option to do a number of VCOP steps.
+// ToggleBuffers()   - User menu option to toggle VCOP buffer settings.
+//------------------------------------------------------------------------------
+
+// This is a short cut for the Expression window to set the WAY
+// index in one place for looking at multiple vector variables.
+// It is not used in this file, just defined here so it's available.
+unsigned int WAY = 0;
+
+// Flag the status of the buffer settings
+unsigned int BUFFERS_CONTROL  = 0x40080024;
+unsigned int buffers_unlocked = 0;
+unsigned int buffers_settings = 0;
+
+// Flag if stepping is enabled or not
+unsigned int step_enabled = 0;
+
+// Number of steps to execute for Step function
+unsigned int step_count = 0;
+
+//------------------------------------------------------------------------------
+// Step()
+//
+// Execute the requested number of steps.
+//------------------------------------------------------------------------------
+Step() 
+{
+    unsigned int status;
+    
+    if (0 != step_enabled)
+    {
+        if (0 != buffers_unlocked)
+        {
+            // Buffers are unlocked for system viewing, restore settings
+            *BUFFERS_CONTROL = buffers_settings;
+        }
+
+        while (step_count > 0)
+        {
+            status = VCOP_Status_Registers_vcop_status;
+            
+            if (0x01 == (status & 0x01)) 
+            {
+                // Status ready bit is set, VCOP is ready for the next step 
+                VCOP_Status_Registers_vcop_ctrl = 0x03;
+                step_count--;
+            }
+            else if (0x04 == (status & 0x05))
+            {
+                // Status ready is clear and done bit is set, VCOP loop is complete
+                step_enabled = 0;
+                VCOP_Status_Registers_vcop_ctrl = 0x00;
+                step_count = 0;
+                GEL_TextOut("The VCOP task finished; stepping is disabled.\n");
+            }
+            else
+            {
+                // Status bit is clear but the done bit is not set,
+                // the loop is still executing, keep waiting
+                ;                
+            }
+        }
+
+        if (0 != buffers_unlocked)
+        {
+            // Buffers were unlocked for system viewing, restore system view
+            *BUFFERS_CONTROL = 0;
+        }
+    }
+    else
+    {
+        GEL_TextOut("VCOP stepping is disabled.\n");
+    }
+}
+
+//------------------------------------------------------------------------------
+// StartUp()
+//
+// Intialize the ARP32 memory map on GEL start.  
+//------------------------------------------------------------------------------
+StartUp()
+{
+    GEL_MapReset();
+    GEL_MapOn();
+
+    // VCOP buffers
+    GEL_MapAdd(0x40040000, 1, 0x00008000, 1, 1); // WBUF 
+    GEL_MapAdd(0x40050000, 1, 0x00004000, 1, 1); // IBUFLA 
+    GEL_MapAdd(0x40054000, 1, 0x00004000, 1, 1); // IBUFHA 
+    GEL_MapAdd(0x40070000, 1, 0x00004000, 1, 1); // IBUFLB 
+    GEL_MapAdd(0x40074000, 1, 0x00004000, 1, 1); // IBUFHB
+
+    // EVE Control
+    GEL_MapAdd(0x40080000, 1, 0x00001000, 1, 1); // System 
+    GEL_MapAdd(0x40081000, 1, 0x00001000, 1, 1); // MMU0 
+    GEL_MapAdd(0x40082000, 1, 0x00001000, 1, 1); // MMU1
+    GEL_MapAdd(0x40083000, 1, 0x00001000, 1, 1); // T16C
+    GEL_MapAdd(0x40084000, 1, 0x00001000, 1, 1); // VCOP
+    GEL_MapAdd(0x40020000, 1, 0x00008000, 1, 1); // ARP32 DMEM 
+
+    GEL_MapAdd(0x400A0000, 1, 0x00008000, 1, 1);
+
+    // Program memory
+    GEL_MapAdd(0x00000000, 0, 0x10000000, 1, 1);
+    GEL_MapAdd(0x80000000, 0, 0x10000000, 1, 1);
+
+    // Data memory
+    GEL_MapAdd(0x00000000, 1, 0x10000000, 1, 1);
+    GEL_MapAdd(0x80000000, 1, 0x10000000, 1, 1);
+
+    // Register pages
+    GEL_MapAdd(0x00000000, 2, 0x00000100, 1, 1);
+    GEL_MapAdd(0x00000000, 3, 0x00000100, 1, 1);
+    GEL_MapAdd(0x00000000, 4, 0x00000100, 1, 1);
+}
+
+//------------------------------------------------------------------------------
+// OnRestart()
+//
+// Make sure ARP32 is reset to the start vector on program restart.  
+//------------------------------------------------------------------------------
+OnRestart(int nErrorCode)
+{
+    GEL_Reset();
+}
+
+//------------------------------------------------------------------------------
+// OnPreFileLoaded()
+//
+// Make sure ARP32 is reset to the start vector prior to program load.  
+//------------------------------------------------------------------------------
+OnPreFileLoaded()
+{
+    GEL_Reset();
+}
+
+//------------------------------------------------------------------------------
+// OnReset()
+//
+// Make sure VCOP stepping is re-enabled after ARP32 reset.  
+//------------------------------------------------------------------------------
+OnReset()
+{
+    if (0 != step_enabled)
+    {
+        // Set VCOP to stepping mode
+        VCOP_Status_Registers_vcop_ctrl = 0x01;
+    }
+    
+    // Lock the buffers to the values coming out of reset
+    buffers_unlocked = 0;
+    buffers_settings = *BUFFERS_CONTROL;
+}
+
+//------------------------------------------------------------------------------
+// OnTargetConnect()
+//
+// Capture the state of the buffer settings on ARP32 connect.  
+//------------------------------------------------------------------------------
+OnTargetConnect()
+{
+    buffers_unlocked = 0;                // Default to the locked state
+    buffers_settings = *BUFFERS_CONTROL; // Capture the current settings.
+}
+
+//------------------------------------------------------------------------------
+// OnHalt()
+//
+// Capture the state of the buffer settings when ARP32 halts.
+//------------------------------------------------------------------------------
+OnHalt()
+{
+    buffers_unlocked = 0;                // Default to the locked state
+    buffers_settings = *BUFFERS_CONTROL; // Capture the current settings.
+}
+
+menuitem "VCOP Control";
+
+//------------------------------------------------------------------------------
+// StepEnable()
+//
+// User menu option to enable single step mode on VCOP.  
+//------------------------------------------------------------------------------
+hotmenu EnterStepMode()
+{
+    step_enabled = 1;
+    VCOP_Status_Registers_vcop_ctrl = 0x01;        
+    GEL_TextOut("VCOP stepping is enabled.\n");
+}
+
+//------------------------------------------------------------------------------
+// StepDisable()
+//
+// User menu option to disable single step mode on VCOP.  
+//------------------------------------------------------------------------------
+hotmenu ExitStepMode()
+{
+    if (0 != step_enabled)
+    {
+        // If VCOP is executing a task, tell it to finish
+        while (0 != (VCOP_Status_Registers_vcop_status & 0x01))
+        {
+            VCOP_Status_Registers_vcop_ctrl = 0x02;
+        }
+    }
+    
+    if (0 != buffers_unlocked)
+    {
+        // Buffers are unlocked for system viewing, lock them
+        buffers_unlocked = 0;
+        *BUFFERS_CONTROL = buffers_settings;
+    }
+
+    VCOP_Status_Registers_vcop_ctrl = 0x00;
+    step_enabled = 0;    
+    GEL_TextOut("VCOP stepping is disabled.\n");
+}
+
+//------------------------------------------------------------------------------
+// SingleStep()
+//
+// User menu option to execute a single step on VCOP.  
+//------------------------------------------------------------------------------
+hotmenu SingleStep()
+{
+    step_count = 1;
+    Step();
+}
+
+//------------------------------------------------------------------------------
+// StepN()
+//
+// User menu option to execute N number of steps on VCOP.  
+//------------------------------------------------------------------------------
+dialog StepN(count "Number of steps to execute.")
+{
+    if (count > 0)
+    {
+    	step_count = count;
+        Step();
+    }
+}
+
+//------------------------------------------------------------------------------
+// ToggleBuffers()
+//
+// Toggle whether buffers are locked to application settings or unlocked for
+// viewing by the debugger.  
+//
+// NOTE: If unlocked, the step function will automatically restore the settings
+//       prior to a VCOP step or before disabling VCOP step mode.  But the user
+//       MUST manually lock the buffers before doing an ARP32 run or step.
+//------------------------------------------------------------------------------
+hotmenu ToggleBuffers()
+{
+    if (0 == buffers_unlocked)
+    {
+        // Buffers are currently locked
+        buffers_unlocked = 1;
+        *BUFFERS_CONTROL = 0;
+        GEL_TextOut("VCOP buffers are unlocked for system view.\n");
+    }
+    else
+    {
+        // Buffers are currently unlocked
+        buffers_unlocked = 0;
+        *BUFFERS_CONTROL = buffers_settings;
+        GEL_TextOut("VCOP buffers are locked to application control.\n");
+    }
+}
+
+// End of File

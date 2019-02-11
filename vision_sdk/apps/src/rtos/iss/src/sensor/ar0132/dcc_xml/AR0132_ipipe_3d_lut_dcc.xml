@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<IPIPE_3D_LUT_xml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!--this is comment-->
+  <dcc_name>ipipe_3d_lut</dcc_name>
+  <dcc_header>
+    <camera_module_id>     0132 </camera_module_id>
+      <dcc_descriptor_id>   13 </dcc_descriptor_id>
+      <algorithm_vendor_id>  1 </algorithm_vendor_id>
+      <tunning_tool_version> 0 </tunning_tool_version>
+  </dcc_header>
+  <!--=======================================================================-->
+    <typedef>
+        <iss_ipipe_3d_lut type="struct">
+            <update type="uint8"> </update>
+            <enable type="uint8"> </enable> <!-- enable/disable ipipe 3d lut: 0,1 -->
+            <ddd_table_r type="uint16[729]"> </ddd_table_r> <!-- 3d lut for r: U10 -->
+            <ddd_table_g type="uint16[729]"> </ddd_table_g> <!-- 3d lut for g: U10 -->
+            <ddd_table_b type="uint16[729]"> </ddd_table_b> <!-- 3d lut for b: U10 -->
+        </iss_ipipe_3d_lut>
+    </typedef>
+  <!--=======================================================================-->
+
+    <use_case val="1023">
+        <n-space>
+
+            <region0 class="0">
+                <colortemperature val="2" min="0" max="3000">  </colortemperature>
+                <exposure val="1" min="0" max="10000000">  </exposure>
+                <gain val="0" min="0" max="1024">  </gain>
+            </region0>
+
+            <region1 class="1">
+                <colortemperature val="2" min="3001" max="4000">  </colortemperature>
+                <exposure val="1" min="0" max="10000000">  </exposure>
+                <gain val="0" min="0" max="1024">  </gain>
+            </region1>
+
+            <region2 class="2">
+                <colortemperature val="2" min="4001" max="5000">  </colortemperature>
+                <exposure val="1" min="0" max="10000000">  </exposure>
+                <gain val="0" min="0" max="1024">  </gain>
+            </region2>
+
+            <region3 class="3">
+                <colortemperature val="2" min="5001" max="20000">  </colortemperature>
+                <exposure val="1" min="0" max="10000000">  </exposure>
+                <gain val="0" min="0" max="1024">  </gain>
+            </region3>
+
+        </n-space>
+
+        <parameter_package>
+            <ipipe_3d_lut_dcc type="iss_ipipe_3d_lut">
+            {
+                0, //update
+                0, // enable
+                { // ddd_table_r
+                    #include "32_R_3D_lookup_table.txt"
+                },
+                { // ddd_table_g
+                    #include "32_G_3D_lookup_table.txt"
+                },
+                { // ddd_table_b
+                    #include "32_B_3D_lookup_table.txt"
+                }
+            }
+            </ipipe_3d_lut_dcc>
+        </parameter_package>
+
+        <parameter_package>
+            <ipipe_3d_lut_dcc type="iss_ipipe_3d_lut">
+            {
+                0, //update
+                0, // enable
+                { // ddd_table_r
+                    #include "33_R_3D_lookup_table.txt"
+                },
+                { // ddd_table_g
+                    #include "33_G_3D_lookup_table.txt"
+                },
+                { // ddd_table_b
+                    #include "33_B_3D_lookup_table.txt"
+                }
+            }
+            </ipipe_3d_lut_dcc>
+        </parameter_package>
+
+        <parameter_package>
+            <ipipe_3d_lut_dcc type="iss_ipipe_3d_lut">
+            {
+                0, //update
+                0, // enable
+                { // ddd_table_r
+                    #include "34_R_3D_lookup_table.txt"
+                },
+                { // ddd_table_g
+                    #include "34_G_3D_lookup_table.txt"
+                },
+                { // ddd_table_b
+                    #include "34_B_3D_lookup_table.txt"
+                }
+            }
+            </ipipe_3d_lut_dcc>
+        </parameter_package>
+
+        <parameter_package>
+            <ipipe_3d_lut_dcc type="iss_ipipe_3d_lut">
+            {
+                0, //update
+                0, // enable
+                { // ddd_table_r
+                    #include "35_R_3D_lookup_table.txt"
+                },
+                { // ddd_table_g
+                    #include "35_G_3D_lookup_table.txt"
+                },
+                { // ddd_table_b
+                    #include "35_B_3D_lookup_table.txt"
+                }
+            }
+            </ipipe_3d_lut_dcc>
+        </parameter_package>
+
+    </use_case>
+
+  <!--=====================================================================-->
+</IPIPE_3D_LUT_xml>

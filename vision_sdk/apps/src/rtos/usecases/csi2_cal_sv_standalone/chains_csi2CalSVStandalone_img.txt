@@ -1,0 +1,44 @@
+digraph chains_csi2CalSVStandalone {
+
+       ColorScheme [shape=none, margin=0, label=<
+       <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+       <TR><TD bgcolor="lightblue">IPU1_0</TD></TR>
+       <TR><TD bgcolor="palegreen">DSP1</TD></TR>
+       </TABLE>>];
+
+       /************** LINKS ************************/
+       IssCapture [color=lightblue, style=filled]
+       VPE_sv_csc [color=lightblue, style=filled]
+       Sync_sv [color=lightblue, style=filled]
+       Dup_sv [color=lightblue, style=filled]
+       IPCOut_IPU1_0_DSP1_1 [color=lightblue, style=filled]
+       IPCIn_DSP1_IPU1_0_1 [color=palegreen, style=filled]
+       IPCOut_IPU1_0_DSP1_0 [color=lightblue, style=filled]
+       IPCIn_DSP1_IPU1_0_0 [color=palegreen, style=filled]
+       Alg_GeoAlign [color=palegreen, style=filled]
+       Alg_Synthesis [color=palegreen, style=filled]
+       IPCOut_DSP1_IPU1_0_0 [color=palegreen, style=filled]
+       IPCIn_IPU1_0_DSP1_0 [color=lightblue, style=filled]
+       Display_sv [color=lightblue, style=filled]
+       Alg_PhotoAlign [color=palegreen, style=filled]
+       GrpxSrc [color=lightblue, style=filled]
+       Display_Grpx [color=lightblue, style=filled]
+
+       /************** CONNECTIONS ************************/
+       Dup_sv -> IPCOut_IPU1_0_DSP1_0[taillabel=Q0, minlen=2, labeldistance=3]
+       Dup_sv -> IPCOut_IPU1_0_DSP1_1[taillabel=Q1, minlen=2, labeldistance=3]
+       Sync_sv -> Dup_sv
+       VPE_sv_csc -> Sync_sv
+       IssCapture -> VPE_sv_csc
+       Alg_GeoAlign -> Alg_Synthesis[headlabel=Q1 minlen=2, labeldistance=3]
+       Alg_Synthesis -> Alg_PhotoAlign[taillabel=Q1, minlen=2, labeldistance=3]
+       Alg_Synthesis -> IPCOut_DSP1_IPU1_0_0[taillabel=Q0, minlen=2, labeldistance=3]
+       Alg_PhotoAlign -> Alg_Synthesis[headlabel=Q2 minlen=2, labeldistance=3]
+       GrpxSrc -> Display_Grpx
+       IPCOut_IPU1_0_DSP1_0 -> IPCIn_DSP1_IPU1_0_0
+       IPCIn_DSP1_IPU1_0_0 -> Alg_GeoAlign
+       IPCOut_IPU1_0_DSP1_1 -> IPCIn_DSP1_IPU1_0_1
+       IPCIn_DSP1_IPU1_0_1 -> Alg_Synthesis[headlabel=Q0 minlen=2, labeldistance=3]
+       IPCOut_DSP1_IPU1_0_0 -> IPCIn_IPU1_0_DSP1_0
+       IPCIn_IPU1_0_DSP1_0 -> Display_sv
+}

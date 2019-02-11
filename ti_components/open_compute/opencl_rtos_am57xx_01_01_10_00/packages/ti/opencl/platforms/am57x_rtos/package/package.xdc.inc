@@ -1,0 +1,13 @@
+package.xdc
+Platform.xdc
+Platform.xs
+package/ti.opencl.platforms.am57x_rtos.sch
+package/.vers_g180
+package/.vers_r170
+package/.vers_b160
+package/.xdc-A75
+package/ti_opencl_platforms_am57x_rtos.java
+package/ti_opencl_platforms_am57x_rtos.class
+package/package_ti.opencl.platforms.am57x_rtos.c
+package/package.defs.h
+package/ti.opencl.platforms.am57x_rtos.ccs

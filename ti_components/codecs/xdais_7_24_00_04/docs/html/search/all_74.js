@@ -1,0 +1,25 @@
+var searchData=
+[
+  ['tablesptr',['tablesPtr',['../struct_i_s_p_h_d_e_c1___params.html#a7bdee67fcfdecaa52441dbc7d597dd54',1,'ISPHDEC1_Params::tablesPtr()'],['../struct_i_s_p_h_e_n_c1___params.html#af97ca42a83ab32b534d96fa7c1f79c5d',1,'ISPHENC1_Params::tablesPtr()']]],
+  ['targetbitrate',['targetBitRate',['../struct_i_v_i_d_e_n_c___dynamic_params.html#a5409bcb2aca77a54f0b58d91c145c9b0',1,'IVIDENC_DynamicParams::targetBitRate()'],['../struct_i_v_i_d_e_n_c1___dynamic_params.html#ad970e1d843d1a76e93999fdafb7fc68a',1,'IVIDENC1_DynamicParams::targetBitRate()'],['../struct_i_v_i_d_e_n_c2___dynamic_params.html#ae8de0b39eaaa0d993571b3f7c2ddfbef',1,'IVIDENC2_DynamicParams::targetBitRate()'],['../struct_i_v_i_d_t_r_a_n_s_c_o_d_e___dynamic_params.html#a8bb8bfabd89d507e736b1a6b709b2e26',1,'IVIDTRANSCODE_DynamicParams::targetBitRate()']]],
+  ['targetframerate',['targetFrameRate',['../struct_i_v_i_d_e_n_c___dynamic_params.html#a12d0d0b205549f63da4bb0cc57acd162',1,'IVIDENC_DynamicParams::targetFrameRate()'],['../struct_i_v_i_d_e_n_c1___dynamic_params.html#aa9a41d61a27f63f7bdf011636f9371c3',1,'IVIDENC1_DynamicParams::targetFrameRate()'],['../struct_i_v_i_d_e_n_c2___dynamic_params.html#a4e5716ee30977bb40fa0c1c0aa7695b0',1,'IVIDENC2_DynamicParams::targetFrameRate()']]],
+  ['targets',['targets',['../struct_i_v_i_d_a_n_a_l_y_t_i_c_s___out_args.html#ab93f3d95de67e25a7febf41a3dc19bc1',1,'IVIDANALYTICS_OutArgs']]],
+  ['tcctable',['tccTable',['../struct_i_d_m_a3___obj.html#a185dbbfdd7f200a4d692e6b6fcc6a7f9',1,'IDMA3_Obj']]],
+  ['tilemem',['tileMem',['../union_x_d_m2___buf_size.html#a13aee38379c17d730b7eaef088c195ff',1,'XDM2_BufSize']]],
+  ['todo_20list',['Todo List',['../todo.html',1,'']]],
+  ['topfieldfirstflag',['topFieldFirstFlag',['../struct_i_v_i_d_e_n_c1___in_args.html#a5d4dc8e55e03eb69f035fd7cd26d0c4e',1,'IVIDENC1_InArgs::topFieldFirstFlag()'],['../struct_i_v_i_d_e_o1___buf_desc.html#a0e77f5f253f8a17d41cb35a3dff1866a',1,'IVIDEO1_BufDesc::topFieldFirstFlag()'],['../struct_i_v_i_d_e_o2___buf_desc.html#a4e5acc7170fe0927821c209c08330b21',1,'IVIDEO2_BufDesc::topFieldFirstFlag()']]],
+  ['topleft',['topLeft',['../struct_x_d_m___rect.html#a9ddace330c4514c9282c9b48d5aad7a9',1,'XDM_Rect']]],
+  ['totalau',['totalAU',['../struct_i_i_m_g_d_e_c___status.html#a4eac921b7c6ee4521c38e84f35c7f279',1,'IIMGDEC_Status::totalAU()'],['../struct_i_i_m_g_d_e_c1___status.html#a5179894a90ac9dbccee34da8f9867b11',1,'IIMGDEC1_Status::totalAU()'],['../struct_i_i_m_g_e_n_c___status.html#a6575078c14a7632304b47902bffa6eec',1,'IIMGENC_Status::totalAU()'],['../struct_i_i_m_g_e_n_c1___status.html#a92330058d2f29b19d6af03879e1db231',1,'IIMGENC1_Status::totalAU()']]],
+  ['totalscan',['totalScan',['../struct_i_i_m_g_d_e_c___status.html#ad33c5c68bd43da2c542a5071d5425b5d',1,'IIMGDEC_Status::totalScan()'],['../struct_i_i_m_g_d_e_c1___status.html#acb0416bbc4b12fc1ed47e8884a2841f3',1,'IIMGDEC1_Status::totalScan()']]],
+  ['trace_2eh',['trace.h',['../trace_8h.html',1,'']]],
+  ['trace_5f1class',['TRACE_1CLASS',['../group__ti__xdais___t_r_a_c_e.html#gab3b47227b7128f9dd7248cdbac20b28c',1,'trace.h']]],
+  ['trace_5f2class',['TRACE_2CLASS',['../group__ti__xdais___t_r_a_c_e.html#ga97343ce207eec0b43621a7ce712f6a51',1,'trace.h']]],
+  ['trace_5f3class',['TRACE_3CLASS',['../group__ti__xdais___t_r_a_c_e.html#ga0a042541fabc495650334061087052a0',1,'trace.h']]],
+  ['trace_5f4class',['TRACE_4CLASS',['../group__ti__xdais___t_r_a_c_e.html#ga2bc4512b405185af7baa8ef4e160e6f3',1,'trace.h']]],
+  ['trace_5f5class',['TRACE_5CLASS',['../group__ti__xdais___t_r_a_c_e.html#gaeb138d21539b83c10d2c11c76c122552',1,'trace.h']]],
+  ['trace_5f6class',['TRACE_6CLASS',['../group__ti__xdais___t_r_a_c_e.html#ga95e0f1e59bc5d22e913fbd5a4cde68fd',1,'trace.h']]],
+  ['trace_5f7class',['TRACE_7CLASS',['../group__ti__xdais___t_r_a_c_e.html#ga1ceefde1affa0c508b0a6d523ae8860a',1,'trace.h']]],
+  ['trace_5fenter',['TRACE_ENTER',['../group__ti__xdais___t_r_a_c_e.html#gae481bd98d6475b901f3bda374d7dd804',1,'trace.h']]],
+  ['transferpending',['transferPending',['../struct_i_d_m_a3___obj.html#a95914721dbaef8bce045253b0cb81468',1,'IDMA3_Obj']]],
+  ['ttytddmode',['ttyTddMode',['../struct_i_s_p_h_e_n_c___dynamic_params.html#a52ef158dd0c071bae86ec620eba81cb4',1,'ISPHENC_DynamicParams::ttyTddMode()'],['../struct_i_s_p_h_e_n_c___status.html#a60445311e7c3c938ee4329b30addf124',1,'ISPHENC_Status::ttyTddMode()'],['../struct_i_s_p_h_e_n_c1___dynamic_params.html#a9605fa7c93a86e744dfe1360b0b39f21',1,'ISPHENC1_DynamicParams::ttyTddMode()'],['../struct_i_s_p_h_e_n_c1___status.html#a09cd795e3aebe95dfccded3b59dd6ff1',1,'ISPHENC1_Status::ttyTddMode()']]]
+];

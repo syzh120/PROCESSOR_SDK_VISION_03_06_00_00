@@ -1,0 +1,277 @@
+From b608d406cc96d294804fa451dd97eb2010536cd8 Mon Sep 17 00:00:00 2001
+From: Nikhil Devshatwar <nikhil.nd@ti.com>
+Date: Tue, 3 Oct 2017 18:31:32 +0530
+Subject: [PATCH 3/4] arm: dts: infoadas: Late attach remoteprocs
+
+When u-boot loads the remote procs, Linux should not load them
+again. It should not even reset the remote procs and timer devices.
+
+Add late attach properties to all the remote procs and timer nodes
+upon which, driver only attaches to the core and skips the
+initialization / reset logic
+
+Also, add the reserved_mem entry for the page tables being used
+by the remote cores. These page tables are setup by u-boot.
+Linux should not touch this portion of memory.
+
+Signed-off-by: Nikhil Devshatwar <nikhil.nd@ti.com>
+---
+ arch/arm/boot/dts/dra7-evm-infoadas.dts  | 39 ++++++++++++++++++++++++++++++++
+ arch/arm/boot/dts/dra71-evm-infoadas.dts | 36 +++++++++++++++++++++++++++++
+ arch/arm/boot/dts/dra72-evm-infoadas.dts | 36 +++++++++++++++++++++++++++++
+ arch/arm/boot/dts/dra76-evm-infoadas.dts | 39 ++++++++++++++++++++++++++++++++
+ 4 files changed, 150 insertions(+)
+
+diff --git a/arch/arm/boot/dts/dra7-evm-infoadas.dts b/arch/arm/boot/dts/dra7-evm-infoadas.dts
+index 6487f1d..79b0bc7 100755
+--- a/arch/arm/boot/dts/dra7-evm-infoadas.dts
++++ b/arch/arm/boot/dts/dra7-evm-infoadas.dts
+@@ -11,6 +11,12 @@
+ #define DISABLE_COMPLETE(label) &label { status = "disabled"; ti,no-idle; ti,no-reset-on-init; }
+ #define LATE_ATTACH(label) &label { ti,late-attach; ti,no-idle; ti,no-reset-on-init; }
+ 
++/ {
++	chosen {
++		bootargs = "console=ttyO0,115200n8 elevator=noop root=/dev/mmcblk1p2 rw rootwait earlyprintk fixrtc omapdrm.num_crtc=2 consoleblank=0 cma=64M rootfstype=ext4 snd.slots_reserved=1,1 loglevel=0 init=/home/root/init-demo.sh clk_ignore_unused";
++	};
++};
++
+ /* modules used by BIOS, disable from Linux */
+ DISABLE_COMPLETE(vip1);
+ DISABLE_COMPLETE(vip2);
+@@ -30,6 +36,32 @@ DISABLE_PRCM(gpio2);
+ DISABLE_PRCM(gpio4);
+ DISABLE_PRCM(gpio6);
+ 
++/* Remote cores loaded by bootloader */
++LATE_ATTACH(ipu1);
++LATE_ATTACH(mmu_ipu1);
++LATE_ATTACH(ipu2);
++LATE_ATTACH(mmu_ipu2);
++LATE_ATTACH(dsp1);
++LATE_ATTACH(mmu0_dsp1);
++LATE_ATTACH(mmu1_dsp1);
++LATE_ATTACH(dsp2);
++LATE_ATTACH(mmu0_dsp2);
++LATE_ATTACH(mmu1_dsp2);
++
++/* timers used by the remote cores */
++LATE_ATTACH(timer3);
++LATE_ATTACH(timer4);
++LATE_ATTACH(timer5);
++LATE_ATTACH(timer6);
++LATE_ATTACH(timer7);
++LATE_ATTACH(timer9);
++LATE_ATTACH(timer11);
++LATE_ATTACH(timer13);
++LATE_ATTACH(timer14);
++LATE_ATTACH(mailbox5);
++LATE_ATTACH(mailbox6);
++LATE_ATTACH(mailbox7);
++
+ /* Linux uses first 32 channels, BIOS uses last 32 */
+ &edma {
+ 	dma-requests = <32>;
+@@ -89,6 +121,13 @@ DISABLE_PRCM(gpio6);
+ 		reg = <0x0 0xA5000000 0x0 0x4000000>;
+ 		status = "okay";
+ 	};
++
++	/* Memory reserved for IOMMU table carveout in u-boot */
++	latea_pagetbl: late_pgtbl@bfc00000 {
++		reg = <0x0 0xbfc00000 0x0 0x100000>;
++		no-map;
++		status = "okay";
++	};
+ };
+ 
+ &ipu1 {
+diff --git a/arch/arm/boot/dts/dra71-evm-infoadas.dts b/arch/arm/boot/dts/dra71-evm-infoadas.dts
+index 2a7ee96..807ae9e 100755
+--- a/arch/arm/boot/dts/dra71-evm-infoadas.dts
++++ b/arch/arm/boot/dts/dra71-evm-infoadas.dts
+@@ -11,6 +11,12 @@
+ #define DISABLE_COMPLETE(label) &label { status = "disabled"; ti,no-idle; ti,no-reset-on-init; }
+ #define LATE_ATTACH(label) &label { ti,late-attach; ti,no-idle; ti,no-reset-on-init; }
+ 
++/ {
++	chosen {
++		bootargs = "console=ttyO0,115200n8 elevator=noop root=/dev/mmcblk1p2 rw rootwait earlyprintk fixrtc omapdrm.num_crtc=2 consoleblank=0 cma=64M rootfstype=ext4 snd.slots_reserved=1,1 loglevel=0 init=/home/root/init-demo.sh clk_ignore_unused";
++	};
++};
++
+ /* modules used by BIOS, disable from Linux */
+ DISABLE_COMPLETE(vip1);
+ DISABLE_COMPLETE(cal);
+@@ -29,6 +35,29 @@ DISABLE_PRCM(gpio2);
+ DISABLE_PRCM(gpio4);
+ DISABLE_PRCM(gpio6);
+ 
++/* Remote cores loaded by bootloader */
++LATE_ATTACH(ipu1);
++LATE_ATTACH(mmu_ipu1);
++LATE_ATTACH(ipu2);
++LATE_ATTACH(mmu_ipu2);
++LATE_ATTACH(dsp1);
++LATE_ATTACH(mmu0_dsp1);
++LATE_ATTACH(mmu1_dsp1);
++
++/* timers used by the remote cores */
++LATE_ATTACH(timer3);
++LATE_ATTACH(timer4);
++LATE_ATTACH(timer5);
++LATE_ATTACH(timer6);
++LATE_ATTACH(timer7);
++LATE_ATTACH(timer9);
++LATE_ATTACH(timer11);
++LATE_ATTACH(timer13);
++LATE_ATTACH(timer14);
++LATE_ATTACH(mailbox5);
++LATE_ATTACH(mailbox6);
++LATE_ATTACH(mailbox7);
++
+ /* Linux uses first 32 channels, BIOS uses last 32 */
+ &edma {
+ 	dma-requests = <32>;
+@@ -78,6 +107,13 @@ DISABLE_PRCM(gpio6);
+ 		reg = <0x0 0xA0000000 0x0 0x1000000>;
+ 		status = "okay";
+ 	};
++
++	/* Memory reserved for IOMMU table carveout in u-boot */
++	latea_pagetbl: late_pgtbl@bfc00000 {
++		reg = <0x0 0xbfc00000 0x0 0x100000>;
++		no-map;
++		status = "okay";
++	};
+ };
+ 
+ &ipu1 {
+diff --git a/arch/arm/boot/dts/dra72-evm-infoadas.dts b/arch/arm/boot/dts/dra72-evm-infoadas.dts
+index ec07648..83eee36 100755
+--- a/arch/arm/boot/dts/dra72-evm-infoadas.dts
++++ b/arch/arm/boot/dts/dra72-evm-infoadas.dts
+@@ -11,6 +11,12 @@
+ #define DISABLE_COMPLETE(label) &label { status = "disabled"; ti,no-idle; ti,no-reset-on-init; }
+ #define LATE_ATTACH(label) &label { ti,late-attach; ti,no-idle; ti,no-reset-on-init; }
+ 
++/ {
++	chosen {
++		bootargs = "console=ttyO0,115200n8 elevator=noop root=/dev/mmcblk1p2 rw rootwait earlyprintk fixrtc omapdrm.num_crtc=2 consoleblank=0 cma=64M rootfstype=ext4 snd.slots_reserved=1,1 loglevel=0 init=/home/root/init-demo.sh clk_ignore_unused";
++	};
++};
++
+ /* modules used by BIOS, disable from Linux */
+ DISABLE_COMPLETE(vip1);
+ DISABLE_COMPLETE(cal);
+@@ -29,6 +35,29 @@ DISABLE_PRCM(gpio2);
+ DISABLE_PRCM(gpio4);
+ DISABLE_PRCM(gpio6);
+ 
++/* Remote cores loaded by bootloader */
++LATE_ATTACH(ipu1);
++LATE_ATTACH(mmu_ipu1);
++LATE_ATTACH(ipu2);
++LATE_ATTACH(mmu_ipu2);
++LATE_ATTACH(dsp1);
++LATE_ATTACH(mmu0_dsp1);
++LATE_ATTACH(mmu1_dsp1);
++
++/* timers used by the remote cores */
++LATE_ATTACH(timer3);
++LATE_ATTACH(timer4);
++LATE_ATTACH(timer5);
++LATE_ATTACH(timer6);
++LATE_ATTACH(timer7);
++LATE_ATTACH(timer9);
++LATE_ATTACH(timer11);
++LATE_ATTACH(timer13);
++LATE_ATTACH(timer14);
++LATE_ATTACH(mailbox5);
++LATE_ATTACH(mailbox6);
++LATE_ATTACH(mailbox7);
++
+ /* Linux uses first 32 channels, BIOS uses last 32 */
+ &edma {
+ 	dma-requests = <32>;
+@@ -78,6 +107,13 @@ DISABLE_PRCM(gpio6);
+ 		reg = <0x0 0xA0000000 0x0 0x1000000>;
+ 		status = "okay";
+ 	};
++
++	/* Memory reserved for IOMMU table carveout in u-boot */
++	latea_pagetbl: late_pgtbl@bfc00000 {
++		reg = <0x0 0xbfc00000 0x0 0x100000>;
++		no-map;
++		status = "okay";
++	};
+ };
+ 
+ &ipu1 {
+diff --git a/arch/arm/boot/dts/dra76-evm-infoadas.dts b/arch/arm/boot/dts/dra76-evm-infoadas.dts
+index fc10d15..86b9db8 100755
+--- a/arch/arm/boot/dts/dra76-evm-infoadas.dts
++++ b/arch/arm/boot/dts/dra76-evm-infoadas.dts
+@@ -11,6 +11,12 @@
+ #define DISABLE_COMPLETE(label) &label { status = "disabled"; ti,no-idle; ti,no-reset-on-init; }
+ #define LATE_ATTACH(label) &label { ti,late-attach; ti,no-idle; ti,no-reset-on-init; }
+ 
++/ {
++	chosen {
++		bootargs = "console=ttyO0,115200n8 elevator=noop root=/dev/mmcblk0p2 rw rootwait earlyprintk fixrtc omapdrm.num_crtc=2 consoleblank=0 cma=64M rootfstype=ext4 snd.slots_reserved=1,1 loglevel=8 init=/home/root/init-demo.sh clk_ignore_unused";
++	};
++};
++
+ /* modules used by BIOS, disable from Linux */
+ DISABLE_COMPLETE(vip1);
+ DISABLE_COMPLETE(vip2);
+@@ -32,6 +38,32 @@ DISABLE_PRCM(gpio4);
+ DISABLE_PRCM(gpio5);
+ DISABLE_PRCM(gpio6);
+ 
++/* Remote cores loaded by bootloader */
++LATE_ATTACH(ipu1);
++LATE_ATTACH(mmu_ipu1);
++LATE_ATTACH(ipu2);
++LATE_ATTACH(mmu_ipu2);
++LATE_ATTACH(dsp1);
++LATE_ATTACH(mmu0_dsp1);
++LATE_ATTACH(mmu1_dsp1);
++LATE_ATTACH(dsp2);
++LATE_ATTACH(mmu0_dsp2);
++LATE_ATTACH(mmu1_dsp2);
++
++/* timers used by the remote cores */
++LATE_ATTACH(timer3);
++LATE_ATTACH(timer4);
++LATE_ATTACH(timer5);
++LATE_ATTACH(timer6);
++LATE_ATTACH(timer7);
++LATE_ATTACH(timer9);
++LATE_ATTACH(timer11);
++LATE_ATTACH(timer13);
++LATE_ATTACH(timer14);
++LATE_ATTACH(mailbox5);
++LATE_ATTACH(mailbox6);
++LATE_ATTACH(mailbox7);
++
+ /* Linux uses first 32 channels, BIOS uses last 32 */
+ &edma {
+ 	dma-requests = <32>;
+@@ -91,6 +123,13 @@ DISABLE_PRCM(gpio6);
+ 		reg = <0x0 0xA5000000 0x0 0x4000000>;
+ 		status = "okay";
+ 	};
++
++	/* Memory reserved for IOMMU table carveout in u-boot */
++	latea_pagetbl: late_pgtbl@bfc00000 {
++		reg = <0x0 0xbfc00000 0x0 0x100000>;
++		no-map;
++		status = "okay";
++	};
+ };
+ 
+ &ipu1 {
+-- 
+2.7.4
+

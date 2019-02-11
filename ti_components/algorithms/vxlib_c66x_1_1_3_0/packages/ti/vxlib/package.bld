@@ -1,0 +1,886 @@
+/* ======================================================================== *
+ * VXLIB -- TI OpenVX Kernel Library                                        *
+ *                                                                          *
+ *                                                                          *
+ * Copyright (C) 2016 Texas Instruments Incorporated - http://www.ti.com/   *
+ *                                                                          *
+ *                                                                          *
+ *  Redistribution and use in source and binary forms, with or without      *
+ *  modification, are permitted provided that the following conditions      *
+ *  are met:                                                                *
+ *                                                                          *
+ *    Redistributions of source code must retain the above copyright        *
+ *    notice, this list of conditions and the following disclaimer.         *
+ *                                                                          *
+ *    Redistributions in binary form must reproduce the above copyright     *
+ *    notice, this list of conditions and the following disclaimer in the   *
+ *    documentation and/or other materials provided with the                *
+ *    distribution.                                                         *
+ *                                                                          *
+ *    Neither the name of Texas Instruments Incorporated nor the names of   *
+ *    its contributors may be used to endorse or promote products derived   *
+ *    from this software without specific prior written permission.         *
+ *                                                                          *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS     *
+ *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT       *
+ *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR   *
+ *  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT    *
+ *  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,   *
+ *  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT        *
+ *  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,   *
+ *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY   *
+ *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT     *
+ *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE   *
+ *  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.    *
+ * ======================================================================== */
+/****************************************************************************
+ * FILE PURPOSE: Build description for package ti.vxlib
+ ****************************************************************************
+ * FILE NAME: package.bld
+ *
+ * DESCRIPTION: This file contains attributes to build and create releases
+ *              for package ti.vxlib
+ ****************************************************************************/
+
+    var Package = xdc.loadCapsule('ti/mas/swtools/CommonBld.xs');
+
+    /* Global Variables */
+    Package.bundlename = "vxlib";
+
+    Package.bundletype = "kernel";
+
+    Package.bundleUseDeliveryName = true;
+
+    Package.archiveTypeDefault = false;
+
+    var doxygenstring = " docs/doxygen src/common/VXLIB_bufParams.h src/common/VXLIB_types.h ";
+
+    /* List names of kernel directories */
+    var IncludeList =[  "vx/VXLIB_absDiff_i16s_i16s_o16s",
+                        "vx/VXLIB_absDiff_i8u_i8u_o8u",
+                        "vx/VXLIB_accumulateImage_i8u_io16s",
+                        "vx/VXLIB_accumulateSquareImage_i8u_io16s",
+                        "vx/VXLIB_accumulateWeightedImage_i8u_io8u",
+                        "vx/VXLIB_add_i16s_i16s_o16s",
+                        "vx/VXLIB_add_i8u_i8u_o8u",
+                        "vx/VXLIB_add_i8u_i16s_o16s",
+                        "vx/VXLIB_add_i8u_i8u_o16s",
+                        "vx/VXLIB_addSquare_i8u_i16s_o16s",
+                        "vx/VXLIB_addWeight_i8u_i8u_o8u",
+                        "vx/VXLIB_and_i8u_i8u_o8u",
+                        "vx/VXLIB_box_3x3_i8u_o8u",
+                        "vx/VXLIB_cannyNMS_i16s_i16s_i16u_o8u",
+                        "vx/VXLIB_channelCopy_1to1_i8u_o8u",
+                        "vx/VXLIB_channelCombine_2to1_i8u_o8u",
+                        "vx/VXLIB_channelCombine_3to1_i8u_o8u",
+                        "vx/VXLIB_channelCombine_4to1_i8u_o8u",
+                        "vx/VXLIB_channelCombine_yuyv_i8u_o8u",
+                        "vx/VXLIB_channelExtract_1of2_i8u_o8u",
+                        "vx/VXLIB_channelExtract_1of3_i8u_o8u",
+                        "vx/VXLIB_channelExtract_1of4_i8u_o8u",
+                        "vx/VXLIB_colorConvert_IYUVtoNV12_i8u_o8u",
+                        "vx/VXLIB_colorConvert_IYUVtoRGB_i8u_o8u",
+                        "vx/VXLIB_colorConvert_IYUVtoRGBX_i8u_o8u",
+                        "vx/VXLIB_colorConvert_IYUVtoYUV4_i8u_o8u",
+                        "vx/VXLIB_colorConvert_NVXXtoIYUV_i8u_o8u",
+                        "vx/VXLIB_colorConvert_NVXXtoRGB_i8u_o8u",
+                        "vx/VXLIB_colorConvert_NVXXtoRGBX_i8u_o8u",
+                        "vx/VXLIB_colorConvert_NVXXtoYUV4_i8u_o8u",
+                        "vx/VXLIB_colorConvert_RGBtoIYUV_i8u_o8u",
+                        "vx/VXLIB_colorConvert_RGBtoNV12_i8u_o8u",
+                        "vx/VXLIB_colorConvert_RGBtoRGBX_i8u_o8u",
+                        "vx/VXLIB_colorConvert_RGBtoYUV4_i8u_o8u",
+                        "vx/VXLIB_colorConvert_RGBXtoIYUV_i8u_o8u",
+                        "vx/VXLIB_colorConvert_RGBXtoNV12_i8u_o8u",
+                        "vx/VXLIB_colorConvert_RGBXtoRGB_i8u_o8u",
+                        "vx/VXLIB_colorConvert_RGBXtoYUV4_i8u_o8u",
+                        "vx/VXLIB_colorConvert_YUVXtoIYUV_i8u_o8u",
+                        "vx/VXLIB_colorConvert_YUVXtoNV12_i8u_o8u",
+                        "vx/VXLIB_colorConvert_YUVXtoRGB_i8u_o8u",
+                        "vx/VXLIB_colorConvert_YUVXtoRGBX_i8u_o8u",
+                        "vx/VXLIB_convertDepth_i16s_o8u",
+                        "vx/VXLIB_convertDepth_i8u_o16s",
+                        "vx/VXLIB_convolve_3x3_i8u_c16s_o16s",
+                        "vx/VXLIB_convolve_3x3_i8u_c16s_o8u",
+                        "vx/VXLIB_convolve_5x5_i8u_c16s_o16s",
+                        "vx/VXLIB_convolve_5x5_i8u_c16s_o8u",
+                        "vx/VXLIB_convolve_7x7_i8u_c16s_o16s",
+                        "vx/VXLIB_convolve_7x7_i8u_c16s_o8u",
+                        "vx/VXLIB_convolve_i8u_c16s_o16s",
+                        "vx/VXLIB_convolve_i8u_c16s_o8u",
+                        "vx/VXLIB_dilate_3x3_i8u_o8u",
+                        "vx/VXLIB_dilate_MxN_i8u_i8u_o8u",
+                        "vx/VXLIB_doubleThreshold_i16u_i8u",
+                        "vx/VXLIB_edgeTracing_i8u",
+                        "vx/VXLIB_equalizeHist_i8u_o8u",
+                        "vx/VXLIB_erode_3x3_i8u_o8u",
+                        "vx/VXLIB_erode_MxN_i8u_i8u_o8u",
+                        "vx/VXLIB_fastCorners_i8u",
+                        "vx/VXLIB_fastCornersDetect_i8u",
+                        "vx/VXLIB_fastCornersScore_i8u",
+                        "vx/VXLIB_fastCornersNMS_i8u",
+                        "vx/VXLIB_gaussian_3x3_i8u_o8u",
+                        "vx/VXLIB_gaussian_5x5_br_i8u_o8u",
+                        "vx/VXLIB_gaussian_5x5_i8u_o8u",
+                        "vx/VXLIB_halfScaleGaussian_5x5_i8u_o8u",
+                        "vx/VXLIB_halfScaleGaussian_5x5_i8u_o8u_o8u",
+                        "vx/VXLIB_halfScaleGaussian_5x5_br_i8u_o8u_o8u",
+                        "vx/VXLIB_harrisCornersDetect_i32f",
+                        "vx/VXLIB_harrisCornersNMS_i32f",
+                        "vx/VXLIB_harrisCornersScore_i16s_i16s_o32f",
+                        "vx/VXLIB_harrisCornersScore_i32s_i32s_o32f",
+                        "vx/VXLIB_histogram_i8u_o32u",
+                        "vx/VXLIB_histogramCdfLut_i32u_o8u",
+                        "vx/VXLIB_histogramSimple_i8u_o32u",
+                        "vx/VXLIB_integralImage_i8u_o32u",
+                        "vx/VXLIB_magnitude_i16s_i16s_o16s",
+                        "vx/VXLIB_meanStdDev_i8u_o32f",
+                        "vx/VXLIB_median_3x3_i8u_o8u",
+                        "vx/VXLIB_median_MxN_i8u_i8u_o8u",
+                        "vx/VXLIB_minMaxLoc_i16s",
+                        "vx/VXLIB_minMaxLoc_i8u",
+                        "vx/VXLIB_multiply_i16s_i16s_o16s",
+                        "vx/VXLIB_multiply_i8u_i8u_o8u",
+                        "vx/VXLIB_multiply_i8u_i16s_o16s",
+                        "vx/VXLIB_multiply_i8u_i8u_o16s",
+                        "vx/VXLIB_normL1_i16s_i16s_o16u",
+                        "vx/VXLIB_normL2_i16s_i16s_o16u",
+                        "vx/VXLIB_not_i8u_o8u",
+                        "vx/VXLIB_or_i8u_i8u_o8u",
+                        "vx/VXLIB_phase_i16s_i16s_o8u",
+                        "vx/VXLIB_remapBilinear_bc_i8u_i32f_o8u",
+                        "vx/VXLIB_remapNearest_bc_i8u_i32f_o8u",
+                        "vx/VXLIB_scaleImageBilinear_i8u_o8u",
+                        "vx/VXLIB_scaleImageBilinear_bc_i8u_o8u",
+                        "vx/VXLIB_scaleImageBilinear_br_i8u_o8u",
+                        "vx/VXLIB_scaleImageNearest_i8u_o8u",
+                        "vx/VXLIB_scharr_3x3_i8u_o16s_o16s",
+                        "vx/VXLIB_sobelX_3x3_i8u_o16s",
+                        "vx/VXLIB_sobelY_3x3_i8u_o16s",
+                        "vx/VXLIB_sobel_3x3_i8u_o16s_o16s",
+                        "vx/VXLIB_sobel_5x5_i8u_o16s_o16s",
+                        "vx/VXLIB_sobel_7x7_i8u_o16s_o16s",
+                        "vx/VXLIB_sobel_7x7_i8u_o32s_o32s",
+                        "vx/VXLIB_subtract_i16s_i16s_o16s",
+                        "vx/VXLIB_subtract_i8u_i8u_o8u",
+                        "vx/VXLIB_subtract_i8u_i16s_o16s",
+                        "vx/VXLIB_subtract_i8u_i8u_o16s",
+                        "vx/VXLIB_tableLookup_i16s_o16s",
+                        "vx/VXLIB_tableLookup_i8u_o8u",
+                        "vx/VXLIB_thresholdBinary_i8u_o8u",
+                        "vx/VXLIB_thresholdRange_i8u_o8u",
+                        "vx/VXLIB_trackFeaturesLK_i8u",
+                        "vx/VXLIB_warpAffineBilinear_bc_i8u_c32f_o8u",
+                        "vx/VXLIB_warpAffineBilinear_i8u_c32f_o8u",
+                        "vx/VXLIB_warpAffineNearest_bc_i8u_c32f_o8u",
+                        "vx/VXLIB_warpAffineNearest_i8u_c32f_o8u",
+                        "vx/VXLIB_warpPerspectiveBilinear_bc_i8u_c32f_o8u",
+                        "vx/VXLIB_warpPerspectiveBilinear_i8u_c32f_o8u",
+                        "vx/VXLIB_warpPerspectiveNearest_bc_i8u_c32f_o8u",
+                        "vx/VXLIB_warpPerspectiveNearest_i8u_c32f_o8u",
+                        "vx/VXLIB_xor_i8u_i8u_o8u"
+                        ];
+
+    var ExcludeList = [
+                    ];
+
+    var ExcludeHeader = [
+                      ]
+
+    var SpecialList = [];
+
+    /* Command line handling */
+    Package.args["knl"] = {
+        value:"knl",
+        action: function(value) {
+            IncludeList = new Array(value);
+        },
+        usageComment: "       Select a kernel to compile"
+    }
+
+    Package.archiveFiles["CommonArchiveFiles"] = {
+        files: ["docs/bundle/manifest/doxyfile.xdt",
+                "docs/bundle/doxygen/doxyfile.xdt",
+                "docs/doxygen/doxyfile.xdt",
+                "docs/manifest/manifest_tspa.xml.xdt",
+                "docs/manifest/Software_Manifest.html",
+                "Makedocs.mk.xdt",
+                "lib/common.a86l.mk",
+                "lib/vxlib.a86l.mk",
+                "lib/vxlib_cn.a86l.mk",
+                "lib/vxlib_bamplugin.a86l.mk"
+                ]
+    };
+
+    Package.archiveFiles["bundle"] = {
+        base_directory: ".",
+        delivery_type: "bundle",
+        files: ["docs/VXLIB_Software_Manifest.html",
+                "docs/VXLIB_Users_Manual.html",
+                "docs/doxygen/html",
+                "docs/manifest/html",
+                "README.txt",
+                "examples"
+                ]
+    };
+
+    Package.archiveFiles["bundle-c66x"] = {
+        base_directory: "./docs",
+        delivery_type: "bundle",
+        files: ["VXLIB_c66x_TestReport.html"
+                ],
+        target: ["c66le",
+                 "ce66le"
+                ]
+    };
+
+    Package.archiveFiles["bundle-c66x-obj"] = {
+        delivery_type: "obj",
+        files:  ["src/common/c6x/TI_cache.h"
+                ],
+        target: ["c66le",
+                 "ce66le"
+                ]
+    };
+
+    Package.archiveFiles["src"] = {
+        base_directory: ".",
+        delivery_type: "src",
+        files:  ["docs/doxygen/doxygen.h",
+                 "docs/manifest/manifest_comm.xml.xdt"
+                ],
+        target: ["c66le",
+                 "ce66le",
+                ]
+    };
+
+    Package.archiveFiles["obj"] = {
+        base_directory: "./src/common",
+        delivery_type: "obj",
+        files:  ["TI_profile.h",
+                 "TI_test.h",
+                 "TI_memory.h",
+                 "VXLIB_types.h",
+                 "VXLIB_bufParams.h",
+                 "TI_platforms.h",
+                 "TI_cache.h",
+                ],
+        target: ["c66le",
+                 "ce66le",
+                ]
+    };
+
+    Package.archiveFiles["vc98"] = {
+        base_directory: "./src/common/c6xsim",
+        files:  ["_C6xSimulator_priv.h",
+                 "C6xSimulator.h",
+                 "C6xSimulator_base_types.h",
+                 "C6xSimulator_type_modifiers.h",
+                 "c66_ag_intrins.h",
+                 "c66_conversion_macros.h",
+                 "c66_data_sim.h",
+                 "global.h",
+                ],
+        target: [
+                  "vc98","vc98_64",
+                ]
+    };
+
+
+    /*****************************************************************************
+     The main package.bld routine starts here
+     *****************************************************************************/
+
+    /* Set up the targets array. Current implementation supports C66 */
+    Package.targets = [ C66_elf ];
+
+    /* Set up version number for the package */
+    Package.pkgStdVer = "2.0";
+    Package.version = [1, 1, 3, 0, 3, 0];
+
+    Package.createVersion();
+
+    /* Parse XDC Arguments */
+    Package.parseArgs(arguments);
+
+    /* Changes for object release */
+    if(Package.delivery_type == "obj")
+    {
+        /*Package.knlLicense = false;
+        Package.archiveFiles["bundle"].files.push("Software_License_Agreement.pdf");*/
+        Package.archiveFiles["bundle"].files.push("docs/Misra-Compliance.html");
+    }
+    else
+    {
+        //Package.knlLicense = true;
+        //Package.licenseFile="VXLIB_Software_License_Agreement.pdf";
+        //Package.licenseStringFile="./install/VXLIB_Software_License_Agreement.txt"
+        //Package.archiveFiles["bundle"].files.push("VXLIB_Software_License_Agreement.pdf");
+        Package.archiveFiles["bundle"].files.push("docs/VXLIB_MisraC_Policy.xlsx");
+        Package.targets.push(VC98);
+        Package.targets.push(VC98_64);
+         /* Parse XDC Arguments */
+        Package.parseArgs(arguments);
+    }
+
+
+    /* Call Local function to set up parameters for ccs projects */
+    addArtifacts();
+
+    /* Generate Doxyfile based on the version array above */
+    var tplt = xdc.loadTemplate("./docs/doxygen/doxyfile.xdt");
+    tplt.genFile("./docs/doxygen/Doxyfile",null,[Package.version,doxygenstring]);
+
+    /* Generate Software Manifest XML files */
+    var tplt = xdc.loadTemplate("./docs/manifest/manifest_tspa.xml.xdt");
+    tplt.genFile("./docs/manifest/manifest_tspa.xml",Package);
+    var tplt = xdc.loadTemplate("./docs/manifest/manifest_comm.xml.xdt");
+    tplt.genFile("./docs/manifest/manifest_comm.xml",Package);
+
+    /* Generate VXLIB bundle users manual Doxyfile */
+    tplt = xdc.loadTemplate("./docs/bundle/doxygen/doxyfile.xdt");
+    tplt.genFile("./docs/bundle/doxygen/Doxyfile",Package);
+
+    /* Generate VXLIB bundle manifest Doxyfile */
+    tplt = xdc.loadTemplate("./docs/bundle/manifest/doxyfile.xdt");
+    tplt.genFile("./docs/bundle/manifest/Doxyfile",Package);
+
+    /* Generate Makedocs.mk*/
+    var makedocs = xdc.loadTemplate("Makedocs.mk.xdt");
+    makedocs.genFile("Makedocs.mk", Package);
+
+    /* Generate Webgen makefile */
+    template = xdc.loadTemplate("./webgen/webgen.mak.xdt");
+    template.genFile("./webgen/webgen.mak", Package);
+
+
+    /* Generate Webgen makefile */
+    template = xdc.loadTemplate("./webgen/webgen.internal.mak.xdt");
+    template.genFile("./webgen/webgen.internal.mak", Package);
+
+    /* Create generatedFiles list for clean-up */
+    Package.generatedFiles.push("Makedocs.mk");
+    Package.generatedFiles.push("./docs/bundle/manifest/Doxyfile");
+    Package.generatedFiles.push("./docs/bundle/doxygen/Doxyfile");
+    Package.generatedFiles.push("./docs/doxygen/Doxyfile");
+    Package.generatedFiles.push("./docs/manifest/manifest_tspa.xml");
+    Package.generatedFiles.push("./docs/manifest/manifest_comm.xml");
+    Package.generatedFiles.push("./docs/manifest/Software_Manifest.html");
+
+    /* Include custom makefile to generate doxygen documents */
+    Package.includeMake("Makedocs.mk");
+
+    /* Include custom makefile to generate bundle documents */
+    Package.bundleMakeDoc = "MakedocsBundle.mk";
+
+    Package.createProjects();
+
+    createknlhdr(0);
+    createknlhdr(1);
+
+    /* Add release notes to archive */
+    //addRelNotes();
+
+    /* Create Archive */
+    Package.createArchive();
+
+    /* Clean Package */
+    Package.packageClean();
+
+    /*****************************************************************************
+     The main package.bld routine ends here
+     *****************************************************************************/
+
+    /** Local function to add release notes **/
+    function addRelNotes() {
+        var Files = new java.io.File(".");
+        for each (var file in Files.list()) {
+            var strFile = String(file);
+            var dot = strFile.lastIndexOf(".");
+            var extension = strFile.substr(dot,strFile.length);
+            if (extension == ".html") {
+                Package.archiveFiles["CommonArchiveFiles"].files.push(strFile);
+            }
+        }
+    }
+
+    /** Local function to add projects **/
+    function addArtifacts() {
+        if (IncludeList == undefined) {
+            var file = new java.io.File("src");
+            IncludeList = file.list();
+        }
+        var libc_c66 = new Array();
+        var libcn_c66 = new Array();
+        var libbam_c66 = new Array();
+
+        /* Common files that will go to each library */
+        var commonroot  = "src/common/";
+
+        /* Common Files that will be linked in every kernel unittest */
+
+        var common = [
+            commonroot  + "TI_profile.c",
+            commonroot  + "TI_test.c",
+            commonroot  + "TI_memory.c",
+            commonroot  + "c6x/TI_cache.c"
+        ]
+
+        /* Common Host Files that will be linked in every kernel unittest */
+        var commonHost = common.concat([
+            commonroot  + "c6xsim/C6xSimulator.c",
+            commonroot  + "c6xsim/c66_ag_intrins.c",
+            commonroot  + "c6xsim/c66_data_sim.c"
+        ]);
+
+        /* Loop over all the kernel folders */
+        for each (var dir in IncludeList) {
+            var hasDeps       = false;
+            var knlDeps       = [];
+            var hasArch       = false;
+            var knlArch       = "";
+            var special       = false;
+            var exclude64p    = true;
+            var exclude66     = true;
+            var exclude674    = true;
+            var slubdirslash  = dir.lastIndexOf("/");
+            var kernelhdr     = dir.substr(slubdirslash+1) + ".h";
+
+            /* Check the XDCARGS and exclude appropriate target */
+            if(Package.xdcargs_targ.match("all"))
+            {
+                exclude66=false;
+            }
+            else if(Package.xdcargs_targ.match("c66x"))
+            {
+                exclude66=false;
+            }
+
+
+            /* Check if dir is in exclude list */
+            for each (var excludedir in ExcludeList) {
+                if (excludedir.name == dir) {
+                    if (excludedir.srcDir.toString().match("c66")) {
+                        exclude66 = true;
+                    }
+                }
+            }
+
+            /* Check if dir is in special list */
+            for each (var specialdir in SpecialList) {
+                if (specialdir.name == dir && specialdir.srcDir == srcDir) {
+                    special = true;
+                    break;
+                }
+            }
+
+            if (special == true) {
+                cflags = specialdir.cflags;
+            }
+
+            /*****************************************************************************
+             Local Variables
+             *****************************************************************************/
+            var projectname = dir;
+            var projectroot = "src/" + projectname + "/";
+            var projectbamroot = projectroot + "bam_plugin/";
+            var commonroot  = "src/common/";
+            var prjtargroot;
+            var cmntargroot;
+            var prjtarget;
+            var linkfile;
+
+            /*****************************************************************************
+             Kernel C66x project
+             *****************************************************************************/
+            if (exclude66 == false) {
+                prjtarget   = "66"
+                prjtargroot = projectroot + "/c66/";
+                cmntargroot = commonroot  + "/c66/";
+
+                linkfile = new Array();
+                findProjectFiles (projectroot,linkfile,kernelhdr,"66");
+                findProjectFiles (prjtargroot,linkfile,kernelhdr,"66");
+                findBamFiles(projectbamroot);
+
+                /* Add library files */
+                findLibFiles(projectroot, libc_c66, libcn_c66);
+                findLibFiles(prjtargroot, libc_c66, libcn_c66);
+                findBamLibFiles(projectbamroot, libbam_c66);
+
+                linkfile.push(commonroot  + "TI_profile.h");
+                linkfile.push(commonroot  + "TI_test.h");
+                linkfile.push(commonroot  + "TI_cache.h");
+                linkfile.push(commonroot  + "TI_memory.h");
+                linkfile.push(commonroot  + "VXLIB_types.h");
+                linkfile.push(commonroot  + "TI_platforms.h");
+                if (Package.delivery_type == "src") {
+                    linkfile.push(commonroot  + "VXLIB_inlines.h");
+                    linkfile.push(commonroot  + "c6x/VXLIB_inlines.h");
+                }
+
+                linkfile.push(commonroot  + "c6x/TI_cache.h");
+                linkfile.push(cmntargroot + "lnk.cmd");
+
+                if (Package.delivery_type == "obj") {
+                    Package.archiveFiles["bundle-c66x-obj"].files.push(projectroot + kernelhdr);
+                    Package.archiveFiles["bundle-c66x-obj"].files.push(prjtargroot + kernelhdr);
+                }
+
+                Package.ccsProjects.push({  pjtName:        projectname,
+                                            location:       prjtargroot,
+                                            buildArtifact:  "executable",
+                                            srcFiles:       linkfile,
+                                            cFlags:         " --mem_model:data=far --legacy",
+                                            targets:        [prjtarget]
+                                        });
+            }
+        } // Kernel Loop end
+
+        /********************************************/
+
+        /* create rules for creating common library */
+        Package.files=new Array();
+
+        /*  VXLIB Common Library */
+        Package.files["common"] =
+        {
+            files: common,
+            def_flags: " --mem_model:data=far --legacy",
+            target: ["ce66le","c66le"]
+        };
+
+        Package.files["commonHost"] =
+        {
+            files: commonHost,
+            def_flags: " -DTMS320C66X -D_TMS320C6600 -DLITTLE_ENDIAN_HOST -D_LITTLE_ENDIAN -D_HOST_BUILD -Icommon/c6xsim",
+            target: ["vc98", "vc98_64"]
+        };
+
+        /* Create VXLIB common library */
+        Package.createLib("common");
+
+        /********************************************/
+
+        /* create rules for creating optimized VXLIB library */
+        Package.files=new Array();
+
+        /* C66x VXLIB Intrinsic Library */
+        Package.files["kernelc66"] =
+        {
+            files: libc_c66,
+            def_flags: " --mem_model:data=far --legacy",
+            target: ["ce66le","c66le"]
+        };
+
+        /* C66x VXLIB Host Intrinsic Library */
+        Package.files["kernelc66Host"] =
+        {
+            files: libc_c66,
+            def_flags: " -DTMS320C66X -D_TMS320C6600 -DLITTLE_ENDIAN_HOST -D_LITTLE_ENDIAN  -D_HOST_BUILD -Icommon/c6xsim",
+            target: ["vc98","vc98_64"]
+        };
+
+        /* Create VXLIB library */
+        Package.createLib("vxlib");
+
+        /********************************************/
+
+        /* create rules for creating Natural C VXLIB Library */
+        Package.files["kernelNatcc66"] =
+        {
+            files: libcn_c66,
+            def_flags: " --mem_model:data=far --legacy",
+            target: ["ce66le","c66le"]
+        };
+
+        /* C66x VXLIB Host Natural C Library */
+        Package.files["kernelNatcc66Host"] =
+        {
+            files: libcn_c66,
+            def_flags: " -DTMS320C66X -D_TMS320C6600 -DLITTLE_ENDIAN_HOST -D_LITTLE_ENDIAN  -D_HOST_BUILD -Icommon/c6xsim",
+            target: ["vc98","vc98_64"]
+        };
+
+        /* Rule to create Natural C library */
+        Package.createLib("vxlib_cn");
+
+        /********************************************/
+
+        /* create rules for creating Bam Plugin library */
+        Package.files=new Array();
+
+        /* C66x VXLIB Intrinsic Library */
+        Package.files["kernelBamc66"] =
+        {
+            files: libbam_c66,
+            def_flags: " --mem_model:data=far --legacy -DCORE_DSP",
+            target: ["ce66le","c66le"]
+        };
+
+        /* C66x VXLIB Host Intrinsic Library */
+        Package.files["kernelBamc66Host"] =
+        {
+            files: libbam_c66,
+            def_flags: " -DTMS320C66X -D_TMS320C6600 -D_HOST_BUILD -DCORE_DSP -DHOST_EMULATION",
+            target: ["vc98","vc98_64"]
+        };
+
+        /* Create VXLIB library */
+        Package.createLib("vxlib_bamplugin");
+
+        /********************************************/
+
+        Pkg.makeEpilogue += "\nlib/common.a86l.mk: lib/common.a86.mk";
+        Pkg.makeEpilogue += "\n\tperl ./scripts/makefileCopy.pl $<  $@";
+
+        Pkg.makeEpilogue += "\nlib/vxlib.a86l.mk: lib/vxlib.a86.mk";
+        Pkg.makeEpilogue += "\n\tperl ./scripts/makefileCopy.pl $<  $@";
+
+        Pkg.makeEpilogue += "\nlib/vxlib_cn.a86l.mk: lib/vxlib_cn.a86.mk";
+        Pkg.makeEpilogue += "\n\tperl ./scripts/makefileCopy.pl $<  $@";
+
+        Pkg.makeEpilogue += "\nlib/vxlib_bamplugin.a86l.mk: lib/vxlib_bamplugin.a86.mk";
+        Pkg.makeEpilogue += "\n\tperl ./scripts/makefileCopy.pl $<  $@\n\n";
+
+    }
+
+    /** Local function to add files for projects **/
+    function findProjectFiles(path,lnkfile,hdrfile,target) {
+        var Files = new java.io.File(path);
+        for each (var srcFile in Files.list()) {
+            srcFile = String(srcFile);
+            var srcPath = path + srcFile;
+            var dot = srcFile.lastIndexOf(".");
+            var extension = srcFile.substr(dot,srcFile.length-dot);
+
+            /* Add source C file to project */
+            if (extension == ".c"){
+
+                /* Only add below files. The kernel c and natc will come for library */
+                var underscore=srcFile.lastIndexOf("_");
+                var fileType=srcFile.substr(underscore,dot-underscore);
+
+                /* Only add below files. The kernel c and natc will come for library */
+                if((fileType=="_d")  /* driver file */
+                   || (fileType=="_idat")  /* input dat file */
+                )
+                {
+                    lnkfile.push(srcPath);
+                }
+            }
+
+            /* Create Doxygen string */
+            if(extension == ".h")
+            {
+                if (extension == ".h" && srcFile.match(hdrfile)) {
+                    doxygenstring += " " + srcPath;
+                }
+                if (xdc.findFile(srcPath) && target != "vc98" && target != "vc98_64" && (inExcludeHeader(srcPath)==false)) {
+                    lnkfile.push(srcPath);
+                }
+            }
+        }
+    }
+
+    /** Local function to add files for libraries **/
+    function findLibFiles(path,libc,libcn) {
+        var Files = new java.io.File(path);
+        for each (var srcFile in Files.list()) {
+            srcFile = String(srcFile);
+            var srcPath = path + srcFile;
+            var dot = srcFile.lastIndexOf(".");
+            var extension = srcFile.substr(dot,srcFile.length-dot);
+
+            /* Add source C file to project */
+            if (extension == ".c"){
+                var underscore=srcFile.lastIndexOf("_");
+                var fileType=srcFile.substr(underscore,dot-underscore);
+                /* Only add below files. The kernel c and natc will come for library */
+                if((fileType!="_d")  /* driver file */
+                && (fileType !="_idat")  /* input dat file */
+                )
+                {
+                    if(fileType=="_cn")
+                        libcn.push(srcPath);
+                    else
+                        libc.push(srcPath);
+                }
+            }
+        }
+    }
+
+    /** Local function to add files for bam_plugin library **/
+    function findBamLibFiles(path,bamlib) {
+        var Files = new java.io.File(path);
+        for each (var srcFile in Files.list()) {
+            srcFile = String(srcFile);
+            var srcPath = path + srcFile;
+            var dot = srcFile.lastIndexOf(".");
+            var extension = srcFile.substr(dot,srcFile.length-dot);
+
+            /* Add source C file to project */
+            if (extension == ".c"){
+                bamlib.push(srcPath);
+            }
+        }
+    }
+
+    /** Local function to add files for bam_plugin in package **/
+    function findBamFiles(path) {
+        var Files = new java.io.File(path);
+        for each (var srcFile in Files.list()) {
+            srcFile = String(srcFile);
+            var srcPath = path + srcFile;
+            Package.archiveFiles["bundle-c66x-obj"].files.push(srcPath);
+        }
+    }
+
+    function createknlhdr(mode)
+    {
+        /* Create Kernel API header file */
+        if(mode == 0) {
+            var api = Package.bundlename+".h";
+        } else {
+            var api = Package.bundlename+"_cn.h";
+        }
+        var fileModule = xdc.module('xdc.services.io.File');
+        try{
+            var apiHeader = fileModule.open(api, "w");
+        } catch (ex)
+        {
+            print( api + " cannot be written to. Please check Writing Permissions.");
+            java.lang.System.exit(1);
+        }
+        Package.archiveFiles["CommonArchiveFiles"].files.push(api);
+
+        /* Header Information */
+        apiHeader.writeLine("/*******************************************************************************");
+        apiHeader.writeLine("**+--------------------------------------------------------------------------+**");
+        apiHeader.writeLine("**|                            ****                                          |**");
+        apiHeader.writeLine("**|                            ****                                          |**");
+        apiHeader.writeLine("**|                            ******o***                                    |**");
+        apiHeader.writeLine("**|                      ********_\/\/\/_****                                   |**");
+        apiHeader.writeLine("**|                      ***** \/_\/\/_\/ ****                                   |**");
+        apiHeader.writeLine("**|                       ** ** \(__\/ ****                                    |**");
+        apiHeader.writeLine("**|                           *********                                      |**");
+        apiHeader.writeLine("**|                            ****                                          |**");
+        apiHeader.writeLine("**|                            ***                                           |**");
+        apiHeader.writeLine("**|                                                                          |**");
+        apiHeader.writeLine("**|        Copyright (c) 2016 \- 2018 Texas Instruments Incorporated          |**");
+        apiHeader.writeLine("**|                                                                          |**");
+        apiHeader.writeLine("**|              All rights reserved not granted herein.                     |**");
+        apiHeader.writeLine("**|                                                                          |**");
+        apiHeader.writeLine("**|                         Limited License.                                 |**");
+        apiHeader.writeLine("**|                                                                          |**");
+        apiHeader.writeLine("**|  Texas Instruments Incorporated grants a world-wide, royalty-free,       |**");
+        apiHeader.writeLine("**|  non-exclusive license under copyrights and patents it now or            |**");
+        apiHeader.writeLine("**|  hereafter owns or controls to make, have made, use, import, offer to    |**");
+        apiHeader.writeLine("**|  sell and sell \(\"Utilize\"\) this software subject to the terms herein.    |**");
+        apiHeader.writeLine("**|  With respect to the foregoing patent license, such license is granted   |**");
+        apiHeader.writeLine("**|  solely to the extent that any such patent is necessary to Utilize the   |**");
+        apiHeader.writeLine("**|  software alone.  The patent license shall not apply to any              |**");
+        apiHeader.writeLine("**|  combinations which include this software, other than combinations       |**");
+        apiHeader.writeLine("**|  with devices manufactured by or for TI \(\"TI Devices\"\).  No hardware     |**");
+        apiHeader.writeLine("**|  patent is licensed hereunder.                                           |**");
+        apiHeader.writeLine("**|                                                                          |**");
+        apiHeader.writeLine("**|  Redistributions must preserve existing copyright notices and            |**");
+        apiHeader.writeLine("**|  reproduce this license \(including the above copyright notice and the    |**");
+        apiHeader.writeLine("**|  disclaimer and \(if applicable\) source code license limitations below\)   |**");
+        apiHeader.writeLine("**|  in the documentation and\/or other materials provided with the           |**");
+        apiHeader.writeLine("**|  distribution                                                            |**");
+        apiHeader.writeLine("**|                                                                          |**");
+        apiHeader.writeLine("**|  Redistribution and use in binary form, without modification, are        |**");
+        apiHeader.writeLine("**|  permitted provided that the following conditions are met\:               |**");
+        apiHeader.writeLine("**|                                                                          |**");
+        apiHeader.writeLine("**|    *  No reverse engineering, decompilation, or disassembly of this      |**");
+        apiHeader.writeLine("**|  software is permitted with respect to any software provided in binary   |**");
+        apiHeader.writeLine("**|  form.                                                                   |**");
+        apiHeader.writeLine("**|                                                                          |**");
+        apiHeader.writeLine("**|    *  any redistribution and use are licensed by TI for use only with    |**");
+        apiHeader.writeLine("**|  TI Devices.                                                             |**");
+        apiHeader.writeLine("**|                                                                          |**");
+        apiHeader.writeLine("**|    *  Nothing shall obligate TI to provide you with source code for      |**");
+        apiHeader.writeLine("**|  the software licensed and provided to you in object code.               |**");
+        apiHeader.writeLine("**|                                                                          |**");
+        apiHeader.writeLine("**|  If software source code is provided to you, modification and            |**");
+        apiHeader.writeLine("**|  redistribution of the source code are permitted provided that the       |**");
+        apiHeader.writeLine("**|  following conditions are met:                                           |**");
+        apiHeader.writeLine("**|                                                                          |**");
+        apiHeader.writeLine("**|    *  any redistribution and use of the source code, including any       |**");
+        apiHeader.writeLine("**|  resulting derivative works, are licensed by TI for use only with TI     |**");
+        apiHeader.writeLine("**|  Devices.                                                                |**");
+        apiHeader.writeLine("**|                                                                          |**");
+        apiHeader.writeLine("**|    *  any redistribution and use of any object code compiled from the    |**");
+        apiHeader.writeLine("**|  source code and any resulting derivative works, are licensed by TI      |**");
+        apiHeader.writeLine("**|  for use only with TI Devices.                                           |**");
+        apiHeader.writeLine("**|                                                                          |**");
+        apiHeader.writeLine("**|  Neither the name of Texas Instruments Incorporated nor the names of     |**");
+        apiHeader.writeLine("**|  its suppliers may be used to endorse or promote products derived from   |**");
+        apiHeader.writeLine("**|  this software without specific prior written permission.                |**");
+        apiHeader.writeLine("**|                                                                          |**");
+        apiHeader.writeLine("**|  DISCLAIMER.                                                             |**");
+        apiHeader.writeLine("**|                                                                          |**");
+        apiHeader.writeLine("**|  THIS SOFTWARE IS PROVIDED BY TI AND TI\'S LICENSORS \"AS IS\" AND ANY      |**");
+        apiHeader.writeLine("**|  EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE       |**");
+        apiHeader.writeLine("**|  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR      |**");
+        apiHeader.writeLine("**|  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL TI AND TI\'S LICENSORS BE      |**");
+        apiHeader.writeLine("**|  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR     |**");
+        apiHeader.writeLine("**|  CONSEQUENTIAL DAMAGES \(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF    |**");
+        apiHeader.writeLine("**|  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR         |**");
+        apiHeader.writeLine("**|  BUSINESS INTERRUPTION\) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,   |**");
+        apiHeader.writeLine("**|  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT \(INCLUDING NEGLIGENCE    |**");
+        apiHeader.writeLine("**|  OR OTHERWISE\) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,       |**");
+        apiHeader.writeLine("**|  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                      |**");
+        apiHeader.writeLine("**+--------------------------------------------------------------------------+**");
+        apiHeader.writeLine("*******************************************************************************/");
+        apiHeader.writeLine("#ifdef __cplusplus");
+        apiHeader.writeLine("extern \"C\" {");
+        apiHeader.writeLine("#endif /* __cplusplus */");
+        apiHeader.writeLine("");
+
+        var projectDir = new java.io.File("./package/projects");
+        var projectXml = projectDir.list();
+
+        for each(var xml in projectXml)
+        {
+            xml=String(xml);
+            var dot = xml.lastIndexOf(".");
+            var extension = xml.substr(dot,xml.length);
+            if(extension == ".xml")
+            {
+                var project=xdc.loadXML("./package/projects/"+xml);
+                if(mode == 0) {
+                    var headerfile = project["params"].name+".h";
+                } else {
+                    var headerfile = project["params"].name+"_cn.h";
+                }
+                if(xdc.findFile("src/vx/"+project["params"].name+"/"+headerfile))
+                {
+                    apiHeader.writeLine("#include <"+Pkg.name.replace(/\./g,"/")+"/src/vx/"+project["params"].name+"/"+headerfile+">");
+                }
+            }
+        }
+
+        apiHeader.writeLine("");
+        apiHeader.writeLine("#ifdef __cplusplus");
+        apiHeader.writeLine("}");
+        apiHeader.writeLine("#endif /* __cplusplus */");
+        apiHeader.writeLine("");
+    }
+
+    function inExcludeHeader(header)
+    {
+        var result = false;
+        for each (var file in  ExcludeHeader)
+        {
+            if(header.match(file) && Package.delivery_type=="obj")
+            {
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
+
+/* Nothing past this point */

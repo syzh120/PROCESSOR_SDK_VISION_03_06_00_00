@@ -1,0 +1,615 @@
+/*
+ * package.bld
+ *
+ * xdc build specification file for the RM sample module.
+ *
+ * Copyright (C) 2009 - 2017 Texas Instruments Incorporated - http://www.ti.com/
+ *
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *
+ *    Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ *    Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the
+ *    distribution.
+ *
+ *    Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ *  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ *  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ *  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ *  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ *  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+*/
+
+
+var Build = xdc.useModule('xdc.bld.BuildEnvironment');
+var Pkg = xdc.useModule('xdc.bld.PackageContents');
+
+var objListDA830 = [
+    "src/platforms/sample_da830_cfg.c",
+    "src/platforms/sample_da830_int_reg.c",
+    "src/sample_cs.c",
+    "src/sample_init.c",
+];
+
+var objListC6748 = [
+    "src/platforms/sample_c6748_cfg.c",
+    "src/platforms/sample_c6748_int_reg.c",
+    "src/sample_cs.c",
+    "src/sample_init.c",
+];
+
+var objListOMAPL137 = [
+    "src/platforms/sample_omapl137_cfg.c",
+    "src/platforms/sample_omapl137_int_reg.c",
+    "src/sample_cs.c",
+    "src/sample_init.c",
+];
+
+var objListOMAPL138 = [
+    "src/platforms/sample_omapl138_cfg.c",
+    "src/platforms/sample_omapl138_int_reg.c",
+    "src/sample_cs.c",
+    "src/sample_init.c",
+];
+
+var objListTI814X = [
+    "src/platforms/sample_ti814x_cfg.c",
+    "src/platforms/sample_ti814x_int_reg.c",
+    "src/sample_cs.c",
+    "src/sample_init.c",
+];
+
+var objListTI814XARM = [
+    "src/platforms/sample_ti814x_arm_cfg.c",
+    "src/platforms/sample_ti814x_arm_int_reg.c",
+    "src/sample_arm_cs.c",
+    "src/sample_arm_init.c",
+];
+
+var objListOMAPL137ARM = [
+    "src/platforms/sample_omapl137_arm_cfg.c",
+    "src/platforms/sample_omapl137_arm_int_reg.c",
+    "src/sample_arm_cs.c",
+    "src/sample_init.c",
+];
+
+var objListOMAPL138ARM = [
+    "src/platforms/sample_omapl138_arm_cfg.c",
+    "src/platforms/sample_omapl138_arm_int_reg.c",
+    "src/sample_arm_cs.c",
+    "src/sample_init.c",
+];
+
+var objListSimTCI6608 = [
+    "src/platforms/sample_tci6608_cfg.c",
+    "src/platforms/sample_tci6608_int_reg.c",
+    "src/sample_cs.c",
+    "src/sample_init.c",
+];
+
+var objListSimTCI6616 = [
+    "src/platforms/sample_tci6616_cfg.c",
+    "src/platforms/sample_tci6616_int_reg.c",
+    "src/sample_cs.c",
+    "src/sample_init.c",
+];
+
+var objListSimTCI6614 = [
+    "src/platforms/sample_tci6614_cfg.c",
+    "src/platforms/sample_tci6614_int_reg.c",
+    "src/sample_cs.c",
+    "src/sample_init.c",
+];
+
+var objListSimC6657 = [
+    "src/platforms/sample_c6657_cfg.c",
+    "src/platforms/sample_c6657_int_reg.c",
+    "src/sample_cs.c",
+    "src/sample_init.c",
+];
+
+var objListSimTCI6638K2K = [
+    "src/platforms/sample_tci6638k2k_cfg.c",
+    "src/platforms/sample_tci6638k2k_int_reg.c",
+    "src/sample_cs.c",
+    "src/sample_init.c",
+];
+
+var objListEVM6670 = [
+    "src/platforms/sample_c6670_cfg.c",
+    "src/platforms/sample_c6670_int_reg.c",
+    "src/sample_cs.c",
+    "src/sample_init.c",
+];
+
+var objListEVM6678 = [
+    "src/platforms/sample_c6678_cfg.c",
+    "src/platforms/sample_c6678_int_reg.c",
+    "src/sample_cs.c",
+    "src/sample_init.c",
+];
+
+var objListEVMTCI6614 = [
+    "src/platforms/sample_tci6614_cfg.c",
+    "src/platforms/sample_tci6614_int_reg.c",
+    "src/sample_cs.c",
+    "src/sample_init.c",
+];
+
+var objListEVM6657 = [
+    "src/platforms/sample_c6657_cfg.c",
+    "src/platforms/sample_c6657_int_reg.c",
+    "src/sample_cs.c",
+    "src/sample_init.c",
+];
+
+var objListEVMTCI6638K2K = [
+    "src/platforms/sample_tci6638k2k_cfg.c",
+    "src/platforms/sample_tci6638k2k_int_reg.c",
+    "src/sample_cs.c",
+    "src/sample_init.c",
+];
+
+var objListEVMTCI6630K2L = [
+    "src/platforms/sample_tci6630k2l_cfg.c",
+    "src/platforms/sample_tci6630k2l_int_reg.c",
+    "src/sample_cs.c",
+    "src/sample_init.c",
+];
+
+var objListEVMC66AK2E = [
+    "src/platforms/sample_c6666ak2e_cfg.c",
+    "src/platforms/sample_c6666ak2e_int_reg.c",
+    "src/sample_cs.c",
+    "src/sample_init.c",
+];
+
+var objListEVMTCI6636K2H = [
+    "src/platforms/sample_tci6636k2h_cfg.c",
+    "src/platforms/sample_tci6636k2h_int_reg.c",
+    "src/sample_cs.c",
+    "src/sample_init.c",
+];
+
+var objListEVMTCI66AK2G02 = [
+    "src/platforms/sample_tci66ak2g02_cfg.c",
+    "src/platforms/sample_tci66ak2g02_int_reg.c",
+    "src/sample_cs.c",
+    "src/sample_init.c",
+];
+
+var objListSimTI816X = [
+    "src/platforms/sample_ti816x_cfg.c",
+    "src/platforms/sample_ti816x_int_reg.c",
+    "src/sample_cs.c",
+    "src/sample_init.c",
+];
+
+var objListEVMTI816X = [
+    "src/platforms/sample_ti816x_cfg.c",
+    "src/platforms/sample_ti816x_int_reg.c",
+    "src/sample_cs.c",
+    "src/sample_init.c",
+];
+
+var objListEVM6472= [
+    "src/platforms/sample_c6472_cfg.c",
+    "src/platforms/sample_c6472_int_reg.c",
+    "src/sample_cs.c",
+    "src/sample_init.c",
+];
+
+var objListEVMTCI6486= [
+    "src/platforms/sample_tci6486_cfg.c",
+    "src/platforms/sample_tci6486_int_reg.c",
+    "src/sample_cs.c",
+    "src/sample_init.c",
+];
+
+var objListTI816XARM = [
+    "src/platforms/sample_ti816x_cfg.c",
+    "src/platforms/sample_ti816x_int_reg.c",
+    "src/sample_arm_cs.c",
+    "src/sample_arm_init.c",
+];
+
+var objListEVMAM335X = [
+    "src/platforms/sample_am335x_cfg.c",
+    "src/platforms/sample_am335x_arm_int_reg.c",
+    "src/sample_arm_cs.c",
+    "src/sample_arm_init.c",
+];
+
+var objListEVMAM437X = [
+    "src/platforms/sample_am437x_cfg.c",
+    "src/platforms/sample_am437x_arm_int_reg.c",
+    "src/sample_arm_cs.c",
+    "src/sample_arm_init.c",
+];
+
+
+var chipdefines = [
+                    'CHIP_DA830',
+                    'SIMTCI6608',
+                    'SIMTCI6608',
+                    'SIMTCI6616',
+                    'SIMTCI6616',
+                    'SIMTCI6614',
+                    'SIMTCI6614',
+                    'SIMC6657',
+                    'SIMC6657',
+                    'SIMTCI6638K2K',
+                    'SIMTCI6638K2K',
+                    'CHIP_C6670',
+                    'CHIP_C6670',
+                    'CHIP_C6678',
+                    'CHIP_C6678',
+                    'CHIP_TCI6614',
+                    'CHIP_TCI6614',
+                    'CHIP_C6657',
+                    'CHIP_C6657',
+                    'CHIP_TCI6638K2K',
+                    'CHIP_TCI6638K2K',
+                    'CHIP_TCI6636K2H',
+                    'CHIP_TCI6636K2H',
+                    'CHIP_TCI6630K2L',
+                    'CHIP_TCI6630K2L',
+                    'CHIP_C66AK2E',
+                    'CHIP_C66AK2E',
+                    'CHIP_TCI66AK2G02',
+                    'CHIP_TCI66AK2G02',
+                    'CHIP_C6748',
+                    'CHIP_OMAPL137',
+                    'CHIP_OMAPL137',
+                    'CHIP_OMAPL138',
+                    'CHIP_OMAPL138',
+                    'SIMTI816X',
+                    'CHIP_TI816X',
+                    'CHIP_C6472',
+                    'CHIP_C6472',
+                    'CHIP_TCI6486',
+                    'CHIP_TCI6486',
+                    'CHIP_TI814X',
+                    'CHIP_TI814X',
+                    'CHIP_TI816X',
+                    'CHIP_AM335X',
+                    'CHIP_AM437X',
+
+                  ];
+
+/* Platforms supported */
+var plat_supported = [
+                        {
+                           platform: 'ti.platforms.evmDA830',   targ : 'C674', objList: objListDA830, dir : 'da830-evm/674/'
+                        },
+                        {
+                            platform: 'ti.platforms.simTCI6608', targ : 'C66',objList: objListSimTCI6608, dir : 'tci6608-sim/66/'
+                        },
+                        {
+                            platform: 'ti.platforms.simTCI6608', targ : 'C66_big_endian',objList: objListSimTCI6608, dir : 'tci6608-sim/66/'
+                        },
+                        {
+                            platform: 'ti.platforms.simTCI6616', targ : 'C66',objList: objListSimTCI6616, dir : 'tci6616-sim/66/'
+                        },
+                        {
+                            platform: 'ti.platforms.simTCI6616', targ : 'C66_big_endian',objList: objListSimTCI6616, dir : 'tci6616-sim/66/'
+                        },
+                        {
+                            platform: 'ti.platforms.simTCI6614', targ : 'C66',objList: objListSimTCI6614, dir : 'tci6614-sim/66/'
+                        },
+                        {
+                            platform: 'ti.platforms.simTCI6614', targ : 'C66_big_endian',objList: objListSimTCI6614, dir : 'tci6614-sim/66/'
+                        },
+                        {
+                            platform: 'ti.platforms.simC6657', targ : 'C66',objList: objListSimC6657, dir : 'c6657-sim/66/'
+                        },
+                        {
+                            platform: 'ti.platforms.simC6657', targ : 'C66_big_endian',objList: objListSimC6657, dir : 'c6657-sim/66/'
+                        },
+                        {
+                            platform: 'ti.platforms.simKepler', targ : 'C66',objList: objListSimTCI6638K2K, dir : 'tci6638k2k-sim/66/'
+                        },
+                        {
+                            platform: 'ti.platforms.simKepler', targ : 'C66_big_endian',objList: objListSimTCI6638K2K, dir : 'tci6638k2k-sim/66/'
+                        },
+                        {
+                            platform: 'ti.platforms.evm6670', targ : 'C66',objList: objListEVM6670, dir : 'c6670-evm/66/'
+                        },
+                        {
+                            platform: 'ti.platforms.evm6670', targ : 'C66_big_endian',objList: objListEVM6670, dir : 'c6670-evm/66/'
+                        },
+                        {
+                            platform: 'ti.platforms.evm6678', targ : 'C66',objList: objListEVM6678, dir : 'c6678-evm/66/'
+                        },
+                        {
+                            platform: 'ti.platforms.evm6678', targ : 'C66_big_endian',objList: objListEVM6678, dir : 'c6678-evm/66/'
+                        },
+                        {
+                            platform: 'ti.platforms.evmTCI6614', targ : 'C66',objList: objListEVMTCI6614, dir : 'tci6614-evm/66/'
+                        },
+                        {
+                            platform: 'ti.platforms.evmTCI6614', targ : 'C66_big_endian',objList: objListEVMTCI6614, dir : 'tci6614-evm/66/'
+                        },
+                        {
+                            platform: 'ti.platforms.evm6657', targ : 'C66',objList: objListEVM6657, dir : 'c6657-evm/66/'
+                        },
+                        {
+                            platform: 'ti.platforms.evm6657', targ : 'C66_big_endian',objList: objListEVM6657, dir : 'c6657-evm/66/'
+                        },
+                        {
+                            platform: 'ti.platforms.evmTCI6638K2K', targ : 'C66',objList: objListEVMTCI6638K2K, dir : 'tci6638k2k-evm/66/'
+                        },
+                        {
+                            platform: 'ti.platforms.evmTCI6638K2K', targ : 'C66_big_endian',objList: objListEVMTCI6638K2K, dir : 'tci6638k2k-evm/66/'
+                        },
+                        {
+                            platform: 'ti.platforms.evmTCI6636K2H', targ : 'C66',objList: objListEVMTCI6636K2H, dir : 'tci6636k2h-evm/66/'
+                        },
+                        {
+                            platform: 'ti.platforms.evmTCI6636K2H', targ : 'C66_big_endian',objList: objListEVMTCI6636K2H, dir : 'tci6636k2h-evm/66/'
+                        },
+                        {
+                            platform: 'ti.platforms.evmTCI6630K2L', targ : 'C66',objList: objListEVMTCI6630K2L, dir : 'tci6630k2l-evm/66/'
+                        },
+                        {
+                            platform: 'ti.platforms.evmTCI6630K2L', targ : 'C66_big_endian',objList: objListEVMTCI6630K2L, dir : 'tci6630k2l-evm/66/'
+                        },
+                        {
+                            platform: 'ti.platforms.evmC66AK2E', targ : 'C66',objList: objListEVMC66AK2E, dir : 'c66ak2e-evm/66/'
+                        },
+                        {
+                            platform: 'ti.platforms.evmC66AK2E', targ : 'C66_big_endian',objList: objListEVMC66AK2E, dir : 'c66ak2e-evm/66/'
+                        },
+                        {
+                            platform: 'ti.platforms.evmTCI66AK2G02', targ : 'C66',objList: objListEVMTCI66AK2G02, dir : 'tci66ak2g02-evm/66/'
+                        },
+                        {
+                            platform: 'ti.platforms.evmTCI66AK2G02', targ : 'C66_big_endian',objList: objListEVMTCI66AK2G02, dir : 'tci66ak2g02-evm/66/'
+                        },
+                        {
+                            platform: 'ti.platforms.evm6748',    targ : 'C674', objList: objListC6748, dir : 'c6748-evm/674/'
+                        },
+                        {
+                            platform: 'ti.platforms.evmOMAPL137',targ : 'C674', objList: objListOMAPL137, dir : 'omapl137-evm/674/'
+                        },
+                        {
+                            platform: 'ti.platforms.evmOMAPL137',targ : 'Arm9', objList: objListOMAPL137ARM, dir : 'omapl137-evm/arm9/'
+                        },
+                        {
+                            platform: 'ti.platforms.evmOMAPL138',targ : 'C674', objList: objListOMAPL138, dir : 'omapl138-evm/674/'
+                        },
+                        {
+                            platform: 'ti.platforms.evmOMAPL138',targ : 'Arm9', objList: objListOMAPL138ARM, dir : 'omapl138-evm/arm9/'
+                        },
+                        {
+                            platform: 'ti.platforms.simDM8168', targ : 'C674',objList: objListSimTI816X, dir : 'ti816x-sim/674/'
+                        },
+                        {
+                            platform: 'ti.platforms.evmDM8168', targ : 'C674',objList: objListEVMTI816X, dir : 'ti816x-evm/674/'
+                        },
+                        {
+                            platform: 'ti.platforms.evm6472', targ : 'C64P', objList: objListEVM6472, dir : 'c6472-evm/64p/'
+                        },
+                        {
+                            platform: 'ti.platforms.evm6472', targ : 'C64P_big_endian', objList: objListEVM6472, dir : 'c6472-evm/64p/'
+                        },
+                        {
+                            platform: 'ti.platforms.evmTCI6486', targ : 'C64P', objList: objListEVMTCI6486, dir : 'tci6486-evm/64p/'
+                        },
+                        {
+                            platform: 'ti.platforms.evmTCI6486', targ : 'C64P_big_endian', objList: objListEVMTCI6486, dir : 'tci6486-evm/64p/'
+                        },
+                        {
+                            platform: 'ti.platforms.evmDM8148',targ : 'C674', objList: objListTI814X, dir : 'ti814x-evm/674/'
+                        },
+                        {
+                            platform: 'ti.platforms.evmDM8148',targ : 'A8F', objList: objListTI814XARM, dir : 'ti814x-evm/a8/'
+                        },
+                        {
+                            platform: 'ti.platforms.evmTI816X',targ : 'M3', objList: objListTI816XARM, dir : 'ti816x-evm/m3/'
+                        },
+                        {
+                            platform: 'ti.platforms.evmAM3359',targ : 'A8F', objList: objListEVMAM335X, dir : 'am335x-evm/a8/'
+                        },
+                        {
+                            platform: 'ti.platforms.evmAM437X',targ : 'Arm9', objList: objListEVMAM437X, dir : 'am437x-evm/arm9/'
+                        },
+                     ];
+
+for each (var targ in Build.targets)
+{
+    for each (var plat in targ.platforms)
+    {
+        var lib = "lib/";
+        var bool = 0;
+
+        if (targ.platforms.length == 0)
+        	break;
+        
+        for (var i = 0; i < plat_supported.length; i++)
+        {
+            if (java.lang.String(plat).equals(plat_supported[i].platform))
+            {
+                var chip = "-D";
+                if (java.lang.String(targ.name).equals(plat_supported[i].targ))
+                {
+                    /* Choose the selected platform */
+                    lib = lib + plat_supported[i].dir;
+                    chip = chip + chipdefines[i];
+                    bool = 1;
+                    break;
+                }
+            }
+        }
+
+        if (bool == 0)
+            throw new Error('Unexpected value in "platform" parameter')
+
+        if (java.lang.String(targ.model.endian).equals("big"))	{
+            Pkg.addLibrary(lib + "debug/" + Pkg.name, targ,
+                { defs:"-DBIG_ENDIAN_MODE", profile: "debug"}
+                ).addObjects(plat_supported[i].objList);
+            Pkg.addLibrary(lib + "release/" + Pkg.name, targ,
+                { defs:"-DBIG_ENDIAN_MODE", profile: "release"}
+                ).addObjects(plat_supported[i].objList);
+        } else {
+            Pkg.addLibrary(lib + "debug/" + Pkg.name, targ,
+                { defs:chip, profile: "debug"}
+                ).addObjects(plat_supported[i].objList);
+            Pkg.addLibrary(lib + "release/" + Pkg.name, targ,
+                { defs:chip, profile: "release"}
+                ).addObjects(plat_supported[i].objList);
+        }
+    }
+}
+
+
+Pkg.otherFiles=[
+        '.settings/org.eclipse.cdt.core.prefs',
+        'lib/da830/debug/ti.sdo.edma3.rm.sample.a674',
+        'lib/da830/release/ti.sdo.edma3.rm.sample.a674',
+        'lib/c6748/debug/ti.sdo.edma3.rm.sample.a674',
+        'lib/c6748/release/ti.sdo.edma3.rm.sample.a674',
+        'lib/omapl137/debug/ti.sdo.edma3.rm.sample.a674',
+        'lib/omapl137/release/ti.sdo.edma3.rm.sample.a674',
+        'lib/omapl137/debug/ti.sdo.edma3.rm.sample.ae9',
+        'lib/omapl137/release/ti.sdo.edma3.rm.sample.ae9',
+        'lib/omapl138/debug/ti.sdo.edma3.rm.sample.a674',
+        'lib/omapl138/release/ti.sdo.edma3.rm.sample.a674',
+        'lib/omapl138/debug/ti.sdo.edma3.rm.sample.ae9',
+        'lib/omapl138/release/ti.sdo.edma3.rm.sample.ae9',
+        'lib/ti814x/debug/ti.sdo.edma3.rm.sample.a674',
+        'lib/ti814x/release/ti.sdo.edma3.rm.sample.a674',
+        'lib/ti814x/debug/ti.sdo.edma3.rm.sample.aea8f',
+        'lib/ti814x/release/ti.sdo.edma3.rm.sample.aea8f',
+        'lib/tci6608/debug/ti.sdo.edma3.rm.sample.ae66',
+        'lib/tci6608/debug/ti.sdo.edma3.rm.sample.ae66e',
+        'lib/tci6608/release/ti.sdo.edma3.rm.sample.ae66',
+        'lib/tci6608/release/ti.sdo.edma3.rm.sample.ae66e',
+        'lib/tci6616/debug/ti.sdo.edma3.rm.sample.ae66',
+        'lib/tci6616/debug/ti.sdo.edma3.rm.sample.ae66e',
+        'lib/tci6616/release/ti.sdo.edma3.rm.sample.ae66',
+        'lib/tci6616/release/ti.sdo.edma3.rm.sample.ae66e',
+        'lib/tci6614/debug/ti.sdo.edma3.rm.sample.ae66',
+        'lib/tci6614/debug/ti.sdo.edma3.rm.sample.ae66e',
+        'lib/tci6614/release/ti.sdo.edma3.rm.sample.ae66',
+        'lib/tci6614/release/ti.sdo.edma3.rm.sample.ae66e',
+        'lib/c6657/debug/ti.sdo.edma3.rm.sample.ae66',
+        'lib/c6657/debug/ti.sdo.edma3.rm.sample.ae66e',
+        'lib/c6657/release/ti.sdo.edma3.rm.sample.ae66',
+        'lib/c6657/release/ti.sdo.edma3.rm.sample.ae66e',
+        'lib/tci6638k2k/debug/ti.sdo.edma3.rm.sample.ae66',
+        'lib/tci6638k2k/debug/ti.sdo.edma3.rm.sample.ae66e',
+        'lib/tci6638k2k/release/ti.sdo.edma3.rm.sample.ae66',
+        'lib/tci6638k2k/release/ti.sdo.edma3.rm.sample.ae66e',
+        'lib/tci6636k2h/debug/ti.sdo.edma3.rm.sample.ae66',
+        'lib/tci6636k2h/debug/ti.sdo.edma3.rm.sample.ae66e',
+        'lib/tci6636k2h/release/ti.sdo.edma3.rm.sample.ae66',
+        'lib/tci6636k2h/release/ti.sdo.edma3.rm.sample.ae66e',
+        'lib/tci6630k2l/debug/ti.sdo.edma3.rm.sample.ae66',
+        'lib/tci6630k2l/debug/ti.sdo.edma3.rm.sample.ae66e',
+        'lib/tci6630k2l/release/ti.sdo.edma3.rm.sample.ae66',
+        'lib/tci6630k2l/release/ti.sdo.edma3.rm.sample.ae66e',
+        'lib/c66ak2e/debug/ti.sdo.edma3.rm.sample.ae66',
+        'lib/c66ak2e/debug/ti.sdo.edma3.rm.sample.ae66e',
+        'lib/c66ak2e/release/ti.sdo.edma3.rm.sample.ae66',
+        'lib/c66ak2e/release/ti.sdo.edma3.rm.sample.ae66e',
+        'lib/tci66ak2g02/debug/ti.sdo.edma3.rm.sample.ae66',
+        'lib/tci66ak2g02/debug/ti.sdo.edma3.rm.sample.ae66e',
+        'lib/tci66ak2g02/release/ti.sdo.edma3.rm.sample.ae66',
+        'lib/tci66ak2g02/release/ti.sdo.edma3.rm.sample.ae66e',
+        'lib/c6670/debug/ti.sdo.edma3.rm.sample.ae66',
+        'lib/c6670/debug/ti.sdo.edma3.rm.sample.ae66e',
+        'lib/c6670/release/ti.sdo.edma3.rm.sample.ae66',
+        'lib/c6670/release/ti.sdo.edma3.rm.sample.ae66e',
+        'lib/c6678/debug/ti.sdo.edma3.rm.sample.ae66',
+        'lib/c6678/debug/ti.sdo.edma3.rm.sample.ae66e',
+        'lib/c6678/release/ti.sdo.edma3.rm.sample.ae66',
+        'lib/c6678/release/ti.sdo.edma3.rm.sample.ae66e',
+        'lib/simti816x/debug/ti.sdo.edma3.rm.sample.a674',
+        'lib/simti816x/release/ti.sdo.edma3.rm.sample.a674',
+        'lib/evmti816x/debug/ti.sdo.edma3.rm.sample.a674',
+        'lib/evmti816x/release/ti.sdo.edma3.rm.sample.a674',
+        'lib/c6472/debug/ti.sdo.edma3.rm.sample.a64P',
+        'lib/c6472/debug/ti.sdo.edma3.rm.sample.a64Pe',
+        'lib/c6472/release/ti.sdo.edma3.rm.sample.a64P',
+        'lib/c6472/release/ti.sdo.edma3.rm.sample.a64Pe',
+        'lib/tci6486/debug/ti.sdo.edma3.rm.sample.a64P',
+        'lib/tci6486/debug/ti.sdo.edma3.rm.sample.a64Pe',
+        'lib/tci6486/release/ti.sdo.edma3.rm.sample.a64P',
+        'lib/tci6486/release/ti.sdo.edma3.rm.sample.a64Pe',
+        'src/sample_cs.c',
+        'src/sample_init.c',
+        'src/sample_arm_cs.c',
+        'src/sample_arm_init.c',
+        'src/platforms/sample_da830_cfg.c',
+        'src/platforms/sample_da830_int_reg.c',
+        'src/platforms/sample_c6748_cfg.c',
+        'src/platforms/sample_c6748_int_reg.c',
+        'src/platforms/sample_omapl137_cfg.c',
+        'src/platforms/sample_omapl137_int_reg.c',
+        'src/platforms/sample_omapl137_arm_cfg.c',
+        'src/platforms/sample_omapl137_arm_int_reg.c',
+        'src/platforms/sample_omapl138_cfg.c',
+        'src/platforms/sample_omapl138_int_reg.c',
+        'src/platforms/sample_omapl138_arm_cfg.c',
+        'src/platforms/sample_omapl138_arm_int_reg.c',
+        'src/platforms/sample_ti814x_cfg.c',
+        'src/platforms/sample_ti814x_int_reg.c',
+        'src/platforms/sample_ti814x_arm_cfg.c',
+        'src/platforms/sample_ti814x_arm_int_reg.c',
+        'src/platforms/sample_tci6608_cfg.c',
+        'src/platforms/sample_tci6608_int_reg.c',
+        'src/platforms/sample_tci6616_cfg.c',
+        'src/platforms/sample_tci6616_int_reg.c',
+        'src/platforms/sample_tci6614_cfg.c',
+        'src/platforms/sample_tci6614_int_reg.c',
+        'src/platforms/sample_c6657_cfg.c',
+        'src/platforms/sample_c6657_int_reg.c',
+        'src/platforms/sample_tci6638k2k_cfg.c',
+        'src/platforms/sample_tci6638k2k_int_reg.c',
+        'src/platforms/sample_tci6636k2h_cfg.c',
+        'src/platforms/sample_tci6636k2h_int_reg.c',
+        'src/platforms/sample_tci6630k2l_cfg.c',
+        'src/platforms/sample_tci6630k2l_int_reg.c',
+        'src/platforms/sample_c66ak2e_cfg.c',
+        'src/platforms/sample_c66ak2e_int_reg.c',
+        'src/platforms/sample_tci66ak2g02_cfg.c',
+        'src/platforms/sample_tci66ak2g02_int_reg.c',
+        'src/platforms/sample_c6670_cfg.c',
+        'src/platforms/sample_c6670_int_reg.c',
+        'src/platforms/sample_c6678_cfg.c',
+        'src/platforms/sample_c6678_int_reg.c',
+        'src/platforms/sample_ti816x_cfg.c',
+        'src/platforms/sample_ti816x_int_reg.c',
+        'src/platforms/sample_c6472_cfg.c',
+        'src/platforms/sample_c6472_int_reg.c',
+        'src/platforms/sample_tci6486_cfg.c',
+        'src/platforms/sample_tci6486_int_reg.c',
+        'src/platforms/sample_am335x_cfg.c',
+        'src/platforms/sample_am335x_arm_int_reg.c',
+        'src/platforms/sample_am437x_cfg.c',
+        'src/platforms/sample_am437x_arm_int_reg.c',
+        '.cdtproject',
+        '.project',
+        'bios6_edma3_rm_sample.h',
+        'package.bld',
+        'package.xs',
+];
+

@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>interface ti.sdo.ipc.notifyDrivers.IInterrupt</title>
+<meta name="googlebot" content="noindex,nofollow">
+<link rel="stylesheet" type="text/css" href="../../../../src.css"/>
+</head>
+<body>
+<pre class=src>
+     1    <span class="comment">/*
+</span>     2    <span class="comment"> * Copyright (c) 2012-2013, Texas Instruments Incorporated
+</span>     3    <span class="comment"> * All rights reserved.
+</span>     4    <span class="comment"> *
+</span>     5    <span class="comment"> * Redistribution and use in source and binary forms, with or without
+</span>     6    <span class="comment"> * modification, are permitted provided that the following conditions
+</span>     7    <span class="comment"> * are met:
+</span>     8    <span class="comment"> *
+</span>     9    <span class="comment"> * *  Redistributions of source code must retain the above copyright
+</span>    10    <span class="comment"> *    notice, this list of conditions and the following disclaimer.
+</span>    11    <span class="comment"> *
+</span>    12    <span class="comment"> * *  Redistributions in binary form must reproduce the above copyright
+</span>    13    <span class="comment"> *    notice, this list of conditions and the following disclaimer in the
+</span>    14    <span class="comment"> *    documentation and/or other materials provided with the distribution.
+</span>    15    <span class="comment"> *
+</span>    16    <span class="comment"> * *  Neither the name of Texas Instruments Incorporated nor the names of
+</span>    17    <span class="comment"> *    its contributors may be used to endorse or promote products derived
+</span>    18    <span class="comment"> *    from this software without specific prior written permission.
+</span>    19    <span class="comment"> *
+</span>    20    <span class="comment"> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+</span>    21    <span class="comment"> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+</span>    22    <span class="comment"> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+</span>    23    <span class="comment"> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+</span>    24    <span class="comment"> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+</span>    25    <span class="comment"> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+</span>    26    <span class="comment"> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+</span>    27    <span class="comment"> * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+</span>    28    <span class="comment"> * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+</span>    29    <span class="comment"> * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+</span>    30    <span class="comment"> * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+</span>    31    <span class="comment"> */</span>
+    32    <span class="comment">/*
+</span>    33    <span class="comment"> *  ======== IInterrupt.xdc ========
+</span>    34    <span class="comment"> *
+</span>    35    <span class="comment"> */</span>
+    36    
+    37    <span class="xdoc">/*!
+</span>    38    <span class="xdoc"> *  ======== IInterrupt ========
+</span>    39    <span class="xdoc"> *  Interface for the inter-processor interrupts
+</span>    40    <span class="xdoc"> */</span>
+    41    <span class=key>interface</span> IInterrupt {
+    42    
+    43        <span class=key>struct</span> IntInfo {
+    44            UInt  localIntId;
+    45            UInt  remoteIntId;
+    46            UInt  intVectorId;
+    47        }
+    48    
+    49        <span class="xdoc">/*!
+</span>    50    <span class="xdoc">     *  ======== intEnable ========
+</span>    51    <span class="xdoc">     *  Enables the interrupt corresponding to intId
+</span>    52    <span class="xdoc">     *
+</span>    53    <span class="xdoc">     *  <b>@param(remoteProcId)</b>  Remote MultiProc Id
+</span>    54    <span class="xdoc">     *  <b>@param(intInfo)</b>       Information needed to configure interrupt line
+</span>    55    <span class="xdoc">     */</span>
+    56        @DirectCall
+    57        Void intEnable(UInt16 remoteProcId, IntInfo *intInfo);
+    58    
+    59        <span class="xdoc">/*!
+</span>    60    <span class="xdoc">     *  ======== intDisable ========
+</span>    61    <span class="xdoc">     *  Disables the interrupt corresponding to intId
+</span>    62    <span class="xdoc">     *
+</span>    63    <span class="xdoc">     *  <b>@param(remoteProcId)</b>  Remote MultiProc Id
+</span>    64    <span class="xdoc">     *  <b>@param(intInfo)</b>       Information needed to configure interrupt line
+</span>    65    <span class="xdoc">     */</span>
+    66        @DirectCall
+    67        Void intDisable(UInt16 remoteProcId, IntInfo *intInfo);
+    68    
+    69        <span class="xdoc">/*!
+</span>    70    <span class="xdoc">     *  ======== intRegister ========
+</span>    71    <span class="xdoc">     *  Register an interrupt line to a remote processor
+</span>    72    <span class="xdoc">     *
+</span>    73    <span class="xdoc">     *  <b>@param(remoteProcId)</b>  Remote MultiProc Id
+</span>    74    <span class="xdoc">     *  <b>@param(intInfo)</b>       Information needed to configure interrupt line
+</span>    75    <span class="xdoc">     *  <b>@param(func)</b>          Function to register.
+</span>    76    <span class="xdoc">     *  <b>@param(arg)</b>           Argument that will be passed to func
+</span>    77    <span class="xdoc">     */</span>
+    78        @DirectCall
+    79        Void intRegister(UInt16 remoteProcId, IntInfo *intInfo, Fxn func, UArg arg);
+    80    
+    81        <span class="xdoc">/*!
+</span>    82    <span class="xdoc">     *  ======== intUnregister ========
+</span>    83    <span class="xdoc">     *  Unregister an interrupt line to a remote processor
+</span>    84    <span class="xdoc">     *
+</span>    85    <span class="xdoc">     *  <b>@param(remoteProcId)</b>  Remote MultiProc Id
+</span>    86    <span class="xdoc">     *  <b>@param(intInfo)</b>       Information needed to configure interrupt line
+</span>    87    <span class="xdoc">     */</span>
+    88        @DirectCall
+    89        Void intUnregister(UInt16 remoteProcId, IntInfo *intInfo);
+    90    
+    91        <span class="xdoc">/*!
+</span>    92    <span class="xdoc">     *  ======== intSend ========
+</span>    93    <span class="xdoc">     *  Send interrupt to the remote processor
+</span>    94    <span class="xdoc">     *
+</span>    95    <span class="xdoc">     *  <b>@param(remoteProcId)</b>  Remote MultiProc Id
+</span>    96    <span class="xdoc">     *  <b>@param(intInfo)</b>       Information needed to configure interrupt line
+</span>    97    <span class="xdoc">     *  <b>@param(arg)</b>           Argument for sending interrupt.
+</span>    98    <span class="xdoc">     */</span>
+    99        @DirectCall
+   100        Void intSend(UInt16 remoteProcId, IntInfo *intInfo, UArg arg);
+   101    
+   102        <span class="xdoc">/*!
+</span>   103    <span class="xdoc">     *  <b>@_nodoc</b>
+</span>   104    <span class="xdoc">     *  Post an interrupt locally.
+</span>   105    <span class="xdoc">     *
+</span>   106    <span class="xdoc">     *  Used to simulate receiving an interrupt from a remote (source)
+</span>   107    <span class="xdoc">     *  processor
+</span>   108    <span class="xdoc">     *
+</span>   109    <span class="xdoc">     *  <b>@param(remoteProcId)</b>  Source MultiProc Id
+</span>   110    <span class="xdoc">     *  <b>@param(intInfo)</b>       Information needed to configure interrupt line
+</span>   111    <span class="xdoc">     *  <b>@param(arg)</b>           Argument for sending interrupt.
+</span>   112    <span class="xdoc">     */</span>
+   113        @DirectCall
+   114        Void intPost(UInt16 srcProcId, IntInfo *intInfo, UArg arg);
+   115    
+   116        <span class="xdoc">/*!
+</span>   117    <span class="xdoc">     *  ======== intClear ========
+</span>   118    <span class="xdoc">     *  Clear interrupt
+</span>   119    <span class="xdoc">     *
+</span>   120    <span class="xdoc">     *  <b>@param(remoteProcId)</b>  Remote MultiProc Id
+</span>   121    <span class="xdoc">     *  <b>@param(intInfo)</b>       Information needed to configure interrupt line
+</span>   122    <span class="xdoc">     *
+</span>   123    <span class="xdoc">     *  <b>@b(returns)</b>           Value (if any) of the interrupt before
+</span>   124    <span class="xdoc">     *                        it was cleared
+</span>   125    <span class="xdoc">     */</span>
+   126        @DirectCall
+   127        UInt intClear(UInt16 remoteProcId, IntInfo *intInfo);
+   128    }
+</pre>
+</body></html>

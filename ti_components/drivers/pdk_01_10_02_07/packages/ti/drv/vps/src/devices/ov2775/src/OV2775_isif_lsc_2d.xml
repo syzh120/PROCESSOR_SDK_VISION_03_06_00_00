@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ISIF_LSC_xml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<dcc_name>isif_lsc</dcc_name>
+	<dcc_header>
+		<camera_module_id>     2775 </camera_module_id>
+		<dcc_descriptor_id>    2 </dcc_descriptor_id>
+		<algorithm_vendor_id>  1 </algorithm_vendor_id>
+		<tunning_tool_version> 0 </tunning_tool_version>
+	</dcc_header>
+	<!--=======================================================================-->
+	<typedef>
+		<isif_lsc_dcc_descriptor_t type="struct">
+			<enable type="uint8"> </enable> <!-- enable/disable isif 2d lsc correction: 0,1 -->
+			<use_calib type="uint16"> </use_calib>
+			<lsc_hsize type="uint16"> </lsc_hsize> <!-- input image horizontal size: U14 -->
+			<lsc_vsize type="uint16"> </lsc_vsize> <!-- input image vertical size: U14 -->
+			<hdirection_data_offset type="uint16"> </hdirection_data_offset> <!-- horizontal direction data offset: U14 -->
+			<vdirection_data_offset type="uint16"> </vdirection_data_offset> <!-- vertical direction data offset: U14 -->
+			<hposin_paxel type="uint8"> </hposin_paxel> <!-- init_x (horizontal position in the paxel): U7 -->
+			<vposin_paxel type="uint8"> </vposin_paxel> <!-- init_y (vertical position in the paxel): U7 -->
+			<pax_height type="uint8"> </pax_height> <!-- paxel_height = 2^pax_height: U3 -->
+			<pax_length type="uint8"> </pax_length> <!-- paxel_width = 2^pax_length: U3 -->
+			<gain_format type="uint8"> </gain_format> <!-- lsc gain fixed-point format enum: U3 -->
+			<offset_scaling_factor type="uint8"> </offset_scaling_factor> <!-- offset scale factor, a: U8Q7 -->
+			<offset_shift_value type="int8"> </offset_shift_value> <!-- offset shift value, T: S8 -->
+			<offset_enable type="uint8"> </offset_enable> <!-- enable/disable isif 2d offset map: 0,1 -->
+			<gain_table_size type="uint16"> </gain_table_size> <!-- size = (ceil( (INIT_X + IMG_WIDTH) / (2^M) ) + 1) * (ceil( (INIT_Y + IMG_HEIGHT) / (2^N) ) + 1) * 4 (bytes) -->
+			<lsc_table type="uint8*"> </lsc_table> <!-- lsc gain table -->
+			<offset_table_size type="uint16"> </offset_table_size> <!-- size = (ceil( (INIT_X + IMG_WIDTH) / (2^M) ) + 1) * (ceil( (INIT_Y + IMG_HEIGHT) / (2^N) ) + 1) * 4 (bytes) -->
+			<offset_table type="uint8*"> </offset_table> <!-- lsc offset table -->
+		</isif_lsc_dcc_descriptor_t>      
+	</typedef>    
+	<!--=======================================================================-->
+	
+	<use_case val="1023">
+		<n-space>
+		
+			<region0 class="0">
+				<colortemperature val="2" min="0" max="20000">  </colortemperature>
+				<exposure val="1" min="0" max="10000000">  </exposure>
+				<gain val="0" min="0" max="1024">  </gain>
+			</region0>
+		
+		</n-space>
+		
+		<parameter_package>
+			<isif_lsc_dcc type="isif_lsc_dcc_descriptor_t">
+			{
+				1, // enable
+				0, // use_calib
+				1280, // lsc_hsize
+				800, // lsc_vsize
+				0, // hdirection_data_offset
+				0, // vdirection_data_offset
+				0, // hposin_paxel
+				0, // vposin_paxel
+				6, // pax_height
+				6, // pax_length
+				5, // gain_format
+				0, // offset_scaling_factor
+				0, // offset_shift_value
+				0, // offset_enable
+				1176, // gain_table_size
+				{
+7 8 33 7 6 7 27 6 6 6 23 6 6 5 19 5 4 4 17 4 4 4 13 4 3 3 12 3 3 3 10 3 3 2 8 2 2 2 8 2 2 2 8 2 2 2 8 2 2 2 8 2 2 2 9 2 2 3 11 2 3 3 12 4 4 4 14 4 4 4 18 4 5 6 22 5 6 7 26 6 6 7 26 6 
+7 8 29 7 6 7 25 6 5 6 20 5 5 5 17 5 4 4 14 4 3 3 12 3 3 3 10 3 2 2 8 2 2 2 7 2 2 2 6 2 2 1 5 2 1 1 5 2 2 2 6 2 2 2 7 1 2 2 9 2 2 3 10 3 3 3 12 3 4 4 15 4 4 5 18 5 5 6 23 6 5 6 23 6 
+7 7 27 7 6 6 22 6 5 5 17 5 4 4 14 4 3 4 12 3 3 3 9 3 2 2 7 2 2 2 6 2 2 2 5 2 1 1 4 1 1 1 4 1 1 1 4 1 1 1 4 1 1 2 5 1 2 2 7 2 2 2 8 2 3 3 11 3 3 4 13 3 4 4 17 4 5 6 21 5 5 6 21 5 
+6 8 26 6 5 5 21 5 4 5 16 4 4 4 13 4 3 3 10 3 3 2 8 2 2 2 6 2 1 1 4 2 1 1 3 2 1 1 2 1 0 1 2 1 1 1 2 1 0 1 3 1 1 1 3 1 1 2 5 1 2 2 7 2 2 3 8 2 3 4 12 3 4 4 16 4 4 5 19 5 4 5 19 5 
+6 7 24 6 5 6 19 5 5 5 15 4 4 4 12 3 3 3 9 3 3 3 7 2 2 2 5 2 1 1 3 1 1 1 2 1 1 1 2 1 1 1 1 1 0 1 1 1 0 1 2 1 1 1 3 1 1 1 4 1 1 2 6 2 2 2 8 2 3 3 10 3 4 4 14 4 5 5 18 4 5 5 18 4 
+6 7 23 6 5 5 18 5 4 5 14 4 3 3 11 3 3 3 8 3 2 2 6 2 2 2 5 2 1 1 3 1 1 1 2 1 1 0 1 1 1 0 1 0 0 0 0 0 0 0 1 0 0 1 2 1 1 1 3 1 1 1 5 1 2 2 7 2 2 3 10 3 3 4 13 4 4 5 17 4 4 5 17 4 
+6 7 22 6 5 6 18 5 4 5 14 4 4 4 11 3 3 3 8 3 2 2 6 2 2 1 4 1 1 1 2 1 1 1 1 1 1 1 1 1 1 1 1 0 0 1 0 1 0 1 1 0 1 1 2 0 1 1 3 1 1 2 4 1 2 2 7 2 2 3 9 3 3 4 12 3 4 5 17 5 4 5 17 5 
+7 7 24 6 5 6 18 5 4 5 14 4 3 4 11 4 3 3 9 3 2 2 6 2 2 2 4 2 1 1 3 1 1 1 2 1 1 1 1 1 0 1 1 1 0 0 1 0 0 1 1 1 1 1 2 1 1 2 3 1 1 2 5 1 2 2 7 2 2 3 10 3 3 4 13 4 4 5 17 4 4 5 17 4 
+7 8 24 6 6 7 19 6 5 5 15 4 4 4 11 4 3 3 9 3 3 3 7 3 2 2 5 2 2 1 3 1 1 1 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 1 1 1 2 1 1 1 4 1 2 2 5 2 2 3 7 2 3 3 10 3 4 4 14 4 4 5 18 5 4 5 18 5 
+7 8 26 6 6 6 21 6 5 5 16 5 4 4 13 4 4 4 10 3 3 3 8 3 2 2 6 2 2 2 4 2 2 1 3 1 1 1 3 1 1 1 2 1 1 1 2 1 1 1 3 1 1 2 3 1 2 2 5 2 2 2 6 2 3 3 9 3 3 4 11 3 4 5 15 4 5 6 19 5 5 6 19 5 
+7 8 28 7 6 7 22 6 6 6 18 5 5 5 15 4 4 4 12 4 3 3 10 3 3 3 7 2 2 2 6 2 2 2 5 2 2 2 4 2 2 2 4 1 2 2 4 1 2 2 4 2 2 2 5 2 2 2 6 2 2 3 8 2 3 4 10 3 3 4 13 4 4 5 17 4 5 6 20 5 5 6 20 5 
+8 8 30 8 7 7 24 7 6 6 20 6 5 5 17 5 5 5 14 4 4 4 11 4 3 3 9 3 3 3 8 3 3 3 6 3 2 2 6 2 2 2 5 2 2 3 5 2 2 2 6 2 2 3 7 2 2 3 8 3 3 4 10 3 4 4 12 4 4 5 15 4 5 5 19 5 6 7 23 5 6 7 23 5 
+9 9 34 9 8 8 28 7 7 7 23 6 6 6 20 6 5 5 17 5 5 5 15 5 4 4 12 4 4 4 10 3 3 3 9 3 3 3 8 3 3 3 8 3 3 3 8 3 3 3 8 3 3 4 9 3 3 4 11 3 4 5 12 4 4 5 15 4 5 6 18 5 5 6 22 5 6 7 26 6 6 7 26 6 
+9 9 34 9 8 8 28 7 7 7 23 6 6 6 20 6 5 5 17 5 5 5 15 5 4 4 12 4 4 4 10 3 3 3 9 3 3 3 8 3 3 3 8 3 3 3 8 3 3 3 8 3 3 4 9 3 3 4 11 3 4 5 12 4 4 5 15 4 5 6 18 5 5 6 22 5 6 7 26 6 6 7 26 6 
+}
+, // lsc_table
+				1176, // offset_table_size
+				NULL  // offset_table
+			}
+			</isif_lsc_dcc>
+		</parameter_package>
+		
+	</use_case>
+	
+	<!--=====================================================================-->
+</ISIF_LSC_xml>

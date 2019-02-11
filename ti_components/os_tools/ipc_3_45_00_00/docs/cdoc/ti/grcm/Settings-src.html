@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><title>module ti.grcm.Settings</title>
+<meta name="googlebot" content="noindex,nofollow">
+<link rel="stylesheet" type="text/css" href="../../src.css"/>
+</head>
+<body>
+<pre class=src>
+     1    <span class="comment">/*
+</span>     2    <span class="comment"> * Copyright (c) 2011-2013, Texas Instruments Incorporated
+</span>     3    <span class="comment"> * All rights reserved.
+</span>     4    <span class="comment"> *
+</span>     5    <span class="comment"> * Redistribution and use in source and binary forms, with or without
+</span>     6    <span class="comment"> * modification, are permitted provided that the following conditions
+</span>     7    <span class="comment"> * are met:
+</span>     8    <span class="comment"> *
+</span>     9    <span class="comment"> * *  Redistributions of source code must retain the above copyright
+</span>    10    <span class="comment"> *    notice, this list of conditions and the following disclaimer.
+</span>    11    <span class="comment"> *
+</span>    12    <span class="comment"> * *  Redistributions in binary form must reproduce the above copyright
+</span>    13    <span class="comment"> *    notice, this list of conditions and the following disclaimer in the
+</span>    14    <span class="comment"> *    documentation and/or other materials provided with the distribution.
+</span>    15    <span class="comment"> *
+</span>    16    <span class="comment"> * *  Neither the name of Texas Instruments Incorporated nor the names of
+</span>    17    <span class="comment"> *    its contributors may be used to endorse or promote products derived
+</span>    18    <span class="comment"> *    from this software without specific prior written permission.
+</span>    19    <span class="comment"> *
+</span>    20    <span class="comment"> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+</span>    21    <span class="comment"> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+</span>    22    <span class="comment"> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+</span>    23    <span class="comment"> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+</span>    24    <span class="comment"> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+</span>    25    <span class="comment"> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+</span>    26    <span class="comment"> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+</span>    27    <span class="comment"> * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+</span>    28    <span class="comment"> * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+</span>    29    <span class="comment"> * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+</span>    30    <span class="comment"> * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+</span>    31    <span class="comment"> */</span>
+    32    
+    33    
+    34    <span class="comment">/*
+</span>    35    <span class="comment"> *  ======== Settings.xdc ========
+</span>    36    <span class="comment"> *
+</span>    37    <span class="comment"> */</span>
+    38    
+    39    
+    40    <span class=key>package</span> ti.grcm;
+    41    
+    42    
+    43    <span class="xdoc">/*!
+</span>    44    <span class="xdoc"> *  ======== Settings ========
+</span>    45    <span class="xdoc"> *  Global configuration settings for the ti.grcm package
+</span>    46    <span class="xdoc"> *
+</span>    47    <span class="xdoc"> *  This is a RTSC meta-only module. When building your executable with
+</span>    48    <span class="xdoc"> *  XDCtools, use this module to configure this package.
+</span>    49    <span class="xdoc"> *
+</span>    50    <span class="xdoc"> *  <b>@a(See Also)</b>
+</span>    51    <span class="xdoc"> *  <b>@p(dlist)</b>
+</span>    52    <span class="xdoc"> *  - {<b>@link</b> doxy(ti_grcm) RCM Overview}
+</span>    53    <span class="xdoc"> *  - {<b>@link</b> doxy(RcmClient.h) RcmClient File Reference}
+</span>    54    <span class="xdoc"> *  - {<b>@link</b> doxy(RcmServer.h) RcmServer File Reference}
+</span>    55    <span class="xdoc"> *  <b>@p</b>
+</span>    56    <span class="xdoc"> */</span>
+    57    
+    58    <span class=key>metaonly</span> <span class=key>module</span> Settings
+    59    {
+    60    
+    61        <span class=comment>// -------- Module Constants --------</span>
+    62    
+    63        <span class=comment>// -------- Module Types --------</span>
+    64    
+    65        <span class="xdoc">/*!
+</span>    66    <span class="xdoc">     *  IPC Support enumeration type
+</span>    67    <span class="xdoc">     *
+</span>    68    <span class="xdoc">     *  The IPC support is provided by one of the following types.
+</span>    69    <span class="xdoc">     */</span>
+    70        <span class=key>enum</span> IpcSupport {
+    71            IpcSupport_ti_sdo_ipc,          <span class=xdoc>//! DSP/BIOS IPC Support</span>
+    72            IpcSupport_ti_syslink_ipc       <span class=xdoc>//! SysLink IPC Support</span>
+    73        };
+    74    
+    75    
+    76        <span class=comment>// -------- Module Parameters --------</span>
+    77    
+    78        <span class="xdoc">/*!
+</span>    79    <span class="xdoc">     *  Specifies which IPC support to link into the executable
+</span>    80    <span class="xdoc">     *
+</span>    81    <span class="xdoc">     *  This config param must be set in the application config script.
+</span>    82    <span class="xdoc">     *  It has no default value.
+</span>    83    <span class="xdoc">     */</span>
+    84        <span class=key>config</span> IpcSupport ipc = IpcSupport_ti_sdo_ipc;
+    85    
+    86        <span class="xdoc">/*!
+</span>    87    <span class="xdoc">     *  Controls the loading of string constants to the target
+</span>    88    <span class="xdoc">     *
+</span>    89    <span class="xdoc">     *  By default, all string constants are loaded to the target. If the
+</span>    90    <span class="xdoc">     *  program is using a logger which does not process the strings, then
+</span>    91    <span class="xdoc">     *  setting this config param to false will reduce the program's data
+</span>    92    <span class="xdoc">     *  footprint because the string constants will not be loaded.
+</span>    93    <span class="xdoc">     */</span>
+    94        <span class=key>config</span> Bool loadStrings = <span class=key>true</span>;
+    95    }
+</pre>
+</body></html>

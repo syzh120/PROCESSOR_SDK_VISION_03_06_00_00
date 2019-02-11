@@ -1,0 +1,17 @@
+UseCase: chains_lvdsVipSingleCamAnalytics
+
+//
+// front cam algorithm and display
+//
+Capture -> Dup_algPd -> Merge_algPd
+
+// PD Alg & draw links
+Dup_algPd -> Alg_FeaturePlaneComputation (EVE1) -> Alg_ObjectDetection (DSP2) -> Merge_algPd -> Sync_algPd -> Alg_ObjectDraw -> EpSink
+//Merge_alg_display
+
+// LD Alg
+//Dup_algPd -> Merge_algLd (DSP2)
+//Dup_algPd -> Alg_LaneDetect (DSP2) -> Merge_algLd -> Sync_algLd (DSP1) -> Alg_LaneDetectDraw (DSP1) -> Merge_alg_display
+
+// Sync ED & PD output and display
+//Merge_alg_display -> Sync_algDisplay -> Alg_DmaSwMs_alg -> EpSink

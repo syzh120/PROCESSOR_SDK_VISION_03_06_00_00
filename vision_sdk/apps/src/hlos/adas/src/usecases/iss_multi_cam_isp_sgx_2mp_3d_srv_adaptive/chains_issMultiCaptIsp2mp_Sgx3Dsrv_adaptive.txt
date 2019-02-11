@@ -1,0 +1,39 @@
+UseCase: chains_issMultiCaptIsp2mp_Sgx3Dsrv_adaptive
+
+//
+// surround view algorithm and display
+//
+IssCapture -> IssM2mIsp -> Sync -> Dup_sv
+IssM2mIsp -> Alg_IssAewb
+
+// Input sync'ed frames to Alg_Synthesis MUST be Q1
+Dup_sv -> Alg_Synthesis (DSP1)
+
+// Input sync'ed frames to Sgx3Dsrv MUST be Q2
+Dup_sv -> Sgx3Dsrv (A15)
+
+// Alg_Synthesis Output Q0 to NULL
+Alg_Synthesis -> Null (DSP1)
+
+// Alg_Synthesis Output Q1 to Alg_PhotoAlign
+Alg_Synthesis -> Alg_PhotoAlign (DSP1)
+
+// There is no Geo Align Link so connecting Null Source to
+// input Q1 of Synthesis
+NullSource -> Alg_Synthesis
+
+// PhotoAlign output Q0 must be connect to Sgx3Dsrv
+Alg_PhotoAlign -> Sgx3Dsrv
+
+// Alg_AdaptiveBowl output Q0 MUST be connect to Sgx3Dsrv
+UltrasonicCapture -> Alg_AdaptiveBowl (DSP2) -> Sgx3Dsrv
+
+// Alg_Synthesis Output Q2 to Sgx3Dsrv
+Alg_Synthesis -> Sgx3Dsrv
+
+Sgx3Dsrv -> Display_M4 (IPU1_0)
+
+//
+// Graphics overlay display
+//
+GrpxSrc -> Display_Grpx

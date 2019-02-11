@@ -1,0 +1,111 @@
+/*
+ *  Do not modify this file; it is automatically 
+ *  generated and any modifications will be overwritten.
+ *
+ * @(#) xdc-B21
+ */
+
+#ifndef ti_ipc_family_tci6638_Interrupt__INTERNAL__
+#define ti_ipc_family_tci6638_Interrupt__INTERNAL__
+
+#ifndef ti_ipc_family_tci6638_Interrupt__internalaccess
+#define ti_ipc_family_tci6638_Interrupt__internalaccess
+#endif
+
+#include <ti/ipc/family/tci6638/Interrupt.h>
+
+#undef xdc_FILE__
+#ifndef xdc_FILE
+#define xdc_FILE__ NULL
+#else
+#define xdc_FILE__ xdc_FILE
+#endif
+
+/* intEnable */
+#undef ti_ipc_family_tci6638_Interrupt_intEnable
+#define ti_ipc_family_tci6638_Interrupt_intEnable ti_ipc_family_tci6638_Interrupt_intEnable__E
+
+/* intDisable */
+#undef ti_ipc_family_tci6638_Interrupt_intDisable
+#define ti_ipc_family_tci6638_Interrupt_intDisable ti_ipc_family_tci6638_Interrupt_intDisable__E
+
+/* intRegister */
+#undef ti_ipc_family_tci6638_Interrupt_intRegister
+#define ti_ipc_family_tci6638_Interrupt_intRegister ti_ipc_family_tci6638_Interrupt_intRegister__E
+
+/* intUnregister */
+#undef ti_ipc_family_tci6638_Interrupt_intUnregister
+#define ti_ipc_family_tci6638_Interrupt_intUnregister ti_ipc_family_tci6638_Interrupt_intUnregister__E
+
+/* intSend */
+#undef ti_ipc_family_tci6638_Interrupt_intSend
+#define ti_ipc_family_tci6638_Interrupt_intSend ti_ipc_family_tci6638_Interrupt_intSend__E
+
+/* intPost */
+#undef ti_ipc_family_tci6638_Interrupt_intPost
+#define ti_ipc_family_tci6638_Interrupt_intPost ti_ipc_family_tci6638_Interrupt_intPost__E
+
+/* intClear */
+#undef ti_ipc_family_tci6638_Interrupt_intClear
+#define ti_ipc_family_tci6638_Interrupt_intClear ti_ipc_family_tci6638_Interrupt_intClear__E
+
+/* intClearAll */
+#undef ti_ipc_family_tci6638_Interrupt_intClearAll
+#define ti_ipc_family_tci6638_Interrupt_intClearAll ti_ipc_family_tci6638_Interrupt_intClearAll__F
+
+/* checkAndClear */
+#undef ti_ipc_family_tci6638_Interrupt_checkAndClear
+#define ti_ipc_family_tci6638_Interrupt_checkAndClear ti_ipc_family_tci6638_Interrupt_checkAndClear__F
+
+/* Module_startup */
+#undef ti_ipc_family_tci6638_Interrupt_Module_startup
+#define ti_ipc_family_tci6638_Interrupt_Module_startup ti_ipc_family_tci6638_Interrupt_Module_startup__E
+
+/* Instance_init */
+#undef ti_ipc_family_tci6638_Interrupt_Instance_init
+#define ti_ipc_family_tci6638_Interrupt_Instance_init ti_ipc_family_tci6638_Interrupt_Instance_init__E
+
+/* Instance_finalize */
+#undef ti_ipc_family_tci6638_Interrupt_Instance_finalize
+#define ti_ipc_family_tci6638_Interrupt_Instance_finalize ti_ipc_family_tci6638_Interrupt_Instance_finalize__E
+
+/* per-module runtime symbols */
+#undef Module__MID
+#define Module__MID ti_ipc_family_tci6638_Interrupt_Module__id__C
+#undef Module__DGSINCL
+#define Module__DGSINCL ti_ipc_family_tci6638_Interrupt_Module__diagsIncluded__C
+#undef Module__DGSENAB
+#define Module__DGSENAB ti_ipc_family_tci6638_Interrupt_Module__diagsEnabled__C
+#undef Module__DGSMASK
+#define Module__DGSMASK ti_ipc_family_tci6638_Interrupt_Module__diagsMask__C
+#undef Module__LOGDEF
+#define Module__LOGDEF ti_ipc_family_tci6638_Interrupt_Module__loggerDefined__C
+#undef Module__LOGOBJ
+#define Module__LOGOBJ ti_ipc_family_tci6638_Interrupt_Module__loggerObj__C
+#undef Module__LOGFXN0
+#define Module__LOGFXN0 ti_ipc_family_tci6638_Interrupt_Module__loggerFxn0__C
+#undef Module__LOGFXN1
+#define Module__LOGFXN1 ti_ipc_family_tci6638_Interrupt_Module__loggerFxn1__C
+#undef Module__LOGFXN2
+#define Module__LOGFXN2 ti_ipc_family_tci6638_Interrupt_Module__loggerFxn2__C
+#undef Module__LOGFXN4
+#define Module__LOGFXN4 ti_ipc_family_tci6638_Interrupt_Module__loggerFxn4__C
+#undef Module__LOGFXN8
+#define Module__LOGFXN8 ti_ipc_family_tci6638_Interrupt_Module__loggerFxn8__C
+#undef Module__G_OBJ
+#define Module__G_OBJ ti_ipc_family_tci6638_Interrupt_Module__gateObj__C
+#undef Module__G_PRMS
+#define Module__G_PRMS ti_ipc_family_tci6638_Interrupt_Module__gatePrms__C
+#undef Module__GP_create
+#define Module__GP_create ti_ipc_family_tci6638_Interrupt_Module_GateProxy_create
+#undef Module__GP_delete
+#define Module__GP_delete ti_ipc_family_tci6638_Interrupt_Module_GateProxy_delete
+#undef Module__GP_enter
+#define Module__GP_enter ti_ipc_family_tci6638_Interrupt_Module_GateProxy_enter
+#undef Module__GP_leave
+#define Module__GP_leave ti_ipc_family_tci6638_Interrupt_Module_GateProxy_leave
+#undef Module__GP_query
+#define Module__GP_query ti_ipc_family_tci6638_Interrupt_Module_GateProxy_query
+
+
+#endif /* ti_ipc_family_tci6638_Interrupt__INTERNAL____ */

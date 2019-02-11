@@ -1,0 +1,314 @@
+%%{
+/*
+ * Copyright (c) 2012 - 2013, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ */
+%%}
+
+%%{
+    /*
+     *  ======== HDVICP2.xdt ========
+     *  Generate HDVICP2 Resman configuration and initialization structures
+     */
+    var HDVICP2 = this.$package.HDVICP2;
+    var yieldReleaseFxn;
+    var yieldAcquireFxn;
+    var suffix = Program.build.target.findSuffix(this.$package);
+
+    /* Identify if device is a "DSP" device that supports HDVICP */
+    var supportedDsp = (suffix.match("m3|m4") ? true : false);
+
+    var numHdvicp = 0;
+
+    var intArray;
+
+    var device = Program.cpu.deviceName;
+
+    var ivahdPeriph = xdc.module("ti.catalog.peripherals.hdvicp2.HDVICP2");
+    var ivahds = ivahdPeriph.getAll();
+    var numHdvicp = ivahds.length;
+    var intArray = new Array();
+
+    if (numHdvicp == 0) {
+        numHdvicp = HDVICP2.numHdvicp2;
+       /* Get interrupt array */
+       for (i = 0; i < numHdvicp; i++) {
+           intArray[i] = HDVICP2.intArray[i];
+       }
+    }
+    else {
+        for (var i = 0; i < ivahds.length; i++) {
+            intArray[i] = ivahds[i].$orig.intNum;
+        }
+    }
+
+    var yieldReleaseFxn;
+    var yieldAcquireFxn;
+%%}
+
+/* C code contribution from ti/sdo/fc/ires/hdvicp/HDVICP2.xdt */
+
+#include <xdc/std.h>
+#define ti_sdo_fc_ires_NOPROTOCOLREV
+#include <ti/sdo/fc/ires/hdvicp/hdvicp2.h>
+
+% if (null != this.doneFxn) {
+/* Configured HDVICP2 "done" function */
+extern XDAS_Void `this.doneFxn`(IALG_Handle algHandle,
+        IRES_HDVICP2_Obj * hdvicpHandle);
+% }
+
+% if (null != this.resetFxn) {
+/* Configured HDVICP2 "reset" function */
+extern XDAS_UInt32 `this.resetFxn`(IALG_Handle algHandle,
+        IRES_HDVICP2_Obj * hdvicpHandle);
+% }
+
+% if (null != this.waitFxn) {
+/* Configured HDVICP2 "wait" function */
+extern XDAS_UInt32 `this.waitFxn`(IALG_Handle algHandle, IRES_HDVICP2_Obj *
+        hdvicpHandle, IRES_YieldContext * yieldContext);
+% }
+
+% if (null != this.configureFxn) {
+/* Configured HDVICP2 "configure" function */
+extern XDAS_Void `this.configureFxn`(IALG_Handle algHandle,
+        IRES_HDVICP2_Obj * hdvicpHandle,
+        IRES_HDVICP2_CallbackFxn cbFunctionPtr, XDAS_Void * cbArgs);
+% }
+
+extern XDAS_UInt32 ti_sdo_fc_ires_hdvicp_HDVICP2_maxResetDelay =
+        `this.maxHdvicp2ResetDelay`;
+
+/* Params specific to HDVICP2 module */
+HDVICP2_Params HDVICP2_PARAMS = {
+    `(null == this.configureFxn)        ? "NULL" :    this.configureFxn`,
+    `(null == this.waitFxn)             ? "NULL" :    this.waitFxn`,
+    `(null == this.doneFxn)             ? "NULL" :    this.doneFxn`,
+    /* memoryBaseAddress[MAXGROUPS] */
+    {
+% for (var i = 0; i < this.memoryBaseAddress.length; i++) {
+    `this.memoryBaseAddress[i]``i < this.memoryBaseAddress.length-1?",":""`
+% }
+    },
+    /* resetControlAddress[MAXGROUPS] */
+    {
+% for (var i = 0; i < this.resetControlAddress.length; i++) {
+    `this.resetControlAddress[i]``i < this.resetControlAddress.length-1?",":""`
+% }
+    },
+
+    /* registerBaseAddress[MAXGROUPS] */
+    {
+% for (var i = 0; i < this.registerBaseAddress.length; i++) {
+    `this.registerBaseAddress[i]``i < this.registerBaseAddress.length-1?",":""`
+% }
+    },
+    `(null == this.resetFxn)             ? "NULL" :    this.resetFxn`,
+};
+
+/* Generated code from the HDVICP2 module */
+
+Int HDVICP2_MAXRESOURCES = `this.MAXRESOURCES`;
+
+/* Timeout value set by the framework */
+/* Timeout set is `this.timeout` */
+unsigned int ti_sdo_fc_ires_hdvicp_HDVICP2_timeoutVal = `(this.FOREVER == this.timeout) ? "IRES_HDVICP2_TIMEOUTFOREVER" : this.timeout`;
+
+/* Number of HDVICP2 resources to be managed */
+unsigned int _HDVICP2_NUMRESOURCES = (unsigned int)`numHdvicp`;
+
+/* Base key value for HDVICP Linux IPC objects */
+UInt32 _HDVICP2_ipcKeyBase = `utils.toHex(this.ipcKeyBase)`;
+
+/* Flag that says whether to clear the PRCM register during reset, or not */
+XDAS_UInt32 ti_sdo_fc_ires_hdvicp_HDVICP2_clearPRCMRegister =
+        `(false == this.clearPRCMRegister) ? "FALSE" : "TRUE"`;
+
+
+/* Function to be used to obtain yield arguments for a particular scratch grp*/
+ti_sdo_fc_ires_hdvicp_HDVICP2_GetYieldArgsFxn
+        ti_sdo_fc_ires_hdvicp_HDVICP2_getYieldArgs =
+        `(null == this.getYieldArgsFxn) ? "NULL" : this.getYieldArgsFxn`;
+
+/* Yield function to be used when yielding context and reacquiring it to run
+   again */
+% if ((this.yieldReleaseFxn == null) || (this.yieldAcquireFxn == null)) {
+/* yieldRelease is NULL */
+%       yieldReleaseFxn = "NULL";
+%       yieldAcquireFxn = "NULL";
+% }
+% else {
+%       yieldReleaseFxn = this.yieldReleaseFxn;
+%       yieldAcquireFxn = this.yieldAcquireFxn;
+extern Void `yieldReleaseFxn`(IRES_YieldResourceType resource,
+        IRES_YieldContextHandle algYieldContext, IRES_YieldArgs yieldArgs);
+extern Void `yieldAcquireFxn`(IRES_YieldResourceType resource,
+        IRES_YieldContextHandle algYieldContext, IRES_YieldArgs yieldArgs);
+%}
+
+ti_sdo_fc_ires_hdvicp_HDVICP2_YieldFxn
+        ti_sdo_fc_ires_hdvicp_HDVICP2_yieldRelease = `yieldReleaseFxn`;
+
+ti_sdo_fc_ires_hdvicp_HDVICP2_YieldFxn
+        ti_sdo_fc_ires_hdvicp_HDVICP2_yieldAcquire = `yieldAcquireFxn`;
+
+
+%if ((this.getHDVICP2Fxn != null) && (this.freeHDVICP2Fxn != null)) {
+
+/* Plug-in function to schedule HDVICP2 instance to return to alg */
+extern IRES_Status `this.getHDVICP2Fxn` (Int *Id, IALG_Handle alg,
+        IRES_HDVICP2_Handle handle);
+
+/* Plug-in function to free HDVICP2 instance used by alg */
+extern IRES_Status `this.freeHDVICP2Fxn` (Int Id, IALG_Handle alg,
+        IRES_HDVICP2_Handle handle);
+%}
+
+ti_sdo_fc_ires_hdvicp_HDVICP2_GetHdvicp2Fxn
+        ti_sdo_fc_ires_hdvicp_HDVICP2_getHdvicp2Fxn =
+        `(null == this.getHDVICP2Fxn) ?  "NULL" : this.getHDVICP2Fxn`;
+
+ti_sdo_fc_ires_hdvicp_HDVICP2_FreeHdvicp2Fxn
+        ti_sdo_fc_ires_hdvicp_HDVICP2_freeHdvicp2Fxn =
+        `(null == this.freeHDVICP2Fxn) ?  "NULL" : this.freeHDVICP2Fxn`;
+
+%if (supportedDsp) {
+
+/* BIOS support */
+
+#include <ti/sysbios/BIOS.h>
+#include <ti/sysbios/knl/Swi.h>
+
+/* Declaration of SWI and Semaphore Handles */
+% for (var i = 0; i < intArray.length; i++) {
+extern const ti_sysbios_knl_Swi_Handle ti_sdo_fc_ires_hdvicp_HDVICP2_swi`i`;
+extern const xdc_runtime_knl_SemThread_Handle
+        ti_sdo_fc_ires_hdvicp_HDVICP2_sem`i`;
+% }
+
+/* Array of interrupts */
+UInt ti_sdo_fc_ires_hdvicp_HDVICP2_interrupts[`numHdvicp`] = {
+% for (var i = 0; i < intArray.length; i++) {
+    `intArray[i]``i < intArray.length-1?",":""`
+% }
+};
+
+/* Array of Sempahore handles */
+xdc_runtime_knl_ISemaphore_Handle ti_sdo_fc_ires_hdvicp_HDVICP2_semArray[
+        `intArray.length`];
+
+/* Array of callback functions, filled in during call to 'configure' */
+IRES_HDVICP2_CallbackFxn  ti_sdo_fc_ires_hdvicp_HDVICP2_CallBackFxn[`intArray.length`] = {
+% for (var i = 0; i < intArray.length; i++) {
+    NULL`i < intArray.length-1?" ,":""`
+% }
+};
+
+/* Array of IALG_Handles callback, filled in during call to 'configure' */
+IALG_Handle ti_sdo_fc_ires_hdvicp_HDVICP2_CallBackAlg[`intArray.length`] = {
+% for (var i = 0; i < intArray.length; i++) {
+    NULL`i < intArray.length-1?" ,":""`
+% }
+
+};
+
+/* Array of Callback arguments, filled in during call to 'configure' */
+Void * ti_sdo_fc_ires_hdvicp_HDVICP2_CallBackArgs[`intArray.length`]  = {
+% for (var i = 0; i < intArray.length; i++) {
+    NULL`i < intArray.length-1?" ,":""`
+% }
+
+};
+
+/* TODO: Maybe I should have multiple of these plugged in, isntead of one
+         with if check ?? */
+/* Function to plug into HWI */
+void ti_sdo_fc_ires_hdvicp_HDVICP2_hwiFunc(UArg arg) {
+
+    /* Disable interrupt */
+    ti_sysbios_hal_Hwi_disableInterrupt((UInt)
+            (ti_sdo_fc_ires_hdvicp_HDVICP2_interrupts[arg]));
+
+    /* Post swi */
+% for (var i = 0; i < intArray.length; i++) {
+    if (arg == `i`) {
+        ti_sysbios_knl_Swi_post(ti_sdo_fc_ires_hdvicp_HDVICP2_swi`i`);
+    }
+    `i < intArray.length-1?" else ":""`
+% }
+}
+
+/* Function to plug into SWI */
+void ti_sdo_fc_ires_hdvicp_HDVICP2_swiFunc(UArg arg1, UArg arg2) {
+
+    /* Use the args to call some cbFunction */
+    if ( NULL != ti_sdo_fc_ires_hdvicp_HDVICP2_CallBackFxn[arg1] ) {
+        (ti_sdo_fc_ires_hdvicp_HDVICP2_CallBackFxn[arg1])
+                (ti_sdo_fc_ires_hdvicp_HDVICP2_CallBackAlg[arg1],
+                ti_sdo_fc_ires_hdvicp_HDVICP2_CallBackArgs[arg1]);
+    }
+
+    ti_sysbios_hal_Hwi_clearInterrupt((UInt)
+            ti_sdo_fc_ires_hdvicp_HDVICP2_interrupts[arg1]);
+    ti_sysbios_hal_Hwi_enableInterrupt((UInt)
+            ti_sdo_fc_ires_hdvicp_HDVICP2_interrupts[arg1]);
+}
+
+
+Bool ti_sdo_fc_ires_hdvicp_HDVICP2_semInit()
+{
+
+xdc_runtime_knl_ISemaphore_Handle handle = NULL;
+
+% for (var i = 0; i < intArray.length; i++) {
+    handle = xdc_runtime_knl_SemThread_Handle_upCast(
+            ti_sdo_fc_ires_hdvicp_HDVICP2_sem`i`);
+    if (NULL != handle) {
+        ti_sdo_fc_ires_hdvicp_HDVICP2_semArray[`i`] =  handle;
+    }
+    else {
+        return (FALSE);
+    }
+
+% }
+
+  return (TRUE);
+}
+
+% }
+% else {
+
+Bool ti_sdo_fc_ires_hdvicp_HDVICP2_semInit()
+{
+    return (TRUE);
+}
+%}

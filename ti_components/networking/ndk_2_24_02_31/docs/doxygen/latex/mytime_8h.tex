@@ -1,0 +1,128 @@
+\subsection{mytime.\+h File Reference}
+\label{mytime_8h}\index{mytime.\+h@{mytime.\+h}}
+
+
+\subsubsection{Detailed Description}
+The M\+Y\+T\+I\+M\+E module uses the S\+Y\+S/\+B\+I\+O\+S Clock module to keep track of system time for hardware platforms that do not have a Real Time Clock.
+
+The module internally tracks the time by keeping count of the number of seconds since the Epoch, which is defined to be January 1, 1970.
+
+Users of the M\+Y\+T\+I\+M\+E module can access its internal time value using supplied getter and setter functions.
+
+\subsubsection*{Example Usage}
+
+The M\+Y\+T\+I\+M\+E module is part of the N\+D\+K nettools library. An application should include its header file as follows\+: 
+\begin{DoxyCode}
+\textcolor{preprocessor}{#include <ti/ndk/nettools/mytime/mytime.h>}
+\end{DoxyCode}
+
+
+\paragraph*{Initializing The M\+Y\+T\+I\+M\+E Module}
+
+To initialize and start the M\+Y\+T\+I\+M\+E module clock, call the following function\+: 
+\begin{DoxyCode}
+MYTIME_init();
+\end{DoxyCode}
+
+
+\paragraph*{Getting The Current Time}
+
+The internal time value can be obtained by calling the \hyperlink{mytime_8h_a05f7406d31d93f6dc9b7ecaac8a37376}{M\+Y\+T\+I\+M\+E\+\_\+gettime()} function\+: 
+\begin{DoxyCode}
+uint32\_t currentTime = MYTIME_gettime();
+\end{DoxyCode}
+
+
+\paragraph*{Setting The Current Time}
+
+The internal time value can be set by calling the \hyperlink{mytime_8h_a0f77aa4bc459ff00050636b47cda79d3}{M\+Y\+T\+I\+M\+E\+\_\+settime()} function\+: 
+\begin{DoxyCode}
+uint32\_t newTime = 100;
+MYTIME_settime(newTime);
+\end{DoxyCode}
+
+
+\paragraph*{Deinitializing The M\+Y\+T\+I\+M\+E Module}
+
+The following function can be called to stop the M\+Y\+T\+I\+M\+E Clock and free its resources\+: 
+\begin{DoxyCode}
+MYTIME_exit();
+\end{DoxyCode}
+ 
+
+{\ttfamily \#include $<$xdc/std.\+h$>$}\\*
+{\ttfamily \#include $<$stdint.\+h$>$}\\*
+Include dependency graph for mytime.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=159pt]{mytime_8h__incl}
+\end{center}
+\end{figure}
+\subsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{mytime_8h_a7dddeba109c4ccddac8a9a1c11725be3}{M\+Y\+T\+I\+M\+E\+\_\+init} (void)
+\begin{DoxyCompactList}\small\item\em Create a new Clock instance that ticks every second. \end{DoxyCompactList}\item 
+void \hyperlink{mytime_8h_a07dd31d755affd8f8d94fc69acb7b53d}{M\+Y\+T\+I\+M\+E\+\_\+exit} (void)
+\begin{DoxyCompactList}\small\item\em Stops and deletes the Clock instance created in the init function. \end{DoxyCompactList}\item 
+uint32\+\_\+t \hyperlink{mytime_8h_a05f7406d31d93f6dc9b7ecaac8a37376}{M\+Y\+T\+I\+M\+E\+\_\+gettime} (void)
+\begin{DoxyCompactList}\small\item\em Returns the number of seconds since the Epoch (January 1, 1970). \end{DoxyCompactList}\item 
+void \hyperlink{mytime_8h_a0f77aa4bc459ff00050636b47cda79d3}{M\+Y\+T\+I\+M\+E\+\_\+settime} (uint32\+\_\+t newtime)
+\begin{DoxyCompactList}\small\item\em Sets the time to the value passed in via the newtime parameter (units in seconds). \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsubsection{Function Documentation}
+\index{mytime.\+h@{mytime.\+h}!M\+Y\+T\+I\+M\+E\+\_\+init@{M\+Y\+T\+I\+M\+E\+\_\+init}}
+\index{M\+Y\+T\+I\+M\+E\+\_\+init@{M\+Y\+T\+I\+M\+E\+\_\+init}!mytime.\+h@{mytime.\+h}}
+\paragraph[{M\+Y\+T\+I\+M\+E\+\_\+init}]{\setlength{\rightskip}{0pt plus 5cm}void M\+Y\+T\+I\+M\+E\+\_\+init (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}\label{mytime_8h_a7dddeba109c4ccddac8a9a1c11725be3}
+
+
+Create a new Clock instance that ticks every second. 
+
+\index{mytime.\+h@{mytime.\+h}!M\+Y\+T\+I\+M\+E\+\_\+exit@{M\+Y\+T\+I\+M\+E\+\_\+exit}}
+\index{M\+Y\+T\+I\+M\+E\+\_\+exit@{M\+Y\+T\+I\+M\+E\+\_\+exit}!mytime.\+h@{mytime.\+h}}
+\paragraph[{M\+Y\+T\+I\+M\+E\+\_\+exit}]{\setlength{\rightskip}{0pt plus 5cm}void M\+Y\+T\+I\+M\+E\+\_\+exit (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}\label{mytime_8h_a07dd31d755affd8f8d94fc69acb7b53d}
+
+
+Stops and deletes the Clock instance created in the init function. 
+
+\index{mytime.\+h@{mytime.\+h}!M\+Y\+T\+I\+M\+E\+\_\+gettime@{M\+Y\+T\+I\+M\+E\+\_\+gettime}}
+\index{M\+Y\+T\+I\+M\+E\+\_\+gettime@{M\+Y\+T\+I\+M\+E\+\_\+gettime}!mytime.\+h@{mytime.\+h}}
+\paragraph[{M\+Y\+T\+I\+M\+E\+\_\+gettime}]{\setlength{\rightskip}{0pt plus 5cm}uint32\+\_\+t M\+Y\+T\+I\+M\+E\+\_\+gettime (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}\label{mytime_8h_a05f7406d31d93f6dc9b7ecaac8a37376}
+
+
+Returns the number of seconds since the Epoch (January 1, 1970). 
+
+\begin{DoxyReturn}{Returns}
+The number of seconds since January 1, 1970 
+\end{DoxyReturn}
+\index{mytime.\+h@{mytime.\+h}!M\+Y\+T\+I\+M\+E\+\_\+settime@{M\+Y\+T\+I\+M\+E\+\_\+settime}}
+\index{M\+Y\+T\+I\+M\+E\+\_\+settime@{M\+Y\+T\+I\+M\+E\+\_\+settime}!mytime.\+h@{mytime.\+h}}
+\paragraph[{M\+Y\+T\+I\+M\+E\+\_\+settime}]{\setlength{\rightskip}{0pt plus 5cm}void M\+Y\+T\+I\+M\+E\+\_\+settime (
+\begin{DoxyParamCaption}
+\item[{uint32\+\_\+t}]{newtime}
+\end{DoxyParamCaption}
+)}\label{mytime_8h_a0f77aa4bc459ff00050636b47cda79d3}
+
+
+Sets the time to the value passed in via the newtime parameter (units in seconds). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em newtime} & Time in seconds since the Epoch to set the time to \\
+\hline
+\end{DoxyParams}

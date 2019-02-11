@@ -1,0 +1,265 @@
+%%{
+/*
+ * Copyright (c) 2006-2012, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ */
+%%}
+% var lowermod = String(this.module).toLowerCase();
+% var lowerven = String(this.vendor).toLowerCase();
+% var lowerintfc = String(this.inface).toLowerCase();
+/*
+ *  ======== `lowermod`_`lowerven`_ires.c ========
+ *  `lowermod` algorithm's implementation of IRES_Fxns.
+ */
+
+#include <xdc/std.h>
+#include <string.h>
+
+#include <ti/xdais/ialg.h>
+#include <ti/xdais/ires.h>
+#include <ti/xdais/dm/`String(this.templateName).toLowerCase()`.h>
+
+/* 
+ *  The NULL resource (NULLRES) is used in this file as an example.
+ *  All NULLRES code is surrounded in #ifdef ADD_IRES_RESOURCE blocks.
+ *  To use an actualIRES resource, replace all of the NULLRES code with
+ *  code referencing that resource. Note that this may add a dependency
+ *  on Framework Components. For more information on IRES, see:
+ *
+ *  http://processors.wiki.ti.com/index.php/Resource_Management_Framework_Components#
+ *  IRES:_Standard_Interface_for_Resource_Negotiation_and_Utilization
+ */
+
+/* Header file for the NULL resource */
+#ifdef ADD_IRES_RESOURCE
+#include <ti/sdo/fc/ires/nullresource/ires_nullres.h>
+#endif
+
+#include "`lowermod`_`lowerven`.h"
+#include "`lowermod`_`lowerven`_priv.h"
+
+/* IRES Function Declarations */
+static IRES_Status `this.module`_`this.vendor`_activateRes(IALG_Handle handle, IRES_Handle res);
+static IRES_Status `this.module`_`this.vendor`_activateAllRes(IALG_Handle handle);
+static IRES_Status `this.module`_`this.vendor`_deactivateRes(IALG_Handle h, IRES_Handle res);
+static IRES_Status `this.module`_`this.vendor`_deactivateAllRes(IALG_Handle handle);
+static Int32 `this.module`_`this.vendor`_numResources(IALG_Handle handle);
+static IRES_Status `this.module`_`this.vendor`_getResources(IALG_Handle handle,
+        IRES_ResourceDescriptor *desc);
+static IRES_Status `this.module`_`this.vendor`_initResources(IALG_Handle h,
+        IRES_ResourceDescriptor * desc, IRES_YieldFxn  yieldFxn,
+        IRES_YieldArgs yieldArgs);
+static IRES_Status `this.module`_`this.vendor`_deInitResources(IALG_Handle h,
+        IRES_ResourceDescriptor *desc);
+static IRES_Status `this.module`_`this.vendor`_reInitResources(IALG_Handle handle,
+        IRES_ResourceDescriptor *desc, IRES_YieldFxn  yieldFxn,
+        IRES_YieldArgs yieldArgs);
+
+/*
+ *  ======== `this.module`_`this.vendor`_IRES ========
+ */
+IRES_Fxns `this.module`_`this.vendor`_IRES = {
+    &`this.module`_`this.vendor`_IRES,
+    `this.module`_`this.vendor`_getResources,
+    `this.module`_`this.vendor`_numResources,
+    `this.module`_`this.vendor`_initResources,
+    `this.module`_`this.vendor`_reInitResources,
+    `this.module`_`this.vendor`_deInitResources,
+    `this.module`_`this.vendor`_activateRes,
+    `this.module`_`this.vendor`_activateAllRes,
+    `this.module`_`this.vendor`_deactivateRes,
+    `this.module`_`this.vendor`_deactivateAllRes
+};
+
+
+/*
+ *  ======== `this.module`_`this.vendor`_activateAllRes ========
+ */
+static IRES_Status `this.module`_`this.vendor`_activateAllRes(IALG_Handle handle)
+{
+    IRES_Status      status = IRES_OK;
+#ifdef ADD_IRES_RESOURCE
+    `this.module`_`this.vendor`_Obj  *alg = (`this.module`_`this.vendor`_Obj *)handle;
+    /* Activate all resources - this example has only one. */
+
+    status = `this.module`_`this.vendor`_activateRes(handle, (IRES_Handle)alg->resHandle);
+#endif
+    if (status != IRES_OK) {
+        return (status);
+    }
+
+    return (status);
+}
+
+/*
+ *  ======== `this.module`_`this.vendor`_activateRes ========
+ */
+static IRES_Status `this.module`_`this.vendor`_activateRes(IALG_Handle handle, IRES_Handle res)
+{
+#ifdef ADD_IRES_RESOURCE
+    `this.module`_`this.vendor`_Obj  *alg = (`this.module`_`this.vendor`_Obj *)handle;
+    IRES_NULLRES_Handle resHandle = (IRES_NULLRES_Handle)res;
+
+    /* Check that res = alg->resHandle */
+    if (res != (IRES_Handle)(alg->resHandle)) {
+        return (IRES_EFAIL);
+    }
+#endif
+
+    return (IRES_OK);
+}
+
+/*
+ *  ======== `this.module`_`this.vendor`_deactivateAllRes ========
+ */
+static IRES_Status `this.module`_`this.vendor`_deactivateAllRes(IALG_Handle handle) 
+{
+    IRES_Status      status = IRES_OK;
+#ifdef ADD_IRES_RESOURCE
+    `this.module`_`this.vendor`_Obj  *alg = (`this.module`_`this.vendor`_Obj *)handle;
+
+    status = `this.module`_`this.vendor`_deactivateRes(handle, (IRES_Handle)alg->resHandle);
+#endif
+
+    return (status);
+}
+
+/*
+ *  ======== `this.module`_`this.vendor`_deactivateRes ========
+ */
+static IRES_Status `this.module`_`this.vendor`_deactivateRes(IALG_Handle h, IRES_Handle res)
+{
+#ifdef ADD_IRES_RESOURCE
+    `this.module`_`this.vendor`_Obj  *alg = (`this.module`_`this.vendor`_Obj *)h;
+
+    /* Check that res = alg->resHandle */
+    if (res != (IRES_Handle)(alg->resHandle)) {
+        return (IRES_EFAIL);
+    }
+#endif
+
+    return (IRES_OK);
+}
+
+/*
+ *  ======== `this.module`_`this.vendor`_deInitResources ========
+ */
+/* ARGSUSED */
+static IRES_Status `this.module`_`this.vendor`_deInitResources(IALG_Handle h,
+        IRES_ResourceDescriptor *desc)
+{
+#ifdef ADD_IRES_RESOURCE
+    `this.module`_`this.vendor`_Obj  *alg = (`this.module`_`this.vendor`_Obj *)h;
+
+    /* Algorithm relinquishing resource holdings */
+    alg->resHandle = NULL;
+#endif
+
+    return (IRES_OK);
+}
+
+/*
+ *  ======== `this.module`_`this.vendor`_getResources ========
+ */
+static IRES_Status `this.module`_`this.vendor`_getResources(IALG_Handle h,
+        IRES_ResourceDescriptor *desc)
+{
+#ifdef ADD_IRES_RESOURCE
+    `this.module`_`this.vendor`_Obj  *alg = (`this.module`_`this.vendor`_Obj *)h;
+
+    desc->resourceName = IRES_NULLRES_PROTOCOLNAME;
+    desc->revision = &IRES_NULLRES_PROTOCOLREVISION;
+    desc->protocolArgs = NULL; 
+    desc->protocolArgs->mode = IRES_SCRATCH;
+
+    /* 
+     * This API could be called to query for resource requirements and after
+     * having granted the resources, could also be queried for resource 
+     * holdings of the algorithm. The difference is that in the second case a 
+     * valid resource handle (that had been granted earlier) would be expected.
+     */   
+    desc->handle = (IRES_Handle)(alg->resHandle);
+#endif
+
+    return (IRES_OK);
+}
+
+/*
+ *  ======== `this.module`_`this.vendor`_initResources ========
+ */
+static IRES_Status `this.module`_`this.vendor`_initResources(IALG_Handle h,
+        IRES_ResourceDescriptor *desc, IRES_YieldFxn  yieldFxn,
+        IRES_YieldArgs yieldArgs)
+{
+#ifdef ADD_IRES_RESOURCE
+    `this.module`_`this.vendor`_Obj  *alg = (`this.module`_`this.vendor`_Obj *)h;
+
+    /* 
+     * Resource manager has returned a resource handle. Save it in the 
+     * algorithm's instance object 
+     */ 
+    alg->resHandle = (IRES_Handle)desc->handle;
+#endif
+
+    return (IRES_OK);
+}
+
+/*
+ *  ======== `this.module`_`this.vendor`_numResources ========
+ */
+/* ARGSUSED */
+static Int32 `this.module`_`this.vendor`_numResources(IALG_Handle handle) 
+{
+    return (1);
+}
+
+/*
+ *  ======== `this.module`_`this.vendor`_reInitResources ========
+ */
+static IRES_Status `this.module`_`this.vendor`_reInitResources(IALG_Handle handle,
+        IRES_ResourceDescriptor *desc, IRES_YieldFxn  yieldFxn,
+        IRES_YieldArgs yieldArgs)
+{
+#ifdef ADD_IRES_RESOURCE
+    `this.module`_`this.vendor`_Obj  *alg = (`this.module`_`this.vendor`_Obj *)handle;
+
+    /* 
+     * This function implies that the resource holdings of the algorithms have
+     * been changed.
+     * Update them in the algorithm instance object. 
+     */
+    alg->resHandle = (IRES_Handle)desc->handle;
+#endif
+
+    return (IRES_OK);
+}
+
+

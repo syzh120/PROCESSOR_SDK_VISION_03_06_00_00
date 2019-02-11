@@ -1,0 +1,93 @@
+/*
+ * Copyright (c) 2012, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ */
+/*
+ *  ======== package.bld ========
+ */
+
+var Pkg = xdc.useModule('xdc.bld.PackageContents');
+
+/* lib/ is a generated directory that 'xdc clean' should remove */
+Pkg.generatedFiles.$add("lib/");
+
+Pkg.attrs.exportSrc = true;
+
+var srcFilesLinux = ["memutils_cmem"];      // CMEM based implementation
+var srcFilesBios = ["memutils_bios"];       // BIOS based implementation
+var srcFilesWinCE = ["memutils_std"];     // Windows CE based implementation
+Pkg.otherFiles = [
+    "memutils.h",
+    "package.bld",
+    //"simple_GCArmv5T.mak"
+];
+
+
+for (var i = 0; i < Build.targets.length; i++) {
+    var targ = Build.targets[i];
+
+    var srcs;
+
+//    print("Building for target:  " + targ.suffix + "\n");
+    for (profile in targ.profiles) {
+
+        /* Build std lib for all targets */
+        Pkg.addLibrary("lib/" + profile + "/memutils_std", targ, {
+            profile: profile
+        }).addObjects(["memutils_std"]);
+
+        if (targ.os == undefined) {
+    //        print("Found BIOS implementation");
+
+            /* also build a BIOS-based implementation */
+            srcs = srcFilesBios;
+        }
+        else if ((targ.os == "Linux") && (targ.suffix != "86U")) {
+    //        print("Found Linux/CMEM implementation");
+            /* also build a Linux-CMEM-based implementation */
+            srcs = srcFilesLinux;
+        }
+        else if (targ.os == "WindowsCE") {
+            srcs = srcFilesWinCE;
+        }
+        else {
+    //        print("Skipping");
+            srcs = undefined;
+        }
+
+        if (srcs != undefined) {
+    //        print("More libs...");
+            Pkg.addLibrary("lib/" + profile + "/memutils", targ, {
+                profile: profile
+            }).addObjects(srcs);
+        }
+    }
+}

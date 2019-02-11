@@ -1,0 +1,65 @@
+
+      <parameter_package>
+            <!--NSF3 parameters class 3 -->
+            <nsf3_cfg_dcc type="nsf3_cfg_dcc_descriptor_t">
+              {
+                0, //update
+                0, // enable
+                1, // no of iterations
+                {
+                    {   // nsf3_pass_prms_t nsf3_pass_prms;         // Parameters needed for object distance calculation.
+                        1, // sft_thr_en
+                        0, // ee_en
+                        64, // thr_scale_tn1_tn2  -- scaling factor that specifies how thresholds scale from l2-l1 and l2-l3
+                        16, // thr_scale_tn3_tn2
+                        {
+                            // Color 0 noise threshold parameters  //R
+                            {0,5,0,16,5,0,128,5,0,1024,5,0,},  //(x0,y0,slp0,x1,y1,slp1,s2,y2,slp2,x3,y3,slp3) -- the points on the curve (Fig.5 NSF3_func) and the respective slopes.
+                            // Slopes included for ease of computation  later
+                            // Slope computation :
+                            // s = round(N*(X(i+1,2)-X(i,2))/(X(i+1,1)-X(i,1))); X = [x0 y0;x1 y1;x2 y2;x3 y3]
+                            // Color 1 noise threshold parameters // Gr
+                            {0,5,0,16,5,0,128,5,0,1024,5,0,},
+                            // Color 2 noise threshold parameters  // B
+                            {0,5,0,16,5,0,128,5,0,1024,5,0,},
+                            // Color 3 noise threshold parameters // Gb - - depending on Bayer patter r-l;r-l
+                            {0,5,0,16,5,0,128,5,0,1024,5,0,},
+                        },
+                            {48,64,80}, // knee points // (u1,u2,u3)
+                            // see. Table 1-1. NSF3_THR_KNEE in NSF3_func.doc
+                            // ONE knee point for supression, 2 for EE
+                            // knee point common across levels/scales of wavelet decomp.
+                            // u1: SUPPRESSION knee point below which suppression = supression_max (value defined below), above u1, supression decreases linearly to 0 at u = 1.0
+                            // U2.6 representation, between 0 and 63. i.e., 63 = 1;
+                            // u2:  EE knee point. Knee point u2, below which ee = 0. Above u2, ee increases linearly to ee_max at u = u3.
+
+                            // u3: EE knee point. Knee point u3, above which ee = ee_max. 64 <= u2 < u3 <= 255.
+                        {
+                            // Color 0 suppression config
+                            {64,64,51,51,51,51,},
+                            // Supression levels (y-axis for Fig. )
+                            // LH_1/HL_1, HH_1, LH_2/HL_2, HH_2, LH_3/HL_3, HH_3,
+                            // Same supression for the diagonal LH/HL bands, different for the HH band.
+                            // max val = 128 => complete suppression of coeffs below u1, else "scaled" suppression
+                            // Color 1 suppression config
+                            {64,64,51,51,51,51,},
+                            // Color 2 suppression config
+                            {64,64,51,51,51,51,},
+                            // Color 3 suppression config
+                            {64,64,51,51,51,51,},
+                        },
+                        {
+                            // Color 0 edge enhancement config
+                            {64,64,64,64,64,64,},
+                            // Color 1 edge enhancement config
+                            {64,64,64,64,64,64,},
+                            // Color 2 edge enhancement config
+                            {64,64,64,64,64,64,},
+                            // Color 3 edge enhancement config
+                            {64,64,64,64,64,64,},
+                        },
+                    },
+                },
+              }
+            </nsf3_cfg_dcc>
+        </parameter_package>

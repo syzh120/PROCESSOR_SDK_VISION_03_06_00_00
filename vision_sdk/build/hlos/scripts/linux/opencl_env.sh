@@ -1,0 +1,1 @@
+export TI_OCL_COMPUTE_UNIT_LIST="0"

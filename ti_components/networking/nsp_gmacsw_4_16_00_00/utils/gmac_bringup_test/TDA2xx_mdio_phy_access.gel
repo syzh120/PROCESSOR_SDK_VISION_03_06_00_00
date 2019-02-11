@@ -1,0 +1,479 @@
+/* ======================================================================
+ *   Copyright (C) 2014 Texas Instruments Incorporated
+ *
+ *   All rights reserved. Property of Texas Instruments Incorporated.
+ *   Restricted rights to use, duplicate or disclose this code are
+ *   granted through contract.
+ *
+ *   The program may not be used without the written permission
+ *   of Texas Instruments Incorporated or against the terms and conditions
+ *   stipulated in the agreement under which this program has been
+ *   supplied.
+ * ==================================================================== */
+
+#define CTRL_MODULE_BASE 0x4a002000
+/*  For EEE DB MDIO signals are on VIN2a PADs */
+#define VIN2A_D10_MDIO_CLK   (CTRL_MODULE_BASE + 0x1590)
+#define VIN2A_D11_MDIO_D   (CTRL_MODULE_BASE + 0x1594)
+#define MDIO_MCLK   (CTRL_MODULE_BASE + 0x1640)
+#define MDIO_D   (CTRL_MODULE_BASE + 0x163C)
+
+//configure for the mode of operation
+#define GMII    0
+#define MII     1
+#define RGMII   2
+//enable any one of the below
+#define RESET_PHY 1
+//change the values
+#define CPSW_MODE    RGMII //add specific value for mode
+
+#define CPSW_SOFT_RESET         0x48484008
+#define SL1_SOFT_RESET          0x48484d8c
+#define SL2_SOFT_RESET          0x48484dcc
+#define DMA_SOFT_RESET          0x4848481c
+#define CPSWSS_SOFT_RESET       0x48485204
+
+#define IPMDIOBASE           0x48485000
+#define MDIO_VER             0x48485000
+#define MDIO_CONTROL         0x48485004
+#define MDIO_ALIVE           0x48485008
+#define MDIO_LINK            0x4848500c
+#define MDIO_LINKINTRAW      0x48485010
+#define MDIO_LINKINTMASKED   0x48485014
+#define MDIO_USERINTRAW      0x48485020
+#define MDIO_USERINTMASKED   0x48485024
+#define MDIO_USERINTMASKSET  0x48485028
+#define MDIO_USERINTMASKCLR  0x4848502c
+#define MDIO_USERACCESS0     0x48485080
+#define MDIO_USERPHYSEL0     0x48485084
+#define MDIO_USERACCESS1     0x48485088
+#define MDIO_USERPHYSEL1     0x4848508c
+
+/* wait until hardware is ready for another user access */
+#define USERACCESS_GO    0x80000000
+#define USERACCESS_READ  0x00000000
+#define USERACCESS_WRITE 0x40000000
+#define USERACCESS_ACK   1
+#define USERACCESS_DATA  0x0000ffff
+
+
+//register address of PHY
+#define Control_0    0
+#define Status_1     1
+#define PHYID_2      2
+#define PHYID_3      3
+#define ANAR_4      4
+#define ANARLPA_5   5  //status
+//6,7,8 not needed to configure
+#define ANEXP_6      6
+#define ANNP_7      7
+#define BT_Control_9    9
+#define BT_Status_10    10
+//11-12 reserved
+#define Extn_Status_15    15
+//16-17 Reserved.
+#define Intr_Mask_18   18
+#define Intr_Status_19   19
+#define LED_control_24 24
+#define LBK_control_19   19
+
+#define PHY_CONF_TXCLKEN 0x0020
+#define PHY_DPLX    0x0100 //8bit
+#define PHY_AUTON   0x1000 //12bit
+#define PHY_100_MBPS 0x2000 //6=0,13 =1
+#define PHY_10_MBPS 0x0000 //6=0,13 =0
+#define PHY_1000_MBPS 0x0040 //6=1,13 =0
+
+#define PHY_BMCR_RST_NEG  0x0200 //9bit
+#define PHY_1000BTCR_1000FD 0x0200
+#define PHY_1000BTCR_1000HD 0x0100
+#define PHY_BMSR_AUTN_COMP  0x0020//5bit
+#define PHY_DIG         0x4000
+
+#define WR_MEM_32(addr, data)    *(unsigned int*)(addr) =(unsigned int)(data)
+#define RD_MEM_32(addr)      *(unsigned int*)(addr)
+
+menuitem "MDIO_PHY_CPSW"
+
+hotmenu Configure_pad_eee_mdio()
+{
+   WR_MEM_32(0x4a002550, 0x6f361e05);
+   GEL_TextOut("CONFIGURE THE MDIO PINS \n\r");
+   /* IMP::AS on EEE DB VIN2a PADs are used for MDIO, disable MDIO_CLK and MDIO_D coming on default PAD, otherwise it would corrupt MDIO config */
+   WR_MEM_32(MDIO_MCLK, ( RD_MEM_32(MDIO_MCLK) &0xffffff00) | 0xf);
+   WR_MEM_32(MDIO_D, ( RD_MEM_32(MDIO_D) &0xffffff00) | 0xf);
+
+   WR_MEM_32(VIN2A_D10_MDIO_CLK, ( RD_MEM_32(VIN2A_D10_MDIO_CLK) &0xffffff00) | 0x3);
+   WR_MEM_32(VIN2A_D11_MDIO_D, ( RD_MEM_32(VIN2A_D11_MDIO_D) &0xffffff00) | 0x3);
+}
+
+delay_mdio(int cnt)
+{
+   int i;
+   for(i = 0;i<cnt;i++);
+   for(i = 0;i<cnt;i++);
+   for(i = 0;i<cnt;i++);
+   for(i = 0;i<cnt;i++);
+   for(i = 0;i<cnt;i++);
+}
+
+dialog menu_mdio_debug_reg_rdwr(PHY_ADDR "phy number",phy_reg "Debug Reg Address",
+                                rdwr "Read (0) Write (1)", val "write_value")
+{
+    if (rdwr == 0)
+    {
+        cpsw_mdio_write(0x1D, phy_reg,PHY_ADDR);
+        cpsw_mdio_read(0x1E,PHY_ADDR);
+    }
+    else
+    {
+        cpsw_mdio_write(0x1D, phy_reg,PHY_ADDR);
+        cpsw_mdio_write(0x1E, val,PHY_ADDR);
+        cpsw_mdio_read(0x1E,PHY_ADDR);
+    }
+}
+
+dialog menu_mdio_rdwr(PHY_ADDR "phy number",phy_reg "Phy Reg Address",
+                                rdwr "Read (0) Write (1)", val "write_value")
+{
+    if (rdwr == 0)
+    {
+        cpsw_mdio_read(phy_reg,PHY_ADDR);
+    }
+    else
+    {
+        cpsw_mdio_write(phy_reg, val, PHY_ADDR);
+        cpsw_mdio_read(phy_reg,PHY_ADDR);
+    }
+}
+
+dialog menu_phy_mmd_rdwr(PHY_ADDR "phy number",mmd_number "mmd_number",
+                                rdwr "Read (0) Write (1)", val "write_value")
+{
+   /*Writing 0x8000 to register 0 of
+     MMD3
+     1.Write 0x3 to register 0xD: 0xD = 0x0003;
+     (function = address; set the device address)
+     2. Write 0x0 to register 0xE: 0xE = 0x0; (set the
+     register offset address)
+     3. Write 0x4003 to register 0xD:0xD=0x4003;
+     (function = data; keep the device address)
+     4. Read register 0xE:0xE == (data from register
+     0x0 of MMD3)
+     5. Write 0x8000 to register 0xE: 0xE = 0x8000
+     (write 0x8000 to register 0x0 of MMD3 */
+
+   /*0xd is MMD Access Control Register having field device address and function (data or address)
+    * 0xE is MMD Access Address Data Register*/
+
+    if (rdwr == 0)
+    {
+        cpsw_mdio_write(0x0D, 0x001F,PHY_ADDR);
+        cpsw_mdio_write(0x0E, mmd_number,PHY_ADDR);
+        cpsw_mdio_write(0x0D, 0x401F,PHY_ADDR);
+        cpsw_mdio_read(0x0E,PHY_ADDR);
+    }
+    else
+    {
+        cpsw_mdio_write(0x0D, 0x001F,PHY_ADDR);
+        cpsw_mdio_write(0x0E, mmd_number,PHY_ADDR);
+        cpsw_mdio_write(0x0D, 0x401F,PHY_ADDR);
+        cpsw_mdio_write(0x0E, val,PHY_ADDR);
+    }
+}
+
+menu_phy_write_mmd_indirect(int PHY_ADDR ,int mmd_number , int data )
+{
+   /*Writing 0x8000 to register 0 of
+     MMD3
+     1.Write 0x3 to register 0xD: 0xD = 0x0003;
+     (function = address; set the device address)
+     2. Write 0x0 to register 0xE: 0xE = 0x0; (set the
+     register offset address)
+     3. Write 0x4003 to register 0xD:0xD=0x4003;
+     (function = data; keep the device address)
+     4. Read register 0xE:0xE == (data from register
+     0x0 of MMD3)
+     5. Write 0x8000 to register 0xE: 0xE = 0x8000
+     (write 0x8000 to register 0x0 of MMD3 */
+
+   /*0xd is MMD Access Control Register having field device address and function (data or address)
+    * 0xE is MMD Access Address Data Register*/
+
+   cpsw_mdio_write(0x0D, 0x001F,PHY_ADDR);
+   cpsw_mdio_write(0x0E, mmd_number,PHY_ADDR);
+   cpsw_mdio_write(0x0D, 0x401F,PHY_ADDR);
+   cpsw_mdio_write(0x0E, data,PHY_ADDR);
+}
+
+menu_phy_read_mmd_indirect(int PHY_ADDR ,int mmd_number )
+{
+   cpsw_mdio_write(0x0D, 0x001F,PHY_ADDR);
+   cpsw_mdio_write(0x0E, mmd_number,PHY_ADDR);
+   cpsw_mdio_write(0x0D, 0x401F,PHY_ADDR);
+   cpsw_mdio_read(0x0E,PHY_ADDR);
+}
+
+
+dialog  menu_config_delay_dp83867(PHY_ADDR "phy number")
+{
+   menu_phy_write_mmd_indirect(PHY_ADDR, 0x1F, 0x8000);
+   delay_mdio(1000);
+   menu_phy_write_mmd_indirect(PHY_ADDR, 0x86, 0x8);
+   delay_mdio(1000);
+   menu_phy_write_mmd_indirect(PHY_ADDR, 0x32, 0x0D1);
+   delay_mdio(1000);
+   menu_phy_write_mmd_indirect(PHY_ADDR, 0x170, 0x61F);
+   delay_mdio(1000);
+   menu_phy_write_mmd_indirect(PHY_ADDR, 0x1F, 0x4000);
+}
+//wait for go bit to 0 and ack bit to become 1
+wait_for_user_access()
+{
+   int reg;
+   reg = RD_MEM_32(MDIO_USERACCESS0) & 0x80000000;
+   while (reg != 0x0)
+   {
+      delay_mdio (10000);
+      delay_mdio (10000);
+      reg = RD_MEM_32 (MDIO_USERACCESS0) & 0x80000000;
+   }
+   reg = RD_MEM_32(MDIO_USERACCESS0) & 0x20000000;
+   while (reg != 0x20000000)
+   {
+      delay_mdio (10000);
+      delay_mdio (10000);
+      reg = RD_MEM_32 (MDIO_USERACCESS0) & 0x20000000;
+   }
+
+}
+
+cpsw_mdio_read(unsigned char phy_reg, int PHY_ADDR)
+{
+   int reg = 0;
+   reg = (USERACCESS_GO | USERACCESS_READ | (phy_reg << 21) | (PHY_ADDR << 16));
+   WR_MEM_32(MDIO_USERACCESS0,reg);
+   wait_for_user_access();
+   reg = RD_MEM_32(MDIO_USERACCESS0);
+   reg = reg & 0x0000ffff;
+   GEL_TextOut("PHYREG READ VALUE =  %x \n",,,,,reg);
+}
+
+cpsw_mdio_write(unsigned char phy_reg, unsigned short data, int PHY_ADDR)
+{
+   int reg = 0;
+   reg = (USERACCESS_GO | USERACCESS_WRITE | (phy_reg << 21) | (PHY_ADDR << 16) | (data &
+            USERACCESS_DATA));
+   WR_MEM_32(MDIO_USERACCESS0,reg);
+   wait_for_user_access();
+   reg = RD_MEM_32(MDIO_USERACCESS0);
+   reg = reg & 0x0000ffff;
+   GEL_TextOut("PHYREG WRITE VALUE  is  = %x \n",,,,,reg);
+}
+
+hotmenu cpsw_enable_mdio()
+{
+   int writeValue;
+   RD_MEM_32(0x48485004);
+   writeValue=0x40000059;
+   WR_MEM_32(0x48485004,writeValue);
+   GEL_TextOut("**** MDIO ENABLED ****** \n");
+}
+
+dialog  phy_alive_check(PHY_ADDR "Phy number")
+{
+   int i,phy_read,mdio_read,val,data,cnt = 0;
+   int reset  = RESET_PHY;
+   //unlock_mmr();
+   delay_mdio(1000);
+   GEL_TextOut("CONFIGURE THE MDIO CLOCK\n\r");
+   //increase the divider value if it is not working with this
+   WR_MEM_32(MDIO_CONTROL,0x41000089);
+   delay_mdio(1000);
+   mdio_read = RD_MEM_32(MDIO_ALIVE);
+   GEL_TextOut(" MDIO_ALIVE=%x\n",,,,,mdio_read);
+   if(!(mdio_read & 1<<PHY_ADDR))
+   {
+      GEL_TextOut("**********ERROR IN PHY ADDRESS ************* \n");
+      GEL_TextOut("*** CHECK THE PHY ADDRESS FROM MDIO AND RECONFIGURE*** \n\r");
+   }
+
+   if(reset == 1)
+   {
+      GEL_TextOut("**********APPLY RESET TO THE PHY ************* \n");
+      cpsw_mdio_read(Control_0,PHY_ADDR);
+      data = RD_MEM_32(MDIO_USERACCESS0) & USERACCESS_DATA;
+      data |= 0x8000;
+      cpsw_mdio_write(Control_0, data,PHY_ADDR);
+      cpsw_mdio_read(Control_0,PHY_ADDR);
+      data = RD_MEM_32(MDIO_USERACCESS0) & USERACCESS_DATA;
+      while((data & 0x8000) != 0x0){}
+      GEL_TextOut("**********PHY IS OUT OF RESET ************* \n");
+   }
+   GEL_TextOut("************ PHY IS ALIVE ***********\n");
+}
+
+dialog  mdio_phy_access(PHY_ADDR "Phy number")
+{
+   int i,phy_read,mdio_read,val,data,cnt = 0;
+   int mode = CPSW_MODE;
+   //unlock_mmr();
+   PHY_ALIVE_CHECK(PHY_ADDR);
+   GEL_TextOut("PHY ALIVE CHECK DONE\n");
+   /********** FOR GMII PHY ET1011c****************/
+
+   // PHY configuration reg w.r.t clocks address22
+   //===>GEL_TextOut("PHY CONF22 RGISTER is in progress  ....");
+   //===>cpsw_mdio_read(PHY_Config_22);
+   //===>data = RD_MEM_32(MDIO_USERACCESS0) & USERACCESS_DATA;
+   //===>data |= PHY_CONF_TXCLKEN |0x0010;
+   //===>data |= PHY_CONF_TXCLKEN;
+   //===>cpsw_mdio_write(PHY_Config_22, 0x1c20,PHY_ADDR);
+   //===>cpsw_mdio_read (PHY_Config_22);
+   //===>GEL_TextOut("PHY CONF22 RGISTER is DONE check the value");
+
+   //==>AR8035 cpsw_mdio_read(AUX_Control_18,PHY_ADDR);
+   //==>AR8035 data = RD_MEM_32(MDIO_USERACCESS0) & USERACCESS_DATA;
+   //==>AR8035 data |= (1<<7);
+   //==>AR8035 cpsw_mdio_write(AUX_Control_18, data,PHY_ADDR);
+
+
+   /* Enable Autonegotiation,full duplex,100mbps mode,loopback */
+   /* READ/WRITE CONTROL REGISTER0 of PHY */
+
+   cpsw_mdio_read(Control_0,PHY_ADDR);
+   data = RD_MEM_32(MDIO_USERACCESS0) & USERACCESS_DATA;
+   data |= PHY_DPLX | PHY_AUTON|(1<<14);
+
+   GEL_TextOut("THE MODE VALUE IS =%x\n\r",mode);
+   //GIG MODE
+   if(mode ==0){
+      data =  (data & 0xdfbf ) | PHY_1000_MBPS;
+   }
+   //MII_100
+   if(mode ==1){
+      data =  (data & 0xdfbf ) | PHY_100_MBPS;
+   }
+   //MII_10
+   if(mode ==2){
+      data =  (data & 0xdfbf ) | PHY_10_MBPS;
+   }
+   //Enabling EEE
+   /*
+   GEL_TextOut("**Enabling EEE**\n\r");
+    cpsw_mdio_read(0x14,PHY_ADDR);
+   data = RD_MEM_32(MDIO_USERACCESS0) & USERACCESS_DATA;
+   cpsw_mdio_write(0x14, 0x6,PHY_ADDR);
+   cpsw_mdio_read(0x14,PHY_ADDR);
+   data = RD_MEM_32(MDIO_USERACCESS0) & USERACCESS_DATA;
+   GEL_TextOut("**THE smart speed register value =%x**\n\r",,,,,data);
+
+   */
+
+   cpsw_mdio_write(Control_0, data,PHY_ADDR);
+   cpsw_mdio_read(Control_0,PHY_ADDR);
+   data = RD_MEM_32(MDIO_USERACCESS0) & USERACCESS_DATA;
+   GEL_TextOut("THE CONTROL VALUE CONFIGURED is  **********\n\r");
+   if(data == 0x3100) {
+      GEL_TextOut("********** PHY is in MII_100,FULLDUPLEX,EXT LOOPBACK MODE **********\n\r");
+   }
+   if(data == 0x1140) {
+      GEL_TextOut("********** PHY is in GMII,FULLDUPLEX,EXT LOOPBACK MODE **********\n\r");
+   }
+   if(data == 0x1100) {
+      GEL_TextOut("********** PHY is in MII_10,FULLDUPLEX,EXT LOOPBACK MODE **********\n\r");
+   }
+
+
+
+   /********* added for debug ******************/
+
+   //cpsw_mdio_write(LED_control_24,0x00,PHY_ADDR);
+   //cpsw_mdio_write(30,0x82EE,PHY_ADDR);
+   //cpsw_mdio_read(cnt,PHY_ADDR);
+
+   //cpsw_mdio_read(30,PHY_ADDR);
+   //data = RD_MEM_32(MDIO_USERACCESS0) & USERACCESS_DATA;
+   //data = data | 0x100;
+   //cpsw_mdio_write(30,data,PHY_ADDR);
+   //cpsw_mdio_read(cnt,PHY_ADDR);
+   //GEL_TextOut(" 8 *******************************\n",,,,,cnt);
+
+   /********************************/
+
+
+   /* Setup GIG advertisement for full duplex mode of opeartion only*/
+   if(mode == 0){
+      cpsw_mdio_read(BT_Control_9,PHY_ADDR);
+      data = RD_MEM_32(MDIO_USERACCESS0) & USERACCESS_DATA;
+      data |= PHY_1000BTCR_1000FD;
+      //data &= ~PHY_1000BTCR_1000HD;
+      cpsw_mdio_write(BT_Control_9,data,PHY_ADDR);
+      cpsw_mdio_read(BT_Control_9,PHY_ADDR);
+      data = RD_MEM_32(MDIO_USERACCESS0) & USERACCESS_DATA;
+      GEL_TextOut("PHY GiG Advertisement value is   ......\n");
+   }
+
+   //GMII 100
+
+   if(mode == 1){
+      cpsw_mdio_read(BT_Control_9,PHY_ADDR);
+      data = RD_MEM_32(MDIO_USERACCESS0) & USERACCESS_DATA;
+      data |= PHY_1000BTCR_1000FD;
+      //data &= ~PHY_1000BTCR_1000HD;
+      cpsw_mdio_write(BT_Control_9,data,PHY_ADDR);
+      cpsw_mdio_read(BT_Control_9,PHY_ADDR);
+      data = RD_MEM_32(MDIO_USERACCESS0) & USERACCESS_DATA;
+      GEL_TextOut("PHY GiG Advertisement value is   ......\n");
+   }
+   //End GMII 100
+
+
+   /// Setup general advertisement PHY ADRESS 4
+   cpsw_mdio_read(ANAR_4,PHY_ADDR);
+   data = RD_MEM_32(MDIO_USERACCESS0) & USERACCESS_DATA;
+   data |= 0x01e0;
+   cpsw_mdio_write(ANAR_4,data,PHY_ADDR);
+
+   // cpsw_mdio_write(Diag_control_30,0x0040,PHY_ADDR);
+
+   /* Restart auto negotiation*/
+   GEL_TextOut("Restart auto negotiation  is in progres ......\n");
+   cpsw_mdio_read(Control_0,PHY_ADDR);
+   val = RD_MEM_32(MDIO_USERACCESS0) & USERACCESS_DATA;
+   val |= PHY_BMCR_RST_NEG;
+   cpsw_mdio_write(Control_0, val,PHY_ADDR);
+   cpsw_mdio_read(Control_0,PHY_ADDR);
+
+   GEL_TextOut("Polling for auto negotiation complete  is in progres ......\n");
+   cpsw_mdio_read(Status_1,PHY_ADDR);
+   val = RD_MEM_32(MDIO_USERACCESS0) & USERACCESS_DATA;
+   val = val & 0x0020;
+   while(val != 0x0){}
+   GEL_TextOut("Auto negotiation  is DONE ......\n");
+
+
+   delay_mdio(100);
+   cpsw_mdio_read(LED_control_24,PHY_ADDR);
+   val = RD_MEM_32(MDIO_USERACCESS0) & USERACCESS_DATA;
+   val |= 0xFFFF;
+   cpsw_mdio_write(LED_control_24, val,PHY_ADDR);
+   GEL_TextOut("**** PHY CONFIGURATION IS COMPLETED ****** \n");
+
+}
+
+//hotmenu PRINT_REG()
+dialog  print_phy_reg(PHY_ADDR "Phy number")
+{
+   int cnt;
+   //unlock_mmr();
+   for(cnt =0;cnt <31;cnt++){
+      GEL_TextOut("PHY_REG ADDRESS   = %d  \n",,,,,cnt);
+      delay_mdio(0x1000);
+      delay_mdio(0x1000);
+      delay_mdio(0x1000);
+      delay_mdio(0x1000);
+      cpsw_mdio_read(cnt,PHY_ADDR);
+      GEL_TextOut("*******************************\n",,,,,cnt);
+   }
+}

@@ -1,0 +1,77 @@
+%%{
+/*
+ * Copyright (c) 2012, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * */
+/*
+ *  ======== Http.xdt ========
+ *  Template to generate C code for the Http module
+ */
+
+// get handles to needed modules
+var Global = xdc.module('ti.ndk.config.Global');
+var Http = xdc.module('ti.ndk.config.Http');
+%%}
+
+% if (Http.$used > 0 && Http.$instances.length > 0 &&
+%         Global.enableCodeGeneration) {
+
+#include <ti/ndk/inc/netmain.h>
+#include <ti/ndk/config/prototypes.h>
+
+%     for (var i = 0; i < Http.$instances.length; i++) {
+%        for (var cgi in Http.$instances[i].cgiFunctions) {
+extern int `Http.$instances[i].cgiFunctions[cgi]`(SOCKET s, int len);
+%        }    
+%     }
+
+Void ti_ndk_config_http_init(HANDLE hCfg)
+{
+% // declare a http struct for configuring Http module instances
+    CI_SERVICE_HTTP http;
+
+%     for (var i = 0; i < Http.$instances.length; i++) {
+    /* Specify HTTP service for Http instance http`i` */
+    bzero( &http, sizeof(http) );
+    http.cisargs.IPAddr = inet_addr("`Http.$instances[i].ipAddr`");
+    http.cisargs.pCbSrv = `Http.$instances[i].pCbSrv`;
+    http.cisargs.IfIdx  = `Http.$instances[i].ifIdx`;
+    http.param.MaxCon   = `Http.$instances[i].maxCon`;
+    http.param.Port     = `Http.$instances[i].port`;
+    CfgAddEntry(hCfg, CFGTAG_SERVICE, CFGITEM_SERVICE_HTTP, 0,
+                 sizeof(http), (UINT8 *)&http, 0);
+
+%        for (var cgi in Http.$instances[i].cgiFunctions) {
+    efs_createfile("`cgi`", 0, (UINT8 *)`Http.$instances[i].cgiFunctions[cgi]`);
+%        }    
+
+%     } // end "for ( ... Http.$instances ..."
+}
+% } // end "if (Http.$used ..."

@@ -1,0 +1,176 @@
+/*******************************************************************************
+**+--------------------------------------------------------------------------+**
+**|                            ****                                          |**
+**|                            ****                                          |**
+**|                            ******o***                                    |**
+**|                      ********_///_****                                   |**
+**|                      ***** /_//_/ ****                                   |**
+**|                       ** ** (__/ ****                                    |**
+**|                           *********                                      |**
+**|                            ****                                          |**
+**|                            ***                                           |**
+**|                                                                          |**
+**|         Copyright (c) 2007-2014 Texas Instruments Incorporated           |**
+**|                        ALL RIGHTS RESERVED                               |**
+**|                                                                          |**
+**| Permission to use, copy, modify, or distribute this software,            |**
+**| whether in part or in whole, for any purpose is forbidden without        |**
+**| a signed licensing agreement and NDA from Texas Instruments              |**
+**| Incorporated (TI).                                                       |**
+**|                                                                          |**
+**| TI makes no representation or warranties with respect to the             |**
+**| performance of this computer program, and specifically disclaims         |**
+**| any responsibility for any damages, special or consequential,            |**
+**| connected with the use of this program.                                  |**
+**|                                                                          |**
+**+--------------------------------------------------------------------------+**
+*******************************************************************************/
+
+#include "../common/VLIB_test.h"
+#include "../common/VLIB_memory.h"
+#include "../common/VLIB_profile.h"
+
+#include "VLIB_recursiveFilterVert1stOrderS16.h"
+#include "VLIB_recursiveFilterVert1stOrderS16_cn.h"
+#include "VLIB_recursiveFilterVert1stOrderS16_idat.h"
+
+/* ///////////////////////////////////// */
+/* Makes a w * h custom pattern          */
+/* ///////////////////////////////////// */
+static void CreatePattern2(int16_t *p, int16_t w, int16_t h)
+{
+    int32_t    i;
+
+    for( i = 0; i < w * h; i++ ) {
+        int32_t    x = i % w;
+        int32_t    y = i / w;
+
+        p[i] = 12 * (x | y) + 127 + 5000;
+    }
+}
+
+/* VLIB_recursiveFilterVert1stOrderS16_d:  Test Driver Routine */
+void VLIB_recursiveFilterVert1stOrderS16_d (uint8_t LevelOfFeedback)
+{
+    int32_t    tpi;  /* test parameter index */
+
+    /* Test Parameters */
+    recursiveFilterVert1stOrderS16_testParams_t   *prm;
+
+    recursiveFilterVert1stOrderS16_getTestParams(&prm, &test_cases);
+
+    /* Initialize profiling */
+    VLIB_profile_init(3, "VLIB_recursiveFilterVert1stOrderS16");
+
+    /* Run each test case */
+    for( tpi=0; tpi < test_cases; tpi++ ) {
+
+        /* Initialize status flags */
+        int32_t    status_nat_vs_int = vlib_KERNEL_PASS; /* Test status : Natural c vs. Optimized */
+        int32_t    status_nat_vs_ref = vlib_KERNEL_PASS; /* Test status : Natural c vs. Static Reference */
+
+        /* Allocate buffers for each test vector */
+        int16_t   *in      = (int16_t *) VLIB_malloc(prm[tpi].width * prm[tpi].height * sizeof(int16_t));
+        int16_t   *out     = (int16_t *) VLIB_malloc(prm[tpi].width * prm[tpi].height * sizeof(int16_t));
+        int16_t   *out_cn  = (int16_t *) malloc(prm[tpi].width * prm[tpi].height * sizeof(int16_t));
+        int16_t   *scratch = (int16_t *) VLIB_malloc(8 * prm[tpi].height * sizeof(int16_t));
+        int16_t   *boundaryTop    = (int16_t *) VLIB_malloc(prm[tpi].width * sizeof(int16_t));
+        int16_t   *boundaryBottom = (int16_t *) VLIB_malloc(prm[tpi].width * sizeof(int16_t));
+
+        /* Only run the test if the buffer allocations fit in the heap */
+        if( in && out && out_cn && scratch && boundaryTop && boundaryBottom ) {
+
+            int32_t    fail;
+            int16_t   *pBoundaryTop = NULL, *pBoundaryBottom = NULL;
+
+            /* Fill input arrays according to desired test pattern */
+            VLIB_fillBuffer(prm[tpi].testPattern, (uint16_t)255,
+                            in, prm[tpi].staticIn,
+                            prm[tpi].width, prm[tpi].height, prm[tpi].width * sizeof(in[0]),
+                            sizeof(in[0]), testPatternString);
+
+            if( prm[tpi].testPattern == CUSTOM ) {
+                /* Synthetic motion sequence */
+                CreatePattern2(in, prm[tpi].width, prm[tpi].height);
+            }
+
+            if( prm[tpi].boundaryTop ) {
+                memcpy(boundaryTop, prm[tpi].boundaryTop, prm[tpi].width * sizeof(boundaryTop[0]));
+                pBoundaryTop = boundaryTop;
+            }
+            if( prm[tpi].boundaryBottom ) {
+                memcpy(boundaryBottom, prm[tpi].boundaryBottom, prm[tpi].width * sizeof(boundaryBottom[0]));
+                pBoundaryBottom = boundaryBottom;
+            }
+
+            /* Test optimized kernel */
+            VLIB_profile_start(vlib_KERNEL_OPT);
+            VLIB_recursiveFilterVert1stOrderS16(out, in, prm[tpi].width, prm[tpi].height, prm[tpi].weight,
+                                                pBoundaryTop, pBoundaryBottom, scratch);
+            VLIB_profile_stop();
+
+            /* Test _cn kernel */
+            VLIB_profile_start(vlib_KERNEL_CN);
+            VLIB_recursiveFilterVert1stOrderS16_cn(out_cn, in, prm[tpi].width, prm[tpi].height, prm[tpi].weight,
+                                                   pBoundaryTop, pBoundaryBottom, scratch);
+            VLIB_profile_stop();
+
+            /* Compare natural C Output and Optimized Output */
+            status_nat_vs_int = VLIB_compare_mem((void *) out, (void *)out_cn, prm[tpi].width * prm[tpi].height * sizeof(out_cn[0]));
+
+            /* If static output is available, then additionally compares natural C output with static reference output data */
+            if( prm[tpi].staticOut != NULL ) {
+                status_nat_vs_ref = VLIB_compare_mem((void *) prm[tpi].staticOut, (void *)out_cn, prm[tpi].width * prm[tpi].height * sizeof(out_cn[0]));
+            }
+
+            /* Set the 'fail' flag based on test vector comparison results */
+            fail = ((status_nat_vs_int == vlib_KERNEL_FAIL) || (status_nat_vs_ref == vlib_KERNEL_FAIL)) ? 1 : 0;
+
+            est_test=1;
+
+            /* Profile display and preparation for cycle estimation */
+            sprintf(desc, "%s generated input | Opt results compared to NatC results | width=%d, height=%d",
+                    testPatternString, prm[tpi].width, prm[tpi].height);
+            VLIB_formula_add_test(prm[tpi].width * prm[tpi].height, prm[tpi].height, NULL, fail, desc, NULL);
+
+        } else {
+            /* Display the error printout for this test vector before moving on to the next test vector */
+            sprintf(desc, "width=%d, height=%d",
+                    prm[tpi].width, prm[tpi].height);
+            VLIB_skip_test(desc);
+        }
+
+        /* Free buffers for each test vector */
+        VLIB_free(boundaryBottom);
+        VLIB_free(boundaryTop);
+        VLIB_free(scratch);
+        free(out_cn);
+        VLIB_free(out);
+        VLIB_free(in);
+    }
+
+    /* Calculate and display cycle formula and/or cycle range (and testing success) */
+    VLIB_profile_cycle_report(vlib_PROFILE_FORMULA_RANGE,
+                              "N = width * height; M = height",
+                              "width * height");
+
+    /* Provide memory requirements */
+    VLIB_kernel_memory();
+}
+
+/* Main call for individual test projects */
+#ifndef __ONESHOTTEST
+
+main() {
+    if( VLIB_cache_init()) {
+        VLIB_memError("VLIB_recursiveFilterVert1stOrderS16");
+    } else {
+        VLIB_recursiveFilterVert1stOrderS16_d(0);
+    }
+}
+#endif /* __ONESHOTTEST */
+
+/* ======================================================================== */
+/*  End of file:  VLIB_recursiveFilterVert1stOrderS16_d.c                   */
+/* ======================================================================== */
+

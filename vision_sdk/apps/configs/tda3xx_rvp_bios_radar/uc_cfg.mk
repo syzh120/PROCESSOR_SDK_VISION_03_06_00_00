@@ -1,0 +1,7 @@
+
+UC_radar_capture_only=no
+UC_radar_objectdetect_display=yes
+UC_radar_objectdetect_null=no
+UC_radar_capture_process=no
+UC_multi_radar_capture_fft_display=yes
+

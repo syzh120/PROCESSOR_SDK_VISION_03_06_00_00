@@ -1,0 +1,103 @@
+/*
+ * Copyright (c) 2012, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * */
+/*
+ * ======== package.bld ========
+ */
+
+Pkg.otherFiles = ["package.bld"];
+
+var consoleLibFiles = [
+    "conacct.c", 
+    "conecho.c", 
+    "conipv6.c", 
+    "conping.c", 
+    "conroute.c", 
+    "console.c", 
+    "constat.c", 
+    "contftp.c", 
+    "condns.c", 
+    "conipaddr.c", 
+    "conlli.c", 
+    "consock.c", 
+    "contest.c", 
+    "convlan.c", 
+];
+
+var commonCopts = " -D_NDK_EXTERN_CONFIG -DNETSRV_ENABLE_NAT=0 -D_INCLUDE_NIMU_CODE";
+
+/* Build the libraries for all the targets specified. */
+for (var i = 0; i < Build.targets.length; i++) {
+    var target = Build.targets[i];
+
+    // build console for IPv6, PPPoE
+    var libName = "console";
+    var libOptions = {
+            copts: commonCopts + " -D_INCLUDE_IPv6_CODE -D_INCLUDE_PPPOE_CODE ",
+            incs: ndkPathInclude,
+    };
+
+    var lib = Pkg.addLibrary("lib/" + libName, target, libOptions);
+    lib.addObjects(consoleLibFiles);
+
+    // build console for IPv6 but exclude PPPoE
+    var libName = "console_min";
+    var libOptions = {
+            copts: commonCopts + " -D_INCLUDE_IPv6_CODE ",
+            incs: ndkPathInclude,
+    };
+
+    var lib = Pkg.addLibrary("lib/" + libName, target, libOptions);
+    lib.addObjects(consoleLibFiles);
+
+    // build console for IPv4 and PPPoE
+    libName = "console_ipv4"
+    var libOptions = {
+            copts: commonCopts + " -D_INCLUDE_PPPOE_CODE ",
+            incs: ndkPathInclude,
+    };
+    var lib = Pkg.addLibrary("lib/" + libName, target, libOptions);
+    lib.addObjects(consoleLibFiles);
+
+    // build console for IPv4 but exclude PPPoE
+    libName = "console_min_ipv4"
+    var libOptions = {
+            copts: commonCopts,
+            incs: ndkPathInclude,
+    };
+    var lib = Pkg.addLibrary("lib/" + libName, target, libOptions);
+    lib.addObjects(consoleLibFiles);
+
+}
+
+/* include source files in the release package */
+Pkg.attrs.exportSrc = true;
+Pkg.attrs.exportCfg = true;

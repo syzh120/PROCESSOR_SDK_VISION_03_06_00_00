@@ -1,0 +1,27 @@
+var searchData=
+[
+  ['iresman_5fedma3chan_5fexit',['IRESMAN_EDMA3CHAN_exit',['../group__ti__sdo__fc__ires__edma3chan___i_r_e_s_m_a_n___e_d_m_a3_c_h_a_n.html#gac67268cf9b8f5bf523caffebfe8dc148',1,'iresman_edma3Chan.h']]],
+  ['iresman_5fedma3chan_5ffreehandle',['IRESMAN_EDMA3CHAN_freeHandle',['../group__ti__sdo__fc__ires__edma3chan___i_r_e_s_m_a_n___e_d_m_a3_c_h_a_n.html#gabd5e4de994bdaf06fe5a45f5c41fe265',1,'iresman_edma3Chan.h']]],
+  ['iresman_5fedma3chan_5fgethandles',['IRESMAN_EDMA3CHAN_getHandles',['../group__ti__sdo__fc__ires__edma3chan___i_r_e_s_m_a_n___e_d_m_a3_c_h_a_n.html#gad30ebcbc0fed976c39cdf716677b2080',1,'iresman_edma3Chan.h']]],
+  ['iresman_5fedma3chan_5fgetprotocolname',['IRESMAN_EDMA3CHAN_getProtocolName',['../group__ti__sdo__fc__ires__edma3chan___i_r_e_s_m_a_n___e_d_m_a3_c_h_a_n.html#gaeb774220d0deb5da8bbfe8aa25c15094',1,'iresman_edma3Chan.h']]],
+  ['iresman_5fedma3chan_5fgetprotocolrevision',['IRESMAN_EDMA3CHAN_getProtocolRevision',['../group__ti__sdo__fc__ires__edma3chan___i_r_e_s_m_a_n___e_d_m_a3_c_h_a_n.html#ga695084a1271cf138b383a2a7c42e1e20',1,'iresman_edma3Chan.h']]],
+  ['iresman_5fedma3chan_5finit',['IRESMAN_EDMA3CHAN_init',['../group__ti__sdo__fc__ires__edma3chan___i_r_e_s_m_a_n___e_d_m_a3_c_h_a_n.html#ga941b3ff64286bcfaa3bb5205bb669d55',1,'iresman_edma3Chan.h']]],
+  ['iresman_5fhdvicp_5fexit',['IRESMAN_HDVICP_exit',['../group__ti__sdo__fc__ires__hdvicp___i_r_e_s_m_a_n___h_d_v_i_c_p.html#ga66e789620a153083717fe8b73f576ad8',1,'iresman_hdvicp.h']]],
+  ['iresman_5fhdvicp_5ffreehandles',['IRESMAN_HDVICP_freeHandles',['../group__ti__sdo__fc__ires__hdvicp___i_r_e_s_m_a_n___h_d_v_i_c_p.html#ga8082e13e6d0f726991c2e78659f7d82c',1,'iresman_hdvicp.h']]],
+  ['iresman_5fhdvicp_5fgethandles',['IRESMAN_HDVICP_getHandles',['../group__ti__sdo__fc__ires__hdvicp___i_r_e_s_m_a_n___h_d_v_i_c_p.html#ga91dcd1ec36206aeb58649b7361d7904b',1,'iresman_hdvicp.h']]],
+  ['iresman_5fhdvicp_5fgetprotocolname',['IRESMAN_HDVICP_getProtocolName',['../group__ti__sdo__fc__ires__hdvicp___i_r_e_s_m_a_n___h_d_v_i_c_p.html#ga263a6e5378a5a80ec72cbe1e1996d4e1',1,'iresman_hdvicp.h']]],
+  ['iresman_5fhdvicp_5fgetprotocolrevision',['IRESMAN_HDVICP_getProtocolRevision',['../group__ti__sdo__fc__ires__hdvicp___i_r_e_s_m_a_n___h_d_v_i_c_p.html#ga1e6757007676bb59bc49b976c7082d68',1,'iresman_hdvicp.h']]],
+  ['iresman_5fhdvicp_5finit',['IRESMAN_HDVICP_init',['../group__ti__sdo__fc__ires__hdvicp___i_r_e_s_m_a_n___h_d_v_i_c_p.html#ga9b2d49524494e6c589a17b8d3f6e2b83',1,'iresman_hdvicp.h']]],
+  ['iresman_5ftiledmemory_5fexit',['IRESMAN_TILEDMEMORY_exit',['../group__ti__sdo__fc__ires__tiledmemory___i_r_e_s_m_a_n___t_i_l_e_d_m_e_m_o_r_y.html#ga9415a0ced325b5467295b8771e52d304',1,'iresman_tiledmemory.h']]],
+  ['iresman_5ftiledmemory_5ffreehandles',['IRESMAN_TILEDMEMORY_freeHandles',['../group__ti__sdo__fc__ires__tiledmemory___i_r_e_s_m_a_n___t_i_l_e_d_m_e_m_o_r_y.html#gac62245768c47931560eeed6d7d73e02b',1,'iresman_tiledmemory.h']]],
+  ['iresman_5ftiledmemory_5fgethandles',['IRESMAN_TILEDMEMORY_getHandles',['../group__ti__sdo__fc__ires__tiledmemory___i_r_e_s_m_a_n___t_i_l_e_d_m_e_m_o_r_y.html#gadfa289400bc20009f0a0758bc7087aea',1,'iresman_tiledmemory.h']]],
+  ['iresman_5ftiledmemory_5fgetprotocolname',['IRESMAN_TILEDMEMORY_getProtocolName',['../group__ti__sdo__fc__ires__tiledmemory___i_r_e_s_m_a_n___t_i_l_e_d_m_e_m_o_r_y.html#gabea58ade569b614d4b8c55f455ea2833',1,'iresman_tiledmemory.h']]],
+  ['iresman_5ftiledmemory_5fgetprotocolrevision',['IRESMAN_TILEDMEMORY_getProtocolRevision',['../group__ti__sdo__fc__ires__tiledmemory___i_r_e_s_m_a_n___t_i_l_e_d_m_e_m_o_r_y.html#ga4832f10ae177316cf1e73a29c6713531',1,'iresman_tiledmemory.h']]],
+  ['iresman_5ftiledmemory_5finit',['IRESMAN_TILEDMEMORY_init',['../group__ti__sdo__fc__ires__tiledmemory___i_r_e_s_m_a_n___t_i_l_e_d_m_e_m_o_r_y.html#gaf0587262c783dfdf65faaaf6eea0807a',1,'iresman_tiledmemory.h']]],
+  ['iresman_5fvicp_5fexit',['IRESMAN_VICP_exit',['../group__ti__sdo__fc__ires__vicp___i_r_e_s_m_a_n___v_i_c_p.html#ga5d1eb79a6ad9c7a9e75fe48d70a2da58',1,'iresman_vicp.h']]],
+  ['iresman_5fvicp_5ffreehandles',['IRESMAN_VICP_freeHandles',['../group__ti__sdo__fc__ires__vicp___i_r_e_s_m_a_n___v_i_c_p.html#gaa7bb21ce4147fab50131169877ab7f37',1,'iresman_vicp.h']]],
+  ['iresman_5fvicp_5fgethandles',['IRESMAN_VICP_getHandles',['../group__ti__sdo__fc__ires__vicp___i_r_e_s_m_a_n___v_i_c_p.html#ga64636048ebc7e7a1a41e96552297f022',1,'iresman_vicp.h']]],
+  ['iresman_5fvicp_5fgetprotocolname',['IRESMAN_VICP_getProtocolName',['../group__ti__sdo__fc__ires__vicp___i_r_e_s_m_a_n___v_i_c_p.html#ga4bf0fa4a35386dcd6f04c16a468984dd',1,'iresman_vicp.h']]],
+  ['iresman_5fvicp_5fgetprotocolrevision',['IRESMAN_VICP_getProtocolRevision',['../group__ti__sdo__fc__ires__vicp___i_r_e_s_m_a_n___v_i_c_p.html#ga01841f095420ce69ce02aaf644d7250d',1,'iresman_vicp.h']]],
+  ['iresman_5fvicp_5finit',['IRESMAN_VICP_init',['../group__ti__sdo__fc__ires__vicp___i_r_e_s_m_a_n___v_i_c_p.html#ga613cdf62d35efa5fb1a02f9e07c73dd9',1,'iresman_vicp.h']]]
+];

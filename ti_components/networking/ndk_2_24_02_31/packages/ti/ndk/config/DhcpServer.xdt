@@ -1,0 +1,72 @@
+%%{
+/*
+ * Copyright (c) 2012, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * */
+/*
+ *  ======== DhcpServer.xdt ========
+ *  Template to generate C code for the DhcpServer module
+ */
+
+// get handles to needed modules
+var Global = xdc.module('ti.ndk.config.Global');
+var DhcpServer = xdc.module('ti.ndk.config.DhcpServer');
+%%}
+
+% if (DhcpServer.$used > 0 && DhcpServer.$instances.length > 0 &&
+%         Global.enableCodeGeneration) {
+%
+#include <ti/ndk/inc/netmain.h>
+#include <ti/ndk/config/prototypes.h>
+
+Void ti_ndk_config_dhcpserver_init(HANDLE hCfg)
+{
+% // declare a DHCP server struct for configuring DhcpServer module instances
+    CI_SERVICE_DHCPS dhcps;
+
+%     for (var i = 0; i < DhcpServer.$instances.length; i++) {
+    /* Specify DhcpServer service for DhcpServer instance `i` */
+    bzero(&dhcps, sizeof(dhcps));
+    dhcps.cisargs.Mode       = CIS_FLG_IFIDXVALID;
+    dhcps.cisargs.pCbSrv     = `DhcpServer.$instances[i].pCbSrv`;
+    dhcps.cisargs.IfIdx      = `DhcpServer.$instances[i].ifIdx`;
+% if (DhcpServer.$instances[i].localDomain) {
+    dhcps.param.Flags        |= DHCPS_FLG_LOCALDOMAIN;
+%}    
+% if (DhcpServer.$instances[i].localDNS) {
+    dhcps.param.Flags        |= DHCPS_FLG_LOCALDNS;
+%}    
+    dhcps.param.PoolBase     = inet_addr("`DhcpServer.$instances[i].ipAddrPoolBase`");
+    dhcps.param.PoolCount    = `DhcpServer.$instances[i].ipAddrPoolCount`;
+    CfgAddEntry(hCfg, CFGTAG_SERVICE, CFGITEM_SERVICE_DHCPSERVER, 0,
+            sizeof(dhcps), (UINT8 *)&dhcps, 0);
+%     } // end "for (i = 0, i < DhcpServer.instances ..."
+}
+% } // end "if (DhcpServer.$used ..."

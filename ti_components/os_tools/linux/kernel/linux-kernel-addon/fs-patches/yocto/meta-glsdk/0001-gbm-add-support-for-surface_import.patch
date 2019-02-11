@@ -1,0 +1,129 @@
+From 535ebd4c51172d0a0dbb752965f24cd05b012852 Mon Sep 17 00:00:00 2001
+From: Subhajit Paul <a0132170@ti.com>
+Date: Tue, 22 May 2018 14:06:51 +0530
+Subject: [PATCH 1/5] gbm: add support for surface_import
+
+Signed-off-by: Subhajit Paul <a0132170@ti.com>
+---
+ ...-add-support-to-import-gbm_bos-to-surface.patch | 95 ++++++++++++++++++++++
+ recipes-graphics/gbm/libgbm_10.0.0.bbappend        |  6 +-
+ 2 files changed, 100 insertions(+), 1 deletion(-)
+ create mode 100644 recipes-graphics/gbm/libgbm/0001-gbm-add-support-to-import-gbm_bos-to-surface.patch
+
+diff --git a/recipes-graphics/gbm/libgbm/0001-gbm-add-support-to-import-gbm_bos-to-surface.patch b/recipes-graphics/gbm/libgbm/0001-gbm-add-support-to-import-gbm_bos-to-surface.patch
+new file mode 100644
+index 0000000..134c321
+--- /dev/null
++++ b/recipes-graphics/gbm/libgbm/0001-gbm-add-support-to-import-gbm_bos-to-surface.patch
+@@ -0,0 +1,95 @@
++From e0667d356e2ae05d32a1fd491488d325ec64acee Mon Sep 17 00:00:00 2001
++From: Subhajit Paul <subhajit_paul@ti.com>
++Date: Tue, 30 Jan 2018 14:28:53 +0530
++Subject: [PATCH] gbm: add support to import gbm_bos to surface
++
++Signed-off-by: Subhajit Paul <subhajit_paul@ti.com>
++---
++ gbm.c    |   37 +++++++++++++++++++++++++++++++++++++
++ gbm.h    |    6 ++++++
++ gbmint.h |    4 ++++
++ 3 files changed, 47 insertions(+)
++
++diff --git a/gbm.c b/gbm.c
++index c046b1a..7bc5880 100644
++--- a/gbm.c
+++++ b/gbm.c
++@@ -408,6 +408,43 @@ gbm_surface_create(struct gbm_device *gbm,
++ }
++ 
++ /**
+++ * Create a gbm_surface object from a pool of gbm_bo objects
+++ *
+++ * This function imports a pool of gbm_bo objects and creates a new gbm_surface
+++ * object for it.
+++ *
+++ * The GBM APIs support creation of gbm_bo objects by importing external
+++ * memory. This function extends this feature by allowing creation of a
+++ * gbm_surface object using previously created gbm_bo objects
+++ *
+++ * Calling gbm_surface_destroy() does not destroy the gbm_bo objects,
+++ * and the application must call gbm_bo_destroy() for each gbm_bo object
+++ *
+++ * \param gbm The gbm device returned from gbm_create_device()
+++ * \param width Width of each gbm_bo object in the array
+++ * \param height Height of each gbm_bo object in the array
+++ * \param format GBM Format of eacg gbm_bo object in the array
+++ * \param bos Array of gbm_bo objects
+++ * \param count Number of gbm_bo objects in the array
+++ *
+++ * \return A newly allocated surface object that should be freed with
+++ * gbm_surface_destroy() when no longer needed. On error, %NULL is returned
+++ * and errno is set.
+++ */
+++GBM_EXPORT struct gbm_surface *
+++gbm_surface_import(struct gbm_device *gbm,
+++		uint32_t width, uint32_t height,
+++		uint32_t format, uint32_t flags,
+++		struct gbm_bo **bos, uint32_t count)
+++{
+++   if(!gbm->surface_import) {
+++      errno = ENOTSUP;
+++      return NULL;
+++   }
+++   return gbm->surface_import(gbm, width, height, format, flags, bos, count);
+++}
+++
+++/**
++  * Destroys the given surface and frees all resources associated with
++  * it.
++  *
++diff --git a/gbm.h b/gbm.h
++index 8db2153..297711a 100644
++--- a/gbm.h
+++++ b/gbm.h
++@@ -292,6 +292,12 @@ gbm_surface_create(struct gbm_device *gbm,
++                    uint32_t width, uint32_t height,
++ 		   uint32_t format, uint32_t flags);
++ 
+++struct gbm_surface *
+++gbm_surface_import(struct gbm_device *gbm,
+++		uint32_t width, uint32_t height,
+++		uint32_t format, uint32_t flags,
+++		struct gbm_bo **bos, uint32_t count);
+++
++ int
++ gbm_surface_needs_lock_front_buffer(struct gbm_surface *surface);
++ 
++diff --git a/gbmint.h b/gbmint.h
++index 155eb12..3076a2a 100644
++--- a/gbmint.h
+++++ b/gbmint.h
++@@ -75,6 +75,10 @@ struct gbm_device {
++    struct gbm_surface *(*surface_create)(struct gbm_device *gbm,
++                                          uint32_t width, uint32_t height,
++                                          uint32_t format, uint32_t flags);
+++   struct gbm_surface *(*surface_import)(struct gbm_device *gbm,
+++					uint32_t width, uint32_t height,
+++					uint32_t format, uint32_t flags,
+++		                         struct gbm_bo **bos, uint32_t count);
++    struct gbm_bo *(*surface_lock_front_buffer)(struct gbm_surface *surface);
++    void (*surface_release_buffer)(struct gbm_surface *surface,
++                                   struct gbm_bo *bo);
++-- 
++1.7.9.5
++
+diff --git a/recipes-graphics/gbm/libgbm_10.0.0.bbappend b/recipes-graphics/gbm/libgbm_10.0.0.bbappend
+index 6079a54..6bf469d 100644
+--- a/recipes-graphics/gbm/libgbm_10.0.0.bbappend
++++ b/recipes-graphics/gbm/libgbm_10.0.0.bbappend
+@@ -1,3 +1,7 @@
+ SRCREV = "f316cf4b98ca3f4a1ca92a48ddd8aa559894a45c"
+ 
+-PR_append = "_psdkla"
++FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
++
++SRC_URI += "file://0001-gbm-add-support-to-import-gbm_bos-to-surface.patch"
++
++PR_append = "_vision_sdk"
+-- 
+1.9.1
+

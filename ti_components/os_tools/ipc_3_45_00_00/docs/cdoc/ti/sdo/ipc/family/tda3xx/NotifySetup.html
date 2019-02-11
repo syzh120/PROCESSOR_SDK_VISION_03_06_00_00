@@ -1,0 +1,639 @@
+<html>
+<head>
+<title>module ti.sdo.ipc.family.tda3xx.NotifySetup</title>
+<meta name="description" content="Notify driver setup proxy for TDA3XX">
+<link rel="stylesheet" type="text/css" href="../../../../../xdoc.css" />
+</head>
+<body><div id="xdocWrapper"><div id="xdocContent">
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">module</span> <span class="xdoc-id">ti.sdo.ipc.family.tda3xx.</span><span class="xdoc-id">NotifySetup</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/ipc/family/tda3xx/NotifyDriverMbx.html" title="module NotifyDriverMbx"><img class="xdocHdrArrow" src="../../../../../Arrow_left.png"/></a></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/ipc/family/tda3xx/package.html" title="package ti.sdo.ipc.family.tda3xx"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/ipc/family/tda3xx/TableInit.html" title="module TableInit"><img class="xdocHdrArrow" src="../../../../../Arrow_right.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/ipc/family/tda3xx/NotifySetup.html">index URL</a></div>
+<p class="xdocHdrSummary">Notify driver setup proxy for TDA3XX</p>
+<ul class="xdocToc">
+<li class="xdocToc"><a class="xdocToc" href="#targ-synop">C synopsis</a></li>
+<li class="xdocToc2"><a class="xdocToc" href="#xdocElems">Individual elements</a></li>
+<li class="xdocToc"><a class="xdocToc" href="#xdoc-sect-1">DETAILS</a></li>
+<li class="xdocToc"><a class="xdocToc" href="#xdoc-sect-2">CONFIGURATION EXAMPLE</a></li>
+<li class="xdocToc"><a class="xdocToc" href="#meta-synop">Configuration settings</a></li>
+<li class="xdocToc2"><a class="xdocToc" href="#xdocMetaElems">Individual elements</a></li>
+</ul>
+<div class="xdocBrief">
+This module creates and registers the IPC Notify drivers for the TDA3xx
+  device family. There are two types of notify drivers available: 1) shared
+  memory driver, and 2) mailbox driver. Use the <a class="xdoc-link" href="NotifySetup.html#connections" title="connections">connections</a>
+  configuration parameter to select which driver to use for communicating
+  with each remote processor.
+[&nbsp;<a class="xdocBrief" href="#xdoc-desc">more</a>&nbsp;...&nbsp;]
+</div>
+<span id='targ-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-targ2">C</span></tt> synopsis</td>
+<td class="xdocLabelCenter">target-domain</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../../ti/sdo/ipc/family/tda3xx/NotifySetup-src.html"><span class="xdocLabelFile">ti/sdo/ipc/family/tda3xx/NotifySetup.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynT">
+<div class="xdocSynCode">
+<tt></tt><span class="xdoc-kw3">#include</span> <span class="xdoc-id">&lt;ti/sdo/ipc/family/tda3xx/NotifySetup.h&gt;</span>
+</div>
+<table cellspacing="0" cellpadding="0" border="0">
+<tr><td colspan="2"><div class="xdocSynFxnCat">Functions common to all INotifySetup modules</div></td></tr>
+
+<tr valign="top"><td class="xdocSynDecl" nowrap><div class="xdocSynTblType"><tt></tt><span class="xdoc-kw2">Int</span>&nbsp;</div></td><td class="xdocSynDecl"><div class="xdocSynTblDecl"><a class="xdocSynGo" href="#attach"><span class="xdoc-id">NotifySetup_attach</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Function that will be called in Notify_attach</span></span></a>(<span class="xdoc-kw2">UInt16</span>&nbsp;<span class="xdoc-id">remoteProcId</span>, <span class="xdoc-kw2">Ptr</span>&nbsp;<span class="xdoc-id">sharedAddr</span>);</div></td></tr>
+<tr valign="top"><td class="xdocSynDecl" nowrap><div class="xdocSynTblType"><tt></tt><span class="xdoc-kw2">UInt16</span>&nbsp;</div></td><td class="xdocSynDecl"><div class="xdocSynTblDecl"><a class="xdocSynGo" href="#num.Int.Lines"><span class="xdoc-id">NotifySetup_numIntLines</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Returns number of interrupt lines to the processor</span></span></a>(<span class="xdoc-kw2">UInt16</span>&nbsp;<span class="xdoc-id">remoteProcId</span>);</div></td></tr>
+<tr valign="top"><td class="xdocSynDecl" nowrap><div class="xdocSynTblType"><tt></tt><span class="xdoc-kw2">SizeT</span>&nbsp;</div></td><td class="xdocSynDecl"><div class="xdocSynTblDecl"><a class="xdocSynGo" href="#shared.Mem.Req"><span class="xdoc-id">NotifySetup_sharedMemReq</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Shared Memory Required for a single notification line</span></span></a>(<span class="xdoc-kw2">UInt16</span>&nbsp;<span class="xdoc-id">remoteProcId</span>, <span class="xdoc-kw2">Ptr</span>&nbsp;<span class="xdoc-id">sharedAddr</span>);</div></td></tr>
+<tr><td class="xdocSynFxnCat" colspan="2"><div class="xdocSynFxnCat">Functions common to all target modules</div></td></tr>
+
+<tr>
+<td></td>
+<td>
+<div class="xdocSynTblPack">
+<a class="xdocSynGo" href="#module-wide_built-ins"><span class="xdoc-id">NotifySetup_Module_getMask</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Returns the diagnostics mask for this module</span></span></a>,
+<a class="xdocSynGo" href="#module-wide_built-ins"><span class="xdoc-id">NotifySetup_Module_hasMask</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Test whether this module has a diagnostics mask</span></span></a>,
+<a class="xdocSynGo" href="#module-wide_built-ins"><span class="xdoc-id">NotifySetup_Module_heap</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;The heap from which this module allocates memory</span></span></a>,
+<a class="xdocSynGo" href="#module-wide_built-ins"><span class="xdoc-id">NotifySetup_Module_id</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Get this module's unique id</span></span></a>,
+<a class="xdocSynGo" href="#module-wide_built-ins"><span class="xdoc-id">NotifySetup_Module_setMask</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Set the diagnostics mask for this module</span></span></a>,
+<a class="xdocSynGo" href="#module-wide_built-ins"><span class="xdoc-id">NotifySetup_Module_startupDone</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Test if this module has completed startup</span></span></a>
+</div>
+</td>
+</tr>
+<tr><td colspan='2'><div class='xdocSynTblHdr'>Typedefs</div></td></tr>
+
+<tr valign="top"><td class="xdocSynDecl" nowrap><div class="xdocSynTblType"><tt></tt><span class="xdoc-kw1">typedef</span> <span class="xdoc-kw1">struct</span> </div></td><td class="xdocSynDecl"><div class="xdocSynTblDecl"><a class="xdocSynGo" href="#.Connection"><span class="xdoc-id">NotifySetup_Connection</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Define a notify driver connection</span></span></a> ...</div></td></tr>
+<tr valign="top"><td class="xdocSynDecl" nowrap><div class="xdocSynTblType"><tt></tt><span class="xdoc-kw1">typedef</span> <span class="xdoc-kw1">enum</span> </div></td><td class="xdocSynDecl"><div class="xdocSynTblDecl"><a class="xdocSynGo" href="#.Driver"><span class="xdoc-id">NotifySetup_Driver</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Define the available notify drivers</span></span></a> ...</div></td></tr>
+</table>
+<div class="xdocSynSpacer">&nbsp;</div>
+</div>
+<span id="xdoc-desc"></span>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">This module creates and registers the IPC Notify drivers for the TDA3xx
+  device family. There are two types of notify drivers available: 1) shared
+  memory driver, and 2) mailbox driver. Use the <a class="xdoc-link" href="NotifySetup.html#connections" title="connections">connections</a>
+  configuration parameter to select which driver to use for communicating
+  with each remote processor.</div>
+<div class="xdocText">The shared memory notify driver is the default driver. It implements the
+  full Notify API set. This driver uses memory for passing the notify
+  payload between processors. The memory is allocated from SharedRegion #0.</div>
+<div class="xdocText">The mailbox notify driver uses hardware FIFOs for passing the notify
+  payload between processors. No shared memory is required. However, this
+  driver does not implement the full Notify API set. For example, the
+  <tt>Notify_sendEvent()</tt> API will never return <tt>Notify_E_EVTNOTREGISTERED</tt>
+  because it does not track this information.</div>
+<div class="xdocText">When configuring the notify driver, you specify which driver to use
+  for communicating to each remote processor. If not configured, the
+  shared memory driver will be used by default. Both sides of each connection
+  must use the same driver. This is an easy mistake to make and there is
+  no way to check this.</div>
+<div class="xdocText">This module is primarily used by notify driver authors. It is not expected
+  that any application would ever use this module in its runtime code.
+  The typical use of this module is simply to configure which notify driver
+  to use. See the following example for details.</div>
+<span id="xdoc-sect-2"></span>
+<div class="xdocSect">CONFIGURATION EXAMPLE</div>
+<div class="xdocText"></div>
+<div class="xdocText">The following is a three processor example: HOST DSP1 EVE1. In this
+  example, HOST and DSP1 will communicate using the shared memory driver
+  and DSP1 and EVE1 will communicate using the mailbox driver. This example
+  explicitly configures the shared memory driver for HOST and DSP1, but
+  this is strictly not necessary. If left unconfigured, the shared memory
+  driver would be used as the default. Also, the connection between HOST
+  and EVE1 is left undefined as we don't expect to use this connection.</div>
+<div class="xdocText">Notice that each connection configuration specifies the remote processor
+  name and the driver type. This is how the local processor declares which
+  driver it will use when communicating to that remote processor. The
+  corresponding configuration on the remote processor must be complimentary.</div>
+<div class="xdocText">Add the following to your HOST configuration script.</div>
+<div class="xdocText"><PRE class="Example">  // configure the notify driver
+  var NotifySetup = xdc.useModule('ti.sdo.ipc.family.tda3xx.NotifySetup');
+
+  NotifySetup.connections.$add(
+      new NotifySetup.Connection({
+          driver: NotifySetup.Driver_SHAREDMEMORY,
+          procName: "DSP1"
+      })
+ );
+</PRE></div>
+<div class="xdocText">Add the following to your DSP1 configuration script.</div>
+<div class="xdocText"><PRE class="Example">  // configure the notify driver
+  var NotifySetup = xdc.useModule('ti.sdo.ipc.family.tda3xx.NotifySetup');
+
+  NotifySetup.connections.$add(
+      new NotifySetup.Connection({
+          driver: NotifySetup.Driver_SHAREDMEMORY,
+          procName: "HOST"
+      })
+ );
+
+  NotifySetup.connections.$add(
+      new NotifySetup.Connection({
+          driver: NotifySetup.Driver_MAILBOX,
+          procName: "EVE1"
+      })
+  );
+</PRE></div>
+<div class="xdocText">Add the following to your EVE1 configuration script.</div>
+<div class="xdocText"><PRE class="Example">  // configure the notify driver
+  var NotifySetup = xdc.useModule('ti.sdo.ipc.family.tda3xx.NotifySetup');
+
+  NotifySetup.connections.$add(
+      new NotifySetup.Connection({
+          driver: NotifySetup.Driver_MAILBOX,
+          procName: "DSP1"
+      })
+ );
+</PRE></div>
+<div id="xdocSep">
+</div>
+<div id="xdocElems">
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".Driver"></a>
+<a class="xdocAnchor" id=".Driver_.S.H.A.R.E.D.M.E.M.O.R.Y"></a>
+<a class="xdocAnchor" id=".Driver_.M.A.I.L.B.O.X"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">enum</span> <span class="xdoc-id">NotifySetup_</span><span class="xdoc-id">Driver</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/ipc/family/tda3xx/NotifySetup.html" title="module NotifySetup"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/ipc/family/tda3xx/NotifySetup.html#.Driver">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Define the available notify drivers</p>
+<span id='targ-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-targ2dcl">C</span></tt> synopsis</td>
+<td class="xdocLabelRight">target-domain</td>
+</tr></table>
+<div class="xdocSynTdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">typedef</span> <span class="xdoc-kw1">enum</span> <span class="xdoc-id">NotifySetup_Driver</span> {
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-id">NotifySetup_Driver_SHAREDMEMORY</span>, 
+</div>
+<div class='xdocSynSum'><tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>//&nbsp;shared memory driver</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-id">NotifySetup_Driver_MAILBOX</span>
+</div>
+<div class='xdocSynSum'><tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>//&nbsp;hardware mailbox driver</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt>} <span class="xdoc-id">NotifySetup_Driver</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">For any given connection to a remote processor, one of the
+  following notify driver types may be used. Each driver has
+  different characteristics and system requirements.</div>
+<div class="xdocText"><div class="xdocText"><dl>
+  <dt>Driver_SHAREDMEMORY</dt>
+      <dd>
+      This driver uses shared memory for passing the notify payload
+      between processors. Additional state is also stored in the
+      shared memory.<br><br>
+
+      There is a separate, cache-aligned block of memory for each
+      event number. This is necessary to maintain cache coherency.
+      However, this requires a non-trivial amount of memory.<br><br>
+      </dd>
+
+  <dt>Driver_MAILBOX</dt>
+      <dd>
+      This driver uses a hardware FIFO (provided by the hardware
+      mailbox) to pass the notify payload between processors. No
+      shared memory is required by this driver.<br><br>
+
+      This driver does not support the full Notify API set. This
+      driver has lower delivery latency when compard to the shared
+      memory driver.<br><br>
+      </dd>
+  </dl></div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".Connection"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">struct</span> <span class="xdoc-id">NotifySetup_</span><span class="xdoc-id">Connection</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/ipc/family/tda3xx/NotifySetup.html" title="module NotifySetup"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/ipc/family/tda3xx/NotifySetup.html#.Connection">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Define a notify driver connection</p>
+<span id='targ-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-targ2dcl">C</span></tt> synopsis</td>
+<td class="xdocLabelRight">target-domain</td>
+</tr></table>
+<div class="xdocSynTdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">typedef</span> <span class="xdoc-kw1">struct</span> <span class="xdoc-id">NotifySetup_Connection</span> {
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><a class="xdoc-link" href="../../../../../ti/sdo/ipc/family/tda3xx/NotifySetup.html#.Driver" title="ti.sdo.ipc.family.tda3xx.NotifySetup.Driver">NotifySetup_Driver</a>&nbsp;<span class="xdoc-id"><span class="xdoc-id">driver</span></span>;
+</div>
+<div class='xdocSynSum'><tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>//&nbsp;notify driver</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw2">String</span>&nbsp;<span class="xdoc-id"><span class="xdoc-id">procName</span></span>;
+</div>
+<div class='xdocSynSum'><tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>//&nbsp;remote processor name</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt>} <span class="xdoc-id">NotifySetup_Connection</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">FIELDS</div>
+<div class="xdocChild"><span class="xdocChildId">driver</span>
+<span class="xdocChildSum">&#151;&nbsp;The driver to be used for this connection. See the <a class="xdoc-link" href="NotifySetup.html#.Driver" title="Driver">Driver</a>
+  enumeration for details.</span>
+</div>
+<div class="xdocChild"><span class="xdocChildId">procName</span>
+<span class="xdocChildSum">&#151;&nbsp;The name of the remote processor for the given connection.</span>
+</div>
+<span id="xdoc-sect-2"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">Each IPC connection is defined by two end-points: the local
+  processor and the remote processor. Each connection supports
+  only one type of notify driver. In other words, both ends of
+  the connection must configure the same notify driver type.</div>
+<div class="xdocText">However, when a processor has multiple connections (when
+  communicating with multiple remote processors), each connection
+  is configured independently. Therefore, different notify drivers
+  may be used for different connections. Currently, IPC supports
+  only one connection for each remote processor.</div>
+<div class="xdocText">The configuration for a given connection must be coordinated with
+  the remote processor. Each processor is only able to configure its
+  local end-point for the connection. It is important that the remote
+  processor use the same notify driver for the connection.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="attach"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-id">NotifySetup_</span><span class="xdoc-id">attach</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/ipc/family/tda3xx/NotifySetup.html" title="module NotifySetup"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/ipc/family/tda3xx/NotifySetup.html#attach">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Function that will be called in Notify_attach</p>
+<span id='targ-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-targ2dcl">C</span></tt> synopsis</td>
+<td class="xdocLabelRight">target-domain</td>
+</tr></table>
+<div class="xdocSynTdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw2">Int</span>&nbsp;<span class="xdoc-id">NotifySetup_attach</span>(<span class="xdoc-kw2">UInt16</span>&nbsp;<span class="xdoc-id">remoteProcId</span>, <span class="xdoc-kw2">Ptr</span>&nbsp;<span class="xdoc-id">sharedAddr</span>);
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="num.Int.Lines"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-id">NotifySetup_</span><span class="xdoc-id">numIntLines</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/ipc/family/tda3xx/NotifySetup.html" title="module NotifySetup"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/ipc/family/tda3xx/NotifySetup.html#num.Int.Lines">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Returns number of interrupt lines to the processor</p>
+<span id='targ-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-targ2dcl">C</span></tt> synopsis</td>
+<td class="xdocLabelRight">target-domain</td>
+</tr></table>
+<div class="xdocSynTdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw2">UInt16</span>&nbsp;<span class="xdoc-id">NotifySetup_numIntLines</span>(<span class="xdoc-kw2">UInt16</span>&nbsp;<span class="xdoc-id">remoteProcId</span>);
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="shared.Mem.Req"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-id">NotifySetup_</span><span class="xdoc-id">sharedMemReq</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/ipc/family/tda3xx/NotifySetup.html" title="module NotifySetup"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/ipc/family/tda3xx/NotifySetup.html#shared.Mem.Req">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Shared Memory Required for a single notification line</p>
+<span id='targ-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-targ2dcl">C</span></tt> synopsis</td>
+<td class="xdocLabelRight">target-domain</td>
+</tr></table>
+<div class="xdocSynTdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw2">SizeT</span>&nbsp;<span class="xdoc-id">NotifySetup_sharedMemReq</span>(<span class="xdoc-kw2">UInt16</span>&nbsp;<span class="xdoc-id">remoteProcId</span>, <span class="xdoc-kw2">Ptr</span>&nbsp;<span class="xdoc-id">sharedAddr</span>);
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="module-wide_built-ins"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdocSynSum">Module-Wide Built-Ins</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/ipc/family/tda3xx/NotifySetup.html" title="module NotifySetup"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/ipc/family/tda3xx/NotifySetup.html#module-wide_built-ins">index URL</a></div>
+<p class="xdocHdrSummary"></p>
+<span id='targ-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-targ2dcl">C</span></tt> synopsis</td>
+<td class="xdocLabelRight">target-domain</td>
+</tr></table>
+<div class="xdocSynTdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><a class="xdoc-link" href="../../../../../xdc/runtime/Types.html#.Module.Id" title="xdc.runtime.Types.ModuleId">Types_ModuleId</a> <span class="xdoc-id">NotifySetup_Module_id</span>();
+</div>
+<div class='xdocSynSum'><tt></tt><tt></tt>//&nbsp;Get this module's unique id</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw2">Bool</span> <span class="xdoc-id">NotifySetup_Module_startupDone</span>();
+</div>
+<div class='xdocSynSum'><tt></tt><tt></tt>//&nbsp;Test if this module has completed startup</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt><a class="xdoc-link" href="../../../../../xdc/runtime/IHeap.html#per-instance_object_types" title="xdc.runtime.IHeap.Handle">IHeap_Handle</a> <span class="xdoc-id">NotifySetup_Module_heap</span>();
+</div>
+<div class='xdocSynSum'><tt></tt><tt></tt>//&nbsp;The heap from which this module allocates memory</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw2">Bool</span> <span class="xdoc-id">NotifySetup_Module_hasMask</span>();
+</div>
+<div class='xdocSynSum'><tt></tt><tt></tt>//&nbsp;Test whether this module has a diagnostics mask</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw2">Bits16</span> <span class="xdoc-id">NotifySetup_Module_getMask</span>();
+</div>
+<div class='xdocSynSum'><tt></tt><tt></tt>//&nbsp;Returns the diagnostics mask for this module</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw2">Void</span> <span class="xdoc-id">NotifySetup_Module_setMask</span>(<span class="xdoc-kw2">Bits16</span> <span class="xdoc-id">mask</span>);
+</div>
+<div class='xdocSynSum'><tt></tt><tt></tt>//&nbsp;Set the diagnostics mask for this module</div>
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../../ti/sdo/ipc/family/tda3xx/NotifySetup-src.html"><span class="xdocLabelFile">ti/sdo/ipc/family/tda3xx/NotifySetup.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynM">
+<div class="xdocSynCode">
+<tt></tt><span class="xdoc-kw1">var</span> NotifySetup = <span class="xdoc-kw3">xdc.useModule</span>(<span class="xdoc-id">'ti.sdo.ipc.family.tda3xx.NotifySetup'</span>);
+</div>
+<div class='xdocSynHdr'>module-wide constants & types</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><i>values of type <a class="xdocSynGo" href="#meta.Driver">NotifySetup.<span class="xdoc-id">Driver</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Define the available notify drivers</span></span></a></i>
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw1">const</span> <a class="xdocSynGo" href="#meta.Driver">NotifySetup.<span class="xdoc-id">Driver_SHAREDMEMORY</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;shared memory driver</span></span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw1">const</span> <a class="xdocSynGo" href="#meta.Driver">NotifySetup.<span class="xdoc-id">Driver_MAILBOX</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;hardware mailbox driver</span></span></a>;
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">var</span> <i>obj</i> = <span class="xdoc-kw1">new</span> <a class="xdocSynGo" href="#meta.Connection">NotifySetup.<span class="xdoc-id">Connection</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Define a notify driver connection</span></span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>obj</i>.<a class="xdocSynGo" href="#meta.Connection"><span class="xdoc-id">driver</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;notify driver</span></span></a> = <i><a class="xdoc-link" href="../../../../../ti/sdo/ipc/family/tda3xx/NotifySetup.html#.Driver" title="ti.sdo.ipc.family.tda3xx.NotifySetup.Driver">NotifySetup.Driver</a></i><b>&nbsp;&nbsp;...</b>
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>obj</i>.<a class="xdocSynGo" href="#meta.Connection"><span class="xdoc-id">procName</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;remote processor name</span></span></a> = <i><span class="xdoc-kw2">String</span></i><b>&nbsp;&nbsp;...</b>
+</div>
+<div class='xdocSynHdr'>module-wide config parameters</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#common$">NotifySetup.<span class="xdoc-id">common$</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Common module configuration parameters</span></span></a> = <i><a class="xdoc-link" href="../../../../../xdc/runtime/Types.html#.Common$" title="xdc.runtime.Types.Common$">Types.Common$</a></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#connections">NotifySetup.<span class="xdoc-id">connections</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Configure the notify driver for each given connection</span></span></a> = <i><a class="xdoc-link" href="../../../../../ti/sdo/ipc/family/tda3xx/NotifySetup.html#.Connection" title="ti.sdo.ipc.family.tda3xx.NotifySetup.Connection">NotifySetup.Connection</a>[<span class="xdoc-kw1">length</span>]</i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+</div>
+<div id="xdocSep">
+</div>
+<div id="xdocMetaElems">
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="meta.Driver"></a>
+<a class="xdocAnchor" id=".Driver_.S.H.A.R.E.D.M.E.M.O.R.Y"></a>
+<a class="xdocAnchor" id=".Driver_.M.A.I.L.B.O.X"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">enum</span> <span class="xdoc-id">NotifySetup.</span><span class="xdoc-id">Driver</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/ipc/family/tda3xx/NotifySetup.html" title="module NotifySetup"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/ipc/family/tda3xx/NotifySetup.html#.Driver">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Define the available notify drivers</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><i>values of type NotifySetup.<span class="xdoc-id">Driver</span></i>
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw1">const</span> NotifySetup.<span class="xdoc-id">Driver_SHAREDMEMORY</span>;
+</div>
+<div class='xdocSynSum'><tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>//&nbsp;shared memory driver</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw1">const</span> NotifySetup.<span class="xdoc-id">Driver_MAILBOX</span>;
+</div>
+<div class='xdocSynSum'><tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>//&nbsp;hardware mailbox driver</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">For any given connection to a remote processor, one of the
+  following notify driver types may be used. Each driver has
+  different characteristics and system requirements.</div>
+<div class="xdocText"><div class="xdocText"><dl>
+  <dt>Driver_SHAREDMEMORY</dt>
+      <dd>
+      This driver uses shared memory for passing the notify payload
+      between processors. Additional state is also stored in the
+      shared memory.<br><br>
+
+      There is a separate, cache-aligned block of memory for each
+      event number. This is necessary to maintain cache coherency.
+      However, this requires a non-trivial amount of memory.<br><br>
+      </dd>
+
+  <dt>Driver_MAILBOX</dt>
+      <dd>
+      This driver uses a hardware FIFO (provided by the hardware
+      mailbox) to pass the notify payload between processors. No
+      shared memory is required by this driver.<br><br>
+
+      This driver does not support the full Notify API set. This
+      driver has lower delivery latency when compard to the shared
+      memory driver.<br><br>
+      </dd>
+  </dl></div>
+<div class="xdocSect">C SYNOPSIS</div>
+<div class="xdocText"><a class="xdoc-link" href="#.Driver" title="NotifySetup_Driver">NotifySetup_Driver</a></div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="meta.Connection"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">struct</span> <span class="xdoc-id">NotifySetup.</span><span class="xdoc-id">Connection</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/ipc/family/tda3xx/NotifySetup.html" title="module NotifySetup"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/ipc/family/tda3xx/NotifySetup.html#.Connection">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Define a notify driver connection</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">var</span> <i>obj</i> = <span class="xdoc-kw1">new</span> NotifySetup.<span class="xdoc-id">Connection</span>;
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>obj</i>.<span class="xdoc-id">driver</span> = <i><a class="xdoc-link" href="../../../../../ti/sdo/ipc/family/tda3xx/NotifySetup.html#.Driver" title="ti.sdo.ipc.family.tda3xx.NotifySetup.Driver">NotifySetup.Driver</a></i><b>&nbsp;&nbsp;...</b>
+</div>
+<div class='xdocSynSum'><tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>//&nbsp;notify driver</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><i>obj</i>.<span class="xdoc-id">procName</span> = <i><span class="xdoc-kw2">String</span></i><b>&nbsp;&nbsp;...</b>
+</div>
+<div class='xdocSynSum'><tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>//&nbsp;remote processor name</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">FIELDS</div>
+<div class="xdocChild"><span class="xdocChildId">driver</span>
+<span class="xdocChildSum">&#151;&nbsp;The driver to be used for this connection. See the <a class="xdoc-link" href="NotifySetup.html#.Driver" title="Driver">Driver</a>
+  enumeration for details.</span>
+</div>
+<div class="xdocChild"><span class="xdocChildId">procName</span>
+<span class="xdocChildSum">&#151;&nbsp;The name of the remote processor for the given connection.</span>
+</div>
+<span id="xdoc-sect-2"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">Each IPC connection is defined by two end-points: the local
+  processor and the remote processor. Each connection supports
+  only one type of notify driver. In other words, both ends of
+  the connection must configure the same notify driver type.</div>
+<div class="xdocText">However, when a processor has multiple connections (when
+  communicating with multiple remote processors), each connection
+  is configured independently. Therefore, different notify drivers
+  may be used for different connections. Currently, IPC supports
+  only one connection for each remote processor.</div>
+<div class="xdocText">The configuration for a given connection must be coordinated with
+  the remote processor. Each processor is only able to configure its
+  local end-point for the connection. It is important that the remote
+  processor use the same notify driver for the connection.</div>
+<div class="xdocSect">C SYNOPSIS</div>
+<div class="xdocText"><a class="xdoc-link" href="#.Connection" title="NotifySetup_Connection">NotifySetup_Connection</a></div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="common$"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">config</span> <span class="xdoc-id">NotifySetup.</span><span class="xdoc-id">common$</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/ipc/family/tda3xx/NotifySetup.html" title="module NotifySetup"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/ipc/family/tda3xx/NotifySetup.html#common$">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Common module configuration parameters</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>NotifySetup.<span class="xdoc-id">common$</span> = <i><a class="xdoc-link" href="../../../../../xdc/runtime/Types.html#.Common$" title="xdc.runtime.Types.Common$">Types.Common$</a></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">All modules have this configuration parameter.  Its name
+  contains the '$' character to ensure it does not conflict with
+  configuration parameters declared by the module.  This allows
+  new configuration parameters to be added in the future without
+  any chance of breaking existing modules.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="connections"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">config</span> <span class="xdoc-id">NotifySetup.</span><span class="xdoc-id">connections</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../../ti/sdo/ipc/family/tda3xx/NotifySetup.html" title="module NotifySetup"><img class="xdocHdrArrow" src="../../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../../index.html#ti/sdo/ipc/family/tda3xx/NotifySetup.html#connections">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Configure the notify driver for each given connection</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>NotifySetup.<span class="xdoc-id">connections</span> = <i><a class="xdoc-link" href="../../../../../ti/sdo/ipc/family/tda3xx/NotifySetup.html#.Connection" title="ti.sdo.ipc.family.tda3xx.NotifySetup.Connection">NotifySetup.Connection</a>[<span class="xdoc-kw1">length</span>]</i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">Use this configuration parameter to define which notify driver
+  is to be used when communicating with remote processors. Create
+  one entry in this array for each connection. Each entry you create,
+  defines the local end-point of the connection. The remote processor
+  must have a complimentary entry in its <tt>connections</tt> array.</div>
+<div class="xdocText">Any connection which is undefined, will use the shared memory
+  notify driver. It is not necessary to define all connections, just
+  the ones which will not use the default.</div>
+<div class="xdocText">To define a local end-point connection, establish a reference to
+  this module and add a new entry to this array.</div>
+<div class="xdocText">The following example show how to setup the mailbox driver for
+  communicating from DSP1 to EVE1 and EVE2.</div>
+<div class="xdocText">Add the following to your DSP1 configuration script.</div>
+<div class="xdocText"><PRE class="Example">  // configure the notify driver
+  var NotifySetup = xdc.useModule('ti.sdo.ipc.family.tda3xx.NotifySetup');
+
+  NotifySetup.connections.$add(
+      new NotifySetup.Connection({
+          driver: NotifySetup.Driver_MAILBOX,
+          procName: "EVE1"
+      })
+ );
+
+  NotifySetup.connections.$add(
+      new NotifySetup.Connection({
+          driver: NotifySetup.Driver_MAILBOX,
+          procName: "EVE2"
+      })
+  );
+</PRE></div>
+<div class="xdocText">Add the following to your EVE1 configuration script.</div>
+<div class="xdocText"><PRE class="Example">  // configure the notify driver
+  var NotifySetup = xdc.useModule('ti.sdo.ipc.family.tda3xx.NotifySetup');
+
+  NotifySetup.connections.$add(
+      new NotifySetup.Connection({
+          driver: NotifySetup.Driver_MAILBOX,
+          procName: "DSP1"
+      })
+ );
+</PRE></div>
+<div class="xdocText">Add the following to your EVE2 configuration script.</div>
+<div class="xdocText"><PRE class="Example">  // configure the notify driver
+  var NotifySetup = xdc.useModule('ti.sdo.ipc.family.tda3xx.NotifySetup');
+
+  NotifySetup.connections.$add(
+      new NotifySetup.Connection({
+          driver: NotifySetup.Driver_MAILBOX,
+          procName: "DSP1"
+      })
+ );
+</PRE></div>
+</div>
+<div id="xdocDate">generated on Wed, 15 Feb 2017 14:20:09 GMT</div>
+</div></div></body>
+</html>

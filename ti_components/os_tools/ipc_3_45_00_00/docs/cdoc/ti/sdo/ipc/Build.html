@@ -1,0 +1,489 @@
+<html>
+<head>
+<title>module ti.sdo.ipc.Build</title>
+<link rel="stylesheet" type="text/css" href="../../../xdoc.css" />
+</head>
+<body><div id="xdocWrapper"><div id="xdocContent">
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">module</span> <span class="xdoc-id">ti.sdo.ipc.</span><span class="xdoc-id">Build</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/ipc/package.html" title="package ti.sdo.ipc"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/ipc/GateMP.html" title="module GateMP"><img class="xdocHdrArrow" src="../../../Arrow_right.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/ipc/Build.html">index URL</a></div>
+<ul class="xdocToc">
+<li class="xdocToc"><a class="xdocToc" href="#meta-synop">Configuration settings</a></li>
+<li class="xdocToc2"><a class="xdocToc" href="#xdocMetaElems">Individual elements</a></li>
+</ul>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../ti/sdo/ipc/Build-src.html"><span class="xdocLabelFile">ti/sdo/ipc/Build.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynM">
+<div class="xdocSynCode">
+<tt></tt><span class="xdoc-kw1">var</span> Build = <span class="xdoc-kw3">xdc.useModule</span>(<span class="xdoc-id">'ti.sdo.ipc.Build'</span>);
+</div>
+<div class='xdocSynHdr'>module-wide constants & types</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><i>values of type <a class="xdocSynGo" href="#.Lib.Type">Build.<span class="xdoc-id">LibType</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;IPC library selection options</span></span></a></i>
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw1">const</span> <a class="xdocSynGo" href="#.Lib.Type">Build.<span class="xdoc-id">LibType_Instrumented</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Instrumented</span></span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw1">const</span> <a class="xdocSynGo" href="#.Lib.Type">Build.<span class="xdoc-id">LibType_NonInstrumented</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Non-instrumented</span></span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw1">const</span> <a class="xdocSynGo" href="#.Lib.Type">Build.<span class="xdoc-id">LibType_Custom</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Custom (Optimized)</span></span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw1">const</span> <a class="xdocSynGo" href="#.Lib.Type">Build.<span class="xdoc-id">LibType_Debug</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Custom (Debug)</span></span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw1">const</span> <a class="xdocSynGo" href="#.Lib.Type">Build.<span class="xdoc-id">LibType_PkgLib</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Use package library</span></span></a>;
+</div>
+<div class='xdocSynHdr'>module-wide config parameters</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#asserts.Enabled">Build.<span class="xdoc-id">assertsEnabled</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;IPC assert checking in custom library enable flag</span></span></a> = <i><span class="xdoc-kw2">Bool</span></i> <span class="xdoc-kw2">true</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#custom.C.C.Opts">Build.<span class="xdoc-id">customCCOpts</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Compiler options used when building a custom IPC library</span></span></a> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#lib.Dir">Build.<span class="xdoc-id">libDir</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#lib.Type">Build.<span class="xdoc-id">libType</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;IPC library type</span></span></a> = <i><a class="xdoc-link" href="../../../ti/sdo/ipc/Build.html#.Lib.Type" title="ti.sdo.ipc.Build.LibType">Build.LibType</a></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#logs.Enabled">Build.<span class="xdoc-id">logsEnabled</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;IPC log support in custom library enable flag</span></span></a> = <i><span class="xdoc-kw2">Bool</span></i> <span class="xdoc-kw2">true</span>;
+</div>
+<div class='xdocSynHdr'>module-wide functions</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#build.Libs">Build.<span class="xdoc-id">buildLibs</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a>(<i><span class="xdoc-kw2">Any</span></i> <span class="xdoc-id">objList</span>, <i><span class="xdoc-kw2">Any</span></i> <span class="xdoc-id">relList</span>, <i><span class="xdoc-kw2">Any</span></i> <span class="xdoc-id">filter</span>, <i><span class="xdoc-kw2">Any</span></i> <span class="xdoc-id">xdcArgs</span>) <i>returns</i> <i><span class="xdoc-kw2">Any</span></i>
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#get.Asm.Files">Build.<span class="xdoc-id">getAsmFiles</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Get the library Asm source files</span></span></a>(<i><span class="xdoc-kw2">String</span></i> <span class="xdoc-id">target</span>) <i>returns</i> <i><span class="xdoc-kw2">Any</span></i>
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#get.C.C.Opts">Build.<span class="xdoc-id">getCCOpts</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a>(<i><a class="xdoc-link" href="../../../xdc/bld/ITarget.html#.Module" title="xdc.bld.ITarget.Module">ITarget.Module</a></i> <span class="xdoc-id">target</span>) <i>returns</i> <i><span class="xdoc-kw2">String</span></i>
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#get.C.Files">Build.<span class="xdoc-id">getCFiles</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Get the library C source files</span></span></a>(<i><span class="xdoc-kw2">String</span></i> <span class="xdoc-id">target</span>) <i>returns</i> <i><span class="xdoc-kw2">String</span></i>
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#get.Default.Custom.C.C.Opts">Build.<span class="xdoc-id">getDefaultCustomCCOpts</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a>() <i>returns</i> <i><span class="xdoc-kw2">String</span></i>
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#get.Defs">Build.<span class="xdoc-id">getDefs</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Get the compiler -D options necessary to build</span></span></a>() <i>returns</i> <i><span class="xdoc-kw2">String</span></i>
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#get.Libs">Build.<span class="xdoc-id">getLibs</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Common getLibs() for all ipc packages</span></span></a>(<i><span class="xdoc-kw2">Any</span></i> <span class="xdoc-id">pkg</span>) <i>returns</i> <i><span class="xdoc-kw2">Any</span></i>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+</div>
+<div id="xdocSep">
+</div>
+<div id="xdocMetaElems">
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".Lib.Type"></a>
+<a class="xdocAnchor" id=".Lib.Type_.Instrumented"></a>
+<a class="xdocAnchor" id=".Lib.Type_.Non.Instrumented"></a>
+<a class="xdocAnchor" id=".Lib.Type_.Custom"></a>
+<a class="xdocAnchor" id=".Lib.Type_.Debug"></a>
+<a class="xdocAnchor" id=".Lib.Type_.Pkg.Lib"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">enum</span> <span class="xdoc-id">Build.</span><span class="xdoc-id">LibType</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/ipc/Build.html" title="module Build"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/ipc/Build.html#.Lib.Type">index URL</a></div>
+<p class="xdocHdrSummaryDcl">IPC library selection options</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><i>values of type Build.<span class="xdoc-id">LibType</span></i>
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw1">const</span> Build.<span class="xdoc-id">LibType_Instrumented</span>;
+</div>
+<div class='xdocSynSum'><tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>//&nbsp;Instrumented</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw1">const</span> Build.<span class="xdoc-id">LibType_NonInstrumented</span>;
+</div>
+<div class='xdocSynSum'><tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>//&nbsp;Non-instrumented</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw1">const</span> Build.<span class="xdoc-id">LibType_Custom</span>;
+</div>
+<div class='xdocSynSum'><tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>//&nbsp;Custom (Optimized)</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw1">const</span> Build.<span class="xdoc-id">LibType_Debug</span>;
+</div>
+<div class='xdocSynSum'><tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>//&nbsp;Custom (Debug)</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><span class="xdoc-kw1">const</span> Build.<span class="xdoc-id">LibType_PkgLib</span>;
+</div>
+<div class='xdocSynSum'><tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>//&nbsp;Use package library</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">VALUES</div>
+<div class="xdocChild"><span class="xdocChildId">LibType_Instrumented</span>
+<span class="xdocChildSum">&#151;&nbsp;The library supplied is prebuilt
+  with logging and assertions enabled.</span>
+</div>
+<div class="xdocChild"><span class="xdocChildId">LibType_NonInstrumented</span>
+<span class="xdocChildSum">&#151;&nbsp;The library supplied is prebuilt
+  with logging and assertions disabled.</span>
+</div>
+<div class="xdocChild"><span class="xdocChildId">LibType_Custom</span>
+<span class="xdocChildSum">&#151;&nbsp;This option builds the IPC library from
+  sources using the options specified by <a class="xdoc-link" href="Build.html#custom.C.C.Opts" title="customCCOpts">customCCOpts</a>.
+  Only the modules and APIs that your application uses are
+  contained in the resulting executable. Program optimization is
+  performed to reduce the size of the executable and improve
+  performance. Enough debug information is retained to allow you
+  to step through the application code in CCS and locate global
+  variables.</span>
+</div>
+<div class="xdocChild"><span class="xdocChildId">LibType_Debug</span>
+<span class="xdocChildSum">&#151;&nbsp;This option is similar to the LibType_Custom
+  option in that it builds the IPC library from sources and omits
+  modules and APIs that your code does not use. However, no program
+  optimization is performed. The resulting executable is fully
+  debuggable, and you can step into IPC code. The tradeoff is that
+  the executable is larger and runs slower than builds that use the
+  LibType_Custom option.</span>
+</div>
+<div class="xdocChild"><span class="xdocChildId">LibType_PkgLib</span>
+<span class="xdocChildSum">&#151;&nbsp;This option uses the individual libraries
+  built by each package of the IPC product. These libraries are
+  not shipped. You must build the product to generate the package
+  libraries. See the IPC Install Guides (links in the Release
+  Note) for details on building the IPC product.</span>
+</div>
+<span id="xdoc-sect-2"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">This enumeration defines all the IPC library types provided
+  by the product. You can select the library type by setting
+  the <a class="xdoc-link" href="Build.html#lib.Type" title="libType">Build.libType</a> configuration parameter.</div>
+<span id="xdoc-sect-3"></span>
+<div class="xdocSect">SEE</div>
+<div class="xdocText"><a class="xdoc-link" href="Build.html#lib.Type" title="libType">libType</a></div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="asserts.Enabled"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Build.</span><span class="xdoc-id">assertsEnabled</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/ipc/Build.html" title="module Build"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/ipc/Build.html#asserts.Enabled">index URL</a></div>
+<p class="xdocHdrSummaryDcl">IPC assert checking in custom library enable flag</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Build.<span class="xdoc-id">assertsEnabled</span> = <i><span class="xdoc-kw2">Bool</span></i> <span class="xdoc-kw2">true</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">When set to true, assert checking code is compiled into
+  the custom library created when <a class="xdoc-link" href="Build.html#lib.Type" title="libType">Build.libType</a>
+  is set to <a class="xdoc-link" href="Build.html#.Lib.Type_.Custom" title="LibType_Custom">Build_LibType_Custom</a> or
+  <a class="xdoc-link" href="Build.html#.Lib.Type_.Debug" title="LibType_Debug">Build_LibType_Debug</a>.</div>
+<div class="xdocText">When set to false, assert checking code is removed from the
+  custom library created when Build.libType is set to
+  Build.LibType_Custom or Build.LibType_Debug. This option can
+  considerably improve runtime performance as well significantly
+  reduce the application's code size.</div>
+<span id="xdoc-sect-2"></span>
+<div class="xdocSect">SEE</div>
+<div class="xdocText"><a class="xdoc-link" href="Build.html#lib.Type" title="libType">libType</a></div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="custom.C.C.Opts"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Build.</span><span class="xdoc-id">customCCOpts</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/ipc/Build.html" title="module Build"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/ipc/Build.html#custom.C.C.Opts">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Compiler options used when building a custom IPC library</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Build.<span class="xdoc-id">customCCOpts</span> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">When <a class="xdoc-link" href="Build.html#lib.Type" title="libType">Build.libType</a> is set to
+  <a class="xdoc-link" href="Build.html#.Lib.Type_.Custom" title="LibType_Custom">Build_LibType_Custom</a> or
+  <a class="xdoc-link" href="Build.html#.Lib.Type_.Debug" title="LibType_Debug">Build_LibType_Debug</a>, this string contains
+  the options passed to the compiler during any re-build of the
+  IPC sources.</div>
+<div class="xdocText">In addition to the options specified by <tt>Build.customCCOpts</tt>,
+  several <tt>-D</tt> and <tt>-I</tt> options are also passed to the compiler.
+  The options specified by <tt>Build.customCCOpts</tt> preceed the <tt>-D</tt>
+  and <tt>-I</tt> options passed to the compiler on the command line.</div>
+<div class="xdocText">To view the custom compiler options, add the following line
+  to your config script:</div>
+<div class="xdocText"><PRE class="Example">  print("Build.customCCOpts="+Build.customCCOpts);
+</PRE></div>
+<div class="xdocText">When <a class="xdoc-link" href="Build.html#lib.Type" title="libType">Build.libType</a> is set to
+  <a class="xdoc-link" href="Build.html#.Lib.Type_.Custom" title="LibType_Custom">Build_LibType_Custom</a>, <tt>Build.customCCOpts</tt>
+  is initialized to create a highly optimized library.</div>
+<div class="xdocText">When <a class="xdoc-link" href="Build.html#lib.Type" title="libType">Build.libType</a> is set to
+  <a class="xdoc-link" href="Build.html#.Lib.Type_.Debug" title="LibType_Debug">Build_LibType_Debug</a>, <tt>Build.customCCOpts</tt>
+  is initialized to create a non-optimized library that can be
+  used to single-step through the APIs with the CCS debugger.</div>
+<span id="xdoc-sect-2"></span>
+<div class="xdocSect">WARNING</div>
+<div class="xdocText">The default value of <tt>Build.customCCOpts</tt>, which is derived from
+  the target specified by your configuration, includes runtime
+  model options (such as endianess) that must be the same for all
+  sources built and linked into your application. You must not
+  change or add any options that can alter the runtime model
+  specified by the default value of <tt>Build.customCCOpts</tt>.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="lib.Dir"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Build.</span><span class="xdoc-id">libDir</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/ipc/Build.html" title="module Build"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/ipc/Build.html#lib.Dir">index URL</a></div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Build.<span class="xdoc-id">libDir</span> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="lib.Type"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Build.</span><span class="xdoc-id">libType</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/ipc/Build.html" title="module Build"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/ipc/Build.html#lib.Type">index URL</a></div>
+<p class="xdocHdrSummaryDcl">IPC library type</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Build.<span class="xdoc-id">libType</span> = <i><a class="xdoc-link" href="../../../ti/sdo/ipc/Build.html#.Lib.Type" title="ti.sdo.ipc.Build.LibType">Build.LibType</a></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">The IPC runtime is provided in the form of a library that is
+  linked with your application. Several forms of this library are
+  provided with the IPC product. In addition, there is an option
+  to build the library from source. This configuration parameter
+  allows you to select the form of the IPC library to use.</div>
+<div class="xdocText">The default value of libType is taken from the BIOS.libType
+  configuration parameter. For a complete list of options and
+  what they offer see <a class="xdoc-link" href="Build.html#.Lib.Type" title="LibType">LibType</a>.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="logs.Enabled"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Build.</span><span class="xdoc-id">logsEnabled</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/ipc/Build.html" title="module Build"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/ipc/Build.html#logs.Enabled">index URL</a></div>
+<p class="xdocHdrSummaryDcl">IPC log support in custom library enable flag</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Build.<span class="xdoc-id">logsEnabled</span> = <i><span class="xdoc-kw2">Bool</span></i> <span class="xdoc-kw2">true</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">When set to true, IPC execution log code is compiled into
+  the custom library created when <a class="xdoc-link" href="Build.html#lib.Type" title="libType">Build.libType</a>
+  is set to <a class="xdoc-link" href="Build.html#.Lib.Type_.Custom" title="LibType_Custom">Build_LibType_Custom</a> or
+  <a class="xdoc-link" href="Build.html#.Lib.Type_.Debug" title="LibType_Debug">Build_LibType_Debug</a>.</div>
+<div class="xdocText">When set to false, all log code is removed from the custom
+  library created when Build.libType = Build.LibType_Custom or
+  Build.LibType_Debug. This option can considerably improve runtime
+  performance as well signficantly reduce the application's code
+  size.</div>
+<span id="xdoc-sect-2"></span>
+<div class="xdocSect">SEE</div>
+<div class="xdocText"><a class="xdoc-link" href="Build.html#lib.Type" title="libType">libType</a></div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="build.Libs"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-id">Build.</span><span class="xdoc-id">buildLibs</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/ipc/Build.html" title="module Build"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/ipc/Build.html#build.Libs">index URL</a></div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Build.<span class="xdoc-id">buildLibs</span>(<i><span class="xdoc-kw2">Any</span></i> <span class="xdoc-id">objList</span>, <i><span class="xdoc-kw2">Any</span></i> <span class="xdoc-id">relList</span>, <i><span class="xdoc-kw2">Any</span></i> <span class="xdoc-id">filter</span>, <i><span class="xdoc-kw2">Any</span></i> <span class="xdoc-id">xdcArgs</span>) <i>returns</i> <i><span class="xdoc-kw2">Any</span></i>
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="get.Asm.Files"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-id">Build.</span><span class="xdoc-id">getAsmFiles</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/ipc/Build.html" title="module Build"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/ipc/Build.html#get.Asm.Files">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Get the library Asm source files</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Build.<span class="xdoc-id">getAsmFiles</span>(<i><span class="xdoc-kw2">String</span></i> <span class="xdoc-id">target</span>) <i>returns</i> <i><span class="xdoc-kw2">Any</span></i>
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="get.C.C.Opts"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-id">Build.</span><span class="xdoc-id">getCCOpts</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/ipc/Build.html" title="module Build"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/ipc/Build.html#get.C.C.Opts">index URL</a></div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Build.<span class="xdoc-id">getCCOpts</span>(<i><a class="xdoc-link" href="../../../xdc/bld/ITarget.html#.Module" title="xdc.bld.ITarget.Module">ITarget.Module</a></i> <span class="xdoc-id">target</span>) <i>returns</i> <i><span class="xdoc-kw2">String</span></i>
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="get.C.Files"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-id">Build.</span><span class="xdoc-id">getCFiles</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/ipc/Build.html" title="module Build"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/ipc/Build.html#get.C.Files">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Get the library C source files</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Build.<span class="xdoc-id">getCFiles</span>(<i><span class="xdoc-kw2">String</span></i> <span class="xdoc-id">target</span>) <i>returns</i> <i><span class="xdoc-kw2">String</span></i>
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="get.Default.Custom.C.C.Opts"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-id">Build.</span><span class="xdoc-id">getDefaultCustomCCOpts</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/ipc/Build.html" title="module Build"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/ipc/Build.html#get.Default.Custom.C.C.Opts">index URL</a></div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Build.<span class="xdoc-id">getDefaultCustomCCOpts</span>() <i>returns</i> <i><span class="xdoc-kw2">String</span></i>
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="get.Defs"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-id">Build.</span><span class="xdoc-id">getDefs</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/ipc/Build.html" title="module Build"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/ipc/Build.html#get.Defs">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Get the compiler -D options necessary to build</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Build.<span class="xdoc-id">getDefs</span>() <i>returns</i> <i><span class="xdoc-kw2">String</span></i>
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="get.Libs"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-id">Build.</span><span class="xdoc-id">getLibs</span>()&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/sdo/ipc/Build.html" title="module Build"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/sdo/ipc/Build.html#get.Libs">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Common getLibs() for all ipc packages</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Build.<span class="xdoc-id">getLibs</span>(<i><span class="xdoc-kw2">Any</span></i> <span class="xdoc-id">pkg</span>) <i>returns</i> <i><span class="xdoc-kw2">Any</span></i>
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+</div>
+<div id="xdocDate">generated on Wed, 15 Feb 2017 14:20:14 GMT</div>
+</div></div></body>
+</html>

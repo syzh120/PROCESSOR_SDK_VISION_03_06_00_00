@@ -1,0 +1,554 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><!-- 
+ *  Copyright (c) 2010, Texas Instruments Incorporated
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *
+ *  *  Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *
+ *  *  Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ *
+ *  *  Neither the name of Texas Instruments Incorporated nor the names of
+ *     its contributors may be used to endorse or promote products derived
+ *     from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ *  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ *  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ *  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ *  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ *  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ *  OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ *  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ *  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ *  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * 
+-->
+
+    
+    
+    
+  
+
+  <title>Network Development Kit (NDK) 2.21.00.32 GA Release Notes</title><!-- For now, we use the doxygen style sheet --><link type="text/css" rel="stylesheet" href="docs/html/doxygen.css"><!-- doxygen's css .memproto's all have tables for a little extra pad...
+         don't like tables, so give 'em a little extra pad ourselves
+    --->
+
+    
+    
+  <style type="text/css">
+    .memproto {
+        padding: 3;
+    }
+    </style></head>
+<body>
+
+<table width="100%">
+
+  <tbody>
+
+    <tr>
+
+      <td bgcolor="black" width="1">
+        <a href="http://www.ti.com">
+          <img src="docs/html/tilogo.gif" alt="Texas Instruments" border="0">
+        </a>
+      </td>
+
+      <td bgcolor="red">
+        <img src="docs/html/titagline.gif" alt="Technology for Innovators(tm)">
+      </td>
+
+    </tr>
+
+  
+  </tbody>
+</table>
+
+
+<h1 align="center">NDK 2.21.00.32 GA Release Notes</h1>
+
+<h2 align="center">March 24, 2012</h2>
+
+
+<p>
+This major release of the NDK contains documentation updates, support
+for graphical configuration pages, and major bug fixes.
+&nbsp;This release is intended to support
+SYS/BIOS 6.32.03.43 or greater. </p>
+
+<p align="center">
+<a href="#Introduction">Introduction</a>,
+<a href="#Documentation">Documentation</a>,
+<a href="#Whats_New">What's New</a>,
+<a href="#Upgrade_Info">Upgrade Info</a>,
+<a href="#Compatibility">Compatibility Information</a>,
+<a href="#Device_Support">Device Support</a>,
+<a href="#Validation">Validation Info</a>,
+<a href="#Known_Issues">Known Issues</a>,
+<a href="#Benchmarks">Benchmarks</a>,
+<a href="#Examples">Examples</a>,
+<a href="#Rebuilding_The_Core">Rebuilding The NDK Core Libraries</a>,
+<a href="#Version">Version Information</a>,
+<a href="#Support">Technical Support</a>.
+</p>
+
+
+<hr>
+
+<h2><a name="Introduction">Introduction</a></h2>
+
+
+<p>
+The Network Developer's Kit (NDK) is a platform for development
+and demonstration of network enabled applications on TI embedded
+processors,
+currently limited to the TMS320C6000 family and ARM processors.
+The code included in this NDK release is generic C code which runs
+on any C64P, C66, C674, ARM9, Cortex-A8 or Cortex-M3 device (for C6000 processors,
+both big endian and little endian modes are supported). Users
+can obtain an appropriate NDK Support Package (NSP) for the various supported
+platforms separately. The NDK Support Packages include demonstration
+software
+showcasing capabilities across a range of network enabled
+applications. In addition, the stack serves as a rapid prototype
+platform
+for the development of network and packet processing applications, or
+to add
+network connectivity to existing applications for communications,
+configuration, and control. Using the components provided in the NDK,
+developers can quickly move from development concepts to working
+implementations attached to the network. Please check the
+<a href="http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/ndk/index.html">
+release website</a>
+for previous release notes and NDK Support Packages.
+</p>
+
+
+<hr>
+
+<h2><a name="Documentation">Documentation</a></h2>
+
+<p>
+The following documents provide an overview of the NDK, the networking
+programming API, and how to port the software to other platforms:
+</p>
+
+<ul>
+
+  <li>
+    <a href="docs/spru523h.pdf">NDK User's
+    Guide</a>: Documents the NDK basics, and describes how to develop or
+    port a network-enabled application. It also describes how to customize
+    the network environment to fit your embedded environment. 
+  </li>
+
+  <li><a href="docs/spru524h.pdf">NDK Programmer's
+    Reference Guide</a>: Describes the NDK library API calls in detail.
+    It also includes a description of the stack's internal object based
+    API functions. 
+  </li>
+
+  <li><a href="docs/sprufp2_nspethdrvdesign.pdf">NDK Support
+    Package Ethernet Driver Design Guide</a>: 
+    Describes the NIMU based architecture of the Ethernet Drivers
+    packaged in the NSPs.</li>
+
+  <li><a href="http://www.ti.com/lit/an/spraax4/spraax4.pdf" target="_blank">
+    C6000 NDK Getting Started Guide</a>: A somewhat older document, but still
+    provides a good overview as well as a lot of useful information that is
+    still applicable.
+    </li>
+
+</ul>
+
+
+<p>
+In addition, users are encouraged to monitor (and contribute to!) the
+<a href="http://tiexpressdsp.com">TI Embedded Processors Wiki</a>.
+</p>
+
+
+<p>
+Release notes from previous releases are also available in the <a href="http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/ndk/index.html">
+release website.</a>
+</p>
+
+
+<hr>
+<h2><a name="Whats_New">What's New</a></h2>
+
+
+<h3>New Features</h3>
+
+<ul>
+  <li>DSP/BIOS 5.x is no longer supported in this version of the NDK&nbsp;(it is still supported in the NDK 2.20x stream)</li><li>Added new graphical configuration support to ti.ndk.config package.</li><li>PBM and memory manager buffer sizes are now configurable at the application build level.</li><li>Fixed race condition in the task delete code.</li><li>NDK now takes advantage of the SYS/BIOS feature to automatically delete terminated tasks.</li><ul><li>Note: it may be necessary to update your application configuration (*.cfg) file for this.</li><li>Please refer to the <a href="#Known_Issues">Known Issues</a>&nbsp;section, as well as section 5.2.2 of the&nbsp;<a href="docs/spru523h.pdf">NDK User's
+    Guide</a> for more information.</li></ul><li>Now shipping pure IPv4 libraries</li><li>Network
+control library now has 3 possible choices - "minimal", "normal" and
+"full", in order to allow user to eliminate unwanted stack features.</li><li>Added support for the A8Fnv target.</li><li>Added support for the C674 ELF target.</li><li>NDK heartbeat tick period is now adjustable via the configuration
+parameter Global.ndkTickPeriod</li><ul><li>It's default value is 100 ticks.
+&nbsp;This default value was chosen because the default SYS/BIOS Timer
+object, which drives the SYS/BIOS Clock, is configured so that 1 tick
+= = 1 millisecond. &nbsp;However, it is possible for the user to
+configure a new Timer and use that to drive the Clock module. &nbsp;If
+this is done, and the new Timer is not configured such that 1 tick = = 1
+millisecond, then the user is repsonsible for adjusting the NDK tick
+period (via ti.ndk.config.Global.ndkTickPeriod) accordingly.</li></ul></ul>
+
+
+
+<h3>Bug Fixes in NDK 2.21.00.32</h3>
+
+
+<ul><li>SDOCM00076157 need to make size of buffers in pbm.c configurable</li><li>SDOCM00078591 need to scale NDK heartbeat to be 100 ms for all hardware platforms</li><li>SDOCM00076026 NDK 2.20 documents link in the eclipse plugin is broken<br></li><li>SDOCM00085962 clock object needs to be created at run time for multi core (as well as single core scenario)<br></li><li>SDOCM00081792 TaskExit has a potential race condition<br></li><li>SDOCM00083333 NDK Task clean conflicts with SYS/BIOS' Task.deleteTerminatedTasks<br></li><li>SDOCM00078780 NDK config pkg getLibs should fail if building for unsupported target<br></li><li>SDOCM00076155 cannot build pure NDK IPv4 lib due to IPv4 code containing references to IPv6 functions<br></li><li>SDOCM00076156 need to remove references to telnet and http from netsrv.c<br></li><li>SDOCM00086804 NDK product needs to be signed so that CCS does not complain when starting after new NDK installed<span style="font-weight: bold;"></span></li><li>SDOCM00079178 update and run NDK benchmark programs for BIOS 6</li><li>SDOCM00075001 Client example crashes upon stack reboot for BIOS 6 - cannot delete Task in BLOCKED or RUNNING state</li><li>SDOCM00085966 NDK boot task stack size needs to be configurable</li><li>SDOCM00088559 winapps broken in NDK 2.21 due to new compiler used to rebuild them</li><li>SDOCM00077024 NDK API guide (spru524) - update send() to inform user of reason for -1 return value</li><li>SDOCM00082348 NDK documentation needs improved description of fdShare() API</li><li>SDOCM00046203 NDK 1.94 Programmer's guide should warn the IGMPJoinHostGroup and IGMPLeaveHostGroup APIs will be deprecated.</li></ul><h3>Bug Fixes in NDK 2.20.06.35</h3>
+
+
+<ul><li>SDOCM00087781&nbsp;clock create code should only be generated for processors that the user chooses 
+in Global.multiCoreStackRunMode</li><li>SDOCM00087768&nbsp;NDK heartbeat Clock period incorrectly computed in NDK 2.20.05.33 release</li></ul><h3>Bug Fixes in NDK 2.20.05.33</h3>
+
+
+<ul><li>SDOCM00082467 Add C674x ELF support to NDK</li><li>SDOCM00083225&nbsp;add Cortex-A8 vector floating point (A8Fnv) library support for NDK libraries </li><li>SDOCM00084419&nbsp;update NDK 2.20 plugins to work with CCSv5.1</li><li>SDOCM00076026&nbsp;NDK 2.20 documents link in the eclipse plugin is broken</li><li>SDOCM00086022&nbsp;(Child) Ndk clock object needs to be created at run time for multi core (as well as single core scenario)</li><li>SDOCM00086028&nbsp;(Child) need to scale NDK heartbeat to be 100 ms for all hardware platforms </li></ul><h3>Bug Fixes in NDK 2.20.04.26</h3>
+
+
+<ul><li>SDOCM00080990 - NDK big endian library support is broken</li></ul><h3>Bug Fixes in NDK&nbsp;2.20.03.24</h3>
+
+
+<ul>
+  <li>SDOCM00076153 - NDK getLibs() function is broken for non-default stack choice</li><li>SDOCM00076236 - NDK getLibs() should not return binsrc library</li><li>SDOCM00077029 - SEQ_GT macro problem (Arm 4.6.x compiler generates incorrect code) in tcpif.h</li><li>SDOCM00076026 - NDK 2.20 documents link in the eclipse plugin is broken</li><ul><li>This
+bug was thought to have been fixed in 2.20.02.22, but in fact the
+problem was still present in that release. &nbsp;It is now fixed and
+verified to be fixed in this ndk_2_21_00_32 release.</li></ul>
+
+  </ul><h3>Bug Fixes in NDK&nbsp;2.20.02.22</h3><ul><li>SDOCM00075747 - ti.ndk.config getlibs() does not support C66</li></ul><h3>Bug Fixes in NDK&nbsp;2.20.00.19</h3><ul>
+
+  <li>SDOCM00072247 - DaemonNew() function takes task pri and stacksize but doesn't use them when creating a new task.</li><li>SDOCM00071793 - NDK must handle support for ipc.Semaphore vs. knl.Semaphore to support B6.30 as well as earlier B6.x versions</li><li>SDOCM00071791 - ndk.config pkg should useModule on all mods required by OSAL</li>
+
+  <li>SDOCM00072132 - NDK core libs must be rebuildable by the customer</li>
+
+  <li>SDOCM00072131 - NDK needs to build with a CCS project</li>
+
+  <li>SDOCM00072865 - need configuration param for NDK config package to allow user to select which core(s) to run the stack on</li>
+
+  <li>SDOCM00072871 - some NDK config params are type "Int" when they should be type "CisFlags"</li>
+
+  <li>SDOCM00074294 - NDK apps get errors due to undefined symbols when Global.enableCodeGeneration = false</li>
+ 
+  <li>SDOCM00072134 - NDK build fails if BIOS5 is not installed</li>
+
+  <li>SDOCM00074864 - ndk examples get errors if Global.enableCodeGeneration = false and other config modules are used</li> 
+
+  <li>SDOCM00074815 - setting socket option to TCP_NOPUSH in httpClientProcess() causes slow web page bring up</li>
+
+  <li>SDOCM00074294 - NDK apps get errors due to undefined symbols when Global.enableCodeGeneration = false</li>
+
+  <li>SDOCM00072872 - NDK example utilities e.g. cgi, servers, console, etc. - build these into a library</li>
+
+</ul>
+
+
+<hr>
+<h2><a name="Upgrade_Info">Upgrade Information</a></h2>
+
+<p>
+All the libraries in this release support either IPv4 or IPv6 (or both)
+and NIMU. The low-level (LL) packet driver architecture has been
+deprecated
+since NDK v2.0.0 release.
+</p>
+
+
+<p>The NDK stack in this release supports SYS/BIOS 6.32.03.43 (or
+greater) and is meant to be used with CCSv5.1. The OS Abstraction Layer
+(OSAL) and HAL libraries
+have been provided for SYS/BIOS 6.x only. &nbsp;DSP/BIOS 5.x support
+can be found in previous versions of the NDK.
+</p>
+
+
+<p>
+The latest Network Support Packages (NSPs) are now released independently of
+this product and can be obtained from
+the <a href="http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/ndk/index.html">NDK website</a>.
+</p>
+
+
+<hr>
+<h2><a name="Compatibility">Compatibility Information</a></h2>
+<p>
+This release must be used with&nbsp;following component versions (or higher):
+</p>
+
+<ul>
+  <li>SYS/BIOS <b>6.32.03.43</b></li>
+</ul>
+<b></b>
+
+<ul>
+  <li>CCS&nbsp;<span style="font-weight: bold;">5.1</span></li>
+  <li>XDCtools <b>3.22.03.41</b></li>
+  <li>Code Generation Tools Versions</li>
+  <ul type="square">
+    <li>64xx+: Code Generation Tools&nbsp;<span style="font-weight: bold;">7.3.1</span>
+    </li>
+
+    <li>66xx: Code Generation Tools <b>7.3.1</b>
+    </li>
+
+    <li>674x+: Code Generation Tools&nbsp;<span style="font-weight: bold;">7.3.1</span>
+    </li>
+
+    <li>Arm9: Code Generation Tools <b>4.9.1</b>
+    </li>
+
+    <li>Cortex-A8: Code Generation Tools <b>4.9.1</b>
+    </li>
+  </ul>
+</ul>
+
+
+
+
+<hr>
+<h2><a name="Device_Support">Device Support</a></h2>
+
+
+<p>
+This release supports the following devices:
+</p>
+<ul>
+
+  <li>64xx+: big and little endian
+  </li>
+
+  <li>66xx: big and little endian
+  </li>
+
+  <li>674x+:&nbsp;little endian
+  </li>
+
+  <li>Arm9: elf format only
+  </li>
+
+  <li>Cortex-A8: elf format only</li><li>Cortex-M3: elf format only</li>
+</ul>
+
+
+
+
+
+
+<hr>
+<h2><a name="Validation">Validation</a></h2>
+
+<p>
+This release was built and validated against using the following software
+components:
+</p>
+
+
+<ul>
+
+  
+
+  <li><b></b>SYS/BIOS <b>6.32.03.43</b></li>
+
+  <li>NSP <span style="font-weight: bold;">1.10.00.03</span></li><li>CCS&nbsp;<span style="font-weight: bold;">5.1</span></li>
+
+  <li>XDCtools <b>3.22.03.41</b></li>
+
+  <li>Pre-built binaries were built with the following toolchains:
+  </li>
+  <ul type="square">
+    <li>64xx+: Code Generation Tools&nbsp;<b>7.0.0</b>
+    </li>
+
+    <li>66xx: Code Generation Tools&nbsp;<b>7.2.0</b><b></b>
+    </li>
+
+    <li>674x+: Code Generation Tools&nbsp;<span style="font-weight: bold;">7.0.0</span>
+    </li>
+
+    <li>674x+ ELF: Code Generation Tools&nbsp;<span style="font-weight: bold;">7.2.0</span></li><li>Arm9: Code Generation Tools <b>4.9.0</b>
+    </li>
+
+    <li>Cortex-A8: Code Generation Tools <b>4.9.0</b></li><li>Cortex-M3: Code Generation Tools <b>4.9.0</b></li>
+  </ul>
+</ul>
+
+
+<p>
+This release was validated using the following hardware platforms:
+</p>
+
+
+<ul>
+
+  <li>OMAP-L138 LCDK</li><li>LM3S9B92 </li><li>F28M35H52C1 </li></ul>
+
+
+<hr>
+<h2><a name="Known_Issues">Known Issues</a></h2>
+
+
+The NDK has been updated to take advantage of the new SYS/BIOS feature
+which automatically deletes dynamically created Task objects which have
+reached the terminated state. &nbsp;If your application configuration
+is loading the package 'ti.ndk.config' and/or using the
+'ti.ndk.config.Global.xdc' module, then Task clean up will be set up
+correctly for you.<br><br>However, if your application configuration is
+not loading the 'ti.ndk.config' package or the
+'ti.ndk.config.Global.xdc' module, then you must add the following
+lines of code to your application configuration (*.cfg) file:<br><br><div style="margin-left: 40px;">var Task = xdc.useModule('ti.sysbios.knl.Task');<br>Task.deleteTerminatedTasks = true;<br></div><br>If not, you may experience out of memory issues due to improper Task clean up. &nbsp;Please refer to section&nbsp;<span style="font-weight: bold;">5.2.2 TaskCreate(), TaskExit(), and TaskDestroy()</span> of the <a href="docs/spru523h.pdf">NDK User's
+    Guide</a> for more information.<br><br><span style="text-decoration: underline;">Known Bugs</span>:<ul>
+<li>SDOCM00090817 - IPv6 init command fails sporadically</li>
+<li>SDOCM00090372 -&nbsp;running ping to a host name within client telnet session does not work due to 
+incorrectly resolved host name to IP address</li><li>SDOCM00075040 - running ping command within a telnet session on the ndk causes the terminal and telnet session to hang</li>
+
+  <li>SDSCM00025064 - DSP crash on Reboot with a PPPoE server on NDK.
+      Workaround: Ensure that the PPPoE server of the NDK stack is closed
+      before rebooting the stack.
+  </li>
+
+  <li>SDSCM00024506 - PPPoE client connection handle is not removed after
+  PPPoE session timeout. Workaround: Ensure that the session timeout on the
+  PPPoE server is configured to be a large value to avoid this issue.
+  </li>
+  
+</ul>
+
+
+<hr>
+<h2><a name="Benchmarks">Benchmarks</a></h2>
+
+
+<p>NDK benchmarks (described here: <a href="http://www.ti.com/lit/an/spraaq5a/spraaq5a.pdf">Network Developer's Kit (NDK) Benchmark and Sizing</a>)
+were re-built and run using the TCI6482/DSK6455 platform in order to
+obtain throughput and CPU load information against NDK 2.21x libraries
+(for NIMU architecture only).
+</p>
+<p>The benchmarks were run using the IPv6 enabled libraries (stk6_nat_ppp_pppoe.a64P and libraries built with _INCLUDE_IPv6_CODE defined), as well as the pure IPv4 only libraries (stk_nat_ppp_pppoe.a64P and *_ipv4.a64P libraries), which most closely resemble the previously published benchmark results for NDK 1.94 (linked above).
+</p>
+<p>During benchmarking, it was found that the IPv6 enabled stack libraries caused increased CPU load when compared to the pure IPv4 case.  This issue is currently under investigation.
+</p>
+
+<p>Please find updated Excel spreadsheets for benchmark results here.
+You may compare them to the spreadsheets found in the zip file attached
+to the aforementioned benchmark document: </p>
+<li><a href="packages/ti/ndk/benchmarks/2.21_dsk6455_mainboard_NIMU_Benchmark.xls">NDK Performance and CPU Load Benchmarks (pure IPv4 libraries)</a></li>
+<li><a href="packages/ti/ndk/benchmarks/2.21_dsk6455_mainboard_NIMU_Benchmark_IPv6_enabled.xls">NDK Performance and CPU Load Benchmarks (IPv6 enabled)</a></li>
+<p></p>
+
+
+<hr>
+<h2><a name="Examples">Examples</a></h2>
+
+
+<p>NDK examples are no longer included as part of the NDK core release.  All
+   examples are now located in a seperate Network Support Package (NSP).
+</p>
+<p>
+   This NDK release was validated using the latest NSP 1.10.00.03 product for the
+   evmOMAPL138 and evm6748 and so works best with the examples found in that
+   product. Users who have the evmOMAPL138 or evm6748 hardware platforms should
+   make sure to use the latest NSP product with this NDK release.
+</p>
+<p>
+   The latest NSP product may be downloaded from the
+   <a href="http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/ndk/index.html">NDK website</a>
+</p>
+<p>
+   For all other hardware platforms, the corresponding NSP products and
+   examples may be found in the previous NDK 2.00 and NDK 2.01.00 products,
+   which are also found at the 
+   <a href="http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/ndk/index.html">NDK website</a>.
+</p>
+
+
+<hr>
+<h2><a name="Rebuilding_The_Core">Rebuilding The NDK Core Libraries</a></h2>
+
+<p>The NDK product includes source files and build scripts that allow the user to modify its sources and rebuild its libraries.
+   You can do this in order to modify, update, or add functionality. If you<br>edit
+the NDK source code and/or corresponding build scripts, you must also
+rebuild the NDK in order to create new libraries containing these
+modifications.</p><p>The NDK ships with a make file which may be used to rebuild the NDK libraries after sources have been modified.
+</p>
+
+<p>Please refer to the following web page for instructions on how to rebuild
+   the NDK: <a href="http://processors.wiki.ti.com/index.php/Rebuilding_The_NDK_Core_Using_Gmake">Rebuilding The NDK Core With Gmake</a>
+</p>
+<hr>
+<h2><a name="Version">Version Information</a></h2>
+
+<p>
+This product's version follows a version format, <b>M.mm.pp.bb</b>,
+where <b>M</b> is a single digit Major number, <b>mm</b> is 2 digit
+minor number, <b>pp</b> is a 2 digit patch number, and <b>b</b> is an
+unrestricted set of digits used as an incrementing build counter.
+</p>
+
+
+<p>
+To support multiple side-by-side installations of the product, the
+product version is encoded in the top level directory,
+ex. <b>ndk_2_21_00_32</b>.
+</p>
+
+
+<p>
+Subsequent releases of patch upgrades will be identified by the patch
+number, ex. NDK 2.20.01 with directory <b>ndk_2_20_01</b>.
+Typically, these patches only include critical bug fixes.
+</p>
+
+
+<hr>
+<h2><a name="Support">Technical Support</a></h2>
+
+
+<ul>
+
+  <li>
+  <a href="http://support.ti.com">Technical support resources</a>
+  </li>
+
+  <li>
+  Forum-based technical support is available through the TI E2E Community in
+  the <a href="http://e2e.ti.com/support/embedded/f/355.aspx">BIOS forum</a>
+  </li>
+
+  <li>
+  <a href="http://tiexpressdsp.com/wiki/index.php?title=Category:NDK">Wiki-based documentation</a>
+  </li>
+  <li>
+  <a href="http://focus.ti.com/general/docs/techdocsabstract.tsp?abstractName=spraax4">Getting
+  Started with the C6000 Network Developer's Kit (NDK)</a>
+  </li>
+
+</ul>
+
+<p></p>
+
+
+<p>
+Check
+the <a href="http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/ndk/index.html">NDK
+    website</a> for updates.
+</p>
+
+
+<hr>
+<p>
+Last updated: March 24, 2012 Build Ver: ndk_2_21_00_32 Rev: b32
+</p>
+
+</body></html>
+</body>
+</html>

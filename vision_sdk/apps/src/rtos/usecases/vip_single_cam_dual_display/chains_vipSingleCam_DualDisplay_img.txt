@@ -1,0 +1,21 @@
+digraph chains_vipSingleCam_DualDisplay {
+
+       ColorScheme [shape=none, margin=0, label=<
+       <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+       <TR><TD bgcolor="lightblue">IPU1_0</TD></TR>
+       </TABLE>>];
+
+       /************** LINKS ************************/
+       Capture [color=lightblue, style=filled]
+       Dup_Capture [color=lightblue, style=filled]
+       Display_HDMI [color=lightblue, style=filled]
+       Display_LCD [color=lightblue, style=filled]
+       GrpxSrc [color=lightblue, style=filled]
+       Display_Grpx [color=lightblue, style=filled]
+
+       /************** CONNECTIONS ************************/
+       Dup_Capture -> Display_LCD[taillabel=Q0, minlen=2, labeldistance=3]
+       Dup_Capture -> Display_HDMI[taillabel=Q1, minlen=2, labeldistance=3]
+       Capture -> Dup_Capture
+       GrpxSrc -> Display_Grpx
+}

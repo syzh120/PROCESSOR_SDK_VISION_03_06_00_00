@@ -1,0 +1,51 @@
+/*******************************************************************************
+ *                                                                             *
+ * Copyright (c) 2013 Texas Instruments Incorporated - http://www.ti.com/      *
+ *                        ALL RIGHTS RESERVED                                  *
+ *                                                                             *
+ ******************************************************************************/
+
+/*
+ *  ======== config_m4.bld ========
+ */
+
+var MemSegDefine = xdc.loadCapsule("mem_segment_definition_512mb.xs");
+
+var Build = xdc.useModule('xdc.bld.BuildEnvironment');
+
+var buildReleaseConfig = true;
+
+var Build         = xdc.useModule('xdc.bld.BuildEnvironment');
+var M4            = xdc.useModule('ti.targets.arm.elf.M4');
+
+M4.rootDir        = java.lang.System.getenv("COMPILER_TOOLS");
+
+//set default platform and list of all interested platforms for M4
+M4.platforms = ["ti.platforms.evmDRA7XX:IPU_1_0",
+                "ti.platforms.evmDRA7XX:IPU_1_1",
+               ];
+
+M4.platform = M4.platforms[1];
+
+Build.targets     = [
+                    M4,
+                    ];
+
+
+Build.platformTable["ti.platforms.evmDRA7XX:IPU_1_0"] =
+{
+    externalMemoryMap: MemSegDefine.getMemSegmentDefinition_external(),
+    codeMemory:"IPU1_0_CODE_MEM",
+    dataMemory:"IPU1_0_BSS_MEM",
+    stackMemory:"IPU1_0_BSS_MEM"
+};
+
+Build.platformTable["ti.platforms.evmDRA7XX:IPU_1_1"] =
+{
+    externalMemoryMap: MemSegDefine.getMemSegmentDefinition_external(),
+    codeMemory:"IPU1_1_CODE_MEM",
+    dataMemory:"IPU1_1_DATA_MEM",
+    stackMemory:"IPU1_1_DATA_MEM"
+};
+
+

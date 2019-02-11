@@ -1,0 +1,85 @@
+%%{
+/*
+ * Copyright (c) 2013, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+%%}
+%%{
+/*
+ *  ======== Build.xdt ========
+ */
+var BIOS = xdc.module("ti.sysbios.BIOS");
+var Build = xdc.module("ti.sdo.utils.Build");
+var tplt = "";
+
+if (((BIOS.libType == BIOS.LibType_Custom) ||
+    (BIOS.libType == BIOS.LibType_Debug)) &&
+    (Build.$private.outputDir != undefined)) {
+
+    if (Build.doBuild) {
+        /* generate makefile from template
+         * $args[0] = the RTSC target, so the makefile knows how to
+         *            run the compiler and archiver
+         */
+        print("generating custom ti.sdo.utils library makefile ...");
+
+        if (Program.build.target.$name.match(/gnu/) &&
+            (Program.build.target.name.match(/M3/) ||
+             Program.build.target.name.match(/M4/) ||
+             Program.build.target.name.match(/M4F/) ||
+             Program.build.target.name.match(/A15/) ||
+             Program.build.target.name.match(/A9/)  ||
+             Program.build.target.name.match(/A8/))) {
+
+            tplt = xdc.loadTemplate(this.$package.packageBase +
+                    "/makefile_gccArmLto.xdt");
+        }
+        else if (Program.build.target.$name.match(/iar/)) {
+            throw new Error("IAR not supported by IPC");
+        }
+        else {
+            tplt = xdc.loadTemplate(this.$package.packageBase +
+                    "/makefile.xdt");
+        }
+    }
+    else {
+        /* Getting here means that this module should not have been
+         * instructed to build anything. It's too late to abort, so
+         * generate a makefile which will not actually build anything.
+         */
+        tplt = xdc.loadTemplate(this.$package.packageBase +
+                "/makefile_null.xdt");
+    }
+
+    /* use the output directory computed when Build was "used" */
+    tplt.genFile(Build.$private.outputDir + "/makefile", this,
+            [Program.build.target]);
+}
+%%}

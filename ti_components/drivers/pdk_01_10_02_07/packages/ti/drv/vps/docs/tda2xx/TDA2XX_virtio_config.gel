@@ -1,0 +1,30 @@
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  Project        : TDA2XX
+  File            : TDA2XX_Virtio_Config.gel
+  Author        : TI
+  Purpose        : Enables/Disables the cache for ducati sub-system.
+  Desciption    : Enables/Disables the cache for ducati sub-system.
+*/
+menuitem "M4_MMuConfig"
+
+#define WR_MEM_32(addr, data)    *(unsigned int*)(addr) =(unsigned int)(data)
+#define RD_MEM_32(addr)          *(unsigned int*)(addr)
+
+#define DUCATI_MMU_CFG                  0x55080000
+
+OnTargetConnect()
+{
+    GEL_TextOut( "\nConnecting Target...\n" );
+
+    M4_MMuConfig();
+
+    GEL_TextOut( "Connecting Target... Done.\n\n" );
+}
+
+hotmenu M4_MMuConfig()
+{
+    WR_MEM_32(DUCATI_MMU_CFG+0x920,         0x00000000);
+    WR_MEM_32(DUCATI_MMU_CFG+0x9A0,         0x55020000);
+
+    GEL_TextOut("\t MMU Configured\n");
+}

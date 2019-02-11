@@ -1,0 +1,11 @@
+UseCase: chains_networkStereoDisplay
+
+NetworkRx (A15) -> Decode -> VPE_decodeOut -> Dup_orig
+
+Dup_orig -> VPE_orgdisp -> Sync_org -> Alg_DmaSwMs -> Display_org
+
+Dup_orig -> Sync_disp -> Dup_CensusInput -> Alg_Census (EVE2) -> Alg_DisparityHamDist (EVE3) -> Merge -> Alg_StereoPostProcess (DSP1) -> VPE_disparity ->Display_disparity
+
+Dup_CensusInput -> Merge
+
+GrpxSrc -> Display_Grpx

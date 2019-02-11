@@ -1,0 +1,1198 @@
+<!--
+/*
+ *  Copyright 2013 by Texas Instruments Incorporated .
+ *  
+ */
+-->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!--
+ *  Copyright (c) 2013, Texas Instruments Incorporated
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *
+ *  *  Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *
+ *  *  Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ *
+ *  *  Neither the name of Texas Instruments Incorporated nor the names of
+ *     its contributors may be used to endorse or promote products derived
+ *     from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ *  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ *  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ *  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ *  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ *  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ *  OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ *  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ *  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ *  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+-->
+<html>
+<head>
+    <title>XDAIS 7.24.00.04 Release Notes </title>
+    <!-- For now, we use the doxygen style sheet -->
+    <link type="text/css" rel="stylesheet" href="docs/html/doxygen.css">
+    <!-- doxygen's css .memproto's all have tables for a little extra pad...
+         don't like tables, so give 'em a little extra left pad ourselves
+    --->
+    <style type="text/css">
+    body {
+        margin: 20px;
+    }
+    .memproto {
+        padding-left: 6px;
+    }
+    </style>
+</head>
+<body>
+<table width="100%">
+  <tbody>
+    <tr>
+      <td bgcolor="black" width="1">
+        <a href="http://www.ti.com">
+          <img border=0 src="docs/html/tilogo.gif" alt="Texas Instruments">
+        </a>
+      </td>
+      <td bgcolor="red">
+        <img src="docs/html/titagline.gif" alt="Technology for Innovators(tm)">
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h1 align="center">XDAIS 7.24.00.04 Release Notes </h1>
+<h2 align="center">May 2013</h2>
+
+<p align="center">
+<a href="#Introduction">Introduction</a>,
+<a href="#Documentation">Documentation</a>,
+<a href="#Whats_New">What's New</a>,
+<a href="#Upgrade_Info">Upgrade Info</a>,
+<a href="#Compatibility">Compatibility Information</a>,
+<a href="#Validation">Validation Info</a>,
+<a href="#Known_Issues">Known Issues</a>,
+<a href="#Examples">Examples</a>,
+<a href="#Version">Version Information</a>,
+<a href="#Support">Technical Support</a>.
+</p>
+
+<hr>
+
+<h2><a name="Introduction">Introduction</a></h2>
+
+<p>
+This XDAIS product contains the DSP Algorithm Interface Standard specification
+and related documentation and examples.
+</p>
+
+<p>
+Primary packages in this XDAIS release are briefly described here.
+(There are others, see the <a href="xdoc/index.html">Configuration Reference
+Guide</a> documentation for a complete package list.)
+</p>
+
+<ul>
+    <li>
+        <b><tt>ti.xdais</tt></b> - XDAIS interface and documentation
+    </li>
+    <li>
+        <b><tt>ti.xdais.dm</tt></b> - XDAIS-DM (XDM) interface and
+        documentation.
+    </li>
+    <li>
+        <b><tt>ti.xdais.qualiti</tt></b> - XDAIS compliancy checking tool
+    </li>
+</ul>
+
+<p>
+In addition several examples are also provided.
+</p>
+
+<hr>
+
+<h2><a name="Documentation">Documentation</a></h2>
+<p>
+The following documentation is available:
+</p>
+<ul>
+  <li>
+    <a href="http://processors.wiki.ti.com/index.php/XDAIS_Documentation">
+    XDAIS documentation list</a>
+  </li>
+  <li>XDM Users Guide
+  (<a href="packages/ti/xdais/dm/docs/XDM_UsersGuide.pdf">local</a> |
+  <a href="http://www-s.ti.com/sc/techlit/spruec8">latest</a>)
+  </li>
+  <li>XDAIS API Reference Guide (<a href="docs/html/index.html">HTML</a> | <a
+  href="docs/html/xdais_7_24_00_04.chm">CHM</a>) -
+  Includes XDM APIs</li>
+  <li><a href="packages/ti/xdais/dm/docs/xdm1_differences.pdf">What's new in
+  XDM 1.00</a></li>
+  <li><a href="xdoc/index.html">Package Reference Guide</a></li>
+  <li><a href="xdais_7_24_00_04_Reports.html">Code Analysis Reports</a></li>
+</ul>
+
+<p>
+In addition, users are encouraged to monitor (and contribute to!) the
+<a href="http://processors.wiki.ti.com">TI Embedded Processors Wiki</a>.
+</p>
+
+<p>
+Release notes from previous releases are also available in the <a
+href="relnotes_archive">relnotes_archive</a> directory.
+</p>
+
+<hr>
+<h2><a name="Whats_New">What's New</a></h2>
+<p>The following significant changes have been made since 5.00</p>
+
+<div class="memitem">
+<div class="memproto">7.24.00.04 </div>
+
+<div class="memdoc">
+<ul>
+  <li>Deprecated features
+    <ul>
+      <li>IDMA3 is deprecated in this release, being replaced by IRES
+      interfaces.  IDMA3 continues to be provided in this release, but
+      may be removed in the future.</li>
+    </ul>
+  </li>
+
+  <li>The following defects were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+  <br />
+
+  <li>The following enhancements were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+</ul>
+</div>
+</div>
+
+<br />
+
+<div class="memitem">
+<div class="memproto">7.22.00.03 </div>
+
+<div class="memdoc">
+<ul>
+  <li>The following defects were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td>SDOCM00084928</td>
+      <td>videnc2_copy's generated QualiTI script has incorrect interface name
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00084933</td>
+      <td>XDAIS videnc1_copy example does not export its IDMA3 functions in header file
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00084930</td>
+      <td>Add strasgi external reference to QualiTI approved symbols
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00084573</td>
+      <td>QualiTI sometimes crashes when validating algs built with newer cgtools
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00082876</td>
+      <td>QualiTI java.lang.Thread.yield() statement fails with xdctools 3.22
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00084938</td>
+      <td>Alg generated using genalg incorrectly assigns outArgs->extendedError
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+  <br />
+
+  <li>The following enhancements were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td>SDOCM00084576</td>
+      <td>Eclipse plugin updates required for CCS 5.1
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+
+</ul>
+</div>
+</div>
+
+<br/>
+
+<div class="memitem">
+<div class="memproto">7.21.00.02 </div>
+
+<div class="memdoc">
+<ul>
+  <li>The following defects were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td>SDOCM00077137</td>
+      <td>QualiTI should check that the library file is valid
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00081266</td>
+      <td>ELF and ARM RTSC Target Modules Fail to Load in GenAlg Wizard When Running Inside of Code Composer Studio
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00076942</td>
+      <td>GenAlg should detect (and reject) module, vendor, and package names with spaces
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+  <br />
+
+  <li>The following enhancements were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td>SDOCM00070211</td>
+      <td>Add #include guards to genalg templates
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+
+</ul>
+</div>
+</div>
+
+<br />
+
+
+<div class="memitem">
+<div class="memproto">7.20.00.07</div>
+
+<div class="memdoc">
+<ul>
+  <li>The following defects were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00072944">SDOCM00072944</a></td>
+      <td>viddec3_copy example's getLibs() fails to return the 'release' library when asked for a profile it didn't build
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+  <br />
+
+  <li>The following enhancements were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td><a href="https://cqweb.ext.ti.com/cqweb/main?command=GenerateMainFrame&service=CQ&schema=SDO-Web&contextid=SDOWP&entityDefName=IncidentReport&username=readonly&password=readonly&entityID=SDOCM00073013">SDOCM00073013</a></td>
+      <td>Add multiple target support to genalg
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+
+</ul>
+</div>
+</div>
+
+<br />
+
+<div class="memitem">
+<div class="memproto">7.10.00.06</div>
+<div class="memdoc">
+<ul>
+  <li>New features
+    <ul>
+      <li>Updated GenAlg Templates</li>
+      <li>QualiTI enhancements</li>
+    </ul>
+  </li>
+
+  <li>The following defects were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td>SDOCM00064940</td>
+      <td>QualiTI should check the minimal CG XML version is available
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00067032</td>
+      <td>ti/xdais/qualiti/README.txt file refers to non-existent scripts
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00064938</td>
+      <td>QualiTI crashes with older XDC versions
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+
+  <li>The following enhancements were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td>SDOCM00066690</td>
+      <td>Add 'producerId' to all packages, ensuring the marketing version follows the pre-built packages
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00068943</td>
+      <td>Update GenAlg's templates based on IUNIVERSAL users feedback
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+
+</ul>
+</div>
+</div>
+
+<br />
+
+<div class="memitem">
+<div class="memproto">7.00.00.27 </div>
+
+
+
+<div class="memdoc">
+<ul>
+  <li>New features
+    <ul>
+      <li>Added IVIDDEC3 and IVIDENC2 Beta interfaces</li>
+    </ul>
+  </li>
+
+  <li>The following defects were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+
+  <li>The following enhancements were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td>SDOCM00060866</td>
+      <td>Add C64T support to QualiTI
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00060336</td>
+      <td>Add IVIDEO_FRAME_OUTPUTSKIP value to IVIDEO_OutputFrameStatus
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00060424</td>
+      <td>Add several new video formats to IVIDEO_Format enum
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00050265</td>
+      <td>QualiTI (and XDAIS) needs updated for Cortex M3 (and friends)
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+
+</ul>
+</div>
+</div>
+
+<br />
+
+<div class="memitem">
+<div class="memproto">6.25.00.07</div>
+
+<div class="memdoc">
+<ul>
+  <li>New features
+    <ul>
+      <li>Changed to 4-segment versioning</li>
+      <li>Minor example build updates</li>
+    </ul>
+  </li>
+
+  <li>The following defects were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+
+  <li>The following enhancements were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td>SDOCM00061294</td>
+      <td>Allow QualiTI to use relative paths (relative to the .qti file) to set basedir field
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00046986</td>
+      <td>IALG::algInit status/return codes should be well-specified and allow extensions of error or success codes
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00062286</td>
+      <td>Create a wizard to generate XDM algorithm packages
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00061326</td>
+      <td>Add ".econst" and ".ebss" to QualiTI's Rule 13-based list of approved section names
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00061304</td>
+      <td>IRES_RequestMode should also support the IRES_LATEACQUIRE mode for acquiring resources.
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+
+</ul>
+</div>
+
+<br />
+
+<div class="memitem">
+<div class="memproto">6.24</div>
+
+<div class="memdoc">
+<ul>
+  <li>New features
+    <ul>
+      <li>QualiTI improvements</li>
+      <li>Validated examples against WinCE targets</li>
+    </ul>
+  </li>
+
+  <li>The following defects were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+
+  <li>The following enhancements were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+
+</ul>
+</div>
+</div>
+
+<br />
+
+<div class="memitem">
+<div class="memproto">6.23</div>
+
+<div class="memdoc">
+<ul>
+  <li>New features
+    <ul>
+      <li>QualiTI enhancements to include ARM support</li>
+    </ul>
+  </li>
+
+  <li>The following defects were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td>SDOCM00053259</td>
+      <td>chm API Reference Guide search doesn't work
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00054295</td>
+      <td>QualiTI fails on Windows if the tool paths contain spaces
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+
+  <li>The following enhancements were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td>SDOCM00054214</td>
+      <td>Add 674 target support to QualiTI
+</td>
+    </tr>
+    <tr>
+      <td>SDOCM00054216</td>
+      <td>Add QualiTI -g option to support launching GUI with a given filename
+</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+
+</ul>
+</div>
+</div>
+
+<br />
+
+
+<div class="memitem">
+<div class="memproto">6.22</div>
+
+<div class="memdoc">
+<ul>
+  <li>New features
+    <ul>
+      <li>Added new chroma formats to XDM_ChromaFormat enum</li>
+    </ul>
+  </li>
+
+  <li>The following enhancements were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td>SDSCM00050966</td>
+      <td>Add more Chroma format enums</td>
+    </tr>
+  </tbody>
+</table>
+</li>
+
+</ul>
+</div>
+</div>
+
+<br />
+
+<div class="memitem">
+<div class="memproto">6.21</div>
+
+<div class="memdoc">
+<ul>
+  <li>New features
+    <ul>
+      <li>BSD Licensing</li>
+    </ul>
+  </li>
+
+  <li>The following enhancements were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td>SDOCM00049826</td>
+      <td>Change Licensing to BSD</td>
+    </tr>
+    <tr>
+      <td>SDOCM00050452</td>
+      <td>Add the ability for extending XDM-defined enums</td>
+    </tr>
+  </tbody>
+</table>
+  </li>
+
+</ul>
+</div>
+</div>
+
+<br />
+
+<div class="memitem">
+<div class="memproto">6.20</div>
+
+<div class="memdoc">
+<ul>
+  <li>New features
+    <ul>
+      <li>Documentation updates, including error resiliency clarifications
+      in IVIDDEC2.</li>
+      <li>Minor bug fixes in QualiTI.</li>
+      <li>Changes to IVIDANALYTICS API in response to customer feedback.  This
+      breaks compatibility with previous releases of IVIDANALYTICS, but the
+      API continues to be in Beta form and therefore changable.</li>
+    </ul>
+  </li>
+
+
+  <li>The following defects were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td>SDSCM00024690</td>
+      <td>QualiTI doesn't catch not-an-archive Rule 15 if in an XDC package</td>
+    </tr>
+    <tr>
+      <td>SDSCM00025188</td>
+      <td>QualiTI needs to handle _IALG symbols when they're const</td>
+    </tr>
+    <tr>
+      <td>SDSCM00025559</td>
+      <td>viddec2_copy example has incorrect symbol in header</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+
+  <li>The following enhancements were resolved:
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td>SDSCM00024172</td>
+      <td>Examples which use package.bld should have explicit Build and Pkg assignments</td>
+    </tr>
+    <tr>
+      <td>SDSCM00025558</td>
+      <td>IVIDDEC2 spec should state that valid bufs can be returned when non-fatal EFAIL is returned from process()</td>
+    </tr>
+    <tr>
+      <td>SDSCM00026170</td>
+      <td>Add IUNIVERSAL to XDM spec</td>
+    </tr>
+
+  </tbody>
+</table>
+</li>
+
+</ul>
+</div>
+</div>
+
+<br />
+
+<div class="memitem">
+<div class="memproto">6.10</div>
+
+<div class="memdoc">
+<ul>
+  <li>Introduction of IVIDDEC2 interfaces.</li>
+  <li>Introduction of <a href="packages/ti/xdais/qualiti/README.txt">QualiTI
+  XDAIS compliancy validation tool</a>.</li>
+  <li>Updated all examples to pass qualiTI compliance, and added .qti
+  workspace files.</li>
+</ul>
+</div>
+</div>
+<br />
+
+<div class="memitem">
+<div class="memproto">6.00</div>
+
+<div class="memdoc">
+<ul>
+  <li>Introduction of IRES interfaces.</li>
+  <li>Introduction of the video transcoder APIs (IVIDTRANSCODE)</li>
+  <li>Introduction of video analytics <i>Beta</i> APIs (IVIDANALYTICS).
+  These APIs are available for review, and will be replaced with the
+  <i>final</i> interfaces in a future release.</li>
+  <li>Deprecated XDM 0.9 interfaces.  These interfaces are fully supported in
+  this release, but support will be removed in a future release.  XDM algorithm
+  producers are strongly encouraged to migrate to the XDM 1.00 interfaces.</li>
+  <li>Updated <tt>ti.xdais.dm.examples.g711</tt> codec package to include
+  G.711 decode support and both u-law and a-law transforms.</li>
+</ul>
+</div>
+</div>
+
+<br />
+
+<div class="memitem">
+<div class="memproto">5.21</div>
+
+<div class="memdoc">
+<ul>
+  <li>Official release of XDM 1.00.  Examples and API Reference Guides
+  have been updated accordingly.</li>
+  <li>And the following MRs were resolved:
+
+<table width="100%">
+  <colgroup width="15%">
+  <tbody>
+    <tr>
+      <td><b>ID</b></td>
+      <td><b>Headline</b></td>
+    </tr>
+    <tr>
+      <td>SDSCM00014553</td>
+      <td>Remove dependency on BIOS types in idma3.h</td>
+    </tr>
+    <tr>
+      <td>SDSCM00013817</td>
+      <td>Deprecate XDM_ERUNTIME for XDM 1.00</td>
+    </tr>
+    <tr>
+      <td>SDSCM00013698</td>
+      <td>Add bitrate fields to several speech1 structs and more frame
+      types</td>
+    </tr>
+    <tr>
+      <td>SDSCM00013621</td>
+      <td>XDM 1.0 speech inArgs should have "size" field for extensibility</td>
+    </tr>
+    <tr>
+      <td>SDSCM00013568</td>
+      <td>XDM user guide needs to discuss extension of parameter ad
+      argument structions</td>
+    </tr>
+    <tr>
+      <td>SDSCM00013537</td>
+      <td>ISPHENC1_FrameType enums have inconsistant prefix</td>
+    </tr>
+    <tr>
+      <td>SDSCM00011273</td>
+      <td>When including public header files in XDAIS, one needs to
+      use "full qualified package path"</td>
+    </tr>
+    <tr>
+      <td>SDSCM00005724</td>
+      <td>XDAIS Documentation needs to be update to support IDMA3</td>
+    </tr>
+  </tbody>
+</table>
+
+</li>
+</ul>
+</div>
+</div>
+
+<br />
+
+<div class="memitem">
+<div class="memproto">5.10</div>
+
+<div class="memdoc">
+<ul>
+  <li>Introduction of XDM 1.00 Beta.
+    <ul>
+      <li>The Reference Guide has been updated to include these Beta
+      APIs.</li>
+      <li>Added <a
+      href="packages/ti/xdais/dm/docs/xdm1_differences.pdf">"What's New in XDM
+      1.00"</a> documentation, describing the high-level changes in the
+      XDM 1.00 Beta specification.</li>
+      <li>This XDM 1.00 Beta spec addresses the following items:
+        <ul>
+          <li>SDSCM00004685 - XDM speech enc and dec OutArgs should
+          have extendedError field for consistency</li>
+          <li>SDSCM00005009 - IIMGDEC_OutArgs bytesconsumed should be
+          camelCase</li>
+          <li>SDSCM00005245 - Video enc interface needs to reconsider
+          reconBufs conventions for RPCs</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Addition of example "copy" codecs, conforming with XDM 1.00 Beta
+  interfaces.</li>
+  <li>Addition of example G.711 algorithm, conforming with XDM 0.90
+  speech encoder interface.  This example shows how to wrap an XDM
+  interface around an existing algorithm.</li>
+  <li>Addition of example "extended" video encoder copy codec.  This
+  example shows how an algorithm can extend the XDM interface to
+  implement codec-specific features.</li>
+  <li>SDSCM00005726 - Add doxygen comments to ialg.h</li>
+  <li>SDSCM00005728 - IDMA3 channel object documentation needs to
+  include scratch environment support</li>
+  <li>SDSCM00010925 - XDM User's manual uses XMI in places</li>
+  <li>SDSCM00011274 - XDAIS header files for c55 need to include fully
+  qualified package files</li>
+</ul>
+</div>
+</div>
+
+<br />
+
+<hr>
+<h2><a name="Upgrade_Info">Upgrade Information</a></h2>
+<p>
+The XDAIS packages are available in the "packages/"
+subdirectory of the product.  If you have a previous release of the
+XDAIS product, you can install this release next to it, and
+modify your builds to use this newer release.</p>
+<p>
+If you're using the DVSDK, this can be done by setting the
+<b>XDAIS_INSTALL_DIR</b> variable in the <tt>Rules.make</tt> file at the
+top of the DVSDK distribution directory.</p>
+
+<h2>Compatibility Breaks!</h2>
+<p>None</p>
+
+<p>
+Note, if you're upgrading from a release earlier than XDAIS 7.23.00.06, be
+sure to review the <b>Upgrade</b> section for each of the releases between
+your current XDAIS release and this one.  Previous release notes are
+available in the <a href="relnotes_archive">relnotes_archive</a> directory.
+</p>
+
+<hr>
+<h2><a name="Compatibility">Compatibility Information</a></h2>
+<p>
+The table below describes each package's compatibility with the
+previous release (xdais_7_23_00_06). Compatibility keys highlighted in red
+are incompatible with the previous release.
+</p>
+<p>
+Note, the <a href="xdoc/index.html">Configuration Reference Guide</a> contains
+further details about each package.
+</p>
+<table border="1" cellpadding="4">
+  <tbody>
+    <tr>
+      <th>Package</th>
+      <th>xdais_7_23_00_06</th>
+      <th>xdais_7_24_00_04</th>
+    </tr>
+      <tr>
+          <td><tt><a href="./xdoc/index.html#ti/xdais/package.html">ti.xdais</a></tt></td>
+          <td align="center">1, 2.0, 1</td>
+            <td align="center">1, 2.0, 1</td>
+      </tr>
+      <tr>
+          <td><tt><a href="./xdoc/index.html#ti/xdais/dm/package.html">ti.xdais.dm</a></tt></td>
+          <td align="center">1, 0, 7</td>
+            <td align="center">1, 0, 7</td>
+      </tr>
+      <tr>
+          <td><tt><a href="./xdoc/index.html#ti/xdais/dm/templates/package.html">ti.xdais.dm.templates</a></tt></td>
+          <td align="center">1, 0, 0</td>
+            <td align="center">1, 0, 0</td>
+      </tr>
+      <tr>
+          <td><tt><a href="./xdoc/index.html#ti/xdais/qualiti/package.html">ti.xdais.qualiti</a></tt></td>
+          <td align="center">1, 0, 0</td>
+            <td align="center">1, 0, 0</td>
+      </tr>
+      <tr>
+          <td><tt><a href="./xdoc/index.html#ti/xdais/utils/trace/cio/package.html">ti.xdais.utils.trace.cio</a></tt></td>
+          <td align="center">1, 0, 0</td>
+            <td align="center">1, 0, 0</td>
+      </tr>
+      <tr>
+          <td><tt><a href="./xdoc/index.html#ti/xdais/wizards/genalg/package.html">ti.xdais.wizards.genalg</a></tt></td>
+          <td align="center">1, 0, 0</td>
+            <td align="center">1, 0, 0</td>
+      </tr>
+  </tbody>
+</table>
+
+
+
+
+<p>
+If migrating from a release prior to XDAIS 7.23.00.06, consult previous
+releases available in the <a
+href="relnotes_archive">relnotes_archive</a> directory.
+</p>
+
+<h3>Compatibility Key Definitions</h3>
+<p>
+Compatibility keys are intentionally independent of Marketing product
+numbers and are intended to:
+<ol>
+  <li>Enable tooling to identify incompatibilities between components,
+  and</li>
+  <li>Convey a level of compatibility between different releases to
+  set end user expectations.</li>
+</ol>
+</p>
+
+<p>
+Compatibility keys are composed of 3 comma-delimited numbers - M,S,R
+- where:
+<ul>
+  <li><b>M = Major</b>.  A difference in M indicates a break in
+  compatibility.</li>
+  <li><b>S = Source</b>.  A difference in S indicates source
+  compability.  That is, the user's source doesn't require change, but
+  <i>does</i> require rebuilding.</li>
+  <li><b>R = Radix</b>.  A difference in R indicates an introduction
+  of new features, but compatibility with previous interfaces has not
+  broken.  If libraries are provided by the package, an application
+  must re-link with the new libraries, but not rebuild from source.</li>
+</ul>
+</p>
+
+
+<hr>
+<h2><a name="Validation">Validation</a></h2>
+<p>
+This release was built and validated against using the following software
+components:
+</p>
+
+<ul>
+  <li>XDCtools <b>3.23.00.32</b></li>
+  <li>The examples were built with the following toolchains.  Note
+  that, in general, nothing prevents them from being built with a
+  different version of tools, nor for other devices - they are
+  intentionally written in generic C):
+    <ul>
+<!-- autogenerated list -->
+      <li>gnu.targets.Linux86 - <b>4.1.0</b></li>
+      <li>gnu.targets.UCArm9 - <b>4.2.1</b></li>
+      <li>gnu.targets.arm.GCArmv5T - <b>4.3.3</b></li>
+      <li>gnu.targets.arm.GCArmv6 - <b>4.3.2</b></li>
+      <li>gnu.targets.arm.GCArmv7A - <b>4.3.2</b></li>
+      <li>ti.targets.C28_large - <b>5.2.1</b></li>
+      <li>ti.targets.C64P - <b>7.0.0</b></li>
+      <li>ti.targets.C674 - <b>7.0.0</b></li>
+      <li>ti.targets.arm.elf.M3 - <b>4.9.0</b></li>
+      <li>ti.targets.elf.C64P - <b>7.2.0</b></li>
+      <li>ti.targets.elf.C64T - <b>7.2.0</b></li>
+      <li>ti.targets.elf.C66 - <b>7.2.0</b></li>
+      <li>ti.targets.elf.C674 - <b>7.2.0</b></li>
+    </ul>
+  </li>
+</ul>
+
+
+<hr>
+<h2><a name="Known_Issues">Known Issues</a></h2>
+<p>
+<ul>
+  <li>QualiTI
+  <ul>
+    <li>Rule 15 - Each XDAIS-compliant algorithm must be packaged in an
+      archive which has a name that follows a uniform naming convention - has
+      been disabled.
+    </li>
+  </ul>
+  </li>
+  <li>The eclipse plugin is not signed.  In recent releases of CCSv5, a dialog
+      box will be presented informing you of this.  To enable CCS integration,
+      you will have to accept this and click OK.
+  </li>
+</ul>
+</p>
+<p>
+See <a href="http://tiexpressdsp.com/index.php?title=Codec_Engine_Known_Issues">
+the MFP Known Issues wiki article</a> for issues found after these
+release notes were compiled.
+</p>
+
+<hr>
+<h2><a name="Examples">Examples</a></h2>
+<p>XDAIS examples and instructions are located in the
+"examples" directory.
+</p>
+<ul>
+  <li><a href="examples/build_instructions.html">Example Build
+  Instructions</a></li>
+</ul>
+
+<hr>
+<h2><a name="Version">Version Information</a></h2>
+<p>
+This product's version follows a version format, <b>M.mm.pp.bb</b>,
+where <b>M</b> is a single digit Major number, <b>mm</b> is 2 digit
+minor number, <b>pp</b> is a 2 digit patch number, and <b>bb</b> is an
+unrestricted set of digits used as an incrementing build counter.
+</p>
+
+<p>
+To support multiple side-by-side installations of the product, the
+product version is encoded in the top level directory,
+ex. <b>xdais_7_24_00_04</b>.
+</p>
+
+<p>
+Subsequent releases of patch upgrades will be identified by the patch
+number, ex. XDAIS 7.22.01.XX with directory <b>xdais_7_22_01_XX</b>.
+Typically, these patches only include critical bug fixes.
+</p>
+
+<hr>
+<h2><a name="Support">Technical Support</a></h2>
+<p>For technical support, contact <a href="mailto:softwaresupport@ti.com">softwaresupport@ti.com</a></p>
+
+<p>
+Check the following web site for updates: <a href="http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/xdais/index.html">http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/xdais/index.html</a>
+</p>
+
+<hr>
+<p>
+Last updated: May 20, 2013
+</p>
+</body>
+</html>
+<!--
+/*
+ * @(#) xdais_7_24_00_04; 1, 0, 0,1; 5-20-2013 12:17:16; /db/wtree/library/trees/dais/dais-x04/src/ xlibrary
+
+ */
+-->
+

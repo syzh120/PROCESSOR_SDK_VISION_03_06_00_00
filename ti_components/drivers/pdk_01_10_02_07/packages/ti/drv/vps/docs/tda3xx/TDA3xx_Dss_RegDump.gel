@@ -1,0 +1,814 @@
+
+#define WR_MEM_32(addr, data)   *(unsigned int*)(addr) =(unsigned int)(data)
+#define RD_MEM_32(addr)         *(unsigned int*)(addr)
+#define uint32_t                unsigned int
+
+#define DSS_DISPC_COMMON_REG_BASE                                   (0x58010000U)
+#define DSS_DISPC_VID1_REG_BASE                                     (0x58017000U)
+#define DSS_DISPC_VID2_REG_BASE                                     (0x58016000U)
+#define DSS_DISPC_WB_REG_BASE                                       (0x58015000U)
+#define DSS_DISPC_VP_REG_BASE                                       (0x5801AC00U)
+
+#define DSS_DISPC_REVISION                                          (0x0U)
+#define DSS_DISPC_SYSCONFIG                                         (0x4U)
+#define DSS_DISPC_SYSSTATUS                                         (0x8U)
+#define DSS_DISPC_IRQ_EOI                                           (0x20U)
+#define DSS_DISPC_IRQSTATUS_RAW                                     (0x24U)
+#define DSS_DISPC_IRQSTATUS                                         (0x28U)
+#define DSS_DISPC_IRQENABLE_SET                                     (0x2cU)
+#define DSS_DISPC_IRQENABLE_CLR                                     (0x30U)
+#define DSS_DISPC_IRQWAKEEN                                         (0x34U)
+#define DSS_DISPC_GLOBAL_MFLAG_ATTRIBUTE                            (0x40U)
+#define DSS_DISPC_GLOBAL_BUFFER                                     (0x44U)
+#define DSS_DISPC_BA0_FLIPIMMEDIATE_EN                              (0x48U)
+#define DSS_DISPC_DBG_CONTROL                                       (0x4cU)
+#define DSS_DISPC_DBG_STATUS                                        (0x50U)
+#define DSS_DISPC_CLKGATING_DISABLE                                 (0x54U)
+
+#define DSS_VID_ACCUH_0                                             (0x0U)
+#define DSS_VID_ACCUH_1                                             (0x4U)
+#define DSS_VID_ACCUH2_0                                            (0x8U)
+#define DSS_VID_ACCUH2_1                                            (0xCU)
+#define DSS_VID_ACCUV_0                                             (0x10U)
+#define DSS_VID_ACCUV_1                                             (0x14U)
+#define DSS_VID_ACCUV2_0                                            (0x18U)
+#define DSS_VID_ACCUV2_1                                            (0x1CU)
+#define DSS_VID_ATTRIBUTES                                          (0x20U)
+#define DSS_VID_ATTRIBUTES2                                         (0x24U)
+#define DSS_VID_BA_0                                                (0x28U)
+#define DSS_VID_BA_1                                                (0x2CU)
+#define DSS_VID_BA_UV_0                                             (0x30U)
+#define DSS_VID_BA_UV_1                                             (0x34U)
+#define DSS_VID_BUF_SIZE_STATUS                                     (0x38U)
+#define DSS_VID_BUF_THRESHOLD                                       (0x3cU)
+#define DSS_VID_CONV_COEF0                                          (0x40U)
+#define DSS_VID_CONV_COEF1                                          (0x44U)
+#define DSS_VID_CONV_COEF2                                          (0x48U)
+#define DSS_VID_CONV_COEF3                                          (0x4cU)
+#define DSS_VID_CONV_COEF4                                          (0x50U)
+#define DSS_VID_CONV_COEF5                                          (0x54U)
+#define DSS_VID_CONV_COEF6                                          (0x58U)
+#define DSS_VID_FIRH                                                (0x5cU)
+#define DSS_VID_FIRH2                                               (0x60U)
+#define DSS_VID_FIRV                                                (0x64U)
+#define DSS_VID_FIRV2                                               (0x68U)
+#define DSS_VID_FIR_COEF_H0_0                                       (0x6cU)
+#define DSS_VID_FIR_COEF_H0_1                                       (0x70U)
+#define DSS_VID_FIR_COEF_H0_2                                       (0x74U)
+#define DSS_VID_FIR_COEF_H0_3                                       (0x78U)
+#define DSS_VID_FIR_COEF_H0_4                                       (0x7CU)
+#define DSS_VID_FIR_COEF_H0_5                                       (0x80U)
+#define DSS_VID_FIR_COEF_H0_6                                       (0x84U)
+#define DSS_VID_FIR_COEF_H0_7                                       (0x88U)
+#define DSS_VID_FIR_COEF_H0_8                                       (0x8CU)
+#define DSS_VID_FIR_COEF_H0_C_0                                     (0x90U)
+#define DSS_VID_FIR_COEF_H0_C_1                                     (0x94U)
+#define DSS_VID_FIR_COEF_H0_C_2                                     (0x98U)
+#define DSS_VID_FIR_COEF_H0_C_3                                     (0x9CU)
+#define DSS_VID_FIR_COEF_H0_C_4                                     (0xA0U)
+#define DSS_VID_FIR_COEF_H0_C_5                                     (0xA4U)
+#define DSS_VID_FIR_COEF_H0_C_6                                     (0xA8U)
+#define DSS_VID_FIR_COEF_H0_C_7                                     (0xACU)
+#define DSS_VID_FIR_COEF_H0_C_8                                     (0xB0U)
+#define DSS_VID_FIR_COEF_H12_0                                      (0xb4U)
+#define DSS_VID_FIR_COEF_H12_1                                      (0xb8U)
+#define DSS_VID_FIR_COEF_H12_2                                      (0xbcU)
+#define DSS_VID_FIR_COEF_H12_3                                      (0xc0U)
+#define DSS_VID_FIR_COEF_H12_4                                      (0xc4U)
+#define DSS_VID_FIR_COEF_H12_5                                      (0xc8U)
+#define DSS_VID_FIR_COEF_H12_6                                      (0xccU)
+#define DSS_VID_FIR_COEF_H12_7                                      (0xd0U)
+#define DSS_VID_FIR_COEF_H12_8                                      (0xd4U)
+#define DSS_VID_FIR_COEF_H12_9                                      (0xd8U)
+#define DSS_VID_FIR_COEF_H12_10                                     (0xdcU)
+#define DSS_VID_FIR_COEF_H12_11                                     (0xe0U)
+#define DSS_VID_FIR_COEF_H12_12                                     (0xe4U)
+#define DSS_VID_FIR_COEF_H12_13                                     (0xe8U)
+#define DSS_VID_FIR_COEF_H12_14                                     (0xecU)
+#define DSS_VID_FIR_COEF_H12_15                                     (0xf0U)
+#define DSS_VID_FIR_COEF_H12_C_0                                    (0xf4U)
+#define DSS_VID_FIR_COEF_H12_C_1                                    (0xf8U)
+#define DSS_VID_FIR_COEF_H12_C_2                                    (0xfcU)
+#define DSS_VID_FIR_COEF_H12_C_3                                    (0x100U)
+#define DSS_VID_FIR_COEF_H12_C_4                                    (0x104U)
+#define DSS_VID_FIR_COEF_H12_C_5                                    (0x108U)
+#define DSS_VID_FIR_COEF_H12_C_6                                    (0x10CU)
+#define DSS_VID_FIR_COEF_H12_C_7                                    (0x110U)
+#define DSS_VID_FIR_COEF_H12_C_8                                    (0x114U)
+#define DSS_VID_FIR_COEF_H12_C_9                                    (0x118U)
+#define DSS_VID_FIR_COEF_H12_C_10                                   (0x11CU)
+#define DSS_VID_FIR_COEF_H12_C_11                                   (0x120U)
+#define DSS_VID_FIR_COEF_H12_C_12                                   (0x124U)
+#define DSS_VID_FIR_COEF_H12_C_13                                   (0x128U)
+#define DSS_VID_FIR_COEF_H12_C_14                                   (0x12CU)
+#define DSS_VID_FIR_COEF_H12_C_15                                   (0x130U)
+#define DSS_VID_FIR_COEF_V0_0                                       (0x134U)
+#define DSS_VID_FIR_COEF_V0_1                                       (0x138U)
+#define DSS_VID_FIR_COEF_V0_2                                       (0x13CU)
+#define DSS_VID_FIR_COEF_V0_3                                       (0x140U)
+#define DSS_VID_FIR_COEF_V0_4                                       (0x144U)
+#define DSS_VID_FIR_COEF_V0_5                                       (0x148U)
+#define DSS_VID_FIR_COEF_V0_6                                       (0x14cU)
+#define DSS_VID_FIR_COEF_V0_7                                       (0x150U)
+#define DSS_VID_FIR_COEF_V0_8                                       (0x154U)
+#define DSS_VID_FIR_COEF_V0_C_0                                     (0x158U)
+#define DSS_VID_FIR_COEF_V0_C_1                                     (0x15CU)
+#define DSS_VID_FIR_COEF_V0_C_2                                     (0x160U)
+#define DSS_VID_FIR_COEF_V0_C_3                                     (0x164U)
+#define DSS_VID_FIR_COEF_V0_C_4                                     (0x168U)
+#define DSS_VID_FIR_COEF_V0_C_5                                     (0x16CU)
+#define DSS_VID_FIR_COEF_V0_C_6                                     (0x170U)
+#define DSS_VID_FIR_COEF_V0_C_7                                     (0x174U)
+#define DSS_VID_FIR_COEF_V0_C_8                                     (0x178U)
+#define DSS_VID_FIR_COEF_V12_0                                      (0x17cU)
+#define DSS_VID_FIR_COEF_V12_1                                      (0x180U)
+#define DSS_VID_FIR_COEF_V12_2                                      (0x184U)
+#define DSS_VID_FIR_COEF_V12_3                                      (0x188U)
+#define DSS_VID_FIR_COEF_V12_4                                      (0x18cU)
+#define DSS_VID_FIR_COEF_V12_5                                      (0x190U)
+#define DSS_VID_FIR_COEF_V12_6                                      (0x194U)
+#define DSS_VID_FIR_COEF_V12_7                                      (0x198U)
+#define DSS_VID_FIR_COEF_V12_8                                      (0x19cU)
+#define DSS_VID_FIR_COEF_V12_9                                      (0x1a0U)
+#define DSS_VID_FIR_COEF_V12_10                                     (0x1a4U)
+#define DSS_VID_FIR_COEF_V12_11                                     (0x1a8U)
+#define DSS_VID_FIR_COEF_V12_12                                     (0x1acU)
+#define DSS_VID_FIR_COEF_V12_13                                     (0x1b0U)
+#define DSS_VID_FIR_COEF_V12_14                                     (0x1b4U)
+#define DSS_VID_FIR_COEF_V12_15                                     (0x1b8U)
+#define DSS_VID_FIR_COEF_V12_C_0                                    (0x1bcU)
+#define DSS_VID_FIR_COEF_V12_C_1                                    (0x1c0U)
+#define DSS_VID_FIR_COEF_V12_C_2                                    (0x1c4U)
+#define DSS_VID_FIR_COEF_V12_C_3                                    (0x1c8U)
+#define DSS_VID_FIR_COEF_V12_C_4                                    (0x1ccU)
+#define DSS_VID_FIR_COEF_V12_C_5                                    (0x1d0U)
+#define DSS_VID_FIR_COEF_V12_C_6                                    (0x1d4U)
+#define DSS_VID_FIR_COEF_V12_C_7                                    (0x1d8U)
+#define DSS_VID_FIR_COEF_V12_C_8                                    (0x1dcU)
+#define DSS_VID_FIR_COEF_V12_C_9                                    (0x1e0U)
+#define DSS_VID_FIR_COEF_V12_C_10                                   (0x1e4U)
+#define DSS_VID_FIR_COEF_V12_C_11                                   (0x1e8U)
+#define DSS_VID_FIR_COEF_V12_C_12                                   (0x1ecU)
+#define DSS_VID_FIR_COEF_V12_C_13                                   (0x1f0U)
+#define DSS_VID_FIR_COEF_V12_C_14                                   (0x1f4U)
+#define DSS_VID_FIR_COEF_V12_C_15                                   (0x1f8U)
+#define DSS_VID_GLOBAL_ALPHA                                        (0x1fcU)
+#define DSS_VID_IRQENABLE                                           (0x200U)
+#define DSS_VID_IRQSTATUS                                           (0x204U)
+#define DSS_VID_MFLAG_THRESHOLD                                     (0x208U)
+#define DSS_VID_PICTURE_SIZE                                        (0x20cU)
+#define DSS_VID_PIXEL_INC                                           (0x210U)
+#define DSS_VID_POSITION                                            (0x214U)
+#define DSS_VID_PRELOAD                                             (0x218U)
+#define DSS_VID_ROW_INC                                             (0x21cU)
+#define DSS_VID_SIZE                                                (0x220U)
+#define DSS_VID_CLUT                                                (0x224U)
+
+#define DSS_WB_ACCUH_0                                              (0x0U)
+#define DSS_WB_ACCUH_1                                              (0x4U)
+#define DSS_WB_ACCUH2_0                                             (0x8U)
+#define DSS_WB_ACCUH2_1                                             (0xCU)
+#define DSS_WB_ACCUV_0                                              (0x10U)
+#define DSS_WB_ACCUV_1                                              (0x14U)
+#define DSS_WB_ACCUV2_0                                             (0x18U)
+#define DSS_WB_ACCUV2_1                                             (0x1CU)
+#define DSS_WB_ATTRIBUTES                                           (0x20U)
+#define DSS_WB_ATTRIBUTES2                                          (0x24U)
+#define DSS_WB_BA_0                                                 (0x28U)
+#define DSS_WB_BA_1                                                 (0x2CU)
+#define DSS_WB_BA_UV_0                                              (0x30U)
+#define DSS_WB_BA_UV_1                                              (0x34U)
+#define DSS_WB_BUF_SIZE_STATUS                                      (0x38U)
+#define DSS_WB_BUF_THRESHOLD                                        (0x3cU)
+#define DSS_WB_CONV_COEF0                                           (0x40U)
+#define DSS_WB_CONV_COEF1                                           (0x44U)
+#define DSS_WB_CONV_COEF2                                           (0x48U)
+#define DSS_WB_CONV_COEF3                                           (0x4cU)
+#define DSS_WB_CONV_COEF4                                           (0x50U)
+#define DSS_WB_CONV_COEF5                                           (0x54U)
+#define DSS_WB_CONV_COEF6                                           (0x58U)
+#define DSS_WB_FIRH                                                 (0x5cU)
+#define DSS_WB_FIRH2                                                (0x60U)
+#define DSS_WB_FIRV                                                 (0x64U)
+#define DSS_WB_FIRV2                                                (0x68U)
+#define DSS_WB_FIR_COEF_H0_0                                        (0x6cU)
+#define DSS_WB_FIR_COEF_H0_1                                        (0x70U)
+#define DSS_WB_FIR_COEF_H0_2                                        (0x74U)
+#define DSS_WB_FIR_COEF_H0_3                                        (0x78U)
+#define DSS_WB_FIR_COEF_H0_4                                        (0x7CU)
+#define DSS_WB_FIR_COEF_H0_5                                        (0x80U)
+#define DSS_WB_FIR_COEF_H0_6                                        (0x84U)
+#define DSS_WB_FIR_COEF_H0_7                                        (0x88U)
+#define DSS_WB_FIR_COEF_H0_8                                        (0x8CU)
+#define DSS_WB_FIR_COEF_H0_C_0                                      (0x90U)
+#define DSS_WB_FIR_COEF_H0_C_1                                      (0x94U)
+#define DSS_WB_FIR_COEF_H0_C_2                                      (0x98U)
+#define DSS_WB_FIR_COEF_H0_C_3                                      (0x9CU)
+#define DSS_WB_FIR_COEF_H0_C_4                                      (0xA0U)
+#define DSS_WB_FIR_COEF_H0_C_5                                      (0xA4U)
+#define DSS_WB_FIR_COEF_H0_C_6                                      (0xA8U)
+#define DSS_WB_FIR_COEF_H0_C_7                                      (0xACU)
+#define DSS_WB_FIR_COEF_H0_C_8                                      (0xB0U)
+#define DSS_WB_FIR_COEF_H12_0                                       (0xb4U)
+#define DSS_WB_FIR_COEF_H12_1                                       (0xb8U)
+#define DSS_WB_FIR_COEF_H12_2                                       (0xbcU)
+#define DSS_WB_FIR_COEF_H12_3                                       (0xc0U)
+#define DSS_WB_FIR_COEF_H12_4                                       (0xc4U)
+#define DSS_WB_FIR_COEF_H12_5                                       (0xc8U)
+#define DSS_WB_FIR_COEF_H12_6                                       (0xccU)
+#define DSS_WB_FIR_COEF_H12_7                                       (0xd0U)
+#define DSS_WB_FIR_COEF_H12_8                                       (0xd4U)
+#define DSS_WB_FIR_COEF_H12_9                                       (0xd8U)
+#define DSS_WB_FIR_COEF_H12_10                                      (0xdcU)
+#define DSS_WB_FIR_COEF_H12_11                                      (0xe0U)
+#define DSS_WB_FIR_COEF_H12_12                                      (0xe4U)
+#define DSS_WB_FIR_COEF_H12_13                                      (0xe8U)
+#define DSS_WB_FIR_COEF_H12_14                                      (0xecU)
+#define DSS_WB_FIR_COEF_H12_15                                      (0xf0U)
+#define DSS_WB_FIR_COEF_H12_C_0                                     (0xf4U)
+#define DSS_WB_FIR_COEF_H12_C_1                                     (0xf8U)
+#define DSS_WB_FIR_COEF_H12_C_2                                     (0xfcU)
+#define DSS_WB_FIR_COEF_H12_C_3                                     (0x100U)
+#define DSS_WB_FIR_COEF_H12_C_4                                     (0x104U)
+#define DSS_WB_FIR_COEF_H12_C_5                                     (0x108U)
+#define DSS_WB_FIR_COEF_H12_C_6                                     (0x10CU)
+#define DSS_WB_FIR_COEF_H12_C_7                                     (0x110U)
+#define DSS_WB_FIR_COEF_H12_C_8                                     (0x114U)
+#define DSS_WB_FIR_COEF_H12_C_9                                     (0x118U)
+#define DSS_WB_FIR_COEF_H12_C_10                                    (0x11CU)
+#define DSS_WB_FIR_COEF_H12_C_11                                    (0x120U)
+#define DSS_WB_FIR_COEF_H12_C_12                                    (0x124U)
+#define DSS_WB_FIR_COEF_H12_C_13                                    (0x128U)
+#define DSS_WB_FIR_COEF_H12_C_14                                    (0x12CU)
+#define DSS_WB_FIR_COEF_H12_C_15                                    (0x130U)
+#define DSS_WB_FIR_COEF_V0_0                                        (0x134U)
+#define DSS_WB_FIR_COEF_V0_1                                        (0x138U)
+#define DSS_WB_FIR_COEF_V0_2                                        (0x13CU)
+#define DSS_WB_FIR_COEF_V0_3                                        (0x140U)
+#define DSS_WB_FIR_COEF_V0_4                                        (0x144U)
+#define DSS_WB_FIR_COEF_V0_5                                        (0x148U)
+#define DSS_WB_FIR_COEF_V0_6                                        (0x14cU)
+#define DSS_WB_FIR_COEF_V0_7                                        (0x150U)
+#define DSS_WB_FIR_COEF_V0_8                                        (0x154U)
+#define DSS_WB_FIR_COEF_V0_C_0                                      (0x158U)
+#define DSS_WB_FIR_COEF_V0_C_1                                      (0x15CU)
+#define DSS_WB_FIR_COEF_V0_C_2                                      (0x160U)
+#define DSS_WB_FIR_COEF_V0_C_3                                      (0x164U)
+#define DSS_WB_FIR_COEF_V0_C_4                                      (0x168U)
+#define DSS_WB_FIR_COEF_V0_C_5                                      (0x16CU)
+#define DSS_WB_FIR_COEF_V0_C_6                                      (0x170U)
+#define DSS_WB_FIR_COEF_V0_C_7                                      (0x174U)
+#define DSS_WB_FIR_COEF_V0_C_8                                      (0x178U)
+#define DSS_WB_FIR_COEF_V12_0                                       (0x17cU)
+#define DSS_WB_FIR_COEF_V12_1                                       (0x180U)
+#define DSS_WB_FIR_COEF_V12_2                                       (0x184U)
+#define DSS_WB_FIR_COEF_V12_3                                       (0x188U)
+#define DSS_WB_FIR_COEF_V12_4                                       (0x18cU)
+#define DSS_WB_FIR_COEF_V12_5                                       (0x190U)
+#define DSS_WB_FIR_COEF_V12_6                                       (0x194U)
+#define DSS_WB_FIR_COEF_V12_7                                       (0x198U)
+#define DSS_WB_FIR_COEF_V12_8                                       (0x19cU)
+#define DSS_WB_FIR_COEF_V12_9                                       (0x1a0U)
+#define DSS_WB_FIR_COEF_V12_10                                      (0x1a4U)
+#define DSS_WB_FIR_COEF_V12_11                                      (0x1a8U)
+#define DSS_WB_FIR_COEF_V12_12                                      (0x1acU)
+#define DSS_WB_FIR_COEF_V12_13                                      (0x1b0U)
+#define DSS_WB_FIR_COEF_V12_14                                      (0x1b4U)
+#define DSS_WB_FIR_COEF_V12_15                                      (0x1b8U)
+#define DSS_WB_FIR_COEF_V12_C_0                                     (0x1bcU)
+#define DSS_WB_FIR_COEF_V12_C_1                                     (0x1c0U)
+#define DSS_WB_FIR_COEF_V12_C_2                                     (0x1c4U)
+#define DSS_WB_FIR_COEF_V12_C_3                                     (0x1c8U)
+#define DSS_WB_FIR_COEF_V12_C_4                                     (0x1ccU)
+#define DSS_WB_FIR_COEF_V12_C_5                                     (0x1d0U)
+#define DSS_WB_FIR_COEF_V12_C_6                                     (0x1d4U)
+#define DSS_WB_FIR_COEF_V12_C_7                                     (0x1d8U)
+#define DSS_WB_FIR_COEF_V12_C_8                                     (0x1dcU)
+#define DSS_WB_FIR_COEF_V12_C_9                                     (0x1e0U)
+#define DSS_WB_FIR_COEF_V12_C_10                                    (0x1e4U)
+#define DSS_WB_FIR_COEF_V12_C_11                                    (0x1e8U)
+#define DSS_WB_FIR_COEF_V12_C_12                                    (0x1ecU)
+#define DSS_WB_FIR_COEF_V12_C_13                                    (0x1f0U)
+#define DSS_WB_FIR_COEF_V12_C_14                                    (0x1f4U)
+#define DSS_WB_FIR_COEF_V12_C_15                                    (0x1f8U)
+#define DSS_WB_IRQENABLE                                            (0x1fcU)
+#define DSS_WB_IRQSTATUS                                            (0x200U)
+#define DSS_WB_MFLAG_THRESHOLD                                      (0x204U)
+#define DSS_WB_PICTURE_SIZE                                         (0x208U)
+#define DSS_WB_SIZE                                                 (0x210U)
+#define DSS_WB_POSITION                                             (0x214U)
+#define DSS_WB_REGION_BASED_TOTAL_PICTURE_SIZEY                     (0x218U)
+
+#define DSS_VP_CONFIG                                               (0x0U)
+#define DSS_VP_CONTROL                                              (0x4U)
+#define DSS_VP_CPR_COEF_B                                           (0x8U)
+#define DSS_VP_CPR_COEF_G                                           (0xcU)
+#define DSS_VP_CPR_COEF_R                                           (0x10U)
+#define DSS_VP_DATA_CYCLE_0                                         (0x14U)
+#define DSS_VP_DATA_CYCLE_1                                         (0x18U)
+#define DSS_VP_DATA_CYCLE_2                                         (0x1CU)
+#define DSS_VP_GAMMA_TABLE                                          (0x20U)
+#define DSS_VP_IRQENABLE                                            (0x3cU)
+#define DSS_VP_IRQSTATUS                                            (0x40U)
+#define DSS_VP_LINE_NUMBER                                          (0x44U)
+#define DSS_VP_LINE_STATUS                                          (0x48U)
+#define DSS_VP_POL_FREQ                                             (0x4cU)
+#define DSS_VP_SIZE_SCREEN                                          (0x50U)
+#define DSS_VP_TIMING_H                                             (0x54U)
+#define DSS_VP_TIMING_V                                             (0x58U)
+
+menuitem "TDA3xx Dss Reg Dump"
+hotmenu DssRegDumpAll()
+{
+    regDump_common();
+    regDump_vid1();
+    regDump_vid2();
+    regDump_wb();
+    regDump_vp();
+}
+
+hotmenu DssRegDump_DssCommon()
+{
+    regDump_common();
+}
+hotmenu DssRegDump_DssVid1Pipe()
+{
+    regDump_vid1();
+}
+hotmenu DssRegDump_DssVid2Pipe()
+{
+    regDump_vid2();
+}
+hotmenu DssRegDump_DssWbPipe()
+{
+    regDump_wb();
+}
+hotmenu DssRegDump_DssVideoPort()
+{
+    regDump_vp();
+}
+
+
+regDump_common()
+{
+    GEL_TextOut("DSS_DISPC_REVISION              = %x\n",,,,, RD_MEM_32(DSS_DISPC_COMMON_REG_BASE + DSS_DISPC_REVISION              ));
+    GEL_TextOut("DSS_DISPC_SYSCONFIG             = %x\n",,,,, RD_MEM_32(DSS_DISPC_COMMON_REG_BASE + DSS_DISPC_SYSCONFIG             ));
+    GEL_TextOut("DSS_DISPC_SYSSTATUS             = %x\n",,,,, RD_MEM_32(DSS_DISPC_COMMON_REG_BASE + DSS_DISPC_SYSSTATUS             ));
+    GEL_TextOut("DSS_DISPC_IRQ_EOI               = %x\n",,,,, RD_MEM_32(DSS_DISPC_COMMON_REG_BASE + DSS_DISPC_IRQ_EOI               ));
+    GEL_TextOut("DSS_DISPC_IRQSTATUS_RAW         = %x\n",,,,, RD_MEM_32(DSS_DISPC_COMMON_REG_BASE + DSS_DISPC_IRQSTATUS_RAW         ));
+    GEL_TextOut("DSS_DISPC_IRQSTATUS             = %x\n",,,,, RD_MEM_32(DSS_DISPC_COMMON_REG_BASE + DSS_DISPC_IRQSTATUS             ));
+    GEL_TextOut("DSS_DISPC_IRQENABLE_SET         = %x\n",,,,, RD_MEM_32(DSS_DISPC_COMMON_REG_BASE + DSS_DISPC_IRQENABLE_SET         ));
+    GEL_TextOut("DSS_DISPC_IRQENABLE_CLR         = %x\n",,,,, RD_MEM_32(DSS_DISPC_COMMON_REG_BASE + DSS_DISPC_IRQENABLE_CLR         ));
+    GEL_TextOut("DSS_DISPC_IRQWAKEEN             = %x\n",,,,, RD_MEM_32(DSS_DISPC_COMMON_REG_BASE + DSS_DISPC_IRQWAKEEN             ));
+    GEL_TextOut("DSS_DISPC_GLOBAL_MFLAG_ATTRIBUTE= %x\n",,,,, RD_MEM_32(DSS_DISPC_COMMON_REG_BASE + DSS_DISPC_GLOBAL_MFLAG_ATTRIBUTE));
+    GEL_TextOut("DSS_DISPC_GLOBAL_BUFFER         = %x\n",,,,, RD_MEM_32(DSS_DISPC_COMMON_REG_BASE + DSS_DISPC_GLOBAL_BUFFER         ));
+    GEL_TextOut("DSS_DISPC_BA0_FLIPIMMEDIATE_EN  = %x\n",,,,, RD_MEM_32(DSS_DISPC_COMMON_REG_BASE + DSS_DISPC_BA0_FLIPIMMEDIATE_EN  ));
+    GEL_TextOut("DSS_DISPC_DBG_CONTROL           = %x\n",,,,, RD_MEM_32(DSS_DISPC_COMMON_REG_BASE + DSS_DISPC_DBG_CONTROL           ));
+    GEL_TextOut("DSS_DISPC_DBG_STATUS            = %x\n",,,,, RD_MEM_32(DSS_DISPC_COMMON_REG_BASE + DSS_DISPC_DBG_STATUS            ));
+    GEL_TextOut("DSS_DISPC_CLKGATING_DISABLE     = %x\n",,,,, RD_MEM_32(DSS_DISPC_COMMON_REG_BASE + DSS_DISPC_CLKGATING_DISABLE     ));
+}
+
+regDump_vid1()
+{
+    GEL_TextOut("\n");
+    GEL_TextOut("DSS_VID_ACCUH_0                 = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_ACCUH_0                 ));
+    GEL_TextOut("DSS_VID_ACCUH_1                 = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_ACCUH_1                 ));
+    GEL_TextOut("DSS_VID_ACCUH2_0                = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_ACCUH2_0                ));
+    GEL_TextOut("DSS_VID_ACCUH2_1                = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_ACCUH2_1                ));
+    GEL_TextOut("DSS_VID_ACCUV_0                 = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_ACCUV_0                 ));
+    GEL_TextOut("DSS_VID_ACCUV_1                 = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_ACCUV_1                 ));
+    GEL_TextOut("DSS_VID_ACCUV2_0                = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_ACCUV2_0                ));
+    GEL_TextOut("DSS_VID_ACCUV2_1                = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_ACCUV2_1                ));
+    GEL_TextOut("DSS_VID_ATTRIBUTES              = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_ATTRIBUTES              ));
+    GEL_TextOut("DSS_VID_ATTRIBUTES2             = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_ATTRIBUTES2             ));
+    GEL_TextOut("DSS_VID_BA_0                    = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_BA_0                    ));
+    GEL_TextOut("DSS_VID_BA_1                    = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_BA_1                    ));
+    GEL_TextOut("DSS_VID_BA_UV_0                 = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_BA_UV_0                 ));
+    GEL_TextOut("DSS_VID_BA_UV_1                 = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_BA_UV_1                 ));
+    GEL_TextOut("DSS_VID_BUF_SIZE_STATUS         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_BUF_SIZE_STATUS         ));
+    GEL_TextOut("DSS_VID_BUF_THRESHOLD           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_BUF_THRESHOLD           ));
+    GEL_TextOut("DSS_VID_CONV_COEF0              = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_CONV_COEF0              ));
+    GEL_TextOut("DSS_VID_CONV_COEF1              = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_CONV_COEF1              ));
+    GEL_TextOut("DSS_VID_CONV_COEF2              = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_CONV_COEF2              ));
+    GEL_TextOut("DSS_VID_CONV_COEF3              = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_CONV_COEF3              ));
+    GEL_TextOut("DSS_VID_CONV_COEF4              = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_CONV_COEF4              ));
+    GEL_TextOut("DSS_VID_CONV_COEF5              = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_CONV_COEF5              ));
+    GEL_TextOut("DSS_VID_CONV_COEF6              = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_CONV_COEF6              ));
+    GEL_TextOut("DSS_VID_FIRH                    = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIRH                    ));
+    GEL_TextOut("DSS_VID_FIRH2                   = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIRH2                   ));
+    GEL_TextOut("DSS_VID_FIRV                    = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIRV                    ));
+    GEL_TextOut("DSS_VID_FIRV2                   = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIRV2                   ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_0           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H0_0           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_1           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H0_1           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_2           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H0_2           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_3           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H0_3           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_4           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H0_4           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_5           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H0_5           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_6           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H0_6           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_7           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H0_7           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_8           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H0_8           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_C_0         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H0_C_0         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_C_1         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H0_C_1         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_C_2         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H0_C_2         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_C_3         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H0_C_3         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_C_4         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H0_C_4         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_C_5         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H0_C_5         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_C_6         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H0_C_6         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_C_7         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H0_C_7         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_C_8         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H0_C_8         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_0          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H12_0          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_1          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H12_1          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_2          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H12_2          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_3          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H12_3          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_4          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H12_4          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_5          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H12_5          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_6          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H12_6          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_7          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H12_7          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_8          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H12_8          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_9          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H12_9          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_10         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H12_10         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_11         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H12_11         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_12         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H12_12         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_13         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H12_13         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_14         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H12_14         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_15         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H12_15         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_C_0        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H12_C_0        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_C_1        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H12_C_1        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_C_2        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H12_C_2        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_C_3        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H12_C_3        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_C_4        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H12_C_4        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_C_5        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H12_C_5        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_C_6        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H12_C_6        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_C_7        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H12_C_7        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_C_8        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H12_C_8        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_C_9        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H12_C_9        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_C_10       = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H12_C_10       ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_C_11       = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H12_C_11       ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_C_12       = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H12_C_12       ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_C_13       = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H12_C_13       ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_C_14       = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H12_C_14       ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_C_15       = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_H12_C_15       ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_0           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V0_0           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_1           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V0_1           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_2           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V0_2           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_3           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V0_3           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_4           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V0_4           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_5           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V0_5           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_6           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V0_6           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_7           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V0_7           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_8           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V0_8           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_C_0         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V0_C_0         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_C_1         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V0_C_1         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_C_2         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V0_C_2         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_C_3         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V0_C_3         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_C_4         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V0_C_4         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_C_5         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V0_C_5         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_C_6         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V0_C_6         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_C_7         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V0_C_7         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_C_8         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V0_C_8         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_0          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V12_0          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_1          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V12_1          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_2          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V12_2          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_3          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V12_3          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_4          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V12_4          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_5          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V12_5          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_6          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V12_6          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_7          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V12_7          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_8          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V12_8          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_9          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V12_9          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_10         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V12_10         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_11         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V12_11         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_12         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V12_12         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_13         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V12_13         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_14         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V12_14         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_15         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V12_15         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_C_0        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V12_C_0        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_C_1        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V12_C_1        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_C_2        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V12_C_2        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_C_3        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V12_C_3        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_C_4        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V12_C_4        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_C_5        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V12_C_5        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_C_6        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V12_C_6        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_C_7        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V12_C_7        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_C_8        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V12_C_8        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_C_9        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V12_C_9        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_C_10       = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V12_C_10       ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_C_11       = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V12_C_11       ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_C_12       = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V12_C_12       ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_C_13       = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V12_C_13       ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_C_14       = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V12_C_14       ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_C_15       = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_FIR_COEF_V12_C_15       ));
+    GEL_TextOut("DSS_VID_GLOBAL_ALPHA            = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_GLOBAL_ALPHA            ));
+    GEL_TextOut("DSS_VID_IRQENABLE               = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_IRQENABLE               ));
+    GEL_TextOut("DSS_VID_IRQSTATUS               = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_IRQSTATUS               ));
+    GEL_TextOut("DSS_VID_MFLAG_THRESHOLD         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_MFLAG_THRESHOLD         ));
+    GEL_TextOut("DSS_VID_PICTURE_SIZE            = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_PICTURE_SIZE            ));
+    GEL_TextOut("DSS_VID_PIXEL_INC               = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_PIXEL_INC               ));
+    GEL_TextOut("DSS_VID_POSITION                = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_POSITION                ));
+    GEL_TextOut("DSS_VID_PRELOAD                 = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_PRELOAD                 ));
+    GEL_TextOut("DSS_VID_ROW_INC                 = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_ROW_INC                 ));
+    GEL_TextOut("DSS_VID_SIZE                    = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_SIZE                    ));
+    GEL_TextOut("DSS_VID_CLUT                    = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID1_REG_BASE   + DSS_VID_CLUT                    ));
+}
+
+regDump_vid2()
+{
+    GEL_TextOut("\n");
+    GEL_TextOut("DSS_VID_ACCUH_0                 = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_ACCUH_0                 ));
+    GEL_TextOut("DSS_VID_ACCUH_1                 = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_ACCUH_1                 ));
+    GEL_TextOut("DSS_VID_ACCUH2_0                = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_ACCUH2_0                ));
+    GEL_TextOut("DSS_VID_ACCUH2_1                = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_ACCUH2_1                ));
+    GEL_TextOut("DSS_VID_ACCUV_0                 = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_ACCUV_0                 ));
+    GEL_TextOut("DSS_VID_ACCUV_1                 = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_ACCUV_1                 ));
+    GEL_TextOut("DSS_VID_ACCUV2_0                = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_ACCUV2_0                ));
+    GEL_TextOut("DSS_VID_ACCUV2_1                = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_ACCUV2_1                ));
+    GEL_TextOut("DSS_VID_ATTRIBUTES              = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_ATTRIBUTES              ));
+    GEL_TextOut("DSS_VID_ATTRIBUTES2             = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_ATTRIBUTES2             ));
+    GEL_TextOut("DSS_VID_BA_0                    = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_BA_0                    ));
+    GEL_TextOut("DSS_VID_BA_1                    = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_BA_1                    ));
+    GEL_TextOut("DSS_VID_BA_UV_0                 = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_BA_UV_0                 ));
+    GEL_TextOut("DSS_VID_BA_UV_1                 = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_BA_UV_1                 ));
+    GEL_TextOut("DSS_VID_BUF_SIZE_STATUS         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_BUF_SIZE_STATUS         ));
+    GEL_TextOut("DSS_VID_BUF_THRESHOLD           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_BUF_THRESHOLD           ));
+    GEL_TextOut("DSS_VID_CONV_COEF0              = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_CONV_COEF0              ));
+    GEL_TextOut("DSS_VID_CONV_COEF1              = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_CONV_COEF1              ));
+    GEL_TextOut("DSS_VID_CONV_COEF2              = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_CONV_COEF2              ));
+    GEL_TextOut("DSS_VID_CONV_COEF3              = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_CONV_COEF3              ));
+    GEL_TextOut("DSS_VID_CONV_COEF4              = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_CONV_COEF4              ));
+    GEL_TextOut("DSS_VID_CONV_COEF5              = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_CONV_COEF5              ));
+    GEL_TextOut("DSS_VID_CONV_COEF6              = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_CONV_COEF6              ));
+    GEL_TextOut("DSS_VID_FIRH                    = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIRH                    ));
+    GEL_TextOut("DSS_VID_FIRH2                   = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIRH2                   ));
+    GEL_TextOut("DSS_VID_FIRV                    = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIRV                    ));
+    GEL_TextOut("DSS_VID_FIRV2                   = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIRV2                   ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_0           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H0_0           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_1           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H0_1           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_2           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H0_2           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_3           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H0_3           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_4           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H0_4           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_5           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H0_5           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_6           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H0_6           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_7           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H0_7           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_8           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H0_8           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_C_0         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H0_C_0         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_C_1         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H0_C_1         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_C_2         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H0_C_2         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_C_3         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H0_C_3         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_C_4         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H0_C_4         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_C_5         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H0_C_5         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_C_6         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H0_C_6         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_C_7         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H0_C_7         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H0_C_8         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H0_C_8         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_0          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H12_0          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_1          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H12_1          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_2          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H12_2          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_3          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H12_3          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_4          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H12_4          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_5          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H12_5          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_6          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H12_6          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_7          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H12_7          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_8          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H12_8          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_9          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H12_9          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_10         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H12_10         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_11         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H12_11         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_12         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H12_12         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_13         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H12_13         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_14         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H12_14         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_15         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H12_15         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_C_0        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H12_C_0        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_C_1        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H12_C_1        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_C_2        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H12_C_2        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_C_3        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H12_C_3        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_C_4        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H12_C_4        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_C_5        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H12_C_5        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_C_6        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H12_C_6        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_C_7        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H12_C_7        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_C_8        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H12_C_8        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_C_9        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H12_C_9        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_C_10       = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H12_C_10       ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_C_11       = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H12_C_11       ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_C_12       = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H12_C_12       ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_C_13       = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H12_C_13       ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_C_14       = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H12_C_14       ));
+    GEL_TextOut("DSS_VID_FIR_COEF_H12_C_15       = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_H12_C_15       ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_0           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V0_0           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_1           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V0_1           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_2           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V0_2           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_3           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V0_3           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_4           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V0_4           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_5           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V0_5           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_6           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V0_6           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_7           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V0_7           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_8           = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V0_8           ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_C_0         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V0_C_0         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_C_1         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V0_C_1         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_C_2         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V0_C_2         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_C_3         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V0_C_3         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_C_4         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V0_C_4         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_C_5         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V0_C_5         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_C_6         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V0_C_6         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_C_7         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V0_C_7         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V0_C_8         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V0_C_8         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_0          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V12_0          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_1          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V12_1          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_2          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V12_2          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_3          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V12_3          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_4          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V12_4          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_5          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V12_5          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_6          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V12_6          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_7          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V12_7          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_8          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V12_8          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_9          = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V12_9          ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_10         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V12_10         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_11         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V12_11         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_12         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V12_12         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_13         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V12_13         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_14         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V12_14         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_15         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V12_15         ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_C_0        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V12_C_0        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_C_1        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V12_C_1        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_C_2        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V12_C_2        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_C_3        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V12_C_3        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_C_4        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V12_C_4        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_C_5        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V12_C_5        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_C_6        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V12_C_6        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_C_7        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V12_C_7        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_C_8        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V12_C_8        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_C_9        = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V12_C_9        ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_C_10       = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V12_C_10       ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_C_11       = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V12_C_11       ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_C_12       = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V12_C_12       ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_C_13       = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V12_C_13       ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_C_14       = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V12_C_14       ));
+    GEL_TextOut("DSS_VID_FIR_COEF_V12_C_15       = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_FIR_COEF_V12_C_15       ));
+    GEL_TextOut("DSS_VID_GLOBAL_ALPHA            = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_GLOBAL_ALPHA            ));
+    GEL_TextOut("DSS_VID_IRQENABLE               = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_IRQENABLE               ));
+    GEL_TextOut("DSS_VID_IRQSTATUS               = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_IRQSTATUS               ));
+    GEL_TextOut("DSS_VID_MFLAG_THRESHOLD         = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_MFLAG_THRESHOLD         ));
+    GEL_TextOut("DSS_VID_PICTURE_SIZE            = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_PICTURE_SIZE            ));
+    GEL_TextOut("DSS_VID_PIXEL_INC               = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_PIXEL_INC               ));
+    GEL_TextOut("DSS_VID_POSITION                = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_POSITION                ));
+    GEL_TextOut("DSS_VID_PRELOAD                 = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_PRELOAD                 ));
+    GEL_TextOut("DSS_VID_ROW_INC                 = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_ROW_INC                 ));
+    GEL_TextOut("DSS_VID_SIZE                    = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_SIZE                    ));
+    GEL_TextOut("DSS_VID_CLUT                    = %x\n",,,,, RD_MEM_32(DSS_DISPC_VID2_REG_BASE   + DSS_VID_CLUT                    ));
+}
+
+regDump_wb()
+{
+    GEL_TextOut("DSS_WB_ACCUH_0                  = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_ACCUH_0                  ));
+    GEL_TextOut("DSS_WB_ACCUH_1                  = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_ACCUH_1                  ));
+    GEL_TextOut("DSS_WB_ACCUH2_0                 = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_ACCUH2_0                 ));
+    GEL_TextOut("DSS_WB_ACCUH2_1                 = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_ACCUH2_1                 ));
+    GEL_TextOut("DSS_WB_ACCUV_0                  = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_ACCUV_0                  ));
+    GEL_TextOut("DSS_WB_ACCUV_1                  = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_ACCUV_1                  ));
+    GEL_TextOut("DSS_WB_ACCUV2_0                 = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_ACCUV2_0                 ));
+    GEL_TextOut("DSS_WB_ACCUV2_1                 = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_ACCUV2_1                 ));
+    GEL_TextOut("DSS_WB_ATTRIBUTES               = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_ATTRIBUTES               ));
+    GEL_TextOut("DSS_WB_ATTRIBUTES2              = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_ATTRIBUTES2              ));
+    GEL_TextOut("DSS_WB_BA_0                     = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_BA_0                     ));
+    GEL_TextOut("DSS_WB_BA_1                     = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_BA_1                     ));
+    GEL_TextOut("DSS_WB_BA_UV_0                  = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_BA_UV_0                  ));
+    GEL_TextOut("DSS_WB_BA_UV_1                  = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_BA_UV_1                  ));
+    GEL_TextOut("DSS_WB_BUF_SIZE_STATUS          = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_BUF_SIZE_STATUS          ));
+    GEL_TextOut("DSS_WB_BUF_THRESHOLD            = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_BUF_THRESHOLD            ));
+    GEL_TextOut("DSS_WB_CONV_COEF0               = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_CONV_COEF0               ));
+    GEL_TextOut("DSS_WB_CONV_COEF1               = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_CONV_COEF1               ));
+    GEL_TextOut("DSS_WB_CONV_COEF2               = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_CONV_COEF2               ));
+    GEL_TextOut("DSS_WB_CONV_COEF3               = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_CONV_COEF3               ));
+    GEL_TextOut("DSS_WB_CONV_COEF4               = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_CONV_COEF4               ));
+    GEL_TextOut("DSS_WB_CONV_COEF5               = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_CONV_COEF5               ));
+    GEL_TextOut("DSS_WB_CONV_COEF6               = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_CONV_COEF6               ));
+    GEL_TextOut("DSS_WB_FIRH                     = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIRH                     ));
+    GEL_TextOut("DSS_WB_FIRH2                    = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIRH2                    ));
+    GEL_TextOut("DSS_WB_FIRV                     = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIRV                     ));
+    GEL_TextOut("DSS_WB_FIRV2                    = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIRV2                    ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H0_0            = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H0_0            ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H0_1            = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H0_1            ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H0_2            = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H0_2            ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H0_3            = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H0_3            ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H0_4            = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H0_4            ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H0_5            = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H0_5            ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H0_6            = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H0_6            ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H0_7            = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H0_7            ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H0_8            = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H0_8            ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H0_C_0          = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H0_C_0          ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H0_C_1          = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H0_C_1          ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H0_C_2          = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H0_C_2          ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H0_C_3          = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H0_C_3          ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H0_C_4          = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H0_C_4          ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H0_C_5          = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H0_C_5          ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H0_C_6          = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H0_C_6          ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H0_C_7          = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H0_C_7          ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H0_C_8          = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H0_C_8          ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H12_0           = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H12_0           ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H12_1           = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H12_1           ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H12_2           = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H12_2           ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H12_3           = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H12_3           ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H12_4           = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H12_4           ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H12_5           = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H12_5           ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H12_6           = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H12_6           ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H12_7           = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H12_7           ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H12_8           = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H12_8           ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H12_9           = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H12_9           ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H12_10          = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H12_10          ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H12_11          = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H12_11          ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H12_12          = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H12_12          ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H12_13          = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H12_13          ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H12_14          = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H12_14          ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H12_15          = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H12_15          ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H12_C_0         = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H12_C_0         ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H12_C_1         = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H12_C_1         ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H12_C_2         = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H12_C_2         ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H12_C_3         = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H12_C_3         ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H12_C_4         = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H12_C_4         ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H12_C_5         = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H12_C_5         ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H12_C_6         = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H12_C_6         ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H12_C_7         = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H12_C_7         ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H12_C_8         = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H12_C_8         ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H12_C_9         = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H12_C_9         ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H12_C_10        = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H12_C_10        ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H12_C_11        = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H12_C_11        ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H12_C_12        = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H12_C_12        ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H12_C_13        = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H12_C_13        ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H12_C_14        = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H12_C_14        ));
+    GEL_TextOut("DSS_WB_FIR_COEF_H12_C_15        = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_H12_C_15        ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V0_0            = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V0_0            ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V0_1            = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V0_1            ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V0_2            = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V0_2            ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V0_3            = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V0_3            ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V0_4            = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V0_4            ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V0_5            = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V0_5            ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V0_6            = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V0_6            ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V0_7            = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V0_7            ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V0_8            = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V0_8            ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V0_C_0          = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V0_C_0          ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V0_C_1          = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V0_C_1          ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V0_C_2          = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V0_C_2          ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V0_C_3          = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V0_C_3          ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V0_C_4          = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V0_C_4          ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V0_C_5          = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V0_C_5          ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V0_C_6          = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V0_C_6          ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V0_C_7          = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V0_C_7          ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V0_C_8          = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V0_C_8          ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V12_0           = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V12_0           ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V12_1           = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V12_1           ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V12_2           = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V12_2           ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V12_3           = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V12_3           ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V12_4           = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V12_4           ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V12_5           = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V12_5           ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V12_6           = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V12_6           ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V12_7           = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V12_7           ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V12_8           = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V12_8           ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V12_9           = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V12_9           ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V12_10          = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V12_10          ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V12_11          = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V12_11          ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V12_12          = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V12_12          ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V12_13          = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V12_13          ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V12_14          = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V12_14          ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V12_15          = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V12_15          ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V12_C_0         = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V12_C_0         ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V12_C_1         = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V12_C_1         ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V12_C_2         = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V12_C_2         ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V12_C_3         = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V12_C_3         ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V12_C_4         = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V12_C_4         ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V12_C_5         = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V12_C_5         ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V12_C_6         = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V12_C_6         ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V12_C_7         = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V12_C_7         ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V12_C_8         = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V12_C_8         ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V12_C_9         = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V12_C_9         ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V12_C_10        = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V12_C_10        ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V12_C_11        = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V12_C_11        ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V12_C_12        = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V12_C_12        ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V12_C_13        = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V12_C_13        ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V12_C_14        = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V12_C_14        ));
+    GEL_TextOut("DSS_WB_FIR_COEF_V12_C_15        = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_FIR_COEF_V12_C_15        ));
+    GEL_TextOut("DSS_WB_IRQENABLE                = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_IRQENABLE                ));
+    GEL_TextOut("DSS_WB_IRQSTATUS                = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_IRQSTATUS                ));
+    GEL_TextOut("DSS_WB_MFLAG_THRESHOLD          = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_MFLAG_THRESHOLD          ));
+    GEL_TextOut("DSS_WB_PICTURE_SIZE             = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_PICTURE_SIZE             ));
+    GEL_TextOut("DSS_WB_SIZE                     = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_SIZE                     ));
+    GEL_TextOut("DSS_WB_POSITION                 = %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_POSITION                 ));
+    GEL_TextOut("DSS_WB_REGION_BASED_TOTAL_PICTURE_SIZEY= %x\n",,,,, RD_MEM_32(DSS_DISPC_WB_REG_BASE     + DSS_WB_REGION_BASED_TOTAL_PICTURE_SIZEY));
+}
+
+regDump_vp()
+{
+    GEL_TextOut("DSS_VP_CONFIG                   = %x\n",,,,, RD_MEM_32(DSS_DISPC_VP_REG_BASE     + DSS_VP_CONFIG                   ));
+    GEL_TextOut("DSS_VP_CONTROL                  = %x\n",,,,, RD_MEM_32(DSS_DISPC_VP_REG_BASE     + DSS_VP_CONTROL                  ));
+    GEL_TextOut("DSS_VP_CPR_COEF_B               = %x\n",,,,, RD_MEM_32(DSS_DISPC_VP_REG_BASE     + DSS_VP_CPR_COEF_B               ));
+    GEL_TextOut("DSS_VP_CPR_COEF_G               = %x\n",,,,, RD_MEM_32(DSS_DISPC_VP_REG_BASE     + DSS_VP_CPR_COEF_G               ));
+    GEL_TextOut("DSS_VP_CPR_COEF_R               = %x\n",,,,, RD_MEM_32(DSS_DISPC_VP_REG_BASE     + DSS_VP_CPR_COEF_R               ));
+    GEL_TextOut("DSS_VP_DATA_CYCLE_0             = %x\n",,,,, RD_MEM_32(DSS_DISPC_VP_REG_BASE     + DSS_VP_DATA_CYCLE_0             ));
+    GEL_TextOut("DSS_VP_DATA_CYCLE_1             = %x\n",,,,, RD_MEM_32(DSS_DISPC_VP_REG_BASE     + DSS_VP_DATA_CYCLE_1             ));
+    GEL_TextOut("DSS_VP_DATA_CYCLE_2             = %x\n",,,,, RD_MEM_32(DSS_DISPC_VP_REG_BASE     + DSS_VP_DATA_CYCLE_2             ));
+    GEL_TextOut("DSS_VP_GAMMA_TABLE              = %x\n",,,,, RD_MEM_32(DSS_DISPC_VP_REG_BASE     + DSS_VP_GAMMA_TABLE              ));
+    GEL_TextOut("DSS_VP_IRQENABLE                = %x\n",,,,, RD_MEM_32(DSS_DISPC_VP_REG_BASE     + DSS_VP_IRQENABLE                ));
+    GEL_TextOut("DSS_VP_IRQSTATUS                = %x\n",,,,, RD_MEM_32(DSS_DISPC_VP_REG_BASE     + DSS_VP_IRQSTATUS                ));
+    GEL_TextOut("DSS_VP_LINE_NUMBER              = %x\n",,,,, RD_MEM_32(DSS_DISPC_VP_REG_BASE     + DSS_VP_LINE_NUMBER              ));
+    GEL_TextOut("DSS_VP_LINE_STATUS              = %x\n",,,,, RD_MEM_32(DSS_DISPC_VP_REG_BASE     + DSS_VP_LINE_STATUS              ));
+    GEL_TextOut("DSS_VP_POL_FREQ                 = %x\n",,,,, RD_MEM_32(DSS_DISPC_VP_REG_BASE     + DSS_VP_POL_FREQ                 ));
+    GEL_TextOut("DSS_VP_SIZE_SCREEN              = %x\n",,,,, RD_MEM_32(DSS_DISPC_VP_REG_BASE     + DSS_VP_SIZE_SCREEN              ));
+    GEL_TextOut("DSS_VP_TIMING_H                 = %x\n",,,,, RD_MEM_32(DSS_DISPC_VP_REG_BASE     + DSS_VP_TIMING_H                 ));
+    GEL_TextOut("DSS_VP_TIMING_V                 = %x\n",,,,, RD_MEM_32(DSS_DISPC_VP_REG_BASE     + DSS_VP_TIMING_V                 ));
+}

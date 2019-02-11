@@ -1,0 +1,182 @@
+%%{
+/*
+ * Copyright (c) 2012-2016 Texas Instruments Incorporated - http://www.ti.com
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+%%}
+%%{
+    var File = xdc.module("xdc.services.io.File");
+    var BIOS = xdc.module("ti.sysbios.BIOS");
+    var Build = xdc.module("ti.sdo.ipc.Build");
+    var TARGET = $args[0];
+    var XDCROOT = String(environment['xdc.rootDir'] + '/packages/').replace(/\\/g, "/");
+
+    var XOPTS = '-I "' + XDCROOT + '"' + " -Dxdc_target_types__="
+        + File.getDOSPath(TARGET.$package.packageRepository) + TARGET.stdInclude
+	+ " -Dxdc_target_name__=" + TARGET.name;
+
+    var CGEN = TARGET.rootDir.replace(/\\/g, "/");
+
+    function baseName(file) {
+	return file.substr(file.lastIndexOf('/') + 1).replace(/\.[^\.]+$/, "");
+    }
+
+    function packageName(file) {
+	return file.substring(0, file.lastIndexOf('/')).replace(/\//g, "_");
+    }
+    var OBJS = [];
+%%}
+vpath % `File.getDOSPath(this.$package.packageRepository)`
+vpath %.c `XDCROOT`
+
+CCOPTS = `Build.getCCOpts(TARGET)`
+
+BUILD_DEFS = `Build.getDefs()`
+
+%%{
+    /* convert package path into include path */
+    var incs = new Array();
+    incs.push("-I" + this.$package.packageRepository.replace(/\/$/, ""));
+
+    for each (var repo in xdc.curPath().split(';')) {
+        /* skip empty repo, relative paths, and xdctools itself */
+        if ((repo == "") || repo.match(/^\./) || repo.match(/xdctools/)) {
+            continue;
+        }
+
+        /* add repo if not already present in array */
+        var i;
+        for (i = 0; i < incs.length; i++) {
+            if (incs[i] == "-I" + repo) {
+                break;
+            }
+        }
+        if (i == incs.length) {
+            incs.push("-I" + repo);
+        }
+    }
+%%}
+INCS = `incs.join(" ")`
+
+CC = `CGEN`/`TARGET.ccBin.cmd` $(CCOPTS) -I `CGEN`/arm-none-eabi/include
+ASM = `CGEN`/`TARGET.asmBin.cmd` $(CCOPTS) -I `CGEN`/arm-none-eabi/include
+AR = `CGEN`/`TARGET.arBin.cmd` `TARGET.ar.opts`
+
+%if (environment["os.name"].match(/Windows.*/i)) {
+%if (BIOS.buildingAppLib == false) {
+%    Build.$private.libDir = Build.$private.libDir.replace(/\//g,'\\');
+%}
+DEL = cmd.exe /q /c del /f
+CP = cmd.exe /q /c copy /Y
+MKDIR = mkdir
+%}
+%else {
+DEL = rm -f
+CP = cp -f
+MKDIR = mkdir -p
+%}
+
+define RM
+	$(if $(wildcard $1),$(DEL) $1,:)
+endef
+
+define ASSEMBLE
+	@echo asm`TARGET.suffix` $< ...
+	@$(ASM) $(BUILD_DEFS) `XOPTS` $(INCS) $<
+endef
+
+define COMPILE
+	@echo cl`TARGET.suffix` $< ...
+	@$(CC) $(BUILD_DEFS) `XOPTS` $(INCS) $<
+endef
+
+%var LIB = "ipc.a" + TARGET.suffix;
+
+%if (BIOS.buildingAppLib == false) {
+all: `Build.$private.libDir``LIB`
+%}
+%else {
+all: `LIB`
+%}
+
+%var sources = Build.getAsmFiles(TARGET.$name);
+%for each (var s in sources) {
+%    var obj = packageName(s) + "_" + baseName(s) + ".o";
+%    OBJS.push(obj)
+`obj`: `s` makefile
+	@-$(call RM, $@)
+	$(ASSEMBLE) -o `obj`
+
+%}
+
+%var sources = Build.getCFiles(TARGET.$name).split(' ');
+%for each (var s in sources) {
+%    var obj = packageName(s) + "_" + baseName(s) + ".o";
+%    OBJS.push(obj)
+`obj`: `s` makefile
+	@-$(call RM, `obj`)
+	$(COMPILE) -o `obj`
+%}
+
+`LIB`: `OBJS.join(" ")`
+	@echo ar`TARGET.suffix` $^ ...
+	@-$(call RM, $@)
+	@$(AR) $@ $^
+
+%if (BIOS.buildingAppLib == false) {
+`Build.$private.libDir``LIB`: `LIB`
+	@echo cp `LIB`
+	@-$(call RM, "`Build.$private.libDir``LIB`")
+	@$(CP) `LIB` "`Build.$private.libDir``LIB`"
+%}
+
+clean:
+	@-$(call RM, `LIB`)
+%if (BIOS.buildingAppLib == false) {
+	@-$(call RM, "`Build.$private.libDir``LIB`")
+%}
+%if (TARGET.$name.match(/gnu/)) {
+	@-$(call RM, BIOS.o)
+%}
+%else {
+	@-$(call RM, BIOS.obj)
+%}
+%for (var i = 0; i < OBJS.length; i++) {
+	@-$(call RM, `OBJS[i]`)
+%}
+%if (Build.$private.libDir != null) {
+
+# create output directories
+ifneq ($(MAKECMDGOALS),clean)
+ifeq ($(wildcard `Build.$private.libDir`),)
+    $(shell $(MKDIR) `Build.$private.libDir`)
+endif
+endif
+%}

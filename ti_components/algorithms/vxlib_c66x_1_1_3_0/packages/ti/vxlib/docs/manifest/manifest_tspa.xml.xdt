@@ -1,0 +1,181 @@
+%%{
+/*!
+ *  This template implements the Doxyfile
+ */  
+  var ver = this.version;
+  var Version = ver[0]+"."+ver[1]+"."+ver[2];
+
+  if(this.xdcargs_targ.match("c66x"))
+  {
+    var targ = "c66";
+  }
+  else
+  {
+    var targ = "c64P";
+  }
+  
+  var date=new java.util.Date();
+  year=date.getYear();
+  year+=1900;
+%%}
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="manifest_style_1.00.00.00.xsl"?>
+
+<!-- 
+ * ======================================================================== *
+ * VXLIB - TI VX Library                                                    *
+ *                                                                          *
+ *  manifest.xml - VLIB Software Manifest generation file                   *
+ *                                                                          *
+ *                                                                          *
+ * Copyright (C) 2016 - 2017 Texas Instruments Incorporated                 *
+ *                   http://www.ti.com/                                     *
+ *                                                                          *
+ *                                                                          *
+ *  Redistribution and use in source and binary forms, with or without      *
+ *  modification, are permitted provided that the following conditions      *
+ *  are met:                                                                *
+ *                                                                          *
+ *    Redistributions of source code must retain the above copyright        *
+ *    notice, this list of conditions and the following disclaimer.         *
+ *                                                                          *
+ *    Redistributions in binary form must reproduce the above copyright     *
+ *    notice, this list of conditions and the following disclaimer in the   *
+ *    documentation and/or other materials provided with the                *
+ *    distribution.                                                         *
+ *                                                                          *
+ *    Neither the name of Texas Instruments Incorporated nor the names of   *
+ *    its contributors may be used to endorse or promote products derived   *
+ *    from this software without specific prior written permission.         *
+ *                                                                          *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS     *
+ *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT       *
+ *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR   *
+ *  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT    *
+ *  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,   *
+ *  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT        *
+ *  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,   *
+ *  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY   *
+ *  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT     *
+ *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE   *
+ *  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.    *
+ * ======================================================================== *
+ -->
+
+<!-- 
+	XML Manifest Version 1.00.00.00
+ -->
+
+<manifest>
+	<!-- 
+	The Manifest version this XML file conforms to. There is only 
+	one manifestversion block allowed
+	 -->
+	<manifestversion>1.00.00.00</manifestversion>
+	<!-- 
+	The Product block describes the product you are delivering. There is only 
+	one Product block allowed
+	 -->
+	<product>
+		<name>VXLIB Package</name>
+		<version>`Version`</version>
+    <eccn_software>Publicly Available</eccn_software>
+    <eccn_technology>Publicly Available</eccn_technology>
+		<description>VXLIB is a software library of more than 100 royalty-free kernels from Texas 
+        Instruments that accelerates common vision processing operations. 
+    </description>
+	</product>
+	<!-- 
+	The Package block describes a piece of content and its liscensing. It is equivalent to 
+	a single line entry on the Manifest.
+	There can be multiple Package blocks, but there must be at least 1.
+	Packages are displayed in the table in the order they appear here.
+	The values to use here are defined and explained in the DOC version of the Manifest.
+	 -->
+	<package>
+		<name>VXLIB Library</name>
+		<version>`Version`</version>
+		<license>TI Text File License</license>
+		<format>Limited Source and Object</format>
+		<modified>N/A</modified>
+		<location>~/ti/vxlib</location>
+		<obtainedfrom>TI</obtainedfrom>	
+	</package>
+	<package>
+		<name>Khronos OpenVX Sample Implementation</name>
+		<version>1.1 (June 17, 2016)</version>
+		<license>Khronos License</license>
+		<format>Object</format>
+		<modified>Yes</modified>
+		<location>~/ti/vxlib/lib/vxlib_cn.lib ~/ti/vxlib/lib/vxlib.lib</location>
+		<obtainedfrom>https://www.khronos.org/registry/OpenVX/sample/openvx_sample_1.1.tar.bz2</obtainedfrom>	
+	</package>
+	<!-- 
+  The Disclaimer block describes a disclaimer that should be displayed in the Disclaimers section
+  of the Manifest. The two below are standard.
+  There can be 0 or more Disclaimer blocks. 
+	 -->
+  <ltext>
+  &lt;br&gt;&lt;br&gt;
+  TEXAS INSTRUMENTS TEXT FILE LICENSE
+  &lt;br&gt;&lt;br&gt;
+  Copyright (c) 2016 - `year` Texas Instruments Incorporated
+  &lt;br&gt;&lt;br&gt;
+  All rights reserved not granted herein.
+  &lt;br&gt;
+  Limited License.  
+  &lt;br&gt;&lt;br&gt;
+  Texas Instruments Incorporated grants a world-wide, royalty-free, non-exclusive license under copyrights and patents it now or hereafter owns or controls to make, have made, use, import, offer to sell and sell ("Utilize") this software subject to the terms herein.  With respect to the foregoing patent license, such license is granted solely to the extent that any such patent is necessary to Utilize the software alone.  The patent license shall not apply to any combinations which include this software, other than combinations with devices manufactured by or for TI ("TI Devices"). No hardware patent is licensed hereunder.
+  &lt;br&gt;&lt;br&gt;
+  Redistributions must preserve existing copyright notices and reproduce this license (including the above copyright notice and the disclaimer and (if applicable) source code license limitations below) in the documentation and/or other materials provided with the distribution
+  &lt;br&gt;&lt;br&gt;
+  Redistribution and use in binary form, without modification, are permitted provided that the following conditions are met:
+  &lt;br&gt;&lt;br&gt;
+  * No reverse engineering, decompilation, or disassembly of this software is permitted with respect to any software provided in binary form.
+  &lt;br&gt;&lt;br&gt;
+  * any redistribution and use are licensed by TI for use only with TI Devices.
+  &lt;br&gt;&lt;br&gt;
+  * Nothing shall obligate TI to provide you with source code for the software licensed and provided to you in object code.
+  &lt;br&gt;&lt;br&gt;
+  If software source code is provided to you, modification and redistribution of the source code are permitted provided that the following conditions are met:
+  &lt;br&gt;&lt;br&gt;
+  * any redistribution and use of the source code, including any resulting derivative works, are licensed by TI for use only with TI Devices.
+  &lt;br&gt;&lt;br&gt;
+  * any redistribution and use of any object code compiled from the source code and any resulting derivative works, are licensed by TI for use only with TI Devices.
+  &lt;br&gt;&lt;br&gt;
+  Neither the name of Texas Instruments Incorporated nor the names of its suppliers may be used to endorse or promote products derived from this software without specific prior written permission.
+  &lt;br&gt;&lt;br&gt;
+  DISCLAIMER.
+  &lt;br&gt;&lt;br&gt;
+  THIS SOFTWARE IS PROVIDED BY TI AND TI’S LICENSORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL TI AND TI’S LICENSORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  &lt;br&gt;&lt;br&gt;
+  &lt;br&gt;&lt;br&gt;
+  &lt;br&gt;&lt;br&gt;
+  &lt;br&gt;&lt;br&gt;
+  </ltext>
+  <ltext>
+  &lt;br&gt;&lt;br&gt;
+  Khronos License:
+  &lt;br&gt;&lt;br&gt;
+  ----------------
+  &lt;br&gt;&lt;br&gt;
+  &lt;br&gt;&lt;br&gt;
+  Copyright (c) 2012-2016 The Khronos Group Inc.
+  &lt;br&gt;&lt;br&gt;
+  &lt;br&gt;&lt;br&gt;
+  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and/or associated documentation files (the "Materials"), to deal in the Materials without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Materials, and to permit persons to whom the Materials are furnished to do so, subject to the following conditions:
+  &lt;br&gt;&lt;br&gt;
+  &lt;br&gt;&lt;br&gt;
+  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Materials.
+  &lt;br&gt;&lt;br&gt;
+  &lt;br&gt;&lt;br&gt;
+  MODIFICATIONS TO THIS FILE MAY MEAN IT NO LONGER ACCURATELY REFLECTS KHRONOS STANDARDS. THE UNMODIFIED, NORMATIVE VERSIONS OF KHRONOS SPECIFICATIONS AND HEADER INFORMATION ARE LOCATED AT
+  &lt;br&gt;&lt;br&gt;
+  https://www.khronos.org/registry/
+  &lt;br&gt;&lt;br&gt;
+  &lt;br&gt;&lt;br&gt;
+  THE MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE MATERIALS OR THE USE OR OTHER DEALINGS IN THE MATERIALS.
+  &lt;br&gt;&lt;br&gt;
+  &lt;br&gt;&lt;br&gt;
+  </ltext>
+</manifest>

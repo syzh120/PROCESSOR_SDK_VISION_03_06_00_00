@@ -1,0 +1,382 @@
+/*
+ * Copyright (c) 2013-2014, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * */
+/*
+ * ======== package.bld ========
+ */
+
+Pkg.otherFiles = [
+    "package.bld",
+    "fdt/fdt.h",
+    "ip/ip.h",
+    "ipv6/ipv6.h",
+    "lli/lli.h",
+    "nat/nat.h",
+    "nat/proxy.h",
+    "pbm/jumbo_pbm.c",
+    "ppp/md5.h",
+    "ppp/ppp.h",
+    "pppoe/pppoe.h",
+    "rawethsock/rawethsock.h",
+    "route/route.h",
+    "sock/sock.h",
+    "sock6/sock6.h",
+    "tcp/tcp.h",
+    "tcp6/tcp6.h",
+];
+
+/* List of all the NDK core files. */
+var coreLibFiles = [
+    "bind/bind.c",
+    "fdt/file.c",
+    "fdt/fileuser.c",
+    "fdt/socket.c",
+    "icmp/icmp.c",
+    "icmp/icmpin.c",
+    "igmp/igmp.c",
+    "ip/ip.c",
+    "ip/ipin.c",
+    "ip/ipout.c",
+    "ip/ipfrag.c",
+    "lli/lli.c",
+    "lli/lliin.c",
+    "lli/lliout.c",
+    "node/node.c",
+    "pipe/pipe.c",
+    "raw/raw.c",
+    "res/exec.c",
+    "res/sb.c",
+    "res/timer.c",
+    "route/route.c",
+    "route/rtable.c",
+    "rtc/rtc.c",
+    "sock/sock.c",
+    "sock/sockint.c",
+    "sock/sockpcb.c",
+    "sock/sockprot.c",
+    "tcp/tcp.c",
+    "tcp/tcpin.c",
+    "tcp/tcpout.c",
+    "tcp/tcpprot.c",
+    "tcp/tcptime.c",
+    "udp/udp.c",
+    "nat/nat.c",
+    "nat/natpkt.c",
+    "nat/proxy.c",
+    "ppp/auth.c",
+    "ppp/ipcp.c",
+    "ppp/lcp.c",
+    "ppp/md5.c",
+    "ppp/nimuppp.c",
+    "utils/listlib.c",
+    "pppoe/nimupppoe.c",
+    "nimu/nimu.c",
+    "vlan/vlan.c",
+    "bind6/bind6.c",
+    "icmpv6/icmpv6.c",
+    "icmpv6/icmpv6_ndisc.c",
+    "icmpv6/icmpv6in.c",
+    "icmpv6/icmpv6out.c",
+    "ipv6/ipv6.c",
+    "ipv6/ipv6_exthdrs.c",
+    "ipv6/ipv6_frag.c",
+    "ipv6/ipv6in.c",
+    "ipv6/ipv6out.c",
+    "lli6/lli6.c",
+    "mld/mld.c",
+    "raw6/raw6.c",
+    "res6/sb6.c",
+    "route6/route6.c",
+    "sock6/sock6.c",
+    "sock6/sock6int.c",
+    "sock6/sock6pcb.c",
+    "sock6/sock6prot.c",
+    "tcp6/tcp6.c",
+    "tcp6/tcp6in.c",
+    "tcp6/tcp6out.c",
+    "tcp6/tcp6prot.c",
+    "tcp6/tcp6time.c",
+    "udp6/udp6.c",
+    "raweth/raweth.c",
+    "rawethsock/rawethsock.c",
+    "rawethsock/rawethsock_prot.c",
+    "rawethsock/rawethsock_pcb.c",
+
+    // build PBM into stack library to allow pure IPv4 libs (SDOCM00076155)
+    "pbm/pbm.c",
+    "pbm/pbm_data.c",
+
+    /*
+     * Jumbo frame support
+     *
+     * To add support for jumbo frames, add the following file to this array
+     * and throw the following define to the compiler in 'copts' below:
+     *
+     *    -D_INCLUDE_JUMBOFRAME_SUPPORT
+     */
+     // "pbm/jumbo_pbm.c",
+];
+
+/*
+ *       M3 Library Build Options
+ *
+ * NOTE: currently only IPv4 M3 libraries have reduced sizes.
+ *
+ * Building for M3 requires reduced values for the following sizes,
+ * normally defined in pbm.c and mem_bios6.c:
+ *
+ *     PKT_NUM_FRAMEBUF
+ *     PKT_SIZE_FRAMEBUF
+ *
+ * By defining _NDK_MIN_PBM_BUFS, this allows
+ * these sizes to be redefined elsewhere.  For M3, we'll redefine
+ * them here, in the compiler options variable 'copts', then pass this for all
+ * IPv4 library versions for M3:
+ */
+var m3PbmCopts = " -D_NDK_MIN_PBM_BUFS" +
+                 " -DPKT_NUM_FRAMEBUF=16" +
+                 " -DPKT_SIZE_FRAMEBUF=1552"; 
+
+// back up original value of Pkg.libDir
+var PkglibDirOrig = Pkg.libDir;
+
+if ((typeof(buildMinStack) == undefined) || (buildMinStack == "")) {
+    /* if BUILDMINSTACK wasn't passed in correctly, then build all libs */
+    buildMinStack = 0;
+}
+
+/*
+ * Build all stack libraries
+ *
+ * We must build all permutations of the NDK core stack library for all targets
+ */
+for (var i = 0; i < Build.targets.length; i++) {
+    var target = Build.targets[i];
+
+    /*
+     * stk.lib
+     */
+    var libOptions = {
+        copts: "-D_NDK_EXTERN_CONFIG -D_INCLUDE_NIMU_CODE",
+        incs: ndkPathInclude,
+    };
+
+    // first library to build
+    var libName = "stk";
+
+    // build M3 library with reduced buffer sizes for pbm.c and jumbo_pbm.c
+    if (target.name == "M3") {
+        libOptions.copts += m3PbmCopts;
+    }
+
+    var lib = Pkg.addLibrary("lib/" + libName, target, libOptions);
+    lib.addObjects(coreLibFiles);
+
+    /*
+     * stk6.lib
+     */
+    var libName = "stk6";
+    var libOptions = {
+            copts: "-D_NDK_EXTERN_CONFIG -D_INCLUDE_NIMU_CODE " +
+                   "-D_INCLUDE_IPv6_CODE",
+            incs: ndkPathInclude,
+    };
+
+    var lib = Pkg.addLibrary("lib/" + libName, target, libOptions);
+    lib.addObjects(coreLibFiles);
+
+    /*
+     * stk_ppp_pppoe.lib
+     */
+    var libName = "stk_ppp_pppoe";
+    var libOptions = {
+            copts: "-D_INCLUDE_PPP_CODE -D_INCLUDE_PPPOE_CODE " +
+                   "-D_NDK_EXTERN_CONFIG -D_INCLUDE_NIMU_CODE",
+            incs: ndkPathInclude,
+    };
+
+    // build M3 library with reduced buffer sizes for pbm.c and jumbo_pbm.c
+    if (target.name == "M3") {
+        libOptions.copts += m3PbmCopts;
+    }
+
+    var lib = Pkg.addLibrary("lib/" + libName, target, libOptions);
+    lib.addObjects(coreLibFiles);
+
+    /*
+     * stk6_ppp_pppoe.lib
+     */
+    var libName = "stk6_ppp_pppoe";
+    var libOptions = {
+            copts: "-D_INCLUDE_PPP_CODE -D_INCLUDE_PPPOE_CODE " +
+                   "-D_NDK_EXTERN_CONFIG -D_INCLUDE_NIMU_CODE " +
+                   "-D_INCLUDE_IPv6_CODE",
+            incs: ndkPathInclude,
+    };
+
+    var lib = Pkg.addLibrary("lib/" + libName, target, libOptions);
+    lib.addObjects(coreLibFiles);
+
+    /*
+     * Skip other lib permutations if building minimal stack libs (now defined
+     * to be stk_ppp_pppoe and stk6_ppp_pppoe libraries)
+     */
+    if (buildMinStack == 0) {
+        /*
+         * stk_ppp.lib
+         */
+        var libName = "stk_ppp";
+        var libOptions = {
+                copts: "-D_INCLUDE_PPP_CODE -D_NDK_EXTERN_CONFIG " +
+                       "-D_INCLUDE_NIMU_CODE",
+                incs: ndkPathInclude,
+        };
+        if (target.name == "M3") {
+            libOptions.copts += m3PbmCopts;
+        }
+
+        var lib = Pkg.addLibrary("lib/" + libName, target, libOptions);
+        lib.addObjects(coreLibFiles);
+
+        /*
+         * stk6_ppp.lib
+         */
+        var libName = "stk6_ppp";
+        var libOptions = {
+                copts: "-D_INCLUDE_PPP_CODE -D_NDK_EXTERN_CONFIG " +
+                       "-D_INCLUDE_NIMU_CODE -D_INCLUDE_IPv6_CODE",
+                incs: ndkPathInclude,
+        };
+
+        var lib = Pkg.addLibrary("lib/" + libName, target, libOptions);
+        lib.addObjects(coreLibFiles);
+
+        /*
+         * stk_nat.lib
+         */
+        var libName = "stk_nat";
+        var libOptions = {
+                copts: "-D_INCLUDE_NAT_CODE -D_NDK_EXTERN_CONFIG " +
+                       "-D_INCLUDE_NIMU_CODE",
+                incs: ndkPathInclude,
+        };
+
+        // build M3 library with reduced buffer sizes for pbm.c and jumbo_pbm.c
+        if (target.name == "M3") {
+            libOptions.copts += m3PbmCopts;
+        }
+
+        var lib = Pkg.addLibrary("lib/" + libName, target, libOptions);
+        lib.addObjects(coreLibFiles);
+
+        /*
+         * stk6_nat.lib
+         */
+        var libName = "stk6_nat";
+        var libOptions = {
+                copts: "-D_INCLUDE_NAT_CODE -D_NDK_EXTERN_CONFIG " +
+                       "-D_INCLUDE_NIMU_CODE -D_INCLUDE_IPv6_CODE",
+                incs: ndkPathInclude,
+        };
+
+        var lib = Pkg.addLibrary("lib/" + libName, target, libOptions);
+        lib.addObjects(coreLibFiles);
+
+        /*
+         * stk_nat_ppp.lib
+         */
+        var libName = "stk_nat_ppp";
+        var libOptions = {
+                copts: "-D_INCLUDE_NAT_CODE -D_INCLUDE_PPP_CODE " +
+                       "-D_NDK_EXTERN_CONFIG -D_INCLUDE_NIMU_CODE",
+                incs: ndkPathInclude,
+        };
+
+        // build M3 library with reduced buffer sizes for pbm.c and jumbo_pbm.c
+        if (target.name == "M3") {
+            libOptions.copts += m3PbmCopts;
+        }
+
+        var lib = Pkg.addLibrary("lib/" + libName, target, libOptions);
+        lib.addObjects(coreLibFiles);
+
+        /*
+         * stk6_nat_ppp.lib
+         */
+        var libName = "stk6_nat_ppp";
+        var libOptions = {
+                copts: "-D_INCLUDE_NAT_CODE -D_INCLUDE_PPP_CODE " +
+                       "-D_NDK_EXTERN_CONFIG -D_INCLUDE_NIMU_CODE " +
+                       "-D_INCLUDE_IPv6_CODE",
+                incs: ndkPathInclude,
+        };
+
+        var lib = Pkg.addLibrary("lib/" + libName, target, libOptions);
+        lib.addObjects(coreLibFiles);
+
+        /*
+         * stk_nat_ppp_pppoe.lib
+         */
+        var libName = "stk_nat_ppp_pppoe";
+        var libOptions = {
+                copts: "-D_INCLUDE_NAT_CODE -D_INCLUDE_PPP_CODE " +
+                       "-D_INCLUDE_PPPOE_CODE -D_NDK_EXTERN_CONFIG " +
+                       "-D_INCLUDE_NIMU_CODE",
+                incs: ndkPathInclude,
+        };
+
+        // build M3 library with reduced buffer sizes for pbm.c and jumbo_pbm.c
+        if (target.name == "M3") {
+            libOptions.copts += m3PbmCopts;
+        }
+
+        var lib = Pkg.addLibrary("lib/" + libName, target, libOptions);
+        lib.addObjects(coreLibFiles);
+
+        /*
+         * stk6_nat_ppp_pppoe.lib
+         */
+        var libName = "stk6_nat_ppp_pppoe";
+        var libOptions = {
+                copts: "-D_INCLUDE_NAT_CODE -D_INCLUDE_PPP_CODE " +
+                       "-D_INCLUDE_PPPOE_CODE -D_NDK_EXTERN_CONFIG " +
+                       "-D_INCLUDE_NIMU_CODE -D_INCLUDE_IPv6_CODE",
+                incs: ndkPathInclude,
+        };
+
+        var lib = Pkg.addLibrary("lib/" + libName, target, libOptions);
+        lib.addObjects(coreLibFiles);
+    }
+}
+
+/* include source files in the release package */
+Pkg.attrs.exportSrc = true;
+Pkg.attrs.exportCfg = true;

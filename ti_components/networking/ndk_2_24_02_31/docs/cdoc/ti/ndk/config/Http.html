@@ -1,0 +1,503 @@
+<html>
+<head>
+<title>module ti.ndk.config.Http</title>
+<meta name="description" content="NDK HTTP server settings and configuration">
+<link rel="stylesheet" type="text/css" href="../../../xdoc.css" />
+</head>
+<body><div id="xdocWrapper"><div id="xdocContent">
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">module</span> <span class="xdoc-id">ti.ndk.config.</span><span class="xdoc-id">Http</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/ndk/config/Global.html" title="module Global"><img class="xdocHdrArrow" src="../../../Arrow_left.png"/></a></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/ndk/config/package.html" title="package ti.ndk.config"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/ndk/config/Icmp.html" title="module Icmp"><img class="xdocHdrArrow" src="../../../Arrow_right.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/ndk/config/Http.html">index URL</a></div>
+<p class="xdocHdrSummary">NDK HTTP server settings and configuration</p>
+<ul class="xdocToc">
+<li class="xdocToc"><a class="xdocToc" href="#meta-synop">XDCscript usage</a></li>
+<li class="xdocToc2"><a class="xdocToc" href="#xdocMetaElems">Individual elements</a></li>
+</ul>
+<div class="xdocBrief">
+The Http module is used to create an HTTP server on the target processor.
+  Using the Http module, the user is able easily set up and add an HTTP
+  server to their application.
+[&nbsp;<a class="xdocBrief" href="#xdoc-desc">more</a>&nbsp;...&nbsp;]
+</div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2">XDCscript</span></tt> usage</td>
+<td class="xdocLabelCenter">meta-domain</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../ti/ndk/config/Http-src.html"><span class="xdocLabelFile">ti/ndk/config/Http.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynM">
+<div class="xdocSynCode">
+<tt></tt><span class="xdoc-kw1">var</span> Http = <span class="xdoc-kw3">xdc.useModule</span>(<span class="xdoc-id">'ti.ndk.config.Http'</span>);
+</div>
+<div class='xdocSynHdr'>module-wide constants & types</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">const</span> <a class="xdocSynGo" href="#.C.I.S_.F.L.G_.C.A.L.L.B.Y.I.P">Http.<span class="xdoc-id">CIS_FLG_CALLBYIP</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Specifies that the service should be invoked by IP address</span></span></a> = 0x0004;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">const</span> <a class="xdocSynGo" href="#.C.I.S_.F.L.G_.I.F.I.D.X.V.A.L.I.D">Http.<span class="xdoc-id">CIS_FLG_IFIDXVALID</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Specifies if the IfIdx field is valid</span></span></a> = 0x0001;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">const</span> <a class="xdocSynGo" href="#.C.I.S_.F.L.G_.R.E.S.O.L.V.E.I.P">Http.<span class="xdoc-id">CIS_FLG_RESOLVEIP</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Requests that IfIdx be resolved to an IP address before service
+  execution is initiated</span></span></a> = 0x0002;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">const</span> <a class="xdocSynGo" href="#.C.I.S_.F.L.G_.R.E.S.T.A.R.T.I.P.T.E.R.M">Http.<span class="xdoc-id">CIS_FLG_RESTARTIPTERM</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;A service that is dependent on a valid IP address (as determined by the
+  RESOLVEIP flag) is shut down if the IP address becomes invalid</span></span></a> = 0x0008;
+</div>
+<div class='xdocSynHdr'>per-instance config parameters</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">var</span> params = <span class="xdoc-kw1">new</span> Http.<a class="xdocSynGo" href="#per-instance_config_parameters"><span class="xdoc-id">Params</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Instance config-params object</span></span></a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>params.<a class="xdocSynGo" href="#cgi.Functions"><span class="xdoc-id">cgiFunctions</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;CGI functions and names</span></span></a> = <i><span class="xdoc-kw2">String</span>[<span class="xdoc-kw1">string</span>]</i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>params.<a class="xdocSynGo" href="#if.Idx"><span class="xdoc-id">ifIdx</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;The physical device index on which the HTTP server shall be
+  executed.  Must be greater than zero</span></span></a> = <i><span class="xdoc-kw2">Int</span></i> 1;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>params.<a class="xdocSynGo" href="#ip.Addr"><span class="xdoc-id">ipAddr</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;The IP address on which to initiate this service</span></span></a> = <i><span class="xdoc-kw2">String</span></i> "INADDR_ANY";
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>params.<a class="xdocSynGo" href="#max.Con"><span class="xdoc-id">maxCon</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Specifies the maximum number of hosts that may connect to the HTTP
+  server running on this port (1 - 24)</span></span></a> = <i><span class="xdoc-kw2">Int</span></i> 8;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>params.<a class="xdocSynGo" href="#mode"><span class="xdoc-id">mode</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Set of flags which represent the desired behavior of the HTTP Server</span></span></a> = <i><span class="xdoc-kw2">Bits16</span></i> <a class="xdoc-link" href="../../../ti/ndk/config/Http.html#.C.I.S_.F.L.G_.I.F.I.D.X.V.A.L.I.D" title="ti.ndk.config.Http.CIS_FLG_IFIDXVALID">Http.CIS_FLG_IFIDXVALID</a>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>params.<a class="xdocSynGo" href="#p.Cb.Srv"><span class="xdoc-id">pCbSrv</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;HTTP service reporting function</span></span></a> = <i><span class="xdoc-kw2">Void</span>(*)(<span class="xdoc-kw2">Int</span>,<span class="xdoc-kw2">Int</span>,<span class="xdoc-kw2">Int</span>,<span class="xdoc-kw2">Void</span>*)</i> "&ti_ndk_config_Global_serviceReport";
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>params.<a class="xdocSynGo" href="#port"><span class="xdoc-id">port</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Specifies the port number which this HTTP server will accept
+  connections</span></span></a> = <i><span class="xdoc-kw2">Int</span></i> 80;
+</div>
+<div class='xdocSynHdr'>per-instance creation</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">var</span> inst = Http.<a class="xdocSynGo" href="#per-instance_creation"><span class="xdoc-id">create</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Create an instance-object</span></span></a>(params);
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+</div>
+<span id="xdoc-desc"></span>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">The Http module is used to create an HTTP server on the target processor.
+  Using the Http module, the user is able easily set up and add an HTTP
+  server to their application.</div>
+<div class="xdocText">Summary of Steps:</div>
+<div class="xdocText">The following is a summary of required steps to add a HTTP server to an NDK
+  application:</div>
+<div class="xdocText">1. Use the Http module</div>
+<div class="xdocText">2. Create a Http parameter structure and configure its properties.</div>
+<div class="xdocText">3. Create an Http module instance based on the properties set in the
+     configuration structure.</div>
+<div class="xdocText">Detailed Steps:</div>
+<div class="xdocText">1. To add an HTTP server using the Http module, it's first necessary to use
+     the Http module in the application RTSC configuration file:</div>
+<div class="xdocText"><PRE class="Example">  var Http = xdc.useModule('ti.ndk.config.Http');
+</PRE></div>
+<div class="xdocText">2. After the Http module is used, it can then be referenced to create a 
+     Http parameter structure, through which the properties of the HTTP
+     server being added can be configured:</div>
+<div class="xdocText"><PRE class="Example">  var httpParams = new Http.Params();
+  httpParams.port = 1003;
+  httpParams.maxCon = 11;
+</PRE></div>
+<div class="xdocText">3. Once the properties of the HTTP server have been set (via the parameter
+     structure), an Http instance may be created based on those parameters:</div>
+<div class="xdocText"><PRE class="Example">  var httpInst = Http.create(httpParams);
+</PRE></div>
+<div class="xdocText">As the above steps indicate, the Http module is configured on a per
+  instance basis.  The steps above detail how to configure a single Http
+  instance, but, it is also possible to create several Http servers, all
+  running on the same target processor, which accept connections on
+  different ports.</div>
+<div class="xdocText">For example, the above steps illustrate how to add a HTTP server which
+  accepts connections on port 1003.  To add a second HTTP server, which
+  accepts connections on the port 1004, the following code could be
+  added:</div>
+<div class="xdocText"><PRE class="Example">  var http2Params = new Http.Params();
+  http2Params.port = 1004;
+  var http2Inst = Http.create(http2Params);
+</PRE></div>
+<div id="xdocSep">
+</div>
+<div id="xdocMetaElems">
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".C.I.S_.F.L.G_.C.A.L.L.B.Y.I.P"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">const</span> <span class="xdoc-id">Http.</span><span class="xdoc-id">CIS_FLG_CALLBYIP</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/ndk/config/Http.html" title="module Http"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/ndk/config/Http.html#.C.I.S_.F.L.G_.C.A.L.L.B.Y.I.P">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Specifies that the service should be invoked by IP address</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl">XDCscript</span></tt> usage</td>
+<td class="xdocLabelRight">meta-domain</td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">const</span> Http.<span class="xdoc-id">CIS_FLG_CALLBYIP</span> = 0x0004;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".C.I.S_.F.L.G_.I.F.I.D.X.V.A.L.I.D"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">const</span> <span class="xdoc-id">Http.</span><span class="xdoc-id">CIS_FLG_IFIDXVALID</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/ndk/config/Http.html" title="module Http"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/ndk/config/Http.html#.C.I.S_.F.L.G_.I.F.I.D.X.V.A.L.I.D">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Specifies if the IfIdx field is valid</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl">XDCscript</span></tt> usage</td>
+<td class="xdocLabelRight">meta-domain</td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">const</span> Http.<span class="xdoc-id">CIS_FLG_IFIDXVALID</span> = 0x0001;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".C.I.S_.F.L.G_.R.E.S.O.L.V.E.I.P"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">const</span> <span class="xdoc-id">Http.</span><span class="xdoc-id">CIS_FLG_RESOLVEIP</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/ndk/config/Http.html" title="module Http"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/ndk/config/Http.html#.C.I.S_.F.L.G_.R.E.S.O.L.V.E.I.P">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Requests that IfIdx be resolved to an IP address before service
+  execution is initiated</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl">XDCscript</span></tt> usage</td>
+<td class="xdocLabelRight">meta-domain</td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">const</span> Http.<span class="xdoc-id">CIS_FLG_RESOLVEIP</span> = 0x0002;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".C.I.S_.F.L.G_.R.E.S.T.A.R.T.I.P.T.E.R.M"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">const</span> <span class="xdoc-id">Http.</span><span class="xdoc-id">CIS_FLG_RESTARTIPTERM</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/ndk/config/Http.html" title="module Http"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/ndk/config/Http.html#.C.I.S_.F.L.G_.R.E.S.T.A.R.T.I.P.T.E.R.M">index URL</a></div>
+<p class="xdocHdrSummaryDcl">A service that is dependent on a valid IP address (as determined by the
+  RESOLVEIP flag) is shut down if the IP address becomes invalid</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl">XDCscript</span></tt> usage</td>
+<td class="xdocLabelRight">meta-domain</td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">const</span> Http.<span class="xdoc-id">CIS_FLG_RESTARTIPTERM</span> = 0x0008;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">When this flag is set, the service will be restarted when a new address
+  becomes available. Otherwise; the service will not be restarted.</div>
+<a class="xdocAnchor" id="per-instance_config_parameters"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdocSynSum">Instance Config Parameters</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/ndk/config/Http.html" title="module Http"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/ndk/config/Http.html#per-instance_config_parameters">index URL</a></div>
+<p class="xdocHdrSummary"></p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl">XDCscript</span></tt> usage</td>
+<td class="xdocLabelRight">meta-domain</td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">var</span> params = <span class="xdoc-kw1">new</span> Http.<span class="xdoc-id">Params</span>;
+</div>
+<div class='xdocSynSum'><tt></tt><tt></tt>//&nbsp;Instance config-params object</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>params.<span class="xdoc-id">cgiFunctions</span> = <i><span class="xdoc-kw2">String</span>[<span class="xdoc-kw1">string</span>]</i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class='xdocSynSum'><tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>//&nbsp;CGI functions and names</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>params.<span class="xdoc-id">ifIdx</span> = <i><span class="xdoc-kw2">Int</span></i> 1;
+</div>
+<div class='xdocSynSum'><tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>//&nbsp;The physical device index on which the HTTP server shall be
+  executed.  Must be greater than zero</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>params.<span class="xdoc-id">ipAddr</span> = <i><span class="xdoc-kw2">String</span></i> "INADDR_ANY";
+</div>
+<div class='xdocSynSum'><tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>//&nbsp;The IP address on which to initiate this service</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>params.<span class="xdoc-id">maxCon</span> = <i><span class="xdoc-kw2">Int</span></i> 8;
+</div>
+<div class='xdocSynSum'><tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>//&nbsp;Specifies the maximum number of hosts that may connect to the HTTP
+  server running on this port (1 - 24)</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>params.<span class="xdoc-id">mode</span> = <i><span class="xdoc-kw2">Bits16</span></i> <a class="xdoc-link" href="../../../ti/ndk/config/Http.html#.C.I.S_.F.L.G_.I.F.I.D.X.V.A.L.I.D" title="ti.ndk.config.Http.CIS_FLG_IFIDXVALID">Http.CIS_FLG_IFIDXVALID</a>;
+</div>
+<div class='xdocSynSum'><tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>//&nbsp;Set of flags which represent the desired behavior of the HTTP Server</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>params.<span class="xdoc-id">pCbSrv</span> = <i><span class="xdoc-kw2">Void</span>(*)(<span class="xdoc-kw2">Int</span>,<span class="xdoc-kw2">Int</span>,<span class="xdoc-kw2">Int</span>,<span class="xdoc-kw2">Void</span>*)</i> "&ti_ndk_config_Global_serviceReport";
+</div>
+<div class='xdocSynSum'><tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>//&nbsp;HTTP service reporting function</div>
+<div class="xdocSynCode">
+<tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>params.<span class="xdoc-id">port</span> = <i><span class="xdoc-kw2">Int</span></i> 80;
+</div>
+<div class='xdocSynSum'><tt></tt><tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt>//&nbsp;Specifies the port number which this HTTP server will accept
+  connections</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="cgi.Functions"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Http.</span><span class="xdoc-id">cgiFunctions</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;instance</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/ndk/config/Http.html" title="module Http"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/ndk/config/Http.html#cgi.Functions">index URL</a></div>
+<p class="xdocHdrSummaryDcl">CGI functions and names</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl">XDCscript</span></tt> usage</td>
+<td class="xdocLabelRight">meta-domain</td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">var</span> params = <span class="xdoc-kw1">new</span> Http.<span class="xdoc-id">Params</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt><b>&nbsp;&nbsp;...</b>
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt>params.<span class="xdoc-id">cgiFunctions</span> = <i><span class="xdoc-kw2">String</span>[<span class="xdoc-kw1">string</span>]</i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="if.Idx"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Http.</span><span class="xdoc-id">ifIdx</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;instance</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/ndk/config/Http.html" title="module Http"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/ndk/config/Http.html#if.Idx">index URL</a></div>
+<p class="xdocHdrSummaryDcl">The physical device index on which the HTTP server shall be
+  executed.  Must be greater than zero</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl">XDCscript</span></tt> usage</td>
+<td class="xdocLabelRight">meta-domain</td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">var</span> params = <span class="xdoc-kw1">new</span> Http.<span class="xdoc-id">Params</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt><b>&nbsp;&nbsp;...</b>
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt>params.<span class="xdoc-id">ifIdx</span> = <i><span class="xdoc-kw2">Int</span></i> 1;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="ip.Addr"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Http.</span><span class="xdoc-id">ipAddr</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;instance</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/ndk/config/Http.html" title="module Http"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/ndk/config/Http.html#ip.Addr">index URL</a></div>
+<p class="xdocHdrSummaryDcl">The IP address on which to initiate this service</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl">XDCscript</span></tt> usage</td>
+<td class="xdocLabelRight">meta-domain</td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">var</span> params = <span class="xdoc-kw1">new</span> Http.<span class="xdoc-id">Params</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt><b>&nbsp;&nbsp;...</b>
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt>params.<span class="xdoc-id">ipAddr</span> = <i><span class="xdoc-kw2">String</span></i> "INADDR_ANY";
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">To accept a connection from any IP, specify INADDR_ANY.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="max.Con"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Http.</span><span class="xdoc-id">maxCon</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;instance</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/ndk/config/Http.html" title="module Http"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/ndk/config/Http.html#max.Con">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Specifies the maximum number of hosts that may connect to the HTTP
+  server running on this port (1 - 24)</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl">XDCscript</span></tt> usage</td>
+<td class="xdocLabelRight">meta-domain</td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">var</span> params = <span class="xdoc-kw1">new</span> Http.<span class="xdoc-id">Params</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt><b>&nbsp;&nbsp;...</b>
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt>params.<span class="xdoc-id">maxCon</span> = <i><span class="xdoc-kw2">Int</span></i> 8;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="mode"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Http.</span><span class="xdoc-id">mode</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;instance</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/ndk/config/Http.html" title="module Http"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/ndk/config/Http.html#mode">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Set of flags which represent the desired behavior of the HTTP Server</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl">XDCscript</span></tt> usage</td>
+<td class="xdocLabelRight">meta-domain</td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">var</span> params = <span class="xdoc-kw1">new</span> Http.<span class="xdoc-id">Params</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt><b>&nbsp;&nbsp;...</b>
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt>params.<span class="xdoc-id">mode</span> = <i><span class="xdoc-kw2">Bits16</span></i> <a class="xdoc-link" href="../../../ti/ndk/config/Http.html#.C.I.S_.F.L.G_.I.F.I.D.X.V.A.L.I.D" title="ti.ndk.config.Http.CIS_FLG_IFIDXVALID">Http.CIS_FLG_IFIDXVALID</a>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">The following flag values may be set either individually, or by or-ing
+  flags together:</div>
+<div class="xdocText"><UL><LI> CIS_FLG_IFIDXVALID - specifies if the IfIdx field is valid.
+</LI><LI> CIS_FLG_RESOLVEIP - Requests that IfIdx be resolved to an IP
+      address before service execution is initiated.
+</LI><LI> CIS_FLG_CALLBYIP - Specifies that the service should be invoked by
+      IP address
+</LI><LI> CIS_FLG_RESTARTIPTERM - A service that is dependent on a valid IP
+      address.
+</LI></UL></div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="p.Cb.Srv"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Http.</span><span class="xdoc-id">pCbSrv</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;instance</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/ndk/config/Http.html" title="module Http"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/ndk/config/Http.html#p.Cb.Srv">index URL</a></div>
+<p class="xdocHdrSummaryDcl">HTTP service reporting function</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl">XDCscript</span></tt> usage</td>
+<td class="xdocLabelRight">meta-domain</td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">var</span> params = <span class="xdoc-kw1">new</span> Http.<span class="xdoc-id">Params</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt><b>&nbsp;&nbsp;...</b>
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt>params.<span class="xdoc-id">pCbSrv</span> = <i><span class="xdoc-kw2">Void</span>(*)(<span class="xdoc-kw2">Int</span>,<span class="xdoc-kw2">Int</span>,<span class="xdoc-kw2">Int</span>,<span class="xdoc-kw2">Void</span>*)</i> "&ti_ndk_config_Global_serviceReport";
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="port"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Http.</span><span class="xdoc-id">port</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;instance</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/ndk/config/Http.html" title="module Http"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/ndk/config/Http.html#port">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Specifies the port number which this HTTP server will accept
+  connections</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl">XDCscript</span></tt> usage</td>
+<td class="xdocLabelRight">meta-domain</td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">var</span> params = <span class="xdoc-kw1">new</span> Http.<span class="xdoc-id">Params</span>;
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt><b>&nbsp;&nbsp;...</b>
+</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt>params.<span class="xdoc-id">port</span> = <i><span class="xdoc-kw2">Int</span></i> 80;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="per-instance_creation"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdocSynSum">Instance Creation</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../ti/ndk/config/Http.html" title="module Http"><img class="xdocHdrArrow" src="../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../index.html#ti/ndk/config/Http.html#per-instance_creation">index URL</a></div>
+<p class="xdocHdrSummary"></p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl">XDCscript</span></tt> usage</td>
+<td class="xdocLabelRight">meta-domain</td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">var</span> params = <span class="xdoc-kw1">new</span> Http.<a class="xdoc-link" href="../../../ti/ndk/config/Http.html#per-instance_config_parameters" title="ti.ndk.config.Http.Params">Params</a>;
+</div>
+<div class='xdocSynSum'><tt></tt><tt></tt>//&nbsp;Allocate instance config-params</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt>params.<i>config</i> = <b>&nbsp;&nbsp;...</b>
+</div>
+<div class='xdocSynSum'><tt></tt><tt></tt>//&nbsp;Assign individual configs</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">var</span> inst = Http.<span class="xdoc-id">create</span>(params);
+</div>
+<div class='xdocSynSum'><tt></tt><tt></tt>//&nbsp;Create an instance-object</div>
+</div>
+</div>
+<div id="xdocDate">generated on Tue, 14 Apr 2015 22:13:49 GMT</div>
+</div></div></body>
+</html>

@@ -1,0 +1,980 @@
+<html>
+<head>
+<title>module ti.sdo.fc.edma3.Settings</title>
+<link rel="stylesheet" type="text/css" href="../../../../xdoc.css" />
+</head>
+<body><div id="xdocWrapper"><div id="xdocContent">
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">metaonly </span><span class="xdoc-kw1">module</span> <span class="xdoc-id">ti.sdo.fc.edma3.</span><span class="xdoc-id">Settings</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/package.html" title="package ti.sdo.fc.edma3"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html">index URL</a></div>
+<ul class="xdocToc">
+<li class="xdocToc"><a class="xdocToc" href="#meta-synop">Configuration settings</a></li>
+<li class="xdocToc2"><a class="xdocToc" href="#xdocMetaElems">Individual elements</a></li>
+</ul>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight">sourced in <a class="xdocLink" href="../../../../ti/sdo/fc/edma3/Settings-src.html"><span class="xdocLabelFile">ti/sdo/fc/edma3/Settings.xdc</span></a></td>
+</tr></table>
+<div class="xdocSynM">
+<div class="xdocSynCode">
+<tt></tt><span class="xdoc-kw1">var</span> Settings = <span class="xdoc-kw3">xdc.useModule</span>(<span class="xdoc-id">'ti.sdo.fc.edma3.Settings'</span>);
+</div>
+<div class='xdocSynHdr'>module-wide constants & types</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">const</span> <a class="xdocSynGo" href="#.E.D.M.A3_.M.A.X.G.R.O.U.P.S">Settings.<span class="xdoc-id">EDMA3_MAXGROUPS</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Maximum number of groups for sharing
+                                 EDMA3 resources</span></span></a> = 20;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><span class="xdoc-kw1">const</span> <a class="xdocSynGo" href="#.E.D.M.A3_.M.A.X.T.C.S">Settings.<span class="xdoc-id">EDMA3_MAXTCS</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> = 8;
+</div>
+<div class='xdocSynHdr'>module-wide config parameters</div>
+
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#contiguous.Pa.Rams">Settings.<span class="xdoc-id">contiguousPaRams</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Boolean value indicating if PaRams assigned to scratch groups need to be
+ contiguous or not</span></span></a> = <i><span class="xdoc-kw2">Bool</span></i> <span class="xdoc-kw2">true</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#controller.Id">Settings.<span class="xdoc-id">controllerId</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Id of the EDMA3 instance that will be used to request resources from.
+ If this platform is natively supported by this module and the default
+ configurations are being used, this Id is used to determine, which EDMA3
+ instance to request resources from</span></span></a> = <i><span class="xdoc-kw2">UInt</span></i> 0;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#create.R.M.Obj">Settings.<span class="xdoc-id">createRMObj</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Boolean value indicating if EDMA3 LLD RM object needs to be created by
+ FC or if it is going to be supplied by the driver or app etc.
+ TRUE by default. Should be set to FALSE in cases where the LLD is being
+ used, or if the app is supplying the semaphore functions for RM creation</span></span></a> = <i><span class="xdoc-kw2">Bool</span></i> <span class="xdoc-kw2">true</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#default.Q">Settings.<span class="xdoc-id">defaultQ</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Default queue assignment for all channels allocated for this app. When
+ channels are first granted to the algorithm, they will be mapped to this
+ Event Queue</span></span></a> = <i><span class="xdoc-kw2">UInt</span></i> 0;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#event.Queue.Setup">Settings.<span class="xdoc-id">eventQueueSetup</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;This flag decides if EDMA3 global registers related to Transfer
+ Controller/Queues should be programmed.
+ If using on a device where ARM-side drivers might perform the
+ intialization, set this to false so it doesn't overwrite the ARM-side
+ setup.
+ This is required to be supplied ONLY if application is built for
+ DSP target</span></span></a> = <i><span class="xdoc-kw2">Bool</span></i> <span class="xdoc-kw2">false</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#ext.Memory.Q0">Settings.<span class="xdoc-id">extMemoryQ0</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Configuration to setup Queue # to be used to external memory writes
+ Multiple Queues can be configured for same type of memory writes to allow
+ load balancing for performance.
+ This is required to be supplied ONLY if application is built for DSP
+ target</span></span></a> = <i><span class="xdoc-kw2">UInt</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#ext.Memory.Q1">Settings.<span class="xdoc-id">extMemoryQ1</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> = <i><span class="xdoc-kw2">UInt</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#ext.Memory.Q2">Settings.<span class="xdoc-id">extMemoryQ2</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> = <i><span class="xdoc-kw2">UInt</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#global.Config">Settings.<span class="xdoc-id">globalConfig</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;If a platform is not natively supported by this module or if the default
+ number of EDMA3 hardware resources is to be overriden for some reason,
+ this configuration is required to set the SOC specific details of EDMA3
+ Set this parameter to the name of a structure of type
+ EDMA3_GblConfigParams (defined in edma3_config.h).
+ far EDMA3_GblConfigParams _globalConfig;</span></span></a> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#global.Init">Settings.<span class="xdoc-id">globalInit</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;This flag decides if EDMA3 global registers and PaRam entries will be
+ initialized by this module.
+ If building this app for a system where ARM-side (or other) drivers might     * perform EDMA3 intialization, set this to false so it doesn't overwrite
+ the ARM-side setup</span></span></a> = <i><span class="xdoc-kw2">Bool</span></i> <span class="xdoc-kw2">false</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#int.Memory.Q0">Settings.<span class="xdoc-id">intMemoryQ0</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Configuration to setup Queue # to be used to internal memory writes,
+ Multiple Queues can be configured for same type of memory writes to allow
+ load balancing for performance.
+ This is required to be supplied ONLY if application is built for DSP
+ target</span></span></a> = <i><span class="xdoc-kw2">UInt</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#int.Memory.Q1">Settings.<span class="xdoc-id">intMemoryQ1</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> = <i><span class="xdoc-kw2">UInt</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#int.Memory.Q2">Settings.<span class="xdoc-id">intMemoryQ2</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> = <i><span class="xdoc-kw2">UInt</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#max.Algs">Settings.<span class="xdoc-id">maxAlgs</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Maximum number of algorithm instances that will be created</span></span></a> = <i><span class="xdoc-kw2">UInt</span></i> 32;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#max.Edma.Channels">Settings.<span class="xdoc-id">maxEdmaChannels</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Array containing the maximum number of Edma Channels that will be
+ assigned to groups for sharing.
+ Algorithms created within a given group ID will share the EDMA3 resources
+ assigned to that group
+ On devices where DCHMAP doesn't exist, it is recommended to request as
+ many channels as PaRams requested</span></span></a> = <i><span class="xdoc-kw2">UInt</span>[<a class="xdoc-link" href="../../../../ti/sdo/fc/edma3/Settings.html#.E.D.M.A3_.M.A.X.G.R.O.U.P.S" title="ti.sdo.fc.edma3.Settings.EDMA3_MAXGROUPS">Settings.EDMA3_MAXGROUPS</a>]</i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#max.Pa.Rams">Settings.<span class="xdoc-id">maxPaRams</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Arrays containing the maximum number of PaRams that will be assigned to
+ groups for sharing.
+ Algorithms created within a given group ID will share the EDMA3 resources
+ assigned to that group</span></span></a> = <i><span class="xdoc-kw2">UInt</span>[<a class="xdoc-link" href="../../../../ti/sdo/fc/edma3/Settings.html#.E.D.M.A3_.M.A.X.G.R.O.U.P.S" title="ti.sdo.fc.edma3.Settings.EDMA3_MAXGROUPS">Settings.EDMA3_MAXGROUPS</a>]</i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#max.Qdma.Channels">Settings.<span class="xdoc-id">maxQdmaChannels</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Array containing the maximum number of Qdma Channels that will be
+ assigned to groups for sharing.
+ Algorithms created within a given group ID will share the EDMA3 resources
+ assigned to that group</span></span></a> = <i><span class="xdoc-kw2">UInt</span>[<a class="xdoc-link" href="../../../../ti/sdo/fc/edma3/Settings.html#.E.D.M.A3_.M.A.X.G.R.O.U.P.S" title="ti.sdo.fc.edma3.Settings.EDMA3_MAXGROUPS">Settings.EDMA3_MAXGROUPS</a>]</i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#max.Requests">Settings.<span class="xdoc-id">maxRequests</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Maximum number of "active" resource requests that will be
+ made by the algorithms in each scratch group</span></span></a> = <i><span class="xdoc-kw2">UInt</span></i> 64;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#max.Tccs">Settings.<span class="xdoc-id">maxTccs</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Arrays containing the maximum number of TCCs that will be assigned to
+ groups for sharing.
+ Algorithms created within a given group ID will share the EDMA3 resources
+ assigned to that group</span></span></a> = <i><span class="xdoc-kw2">UInt</span>[<a class="xdoc-link" href="../../../../ti/sdo/fc/edma3/Settings.html#.E.D.M.A3_.M.A.X.G.R.O.U.P.S" title="ti.sdo.fc.edma3.Settings.EDMA3_MAXGROUPS">Settings.EDMA3_MAXGROUPS</a>]</i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#other.Q0">Settings.<span class="xdoc-id">otherQ0</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> = <i><span class="xdoc-kw2">UInt</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#other.Q1">Settings.<span class="xdoc-id">otherQ1</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> = <i><span class="xdoc-kw2">UInt</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#persistent.Alloc.Fxn">Settings.<span class="xdoc-id">persistentAllocFxn</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Function for allocating persistent memory for RMAN's and other IRESMAN
+  implementation's internal objects</span></span></a> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#persistent.Free.Fxn">Settings.<span class="xdoc-id">persistentFreeFxn</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Function for freeing persistent memory used by RMAN and other IRESMAN
+  implementation's internal objects</span></span></a> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#queue.Priority">Settings.<span class="xdoc-id">queuePriority</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> = <i><span class="xdoc-kw2">Int</span>[<a class="xdoc-link" href="../../../../ti/sdo/fc/edma3/Settings.html#.E.D.M.A3_.M.A.X.T.C.S" title="ti.sdo.fc.edma3.Settings.EDMA3_MAXTCS">Settings.EDMA3_MAXTCS</a>]</i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#queue.T.C.Map">Settings.<span class="xdoc-id">queueTCMap</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;</span></span></a> = <i><span class="xdoc-kw2">Int</span>[<a class="xdoc-link" href="../../../../ti/sdo/fc/edma3/Settings.html#.E.D.M.A3_.M.A.X.T.C.S" title="ti.sdo.fc.edma3.Settings.EDMA3_MAXTCS">Settings.EDMA3_MAXTCS</a>]</i> <span class="xdoc-kw2">undefined</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#region">Settings.<span class="xdoc-id">region</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Id of the EDMA3 Region we will program with the assigned Resources etc.
+ If this platform is natively supported by this module and the default
+ configurations are being used, region number is used to determine,
+ which region of the EDMA3 configuration to request resources from.
+ On most heterogenous devices:
+ Region number 1 usually corresponds to DSP.
+ Region number 0 usually corresponds to ARM.
+ On most multicore devices:
+ Region number n corresponds to Core number n</span></span></a> = <i><span class="xdoc-kw2">UInt</span></i> 1;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#region.Config">Settings.<span class="xdoc-id">regionConfig</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;If a platform is not natively supported by this module or if the default
+ number of resources available to a particular region are to be overriden,
+ region specific configuration can be specified directly via this
+ parameter.
+ Set this parameter to the name of a structure of type
+ EDMA3_InstanceInitConfg (defined in edma3_config.h).
+ far EDMA3_InstanceInitConfg _regionConfig;</span></span></a> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#sem.Create.Fxn">Settings.<span class="xdoc-id">semCreateFxn</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Function to create semaphores used by various individual resource
+ manager(s) registered with RMAN</span></span></a> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#sem.Delete.Fxn">Settings.<span class="xdoc-id">semDeleteFxn</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Function to delete semaphores used by various individual resource
+ manager(s) registered with RMAN</span></span></a> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#sem.Pend.Fxn">Settings.<span class="xdoc-id">semPendFxn</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Function to pend on semaphores used by various resource manager(s)
+ registered with RMAN</span></span></a> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+<div class="xdocSynCode">
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;</tt><tt></tt><a class="xdocSynGo" href="#sem.Post.Fxn">Settings.<span class="xdoc-id">semPostFxn</span><span class="xdocSynHoverShadow"><span class="xdocSynHover">//&nbsp;Function to post on Semaphores used by various resource manager(s)
+ registered with RMAN</span></span></a> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+</div>
+<div id="xdocSep">
+</div>
+<div id="xdocMetaElems">
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".E.D.M.A3_.M.A.X.G.R.O.U.P.S"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">const</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">EDMA3_MAXGROUPS</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#.E.D.M.A3_.M.A.X.G.R.O.U.P.S">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Maximum number of groups for sharing
+                                 EDMA3 resources</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">const</span> Settings.<span class="xdoc-id">EDMA3_MAXGROUPS</span> = 20;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id=".E.D.M.A3_.M.A.X.T.C.S"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">const</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">EDMA3_MAXTCS</span></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#.E.D.M.A3_.M.A.X.T.C.S">index URL</a></div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt><span class="xdoc-kw1">const</span> Settings.<span class="xdoc-id">EDMA3_MAXTCS</span> = 8;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="contiguous.Pa.Rams"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">contiguousPaRams</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#contiguous.Pa.Rams">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Boolean value indicating if PaRams assigned to scratch groups need to be
+ contiguous or not</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Settings.<span class="xdoc-id">contiguousPaRams</span> = <i><span class="xdoc-kw2">Bool</span></i> <span class="xdoc-kw2">true</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="controller.Id"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">controllerId</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#controller.Id">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Id of the EDMA3 instance that will be used to request resources from.
+ If this platform is natively supported by this module and the default
+ configurations are being used, this Id is used to determine, which EDMA3
+ instance to request resources from</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Settings.<span class="xdoc-id">controllerId</span> = <i><span class="xdoc-kw2">UInt</span></i> 0;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="create.R.M.Obj"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">createRMObj</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#create.R.M.Obj">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Boolean value indicating if EDMA3 LLD RM object needs to be created by
+ FC or if it is going to be supplied by the driver or app etc.
+ TRUE by default. Should be set to FALSE in cases where the LLD is being
+ used, or if the app is supplying the semaphore functions for RM creation</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Settings.<span class="xdoc-id">createRMObj</span> = <i><span class="xdoc-kw2">Bool</span></i> <span class="xdoc-kw2">true</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="default.Q"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">defaultQ</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#default.Q">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Default queue assignment for all channels allocated for this app. When
+ channels are first granted to the algorithm, they will be mapped to this
+ Event Queue</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Settings.<span class="xdoc-id">defaultQ</span> = <i><span class="xdoc-kw2">UInt</span></i> 0;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="event.Queue.Setup"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">eventQueueSetup</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#event.Queue.Setup">index URL</a></div>
+<p class="xdocHdrSummaryDcl">This flag decides if EDMA3 global registers related to Transfer
+ Controller/Queues should be programmed.
+ If using on a device where ARM-side drivers might perform the
+ intialization, set this to false so it doesn't overwrite the ARM-side
+ setup.
+ This is required to be supplied ONLY if application is built for
+ DSP target</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Settings.<span class="xdoc-id">eventQueueSetup</span> = <i><span class="xdoc-kw2">Bool</span></i> <span class="xdoc-kw2">false</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="ext.Memory.Q0"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">extMemoryQ0</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#ext.Memory.Q0">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Configuration to setup Queue # to be used to external memory writes
+ Multiple Queues can be configured for same type of memory writes to allow
+ load balancing for performance.
+ This is required to be supplied ONLY if application is built for DSP
+ target</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Settings.<span class="xdoc-id">extMemoryQ0</span> = <i><span class="xdoc-kw2">UInt</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="ext.Memory.Q1"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">extMemoryQ1</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#ext.Memory.Q1">index URL</a></div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Settings.<span class="xdoc-id">extMemoryQ1</span> = <i><span class="xdoc-kw2">UInt</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="ext.Memory.Q2"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">extMemoryQ2</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#ext.Memory.Q2">index URL</a></div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Settings.<span class="xdoc-id">extMemoryQ2</span> = <i><span class="xdoc-kw2">UInt</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="global.Config"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">globalConfig</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#global.Config">index URL</a></div>
+<p class="xdocHdrSummaryDcl">If a platform is not natively supported by this module or if the default
+ number of EDMA3 hardware resources is to be overriden for some reason,
+ this configuration is required to set the SOC specific details of EDMA3
+ Set this parameter to the name of a structure of type
+ EDMA3_GblConfigParams (defined in edma3_config.h).
+ far EDMA3_GblConfigParams _globalConfig;</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Settings.<span class="xdoc-id">globalConfig</span> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">Note:- This is required to be supplied ONLY if application is built for      *  DSP target.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="global.Init"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">globalInit</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#global.Init">index URL</a></div>
+<p class="xdocHdrSummaryDcl">This flag decides if EDMA3 global registers and PaRam entries will be
+ initialized by this module.
+ If building this app for a system where ARM-side (or other) drivers might     * perform EDMA3 intialization, set this to false so it doesn't overwrite
+ the ARM-side setup</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Settings.<span class="xdoc-id">globalInit</span> = <i><span class="xdoc-kw2">Bool</span></i> <span class="xdoc-kw2">false</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">Note:- This is required to be supplied ONLY if application is built for
+  DSP target.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="int.Memory.Q0"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">intMemoryQ0</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#int.Memory.Q0">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Configuration to setup Queue # to be used to internal memory writes,
+ Multiple Queues can be configured for same type of memory writes to allow
+ load balancing for performance.
+ This is required to be supplied ONLY if application is built for DSP
+ target</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Settings.<span class="xdoc-id">intMemoryQ0</span> = <i><span class="xdoc-kw2">UInt</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="int.Memory.Q1"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">intMemoryQ1</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#int.Memory.Q1">index URL</a></div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Settings.<span class="xdoc-id">intMemoryQ1</span> = <i><span class="xdoc-kw2">UInt</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="int.Memory.Q2"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">intMemoryQ2</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#int.Memory.Q2">index URL</a></div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Settings.<span class="xdoc-id">intMemoryQ2</span> = <i><span class="xdoc-kw2">UInt</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="max.Algs"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">maxAlgs</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#max.Algs">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Maximum number of algorithm instances that will be created</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Settings.<span class="xdoc-id">maxAlgs</span> = <i><span class="xdoc-kw2">UInt</span></i> 32;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="max.Edma.Channels"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">maxEdmaChannels</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#max.Edma.Channels">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Array containing the maximum number of Edma Channels that will be
+ assigned to groups for sharing.
+ Algorithms created within a given group ID will share the EDMA3 resources
+ assigned to that group
+ On devices where DCHMAP doesn't exist, it is recommended to request as
+ many channels as PaRams requested</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Settings.<span class="xdoc-id">maxEdmaChannels</span> = <i><span class="xdoc-kw2">UInt</span>[<a class="xdoc-link" href="../../../../ti/sdo/fc/edma3/Settings.html#.E.D.M.A3_.M.A.X.G.R.O.U.P.S" title="ti.sdo.fc.edma3.Settings.EDMA3_MAXGROUPS">Settings.EDMA3_MAXGROUPS</a>]</i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">Note:- This is required to be supplied ONLY if application is built for
+  DSP target.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="max.Pa.Rams"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">maxPaRams</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#max.Pa.Rams">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Arrays containing the maximum number of PaRams that will be assigned to
+ groups for sharing.
+ Algorithms created within a given group ID will share the EDMA3 resources
+ assigned to that group</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Settings.<span class="xdoc-id">maxPaRams</span> = <i><span class="xdoc-kw2">UInt</span>[<a class="xdoc-link" href="../../../../ti/sdo/fc/edma3/Settings.html#.E.D.M.A3_.M.A.X.G.R.O.U.P.S" title="ti.sdo.fc.edma3.Settings.EDMA3_MAXGROUPS">Settings.EDMA3_MAXGROUPS</a>]</i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">Note:- This is required to be supplied ONLY if application is built for
+  DSP target.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="max.Qdma.Channels"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">maxQdmaChannels</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#max.Qdma.Channels">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Array containing the maximum number of Qdma Channels that will be
+ assigned to groups for sharing.
+ Algorithms created within a given group ID will share the EDMA3 resources
+ assigned to that group</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Settings.<span class="xdoc-id">maxQdmaChannels</span> = <i><span class="xdoc-kw2">UInt</span>[<a class="xdoc-link" href="../../../../ti/sdo/fc/edma3/Settings.html#.E.D.M.A3_.M.A.X.G.R.O.U.P.S" title="ti.sdo.fc.edma3.Settings.EDMA3_MAXGROUPS">Settings.EDMA3_MAXGROUPS</a>]</i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">Note:- This is required to be supplied ONLY if application is built for
+  DSP target.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="max.Requests"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">maxRequests</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#max.Requests">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Maximum number of "active" resource requests that will be
+ made by the algorithms in each scratch group</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Settings.<span class="xdoc-id">maxRequests</span> = <i><span class="xdoc-kw2">UInt</span></i> 64;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="max.Tccs"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">maxTccs</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#max.Tccs">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Arrays containing the maximum number of TCCs that will be assigned to
+ groups for sharing.
+ Algorithms created within a given group ID will share the EDMA3 resources
+ assigned to that group</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Settings.<span class="xdoc-id">maxTccs</span> = <i><span class="xdoc-kw2">UInt</span>[<a class="xdoc-link" href="../../../../ti/sdo/fc/edma3/Settings.html#.E.D.M.A3_.M.A.X.G.R.O.U.P.S" title="ti.sdo.fc.edma3.Settings.EDMA3_MAXGROUPS">Settings.EDMA3_MAXGROUPS</a>]</i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">Note:- This is required to be supplied ONLY if application is built for
+  DSP target.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="other.Q0"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">otherQ0</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#other.Q0">index URL</a></div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Settings.<span class="xdoc-id">otherQ0</span> = <i><span class="xdoc-kw2">UInt</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="other.Q1"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">otherQ1</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#other.Q1">index URL</a></div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Settings.<span class="xdoc-id">otherQ1</span> = <i><span class="xdoc-kw2">UInt</span></i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="persistent.Alloc.Fxn"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">persistentAllocFxn</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#persistent.Alloc.Fxn">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Function for allocating persistent memory for RMAN's and other IRESMAN
+  implementation's internal objects</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Settings.<span class="xdoc-id">persistentAllocFxn</span> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">Note:- This is required to be supplied ONLY if
+  <a class="xdoc-link" href="../../../../ti/sdo/fc/rman/RMAN.html#use.D.S.K.T2" title="ti.sdo.fc.rman.RMAN.useDSKT2">ti.sdo.fc.rman.RMAN.useDSKT2</a> is set to <tt>false</tt>.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="persistent.Free.Fxn"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">persistentFreeFxn</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#persistent.Free.Fxn">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Function for freeing persistent memory used by RMAN and other IRESMAN
+  implementation's internal objects</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Settings.<span class="xdoc-id">persistentFreeFxn</span> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">Note:- This is required to be supplied ONLY if
+  <a class="xdoc-link" href="../../../../ti/sdo/fc/rman/RMAN.html#use.D.S.K.T2" title="ti.sdo.fc.rman.RMAN.useDSKT2">ti.sdo.fc.rman.RMAN.useDSKT2</a> is set to <tt>false</tt>.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="queue.Priority"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">queuePriority</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#queue.Priority">index URL</a></div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Settings.<span class="xdoc-id">queuePriority</span> = <i><span class="xdoc-kw2">Int</span>[<a class="xdoc-link" href="../../../../ti/sdo/fc/edma3/Settings.html#.E.D.M.A3_.M.A.X.T.C.S" title="ti.sdo.fc.edma3.Settings.EDMA3_MAXTCS">Settings.EDMA3_MAXTCS</a>]</i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="queue.T.C.Map"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">queueTCMap</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#queue.T.C.Map">index URL</a></div>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Settings.<span class="xdoc-id">queueTCMap</span> = <i><span class="xdoc-kw2">Int</span>[<a class="xdoc-link" href="../../../../ti/sdo/fc/edma3/Settings.html#.E.D.M.A3_.M.A.X.T.C.S" title="ti.sdo.fc.edma3.Settings.EDMA3_MAXTCS">Settings.EDMA3_MAXTCS</a>]</i> <span class="xdoc-kw2">undefined</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="region"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">region</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#region">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Id of the EDMA3 Region we will program with the assigned Resources etc.
+ If this platform is natively supported by this module and the default
+ configurations are being used, region number is used to determine,
+ which region of the EDMA3 configuration to request resources from.
+ On most heterogenous devices:
+ Region number 1 usually corresponds to DSP.
+ Region number 0 usually corresponds to ARM.
+ On most multicore devices:
+ Region number n corresponds to Core number n</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Settings.<span class="xdoc-id">region</span> = <i><span class="xdoc-kw2">UInt</span></i> 1;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="region.Config"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">regionConfig</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#region.Config">index URL</a></div>
+<p class="xdocHdrSummaryDcl">If a platform is not natively supported by this module or if the default
+ number of resources available to a particular region are to be overriden,
+ region specific configuration can be specified directly via this
+ parameter.
+ Set this parameter to the name of a structure of type
+ EDMA3_InstanceInitConfg (defined in edma3_config.h).
+ far EDMA3_InstanceInitConfg _regionConfig;</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Settings.<span class="xdoc-id">regionConfig</span> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">Note:- This is required to be supplied ONLY if application is built for      *  DSP target.</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="sem.Create.Fxn"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">semCreateFxn</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#sem.Create.Fxn">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Function to create semaphores used by various individual resource
+ manager(s) registered with RMAN</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Settings.<span class="xdoc-id">semCreateFxn</span> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">Function signature is:</div>
+<div class="xdocText"><PRE class="Example"> Void * _semCreate(Int key, Int count);
+     
+</PRE></div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="sem.Delete.Fxn"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">semDeleteFxn</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#sem.Delete.Fxn">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Function to delete semaphores used by various individual resource
+ manager(s) registered with RMAN</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Settings.<span class="xdoc-id">semDeleteFxn</span> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">Function signature is:</div>
+<div class="xdocText"><PRE class="Example">  Void _semDelete(Void * sem);
+     
+</PRE></div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="sem.Pend.Fxn"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">semPendFxn</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#sem.Pend.Fxn">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Function to pend on semaphores used by various resource manager(s)
+ registered with RMAN</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Settings.<span class="xdoc-id">semPendFxn</span> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">Function signature is:</div>
+<div class="xdocText"><PRE class="Example">  Int _semPend(Void * sem, UInt32 timeout);
+     
+</PRE></div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<a class="xdocAnchor" id="sem.Post.Fxn"></a>
+<table class="xdocHdr"><tr>
+<td class="xdocHdrTitle"><span class="xdoc-kw1">config</span> <span class="xdoc-id">Settings.</span><span class="xdoc-id">semPostFxn</span>&nbsp;&nbsp;<small><span class="xdocSynSum">//&nbsp;module-wide</span></small></td>
+<td class="xdocHdrArrow">
+<a class="xdocHdrLink" href="../../../../ti/sdo/fc/edma3/Settings.html" title="module Settings"><img class="xdocHdrArrow" src="../../../../Arrow_up.png"/></a></td>
+</table>
+<div class=xdocHdrIndex><a class=xdocHdrIndex title="right-click to capture" href="../../../../index.html#ti/sdo/fc/edma3/Settings.html#sem.Post.Fxn">index URL</a></div>
+<p class="xdocHdrSummaryDcl">Function to post on Semaphores used by various resource manager(s)
+ registered with RMAN</p>
+<span id='meta-synop'></span>
+<table class="xdocLabel"><tr>
+<td class="xdocLabelLeft"><tt><span class="xdoc-id-meta2dcl"></span></tt>Configuration settings</td>
+<td class="xdocLabelRight"></td>
+</tr></table>
+<div class="xdocSynMdcl">
+<div class="xdocSynCode">
+<tt></tt><tt></tt>Settings.<span class="xdoc-id">semPostFxn</span> = <i><span class="xdoc-kw2">String</span></i> <span class="xdoc-kw2">null</span>;
+</div>
+</div>
+<div class="xdocSynSpacer">&nbsp;</div>
+<span id="xdoc-sect-1"></span>
+<div class="xdocSect">DETAILS</div>
+<div class="xdocText">Function signature is:</div>
+<div class="xdocText"><PRE class="Example"> Void _semPost(Void * sem);
+     
+</PRE></div>
+</div>
+<div id="xdocDate">generated on Tue, 28 Jun 2016 21:14:31 GMT</div>
+</div></div></body>
+</html>

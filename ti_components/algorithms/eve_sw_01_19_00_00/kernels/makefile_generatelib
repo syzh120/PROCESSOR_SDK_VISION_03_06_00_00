@@ -1,0 +1,103 @@
+#******************************************************************************
+#*      Copyright (C) 2009-2012 Texas Instruments Incorporated.               *
+#*                      All Rights Reserved                                   *
+#******************************************************************************
+
+EVEALGFRAMEWORK = ../algframework
+EVESTARTERWARE = ../starterware
+
+KERNEL_MODE ?= KERNELC
+
+
+
+##############################################################
+# Read IP Kernel list file and build them
+FILE_LIST?=kernel_list.txt
+
+ifdef SystemRoot
+KERNEL_LIST:=$(shell $(UTILS_PATH)\cat $(FILE_LIST))
+KERNEL_LIST:= $(subst /,\,$(KERNEL_LIST))
+else
+KERNEL_LIST:=$(shell cat $(FILE_LIST))
+KERNEL_LIST:= $(subst \,/,$(KERNEL_LIST))
+endif
+SUBDIRS = ./bamdb
+# BAM Helper folders
+SUBDIRS += $(foreach dir,$(KERNEL_LIST),$(wildcard $(dir)/bam_helper))
+
+ifeq ($(KERNEL_MODE),KERNELC)
+# src_kernelC folders
+KERNELCDIRS += $(foreach dir,$(KERNEL_LIST),$(wildcard $(dir)/src_kernelC))
+else
+# src_C folders
+SRCCDIRS += $(foreach dir,$(KERNEL_LIST),$(wildcard $(dir)/src_C))
+endif
+
+# Read .c files from src_C folders if they exist
+# They may not exist in Object only release
+CFILES_TEMP = $(foreach dir,$(SRCCDIRS),$(wildcard $(dir)/*.c))
+
+# Read .k files from src_kernelC folders if they exist
+# They may not exist in Object only release
+KFILES_TEMP = $(foreach dir,$(KERNELCDIRS),$(wildcard $(dir)/*.k))
+
+ifeq ($(KERNEL_MODE),KERNELC)
+ifeq (,$(wildcard $(KFILES_TEMP)))
+# In case of OBJ release, if KFILES are not present at all, don't build anything.
+CFILES_TEMP =
+else
+CFILES_TEMP = $(KFILES_TEMP)
+CFILES_TEMP += $(foreach dir,$(KERNELCDIRS),$(wildcard $(dir)/*.c))
+CFILES_TEMP += $(foreach dir,$(SUBDIRS),$(wildcard $(dir)/*.c))
+endif
+
+else
+ifeq (,$(wildcard $(CFILES_TEMP)))
+# In case of OBJ release, if SRC_C FILES are not present at all, don't build anything.
+CFILES_TEMP =
+endif
+endif
+
+#remove any kernel test bench files
+CFILES= $(filter-out %_tb.c, $(CFILES_TEMP))
+
+VCOP_H_DIR := ./inc
+
+
+HFILES = $(foreach dir,$(SUBDIRS),$(wildcard $(dir)/*.h))
+
+OUTFILE = lib/$(TARGET_BUILD)/$(LIB_NAME)
+##############################################################
+ifndef EVE_SW_ROOT
+$(error You must define EVE_SW_ROOT!)
+endif 
+include $(EVE_SW_ROOT)/makerules/makerules_eve.mk
+
+##############################################################
+
+#used inside makerules, but okay to define it afterwards
+CFLAGS += -I $(EVESTARTERWARE)/inc
+CFLAGS += -I $(EVESTARTERWARE)/inc/edma_utils
+CFLAGS += -I $(EVESTARTERWARE)/inc/edma_csl
+CFLAGS += -I $(EVEALGFRAMEWORK)/inc
+
+# Searching for inc folder at third folder structure level
+DIRECTORYS = $(sort $(dir $(wildcard vlib/*/inc/*/)))
+DIRECTORYS += $(sort $(dir $(wildcard imgsiglib/*/inc/*/)))
+DIRECTORYS += $(sort $(dir $(wildcard radarlib/*/inc/*/)))
+CFLAGS += $(foreach dir,$(DIRECTORYS),-I $(dir))
+CFLAGS += -I ./common
+CFLAGS += -I $(VCOP_H_DIR)
+CFLAGS += -DINPUTTILE
+ifneq ($(TARGET_PLATFORM) , PC)
+CFLAGS += --diag_suppress=26066
+endif
+##############################################################
+
+##############################################################
+LIBDIR:=  "lib/$(TARGET_BUILD)"
+OUTDIR:=  "../elf_out"
+
+$(OUTFILE) : libfile
+##############################################################
+

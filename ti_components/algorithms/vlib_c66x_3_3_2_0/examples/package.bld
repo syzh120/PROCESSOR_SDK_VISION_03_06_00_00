@@ -1,0 +1,233 @@
+/*******************************************************************************
+**+--------------------------------------------------------------------------+**
+**|                            ****                                          |**
+**|                            ****                                          |**
+**|                            ******o***                                    |**
+**|                      ********_///_****                                   |**
+**|                      ***** /_//_/ ****                                   |**
+**|                       ** ** (__/ ****                                    |**
+**|                           *********                                      |**
+**|                            ****                                          |**
+**|                            ***                                           |**
+**|                                                                          |**
+**|        Copyright (c) 2007 – 2013 Texas Instruments Incorporated          |**
+**|                                                                          |**
+**|              All rights reserved not granted herein.                     |**
+**|                                                                          |**
+**|                         Limited License.                                 |**
+**|                                                                          |**
+**|  Texas Instruments Incorporated grants a world-wide, royalty-free,       |**
+**|  non-exclusive license under copyrights and patents it now or            |**
+**|  hereafter owns or controls to make, have made, use, import, offer to    |**
+**|  sell and sell ("Utilize") this software subject to the terms herein.    |**
+**|  With respect to the foregoing patent license, such license is granted   |**
+**|  solely to the extent that any such patent is necessary to Utilize the   |**
+**|  software alone.  The patent license shall not apply to any              |**
+**|  combinations which include this software, other than combinations       |**
+**|  with devices manufactured by or for TI (“TI Devices�?).  No hardware     |**
+**|  patent is licensed hereunder.                                           |**
+**|                                                                          |**
+**|  Redistributions must preserve existing copyright notices and            |**
+**|  reproduce this license (including the above copyright notice and the    |**
+**|  disclaimer and (if applicable) source code license limitations below)   |**
+**|  in the documentation and/or other materials provided with the           |**
+**|  distribution                                                            |**
+**|                                                                          |**
+**|  Redistribution and use in binary form, without modification, are        |**
+**|  permitted provided that the following conditions are met:               |**
+**|                                                                          |**
+**|    *  No reverse engineering, decompilation, or disassembly of this      |**
+**|  software is permitted with respect to any software provided in binary   |**
+**|  form.                                                                   |**
+**|                                                                          |**
+**|    *  any redistribution and use are licensed by TI for use only with    |**
+**|  TI Devices.                                                             |**
+**|                                                                          |**
+**|    *  Nothing shall obligate TI to provide you with source code for      |**
+**|  the software licensed and provided to you in object code.               |**
+**|                                                                          |**
+**|  If software source code is provided to you, modification and            |**
+**|  redistribution of the source code are permitted provided that the       |**
+**|  following conditions are met:                                           |**
+**|                                                                          |**
+**|    *  any redistribution and use of the source code, including any       |**
+**|  resulting derivative works, are licensed by TI for use only with TI     |**
+**|  Devices.                                                                |**
+**|                                                                          |**
+**|    *  any redistribution and use of any object code compiled from the    |**
+**|  source code and any resulting derivative works, are licensed by TI      |**
+**|  for use only with TI Devices.                                           |**
+**|                                                                          |**
+**|  Neither the name of Texas Instruments Incorporated nor the names of     |**
+**|  its suppliers may be used to endorse or promote products derived from   |**
+**|  this software without specific prior written permission.                |**
+**|                                                                          |**
+**|  DISCLAIMER.                                                             |**
+**|                                                                          |**
+**|  THIS SOFTWARE IS PROVIDED BY TI AND TI’S LICENSORS "AS IS" AND ANY      |**
+**|  EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE       |**
+**|  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR      |**
+**|  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL TI AND TI’S LICENSORS BE      |**
+**|  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR     |**
+**|  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF    |**
+**|  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR         |**
+**|  BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,   |**
+**|  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE    |**
+**|  OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,       |**
+**|  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                      |**
+**+--------------------------------------------------------------------------+**
+*******************************************************************************/
+ 
+ var Package=xdc.loadCapsule('ti/mas/swtools/CommonBld.xs');
+
+
+  Package.ccsProjects.push({ pjtName:        "HoughLinesDemo",
+									   location:       "HoughLinesDemo",
+									   buildArtifact:  "executable",
+									   srcFiles:       ["HoughLinesDemo/BinImageToEdgelist.c","HoughLinesDemo/draw_line.c","HoughLinesDemo/hough_wrapper.c","HoughLinesDemo/pgmwrite.c","HoughLinesDemo/VLIB_testHoughForLines_data.c","HoughLinesDemo/lnk.cmd"],
+									   cFlags:         " --mem_model:data=far -i../../../../packages",
+									   targets:        ["66"]	 
+								   });
+								   
+  						   
+/**********************************************************************************************
+  The main package.bld routine starts here 
+***********************************************************************************************/
+
+  /* Set up the target architecture */
+  Package.targets = [C66_elf];
+
+  /* Parse XDC Arguments */
+  Package.parseArgs(arguments);
+  
+  /* Create Regression test */
+  createRegression();
+  
+  /* Create Executable */ 
+  Package.createProjects();
+
+  /* Create Archive */ 
+  Package.createArchive();
+
+  /* Clean Package */
+  Package.packageClean();
+  
+  /***********LOCAL Functions ****************/
+  function createRegression()
+  {
+     var projectDir = new java.io.File("../../package/projects");
+     var projectXml = projectDir.list();
+	 var linkfiles=[];
+	 var cnatlinkfiles=[];
+	 var func=new Array();
+  
+     for each(var xml in projectXml)
+     {
+       xml=String(xml);
+       var dot = xml.lastIndexOf(".");
+       var extension = xml.substr(dot,xml.length); 
+       if(extension == ".xml")
+       {
+          var project=xdc.loadXML("../../package/projects/"+xml);
+		  var files=project["params"].files;
+		  func.push(project["params"].name+"_d");
+		  
+		  for each (var file in files)
+		  {
+		    var source= String(file.@name);
+			var dot = source.lastIndexOf(".");
+			var extension = source.substr(dot,source.length); 
+			if(extension == ".c")
+			{
+  			  var splitfile=source.split("/");
+			  if( splitfile[splitfile.length-1].match("_d.c") 
+			   || splitfile[splitfile.length-1].match("_idat.c") || splitfile[splitfile.length-1].match("_odat.c")
+			   || source.match("common"))
+			  {
+			  	if(checkFile(source,linkfiles) == false )
+			      linkfiles.push("../packages/ti/vlib/"+source);
+			  }
+			}
+		  }
+       }
+     }
+	 var tplt = xdc.loadTemplate('./Regression/main.c.xdt');
+     tplt.genFile ("./Regression/main.c", null, [func]);
+	 
+	 Package.files["commontestsrc"]=
+     {
+	   files: linkfiles,
+       
+       target: ["ce66le","c66le", "ce674le","c674le", "ce64Ple","c64Ple"],
+	   	     
+	   def_flags: " --mem_model:data=far -i../../../../packages -D__ONESHOTTEST",
+     };
+     
+    
+	Package.libraryPath = "Regression";
+	 
+	Package.createLib("regress_d");
+    
+    Package.files=new Array();
+    /*  VLIB Common Library */
+    linkfiles.push("Regression/main.c");
+    Package.files["TestSource"] =
+    {
+          files: linkfiles,
+          def_flags: " -DTMS320C66X -D_TMS320C6600  -DLITTLE_ENDIAN_HOST -D_LITTLE_ENDIAN -D_HOST_BUILD -D__ONESHOTTEST -Iti/vlib/src/common/c6xsim",
+          target: ["vc98", "vc98_64"]
+    };
+
+    Package.exeTarget = new Array();
+    var targLoc="Regression/WINPC/";
+    Package.exeTarget.push(
+    {
+        base_directory: targLoc,
+        target:  "vc98",
+        name:  "RegressionTest",
+        def_flags: " -DTMS320C66X -D_TMS320C6600  -DLITTLE_ENDIAN_HOST -D_LITTLE_ENDIAN  -D_HOST_BUILD -Iti/vlib/src/common/c6xsim",
+    }
+    )
+    Package.generatedFiles.push(targLoc);
+    Package.createExe();
+
+    Package.exeTarget = new Array();
+    var targLoc="Regression/WINPC_64/";
+    Package.exeTarget.push(
+    {
+        base_directory: targLoc,
+        target:  "vc98_64",
+        name:  "RegressionTest",
+        def_flags: " -DTMS320C66X -D_TMS320C6600  -DLITTLE_ENDIAN_HOST -D_LITTLE_ENDIAN  -D_HOST_BUILD -Iti/vlib/src/common/c6xsim",
+    }
+    )
+    Package.generatedFiles.push(targLoc);
+    Package.createExe();
+
+    Package.files=new Array();
+
+	Package.ccsProjects.push({ pjtName:        "RegressionTest",
+									   location:       "Regression",
+									   buildArtifact:  "executable",
+									   srcFiles:       ["Regression/main.c","Regression/lnk.cmd"],
+									   cFlags:         " --mem_model:data=far -i../../../../packages -D__ONESHOTTEST",
+									   targets:        ["66"]	 
+								   });
+	  
+  }
+  
+  function checkFile(f, linkfiles)
+  {
+    var ret = false;
+	for each (var file in linkfiles)
+	{
+	  if(file.match(f))
+	  {
+	   ret = true;
+	   break;
+	  }
+	}
+   return ret;
+  }
+  
+/* nothing past this point */

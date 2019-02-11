@@ -1,0 +1,52 @@
+.bd B 3
+.TH strip-arp32 1 "Jan 05, 2015" "TI Tools" "TI Code Generation Tools"
+.SH NAME
+strip-arp32 - Strip symbol table and debugging information from an object file.
+.SH SYNOPSIS
+.B strip-arp32
+[
+.I options
+] [
+.I file(s)
+]
+.SH DESCRIPTION
+The strip utility removes COFF and DWARF debug information from an object file, along with any symbols and relocation entries that reference the debug information.  Additional information can be removed by specifying the -p option (see below).   Once stripping has been done, no debugging information will be available for those files.  Therefore, it should only be run on object files that have already been debugged and tested.
+
+The strip utility is used for reducing host file system usage, as well as decreasing the load time of object files onto a target.
+
+The input object files are overwritten with their stripped versions.
+.SH OPTIONS
+The following options are accepted by this tool:
+.SS Options:
+.SS
+.TP
+--diag_wrap[=on,off]
+Set diagnostic messages to wrap at 79 columns (on) or not (off). The argument to the option is optional, and if not specified it will default to: on
+.TP
+-h
+Print a help message that includes usage and option information.
+.TP
+-o=file
+Write stripped output to a new file. Do not overwrite the original input file.  When this argument is used, only one input file may be specified.
+.TP
+-p
+When this option is used, all information not required for execution is stripped from the object file.    In addition to the default behavior, this option also strips the entire symbol table (with the exception of __CIOBUF_, C$$IO$$, and C$$EXIT) and all relocation entries.    Using this option will leave the object file in an un-linkable state, so it should only be used on executable files.
+.TP
+-pdew
+Treat warnings as errors
+.TP
+--rom
+Strip readonly sections and segments. Also remove local symbols associated with rom sections, and make bound symbols absolute
+.SH EXIT STATUS
+The following error values are returned:
+.PD 0
+.TP 10
+.B 0
+Successful completion.
+.TP
+.B >0
+Unsuccessful completion; an error occured.
+.PD
+.SH COPYRIGHT
+.TP
+Copyright (c) 2015, Texas Instruments, Inc.

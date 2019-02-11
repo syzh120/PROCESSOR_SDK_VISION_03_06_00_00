@@ -1,0 +1,277 @@
+#/*==========================================================================*/
+#/*      Copyright (C) 2009-2013 Texas Instruments Incorporated.             */
+#/*                      All Rights Reserved                                 */
+#/*==========================================================================*/
+ifeq (0,1)
+mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
+makefile_dir := $(dir $(mkfile_path))
+include $(makefile_dir)/Makefile.linux
+else
+
+ifdef SystemRoot
+#Windows OS
+    ifeq ($(wildcard $(UTILS_PATH)),)
+      $(error You must define UTILS_PATH!)
+    endif
+    RM_CMD = $(UTILS_PATH)\rm -rf
+    MKDIR_CMD = $(UTILS_PATH)\mkdir -p $(1)
+    CHANGE_PATHSEP=$(subst /,\,$(1))
+    CAT_CMD = $(UTILS_PATH)\cat
+    else
+    ifeq ($(shell uname), Linux)
+	#Linux
+      RM_CMD = rm -rf
+      MKDIR_CMD = mkdir -p $(1)
+      CHANGE_PATHSEP=$(subst \,/,$(1))
+      CAT_CMD = cat
+    endif
+endif
+# Common makefile for VCOP-C kernels and drivers
+
+# The Makefile expects users to set the variable FILE.
+# If the TEST_BENCH is not $(FILE), users need to set the variable TEST_BENCH.
+# All the *.c files to be built can be included in the variable CFILES.
+# The Makefile enforses the presence of the file ..\src_kernelC\$(FILE)_kernel.k.
+# The extra *.k files can be included in the variable KERNELFILES.
+
+ARP32_TOOLS ?= "C:\Program Files\Texas Instruments\ARP32_tools"
+OBJ_DIR = ".\elf_out"
+
+OBJ_DIR := $(call CHANGE_PATHSEP,$(OBJ_DIR))
+# kernel code (VCOP-C)
+KERNEL = ..\src_kernelC\$(FILE)_kernel
+# if enabled NATC code is built otherwise natural C code is not built
+# instead natclibrary
+SRC_C_PATH := ..\src_C
+SRC_C_PATH := $(call CHANGE_PATHSEP,$(SRC_C_PATH))
+
+# if src_C folder exists then build natural C code otherwise
+# Link using kernel library
+ifneq ("$(wildcard $(SRC_C_PATH))","")
+NATC_BUILD := 1
+else
+NATC_BUILD := 0
+endif
+
+
+
+ifneq "$(CUSTOM_KERNELFILES)" ""
+KERNEL = $(CUSTOM_KERNELFILES)
+endif
+
+# Kernel library to be linked in case of Object-only build.
+KERNELLIB = ..\..\..\lib\release\libevekernels.eve.lib
+
+# It is necessary to separate out the Natural C files and the Kernel files
+# which get compiled and linked into the libevekernels.lib and libevenatckernels.lib
+# If these files don't exist (as possible for Object release mode), it is necessary
+# to avoid compiling these files to prevent make error. Only the libraries need to
+# be linked.
+# NATURALC will have the files to be compiled in src_C folder.
+# KERNELCFILES will have the files to be compiled in src_kernelC folder.
+# ALLCFILES will have all the remaining files to be compiled + Test Bench.
+
+
+ifeq ($(NATC_BUILD),0)
+TEMP_VAR = $(foreach f, $(CFILES),$(subst src_C,,$f))
+CFILES := $(filter $(CFILES),$(TEMP_VAR))
+NATURALC:=
+else
+endif
+
+NATCLIB = ..\..\..\lib\release\libevenatckernels.eve.lib
+NATCLIB_DEBUG =..\..\..\lib\debug\libevenatckernels.eve.lib
+
+NATURALC ?= $(foreach f,$(CFILES),$(if $(filter src_C,$(subst \, ,$f)),$f))
+NATURALCFINAL = $(patsubst %.c,%,$(NATURALC))
+KERNELCFILES = $(foreach f,$(CFILES),$(if $(filter src_kernelC,$(subst \, ,$f)),$f))
+ALLCFILES = $(filter-out $(NATURALC) $(KERNELCFILES),$(CFILES))
+
+# test bench code
+TEST_BENCH ?= $(FILE)
+
+HOST_EXE_FILE_NAME ?= a.exe
+
+HOSTCC = "g++"
+HOSTCC_FLAGS += -g -fpermissive -I$(TARGETINC_VCOP) -I$(EVE_PROFILE_INC) -I$(EVE_TEST_INC) -DVCOP_HOST_EMULATION -o $(OBJ_DIR)\$(HOST_EXE_FILE_NAME)
+
+MSVC_CC = cl
+MSVC_CC_FLAGS += /EHsc /TP /W0 /DVCOP_HOST_EMULATION /Fo$(OBJ_DIR)\ /Fe$(OBJ_DIR)\$(HOST_EXE_FILE_NAME) /Od /MDd /Gm /Zi /RTC1 -I$(TARGETINC_VCOP) -I$(EVE_PROFILE_INC) -I$(EVE_TEST_INC)
+
+
+# VCOP-C compiler (aka symbolic assembler)
+# KERNELCC = $(ARP32_TOOLS)\bin\vcc-arp32.exe
+
+# EVE C compiler
+TARGETCC = $(ARP32_TOOLS)/bin/cl-arp32
+TARGETOFD = $(ARP32_TOOLS)/bin/ofd-arp32
+TARGETINC = $(ARP32_TOOLS)/include
+TEMPINC1 ="..\..\..\..\starterware\inc"
+TEMPINC2 ="..\..\..\..\starterware\inc\baseaddress\vayu\eve"
+KERNEL_INC ="..\..\..\inc"
+TARGET_INC_K ="..\inc"
+TARGET_SRC_K ="..\src_kernelC"
+TARGET_SRC_C ="..\src_C"
+TARGETCC_FLAGS = --opt_for_speed=5 -kh --silicon_version=v210 -lu  --display_error_number --diag_suppress=26066 --diag_suppress=10063
+TARGETLD = $(ARP32_TOOLS)/bin/lnk-arp32 -cr
+EVE_LIB = $(ARP32_TOOLS)/lib/rtsarp32_v200.lib
+EVE_LCF ?="..\..\..\common\linker_boot_cama.cmd"
+EVE_START_LIB = "..\..\..\..\starterware\libs\vayu\eve\release\libevestarterware_eve.lib"
+
+TARGETCC := $(call CHANGE_PATHSEP,$(TARGETCC))
+
+EVE_TEST_INC="..\..\..\common"
+EVE_PROFILE_INC="..\..\..\..\common"
+EVE_PROFILE = "..\..\..\..\common\eve_profile.c"
+
+EVE_PROFILEOBJ = "eve_profile.obj"
+CONFIG_PARSER = "..\..\..\..\common\configparser.c"
+CONFIG_PARSEROBJ = "configparser.obj"
+
+ALLCFILES += $(TEST_BENCH).c
+ALLCFILESOBJ = $(patsubst %.c,%.obj,$(ALLCFILES))
+CURVE_FITTING = "..\..\..\..\common\curve_fitting.c"
+EVE_STATS_COLLLECTOR = "..\..\..\..\common\ti_stats_collector.c"
+
+
+# set KFILES and KERNELLIB only if KERNEL.k source file exists.
+# This way we can avoid compiling them if they don't exist.
+ifneq (,$(wildcard $(KERNEL).k))
+KERNELLIB := $(patsubst %.c,%.obj,$(KERNELCFILES))
+KFILES = $(KERNELCFILES)
+KFILES += $(KERNEL).k
+KERNELLIB += $(KERNEL).obj
+ifneq (,$(wildcard $(KERNELFILES)))
+KFILES += $(KERNELFILES)
+KERNELLIB += $(patsubst %.k,%.obj,$(KERNELFILES))
+endif
+endif
+
+# Linking the libevenatckernels.eve.lib library only 
+# if it is required by test bench.
+ifneq "$(NATURALC)" ""
+NATCLIB = ..\..\..\lib\release\libevenatckernels.eve.lib
+NATCOBJ = $(patsubst %.c,%.obj,$(NATURALC))
+# As for KernelC, set NATCFILES NATCLIB and only if NATURALC source exists.
+# This way we can avoid compiling them if they don't exist.
+ifneq (,$(wildcard $(NATURALC)))
+NATCFILES = $(NATURALC)
+NATCLIB = $(NATCOBJ)
+endif
+endif
+
+# location of vcop.h
+TARGETINC_VCOP = $(ARP32_TOOLS)\include\vcop
+VCOP_H       = vcop.h
+
+BOOT = ..\..\..\common\boot_arp32.obj
+
+GENERATE_KERNELFILES := $(TARGET_INC_K)\*_kernel.c
+GENERATE_KERNELFILES += $(TARGET_INC_K)\*_kernel.h
+
+BOOT := $(call CHANGE_PATHSEP,$(BOOT))
+TARGETINC := $(call CHANGE_PATHSEP,$(TARGETINC))
+TARGETINC_VCOP := $(call CHANGE_PATHSEP,$(TARGETINC_VCOP))
+EVE_PROFILE_INC := $(call CHANGE_PATHSEP,$(EVE_PROFILE_INC))
+EVE_TEST_INCEVE_TEST_INC := $(call CHANGE_PATHSEP,$(EVE_TEST_INCEVE_TEST_INC))
+EVE_PROFILE_INC := $(call CHANGE_PATHSEP,$(EVE_PROFILE_INC))
+EVE_PROFILE := $(call CHANGE_PATHSEP,$(EVE_PROFILE))
+CONFIG_PARSER := $(call CHANGE_PATHSEP,$(CONFIG_PARSER))
+CURVE_FITTING := $(call CHANGE_PATHSEP,$(CURVE_FITTING))
+EVE_STATS_COLLLECTOR := $(call CHANGE_PATHSEP,$(EVE_STATS_COLLLECTOR))
+NATCLIB := $(call CHANGE_PATHSEP,$(NATCLIB))
+TEMPINC1 := $(call CHANGE_PATHSEP,$(TEMPINC1))
+TEMPINC2 := $(call CHANGE_PATHSEP,$(TEMPINC2))
+KERNEL_INC := $(call CHANGE_PATHSEP,$(KERNEL_INC))
+TARGET_INC_K := $(call CHANGE_PATHSEP,$(TARGET_INC_K))
+TARGET_SRC_K := $(call CHANGE_PATHSEP,$(TARGET_SRC_K))
+TARGET_SRC_C := $(call CHANGE_PATHSEP,$(TARGET_SRC_C))
+EVE_LCF := $(call CHANGE_PATHSEP,$(EVE_LCF))
+EVE_START_LIB := $(call CHANGE_PATHSEP,$(EVE_START_LIB))
+TARGET_INC_K := $(call CHANGE_PATHSEP,$(TARGET_INC_K))
+KERNELLIB := $(call CHANGE_PATHSEP,$(KERNELLIB))
+KERNEL := $(call CHANGE_PATHSEP,$(KERNEL))
+ALLCFILESOBJ := $(call CHANGE_PATHSEP,$(ALLCFILESOBJ))
+GENERATE_KERNELFILES := $(call CHANGE_PATHSEP,$(GENERATE_KERNELFILES))
+
+ifeq ($(NATC_BUILD),0)
+KERNEL_ELFOUT_DEPENDENCY := $(KERNELLIB) $(BOOT)  $(ALLCFILES)
+NATCFILES :=
+NATC_PC_LIB :=/link libevenatckernels.eve.lib_pc.lib /LIBPATH:..\..\..\lib\debug
+else
+KERNEL_ELFOUT_DEPENDENCY := $(KERNELLIB) $(BOOT)  $(ALLCFILES) $(NATCLIB)
+NATC_PC_LIB :=
+endif
+
+# 'host' rules
+host: a.out
+
+a.out: $(OBJ_DIR) $(ALLCFILES) $(KFILES)
+	$(HOSTCC) $(HOSTCC_FLAGS) -I$(TARGET_INC_K) $(ALLCFILES) $(EVE_PROFILE) $(CURVE_FITTING) $(CONFIG_PARSER) $(NATCFILES)
+
+
+# 'hostrun' rules
+hostrun: host
+	$(HOST_EXE_FILE_NAME)
+
+msvc: $(OBJ_DIR)
+	$(MSVC_CC)  $(MSVC_CC_FLAGS) -I$(TARGET_INC_K) -I$(KERNEL_INC)  $(ALLCFILES) $(EVE_PROFILE) $(CURVE_FITTING) $(CONFIG_PARSER) $(NATCFILES) $(KERNELCFILES) $(HOSTFILES) $(NATC_PC_LIB)
+
+# 'msvcrun' rules
+msvcrun: msvc
+	cd $(OBJ_DIR) && $(HOST_EXE_FILE_NAME) > translate.data && move ./translate.data ../translate.data
+
+# 'target' rules - Default rule to build release binary for target platform
+target: DEBUG_FLAG = -O3
+target: target_build
+
+# 'profile' rules - To build debug binary on target platform
+profile: DEBUG_FLAG = -DREPORT -DSCTM -O3 -kv
+profile: target_build mem_info
+
+mem_info:
+	$(TARGETOFD) --func_info $(KERNEL).obj
+
+# 'debug' rules - To build debug binary on target platform
+debug: DEBUG_FLAG = -g
+debug: NATCLIB = $(NATCLIB_DEBUG)
+debug: target_build
+
+# 'target_build' rules
+target_build: $(OBJ_DIR) $(OBJ_DIR)/$(FILE)_kernelC.out
+
+target_run: target_build
+	C:\ti\ccsv5\ccs_base\scripting\examples\loadti\loadti.bat -c C:\Users\a0393754\ti\CCSTargetConfigurations\vayu_sim.ccxml --stdout-file=translate.data --fileio=$(OBJ_DIR) $(OBJ_DIR)/$(FILE)_kernelC.out 
+
+$(OBJ_DIR)/$(FILE)_kernelC.out: $(KERNEL_ELFOUT_DEPENDENCY)
+	$(TARGETCC) $(DEBUG_FLAG) $(TARGETCC_FLAGS) -I$(TARGETINC) -I$(TARGETINC_VCOP) -I . -I$(EVE_PROFILE_INC) -I$(EVE_TEST_INC) -I$(TEMPINC1) -I$(TEMPINC2) -I$(KERNEL_INC) -I$(TARGET_INC_K) $(ALLCFILES) $(CONFIG_PARSER) $(EVE_PROFILE) $(CURVE_FITTING) $(EVE_STATS_COLLLECTOR) $(BOOT) -z $(TARGETLD_FLAGS) -l$(KERNELLIB) -l$(NATCLIB) -l$(EVE_LCF) -l$(EVE_LIB) -l$(EVE_START_LIB) -m $(OBJ_DIR)\$(FILE)_kernelC.map -o $@
+
+$(KERNELLIB): $(KFILES)
+	$(TARGETCC) $(DEBUG_FLAG) $(TARGETCC_FLAGS) -I$(TARGETINC) -I$(TARGETINC_VCOP) -I$(TARGET_INC_K) -I$(KERNEL_INC) --temp_directory=$(KERNEL_INC) --obj_directory=$(TARGET_SRC_K) $(KFILES)
+
+
+$(NATCLIB): $(NATCFILES)
+	$(TARGETCC) $(DEBUG_FLAG) $(TARGETCC_FLAGS) -I$(TARGETINC) -I$(TARGETINC_VCOP) -I$(TARGET_INC_K) --temp_directory=$(KERNEL_INC) --obj_directory=$(TARGET_SRC_C) $<
+
+$(OBJ_DIR):
+	$(MKDIR_CMD) $(OBJ_DIR) || cd $(OBJ_DIR)
+
+# clean rules
+clean:
+	$(RM_CMD) *.o
+	$(RM_CMD) *.obj
+	$(RM_CMD) $(KERNELLIB)
+	$(RM_CMD) $(ALLCFILESOBJ)
+	$(RM_CMD) $(OBJ_DIR)/*.out
+	$(RM_CMD) *.asm
+	$(RM_CMD) $(GENERATE_KERNELFILES)
+	$(RM_CMD) $(OBJ_DIR)/*.map
+	$(RM_CMD) *.exe
+	$(RM_CMD) $(OBJ_DIR)
+	$(RM_CMD) *.pdb
+	$(RM_CMD) *.idb
+	$(RM_CMD) *.sdo
+	$(RM_CMD) *.ilk
+	$(RM_CMD) *.suo
+	$(RM_CMD) translate.data
+endif

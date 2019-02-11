@@ -1,0 +1,172 @@
+From 81117b56046ed3dc5540eca2b7782fd5a6e17a34 Mon Sep 17 00:00:00 2001
+From: Robert Tivy <rtivy@ti.com>
+Date: Fri, 8 Mar 2013 10:55:18 -0800
+Subject: [PATCH v8 6/7] ARM: davinci: Add a new remoteproc platform device for DA8XX
+
+Contains CMA-based reservation of physical memory block. A new kernel
+command-line parameter has been added to allow boot-time specification
+of the physical memory block.
+
+Signed-off-by: Robert Tivy <rtivy@ti.com>
+Acked-by: Sekhar Nori <nsekhar@ti.com>
+---
+ Documentation/kernel-parameters.txt        |    6 ++
+ arch/arm/mach-davinci/devices-da8xx.c      |   88 +++++++++++++++++++++++++++-
+ arch/arm/mach-davinci/include/mach/da8xx.h |    4 ++
+ 3 files changed, 97 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/kernel-parameters.txt b/Documentation/kernel-parameters.txt
+index 6c72381..a46456a 100644
+--- a/Documentation/kernel-parameters.txt
++++ b/Documentation/kernel-parameters.txt
+@@ -44,6 +44,7 @@ parameter is applicable:
+ 	AVR32	AVR32 architecture is enabled.
+ 	AX25	Appropriate AX.25 support is enabled.
+ 	BLACKFIN Blackfin architecture is enabled.
++	CMA	Contiguous Memory Area support is enabled.
+ 	DRM	Direct Rendering Management support is enabled.
+ 	DYNAMIC_DEBUG Build in debug messages and enable them at runtime
+ 	EDD	BIOS Enhanced Disk Drive Services (EDD) is enabled
+@@ -2634,6 +2635,11 @@ bytes respectively. Such letter suffixes can also be entirely omitted.
+ 			Useful for devices that are detected asynchronously
+ 			(e.g. USB and MMC devices).
+ 
++	rproc_mem=nn[KMG][@address]
++			[KNL,ARM,CMA] Remoteproc physical memory block.
++			Memory area to be used by remote processor image,
++			managed by CMA.
++
+ 	rw		[KNL] Mount root device read-write on boot
+ 
+ 	S		[KNL] Run init in single mode
+diff --git a/arch/arm/mach-davinci/devices-da8xx.c b/arch/arm/mach-davinci/devices-da8xx.c
+index fc50243..08a6b36 100644
+--- a/arch/arm/mach-davinci/devices-da8xx.c
++++ b/arch/arm/mach-davinci/devices-da8xx.c
+@@ -12,7 +12,7 @@
+  */
+ #include <linux/init.h>
+ #include <linux/platform_device.h>
+-#include <linux/dma-mapping.h>
++#include <linux/dma-contiguous.h>
+ #include <linux/serial_8250.h>
+ #include <linux/ahci_platform.h>
+ #include <linux/clk.h>
+@@ -714,6 +714,92 @@ int __init da850_register_mmcsd1(struct davinci_mmc_config *config)
+ }
+ #endif
+ 
++static struct resource da8xx_rproc_resources[] = {
++	{ /* DSP boot address */
++		.start		= DA8XX_SYSCFG0_BASE + DA8XX_HOST1CFG_REG,
++		.end		= DA8XX_SYSCFG0_BASE + DA8XX_HOST1CFG_REG + 3,
++		.flags		= IORESOURCE_MEM,
++	},
++	{ /* DSP interrupt registers */
++		.start		= DA8XX_SYSCFG0_BASE + DA8XX_CHIPSIG_REG,
++		.end		= DA8XX_SYSCFG0_BASE + DA8XX_CHIPSIG_REG + 7,
++		.flags		= IORESOURCE_MEM,
++	},
++	{ /* dsp irq */
++		.start		= IRQ_DA8XX_CHIPINT0,
++		.end		= IRQ_DA8XX_CHIPINT0,
++		.flags		= IORESOURCE_IRQ,
++	},
++};
++
++static struct platform_device da8xx_dsp = {
++	.name	= "davinci-rproc",
++	.dev	= {
++		.coherent_dma_mask	= DMA_BIT_MASK(32),
++	},
++	.num_resources	= ARRAY_SIZE(da8xx_rproc_resources),
++	.resource	= da8xx_rproc_resources,
++};
++
++#if IS_ENABLED(CONFIG_DA8XX_REMOTEPROC)
++
++static phys_addr_t rproc_base __initdata;
++static unsigned long rproc_size __initdata;
++
++static int __init early_rproc_mem(char *p)
++{
++	char *endp;
++
++	if (p == NULL)
++		return 0;
++
++	rproc_size = memparse(p, &endp);
++	if (*endp == '@')
++		rproc_base = memparse(endp + 1, NULL);
++
++	return 0;
++}
++early_param("rproc_mem", early_rproc_mem);
++
++void __init da8xx_rproc_reserve_cma(void)
++{
++	int ret;
++
++	if (!rproc_base || !rproc_size) {
++		pr_err("%s: 'rproc_mem=nn@address' badly specified\n"
++		       "    'nn' and 'address' must both be non-zero\n",
++		       __func__);
++
++		return;
++	}
++
++	pr_info("%s: reserving 0x%lx @ 0x%lx...\n",
++		__func__, rproc_size, (unsigned long)rproc_base);
++
++	ret = dma_declare_contiguous(&da8xx_dsp.dev, rproc_size, rproc_base, 0);
++	if (ret)
++		pr_err("%s: dma_declare_contiguous failed %d\n", __func__, ret);
++}
++
++#else
++
++void __init da8xx_rproc_reserve_cma(void)
++{
++}
++
++#endif
++
++int __init da8xx_register_rproc(void)
++{
++	int ret;
++
++	ret = platform_device_register(&da8xx_dsp);
++	if (ret)
++		pr_err("%s: can't register DSP device: %d\n", __func__, ret);
++
++	return ret;
++};
++
+ static struct resource da8xx_rtc_resources[] = {
+ 	{
+ 		.start		= DA8XX_RTC_BASE,
+diff --git a/arch/arm/mach-davinci/include/mach/da8xx.h b/arch/arm/mach-davinci/include/mach/da8xx.h
+index de439b7..5e85c27 100644
+--- a/arch/arm/mach-davinci/include/mach/da8xx.h
++++ b/arch/arm/mach-davinci/include/mach/da8xx.h
+@@ -54,6 +54,8 @@ extern unsigned int da850_max_speed;
+ #define DA8XX_SYSCFG0_BASE	(IO_PHYS + 0x14000)
+ #define DA8XX_SYSCFG0_VIRT(x)	(da8xx_syscfg0_base + (x))
+ #define DA8XX_JTAG_ID_REG	0x18
++#define DA8XX_HOST1CFG_REG	0x44
++#define DA8XX_CHIPSIG_REG	0x174
+ #define DA8XX_CFGCHIP0_REG	0x17c
+ #define DA8XX_CFGCHIP2_REG	0x184
+ #define DA8XX_CFGCHIP3_REG	0x188
+@@ -104,6 +106,8 @@ int __init da850_register_vpif_display
+ int __init da850_register_vpif_capture
+ 			(struct vpif_capture_config *capture_config);
+ void da8xx_restart(char mode, const char *cmd);
++void da8xx_rproc_reserve_cma(void);
++int da8xx_register_rproc(void);
+ 
+ extern struct platform_device da8xx_serial_device;
+ extern struct emac_platform_data da8xx_emac_pdata;
+-- 
+1.7.9.4
+
